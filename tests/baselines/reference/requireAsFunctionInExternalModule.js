@@ -19,18 +19,16 @@ hello();
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.has = void 0;
-function require(a) { }
 exports.default = require;
-function has(a) { return true; }
 exports.has = has;
+function require(a) { }
+function has(a) { return true; }
 //// [m.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hello = void 0;
+exports.hello = hello;
 var c_1 = require("./c");
 function hello() { }
-exports.hello = hello;
 if ((0, c_1.has)('ember-debug')) {
     (0, c_1.default)('ember-debug');
 }

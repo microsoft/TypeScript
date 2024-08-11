@@ -3,4 +3,5 @@
 === parserSkippedTokens4.ts ===
 \  /regexp/;
 >/regexp/ : RegExp
+>         : ^^^^^^
 

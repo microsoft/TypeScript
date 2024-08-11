@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty4.ts] ////
+
+=== discriminateWithOptionalProperty4.ts ===
+// https://github.com/microsoft/TypeScript/issues/55566
+
+export function main(a: string[] | undefined) {
+>main : (a: string[] | undefined) => void
+>     : ^ ^^                    ^^^^^^^^^
+>a : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+
+  const z = a ? { a } : { b: ["there"] };
+>z : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a ? { a } : { b: ["there"] } : { a: string[]; } | { b: string[]; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+>{ a } : { a: string[]; }
+>      : ^^^^^^^^^^^^^^^^
+>a : string[]
+>  : ^^^^^^^^
+>{ b: ["there"] } : { b: string[]; }
+>                 : ^^^^^^^^^^^^^^^^
+>b : string[]
+>  : ^^^^^^^^
+>["there"] : string[]
+>          : ^^^^^^^^
+>"there" : "there"
+>        : ^^^^^^^
+
+  z.a //
+>z.a //    ? z.a.toString()    : z.b.toString() : string
+>                                               : ^^^^^^
+>z.a : string[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>z : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+
+    ? z.a.toString()
+>z.a.toString() : string
+>               : ^^^^^^
+>z.a.toString : () => string
+>             : ^^^^^^      
+>z.a : string[]
+>    : ^^^^^^^^
+>z : { a: string[]; b?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+
+    : z.b.toString();
+>z.b.toString() : string
+>               : ^^^^^^
+>z.b.toString : () => string
+>             : ^^^^^^      
+>z.b : string[]
+>    : ^^^^^^^^
+>z : { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+
+  const zWorkAround:
+>zWorkAround : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>            : ^^^^^        ^^^^^^         ^^^^^^^^^^^        ^^^^^^         ^^^
+
+    | { a: string[]; b?: undefined }
+>a : string[]
+>  : ^^^^^^^^
+>b : undefined
+>  : ^^^^^^^^^
+
+    | { b: string[]; a?: undefined } = z;
+>b : string[]
+>  : ^^^^^^^^
+>a : undefined
+>  : ^^^^^^^^^
+>z : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString();
+>zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString() : string
+>                                                                    : ^^^^^^
+>zWorkAround.a : string[] | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^
+>zWorkAround : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>            : ^^^^^        ^^^^^^         ^^^^^^^^^^^        ^^^^^^         ^^^
+>a : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+>zWorkAround.a.toString() : string
+>                         : ^^^^^^
+>zWorkAround.a.toString : () => string
+>                       : ^^^^^^      
+>zWorkAround.a : string[]
+>              : ^^^^^^^^
+>zWorkAround : { a: string[]; b?: undefined; }
+>            : ^^^^^        ^^^^^^         ^^^
+>a : string[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+>zWorkAround.b.toString() : string
+>                         : ^^^^^^
+>zWorkAround.b.toString : () => string
+>                       : ^^^^^^      
+>zWorkAround.b : string[]
+>              : ^^^^^^^^
+>zWorkAround : { b: string[]; a?: undefined; }
+>            : ^^^^^        ^^^^^^         ^^^
+>b : string[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+
+  "a" in z ? z.a.toString() : z.b.toString();
+>"a" in z ? z.a.toString() : z.b.toString() : string
+>                                           : ^^^^^^
+>"a" in z : boolean
+>         : ^^^^^^^
+>"a" : "a"
+>    : ^^^
+>z : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z.a.toString() : string
+>               : ^^^^^^
+>z.a.toString : () => string
+>             : ^^^^^^      
+>z.a : string[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>z : { a: string[]; b?: undefined; } | { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+>z.b.toString() : string
+>               : ^^^^^^
+>z.b.toString : () => string
+>             : ^^^^^^      
+>z.b : string[]
+>    : ^^^^^^^^
+>z : { b: string[]; a?: undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string[]
+>  : ^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+}
+

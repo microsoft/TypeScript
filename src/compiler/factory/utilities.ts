@@ -17,8 +17,6 @@ import {
     BindingOrAssignmentPattern,
     BitwiseOperator,
     BitwiseOperatorOrHigher,
-    Block,
-    BooleanLiteral,
     CharacterCodes,
     CommaListExpression,
     compareStringsCaseSensitive,
@@ -53,10 +51,12 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
+    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
+    getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -78,7 +78,6 @@ import {
     isAssignmentExpression,
     isAssignmentOperator,
     isAssignmentPattern,
-    isBlock,
     isCommaListExpression,
     isComputedPropertyName,
     isDeclarationBindingElement,
@@ -91,10 +90,8 @@ import {
     isGeneratedPrivateIdentifier,
     isIdentifier,
     isInJSFile,
-    isLiteralExpression,
     isMemberName,
     isMinusToken,
-    isModifierKind,
     isObjectLiteralElementLike,
     isParenthesizedExpression,
     isPlusToken,
@@ -139,13 +136,11 @@ import {
     NodeArray,
     NodeFactory,
     nodeIsSynthesized,
-    NullLiteral,
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     OuterExpression,
     OuterExpressionKinds,
-    outFile,
     ParenthesizedExpression,
     parseNodeFactory,
     PlusToken,
@@ -178,8 +173,8 @@ import {
     Token,
     TransformFlags,
     TypeNode,
-    WrappedExpression
-} from "../_namespaces/ts";
+    WrappedExpression,
+} from "../_namespaces/ts.js";
 
 // Compound nodes
 
@@ -191,14 +186,14 @@ export function createEmptyExports(factory: NodeFactory) {
 /** @internal */
 export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
     if (isComputedPropertyName(memberName)) {
-         return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
+        return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
     }
     else {
         const expression = setTextRange(
             isMemberName(memberName)
                 ? factory.createPropertyAccessExpression(target, memberName)
                 : factory.createElementAccessExpression(target, memberName),
-            memberName
+            memberName,
         );
         addEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
         return expression;
@@ -234,7 +229,7 @@ export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntit
         createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
             createReactNamespace(reactNamespace, parent),
-            "createElement"
+            "createElement",
         );
 }
 
@@ -243,7 +238,7 @@ function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFac
         createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
             createReactNamespace(reactNamespace, parent),
-            "Fragment"
+            "Fragment",
         );
 }
 
@@ -274,9 +269,9 @@ export function createExpressionForJsxElement(factory: NodeFactory, callee: Expr
         factory.createCallExpression(
             callee,
             /*typeArguments*/ undefined,
-            argumentsList
+            argumentsList,
         ),
-        location
+        location,
     );
 }
 
@@ -301,9 +296,9 @@ export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryE
         factory.createCallExpression(
             createJsxFactoryExpression(factory, jsxFactoryEntity, reactNamespace, parentElement),
             /*typeArguments*/ undefined,
-            argumentsList
+            argumentsList,
         ),
-        location
+        location,
     );
 }
 
@@ -318,29 +313,19 @@ export function createForOfBindingStatement(factory: NodeFactory, node: ForIniti
             firstDeclaration.name,
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
-            boundValue
+            boundValue,
         );
         return setTextRange(
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                factory.updateVariableDeclarationList(node, [updatedDeclaration])
+                factory.updateVariableDeclarationList(node, [updatedDeclaration]),
             ),
-            /*location*/ node
+            /*location*/ node,
         );
     }
     else {
         const updatedExpression = setTextRange(factory.createAssignment(node, boundValue), /*location*/ node);
         return setTextRange(factory.createExpressionStatement(updatedExpression), /*location*/ node);
-    }
-}
-
-/** @internal */
-export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement): Block {
-    if (isBlock(dest)) {
-        return factory.updateBlock(dest, setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
-    }
-    else {
-        return factory.createBlock(factory.createNodeArray([dest, source]), /*multiLine*/ true);
     }
 }
 
@@ -392,11 +377,11 @@ function createExpressionForAccessorDeclaration(factory: NodeFactory, properties
                                 /*typeParameters*/ undefined,
                                 getAccessor.parameters,
                                 /*type*/ undefined,
-                                getAccessor.body! // TODO: GH#18217
+                                getAccessor.body!, // TODO: GH#18217
                             ),
-                            getAccessor
+                            getAccessor,
                         ),
-                        getAccessor
+                        getAccessor,
                     ),
                     set: setAccessor && setTextRange(
                         setOriginalNode(
@@ -407,15 +392,15 @@ function createExpressionForAccessorDeclaration(factory: NodeFactory, properties
                                 /*typeParameters*/ undefined,
                                 setAccessor.parameters,
                                 /*type*/ undefined,
-                                setAccessor.body! // TODO: GH#18217
+                                setAccessor.body!, // TODO: GH#18217
                             ),
-                            setAccessor
+                            setAccessor,
                         ),
-                        setAccessor
-                    )
-                }, !multiLine)
+                        setAccessor,
+                    ),
+                }, !multiLine),
             ),
-            firstAccessor
+            firstAccessor,
         );
     }
 
@@ -427,11 +412,11 @@ function createExpressionForPropertyAssignment(factory: NodeFactory, property: P
         setTextRange(
             factory.createAssignment(
                 createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
-                property.initializer
+                property.initializer,
             ),
-            property
+            property,
         ),
-        property
+        property,
     );
 }
 
@@ -440,11 +425,11 @@ function createExpressionForShorthandPropertyAssignment(factory: NodeFactory, pr
         setTextRange(
             factory.createAssignment(
                 createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
-                factory.cloneNode(property.name)
+                factory.cloneNode(property.name),
             ),
-            /*location*/ property
+            /*location*/ property,
         ),
-        /*original*/ property
+        /*original*/ property,
     );
 }
 
@@ -462,16 +447,16 @@ function createExpressionForMethodDeclaration(factory: NodeFactory, method: Meth
                             /*typeParameters*/ undefined,
                             method.parameters,
                             /*type*/ undefined,
-                            method.body! // TODO: GH#18217
+                            method.body!, // TODO: GH#18217
                         ),
-                        /*location*/ method
+                        /*location*/ method,
                     ),
-                    /*original*/ method
-                )
+                    /*original*/ method,
+                ),
             ),
-            /*location*/ method
+            /*location*/ method,
         ),
-        /*original*/ method
+        /*original*/ method,
     );
 }
 
@@ -483,7 +468,7 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
     switch (property.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier> }, receiver, !!node.multiLine);
+            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver, !!node.multiLine);
         case SyntaxKind.PropertyAssignment:
             return createExpressionForPropertyAssignment(factory, property, receiver);
         case SyntaxKind.ShorthandPropertyAssignment:
@@ -612,12 +597,12 @@ export function startsWithUseStrict(statements: readonly Statement[]) {
 }
 
 /** @internal */
-export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } {
+export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } {
     return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
 }
 
 /** @internal */
-export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+export function isCommaSequence(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } | CommaListExpression {
     return isCommaExpression(node) || isCommaListExpression(node);
 }
 
@@ -645,9 +630,10 @@ export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All):
             return (kinds & OuterExpressionKinds.Parentheses) !== 0;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
-        case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.SatisfiesExpression:
             return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return (kinds & OuterExpressionKinds.ExpressionsWithTypeArguments) !== 0;
         case SyntaxKind.NonNullExpression:
             return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
         case SyntaxKind.PartiallyEmittedExpression:
@@ -681,15 +667,6 @@ export function walkUpOuterExpressions(node: Expression, kinds = OuterExpression
 }
 
 /** @internal */
-export function skipAssertions(node: Expression): Expression;
-/** @internal */
-export function skipAssertions(node: Node): Node;
-/** @internal */
-export function skipAssertions(node: Node): Node {
-    return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
-}
-
-/** @internal */
 export function startOnNewLine<T extends Node>(node: T): T {
     return setStartsOnNewLine(node, /*newLine*/ true);
 }
@@ -713,7 +690,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions) === ModuleKind.ESNext) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
@@ -731,10 +708,10 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                     // Alias the imports if the names are used somewhere in the file.
                     // NOTE: We don't need to care about global import collisions as this is a module.
                     namedBindings = nodeFactory.createNamedImports(
-                        map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
-                            ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
-                            : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
-                        )
+                        map(helperNames, name =>
+                            isFileLevelUniqueName(sourceFile, name)
+                                ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
+                                : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))),
                     );
                     const parseNode = getOriginalNode(sourceFile, isSourceFile);
                     const emitNode = getOrCreateEmitNode(parseNode);
@@ -754,7 +731,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                 /*modifiers*/ undefined,
                 nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                 nodeFactory.createStringLiteral(externalHelpersModuleNameText),
-                 /*assertClause*/ undefined
+                /*attributes*/ undefined,
             );
             addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
             return externalHelpersImportDeclaration;
@@ -762,18 +739,15 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     }
 }
 
-/** @internal */
-export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
         const externalHelpersModuleName = getExternalHelpersModuleName(node);
         if (externalHelpersModuleName) {
             return externalHelpersModuleName;
         }
 
-        const moduleKind = getEmitModuleKind(compilerOptions);
         let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && moduleKind !== ModuleKind.System
-            && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
+            && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
         if (!create) {
             const helpers = getEmitHelpers(node);
             if (helpers) {
@@ -803,6 +777,9 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
+        if (name.kind === SyntaxKind.StringLiteral) {
+            return factory.getGeneratedNameForNode(node);
+        }
         return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
     if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
@@ -860,7 +837,7 @@ export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile 
     if (file.moduleName) {
         return factory.createStringLiteral(file.moduleName);
     }
-    if (!file.isDeclarationFile && outFile(options)) {
+    if (!file.isDeclarationFile && options.outFile) {
         return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
     }
     return undefined;
@@ -1114,7 +1091,7 @@ export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) 
     }
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function canHaveIllegalType(node: Node): node is HasIllegalType {
     const kind = node.kind;
     return kind === SyntaxKind.Constructor
@@ -1181,16 +1158,6 @@ export function isModuleName(node: Node): node is ModuleName {
     return isIdentifier(node) || isStringLiteral(node);
 }
 
-/** @internal */
-export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
-    const kind = node.kind;
-    return kind === SyntaxKind.NullKeyword
-        || kind === SyntaxKind.TrueKeyword
-        || kind === SyntaxKind.FalseKeyword
-        || isLiteralExpression(node)
-        || isPrefixUnaryExpression(node);
-}
-
 function isExponentiationOperator(kind: SyntaxKind): kind is ExponentiationOperator {
     return kind === SyntaxKind.AsteriskAsteriskToken;
 }
@@ -1222,7 +1189,8 @@ function isShiftOperator(kind: SyntaxKind): kind is ShiftOperator {
         || kind === SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
 }
 
-function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
+/** @internal */
+export function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
     return isShiftOperator(kind)
         || isAdditiveOperatorOrHigher(kind);
 }
@@ -1290,7 +1258,7 @@ export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
 
-type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, outerState: TOuterState) => number;
+type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult; }, outerState: TOuterState) => number;
 
 namespace BinaryExpressionState {
     /**
@@ -1299,7 +1267,7 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, outerState: TOuterState): number {
+    export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, outerState: TOuterState): number {
         const prevUserState = stackIndex > 0 ? userStateStack[stackIndex - 1] : undefined;
         Debug.assertEqual(stateStack[stackIndex], enter);
         userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState, outerState);
@@ -1313,7 +1281,7 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+    export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
         Debug.assertEqual(stateStack[stackIndex], left);
         Debug.assertIsDefined(machine.onLeft);
         stateStack[stackIndex] = nextState(machine, left);
@@ -1331,7 +1299,7 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+    export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
         Debug.assertEqual(stateStack[stackIndex], operator);
         Debug.assertIsDefined(machine.onOperator);
         stateStack[stackIndex] = nextState(machine, operator);
@@ -1345,7 +1313,7 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+    export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
         Debug.assertEqual(stateStack[stackIndex], right);
         Debug.assertIsDefined(machine.onRight);
         stateStack[stackIndex] = nextState(machine, right);
@@ -1363,7 +1331,7 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, _outerState: TOuterState): number {
+    export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult; }, _outerState: TOuterState): number {
         Debug.assertEqual(stateStack[stackIndex], exit);
         stateStack[stackIndex] = nextState(machine, exit);
         const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
@@ -1384,7 +1352,7 @@ namespace BinaryExpressionState {
      * Handles a frame that is already done.
      * @returns The `done` state.
      */
-    export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+    export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
         Debug.assertEqual(stateStack[stackIndex], done);
         return stackIndex;
     }
@@ -1400,10 +1368,14 @@ namespace BinaryExpressionState {
             case operator:
                 if (machine.onRight) return right;
                 // falls through
-            case right: return exit;
-            case exit: return done;
-            case done: return done;
-            default: Debug.fail("Invalid state");
+            case right:
+                return exit;
+            case exit:
+                return done;
+            case done:
+                return done;
+            default:
+                Debug.fail("Invalid state");
         }
     }
 
@@ -1451,7 +1423,7 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
  *
  * @internal
  */
- export function createBinaryExpressionTrampoline<TState, TResult>(
+export function createBinaryExpressionTrampoline<TState, TResult>(
     onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
     onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
     onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
@@ -1491,7 +1463,7 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     return trampoline;
 
     function trampoline(node: BinaryExpression, outerState: TOuterState) {
-        const resultHolder: { value: TResult } = { value: undefined! };
+        const resultHolder: { value: TResult; } = { value: undefined! };
         const stateStack: BinaryExpressionState[] = [BinaryExpressionState.enter];
         const nodeStack: BinaryExpression[] = [node];
         const userStateStack: TState[] = [undefined!];
@@ -1512,12 +1484,6 @@ function isExportOrDefaultKeywordKind(kind: SyntaxKind): kind is SyntaxKind.Expo
 export function isExportOrDefaultModifier(node: Node): node is ExportKeyword | DefaultKeyword {
     const kind = node.kind;
     return isExportOrDefaultKeywordKind(kind);
-}
-
-/** @internal */
-export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier, ExportKeyword | DefaultKeyword> {
-    const kind = node.kind;
-    return isModifierKind(kind) && !isExportOrDefaultKeywordKind(kind);
 }
 
 /**
@@ -1549,10 +1515,13 @@ export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPri
             node = original;
             const autoGenerate = node.emitNode?.autoGenerate;
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
-            if (isMemberName(node) && (
-                autoGenerate === undefined ||
-                !!(autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
-                autoGenerate.id !== autoGenerateId)) {
+            if (
+                isMemberName(node) && (
+                    autoGenerate === undefined ||
+                    !!(autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
+                        autoGenerate.id !== autoGenerateId
+                )
+            ) {
                 break;
             }
 
@@ -1636,7 +1605,7 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
         factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage"),
         /*questionOrExclamationToken*/ undefined,
         /*type*/ undefined,
-        initializer
+        initializer,
     );
 }
 
@@ -1645,7 +1614,7 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
  *
  * @internal
  */
-export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName): GetAccessorDeclaration {
+export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): GetAccessorDeclaration {
     return factory.createGetAccessorDeclaration(
         modifiers,
         name,
@@ -1654,11 +1623,11 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
         factory.createBlock([
             factory.createReturnStatement(
                 factory.createPropertyAccessExpression(
-                    factory.createThis(),
-                    factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
-                )
-            )
-        ])
+                    receiver,
+                    factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage"),
+                ),
+            ),
+        ]),
     );
 }
 
@@ -1667,26 +1636,26 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,
         [factory.createParameterDeclaration(
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
-            "value"
+            "value",
         )],
         factory.createBlock([
             factory.createExpressionStatement(
                 factory.createAssignment(
                     factory.createPropertyAccessExpression(
-                        factory.createThis(),
-                        factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
+                        receiver,
+                        factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage"),
                     ),
-                    factory.createIdentifier("value")
-                )
-            )
-        ])
+                    factory.createIdentifier("value"),
+                ),
+            ),
+        ]),
     );
 }
 
@@ -1706,7 +1675,7 @@ export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyNa
         }
 
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isGeneratedIdentifier(node.left)) {
-            return node as AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier };
+            return node as AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier; };
         }
 
         break;

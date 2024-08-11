@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -331,15 +331,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 After request
 
@@ -354,10 +350,19 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tsconfig.json",
+        "reason": "Creating possible configured project for /index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
@@ -573,7 +578,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undef
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-0 ""
@@ -886,6 +891,115 @@ Info seq  [hh:mm:ss:mss] 	Files (102)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 101,
+            "tsSize": 2290,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 158,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "commonjs"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/index.ts",
+        "configFile": "/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 
@@ -895,7 +1009,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1113,6 +1234,421 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1148,6 +1684,422 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1162,7 +2114,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-1 "s"
@@ -1665,6 +2617,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1699,11 +2657,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/lib/foo/constants",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
-              "exportMapKey": "exp|*|",
+              "exportMapKey": "3 * exp ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -1712,8 +2670,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_0",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_0",
@@ -1722,7 +2680,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -1732,8 +2690,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_1",
@@ -1742,9 +2700,169 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "S2_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_2",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S2_0",
+              "exportMapKey": "4 * S2_0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "S3_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_3",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S3_0",
+              "exportMapKey": "4 * S3_0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "S4_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_4",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S4_0",
+              "exportMapKey": "4 * S4_0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "S5_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_5",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S5_0",
+              "exportMapKey": "4 * S5_0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "S6_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_6",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S6_0",
+              "exportMapKey": "4 * S6_0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "S7_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_7",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S7_0",
+              "exportMapKey": "4 * S7_0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "S8_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_8",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S8_0",
+              "exportMapKey": "4 * S8_0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "S9_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_9",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S9_0",
+              "exportMapKey": "4 * S9_0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -1752,8 +2870,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_10",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_10",
@@ -1762,7 +2880,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -1772,8 +2890,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_11",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_11",
@@ -1782,7 +2900,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -1792,8 +2910,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_12",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_12",
@@ -1802,7 +2920,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -1812,8 +2930,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_13",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_13",
@@ -1822,7 +2940,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -1832,8 +2950,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_14",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_14",
@@ -1842,7 +2960,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -1852,8 +2970,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_15",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_15",
@@ -1862,7 +2980,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -1872,8 +2990,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_16",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_16",
@@ -1882,7 +3000,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -1892,8 +3010,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_17",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_17",
@@ -1902,7 +3020,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -1912,8 +3030,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_18",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_18",
@@ -1922,7 +3040,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -1932,8 +3050,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_19",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_19",
@@ -1942,29 +3060,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
-            }
-          },
-          {
-            "name": "S2_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
             }
           },
           {
@@ -1972,8 +3070,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_20",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_20",
@@ -1982,7 +3080,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -1992,8 +3090,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_21",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_21",
@@ -2002,7 +3100,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -2012,8 +3110,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_22",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_22",
@@ -2022,7 +3120,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -2032,8 +3130,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_23",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_23",
@@ -2042,7 +3140,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -2052,8 +3150,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_24",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_24",
@@ -2062,7 +3160,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -2072,8 +3170,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_25",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_25",
@@ -2082,7 +3180,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -2092,8 +3190,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_26",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_26",
@@ -2102,7 +3200,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -2112,8 +3210,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_27",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_27",
@@ -2122,7 +3220,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -2132,8 +3230,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_28",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_28",
@@ -2142,7 +3240,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -2152,8 +3250,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_29",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_29",
@@ -2162,29 +3260,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "S3_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -2192,8 +3270,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_30",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_30",
@@ -2202,7 +3280,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -2212,8 +3290,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_31",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_31",
@@ -2222,7 +3300,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -2232,8 +3310,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_32",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_32",
@@ -2242,7 +3320,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -2252,8 +3330,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_33",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_33",
@@ -2262,7 +3340,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -2272,8 +3350,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_34",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_34",
@@ -2282,7 +3360,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -2292,8 +3370,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_35",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_35",
@@ -2302,7 +3380,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -2312,8 +3390,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_36",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_36",
@@ -2322,7 +3400,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -2332,8 +3410,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_37",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_37",
@@ -2342,7 +3420,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -2352,8 +3430,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_38",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_38",
@@ -2362,7 +3440,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -2372,8 +3450,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_39",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_39",
@@ -2382,29 +3460,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
-            }
-          },
-          {
-            "name": "S4_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
             }
           },
           {
@@ -2412,8 +3470,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_40",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_40",
@@ -2422,7 +3480,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -2432,8 +3490,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_41",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_41",
@@ -2442,7 +3500,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -2452,8 +3510,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_42",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_42",
@@ -2462,7 +3520,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -2472,8 +3530,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_43",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_43",
@@ -2482,7 +3540,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -2492,8 +3550,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_44",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_44",
@@ -2502,7 +3560,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -2512,8 +3570,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_45",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_45",
@@ -2522,7 +3580,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -2532,8 +3590,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_46",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_46",
@@ -2542,7 +3600,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -2552,8 +3610,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_47",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_47",
@@ -2562,7 +3620,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -2572,8 +3630,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_48",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_48",
@@ -2582,7 +3640,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -2592,8 +3650,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_49",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_49",
@@ -2602,29 +3660,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "S5_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -2632,8 +3670,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_50",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_50",
@@ -2642,7 +3680,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -2652,8 +3690,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_51",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_51",
@@ -2662,7 +3700,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -2672,8 +3710,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_52",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_52",
@@ -2682,7 +3720,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -2692,8 +3730,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_53",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_53",
@@ -2702,7 +3740,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -2712,8 +3750,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_54",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_54",
@@ -2722,7 +3760,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -2732,8 +3770,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_55",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_55",
@@ -2742,7 +3780,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -2752,8 +3790,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_56",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_56",
@@ -2762,7 +3800,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -2772,8 +3810,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_57",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_57",
@@ -2782,7 +3820,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -2792,8 +3830,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_58",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_58",
@@ -2802,7 +3840,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -2812,8 +3850,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_59",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_59",
@@ -2822,29 +3860,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
-            }
-          },
-          {
-            "name": "S6_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
             }
           },
           {
@@ -2852,8 +3870,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_60",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_60",
@@ -2862,7 +3880,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -2872,8 +3890,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_61",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_61",
@@ -2882,7 +3900,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -2892,8 +3910,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_62",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_62",
@@ -2902,7 +3920,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -2912,8 +3930,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_63",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_63",
@@ -2922,7 +3940,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -2932,8 +3950,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_64",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_64",
@@ -2942,7 +3960,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -2952,8 +3970,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_65",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_65",
@@ -2962,7 +3980,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -2972,8 +3990,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_66",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_66",
@@ -2982,7 +4000,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -2992,8 +4010,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_67",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_67",
@@ -3002,7 +4020,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -3012,8 +4030,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_68",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_68",
@@ -3022,7 +4040,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -3032,8 +4050,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_69",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_69",
@@ -3042,29 +4060,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "S7_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -3072,8 +4070,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_70",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_70",
@@ -3082,7 +4080,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -3092,8 +4090,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_71",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_71",
@@ -3102,7 +4100,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -3112,8 +4110,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_72",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_72",
@@ -3122,7 +4120,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -3132,8 +4130,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_73",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_73",
@@ -3142,7 +4140,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -3152,8 +4150,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_74",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_74",
@@ -3162,7 +4160,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -3172,8 +4170,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_75",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_75",
@@ -3182,7 +4180,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -3192,8 +4190,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_76",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_76",
@@ -3202,7 +4200,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -3212,8 +4210,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_77",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_77",
@@ -3222,7 +4220,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -3232,8 +4230,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_78",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_78",
@@ -3242,7 +4240,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -3252,8 +4250,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_79",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_79",
@@ -3262,29 +4260,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
-            }
-          },
-          {
-            "name": "S8_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
             }
           },
           {
@@ -3292,8 +4270,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_80",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_80",
@@ -3302,7 +4280,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -3312,8 +4290,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_81",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_81",
@@ -3322,7 +4300,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -3332,8 +4310,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_82",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_82",
@@ -3342,7 +4320,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -3352,8 +4330,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_83",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_83",
@@ -3362,7 +4340,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -3372,8 +4350,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_84",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_84",
@@ -3382,7 +4360,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -3392,8 +4370,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_85",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_85",
@@ -3402,7 +4380,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -3412,8 +4390,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_86",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_86",
@@ -3422,7 +4400,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -3432,8 +4410,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_87",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_87",
@@ -3442,7 +4420,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -3452,8 +4430,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_88",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_88",
@@ -3462,7 +4440,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -3472,8 +4450,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_89",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_89",
@@ -3482,29 +4460,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "S9_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -3512,8 +4470,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_90",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_90",
@@ -3522,7 +4480,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -3532,8 +4490,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_91",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_91",
@@ -3542,7 +4500,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -3552,8 +4510,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_92",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_92",
@@ -3562,7 +4520,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -3572,8 +4530,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_93",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_93",
@@ -3582,7 +4540,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -3592,8 +4550,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_94",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_94",
@@ -3602,7 +4560,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -3612,8 +4570,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_95",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_95",
@@ -3622,7 +4580,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -3632,8 +4590,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_96",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_96",
@@ -3642,7 +4600,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -3652,8 +4610,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_97",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_97",
@@ -3662,7 +4620,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -3672,8 +4630,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_98",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_98",
@@ -3682,7 +4640,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -3692,8 +4650,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_99",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_99",
@@ -3702,7 +4660,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -3712,11 +4670,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/lib/foo/constants",
+            "hasAction": true,
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -3725,19 +4683,33 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/lib/foo/constants",
+            "hasAction": true,
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Before request
 
@@ -3774,6 +4746,422 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3789,7 +5177,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-2 "si"
@@ -4285,6 +5673,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -4319,8 +5713,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_0",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_0",
@@ -4329,7 +5723,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -4339,8 +5733,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_1",
@@ -4349,9 +5743,169 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "S2_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_2",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S2_0",
+              "exportMapKey": "4 * S2_0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "S3_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_3",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S3_0",
+              "exportMapKey": "4 * S3_0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "S4_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_4",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S4_0",
+              "exportMapKey": "4 * S4_0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "S5_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_5",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S5_0",
+              "exportMapKey": "4 * S5_0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "S6_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_6",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S6_0",
+              "exportMapKey": "4 * S6_0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "S7_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_7",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S7_0",
+              "exportMapKey": "4 * S7_0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "S8_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_8",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S8_0",
+              "exportMapKey": "4 * S8_0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "S9_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "source": "./lib/a_9",
+            "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S9_0",
+              "exportMapKey": "4 * S9_0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -4359,8 +5913,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_10",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_10",
@@ -4369,7 +5923,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -4379,8 +5933,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_11",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_11",
@@ -4389,7 +5943,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -4399,8 +5953,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_12",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_12",
@@ -4409,7 +5963,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -4419,8 +5973,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_13",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_13",
@@ -4429,7 +5983,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -4439,8 +5993,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_14",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_14",
@@ -4449,7 +6003,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -4459,8 +6013,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_15",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_15",
@@ -4469,7 +6023,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -4479,8 +6033,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_16",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_16",
@@ -4489,7 +6043,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -4499,8 +6053,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_17",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_17",
@@ -4509,7 +6063,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -4519,8 +6073,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_18",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_18",
@@ -4529,7 +6083,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -4539,8 +6093,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_19",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_19",
@@ -4549,29 +6103,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
-            }
-          },
-          {
-            "name": "S2_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
             }
           },
           {
@@ -4579,8 +6113,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_20",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_20",
@@ -4589,7 +6123,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -4599,8 +6133,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_21",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_21",
@@ -4609,7 +6143,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -4619,8 +6153,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_22",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_22",
@@ -4629,7 +6163,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -4639,8 +6173,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_23",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_23",
@@ -4649,7 +6183,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -4659,8 +6193,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_24",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_24",
@@ -4669,7 +6203,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -4679,8 +6213,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_25",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_25",
@@ -4689,7 +6223,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -4699,8 +6233,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_26",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_26",
@@ -4709,7 +6243,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -4719,8 +6253,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_27",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_27",
@@ -4729,7 +6263,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -4739,8 +6273,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_28",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_28",
@@ -4749,7 +6283,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -4759,8 +6293,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_29",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_29",
@@ -4769,29 +6303,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "S3_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -4799,8 +6313,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_30",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_30",
@@ -4809,7 +6323,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -4819,8 +6333,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_31",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_31",
@@ -4829,7 +6343,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -4839,8 +6353,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_32",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_32",
@@ -4849,7 +6363,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -4859,8 +6373,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_33",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_33",
@@ -4869,7 +6383,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -4879,8 +6393,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_34",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_34",
@@ -4889,7 +6403,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -4899,8 +6413,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_35",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_35",
@@ -4909,7 +6423,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -4919,8 +6433,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_36",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_36",
@@ -4929,7 +6443,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -4939,8 +6453,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_37",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_37",
@@ -4949,7 +6463,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -4959,8 +6473,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_38",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_38",
@@ -4969,7 +6483,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -4979,8 +6493,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_39",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_39",
@@ -4989,29 +6503,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
-            }
-          },
-          {
-            "name": "S4_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
             }
           },
           {
@@ -5019,8 +6513,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_40",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_40",
@@ -5029,7 +6523,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -5039,8 +6533,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_41",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_41",
@@ -5049,7 +6543,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -5059,8 +6553,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_42",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_42",
@@ -5069,7 +6563,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -5079,8 +6573,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_43",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_43",
@@ -5089,7 +6583,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -5099,8 +6593,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_44",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_44",
@@ -5109,7 +6603,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -5119,8 +6613,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_45",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_45",
@@ -5129,7 +6623,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -5139,8 +6633,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_46",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_46",
@@ -5149,7 +6643,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -5159,8 +6653,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_47",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_47",
@@ -5169,7 +6663,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -5179,8 +6673,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_48",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_48",
@@ -5189,7 +6683,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -5199,8 +6693,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_49",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_49",
@@ -5209,29 +6703,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "S5_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -5239,8 +6713,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_50",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_50",
@@ -5249,7 +6723,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -5259,8 +6733,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_51",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_51",
@@ -5269,7 +6743,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -5279,8 +6753,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_52",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_52",
@@ -5289,7 +6763,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -5299,8 +6773,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_53",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_53",
@@ -5309,7 +6783,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -5319,8 +6793,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_54",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_54",
@@ -5329,7 +6803,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -5339,8 +6813,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_55",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_55",
@@ -5349,7 +6823,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -5359,8 +6833,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_56",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_56",
@@ -5369,7 +6843,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -5379,8 +6853,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_57",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_57",
@@ -5389,7 +6863,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -5399,8 +6873,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_58",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_58",
@@ -5409,7 +6883,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -5419,8 +6893,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_59",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_59",
@@ -5429,29 +6903,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
-            }
-          },
-          {
-            "name": "S6_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
             }
           },
           {
@@ -5459,8 +6913,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_60",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_60",
@@ -5469,7 +6923,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -5479,8 +6933,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_61",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_61",
@@ -5489,7 +6943,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -5499,8 +6953,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_62",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_62",
@@ -5509,7 +6963,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -5519,8 +6973,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_63",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_63",
@@ -5529,7 +6983,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -5539,8 +6993,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_64",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_64",
@@ -5549,7 +7003,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -5559,8 +7013,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_65",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_65",
@@ -5569,7 +7023,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -5579,8 +7033,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_66",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_66",
@@ -5589,7 +7043,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -5599,8 +7053,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_67",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_67",
@@ -5609,7 +7063,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -5619,8 +7073,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_68",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_68",
@@ -5629,7 +7083,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -5639,8 +7093,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_69",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_69",
@@ -5649,29 +7103,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "S7_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -5679,8 +7113,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_70",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_70",
@@ -5689,7 +7123,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -5699,8 +7133,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_71",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_71",
@@ -5709,7 +7143,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -5719,8 +7153,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_72",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_72",
@@ -5729,7 +7163,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -5739,8 +7173,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_73",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_73",
@@ -5749,7 +7183,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -5759,8 +7193,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_74",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_74",
@@ -5769,7 +7203,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -5779,8 +7213,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_75",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_75",
@@ -5789,7 +7223,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -5799,8 +7233,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_76",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_76",
@@ -5809,7 +7243,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -5819,8 +7253,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_77",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_77",
@@ -5829,7 +7263,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -5839,8 +7273,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_78",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_78",
@@ -5849,7 +7283,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -5859,8 +7293,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_79",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_79",
@@ -5869,29 +7303,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
-            }
-          },
-          {
-            "name": "S8_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
             }
           },
           {
@@ -5899,8 +7313,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_80",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_80",
@@ -5909,7 +7323,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -5919,8 +7333,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_81",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_81",
@@ -5929,7 +7343,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -5939,8 +7353,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_82",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_82",
@@ -5949,7 +7363,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -5959,8 +7373,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_83",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_83",
@@ -5969,7 +7383,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -5979,8 +7393,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_84",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_84",
@@ -5989,7 +7403,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -5999,8 +7413,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_85",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_85",
@@ -6009,7 +7423,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -6019,8 +7433,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_86",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_86",
@@ -6029,7 +7443,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -6039,8 +7453,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_87",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_87",
@@ -6049,7 +7463,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -6059,8 +7473,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_88",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_88",
@@ -6069,7 +7483,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -6079,8 +7493,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_89",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_89",
@@ -6089,29 +7503,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "S9_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -6119,8 +7513,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_90",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_90",
@@ -6129,7 +7523,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -6139,8 +7533,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_91",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_91",
@@ -6149,7 +7543,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -6159,8 +7553,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_92",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_92",
@@ -6169,7 +7563,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -6179,8 +7573,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_93",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_93",
@@ -6189,7 +7583,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -6199,8 +7593,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_94",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_94",
@@ -6209,7 +7603,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -6219,8 +7613,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_95",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_95",
@@ -6229,7 +7623,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -6239,8 +7633,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_96",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_96",
@@ -6249,7 +7643,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -6259,8 +7653,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_97",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_97",
@@ -6269,7 +7663,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -6279,8 +7673,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_98",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_98",
@@ -6289,7 +7683,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -6299,8 +7693,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/a_99",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/a_99",
@@ -6309,7 +7703,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -6319,8 +7713,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/foo/constants",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/foo/constants",
@@ -6329,7 +7723,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }
@@ -6339,8 +7733,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "./lib/foo/constants",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "./lib/foo/constants",
@@ -6349,13 +7743,27 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*

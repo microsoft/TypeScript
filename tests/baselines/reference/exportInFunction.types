@@ -3,6 +3,7 @@
 === exportInFunction.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     export = 0;
 

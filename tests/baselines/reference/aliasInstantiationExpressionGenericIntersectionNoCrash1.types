@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash1.ts] ////
+
+=== aliasInstantiationExpressionGenericIntersectionNoCrash1.ts ===
+class ErrImpl<E> {
+>ErrImpl : ErrImpl<E>
+>        : ^^^^^^^^^^
+
+  e!: E;
+>e : E
+>  : ^
+}
+
+declare const Err: typeof ErrImpl & (<T>() => T);
+>Err : typeof ErrImpl & (<T>() => T)
+>    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^
+>ErrImpl : typeof ErrImpl
+>        : ^^^^^^^^^^^^^^
+
+type ErrAlias<U> = typeof Err<U>;
+>ErrAlias : { new (): ErrImpl<U>; prototype: ErrImpl<any>; } & (() => U)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Err : typeof ErrImpl & (<T>() => T)
+>    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^
+
+declare const e: ErrAlias<number>;
+>e : { new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+e as ErrAlias<string>;
+>e as ErrAlias<string> : { new (): ErrImpl<string>; prototype: ErrImpl<any>; } & (() => string)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : { new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,0 +1,17 @@
+classImplementsPrimitive.ts(3,20): error TS2864: A class cannot implement a primitive type like 'number'. It can only implement other named object types.
+classImplementsPrimitive.ts(4,21): error TS2864: A class cannot implement a primitive type like 'string'. It can only implement other named object types.
+classImplementsPrimitive.ts(5,21): error TS2864: A class cannot implement a primitive type like 'boolean'. It can only implement other named object types.
+
+
+==== classImplementsPrimitive.ts (3 errors) ====
+    // classes cannot implement primitives
+    
+    class C implements number { }
+                       ~~~~~~
+!!! error TS2864: A class cannot implement a primitive type like 'number'. It can only implement other named object types.
+    class C2 implements string { }
+                        ~~~~~~
+!!! error TS2864: A class cannot implement a primitive type like 'string'. It can only implement other named object types.
+    class C3 implements boolean { }
+                        ~~~~~~~
+!!! error TS2864: A class cannot implement a primitive type like 'boolean'. It can only implement other named object types.

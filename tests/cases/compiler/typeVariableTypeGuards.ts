@@ -81,3 +81,11 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
         obj[key];
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/57381
+
+function f6<T extends string | (new () => {})>(a: T) {
+  if (typeof a !== "string") {
+    new a();
+  }
+}

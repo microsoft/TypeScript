@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/circularConstructorWithReturn.ts] ////
+
+=== circularConstructorWithReturn.ts ===
+// This should not be a circularity error. See
+// https://github.com/microsoft/TypeScript/pull/57465#issuecomment-1960271216
+export type Client = ReturnType<typeof getPrismaClient> extends new () => infer T ? T : never
+>Client : Symbol(Client, Decl(circularConstructorWithReturn.ts, 0, 0))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>getPrismaClient : Symbol(getPrismaClient, Decl(circularConstructorWithReturn.ts, 2, 93))
+>T : Symbol(T, Decl(circularConstructorWithReturn.ts, 2, 79))
+>T : Symbol(T, Decl(circularConstructorWithReturn.ts, 2, 79))
+
+export function getPrismaClient(options?: any) {
+>getPrismaClient : Symbol(getPrismaClient, Decl(circularConstructorWithReturn.ts, 2, 93))
+>options : Symbol(options, Decl(circularConstructorWithReturn.ts, 4, 32))
+
+  class PrismaClient {
+>PrismaClient : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+
+    self: Client;
+>self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
+>Client : Symbol(Client, Decl(circularConstructorWithReturn.ts, 0, 0))
+
+    constructor(options?: any) {
+>options : Symbol(options, Decl(circularConstructorWithReturn.ts, 7, 16))
+
+      return (this.self = applyModelsAndClientExtensions(this));
+>this.self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
+>this : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+>self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
+>applyModelsAndClientExtensions : Symbol(applyModelsAndClientExtensions, Decl(circularConstructorWithReturn.ts, 13, 1))
+>this : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+    }
+  }
+
+  return PrismaClient
+>PrismaClient : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+}
+
+export function applyModelsAndClientExtensions(client: Client) {
+>applyModelsAndClientExtensions : Symbol(applyModelsAndClientExtensions, Decl(circularConstructorWithReturn.ts, 13, 1))
+>client : Symbol(client, Decl(circularConstructorWithReturn.ts, 15, 47))
+>Client : Symbol(Client, Decl(circularConstructorWithReturn.ts, 0, 0))
+
+  return client;
+>client : Symbol(client, Decl(circularConstructorWithReturn.ts, 15, 47))
+}
+

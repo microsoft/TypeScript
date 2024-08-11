@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/arrowFunctionJSDocAnnotation.ts] ////
+
+=== index.js ===
+/**
+ * @param {any} v
+ */
+function identity(v) {
+>identity : (v: any) => any
+>         : ^ ^^   ^^^^^^^^
+>v : any
+
+    return v;
+>v : any
+}
+
+const x = identity(
+>x : any
+>identity(    /**     * @param {number} param     * @returns {number=}     */    param => param) : any
+>identity : (v: any) => any
+>         : ^ ^^   ^^^^^^^^
+
+    /**
+     * @param {number} param
+     * @returns {number=}
+     */
+    param => param
+>param => param : (param: number) => number | undefined
+>               : ^     ^^      ^^^^^         ^^^^^^^^^
+>param : number
+>      : ^^^^^^
+>param : number
+>      : ^^^^^^
+
+);
+

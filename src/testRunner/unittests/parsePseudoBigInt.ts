@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: BigInt literal base conversions", () => {
     describe("parsePseudoBigInt", () => {
@@ -12,7 +12,7 @@ describe("unittests:: BigInt literal base conversions", () => {
                 for (let leadingZeros = 0; leadingZeros < 10; leadingZeros++) {
                     assert.equal(
                         ts.parsePseudoBigInt("0".repeat(leadingZeros) + testNumber + "n"),
-                        String(testNumber)
+                        String(testNumber),
                     );
                 }
             }
@@ -52,19 +52,19 @@ describe("unittests:: BigInt literal base conversions", () => {
         it("can parse large literals", () => {
             assert.equal(
                 ts.parsePseudoBigInt("123456789012345678901234567890n"),
-                "123456789012345678901234567890"
+                "123456789012345678901234567890",
             );
             assert.equal(
                 ts.parsePseudoBigInt("0b1100011101110100100001111111101101100001101110011111000001110111001001110001111110000101011010010n"),
-                "123456789012345678901234567890"
+                "123456789012345678901234567890",
             );
             assert.equal(
                 ts.parsePseudoBigInt("0o143564417755415637016711617605322n"),
-                "123456789012345678901234567890"
+                "123456789012345678901234567890",
             );
             assert.equal(
                 ts.parsePseudoBigInt("0x18ee90ff6c373e0ee4e3f0ad2n"),
-                "123456789012345678901234567890"
+                "123456789012345678901234567890",
             );
         });
     });

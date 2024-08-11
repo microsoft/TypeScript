@@ -22,5 +22,5 @@ declare global {
     interface RequireInterface {}
 }
 // @filename: /index.ts
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {}

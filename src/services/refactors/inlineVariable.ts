@@ -24,6 +24,7 @@ import {
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isStringLiteral,
+    isShorthandPropertyAssignment,
     isTemplateSpan,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
@@ -41,8 +42,11 @@ import {
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
-} from "../_namespaces/ts";
-import { RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import {
+    RefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -50,7 +54,7 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable
 const inlineVariableAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.inline.variable"
+    kind: "refactor.inline.variable",
 };
 
 interface InliningInfo {
@@ -68,7 +72,7 @@ registerRefactor(refactorName, {
             program,
             preferences,
             startPosition,
-            triggerReason
+            triggerReason,
         } = context;
 
         // tryWithReferenceToken is true below when triggerReason === "invoked", since we want to
@@ -83,7 +87,7 @@ registerRefactor(refactorName, {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [inlineVariableAction]
+                actions: [inlineVariableAction],
             }];
         }
 
@@ -93,8 +97,8 @@ registerRefactor(refactorName, {
                 description: refactorDescription,
                 actions: [{
                     ...inlineVariableAction,
-                    notApplicableReason: info.error
-                }]
+                    notApplicableReason: info.error,
+                }],
             }];
         }
 
@@ -103,7 +107,6 @@ registerRefactor(refactorName, {
 
     getEditsForAction(context, actionName) {
         Debug.assert(actionName === refactorName, "Unexpected refactor invoked");
-
         const { file, program, startPosition } = context;
 
         // tryWithReferenceToken is true below since here we're already performing the refactor.
@@ -127,7 +130,7 @@ registerRefactor(refactorName, {
         });
 
         return { edits };
-    }
+    },
 });
 
 function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
@@ -141,7 +144,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     // If triggered in a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
-    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
+    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
         // Don't inline the variable if it has multiple declarations.
         if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
@@ -195,9 +198,10 @@ function isDeclarationExported(declaration: InitializedVariableDeclaration): boo
 function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
     const references: Identifier[] = [];
     const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
-        // Only inline if all references are reads. Else we might end up with an invalid scenario like:
-        // const y = x++ + 1 -> const y = 2++ + 1
-        if (FindAllReferences.isWriteAccessForReference(ref)) {
+        // Only inline if all references are reads, or if it includes a shorthand property assignment.
+        // Else we might end up with an invalid scenario like:
+        // const y = x++ + 1 -> const y = 2++ + 1,
+        if (FindAllReferences.isWriteAccessForReference(ref) && !isShorthandPropertyAssignment(ref.parent)) {
             return true;
         }
 
@@ -222,7 +226,7 @@ function getReferenceNodes(declaration: InitializedVariableDeclaration, checker:
     return references.length === 0 || cannotInline ? undefined : references;
 }
 
-function getReplacementExpression(reference: Node, replacement: Expression): Expression {
+function getReplacementExpression(reference: Node, replacement: Expression) {
     // Make sure each reference site gets its own copy of the replacement node.
     replacement = getSynthesizedDeepClone(replacement);
     const { parent } = reference;
@@ -248,6 +252,14 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // E.g.: const x = 1; x.toString(); -> (1).toString();
     if (isPropertyAccessExpression(parent) && (isNumericLiteral(replacement) || isObjectLiteralExpression(replacement))) {
         return factory.createParenthesizedExpression(replacement);
+    }
+
+    // Inline shorthand property assignment
+    // E.g.:
+    // const x = 1;
+    // const y = { x }; -> const y = { x: 1 };
+    if (isIdentifier(reference) && isShorthandPropertyAssignment(parent)) {
+        return factory.createPropertyAssignment(reference, replacement);
     }
 
     return replacement;

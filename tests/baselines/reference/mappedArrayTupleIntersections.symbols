@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/mappedArrayTupleIntersections.ts] ////
+
+=== mappedArrayTupleIntersections.ts ===
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(mappedArrayTupleIntersections.ts, 0, 0))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 0, 9))
+>value : Symbol(value, Decl(mappedArrayTupleIntersections.ts, 0, 15))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 0, 9))
+
+type Boxify<T> = { [K in keyof T]: Box<T[K]> };
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 1, 12))
+>K : Symbol(K, Decl(mappedArrayTupleIntersections.ts, 1, 20))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 1, 12))
+>Box : Symbol(Box, Decl(mappedArrayTupleIntersections.ts, 0, 0))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 1, 12))
+>K : Symbol(K, Decl(mappedArrayTupleIntersections.ts, 1, 20))
+
+type T1 = Boxify<string[]>;
+>T1 : Symbol(T1, Decl(mappedArrayTupleIntersections.ts, 1, 47))
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+
+type T2 = Boxify<[string, string]>;
+>T2 : Symbol(T2, Decl(mappedArrayTupleIntersections.ts, 3, 27))
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+
+type T3 = Boxify<string[] & unknown[]>;
+>T3 : Symbol(T3, Decl(mappedArrayTupleIntersections.ts, 4, 35))
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+
+type T4 = Boxify<string[] & [string, string]>;
+>T4 : Symbol(T4, Decl(mappedArrayTupleIntersections.ts, 5, 39))
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+
+type T5 = Boxify<string[] & { x: string }>;
+>T5 : Symbol(T5, Decl(mappedArrayTupleIntersections.ts, 6, 46))
+>Boxify : Symbol(Boxify, Decl(mappedArrayTupleIntersections.ts, 0, 27))
+>x : Symbol(x, Decl(mappedArrayTupleIntersections.ts, 7, 29))
+
+// https://github.com/microsoft/TypeScript/issues/57744
+
+type MustBeArray<T extends any[]> = T;
+>MustBeArray : Symbol(MustBeArray, Decl(mappedArrayTupleIntersections.ts, 7, 43))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 11, 17))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 11, 17))
+
+type Hmm<T extends any[]> = T extends number[] ?
+>Hmm : Symbol(Hmm, Decl(mappedArrayTupleIntersections.ts, 11, 38))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 13, 9))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 13, 9))
+
+    MustBeArray<{ [I in keyof T]: 1 }> :
+>MustBeArray : Symbol(MustBeArray, Decl(mappedArrayTupleIntersections.ts, 7, 43))
+>I : Symbol(I, Decl(mappedArrayTupleIntersections.ts, 14, 19))
+>T : Symbol(T, Decl(mappedArrayTupleIntersections.ts, 13, 9))
+
+    never;
+
+type X = Hmm<[3, 4, 5]>;
+>X : Symbol(X, Decl(mappedArrayTupleIntersections.ts, 15, 10))
+>Hmm : Symbol(Hmm, Decl(mappedArrayTupleIntersections.ts, 11, 38))
+

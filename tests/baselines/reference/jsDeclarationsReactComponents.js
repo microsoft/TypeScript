@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents.ts] ////
 
 //// [jsDeclarationsReactComponents1.jsx]
-/// <reference path="/.lib/react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" preserve="true" />
 import React from "react";
 import PropTypes from "prop-types"
 
@@ -101,7 +101,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
+/// <reference path="react16.d.ts" preserve="true" />
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
 var TabbedShowLayout = function (_a) {
@@ -185,7 +185,7 @@ exports.default = Tree;
 
 
 //// [jsDeclarationsReactComponents1.d.ts]
-/// <reference path="../..react16.d.ts" />
+/// <reference path="../..react16.d.ts" preserve="true" />
 export default TabbedShowLayout;
 declare function TabbedShowLayout({}: {}): JSX.Element;
 declare namespace TabbedShowLayout {
@@ -198,7 +198,6 @@ declare namespace TabbedShowLayout {
 }
 import PropTypes from "prop-types";
 //// [jsDeclarationsReactComponents2.d.ts]
-/// <reference path="../..react16.d.ts" />
 export default TabbedShowLayout;
 /**
  * @type {React.SFC}
@@ -228,7 +227,6 @@ declare namespace TabbedShowLayout {
     }
 }
 //// [jsDeclarationsReactComponents5.d.ts]
-/// <reference path="../..react16.d.ts" />
 export default Tree;
 declare function Tree({ allowDropOnRoot }: {
     allowDropOnRoot: any;

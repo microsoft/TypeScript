@@ -1,9 +1,9 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a.ts
 
 
 import * as a from "a";
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -12,20 +12,21 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a.ts
 
 
 import * as aa from "a";
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -34,10 +35,11 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

@@ -1,8 +1,8 @@
 config:
 {
- "compilerOptions": {
-  "allowJs": false
- }
+  "compilerOptions": {
+    "allowJs": false
+  }
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -42,29 +42,29 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "allowJs": false,
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/a.ts",
-  "c:/dev/b.tsx",
-  "c:/dev/c.tsx"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "compilerOptions": {
-   "allowJs": false
-  }
- },
- "wildcardDirectories": {
-  "c:/dev": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
+  "options": {
+    "allowJs": false,
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/a.ts",
+    "c:/dev/b.tsx",
+    "c:/dev/c.tsx"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "compilerOptions": {
+      "allowJs": false
+    }
+  },
+  "wildcardDirectories": {
+    "c:/dev": "WatchDirectoryFlags.Recursive"
+  },
+  "compileOnSave": false
 }
 Errors::
 

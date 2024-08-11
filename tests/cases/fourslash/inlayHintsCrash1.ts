@@ -1,4 +1,5 @@
 /// <reference path="fourslash.ts" />
+
 // @allowJs: true
 // @checkJs: true
 // @Filename: foo.js
@@ -8,7 +9,8 @@
 //// function doThing(f) {
 ////     f(100)
 //// }
-verify.getInlayHints([], undefined, {
+
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true,
     includeInlayParameterNameHints: "all",
 });

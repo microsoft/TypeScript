@@ -3,5 +3,7 @@
 === parserExpressionStatement1.d.ts ===
 Foo();
 >Foo() : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 

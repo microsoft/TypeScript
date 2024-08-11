@@ -4,9 +4,11 @@
 /// <amd-module name="mynamespace::SomeModuleA" />
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === file2.ts ===
 /// <amd-module name="mynamespace::SomeModuleB" />
 export class Bar {}
 >Bar : Bar
+>    : ^^^
 

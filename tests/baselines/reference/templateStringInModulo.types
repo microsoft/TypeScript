@@ -3,8 +3,13 @@
 === templateStringInModulo.ts ===
 var x = 1 % `abc${ 1 }def`;
 >x : number
+>  : ^^^^^^
 >1 % `abc${ 1 }def` : number
+>                   : ^^^^^^
 >1 : 1
+>  : ^
 >`abc${ 1 }def` : "abc1def"
+>               : ^^^^^^^^^
 >1 : 1
+>  : ^
 

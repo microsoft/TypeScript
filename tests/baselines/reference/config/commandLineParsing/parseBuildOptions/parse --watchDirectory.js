@@ -1,11 +1,11 @@
 --watchDirectory FixedPollingInterval --verbose
 buildOptions::
 {
- "verbose": true
+  "verbose": true
 }
 WatchOptions::
 {
- "watchDirectory": 1
+  "watchDirectory": 1
 }
 Projects::
 .

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.ts] ////
+
+=== /app.mts ===
+/// <reference types="node" preserve="true" />
+export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> {
+>drainStream : (stream: NodeJS.ReadableStream) => Promise<void>
+>            : ^      ^^                     ^^^^^             
+>stream : NodeJS.ReadableStream
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>NodeJS : any
+>       : ^^^
+}
+
+=== /node_modules/@types/node/globals.d.ts ===
+
+declare namespace NodeJS {
+  interface ReadableStream {}
+}
+
+=== /node_modules/@types/node/index.d.ts ===
+
+/// <reference path="globals.d.ts" />
+

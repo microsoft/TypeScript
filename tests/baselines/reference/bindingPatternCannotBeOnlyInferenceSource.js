@@ -45,7 +45,7 @@ var _d = useReduxDispatch1(function (d, f) { return ({
             p[_i] = arguments[_i];
         }
         return d(f.funcA.apply(f, p));
-    },
+    }, // p should be inferrable
     funcB: function () {
         var p = [];
         for (var _i = 0; _i < arguments.length; _i++) {

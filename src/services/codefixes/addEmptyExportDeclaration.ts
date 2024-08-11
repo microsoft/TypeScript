@@ -1,12 +1,12 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 registerCodeFix({
     errorCodes: [
@@ -21,7 +21,7 @@ registerCodeFix({
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 factory.createNamedExports([]),
-                /*moduleSpecifier*/ undefined
+                /*moduleSpecifier*/ undefined,
             );
             changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
         });

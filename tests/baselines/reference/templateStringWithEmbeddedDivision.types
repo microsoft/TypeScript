@@ -3,8 +3,13 @@
 === templateStringWithEmbeddedDivision.ts ===
 var x = `abc${ 1 / 1 }def`;
 >x : string
+>  : ^^^^^^
 >`abc${ 1 / 1 }def` : "abc1def"
+>                   : ^^^^^^^^^
 >1 / 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

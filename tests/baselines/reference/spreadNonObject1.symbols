@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/types/spread/spreadNonObject1.ts] ////
+
+=== spreadNonObject1.ts ===
+// https://github.com/microsoft/TypeScript/issues/45493
+
+type S = `${number}`;
+>S : Symbol(S, Decl(spreadNonObject1.ts, 0, 0))
+
+const b = {
+>b : Symbol(b, Decl(spreadNonObject1.ts, 3, 5))
+
+  c: (["4"] as S[]).map(function (s) {
+>c : Symbol(c, Decl(spreadNonObject1.ts, 3, 11))
+>(["4"] as S[]).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(spreadNonObject1.ts, 0, 0))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(spreadNonObject1.ts, 4, 34))
+
+    const a = { ...s, y: 6 };
+>a : Symbol(a, Decl(spreadNonObject1.ts, 5, 9))
+>s : Symbol(s, Decl(spreadNonObject1.ts, 4, 34))
+>y : Symbol(y, Decl(spreadNonObject1.ts, 5, 21))
+
+  }),
+};
+

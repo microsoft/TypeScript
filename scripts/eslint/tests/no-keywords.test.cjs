@@ -76,7 +76,7 @@ interface Foo {
     number: string;
 }
             `,
-        }
+        },
     ],
 
     invalid: [
@@ -144,14 +144,14 @@ interface A {
             code: `let [number, string] = [3, ''];`,
             errors: [
                 { messageId: "noKeywordsError" },
-                { messageId: "noKeywordsError" }
+                { messageId: "noKeywordsError" },
             ],
         },
         {
             code: `let { String, Boolean } = { String: 1, Boolean: false };`,
             errors: [
                 { messageId: "noKeywordsError" },
-                { messageId: "noKeywordsError" }
+                { messageId: "noKeywordsError" },
             ],
         },
     ],

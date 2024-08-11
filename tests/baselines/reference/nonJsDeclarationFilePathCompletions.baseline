@@ -1,3 +1,4 @@
+// === Completions ===
 === /project/usage.ts ===
 // import { HtmlModuleThing } from "./";
 //                                    ^
@@ -49,7 +50,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -76,7 +78,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

@@ -17,7 +17,7 @@ module M {
 >C : Symbol(C, Decl(decoratorOnClassMethod12.ts, 3, 5))
 >S : Symbol(S, Decl(decoratorOnClassMethod12.ts, 0, 10))
 
-        @super.decorator
+        @(super.decorator)
         method() { }
 >method : Symbol(C.method, Decl(decoratorOnClassMethod12.ts, 4, 23))
     }

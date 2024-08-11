@@ -5,22 +5,33 @@
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
 >xs : number[]
+>   : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var xs2: typeof Array;
 >xs2 : ArrayConstructor
+>    : ^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 var xs3: typeof Array<number>;
 >xs3 : typeof Array<number>
+>    :                     
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 var xs4: typeof Array<typeof x>;
 >xs4 : typeof Array<typeof x>
+>    :                       
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

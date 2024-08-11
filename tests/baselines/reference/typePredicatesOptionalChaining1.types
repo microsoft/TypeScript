@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/typePredicatesOptionalChaining1.ts] ////
+
+=== typePredicatesOptionalChaining1.ts ===
+type X = {
+>X : X
+>  : ^
+
+  y?: {
+>y : { z?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
+
+    z?: string;
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+  };
+};
+const x: X = {
+>x : X
+>  : ^
+>{  y: {},} : { y: {}; }
+>           : ^^^^^^^^^^
+
+  y: {},
+>y : {}
+>  : ^^
+>{} : {}
+>   : ^^
+
+};
+// type guard
+function isNotNull<A>(x: A): x is NonNullable<A> {
+>isNotNull : <A>(x: A) => x is NonNullable<A>
+>          : ^ ^^ ^^ ^^^^^                   
+>x : A
+>  : ^
+
+  return x !== null && x !== undefined;
+>x !== null && x !== undefined : boolean
+>                              : ^^^^^^^
+>x !== null : boolean
+>           : ^^^^^^^
+>x : A
+>  : ^
+>x !== undefined : boolean
+>                : ^^^^^^^
+>x : A & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+// function which I want to call in the result of the expression
+function title(str: string) {
+>title : (str: string) => string
+>      : ^   ^^      ^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  return str.length > 0 ? "Dear " + str : "Dear nobody";
+>str.length > 0 ? "Dear " + str : "Dear nobody" : string
+>                                               : ^^^^^^
+>str.length > 0 : boolean
+>               : ^^^^^^^
+>str.length : number
+>           : ^^^^^^
+>str : string
+>    : ^^^^^^
+>length : number
+>       : ^^^^^^
+>0 : 0
+>  : ^
+>"Dear " + str : string
+>              : ^^^^^^
+>"Dear " : "Dear "
+>        : ^^^^^^^
+>str : string
+>    : ^^^^^^
+>"Dear nobody" : "Dear nobody"
+>              : ^^^^^^^^^^^^^
+}
+
+isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
+>isNotNull(x?.y?.z) ? title(x.y.z) : null : string | null
+>                                         : ^^^^^^^^^^^^^
+>isNotNull(x?.y?.z) : boolean
+>                   : ^^^^^^^
+>isNotNull : <A>(x: A) => x is NonNullable<A>
+>          : ^ ^^ ^^ ^^^^^                   
+>x?.y?.z : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>x?.y : { z?: string; } | undefined
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
+>x : X
+>  : ^
+>y : { z?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>title(x.y.z) : string
+>             : ^^^^^^
+>title : (str: string) => string
+>      : ^   ^^      ^^^^^^^^^^^
+>x.y.z : string
+>      : ^^^^^^
+>x.y : { z?: string; }
+>    : ^^^^^^      ^^^
+>x : X
+>  : ^
+>y : { z?: string; }
+>  : ^^^^^^      ^^^
+>z : string
+>  : ^^^^^^
+

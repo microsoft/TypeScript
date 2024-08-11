@@ -3,11 +3,15 @@
 === constInClassExpression.ts ===
 let C = class {
 >C : typeof C
+>  : ^^^^^^^^
 >class {    const a = 4;} : typeof C
+>                         : ^^^^^^^^
 
     const a = 4;
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 };
 

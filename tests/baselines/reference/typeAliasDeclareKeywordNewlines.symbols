@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/typeAliasDeclareKeywordNewlines.ts] ////
+
+=== typeAliasDeclareKeywordNewlines.ts ===
+var declare: string, type: number;
+>declare : Symbol(declare, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 3))
+>type : Symbol(type, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 20))
+
+// The following is invalid but should declare a type alias named 'T1':
+declare type /*unexpected newline*/
+T1 = null;
+>T1 : Symbol(T1, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 34))
+
+const t1: T1 = null; // Assert that T1 is the null type.
+>t1 : Symbol(t1, Decl(typeAliasDeclareKeywordNewlines.ts, 5, 5))
+>T1 : Symbol(T1, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 34))
+
+let T: null;
+>T : Symbol(T, Decl(typeAliasDeclareKeywordNewlines.ts, 7, 3))
+
+// The following should use a variable named 'declare', use a variable named
+// 'type', and assign to a variable named 'T'.
+declare /*ASI*/
+>declare : Symbol(declare, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 3))
+
+type /*ASI*/
+>type : Symbol(type, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 20))
+
+T = null;
+>T : Symbol(T, Decl(typeAliasDeclareKeywordNewlines.ts, 7, 3))
+
+// The following should use a variable named 'declare' and declare a type alias
+// named 'T2':
+declare /*ASI*/
+>declare : Symbol(declare, Decl(typeAliasDeclareKeywordNewlines.ts, 0, 3))
+
+type T2 = null;
+>T2 : Symbol(T2, Decl(typeAliasDeclareKeywordNewlines.ts, 16, 7))
+
+const t2: T2 = null; // Assert that T2 is the null type.
+>t2 : Symbol(t2, Decl(typeAliasDeclareKeywordNewlines.ts, 18, 5))
+>T2 : Symbol(T2, Decl(typeAliasDeclareKeywordNewlines.ts, 16, 7))
+

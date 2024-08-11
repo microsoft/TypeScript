@@ -1,3 +1,4 @@
+// === Smart Selection ===
 class HomePage {
   componentDidMount(/**/) {
     if (this.props.username) {

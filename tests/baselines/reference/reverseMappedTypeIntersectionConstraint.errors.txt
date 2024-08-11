@@ -1,0 +1,225 @@
+reverseMappedTypeIntersectionConstraint.ts(19,7): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+reverseMappedTypeIntersectionConstraint.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
+reverseMappedTypeIntersectionConstraint.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
+reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+  '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+reverseMappedTypeIntersectionConstraint.ts(63,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }[]' is not assignable to type 'T[]'.
+  Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+    '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+reverseMappedTypeIntersectionConstraint.ts(87,12): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+reverseMappedTypeIntersectionConstraint.ts(98,12): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
+reverseMappedTypeIntersectionConstraint.ts(100,22): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
+reverseMappedTypeIntersectionConstraint.ts(113,67): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
+reverseMappedTypeIntersectionConstraint.ts(152,21): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }'.
+reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
+
+
+==== reverseMappedTypeIntersectionConstraint.ts (14 errors) ====
+    type StateConfig<TAction extends string> = {
+      entry?: TAction
+      states?: Record<string, StateConfig<TAction>>;
+    };
+    
+    type StateSchema = {
+      states?: Record<string, StateSchema>;
+    };
+    
+    declare function createMachine<
+      TConfig extends StateConfig<TAction>,
+      TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
+    >(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
+    
+    const inferredParams1 = createMachine({
+      entry: "foo",
+      states: {
+        a: {
+          entry: "bar",
+          ~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+!!! related TS6500 reverseMappedTypeIntersectionConstraint.ts:2:3: The expected type comes from property 'entry' which is declared here on type 'StateConfig<"foo">'
+        },
+      },
+      extra: 12,
+    });
+    
+    const inferredParams2 = createMachine({
+      entry: "foo",
+      states: {
+        a: {
+          entry: "foo",
+        },
+      },
+      extra: 12,
+      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
+    });
+    
+    
+    // -----------------------------------------------------------------------------------------
+    
+    const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
+    
+    const checked = checkType<{x: number, y: string}>()({
+      x: 1 as number,
+      y: "y",
+      z: "z", // undesirable property z is *not* allowed
+      ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
+    });
+    
+    checked;
+    
+    // -----------------------------------------------------------------------------------------
+    
+    interface Stuff {
+        field: number;
+        anotherField: string;
+    }
+    
+    function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
+        if(Math.random() > 0.5) {
+          return s as T
+        } else {
+          return s
+          ~~~~~~
+!!! error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:   '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+        }
+    }
+    
+    doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+                                                    ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+    
+    function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
+        if(Math.random() > 0.5) {
+          return arr as T[]
+        } else {
+          return arr
+          ~~~~~~
+!!! error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }[]' is not assignable to type 'T[]'.
+!!! error TS2322:   Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:     '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+        }
+    }
+    
+    doStuffWithStuffArr([
+        { field: 1, anotherField: 'a', extra: 123 },
+                                       ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+    ])
+    
+    // -----------------------------------------------------------------------------------------
+    
+    type XNumber = { x: number }
+    
+    declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
+    
+    function bar(props: {x: number, y: string}) {
+      return foo(props); // no error because lack of excess property check by design
+    }
+    
+    foo({x: 1, y: 'foo'});
+               ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+    
+    foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+    
+    // -----------------------------------------------------------------------------------------
+    
+    type NoErrWithOptProps = { x: number, y?: string }
+    
+    declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
+    
+    baz({x: 1});
+    baz({x: 1, z: 123});
+               ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
+    baz({x: 1, y: 'foo'});
+    baz({x: 1, y: 'foo', z: 123});
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
+    
+    // -----------------------------------------------------------------------------------------
+    
+    interface WithNestedProp {
+      prop: string;
+      nested: {
+        prop: string;
+      }
+    }
+    
+    declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
+    
+    const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+                                                                      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
+    
+    // -----------------------------------------------------------------------------------------
+    
+    type IsLiteralString<T extends string> = string extends T ? false : true;
+    
+    type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
+    
+    interface ProvidedActor {
+      src: string;
+      logic: () => Promise<unknown>;
+    }
+    
+    type DistributeActors<TActor> = TActor extends { src: infer TSrc }
+      ? {
+          src: TSrc;
+        }
+      : never;
+    
+    interface MachineConfig<TActor extends ProvidedActor> {
+      types?: {
+        actors?: TActor;
+      };
+      invoke: IsLiteralString<TActor["src"]> extends true
+        ? DistributeActors<TActor>
+        : {
+            src: string;
+          };
+    }
+    
+    type NoExtra<T> = {
+      [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
+    }
+    
+    declare function createXMachine<
+      const TConfig extends MachineConfig<TActor>,
+      TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
+    >(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
+    
+    const child = () => Promise.resolve("foo");
+                        ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    
+    const config = createXMachine({
+      types: {} as {
+        actors: {
+          src: "str";
+          logic: typeof child;
+        };
+      },
+      invoke: {
+        src: "str",
+      },
+      extra: 10
+      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }'.
+    });
+    
+    const config2 = createXMachine({
+      invoke: {
+        src: "whatever",
+      },
+      extra: 10
+      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
+    });
+    

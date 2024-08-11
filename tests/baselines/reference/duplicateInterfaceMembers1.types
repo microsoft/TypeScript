@@ -4,8 +4,10 @@
 interface Bar {
    x: number;
 >x : number
+>  : ^^^^^^
 
    x: number;
 >x : number
+>  : ^^^^^^
 }
 

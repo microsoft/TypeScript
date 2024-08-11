@@ -13,9 +13,11 @@ import {
     getKeyForCompilerOptions,
     getOrUpdate,
     getSetExternalModuleIndicator,
+    getSnapshotText,
     identity,
     IScriptSnapshot,
     isDeclarationFileName,
+    JSDocParsingMode,
     MinimalResolutionCacheHost,
     Path,
     ResolutionMode,
@@ -26,7 +28,7 @@ import {
     toPath,
     tracing,
     updateLanguageServiceSourceFile,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * The document registry represents a store of SourceFile objects that can be shared between
@@ -159,7 +161,7 @@ export interface ExternalDocumentCache {
     getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined;
 }
 
-export type DocumentRegistryBucketKey = string & { __bucketKey: any };
+export type DocumentRegistryBucketKey = string & { __bucketKey: any; };
 
 /** @internal */
 export interface DocumentRegistryEntry {
@@ -178,14 +180,14 @@ export function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRe
     return !!(entry as DocumentRegistryEntry).sourceFile;
 }
 
-export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry {
-    return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory);
+export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry {
+    return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory, jsDocParsingMode);
 }
 
 /** @internal */
 export type DocumentRegistryBucketKeyWithMode = string & { __documentRegistryBucketKeyWithMode: any; };
 /** @internal */
-export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
+export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", jsDocParsingMode?: JSDocParsingMode, externalCache?: ExternalDocumentCache): DocumentRegistry {
     // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
     // for those settings.
     const buckets = new Map<DocumentRegistryBucketKeyWithMode, Map<Path, BucketEntry>>();
@@ -194,13 +196,13 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     function reportStats() {
         const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
             const entries = buckets.get(name)!;
-            const sourceFiles: { name: string; scriptKind: ScriptKind, refCount: number; }[] = [];
+            const sourceFiles: { name: string; scriptKind: ScriptKind; refCount: number; }[] = [];
             entries.forEach((entry, name) => {
                 if (isDocumentRegistryEntry(entry)) {
                     sourceFiles.push({
                         name,
                         scriptKind: entry.sourceFile.scriptKind,
-                        refCount: entry.languageServiceRefCount
+                        refCount: entry.languageServiceRefCount,
                     });
                 }
                 else {
@@ -210,7 +212,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             sourceFiles.sort((x, y) => y.refCount - x.refCount);
             return {
                 bucket: name,
-                sourceFiles
+                sourceFiles,
             };
         });
         return JSON.stringify(bucketInfoArray, undefined, 2);
@@ -269,9 +271,11 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             {
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings)
+                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
+                jsDocParsingMode,
             };
         sourceFileOptions.languageVersion = scriptTarget;
+        Debug.assertEqual(jsDocParsingMode, sourceFileOptions.jsDocParsingMode);
         const oldBucketCount = buckets.size;
         const keyWithMode = getDocumentRegistryBucketKeyWithMode(key, sourceFileOptions.impliedNodeFormat);
         const bucket = getOrUpdate(buckets, keyWithMode, () => new Map());
@@ -297,11 +301,11 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
         if (!entry && externalCache) {
             const sourceFile = externalCache.getDocument(keyWithMode, path);
-            if (sourceFile) {
+            if (sourceFile && sourceFile.scriptKind === scriptKind && sourceFile.text === getSnapshotText(scriptSnapshot)) {
                 Debug.assert(acquiring);
                 entry = {
                     sourceFile,
-                    languageServiceRefCount: 0
+                    languageServiceRefCount: 0,
                 };
                 setBucketEntry();
             }
@@ -324,8 +328,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
             // return it as is.
             if (entry.sourceFile.version !== version) {
-                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                    scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
+                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
                 if (externalCache) {
                     externalCache.setDocument(keyWithMode, path, entry.sourceFile);
                 }

@@ -7,7 +7,7 @@ import {
     System,
     timestamp,
     tryGetNativePerformanceHooks,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** Performance measurements for the compiler. */
 
@@ -35,7 +35,7 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
     let enterCount = 0;
     return {
         enter,
-        exit
+        exit,
     };
 
     function enter() {
@@ -180,7 +180,7 @@ export function enable(system: System = sys) {
     if (!enabled) {
         enabled = true;
         perfHooks ||= tryGetNativePerformanceHooks();
-        if (perfHooks) {
+        if (perfHooks?.performance) {
             timeorigin = perfHooks.performance.timeOrigin;
             // NodeJS's Web Performance API is currently slower than expected, but we'd still like
             // to be able to leverage native trace events when node is run with either `--cpu-prof`

@@ -3,28 +3,39 @@
 === decoratorMetadata-jsdoc.ts ===
 declare var decorator: any;
 >decorator : any
+>          : ^^^
 
 class X {
 >X : X
+>  : ^
 
     @decorator()
 >decorator() : any
+>            : ^^^
 >decorator : any
+>          : ^^^
 
     a?: string?;
 >a : string
+>  : ^^^^^^
 
     @decorator()
 >decorator() : any
+>            : ^^^
 >decorator : any
+>          : ^^^
 
     b?: string!;
 >b : string
+>  : ^^^^^^
 
     @decorator()
 >decorator() : any
+>            : ^^^
 >decorator : any
+>          : ^^^
 
     c?: *;
 >c : any
+>  : ^^^
 }

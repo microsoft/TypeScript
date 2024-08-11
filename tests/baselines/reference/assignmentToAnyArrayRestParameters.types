@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/assignmentToAnyArrayRestParameters.ts] ////
+
+=== assignmentToAnyArrayRestParameters.ts ===
+// Repros from #57122
+
+function foo<T extends string[]>(
+>foo : <T extends string[]>(fa: (s: string, ...args: string[]) => string, fb: (s: string, ...args: T) => string) => void
+>    : ^ ^^^^^^^^^        ^^  ^^                                        ^^  ^^                                 ^^^^^^^^^
+
+    fa: (s: string, ...args: string[]) => string,
+>fa : (s: string, ...args: string[]) => string
+>   : ^ ^^      ^^^^^    ^^        ^^^^^      
+>s : string
+>  : ^^^^^^
+>args : string[]
+>     : ^^^^^^^^
+
+    fb: (s: string, ...args: T) => string
+>fb : (s: string, ...args: T) => string
+>   : ^ ^^      ^^^^^    ^^ ^^^^^      
+>s : string
+>  : ^^^^^^
+>args : T
+>     : ^
+
+) {
+    const f1: (...args: any) => string = fa;
+>f1 : (...args: any) => string
+>   : ^^^^    ^^   ^^^^^      
+>args : any
+>     : ^^^
+>fa : (s: string, ...args: string[]) => string
+>   : ^ ^^      ^^^^^    ^^        ^^^^^      
+
+    const f2: (...args: any[]) => string = fa;
+>f2 : (...args: any[]) => string
+>   : ^^^^    ^^     ^^^^^      
+>args : any[]
+>     : ^^^^^
+>fa : (s: string, ...args: string[]) => string
+>   : ^ ^^      ^^^^^    ^^        ^^^^^      
+
+    const f3: (...args: any) => string = fb;
+>f3 : (...args: any) => string
+>   : ^^^^    ^^   ^^^^^      
+>args : any
+>     : ^^^
+>fb : (s: string, ...args: T) => string
+>   : ^ ^^      ^^^^^    ^^ ^^^^^      
+
+    const f4: (...args: any[]) => string = fb;
+>f4 : (...args: any[]) => string
+>   : ^^^^    ^^     ^^^^^      
+>args : any[]
+>     : ^^^^^
+>fb : (s: string, ...args: T) => string
+>   : ^ ^^      ^^^^^    ^^ ^^^^^      
+}
+
+function bar<T extends string[], K extends number>() {
+>bar : <T extends string[], K extends number>() => void
+>    : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^^^^^^^^^^
+
+    type T00 = string[]["0"];
+>T00 : string
+>    : ^^^^^^
+
+    type T01 = string[]["0.0"];  // Error
+>T01 : any
+>    : ^^^
+
+    type T02 = string[][K | "0"];
+>T02 : string[][K | "0"]
+>    : ^^^^^^^^^^^^^^^^^
+
+    type T10 = T["0"];
+>T10 : T["0"]
+>    : ^^^^^^
+
+    type T11 = T["0.0"];  // Error
+>T11 : T["0.0"]
+>    : ^^^^^^^^
+
+    type T12 = T[K | "0"];
+>T12 : T[K | "0"]
+>    : ^^^^^^^^^^
+}
+

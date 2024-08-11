@@ -37,6 +37,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /                                                                                        |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /                                                                                        |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /                                                                                        |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /                                                                                        |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /                                                                                        |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /                                                                                        |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /                                                                                        |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /                                                                                        |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /                                                                                        |
 
 ## RootDirForResolution: /folderAtRoot
 
@@ -70,6 +76,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
@@ -103,6 +115,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
 
@@ -136,6 +154,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
@@ -169,6 +193,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -202,6 +232,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -235,6 +271,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users
 
@@ -268,6 +310,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username
 
@@ -301,6 +349,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot
 
@@ -334,6 +388,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
@@ -367,6 +427,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
 
@@ -400,6 +466,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -433,6 +505,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -466,6 +544,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -499,6 +583,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user
 
@@ -532,6 +622,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username
 
@@ -565,6 +661,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot
 
@@ -598,6 +700,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
@@ -631,6 +739,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
 
@@ -664,6 +778,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -697,6 +817,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -730,6 +856,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -763,6 +895,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr
 
@@ -796,6 +934,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username
 
@@ -829,6 +973,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
 
@@ -862,6 +1012,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
@@ -895,6 +1051,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
 
@@ -928,6 +1090,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
@@ -961,6 +1129,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -994,6 +1168,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1027,6 +1207,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home
 
@@ -1060,6 +1246,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home                                                                                    |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home                                                                                    |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home                                                                                    |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username
 
@@ -1093,6 +1285,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username                                                                           |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username                                                                           |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username                                                                           |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot
 
@@ -1126,6 +1324,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot                                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot                                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot                                                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
@@ -1159,6 +1363,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1                                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1                                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1                                                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
 
@@ -1192,6 +1402,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2                                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
@@ -1225,6 +1441,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -1258,6 +1480,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1291,4 +1519,283 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
+
+## RootDirForResolution: /workspaces
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces                                                                              |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces                                                                              |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces                                                                              |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces                                                                              |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces                                                                              |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces                                                                              |
+
+## RootDirForResolution: /workspaces/folderAtRoot
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot                                                                 |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot                                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot                                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot                                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot                                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot                                                                 |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1                                                         |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1                                                         |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1                                                         |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1                                                         |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1                                                         |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2                                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2                                                 |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                 |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                 |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Directory                                                                                | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                      |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| /folderAtRoot/folder1/folder2/node_modules/@types                                        | /folderAtRoot/folder1/folder2/node_modules                                               |
+| /folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | /folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| /folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | /folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | /folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| /users/username/folderAtRoot/node_modules/@types                                         | /users/username/folderAtRoot/node_modules                                                |
+| /users/username/folderAtRoot/folder1/node_modules/@types                                 | /users/username/folderAtRoot/folder1/node_modules                                        |
+| /users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | /users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | /users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| /user/username/folderAtRoot/node_modules/@types                                          | /user/username/folderAtRoot/node_modules                                                 |
+| /user/username/folderAtRoot/folder1/node_modules/@types                                  | /user/username/folderAtRoot/folder1/node_modules                                         |
+| /user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /usr/username/folderAtRoot/node_modules/@types                                           | /usr/username/folderAtRoot/node_modules                                                  |
+| /usr/username/folderAtRoot/folder1/node_modules/@types                                   | /usr/username/folderAtRoot/folder1/node_modules                                          |
+| /usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | /usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | /usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| /home/username/folderAtRoot/node_modules/@types                                          | /home/username/folderAtRoot/node_modules                                                 |
+| /home/username/folderAtRoot/folder1/node_modules/@types                                  | /home/username/folderAtRoot/folder1/node_modules                                         |
+| /home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | /home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
+| /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
+| /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                         |
 

@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/es6/modules/exportsAndImports5.ts] ////
+
+=== a.ts ===
+
+export interface A { }
+
+=== b.ts ===
+import { A } from "./a"
+>A : any
+>  : ^^^
+
+export function f(): A {
+>f : () => A
+>  : ^^^^^^ 
+
+    return {};
+>{} : {}
+>   : ^^
+}
+export { f as fV2 };
+>f : () => A
+>  : ^^^^^^ 
+>fV2 : () => A
+>    : ^^^^^^ 
+

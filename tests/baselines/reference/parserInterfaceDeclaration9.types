@@ -4,27 +4,36 @@
 interface I1 {
     get foo(): number,
 >foo : number
+>    : ^^^^^^
 
     set foo(value: number),
 >foo : number
+>    : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 
 interface I2 {
     get foo(): number;
 >foo : number
+>    : ^^^^^^
 
     set foo(value: number);
 >foo : number
+>    : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 
 interface I3 {
     get foo(): number
 >foo : number
+>    : ^^^^^^
 
     set foo(value: number)
 >foo : number
+>    : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 

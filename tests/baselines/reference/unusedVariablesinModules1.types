@@ -5,7 +5,9 @@ export {};
 
 var x: string;
 >x : string
+>  : ^^^^^^
 
 export var y: string;
 >y : string
+>  : ^^^^^^
 

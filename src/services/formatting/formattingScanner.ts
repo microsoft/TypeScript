@@ -1,4 +1,10 @@
 import {
+    createTextRangeWithKind,
+    TextRangeWithKind,
+    TextRangeWithTriviaKind,
+    TokenInfo,
+} from "../_namespaces/ts.formatting.js";
+import {
     append,
     createScanner,
     Debug,
@@ -14,13 +20,7 @@ import {
     NodeArray,
     ScriptTarget,
     SyntaxKind,
-} from "../_namespaces/ts";
-import {
-    createTextRangeWithKind,
-    TextRangeWithKind,
-    TextRangeWithTriviaKind,
-    TokenInfo,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
 const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
@@ -113,7 +113,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
             const item: TextRangeWithTriviaKind = {
                 pos,
                 end: scanner.getTokenFullStart(),
-                kind: t
+                kind: t,
             };
 
             pos = scanner.getTokenFullStart();
