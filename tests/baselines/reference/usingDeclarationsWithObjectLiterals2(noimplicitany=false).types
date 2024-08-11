@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithObjectLiterals2.ts] ////
+
+=== usingDeclarationsWithObjectLiterals2.ts ===
+{
+  using _ = { [Symbol.dispose]() {}, value: null };
+>_ : { [Symbol.dispose](): void; value: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {}, value: null } : { [Symbol.dispose](): void; value: null; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+>value : null
+>      : ^^^^
+}
+
+async function f() {
+>f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
+  {
+    await using _ = { async [Symbol.asyncDispose]() {}, value: null };
+>_ : { [Symbol.asyncDispose](): Promise<void>; value: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ async [Symbol.asyncDispose]() {}, value: null } : { [Symbol.asyncDispose](): Promise<void>; value: null; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.asyncDispose] : () => Promise<void>
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Symbol.asyncDispose : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncDispose : unique symbol
+>             : ^^^^^^^^^^^^^
+>value : null
+>      : ^^^^
+  }
+}
+
+export {};
+
