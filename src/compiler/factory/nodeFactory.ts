@@ -1,9 +1,7 @@
 import {
     __String,
     AccessorDeclaration,
-    addRange,
     append,
-    appendIfUnique,
     ArrayBindingElement,
     ArrayBindingPattern,
     ArrayLiteralExpression,
@@ -422,7 +420,6 @@ import {
     TemplateMiddle,
     TemplateSpan,
     TemplateTail,
-    TextRange,
     ThisExpression,
     ThisTypeNode,
     ThrowStatement,
