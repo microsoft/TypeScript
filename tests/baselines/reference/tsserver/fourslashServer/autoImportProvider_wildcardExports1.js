@@ -1112,8 +1112,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/a1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/a1",
@@ -1134,8 +1134,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/b/b1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/b/b1.js",
@@ -1156,8 +1156,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/c1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/c1.js",
@@ -1178,8 +1178,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/subfolder/c2.mjs",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/subfolder/c2.mjs",
@@ -1200,8 +1200,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/d/d1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/d/d1",
@@ -1229,6 +1229,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

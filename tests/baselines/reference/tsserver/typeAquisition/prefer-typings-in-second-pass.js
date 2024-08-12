@@ -59,6 +59,9 @@ Info seq  [hh:mm:ss:mss] Config: /a/b/jsconfig.json : {
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/typings/node_modules/@types/bar/package.json 2000 undefined Project: /a/b/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/typings/node_modules/@types/package.json 2000 undefined Project: /a/b/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/typings/node_modules/package.json 2000 undefined Project: /a/b/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/jsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/jsconfig.json' (Configured)
@@ -78,6 +81,12 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/a/typings/node_modules/@types/bar/package.json: *new*
+  {"pollingInterval":2000}
+/a/typings/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/typings/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/jsconfig.json: *new*
@@ -358,6 +367,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/a/typings/node_modules/@types/bar/package.json:
+  {"pollingInterval":2000}
+/a/typings/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/a/typings/node_modules/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/jsconfig.json:

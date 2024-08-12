@@ -5,14 +5,17 @@
 
 var x1 = null;
 >x1 : any
+>   : ^^^
 
 var y1 = undefined;
 >y1 : any
+>   : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var z1 = void 0;
 >z1 : any
+>   : ^^^
 >void 0 : undefined
 >       : ^^^^^^^^^
 >0 : 0
@@ -50,11 +53,13 @@ var z3: undefined = void 0;
 
 var x4 = null || null;
 >x4 : any
+>   : ^^^
 >null || null : null
 >             : ^^^^
 
 var y4 = undefined || undefined;
 >y4 : any
+>   : ^^^
 >undefined || undefined : undefined
 >                       : ^^^^^^^^^
 >undefined : undefined
@@ -64,6 +69,7 @@ var y4 = undefined || undefined;
 
 var z4 = void 0 || void 0;
 >z4 : any
+>   : ^^^
 >void 0 || void 0 : undefined
 >                 : ^^^^^^^^^
 >void 0 : undefined

@@ -2,16 +2,16 @@
 
 === useBeforeDeclaration_destructuring.ts ===
 a;
->a : any
->  : ^^^
+>a : string
+>  : ^^^^^^
 
 let {a, b = a} = {a: '', b: 1};
->a : any
->  : ^^^
->b : any
->  : ^^^
->a : any
->  : ^^^
+>a : string
+>  : ^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
 >{a: '', b: 1} : { a: string; b?: number; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -24,8 +24,8 @@ let {a, b = a} = {a: '', b: 1};
 >  : ^
 
 b;
->b : any
->  : ^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
 
 function test({c, d = c}: Record<string, number>) {}
 >test : ({ c, d }: Record<string, number>) => void

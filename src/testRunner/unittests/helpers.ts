@@ -118,23 +118,24 @@ export function createTestCompilerHost(texts: readonly NamedSourceText[], target
     });
     if (useCaseSensitiveFileNames === undefined) useCaseSensitiveFileNames = ts.sys && ts.sys.useCaseSensitiveFileNames;
     const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
-    const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file]);
+    const currentDirectory = "/";
+    const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, currentDirectory, getCanonicalFileName), file]);
     const trace: string[] = [];
     const result: TestCompilerHost = {
         trace: s => trace.push(s),
         getTrace: () => trace,
         clearTrace: () => trace.length = 0,
-        getSourceFile: fileName => filesByPath.get(ts.toPath(fileName, "", getCanonicalFileName)),
+        getSourceFile: fileName => filesByPath.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)),
         getDefaultLibFileName: () => "lib.d.ts",
         writeFile: ts.notImplemented,
-        getCurrentDirectory: () => "",
+        getCurrentDirectory: () => currentDirectory,
         getDirectories: () => [],
         getCanonicalFileName,
         useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
         getNewLine: () => ts.sys ? ts.sys.newLine : newLine,
-        fileExists: fileName => filesByPath.has(ts.toPath(fileName, "", getCanonicalFileName)),
+        fileExists: fileName => filesByPath.has(ts.toPath(fileName, currentDirectory, getCanonicalFileName)),
         readFile: fileName => {
-            const file = filesByPath.get(ts.toPath(fileName, "", getCanonicalFileName));
+            const file = filesByPath.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName));
             return file && file.text;
         },
     };
