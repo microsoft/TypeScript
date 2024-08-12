@@ -585,7 +585,7 @@ export interface LanguageService {
      */
     getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
     /** @internal */
-    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined;
+    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined;  // eslint-disable-line @typescript-eslint/unified-signatures
 
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
