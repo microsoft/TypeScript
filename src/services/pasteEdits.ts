@@ -106,13 +106,13 @@ function pasteEdits(
                 preferences,
                 formatContext,
             };
-            
+
             // `updatedRanges` represent the new ranges that account for the offset changes caused by pasting new text and
             // `offset` represents by how much the starting position of `pasteLocations` needs to be changed.
             //
             // We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
             // identifier lies within the updated range and if it is not resolved, we try resolving it.
-            
+
             const updatedRanges: TextRange[] = [];
             let offset = 0;
             pasteLocations.forEach((location, i) => {
