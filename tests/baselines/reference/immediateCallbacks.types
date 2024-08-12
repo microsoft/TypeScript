@@ -778,6 +778,222 @@ function ff4() {
 >  : ^^^^^^^^^^^^^^^
 }
 
+// Subtype reduction considers (cb: () => void) => a subtype of (immediate cb: () => void) => void
+
+declare function fa1(cb1: () => void): void;
+>fa1 : (cb1: () => void) => void
+>    : ^   ^^          ^^^^^    
+>cb1 : () => void
+>    : ^^^^^^    
+
+declare function fa2(immediate cb2: () => void): void;
+>fa2 : (cb2: () => void) => void
+>    : ^   ^^          ^^^^^    
+>cb2 : () => void
+>    : ^^^^^^    
+
+const fa = Math.random() > 0.5 ? fa1 : fa2;
+>fa : (cb2: () => void) => void
+>   : ^   ^^          ^^^^^    
+>Math.random() > 0.5 ? fa1 : fa2 : (cb2: () => void) => void
+>                                : ^   ^^          ^^^^^    
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>fa1 : (cb1: () => void) => void
+>    : ^   ^^          ^^^^^    
+>fa2 : (cb2: () => void) => void
+>    : ^   ^^          ^^^^^    
+
+function fta() {
+>fta : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    fa(() => {
+>fa(() => {        x = 10;    }) : void
+>                                : ^^^^
+>fa : (cb2: () => void) => void
+>   : ^   ^^          ^^^^^    
+>() => {        x = 10;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 10;
+>x = 10 : 10
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+declare function fb1(cb1: () => void): void;
+>fb1 : (cb1: () => void) => void
+>    : ^   ^^          ^^^^^    
+>cb1 : () => void
+>    : ^^^^^^    
+
+declare function fb2(immediate cb2: () => void): void;
+>fb2 : (cb2: () => void) => void
+>    : ^   ^^          ^^^^^    
+>cb2 : () => void
+>    : ^^^^^^    
+
+const fb = Math.random() > 0.5 ? fb2 : fb1;
+>fb : (cb2: () => void) => void
+>   : ^   ^^          ^^^^^    
+>Math.random() > 0.5 ? fb2 : fb1 : (cb2: () => void) => void
+>                                : ^   ^^          ^^^^^    
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>fb2 : (cb2: () => void) => void
+>    : ^   ^^          ^^^^^    
+>fb1 : (cb1: () => void) => void
+>    : ^   ^^          ^^^^^    
+
+function ftb() {
+>ftb : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    fb(() => {
+>fb(() => {        x = 10;    }) : void
+>                                : ^^^^
+>fb : (cb2: () => void) => void
+>   : ^   ^^          ^^^^^    
+>() => {        x = 10;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 10;
+>x = 10 : 10
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+// A union signature parameter is immediate if any underlying parameter in same position is immediate
+
+declare const fc: ((immediate cb: () => void) => void) | ((cb: () => void) => void);
+>fc : ((cb: () => void) => void) | ((cb: () => void) => void)
+>   : ^^  ^^          ^^^^^    ^^^^^^  ^^          ^^^^^    ^
+>cb : () => void
+>   : ^^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+function ftc() {
+>ftc : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    fc(() => {
+>fc(() => {        x = 10;    }) : void
+>                                : ^^^^
+>fc : ((cb: () => void) => void) | ((cb: () => void) => void)
+>   : ^^  ^^          ^^^^^    ^^^^^^  ^^          ^^^^^    ^
+>() => {        x = 10;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 10;
+>x = 10 : 10
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+declare const fd: ((cb: () => void) => void) | ((immediate cb: () => void) => void);
+>fd : ((cb: () => void) => void) | ((cb: () => void) => void)
+>   : ^^  ^^          ^^^^^    ^^^^^^  ^^          ^^^^^    ^
+>cb : () => void
+>   : ^^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+function ftd() {
+>ftd : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    fd(() => {
+>fd(() => {        x = 10;    }) : void
+>                                : ^^^^
+>fd : ((cb: () => void) => void) | ((cb: () => void) => void)
+>   : ^^  ^^          ^^^^^    ^^^^^^  ^^          ^^^^^    ^
+>() => {        x = 10;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 10;
+>x = 10 : 10
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
 // https://github.com/microsoft/TypeScript/issues/11498
 
 declare function mystery(immediate cb: () => void): void;

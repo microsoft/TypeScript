@@ -491,96 +491,210 @@ function ff4() {
 >z : Symbol(z, Decl(immediateCallbacks.ts, 168, 7))
 }
 
-// https://github.com/microsoft/TypeScript/issues/11498
+// Subtype reduction considers (cb: () => void) => a subtype of (immediate cb: () => void) => void
 
-declare function mystery(immediate cb: () => void): void;
->mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 174, 1))
->cb : Symbol(cb, Decl(immediateCallbacks.ts, 178, 25))
+declare function fa1(cb1: () => void): void;
+>fa1 : Symbol(fa1, Decl(immediateCallbacks.ts, 174, 1))
+>cb1 : Symbol(cb1, Decl(immediateCallbacks.ts, 178, 21))
 
-function fx1() {
->fx1 : Symbol(fx1, Decl(immediateCallbacks.ts, 178, 57))
+declare function fa2(immediate cb2: () => void): void;
+>fa2 : Symbol(fa2, Decl(immediateCallbacks.ts, 178, 44))
+>cb2 : Symbol(cb2, Decl(immediateCallbacks.ts, 179, 21))
+
+const fa = Math.random() > 0.5 ? fa1 : fa2;
+>fa : Symbol(fa, Decl(immediateCallbacks.ts, 181, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>fa1 : Symbol(fa1, Decl(immediateCallbacks.ts, 174, 1))
+>fa2 : Symbol(fa2, Decl(immediateCallbacks.ts, 178, 44))
+
+function fta() {
+>fta : Symbol(fta, Decl(immediateCallbacks.ts, 181, 43))
 
     let x: string | number = "OK";
->x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 184, 7))
 
-    x;  // string
->x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
-
-    mystery(() => {
->mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 174, 1))
+    fa(() => {
+>fa : Symbol(fa, Decl(immediateCallbacks.ts, 181, 5))
 
         x = 10;
->x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 184, 7))
 
     });
     x;  // string | number
->x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 184, 7))
+}
+
+declare function fb1(cb1: () => void): void;
+>fb1 : Symbol(fb1, Decl(immediateCallbacks.ts, 189, 1))
+>cb1 : Symbol(cb1, Decl(immediateCallbacks.ts, 191, 21))
+
+declare function fb2(immediate cb2: () => void): void;
+>fb2 : Symbol(fb2, Decl(immediateCallbacks.ts, 191, 44))
+>cb2 : Symbol(cb2, Decl(immediateCallbacks.ts, 192, 21))
+
+const fb = Math.random() > 0.5 ? fb2 : fb1;
+>fb : Symbol(fb, Decl(immediateCallbacks.ts, 194, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>fb2 : Symbol(fb2, Decl(immediateCallbacks.ts, 191, 44))
+>fb1 : Symbol(fb1, Decl(immediateCallbacks.ts, 189, 1))
+
+function ftb() {
+>ftb : Symbol(ftb, Decl(immediateCallbacks.ts, 194, 43))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 197, 7))
+
+    fb(() => {
+>fb : Symbol(fb, Decl(immediateCallbacks.ts, 194, 5))
+
+        x = 10;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 197, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 197, 7))
+}
+
+// A union signature parameter is immediate if any underlying parameter in same position is immediate
+
+declare const fc: ((immediate cb: () => void) => void) | ((cb: () => void) => void);
+>fc : Symbol(fc, Decl(immediateCallbacks.ts, 206, 13))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 206, 20))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 206, 59))
+
+function ftc() {
+>ftc : Symbol(ftc, Decl(immediateCallbacks.ts, 206, 84))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 209, 7))
+
+    fc(() => {
+>fc : Symbol(fc, Decl(immediateCallbacks.ts, 206, 13))
+
+        x = 10;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 209, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 209, 7))
+}
+
+declare const fd: ((cb: () => void) => void) | ((immediate cb: () => void) => void);
+>fd : Symbol(fd, Decl(immediateCallbacks.ts, 216, 13))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 216, 20))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 216, 49))
+
+function ftd() {
+>ftd : Symbol(ftd, Decl(immediateCallbacks.ts, 216, 84))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 219, 7))
+
+    fd(() => {
+>fd : Symbol(fd, Decl(immediateCallbacks.ts, 216, 13))
+
+        x = 10;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 219, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 219, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/11498
+
+declare function mystery(immediate cb: () => void): void;
+>mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 224, 1))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 228, 25))
+
+function fx1() {
+>fx1 : Symbol(fx1, Decl(immediateCallbacks.ts, 228, 57))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 231, 7))
+
+    x;  // string
+>x : Symbol(x, Decl(immediateCallbacks.ts, 231, 7))
+
+    mystery(() => {
+>mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 224, 1))
+
+        x = 10;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 231, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 231, 7))
 
     if (x === 10) {}
->x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 231, 7))
 }
 
 // https://github.com/microsoft/TypeScript/issues/15380
 
 class Foo {
->Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 238, 1))
 
   public bar: string = "";
->bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
+>bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 242, 11))
 }
 
 function fx2() {
->fx2 : Symbol(fx2, Decl(immediateCallbacks.ts, 194, 1))
+>fx2 : Symbol(fx2, Decl(immediateCallbacks.ts, 244, 1))
 
   let foo: Foo | null = null;
->foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
->Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 247, 5))
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 238, 1))
 
   [1].forEach((item) => {
 >[1].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->item : Symbol(item, Decl(immediateCallbacks.ts, 198, 15))
+>item : Symbol(item, Decl(immediateCallbacks.ts, 248, 15))
 
       foo = new Foo();
->foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
->Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 247, 5))
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 238, 1))
 
   });
   if (foo) {
->foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 247, 5))
 
       foo.bar;
->foo.bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
->foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
->bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
+>foo.bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 242, 11))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 247, 5))
+>bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 242, 11))
   }
 }
 
 // https://github.com/microsoft/TypeScript/issues/57880
 
 const call = (immediate f: () => void) => f();
->call : Symbol(call, Decl(immediateCallbacks.ts, 208, 5))
->f : Symbol(f, Decl(immediateCallbacks.ts, 208, 14))
->f : Symbol(f, Decl(immediateCallbacks.ts, 208, 14))
+>call : Symbol(call, Decl(immediateCallbacks.ts, 258, 5))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 258, 14))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 258, 14))
 
 const fx3 = () => {
->fx3 : Symbol(fx3, Decl(immediateCallbacks.ts, 210, 5))
+>fx3 : Symbol(fx3, Decl(immediateCallbacks.ts, 260, 5))
 
     let a: undefined | number = undefined;
->a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 261, 7))
 >undefined : Symbol(undefined)
 
     call(() => { a = 1; });
->call : Symbol(call, Decl(immediateCallbacks.ts, 208, 5))
->a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>call : Symbol(call, Decl(immediateCallbacks.ts, 258, 5))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 261, 7))
 
     if (a !== undefined) {
->a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 261, 7))
 >undefined : Symbol(undefined)
 
         a.toString();
 >a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 261, 7))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
     }
 };
@@ -588,31 +702,31 @@ const fx3 = () => {
 // https://github.com/microsoft/TypeScript/issues/58291
 
 async function execute(immediate onError: (_err: Error | undefined) => void) {
->execute : Symbol(execute, Decl(immediateCallbacks.ts, 216, 2))
->onError : Symbol(onError, Decl(immediateCallbacks.ts, 220, 23))
->_err : Symbol(_err, Decl(immediateCallbacks.ts, 220, 43))
+>execute : Symbol(execute, Decl(immediateCallbacks.ts, 266, 2))
+>onError : Symbol(onError, Decl(immediateCallbacks.ts, 270, 23))
+>_err : Symbol(_err, Decl(immediateCallbacks.ts, 270, 43))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     onError(new Error("a"));
->onError : Symbol(onError, Decl(immediateCallbacks.ts, 220, 23))
+>onError : Symbol(onError, Decl(immediateCallbacks.ts, 270, 23))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 async function run() {
->run : Symbol(run, Decl(immediateCallbacks.ts, 222, 1))
+>run : Symbol(run, Decl(immediateCallbacks.ts, 272, 1))
 
     let result: boolean = true;
->result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+>result : Symbol(result, Decl(immediateCallbacks.ts, 275, 7))
 
     await execute(() => {
->execute : Symbol(execute, Decl(immediateCallbacks.ts, 216, 2))
+>execute : Symbol(execute, Decl(immediateCallbacks.ts, 266, 2))
 
         result = false;
->result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+>result : Symbol(result, Decl(immediateCallbacks.ts, 275, 7))
 
     });
     if (result === false) {
->result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+>result : Symbol(result, Decl(immediateCallbacks.ts, 275, 7))
 
         console.log("error");
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -620,6 +734,6 @@ async function run() {
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
     return result;
->result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+>result : Symbol(result, Decl(immediateCallbacks.ts, 275, 7))
 }
 

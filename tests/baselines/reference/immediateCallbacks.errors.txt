@@ -198,6 +198,56 @@ immediateCallbacks.ts(131,14): error TS1070: 'immediate' modifier cannot appear 
         z;  // string | number
     }
     
+    // Subtype reduction considers (cb: () => void) => a subtype of (immediate cb: () => void) => void
+    
+    declare function fa1(cb1: () => void): void;
+    declare function fa2(immediate cb2: () => void): void;
+    
+    const fa = Math.random() > 0.5 ? fa1 : fa2;
+    
+    function fta() {
+        let x: string | number = "OK";
+        fa(() => {
+            x = 10;
+        });
+        x;  // string | number
+    }
+    
+    declare function fb1(cb1: () => void): void;
+    declare function fb2(immediate cb2: () => void): void;
+    
+    const fb = Math.random() > 0.5 ? fb2 : fb1;
+    
+    function ftb() {
+        let x: string | number = "OK";
+        fb(() => {
+            x = 10;
+        });
+        x;  // string | number
+    }
+    
+    // A union signature parameter is immediate if any underlying parameter in same position is immediate
+    
+    declare const fc: ((immediate cb: () => void) => void) | ((cb: () => void) => void);
+    
+    function ftc() {
+        let x: string | number = "OK";
+        fc(() => {
+            x = 10;
+        });
+        x;  // string | number
+    }
+    
+    declare const fd: ((cb: () => void) => void) | ((immediate cb: () => void) => void);
+    
+    function ftd() {
+        let x: string | number = "OK";
+        fd(() => {
+            x = 10;
+        });
+        x;  // string | number
+    }
+    
     // https://github.com/microsoft/TypeScript/issues/11498
     
     declare function mystery(immediate cb: () => void): void;
