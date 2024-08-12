@@ -6,10 +6,8 @@ import { jsonToReadableText } from "../helpers.js";
 import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
-    testTscCompileLike,
     TscCompileSystem,
     verifyTsc,
-    verifyTscCompileLike,
 } from "../helpers/tsc.js";
 import {
     appendText,
@@ -224,7 +222,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    verifyTsc({
         scenario: "outFile",
         subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
         fs: getOutFileFsAfterBuild,
@@ -234,6 +232,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
             sys.exit(builder.build());
+            return buildHost.getPrograms;
         },
     });
 
@@ -279,7 +278,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         ],
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    verifyTsc({
         scenario: "outFile",
         subScenario: "builds till project specified",
         fs: getOutFileFs,
@@ -288,10 +287,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
             sys.exit(builder.build("/src/second/tsconfig.json"));
+            return buildHost.getPrograms;
         },
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    verifyTsc({
         scenario: "outFile",
         subScenario: "cleans till project specified",
         fs: getOutFileFsAfterBuild,
@@ -300,6 +300,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
             sys.exit(builder.clean("/src/second/tsconfig.json"));
+            return buildHost.getPrograms;
         },
     });
 

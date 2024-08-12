@@ -35,70 +35,20 @@ export const noChangeRun: TestTscEdit = {
 };
 export const noChangeOnlyRuns = [noChangeRun];
 
-export interface TestTscCompile extends TestTscCompileLikeBase {
-    baselineSourceMap?: boolean;
-    baselineReadFileCalls?: boolean;
-    baselinePrograms?: boolean;
-    baselineDependencies?: boolean;
-}
-
-export interface TestTscCompileLikeBase extends VerifyTscCompileLike {
+export interface TestTscCompile {
+    scenario: string;
+    subScenario: string;
+    commandLineArgs: readonly string[];
+    fs: () => vfs.FileSystem;
     diffWithInitial?: boolean;
     modifyFs?: (fs: vfs.FileSystem) => void;
     computeDtsSignatures?: boolean;
     environmentVariables?: Record<string, string>;
-}
-
-export interface TestTscCompileLike extends TestTscCompileLikeBase {
-    compile: (sys: TscCompileSystem) => void;
-    additionalBaseline?: (sys: TscCompileSystem) => void;
-}
-/**
- * Initialize FS, run compile function and save baseline
- */
-export function testTscCompileLike(input: TestTscCompileLike) {
-    const initialFs = input.fs();
-    const inputFs = initialFs.shadow();
-    const {
-        scenario,
-        subScenario,
-        diffWithInitial,
-        commandLineArgs,
-        modifyFs,
-        environmentVariables,
-        compile: worker,
-        additionalBaseline,
-    } = input;
-    if (modifyFs) modifyFs(inputFs);
-    inputFs.makeReadonly();
-    const fs = inputFs.shadow();
-
-    // Create system
-    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
-    sys.storeSignatureInfo = true;
-    sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
-    sys.exit = exitCode => sys.exitCode = exitCode;
-    worker(sys);
-    sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
-    additionalBaseline?.(sys);
-    fs.makeReadonly();
-    sys.baseLine = () => {
-        const baseFsPatch = diffWithInitial ?
-            inputFs.diff(initialFs, { includeChangedFileWithSameContent: true }) :
-            inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
-        const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
-        return {
-            file: tscBaselineName(scenario, subScenario, commandLineArgs),
-            text: `Input::
-${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
-
-Output::
-${sys.output.map(sanitizeSysOutput).join("")}
-
-${patch ? vfs.formatPatch(patch) : ""}`,
-        };
-    };
-    return sys;
+    baselineSourceMap?: boolean;
+    baselineReadFileCalls?: boolean;
+    baselinePrograms?: boolean;
+    baselineDependencies?: boolean;
+    compile?: (sys: TscCompileSystem) => CommandLineCallbacks["getPrograms"];
 }
 
 export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
@@ -124,16 +74,30 @@ export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite
 /**
  * Initialize Fs, execute command line and save baseline
  */
-export function testTscCompile(input: TestTscCompile) {
+function testTscCompile(input: TestTscCompile) {
+    const initialFs = input.fs();
+    const inputFs = initialFs.shadow();
+    const {
+        scenario,
+        subScenario,
+        diffWithInitial,
+        commandLineArgs,
+        modifyFs,
+        environmentVariables,
+    } = input;
+    if (modifyFs) modifyFs(inputFs);
+    inputFs.makeReadonly();
+    const fs = inputFs.shadow();
+
+    // Create system
+    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
+    sys.storeSignatureInfo = true;
+    sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
+    sys.exit = exitCode => sys.exitCode = exitCode;
+
     let actualReadFileMap: ts.MapLike<number> | undefined;
     let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
-    return testTscCompileLike({
-        ...input,
-        compile: commandLineCompile,
-        additionalBaseline,
-    });
-
-    function commandLineCompile(sys: TscCompileSystem) {
+    if (!input.compile) {
         makeSystemReadyForBaseline(sys);
         actualReadFileMap = {};
         const originalReadFile = sys.readFile;
@@ -146,7 +110,6 @@ export function testTscCompile(input: TestTscCompile) {
                 return originalReadFile.call(sys, path);
             };
         }
-
         const result = commandLineCallbacks(sys, originalReadFile);
         ts.executeCommandLine(
             sys,
@@ -156,23 +119,45 @@ export function testTscCompile(input: TestTscCompile) {
         sys.readFile = originalReadFile;
         getPrograms = result.getPrograms;
     }
-
-    function additionalBaseline(sys: TscCompileSystem) {
-        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
-        const programs = getPrograms!();
-        if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
-        if (shouldBaselinePrograms) {
-            const baseline: string[] = [];
-            baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
-            sys.write(baseline.join("\n"));
-        }
-        if (baselineReadFileCalls) {
-            sys.write(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
-        }
-        if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
-        actualReadFileMap = undefined;
-        getPrograms = undefined;
+    else {
+        getPrograms = input.compile(sys);
     }
+
+    sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
+
+    const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
+    const programs = getPrograms();
+    if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
+    if (shouldBaselinePrograms) {
+        const baseline: string[] = [];
+        baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
+        sys.write(baseline.join("\n"));
+    }
+    if (baselineReadFileCalls) {
+        sys.write(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
+    }
+    if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+    actualReadFileMap = undefined;
+    getPrograms = undefined;
+
+    fs.makeReadonly();
+    sys.baseLine = () => {
+        const baseFsPatch = diffWithInitial ?
+            inputFs.diff(initialFs, { includeChangedFileWithSameContent: true }) :
+            inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
+        const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
+        return {
+            file: tscBaselineName(scenario, subScenario, commandLineArgs),
+            text: `Input::
+${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+
+Output::
+${sys.output.map(sanitizeSysOutput).join("")}
+
+${patch ? vfs.formatPatch(patch) : ""}`,
+        };
+    };
+    return sys;
 }
 
 function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLineProgram[]) {
@@ -211,30 +196,6 @@ export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseL
         Harness.Baseline.runBaseline(file, text);
     });
 }
-export interface VerifyTscCompileLike {
-    scenario: string;
-    subScenario: string;
-    commandLineArgs: readonly string[];
-    fs: () => vfs.FileSystem;
-}
-
-/**
- * Verify by baselining after initializing FS and custom compile
- */
-export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
-    describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
-        describe(input.scenario, () => {
-            describe(input.subScenario, () => {
-                verifyTscBaseline(() =>
-                    verifier({
-                        ...input,
-                        fs: () => input.fs().makeReadonly(),
-                    })
-                );
-            });
-        });
-    });
-}
 
 interface VerifyTscEditDiscrepanciesInput {
     index: number;
@@ -246,6 +207,7 @@ interface VerifyTscEditDiscrepanciesInput {
     baseFs: vfs.FileSystem;
     newSys: TscCompileSystem;
     environmentVariables: TestTscCompile["environmentVariables"];
+    compile: TestTscCompile["compile"];
 }
 function verifyTscEditDiscrepancies({
     index,
@@ -257,6 +219,7 @@ function verifyTscEditDiscrepancies({
     modifyFs,
     baseFs,
     newSys,
+    compile,
 }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
     const { caption, discrepancyExplanation } = edits[index];
     const sys = testTscCompile({
@@ -272,6 +235,7 @@ function verifyTscEditDiscrepancies({
         },
         environmentVariables,
         computeDtsSignatures: true,
+        compile,
     });
     let headerAdded = false;
     for (const outputFile of sys.writtenFiles.keys()) {
@@ -562,6 +526,7 @@ export function verifyTsc({
     baselineReadFileCalls,
     baselinePrograms,
     edits,
+    compile,
 }: VerifyTscWithEditsInput) {
     describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
         let sys: TscCompileSystem;
@@ -579,6 +544,7 @@ export function verifyTsc({
                 baselineReadFileCalls,
                 baselinePrograms,
                 environmentVariables,
+                compile,
             });
             edits?.forEach((
                 { edit, caption, commandLineArgs: editCommandLineArgs },
@@ -595,6 +561,7 @@ export function verifyTsc({
                     baselineReadFileCalls,
                     baselinePrograms,
                     environmentVariables,
+                    compile,
                 }));
             });
         });
@@ -634,6 +601,7 @@ export function verifyTsc({
                         commandLineArgs,
                         modifyFs,
                         environmentVariables,
+                        compile,
                     });
                 }
                 Harness.Baseline.runBaseline(

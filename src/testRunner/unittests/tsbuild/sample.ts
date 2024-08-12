@@ -11,11 +11,9 @@ import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder
 import {
     noChangeOnlyRuns,
     noChangeRun,
-    testTscCompileLike,
     TestTscEdit,
     TscCompileSystem,
     verifyTsc,
-    verifyTscCompileLike,
 } from "../helpers/tsc.js";
 import {
     appendText,
@@ -112,7 +110,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             edits: noChangeOnlyRuns,
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "cleans till project specified",
             fs: getSampleFsAfterBuild,
@@ -121,10 +119,11 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["third/tsconfig.json"], {});
                 sys.exit(builder.clean("logic"));
+                return buildHost.getPrograms;
             },
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "cleaning project in not build order doesnt throw error",
             fs: getSampleFsAfterBuild,
@@ -133,6 +132,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["third/tsconfig.json"], {});
                 sys.exit(builder.clean("logic2"));
+                return buildHost.getPrograms;
             },
         });
     });
@@ -237,7 +237,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             }],
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
             fs: getSampleFsAfterBuild,
@@ -247,10 +247,11 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
                 sys.exit(builder.build());
+                return buildHost.getPrograms;
             },
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
             fs: () => {
@@ -267,6 +268,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
                 sys.exit(builder.build());
+                return buildHost.getPrograms;
             },
         });
 
@@ -285,7 +287,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             }],
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "builds till project specified",
             fs: () => projFs,
@@ -294,10 +296,11 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.build("logic/tsconfig.json"));
+                return buildHost.getPrograms;
             },
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "building project in not build order doesnt throw error",
             fs: () => projFs,
@@ -306,6 +309,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.build("logic2/tsconfig.json"));
+                return buildHost.getPrograms;
             },
         });
 
@@ -335,7 +339,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             }
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "building using buildReferencedProject",
             fs: () => projFs,
@@ -344,6 +348,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
                 sys.exit(builder.buildReferences("tests"));
+                return buildHost.getPrograms;
             },
         });
     });

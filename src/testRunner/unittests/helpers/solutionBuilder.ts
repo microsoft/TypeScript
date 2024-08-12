@@ -1,7 +1,10 @@
 import * as fakes from "../../_namespaces/fakes.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { commandLineCallbacks } from "./baseline.js";
+import {
+    CommandLineCallbacks,
+    commandLineCallbacks,
+} from "./baseline.js";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,
@@ -11,15 +14,24 @@ import {
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
+export type SolutionBuilderHostWithGetPrograms =
+    & ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram>
+    & { getPrograms: CommandLineCallbacks["getPrograms"]; };
 export function createSolutionBuilderHostForBaseline(
     sys: TscCompileSystem | TestServerHost,
     versionToWrite?: string,
     originalRead?: (TscCompileSystem | TestServerHost)["readFile"],
-) {
+): ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> & { getPrograms: CommandLineCallbacks["getPrograms"]; } {
     if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
-    const { cb } = commandLineCallbacks(sys, originalRead);
-    const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
+    const { cb, getPrograms } = commandLineCallbacks(sys, originalRead);
+    const host = ts.createSolutionBuilderHost(
+        sys,
+        /*createProgram*/ undefined,
+        ts.createDiagnosticReporter(sys, /*pretty*/ true),
+        ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+    ) as SolutionBuilderHostWithGetPrograms;
     host.afterProgramEmitAndDiagnostics = cb;
+    host.getPrograms = getPrograms;
     return host;
 }
 
