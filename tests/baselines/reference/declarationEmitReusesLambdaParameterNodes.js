@@ -24,4 +24,4 @@ function CustomSelect2(x) { }
 //// [index.d.ts]
 import { Props } from "react-select";
 export declare const CustomSelect1: <Option>(x: Props<Option> & {}) => void;
-export declare function CustomSelect2<Option>(x: Props<Option> & {}): void;
+export declare function CustomSelect2<Option,>(x: Props<Option> & {}): void;

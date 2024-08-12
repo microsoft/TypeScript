@@ -8142,7 +8142,7 @@ declare namespace ts {
         SourceFileStatements = 131073,
         Decorators = 2146305,
         TypeArguments = 53776,
-        TypeParameters = 53776,
+        TypeParameters = 53840,
         Parameters = 2576,
         IndexSignatureParameters = 8848,
         JSDocComment = 33,

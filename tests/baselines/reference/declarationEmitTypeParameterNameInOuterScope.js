@@ -34,10 +34,10 @@ function b2(x) { return x; }
 declare class A {
 }
 declare var a: <A>(x: A) => A;
-declare function a2<A>(x: A): A;
+declare function a2<A,>(x: A): A;
 declare var a3: <A>(x: A) => globalThis.A;
-declare function a4<A>(x: A): globalThis.A;
+declare function a4<A,>(x: A): globalThis.A;
 interface B {
 }
 declare var b: <B>(x: B) => B;
-declare function b2<B>(x: B): B;
+declare function b2<B,>(x: B): B;

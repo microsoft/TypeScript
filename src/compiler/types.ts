@@ -10013,7 +10013,7 @@ export const enum ListFormat {
     SourceFileStatements = MultiLine | NoTrailingNewLine,
     Decorators = MultiLine | Optional | SpaceAfterList,
     TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
-    TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
+    TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional | AllowTrailingComma,
     Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
     IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     JSDocComment = MultiLine | AsteriskDelimited,

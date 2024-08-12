@@ -100,6 +100,16 @@ describe("unittests:: PrinterAPI", () => {
                 ts.ScriptKind.TSX,
             ));
         });
+
+        printsCorrectly("typeParameters", {}, printer => {
+            return printer.printFile(ts.createSourceFile(
+                "source.tsx",
+                String.raw`export const id = <T,>(id: T): T => id;`,
+                ts.ScriptTarget.Latest,
+                /*setParentNodes*/ undefined,
+                ts.ScriptKind.TSX,
+            ));
+        });
     });
 
     describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
