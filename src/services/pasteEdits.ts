@@ -3,6 +3,7 @@ import {
     codefix,
     Debug,
     fileShouldUseJavaScriptRequire,
+    findAncestor,
     findIndex,
     forEachChild,
     formatting,
@@ -10,6 +11,7 @@ import {
     getTokenAtPosition,
     isIdentifier,
     Program,
+    rangeContainsPosition,
     SourceFile,
     Statement,
     SymbolFlags,
@@ -104,30 +106,29 @@ function pasteEdits(
                 preferences,
                 formatContext,
             };
-
-            /**
-             * `updatedRanges` represent the new ranges that account for the offset changes caused by pasting new text and
-             * `offset` represents by how much the starting position of `pasteLocations` needs to be changed.
-             *
-             * We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
-             * identifier lies within the updated range and if it is not resolved, we try resolving it.
-             */
+            
+            // `updatedRanges` represent the new ranges that account for the offset changes caused by pasting new text and
+            // `offset` represents by how much the starting position of `pasteLocations` needs to be changed.
+            //
+            // We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
+            // identifier lies within the updated range and if it is not resolved, we try resolving it.
+            
             const updatedRanges: TextRange[] = [];
             let offset = 0;
             pasteLocations.forEach((location, i) => {
-                const deletionNeeded = location.pos === location.end ? 0 : location.end - location.pos + 1;
+                const deletionNeeded = location.pos === location.end ? 0 : location.end - location.pos;
                 const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
                 const startPos = location.pos - offset;
-                const endPos = startPos + textToBePasted.length - 1;
+                const endPos = startPos + textToBePasted.length;
                 updatedRanges.push({ pos: startPos, end: endPos });
                 offset += deletionNeeded - textToBePasted.length;
             });
 
             updatedRanges.forEach(range => {
-                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), cb => rangeContainsPosition({ pos: cb.pos, end: cb.end }, range.end));
+                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), ancestorNode => rangeContainsPosition(ancestorNode, range.end));
                 if (!enclosingNode) return;
                 forEachChild(enclosingNode, function cb(node) {
-                    if (isIdentifier(node) && rangeContainsPosition(range, node.getStart()) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
+                    if (isIdentifier(node) && rangeContainsPosition(range, node.getStart(updatedFile)) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
                         importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
                     }
                     node.forEachChild(cb);
