@@ -5,37 +5,65 @@
 // type Sym = symbol | (() => void);
 // type BarType = Sym | boolean;
 // type Obj = { foo: FooType, bar: BarType, str: Str };
-// const obj: Obj = { foo: 1, bar: true, str: "3"};
-//       ^^^
+// const obj1: Obj = { foo: 1, bar: true, str: "3"};
+//       ^^^^
 // | ----------------------------------------------------------------------
-// | const obj: {
+// | const obj1: {
 // |     foo: number | (string | {});
 // |     bar: boolean | (symbol | (() => void));
 // |     str: string | {};
 // | }
 // | (verbosity level: 3)
 // | ----------------------------------------------------------------------
-//       ^^^
+//       ^^^^
 // | ----------------------------------------------------------------------
-// | const obj: {
+// | const obj1: {
 // |     foo: number | Str;
 // |     bar: boolean | Sym;
 // |     str: string | {};
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
-//       ^^^
+//       ^^^^
 // | ----------------------------------------------------------------------
-// | const obj: {
+// | const obj1: {
 // |     foo: FooType;
 // |     bar: BarType;
 // |     str: Str;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
-//       ^^^
+//       ^^^^
 // | ----------------------------------------------------------------------
-// | const obj: Obj
+// | const obj1: Obj
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const obj2: { foo: FooType, bar: BarType, str: Str } = { foo: 1, bar: true, str: "3"};
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | const obj2: {
+// |     foo: number | (string | {});
+// |     bar: boolean | (symbol | (() => void));
+// |     str: string | {};
+// | }
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | const obj2: {
+// |     foo: number | Str;
+// |     bar: boolean | Sym;
+// |     str: string | {};
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | const obj2: {
+// |     foo: FooType;
+// |     bar: BarType;
+// |     str: Str;
+// | }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 
@@ -43,15 +71,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
-      "position": 179,
-      "name": "o"
+      "position": 180,
+      "name": "o1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
         "start": 176,
-        "length": 3
+        "length": 4
       },
       "displayParts": [
         {
@@ -63,7 +91,7 @@
           "kind": "space"
         },
         {
-          "text": "obj",
+          "text": "obj1",
           "kind": "localName"
         },
         {
@@ -86,15 +114,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
-      "position": 179,
-      "name": "o"
+      "position": 180,
+      "name": "o1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
         "start": 176,
-        "length": 3
+        "length": 4
       },
       "displayParts": [
         {
@@ -106,7 +134,7 @@
           "kind": "space"
         },
         {
-          "text": "obj",
+          "text": "obj1",
           "kind": "localName"
         },
         {
@@ -221,15 +249,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
-      "position": 179,
-      "name": "o"
+      "position": 180,
+      "name": "o1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
         "start": 176,
-        "length": 3
+        "length": 4
       },
       "displayParts": [
         {
@@ -241,7 +269,7 @@
           "kind": "space"
         },
         {
-          "text": "obj",
+          "text": "obj1",
           "kind": "localName"
         },
         {
@@ -408,15 +436,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
-      "position": 179,
-      "name": "o"
+      "position": 180,
+      "name": "o1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
         "start": 176,
-        "length": 3
+        "length": 4
       },
       "displayParts": [
         {
@@ -428,7 +456,7 @@
           "kind": "space"
         },
         {
-          "text": "obj",
+          "text": "obj1",
           "kind": "localName"
         },
         {
@@ -670,6 +698,595 @@
       ],
       "documentation": [],
       "verbosityLevel": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
+      "position": 230,
+      "name": "o2"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 226,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "FooType",
+          "kind": "aliasName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "BarType",
+          "kind": "aliasName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "str",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Str",
+          "kind": "aliasName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
+      "position": 230,
+      "name": "o2"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 226,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Str",
+          "kind": "aliasName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Sym",
+          "kind": "aliasName"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "str",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityObjectType1.ts",
+      "position": 230,
+      "name": "o2"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 226,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "obj2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "symbol",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "str",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 2
     }
   }
 ]
