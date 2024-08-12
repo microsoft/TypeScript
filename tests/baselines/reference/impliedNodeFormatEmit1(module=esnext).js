@@ -39,7 +39,10 @@ export var _ = 0;
 //// [b.mjs]
 export var _ = 0;
 //// [c.cjs]
-export var _ = 0;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._ = void 0;
+exports._ = 0;
 //// [d.js]
 export var _ = 0;
 //// [e.mjs]
@@ -51,6 +54,7 @@ export {};
 //// [h.mjs]
 export {};
 //// [i.cjs]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [dummy.js]
 export {};

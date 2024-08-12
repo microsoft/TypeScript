@@ -1,4 +1,13 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    registerCodeFix,
+    typePredicateToAutoImportableTypeNode,
+    typeToAutoImportableTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
@@ -36,6 +45,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
@@ -97,17 +107,7 @@ import {
     VariableStatement,
     walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
-
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    registerCodeFix,
-    typePredicateToAutoImportableTypeNode,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix.js";
-import { getIdentifierForNode } from "../refactors/helpers.js";
+import { getIdentifierForNode } from "../_namespaces/ts.refactor.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -160,8 +160,9 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.UseStructuralFallback
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
-    | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.WriteComputedProps;
+    | NodeBuilderFlags.NoTruncation;
+
+const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
     // Prints its fully spelled out type
@@ -1096,7 +1097,7 @@ function withContext<T>(
 
     function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1110,7 +1111,7 @@ function withContext<T>(
 
     function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;

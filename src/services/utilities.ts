@@ -132,6 +132,7 @@ import {
     ImportTypeNode,
     indexOfNode,
     IndexSignatureDeclaration,
+    InternalNodeBuilderFlags,
     InternalSymbolName,
     isAmbientModule,
     isAnyImportSyntax,
@@ -3440,7 +3441,7 @@ export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, progra
     const checker = program.getTypeChecker();
     let typeIsAccessible = true;
     const notAccessible = () => typeIsAccessible = false;
-    const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
+    const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames, {
         trackSymbol: (symbol, declaration, meaning) => {
             typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             return !typeIsAccessible;

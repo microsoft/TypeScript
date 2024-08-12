@@ -54,6 +54,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/minimatch/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/glob/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/path/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -80,9 +87,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project1/jsconfig.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/project1/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project1/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/glob/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/minimatch/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/path/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project1/src/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -293,9 +314,23 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project1/jsconfig.json:
   {"pollingInterval":2000}
+/user/username/projects/project1/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project1/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/glob/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/minimatch/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/node_modules/path/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/project1/src/package.json:
   {"pollingInterval":2000}
 /user/username/projects/project1/src/tsconfig.json:
   {"pollingInterval":2000}
