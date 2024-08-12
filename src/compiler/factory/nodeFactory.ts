@@ -7449,13 +7449,13 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
     // `leadingComments` are concatenated with any existing leading comments on the destination
     if (leadingComments) {
         // We use `.slice()` in case `destEmitNode.leadingComments` is pushed to later
-        destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+        destEmitNode.leadingComments = leadingComments.slice();
     }
 
     // `trailingComments` are concatenated with any existing trailing comments on the destination
     if (trailingComments) {
         // We use `.slice()` in case `destEmitNode.trailingComments` is pushed to later
-        destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
+        destEmitNode.trailingComments = trailingComments.slice();
     }
 
     // `commentRange` overwrites the destination
@@ -7470,7 +7470,7 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
 
     // `tokenSourceMapRanges` are merged with the destination
     if (tokenSourceMapRanges) {
-        destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
+        destEmitNode.tokenSourceMapRanges = tokenSourceMapRanges.slice();
     }
 
     // `constantValue` overwrites the destination
@@ -7483,9 +7483,7 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
 
     // `helpers` are merged into the destination
     if (helpers) {
-        for (const helper of helpers) {
-            destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
-        }
+        destEmitNode.helpers = helpers.slice();
     }
 
     // `startsOnNewLine` overwrites the destination
@@ -7516,12 +7514,4 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
     // `generatedImportReference` is not merged as it only applies to an Identifier
 
     return destEmitNode;
-}
-
-function mergeTokenSourceMapRanges(sourceRanges: (TextRange | undefined)[], destRanges: (TextRange | undefined)[]) {
-    if (!destRanges) destRanges = [];
-    for (const key in sourceRanges) {
-        destRanges[key] = sourceRanges[key];
-    }
-    return destRanges;
 }
