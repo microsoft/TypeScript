@@ -129,11 +129,10 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/tests/cases/fourslash/server/quickinfoVerbosity.ts",
         "line": 2,
         "offset": 10,
-        "verbosityLevel": 3
+        "verbosityLevel": 1
       },
       "command": "quickinfo"
     }
-Info seq  [hh:mm:ss:mss] >>> quick info verbosityLevel: 3
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

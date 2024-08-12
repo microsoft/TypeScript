@@ -3,4 +3,4 @@
 //// type FooType = string | number
 //// const foo/*a*/: FooType = 1
 
-verify.baselineQuickInfo({ "a": 3 });
+verify.baselineQuickInfo({ "a": 1 });

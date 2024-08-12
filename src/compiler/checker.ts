@@ -6079,12 +6079,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          */
         function expressionOrTypeToTypeNode(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
             const oldFlags = context.flags;
+            const oldDepth = context.depth;
             if (expr && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
                 syntacticNodeBuilder.serializeTypeOfExpression(expr, context, addUndefined);
             }
             context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             const result = expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined);
             context.flags = oldFlags;
+            context.depth = oldDepth;
             return result;
         }
         function expressionOrTypeToTypeNodeHelper(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
@@ -6702,7 +6704,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
-                const key = `${getTypeId(type)}|${context.flags}`;
+                const key = `${getTypeId(type)}|${context.flags}${context.unfoldDepth > 0 ? `|${context.unfoldDepth}` : ""}`;
                 if (links) {
                     links.serializedTypes ||= new Map();
                 }
@@ -8324,23 +8326,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
             const enclosingDeclaration = context.enclosingDeclaration;
             const oldFlags = context.flags;
-            if (declaration && hasInferredType(declaration) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
-                syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
-            }
-            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
-            if (enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
-                const declWithExistingAnnotation = declaration && getNonlocalEffectiveTypeAnnotationNode(declaration)
-                    ? declaration
-                    : getDeclarationWithTypeAnnotation(symbol);
-                if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
-                    // try to reuse the existing annotation
-                    const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                    // explicitly add `| undefined` to optional mapped properties whose type contains `undefined` (and not `missing`)
-                    const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
-                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
-                    if (result) {
-                        context.flags = oldFlags;
-                        return result;
+            const oldDepth = context.depth;
+            
+            const canUnfold = context.depth < context.unfoldDepth;
+            if (!canUnfold) {
+                if (declaration && hasInferredType(declaration) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                    syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
+                }
+                context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
+                if (enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
+                    const declWithExistingAnnotation = declaration && getNonlocalEffectiveTypeAnnotationNode(declaration)
+                        ? declaration
+                        : getDeclarationWithTypeAnnotation(symbol);
+                    if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
+                        // try to reuse the existing annotation
+                        const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
+                        // explicitly add `| undefined` to optional mapped properties whose type contains `undefined` (and not `missing`)
+                        const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
+                        const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
+                        if (result) {
+                            context.flags = oldFlags;
+                            return result;
+                        }
                     }
                 }
             }
@@ -8352,10 +8359,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const decl = declaration ?? symbol.valueDeclaration ?? symbol.declarations?.[0];
-            const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
+            const expr = !canUnfold && decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefinedForParameter);
             context.flags = oldFlags;
+            context.depth = oldDepth;
             return result;
         }
 

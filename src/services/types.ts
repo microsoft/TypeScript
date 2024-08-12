@@ -581,8 +581,12 @@ export interface LanguageService {
      *
      * @param fileName The path to the file
      * @param position A zero-based index of the character where you want the quick info
+     * 
      */
-    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number): QuickInfo | undefined;
+    getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+    /** @internal */
+    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined;
+
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 

@@ -1453,6 +1453,10 @@ declare namespace ts {
                 command: CommandTypes.Quickinfo;
                 arguments: FileLocationRequestArgs;
             }
+            export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+                /** TODO */
+                verbosityLevel?: number;
+            }
             /**
              * Body of QuickInfoResponse.
              */
