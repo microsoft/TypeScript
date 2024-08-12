@@ -1,3 +1,4 @@
+
 import {
     AlternateModeDiagnostics,
     append,
@@ -1854,6 +1855,12 @@ function createUnknownOptionError(
 }
 
 /** @internal */
+
+export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
+    getOptionsNameMap: () => OptionsNameMap;
+    optionTypeMismatchDiagnostic: DiagnosticMessage;
+}
+
 export function parseCommandLineWorker(
     diagnostics: ParseCommandLineWorkerDiagnostics,
     commandLine: readonly string[],
@@ -1864,7 +1871,16 @@ export function parseCommandLineWorker(
     const fileNames: string[] = [];
     const errors: Diagnostic[] = [];
 
+    let buildFlag = false;
+    let forceFlag = false;
+
     parseStrings(commandLine);
+    
+    // Handle the specific case of --build and --force
+    if (forceFlag && !buildFlag) {
+        errors.push(createDiagnostic(diagnostics.optionTypeMismatchDiagnostic, "--force", "--build"));
+    }
+
     return {
         options,
         watchOptions,
@@ -1882,6 +1898,14 @@ export function parseCommandLineWorker(
             }
             else if (s.charCodeAt(0) === CharacterCodes.minus) {
                 const inputOptionName = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
+                
+                if (inputOptionName === "build") {
+                    buildFlag = true;
+                }
+                if (inputOptionName === "force") {
+                    forceFlag = true;
+                }
+
                 const opt = getOptionDeclarationFromName(diagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
                 if (opt) {
                     i = parseOptionValue(args, i, diagnostics, opt, options, errors);
@@ -1901,128 +1925,11 @@ export function parseCommandLineWorker(
             }
         }
     }
-
-    function parseResponseFile(fileName: string) {
-        const text = tryReadFile(fileName, readFile || (fileName => sys.readFile(fileName)));
-        if (!isString(text)) {
-            errors.push(text);
-            return;
-        }
-
-        const args: string[] = [];
-        let pos = 0;
-        while (true) {
-            while (pos < text.length && text.charCodeAt(pos) <= CharacterCodes.space) pos++;
-            if (pos >= text.length) break;
-            const start = pos;
-            if (text.charCodeAt(start) === CharacterCodes.doubleQuote) {
-                pos++;
-                while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.doubleQuote) pos++;
-                if (pos < text.length) {
-                    args.push(text.substring(start + 1, pos));
-                    pos++;
-                }
-                else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
-                }
-            }
-            else {
-                while (text.charCodeAt(pos) > CharacterCodes.space) pos++;
-                args.push(text.substring(start, pos));
-            }
-        }
-        parseStrings(args);
-    }
 }
 
-function parseOptionValue(
-    args: readonly string[],
-    i: number,
-    diagnostics: ParseCommandLineWorkerDiagnostics,
-    opt: CommandLineOption,
-    options: OptionsBase,
-    errors: Diagnostic[],
-) {
-    if (opt.isTSConfigOnly) {
-        const optValue = args[i];
-        if (optValue === "null") {
-            options[opt.name] = undefined;
-            i++;
-        }
-        else if (opt.type === "boolean") {
-            if (optValue === "false") {
-                options[opt.name] = validateJsonOptionValue(opt, /*value*/ false, errors);
-                i++;
-            }
-            else {
-                if (optValue === "true") i++;
-                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line, opt.name));
-            }
-        }
-        else {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line, opt.name));
-            if (optValue && !startsWith(optValue, "-")) i++;
-        }
-    }
-    else {
-        // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-        if (!args[i] && opt.type !== "boolean") {
-            errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
-        }
-
-        if (args[i] !== "null") {
-            switch (opt.type) {
-                case "number":
-                    options[opt.name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
-                    i++;
-                    break;
-                case "boolean":
-                    // boolean flag has optional value true, false, others
-                    const optValue = args[i];
-                    options[opt.name] = validateJsonOptionValue(opt, optValue !== "false", errors);
-                    // consume next argument as boolean flag value
-                    if (optValue === "false" || optValue === "true") {
-                        i++;
-                    }
-                    break;
-                case "string":
-                    options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
-                    i++;
-                    break;
-                case "list":
-                    const result = parseListTypeOption(opt, args[i], errors);
-                    options[opt.name] = result || [];
-                    if (result) {
-                        i++;
-                    }
-                    break;
-                case "listOrElement":
-                    Debug.fail("listOrElement not supported here");
-                    break;
-                // If not a primitive, the possible types are specified in what is effectively a map of options.
-                default:
-                    options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
-                    i++;
-                    break;
-            }
-        }
-        else {
-            options[opt.name] = undefined;
-            i++;
-        }
-    }
-    return i;
+export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
+    return parseCommandLineWorker(compilerOptionsDidYouMeanDiagnostics, commandLine, readFile);
 }
-
-/** @internal */
-export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-    alternateMode: compilerOptionsAlternateMode,
-    getOptionsNameMap,
-    optionDeclarations,
-    unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
-    unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
-    optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument,
-};
 export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
     return parseCommandLineWorker(compilerOptionsDidYouMeanDiagnostics, commandLine, readFile);
 }
