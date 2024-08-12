@@ -29,7 +29,7 @@ jobs:
           - windows-latest
           - macos-14
         node-version:
-          - '22.4.x'
+          - '22'
           - '20'
           - '18'
           - '16'

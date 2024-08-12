@@ -536,6 +536,8 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/node_modules/@types/jquery/package.json 2000 undefined Project: /jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/node_modules/@types/package.json 2000 undefined Project: /jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -676,6 +678,30 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+/node_modules:
+  {"pollingInterval":500}
+/tmp/node_modules/@types/jquery/package.json: *new*
+  {"pollingInterval":2000}
+/tmp/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/bower.json:
+  {}
+/jsconfig.json:
+  {}
+/tmp/package.json:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
 
 Projects::
 /jsconfig.json (Configured) *changed*

@@ -9,16 +9,16 @@ const iterator = Iterator.from([0, 1, 2]);
 
 const mapped = iterator.map(String);
 >mapped : Symbol(mapped, Decl(builtinIterator.ts, 2, 5))
->iterator.map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>iterator.map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >iterator : Symbol(iterator, Decl(builtinIterator.ts, 0, 5))
->map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 
 const filtered = iterator.filter(x => x > 0);
 >filtered : Symbol(filtered, Decl(builtinIterator.ts, 4, 5))
->iterator.filter : Symbol(BuiltinIterator.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>iterator.filter : Symbol(IteratorObject.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >iterator : Symbol(iterator, Decl(builtinIterator.ts, 0, 5))
->filter : Symbol(BuiltinIterator.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>filter : Symbol(IteratorObject.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >x : Symbol(x, Decl(builtinIterator.ts, 4, 33))
 >x : Symbol(x, Decl(builtinIterator.ts, 4, 33))
 
@@ -32,9 +32,9 @@ function isZero(x: number): x is 0 {
 }
 const zero = iterator.filter(isZero);
 >zero : Symbol(zero, Decl(builtinIterator.ts, 9, 5))
->iterator.filter : Symbol(BuiltinIterator.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>iterator.filter : Symbol(IteratorObject.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >iterator : Symbol(iterator, Decl(builtinIterator.ts, 0, 5))
->filter : Symbol(BuiltinIterator.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>filter : Symbol(IteratorObject.filter, Decl(lib.esnext.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >isZero : Symbol(isZero, Decl(builtinIterator.ts, 4, 45))
 
 const iteratorFromBare = Iterator.from({
@@ -69,18 +69,18 @@ function* gen() {
 
 const mappedGen = gen().map(x => x === 0 ? "zero" : "other");
 >mappedGen : Symbol(mappedGen, Decl(builtinIterator.ts, 25, 5))
->gen().map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>gen().map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >gen : Symbol(gen, Decl(builtinIterator.ts, 18, 3))
->map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >x : Symbol(x, Decl(builtinIterator.ts, 25, 28))
 >x : Symbol(x, Decl(builtinIterator.ts, 25, 28))
 
 const mappedValues = [0, 1, 2].values().map(x => x === 0 ? "zero" : "other");
 >mappedValues : Symbol(mappedValues, Decl(builtinIterator.ts, 27, 5))
->[0, 1, 2].values().map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>[0, 1, 2].values().map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >[0, 1, 2].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
 >values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
->map : Symbol(BuiltinIterator.map, Decl(lib.esnext.iterator.d.ts, --, --))
+>map : Symbol(IteratorObject.map, Decl(lib.esnext.iterator.d.ts, --, --))
 >x : Symbol(x, Decl(builtinIterator.ts, 27, 44))
 >x : Symbol(x, Decl(builtinIterator.ts, 27, 44))
 
@@ -182,15 +182,14 @@ const iter1 = Iterator.from(g1);
 >from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
 >g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
 
-declare const iter2: BuiltinIterator<string, BuiltinIteratorReturn>;
+declare const iter2: IteratorObject<string>;
 >iter2 : Symbol(iter2, Decl(builtinIterator.ts, 71, 13))
->BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
->BuiltinIteratorReturn : Symbol(BuiltinIteratorReturn, Decl(lib.es2015.iterable.d.ts, --, --))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 const iter3 = iter2.flatMap(() => g1);
 >iter3 : Symbol(iter3, Decl(builtinIterator.ts, 72, 5))
->iter2.flatMap : Symbol(BuiltinIterator.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
+>iter2.flatMap : Symbol(IteratorObject.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
 >iter2 : Symbol(iter2, Decl(builtinIterator.ts, 71, 13))
->flatMap : Symbol(BuiltinIterator.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
+>flatMap : Symbol(IteratorObject.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
 >g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
 

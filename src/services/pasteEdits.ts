@@ -1,25 +1,21 @@
 import {
     CancellationToken,
-    Program,
-    SourceFile,
-    Statement,
-    SymbolFlags,
-    TextRange,
-    UserPreferences,
-} from "../compiler/types.js";
-import {
     codefix,
     Debug,
     fileShouldUseJavaScriptRequire,
-    findAncestor,
     findIndex,
     forEachChild,
     formatting,
     getQuotePreference,
     getTokenAtPosition,
     isIdentifier,
-    rangeContainsPosition,
+    Program,
+    SourceFile,
+    Statement,
+    SymbolFlags,
     textChanges,
+    TextRange,
+    UserPreferences,
 } from "./_namespaces/ts.js";
 import { addTargetFileImports } from "./refactors/helpers.js";
 import {

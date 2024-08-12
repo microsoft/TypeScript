@@ -33,6 +33,8 @@ import {
     emptyOptions,
     endsWith,
     ensureTrailingDirectorySeparator,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
     fileExtensionIs,
@@ -1060,7 +1062,7 @@ export interface ParsedConfig {
      */
     projects: Map<NormalizedPath, boolean>;
     parsedCommandLine?: ParsedCommandLine;
-    watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
+    watchedDirectories?: Map<string, WildcardDirectoryWatcher<WildcardWatcher>>;
     /**
      * true if watchedDirectories need to be updated as per parsedCommandLine's updated watched directories
      */
@@ -1852,80 +1854,22 @@ export class ProjectService {
     /**
      * This is to watch whenever files are added or removed to the wildcard directories
      */
-    private watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
+    private watchWildcardDirectory(
+        directory: string,
+        flags: WatchDirectoryFlags,
+        configFileName: NormalizedPath,
+        config: ParsedConfig,
+    ) {
         let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
             directory,
-            fileOrDirectory => {
-                const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                if (
-                    getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
-                ) {
-                    const file = this.getNormalizedAbsolutePath(fileOrDirectory);
-                    this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
-                    this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
-                    this.watchPackageJsonFile(file, fileOrDirectoryPath, result);
-                }
-
-                const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
-                if (
-                    isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: this.toPath(directory),
-                        fileOrDirectory,
-                        fileOrDirectoryPath,
-                        configFileName,
-                        extraFileExtensions: this.hostConfiguration.extraFileExtensions,
-                        currentDirectory: this.currentDirectory,
-                        options: config.parsedCommandLine!.options,
-                        program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
-                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
-                        writeLog: s => this.logger.info(s),
-                        toPath: s => this.toPath(s),
-                        getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
-                    })
-                ) return;
-
-                // Reload is pending, do the reload
-                if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
-                config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
-                    if (!watchWildcardDirectories) return;
-                    const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
-                    if (!project) return;
-
-                    if (
-                        configuredProjectForConfig !== project &&
-                        this.getHostPreferences().includeCompletionsForModuleExports
-                    ) {
-                        const path = this.toPath(configFileName);
-                        if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
-                            project.markAutoImportProviderAsDirty();
-                        }
-                    }
-
-                    // Load root file names for configured project with the config file name
-                    // But only schedule update if project references this config file
-                    const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
-                    if (project.pendingUpdateLevel > updateLevel) return;
-
-                    // don't trigger callback on open, existing files
-                    if (this.openFiles.has(fileOrDirectoryPath)) {
-                        const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
-                        if (info.isAttached(project)) {
-                            const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
-                            project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
-                        }
-                        else {
-                            project.pendingUpdateLevel = updateLevel;
-                            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
-                        }
-                    }
-                    else {
-                        project.pendingUpdateLevel = updateLevel;
-                        this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
-                    }
-                });
-            },
+            fileOrDirectory =>
+                this.onWildCardDirectoryWatcherInvoke(
+                    directory,
+                    configFileName,
+                    config,
+                    result,
+                    fileOrDirectory,
+                ),
             flags,
             this.getWatchOptionsFromProjectWatchOptions(config.parsedCommandLine!.watchOptions, getDirectoryPath(configFileName)),
             WatchType.WildcardDirectory,
@@ -1947,6 +1891,84 @@ export class ProjectService {
             },
         };
         return result;
+    }
+
+    private onWildCardDirectoryWatcherInvoke(
+        directory: string,
+        configFileName: NormalizedPath,
+        config: ParsedConfig,
+        wildCardWatcher: WildcardWatcher,
+        fileOrDirectory: string,
+    ) {
+        const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+        const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+        if (
+            getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+            (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
+        ) {
+            const file = this.getNormalizedAbsolutePath(fileOrDirectory);
+            this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
+            this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
+            this.watchPackageJsonFile(file, fileOrDirectoryPath, wildCardWatcher);
+        }
+
+        const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
+        if (
+            isIgnoredFileFromWildCardWatching({
+                watchedDirPath: this.toPath(directory),
+                fileOrDirectory,
+                fileOrDirectoryPath,
+                configFileName,
+                extraFileExtensions: this.hostConfiguration.extraFileExtensions,
+                currentDirectory: this.currentDirectory,
+                options: config.parsedCommandLine!.options,
+                program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
+                useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
+                writeLog: s => this.logger.info(s),
+                toPath: s => this.toPath(s),
+                getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
+            })
+        ) return;
+
+        // Reload is pending, do the reload
+        if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
+        config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
+            if (!watchWildcardDirectories) return;
+            const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
+            if (!project) return;
+
+            if (
+                configuredProjectForConfig !== project &&
+                this.getHostPreferences().includeCompletionsForModuleExports
+            ) {
+                const path = this.toPath(configFileName);
+                if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                    project.markAutoImportProviderAsDirty();
+                }
+            }
+
+            // Load root file names for configured project with the config file name
+            // But only schedule update if project references this config file
+            const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
+            if (project.pendingUpdateLevel > updateLevel) return;
+
+            // don't trigger callback on open, existing files
+            if (this.openFiles.has(fileOrDirectoryPath)) {
+                const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                if (info.isAttached(project)) {
+                    const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
+                    project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
+                }
+                else {
+                    project.pendingUpdateLevel = updateLevel;
+                    this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                }
+            }
+            else {
+                project.pendingUpdateLevel = updateLevel;
+                this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+            }
+        });
     }
 
     private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
@@ -4434,8 +4456,42 @@ export class ProjectService {
         this.removeOrphanScriptInfos();
     }
 
+    private tryInvokeWildCardDirectories(info: ScriptInfo) {
+        // This might not have reflected in projects,
+        this.configFileExistenceInfoCache.forEach((configFileExistenceInfo, config) => {
+            if (
+                !configFileExistenceInfo.config?.parsedCommandLine ||
+                contains(
+                    configFileExistenceInfo.config.parsedCommandLine.fileNames,
+                    info.fileName,
+                    !this.host.useCaseSensitiveFileNames ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+                )
+            ) {
+                return;
+            }
+            configFileExistenceInfo.config.watchedDirectories?.forEach((watcher, directory) => {
+                if (containsPath(directory, info.fileName, !this.host.useCaseSensitiveFileNames)) {
+                    this.logger.info(`Invoking ${config}:: wildcard for open scriptInfo:: ${info.fileName}`);
+                    this.onWildCardDirectoryWatcherInvoke(
+                        directory,
+                        config,
+                        configFileExistenceInfo.config!,
+                        watcher.watcher,
+                        info.fileName,
+                    );
+                }
+            });
+        });
+    }
+
     openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
+        const existing = this.getScriptInfoForPath(normalizedPathToPath(
+            fileName,
+            projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory,
+            this.toCanonicalFileName,
+        ));
         const info = this.getOrCreateOpenScriptInfo(fileName, fileContent, scriptKind, hasMixedContent, projectRootPath);
+        if (!existing && info && !info.isDynamic) this.tryInvokeWildCardDirectories(info);
         const { retainProjects, ...result } = this.assignProjectToOpenedScriptInfo(info);
         this.cleanupProjectsAndScriptInfos(
             retainProjects,
@@ -4636,10 +4692,16 @@ export class ProjectService {
 
     /** @internal */
     applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
+        let existingOpenScriptInfos: (ScriptInfo | undefined)[] | undefined;
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
             for (const file of openFiles) {
+                (existingOpenScriptInfos ??= []).push(this.getScriptInfoForPath(normalizedPathToPath(
+                    toNormalizedPath(file.fileName),
+                    file.projectRootPath ? this.getNormalizedAbsolutePath(file.projectRootPath) : this.currentDirectory,
+                    this.toCanonicalFileName,
+                )));
                 // Create script infos so we have the new content for all the open files before we do any updates to projects
                 const info = this.getOrCreateOpenScriptInfo(
                     toNormalizedPath(file.fileName),
@@ -4670,6 +4732,13 @@ export class ProjectService {
 
         // All the script infos now exist, so ok to go update projects for open files
         let retainProjects: Set<ConfiguredProject> | undefined;
+        forEach(
+            existingOpenScriptInfos,
+            (existing, index) =>
+                !existing && openScriptInfos![index] && !openScriptInfos![index].isDynamic ?
+                    this.tryInvokeWildCardDirectories(openScriptInfos![index]) :
+                    undefined,
+        );
         openScriptInfos?.forEach(info => this.assignProjectToOpenedScriptInfo(info).retainProjects?.forEach(p => (retainProjects ??= new Set()).add(p)));
 
         // While closing files there could be open files that needed assigning new inferred projects, do it now
