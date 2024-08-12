@@ -914,11 +914,12 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, getFlags(type)),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, getFlags(type)),
             mutatedTarget: false,
         };
 
