@@ -116,10 +116,10 @@ function pasteEdits(
             const updatedRanges: TextRange[] = [];
             let offset = 0;
             pasteLocations.forEach((location, i) => {
-                const deletionNeeded = location.pos === location.end ? 0 : location.end - location.pos;
+                const deletionNeeded = location.pos === location.end ? 0 : location.end - location.pos + 1;
                 const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
                 const startPos = location.pos - offset;
-                const endPos = startPos + textToBePasted.length;
+                const endPos = startPos + textToBePasted.length  - 1;
                 updatedRanges.push({ pos: startPos, end: endPos });
                 offset += deletionNeeded - textToBePasted.length;
             });
