@@ -279,6 +279,9 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function getExportedSymbolParent(symbol: Symbol, checker: TypeChecker): Symbol {
+        // #59582: symbols merged through module augmentation do not always have parents. As a result, we need to find the parent if one does not
+        // exist. So far, auto-imports is the only case where the missing parent is needed, so we are not setting symbol.parent as of now, and we can
+        // revisit this if more cases come up.
         if (symbol.parent) {
             return symbol.parent;
         }
