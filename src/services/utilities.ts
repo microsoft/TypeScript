@@ -3740,7 +3740,7 @@ export function createPackageJsonInfo(fileName: string, host: { readFile?(fileNa
 /** @internal */
 export interface PackageJsonImportFilter {
     allowsImportingAmbientModule: (moduleSymbol: Symbol, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
-    allowsImportingSourceFile: (sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
+    getSourceFileInfo: (sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => { importable: boolean; packageName?: string; };
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
@@ -3757,10 +3757,10 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
 
     let usesNodeCoreModules: boolean | undefined;
     let ambientModuleCache: Map<Symbol, boolean> | undefined;
-    let sourceFileCache: Map<SourceFile, boolean> | undefined;
+    let sourceFileCache: Map<SourceFile, { importable: boolean; packageName?: string; }> | undefined;
     return {
         allowsImportingAmbientModule,
-        allowsImportingSourceFile,
+        getSourceFileInfo,
         allowsImportingSpecifier,
     };
 
@@ -3808,9 +3808,9 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
         return result;
     }
 
-    function allowsImportingSourceFile(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): boolean {
+    function getSourceFileInfo(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): { importable: boolean; packageName?: string; } {
         if (!packageJsons.length) {
-            return true;
+            return { importable: true, packageName: undefined };
         }
 
         if (!sourceFileCache) {
@@ -3823,13 +3823,15 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
             }
         }
 
-        const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
-        if (!moduleSpecifier) {
-            sourceFileCache.set(sourceFile, true);
-            return true;
+        const packageName = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
+        if (!packageName) {
+            const result = { importable: true, packageName };
+            sourceFileCache.set(sourceFile, result);
+            return result;
         }
 
-        const result = moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        const importable = moduleSpecifierIsCoveredByPackageJson(packageName);
+        const result = { importable, packageName };
         sourceFileCache.set(sourceFile, result);
         return result;
     }
