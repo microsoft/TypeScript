@@ -21378,8 +21378,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
-                // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
-                if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
+                // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void,
+                // and (x: () => void) => void is a subtype of (immediate x: () => void) => void.
+                if (related && checkMode & SignatureCheckMode.StrictArity && (i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) || isImmediateParameterPosition(source, i) && !isImmediateParameterPosition(target, i)) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
                     related = Ternary.False;
                 }
                 if (!related) {
@@ -28536,8 +28537,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const saveInitialType = initialType;
             initialType = getTypeFromFlowType(flowType);
             let lambdaTypes: Type[] | undefined;
-            // We assume that lambda arguments may or may not have executed. Thus, lambda arguments can only have a widening
-            // effect and will have no effect if we already have the declared type (the widest possible type).
+            // We assume that lambda arguments in 'immediate' parameter positions may or may not have executed. Thus,
+            // lambda arguments can only have a widening effect and will have no effect if we already have the declared
+            // type (the widest possible type).
             if (initialType !== declaredType) {
                 const saveInLambdaArg = inLambdaArg;
                 inLambdaArg = true;
@@ -28554,7 +28556,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // circularities. Instead, we simply check if any signature has a deferred callback marker in the
                         // particular argument position.
                         signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
-                        if (some(signatures, sig => !!(getModifiersAtPosition(sig, i) & (ModifierFlags.Immediate | ModifierFlags.JSDocImmediate)))) {
+                        if (some(signatures, sig => isImmediateParameterPosition(sig, i))) {
                             const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                             if (lambdaType !== initialType) {
                                 lambdaTypes ??= [initialType];
@@ -37703,9 +37705,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return elementType && isTypeAny(elementType) ? anyType : restType;
     }
 
-    function getModifiersAtPosition(signature: Signature, pos: number) {
-        const index = pos < signature.parameters.length ? pos : signatureHasRestParameter(signature) ? signature.parameters.length - 1 : -1;
-        return index >= 0 ? getDeclarationModifierFlagsFromSymbol(signature.parameters[index]) : ModifierFlags.None;
+    function isImmediateParameterPosition(signature: Signature, pos: number) {
+        return someSignature(signature, s => {
+            const index = pos < s.parameters.length ? pos : signatureHasRestParameter(s) ? s.parameters.length - 1 : -1;
+            return index >= 0 && !!(getDeclarationModifierFlagsFromSymbol(s.parameters[index]) & (ModifierFlags.Immediate | ModifierFlags.JSDocImmediate));
+        });
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
