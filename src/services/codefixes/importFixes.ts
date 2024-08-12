@@ -40,7 +40,6 @@ import {
     firstDefined,
     flatMap,
     flatMapIterator,
-    forEach,
     forEachExternalModuleToImportFrom,
     forEachNameOfDefaultExport,
     formatting,
@@ -93,11 +92,9 @@ import {
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
     isJSXTagName,
-    isModuleDeclaration,
     isNamedImports,
     isNamespaceImport,
     isRequireVariableStatement,
-    isSourceFile,
     isSourceFileJS,
     isStringLiteral,
     isStringLiteralLike,
@@ -125,7 +122,6 @@ import {
     NodeFlags,
     nodeIsMissing,
     ObjectBindingPattern,
-    or,
     OrganizeImports,
     PackageJsonImportFilter,
     Path,
@@ -278,23 +274,10 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         addImport(first(info));
     }
 
-    function getExportedSymbolParent(symbol: Symbol, checker: TypeChecker): Symbol {
-        // #59582: symbols merged through module augmentation do not always have parents. As a result, we need to find the parent if one does not
-        // exist. So far, auto-imports is the only case where the missing parent is needed, so we are not setting symbol.parent as of now, and we can
-        // revisit this if more cases come up.
-        if (symbol.parent) {
-            return symbol.parent;
-        }
-        const constituentParent = Debug.checkDefined(forEach(symbol.declarations, d => tryCast(d.parent, or(isSourceFile, isModuleDeclaration)))?.symbol);
-        const merged = checker.getMergedSymbol(constituentParent);
-        Debug.assert(constituentParent !== merged);
-        return merged;
-    }
-
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const checker = program.getTypeChecker();
-        const moduleSymbol = getExportedSymbolParent(exportedSymbol, checker);
+        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+        const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         if (!exportInfo) {
