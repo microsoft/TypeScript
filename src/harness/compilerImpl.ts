@@ -225,7 +225,7 @@ export class CompilationResult {
         return vpath.changeExtension(path, ext);
     }
 
-    public getNumberOfJsFiles(includeJson: boolean) {
+    public getNumberOfJsFiles(includeJson: boolean): number {
         if (includeJson) {
             return this.js.size;
         }

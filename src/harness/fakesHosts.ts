@@ -41,19 +41,19 @@ export class System implements ts.System {
     }
 
     private testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
-    getWidthOfTerminal = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
+    getWidthOfTerminal: (() => number) | undefined = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
 
     // Pretty output
     writeOutputIsTTY() {
         return true;
     }
 
-    public write(message: string) {
+    public write(message: string): void {
         if (ts.Debug.isDebugging) console.log(message);
         this.output.push(message);
     }
 
-    public readFile(path: string) {
+    public readFile(path: string): string | undefined {
         try {
             const content = this.vfs.readFileSync(path, "utf8");
             return content === undefined ? undefined : Utils.removeByteOrderMark(content);
@@ -68,16 +68,16 @@ export class System implements ts.System {
         this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
     }
 
-    public deleteFile(path: string) {
+    public deleteFile(path: string): void {
         this.vfs.unlinkSync(path);
     }
 
-    public fileExists(path: string) {
+    public fileExists(path: string): boolean {
         const stats = this._getStats(path);
         return stats ? stats.isFile() : false;
     }
 
-    public directoryExists(path: string) {
+    public directoryExists(path: string): boolean {
         const stats = this._getStats(path);
         return stats ? stats.isDirectory() : false;
     }
@@ -86,11 +86,11 @@ export class System implements ts.System {
         this.vfs.mkdirpSync(path);
     }
 
-    public getCurrentDirectory() {
+    public getCurrentDirectory(): string {
         return this.vfs.cwd();
     }
 
-    public getDirectories(path: string) {
+    public getDirectories(path: string): string[] {
         const result: string[] = [];
         try {
             for (const file of this.vfs.readdirSync(path)) {
@@ -128,31 +128,31 @@ export class System implements ts.System {
         return { files, directories };
     }
 
-    public exit(exitCode?: number) {
+    public exit(exitCode?: number): void {
         this.exitCode = exitCode;
         throw processExitSentinel;
     }
 
-    public getFileSize(path: string) {
+    public getFileSize(path: string): number {
         const stats = this._getStats(path);
         return stats && stats.isFile() ? stats.size : 0;
     }
 
-    public resolvePath(path: string) {
+    public resolvePath(path: string): string {
         return vpath.resolve(this.vfs.cwd(), path);
     }
 
-    public getExecutingFilePath() {
+    public getExecutingFilePath(): string {
         if (this._executingFilePath === undefined) return ts.notImplemented();
         return this._executingFilePath;
     }
 
-    public getModifiedTime(path: string) {
+    public getModifiedTime(path: string): Date {
         const stats = this._getStats(path);
         return stats ? stats.mtime : undefined!; // TODO: GH#18217
     }
 
-    public setModifiedTime(path: string, time: Date) {
+    public setModifiedTime(path: string, time: Date): void {
         try {
             this.vfs.utimesSync(path, time, time);
         }
@@ -163,7 +163,7 @@ export class System implements ts.System {
         return `${ts.generateDjb2Hash(data)}-${data}`;
     }
 
-    public realpath(path: string) {
+    public realpath(path: string): string {
         try {
             return this.vfs.realpathSync(path);
         }
@@ -185,7 +185,7 @@ export class System implements ts.System {
         }
     }
 
-    now() {
+    now(): Date {
         return new Date(this.vfs.time());
     }
 }
@@ -201,11 +201,11 @@ export class ParseConfigHost implements ts.ParseConfigHost {
         this.sys = sys;
     }
 
-    public get vfs() {
+    public get vfs(): vfs.FileSystem {
         return this.sys.vfs;
     }
 
-    public get useCaseSensitiveFileNames() {
+    public get useCaseSensitiveFileNames(): boolean {
         return this.sys.useCaseSensitiveFileNames;
     }
 
@@ -247,7 +247,7 @@ export class CompilerHost implements ts.CompilerHost {
     public readonly outputs: documents.TextDocument[] = [];
     private readonly _outputsMap: collections.SortedMap<string, number>;
     public readonly traces: string[] = [];
-    public readonly shouldAssertInvariants = !Harness.lightMode;
+    public readonly shouldAssertInvariants: boolean = !Harness.lightMode;
     public readonly jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     private _setParentNodes: boolean;
@@ -255,7 +255,7 @@ export class CompilerHost implements ts.CompilerHost {
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
+    constructor(sys: System | vfs.FileSystem, options: ts.CompilerOptions = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
@@ -266,11 +266,11 @@ export class CompilerHost implements ts.CompilerHost {
         this.jsDocParsingMode = jsDocParsingMode;
     }
 
-    public get vfs() {
+    public get vfs(): vfs.FileSystem {
         return this.sys.vfs;
     }
 
-    public get parseConfigHost() {
+    public get parseConfigHost(): ParseConfigHost {
         return this._parseConfigHost || (this._parseConfigHost = new ParseConfigHost(this.sys));
     }
 
@@ -290,7 +290,7 @@ export class CompilerHost implements ts.CompilerHost {
         return this.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
     }
 
-    public deleteFile(fileName: string) {
+    public deleteFile(fileName: string): void {
         this.sys.deleteFile(fileName);
     }
 
@@ -302,11 +302,11 @@ export class CompilerHost implements ts.CompilerHost {
         return this.sys.directoryExists(directoryName);
     }
 
-    public getModifiedTime(fileName: string) {
+    public getModifiedTime(fileName: string): Date {
         return this.sys.getModifiedTime(fileName);
     }
 
-    public setModifiedTime(fileName: string, time: Date) {
+    public setModifiedTime(fileName: string, time: Date): void {
         return this.sys.setModifiedTime(fileName, time);
     }
 
@@ -322,7 +322,7 @@ export class CompilerHost implements ts.CompilerHost {
         return this.sys.readFile(path);
     }
 
-    public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
+    public writeFile(fileName: string, content: string, writeByteOrderMark: boolean): void {
         if (writeByteOrderMark) content = Utils.addUTF8ByteOrderMark(content);
         this.sys.writeFile(fileName, content);
 
@@ -537,7 +537,7 @@ function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosti
 
 export const version = "FakeTSVersion";
 
-export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
+export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T): T {
     const originalReadFile = sys.readFile;
     sys.readFile = (path, encoding) => {
         const value = originalReadFile.call(sys, path, encoding);
@@ -551,7 +551,7 @@ export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
     return patchHostForBuildInfoWrite(sys, version);
 }
 
-export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
+export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string): T {
     const originalWrite = sys.write;
     sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
     const originalWriteFile = sys.writeFile;
@@ -576,7 +576,7 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
         this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode): SolutionBuilderHost {
         const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram, jsDocParsingMode);
         patchHostForBuildInfoReadWrite(host.sys);
         return host;
@@ -588,19 +588,19 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
 
     diagnostics: SolutionBuilderDiagnostic[] = [];
 
-    reportDiagnostic(diagnostic: ts.Diagnostic) {
+    reportDiagnostic(diagnostic: ts.Diagnostic): void {
         this.diagnostics.push({ kind: DiagnosticKind.Error, diagnostic });
     }
 
-    reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
+    reportSolutionBuilderStatus(diagnostic: ts.Diagnostic): void {
         this.diagnostics.push({ kind: DiagnosticKind.Status, diagnostic });
     }
 
-    clearDiagnostics() {
+    clearDiagnostics(): void {
         this.diagnostics.length = 0;
     }
 
-    assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
+    assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]): void {
         const actual = this.diagnostics.slice().map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
         assert.deepEqual(
@@ -612,7 +612,7 @@ Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`,
         );
     }
 
-    assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
+    assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]): void {
         const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
         assert.deepEqual(
@@ -625,7 +625,7 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
         );
     }
 
-    printDiagnostics(header = "== Diagnostics ==") {
+    printDiagnostics(header = "== Diagnostics =="): void {
         const out = ts.createDiagnosticReporter(ts.sys);
         ts.sys.write(header + "\r\n");
         for (const { diagnostic } of this.diagnostics) {
@@ -633,7 +633,7 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
         }
     }
 
-    now() {
+    now(): Date {
         return this.sys.now();
     }
 }
