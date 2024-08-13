@@ -23,6 +23,11 @@ verify.completions({
     source: "fs/promises",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
+    source: "node:fs",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
   }]),
   preferences: {
     includeCompletionsForModuleExports: true,
