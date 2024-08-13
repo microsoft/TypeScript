@@ -68,6 +68,7 @@ import {
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
+    IncompleteCompletionsCache,
     inferredTypesContainingFile,
     InstallPackageOptions,
     IScriptSnapshot,
@@ -85,6 +86,7 @@ import {
     memoize,
     ModuleResolutionCache,
     ModuleResolutionHost,
+    ModuleSpecifierCache,
     noop,
     noopFileWatcher,
     normalizePath,
@@ -115,6 +117,7 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceFile,
+    SourceFileLike,
     SourceMapper,
     startsWith,
     StringLiteralLike,
@@ -377,7 +380,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      *
      * @internal
      */
-    cachedUnresolvedImportsPerFile: Map<ts.Path, readonly string[]> = new Map<Path, readonly string[]>();
+    cachedUnresolvedImportsPerFile: Map<Path, readonly string[]> = new Map<Path, readonly string[]>();
 
     /** @internal */
     lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -663,12 +666,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     // Method of LanguageServiceHost
-    getCompilationSettings(): ts.CompilerOptions {
+    getCompilationSettings(): CompilerOptions {
         return this.compilerOptions;
     }
 
     // Method to support public API
-    getCompilerOptions(): ts.CompilerOptions {
+    getCompilerOptions(): CompilerOptions {
         return this.getCompilationSettings();
     }
 
@@ -718,7 +721,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return scriptInfo;
     }
 
-    getScriptKind(fileName: string): ts.ScriptKind {
+    getScriptKind(fileName: string): ScriptKind {
         const info = this.projectService.getScriptInfoForPath(this.toPath(fileName));
         return (info && info.scriptKind)!; // TODO: GH#18217
     }
@@ -820,12 +823,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    toPath(fileName: string): ts.Path {
+    toPath(fileName: string): Path {
         return toPath(fileName, this.currentDirectory, this.projectService.toCanonicalFileName);
     }
 
     /** @internal */
-    watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): ts.FileWatcher {
+    watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
         return this.projectService.watchFactory.watchDirectory(
             directory,
             cb,
@@ -837,7 +840,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    watchAffectingFileLocation(file: string, cb: FileWatcherCallback): ts.FileWatcher {
+    watchAffectingFileLocation(file: string, cb: FileWatcherCallback): FileWatcher {
         return this.projectService.watchFactory.watchFile(
             file,
             cb,
@@ -879,7 +882,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): ts.FileWatcher {
+    watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
         return this.projectService.watchFactory.watchDirectory(
             directory,
             cb,
@@ -973,7 +976,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getSourceFileLike(fileName: string): ts.SourceFileLike | undefined {
+    getSourceFileLike(fileName: string): SourceFileLike | undefined {
         return this.projectService.getSourceFileLike(fileName, this);
     }
 
@@ -1100,7 +1103,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }));
     }
 
-    getSourceFile(path: Path): ts.SourceFile | undefined {
+    getSourceFile(path: Path): SourceFile | undefined {
         if (!this.program) {
             return undefined;
         }
@@ -1194,7 +1197,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getRootFilesMap(): Map<ts.Path, ts.server.ProjectRootFile> {
+    getRootFilesMap(): Map<Path, ts.server.ProjectRootFile> {
         return this.rootFilesMap;
     }
 
@@ -1978,7 +1981,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    getTypeAcquisition(): ts.TypeAcquisition {
+    getTypeAcquisition(): TypeAcquisition {
         return this.typeAcquisition || {};
     }
 
@@ -2207,7 +2210,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getCachedExportInfoMap(): ts.ExportInfoMap {
+    getCachedExportInfoMap(): ExportInfoMap {
         return this.exportMapCache ||= createCacheableExportInfoMap(this);
     }
 
@@ -2217,7 +2220,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getModuleSpecifierCache(): ts.ModuleSpecifierCache {
+    getModuleSpecifierCache(): ModuleSpecifierCache {
         return this.moduleSpecifierCache;
     }
 
@@ -2294,12 +2297,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    watchNodeModulesForPackageJsonChanges(directoryPath: string): ts.FileWatcher {
+    watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher {
         return this.projectService.watchPackageJsonsInNodeModules(directoryPath, this);
     }
 
     /** @internal */
-    getIncompleteCompletionsCache(): ts.IncompleteCompletionsCache {
+    getIncompleteCompletionsCache(): IncompleteCompletionsCache {
         return this.projectService.getIncompleteCompletionsCache();
     }
 
@@ -2806,22 +2809,22 @@ export class AutoImportProviderProject extends Project {
         throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
     }
 
-    override getProjectReferences(): readonly ts.ProjectReference[] | undefined {
+    override getProjectReferences(): readonly ProjectReference[] | undefined {
         return this.hostProject.getProjectReferences();
     }
 
     /** @internal */
-    override includePackageJsonAutoImports(): ts.PackageJsonAutoImportPreference {
+    override includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
         return PackageJsonAutoImportPreference.Off;
     }
 
     /** @internal */
-    override getSymlinkCache(): ts.SymlinkCache {
+    override getSymlinkCache(): SymlinkCache {
         return this.hostProject.getSymlinkCache();
     }
 
     /** @internal */
-    override getModuleResolutionCache(): ts.ModuleResolutionCache | undefined {
+    override getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
     }
 }
@@ -2838,7 +2841,7 @@ export class ConfiguredProject extends Project {
     pendingUpdateReason: string | undefined;
 
     /** @internal */
-    openFileWatchTriggered: Map<string, ts.ProgramUpdateLevel> = new Map<string, ProgramUpdateLevel>();
+    openFileWatchTriggered: Map<string, ProgramUpdateLevel> = new Map<string, ProgramUpdateLevel>();
 
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;
@@ -2902,7 +2905,7 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    override getParsedCommandLine(fileName: string): ts.ParsedCommandLine | undefined {
+    override getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
         const configFileName = asNormalizedPath(normalizePath(fileName));
         const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(configFileName));
         // Ensure the config file existience info is cached
