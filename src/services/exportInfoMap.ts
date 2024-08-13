@@ -422,7 +422,7 @@ export function forEachExternalModuleToImportFrom(
     preferences: UserPreferences,
     useAutoImportProvider: boolean,
     cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
-) {
+): void {
     const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
     const excludePatterns = preferences.autoImportFileExcludePatterns && getIsExcludedPatterns(preferences, useCaseSensitiveFileNames);
 
@@ -487,7 +487,7 @@ function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageService
 }
 
 /** @internal */
-export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences) {
+export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences): ({ fileName, path }: SourceFile) => boolean {
     if (!preferences.autoImportFileExcludePatterns) return () => false;
     return getIsExcluded(getIsExcludedPatterns(preferences, hostUsesCaseSensitiveFileNames(host)), host);
 }
@@ -559,7 +559,10 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
 }
 
 /** @internal */
-export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker) {
+export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker): {
+    symbol: Symbol;
+    exportKind: ExportKind;
+} | undefined {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
     if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);

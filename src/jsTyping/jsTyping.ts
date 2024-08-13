@@ -56,7 +56,7 @@ export interface CachedTyping {
 }
 
 /** @internal */
-export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
+export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>): boolean {
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
@@ -117,10 +117,10 @@ const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `nod
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
 
 /** @internal */
-export const nodeCoreModules = new Set(nodeCoreModuleList);
+export const nodeCoreModules: Set<string> = new Set(nodeCoreModuleList);
 
 /** @internal */
-export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+export function nonRelativeModuleNameForTypingCache(moduleName: string): string {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 
