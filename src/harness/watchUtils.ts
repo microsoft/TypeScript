@@ -186,7 +186,7 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData>(
     }
 }
 
-export function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
+export function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined): Map<string, T[]> | undefined {
     let hasChange = diffMap(baseline, caption, multiMap, serialized, /*deleted*/ false);
     hasChange = diffMap(baseline, caption, serialized, multiMap, /*deleted*/ true) || hasChange;
     if (hasChange) {
