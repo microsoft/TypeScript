@@ -100,6 +100,17 @@ describe("unittests:: PrinterAPI", () => {
                 ts.ScriptKind.TSX,
             ));
         });
+
+        // https://github.com/microsoft/TypeScript/issues/59587
+        printsCorrectly("lambda type parameter lists in tsx", {}, printer => {
+            return printer.printFile(ts.createSourceFile(
+                "source.tsx",
+                String.raw`export const id = <T,>(id: T): T => id`,
+                ts.ScriptTarget.ESNext,
+                /*setParentNodes*/ undefined,
+                ts.ScriptKind.TSX,
+            ));
+        });
     });
 
     describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {

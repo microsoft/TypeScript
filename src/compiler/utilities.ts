@@ -265,6 +265,7 @@ import {
     isConstructorDeclaration,
     isConstTypeReference,
     isDeclaration,
+    isDeclarationFileName,
     isDecorator,
     isElementAccessExpression,
     isEnumDeclaration,
@@ -9783,6 +9784,12 @@ export function hasJSFileExtension(fileName: string): boolean {
 /** @internal */
 export function hasTSFileExtension(fileName: string): boolean {
     return some(supportedTSExtensionsFlat, extension => fileExtensionIs(fileName, extension));
+}
+
+/** @internal */
+export function hasImplementationTSFileExtension(fileName: string): boolean {
+    return some(supportedTSImplementationExtensions, extension => fileExtensionIs(fileName, extension))
+        && !isDeclarationFileName(fileName);
 }
 
 /**

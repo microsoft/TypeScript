@@ -4508,7 +4508,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
-        emitList(parentNode, typeParameters, ListFormat.TypeParameters);
+        emitList(parentNode, typeParameters, ListFormat.TypeParameters | (isArrowFunction(parentNode) ? ListFormat.AllowTrailingComma : ListFormat.None));
     }
 
     function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
