@@ -117,7 +117,7 @@ const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `nod
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
 
 /** @internal */
-export const nodeCoreModules: Set<string> = new Set(nodeCoreModuleList);
+export const nodeCoreModules: Set<string> = new Set<string>(nodeCoreModuleList);
 
 /** @internal */
 export function nonRelativeModuleNameForTypingCache(moduleName: string): string {

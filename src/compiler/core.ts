@@ -505,10 +505,10 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
 }
 
 /** @internal */
-export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined): Generator<U & ({} | null), void, unknown> {
+export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined): Generator<NonNullable<U>, void, unknown> {
     for (const x of iter) {
         const value = mapFn(x);
-        if (value !== undefined) {
+        if (value !== undefined && value !== null) { // eslint-disable-line no-restricted-syntax
             yield value;
         }
     }
