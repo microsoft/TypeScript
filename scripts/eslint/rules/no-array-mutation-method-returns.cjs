@@ -89,13 +89,11 @@ module.exports = createRule({
 
         /** @type {(callee: TSESTree.MemberExpression & { parent: TSESTree.CallExpression; }, method: string, toMethod: string | undefined) => void} */
         const check = (callee, method, toMethod) => {
+            if (callee.parent.parent.type === "ExpressionStatement") return;
             if (isFreshArray(callee)) return;
 
             const calleeObjType = getConstrainedTypeAtLocation(services, callee.object);
-
             if (!isTypeArrayTypeOrUnionOfArrayTypes(calleeObjType, checker)) return;
-
-            if (callee.parent.parent.type === "ExpressionStatement") return;
 
             if (toMethod) {
                 context.report({ node: callee.property, messageId: "noSideEffectUseToMethod", data: { method, toMethod } });
