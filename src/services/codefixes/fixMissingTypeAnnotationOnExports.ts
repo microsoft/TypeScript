@@ -45,6 +45,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
@@ -159,8 +160,9 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.UseStructuralFallback
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
-    | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.WriteComputedProps;
+    | NodeBuilderFlags.NoTruncation;
+
+const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
     // Prints its fully spelled out type
@@ -912,11 +914,12 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, getFlags(type)),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, getFlags(type)),
             mutatedTarget: false,
         };
 
@@ -1095,7 +1098,7 @@ function withContext<T>(
 
     function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1109,7 +1112,7 @@ function withContext<T>(
 
     function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
