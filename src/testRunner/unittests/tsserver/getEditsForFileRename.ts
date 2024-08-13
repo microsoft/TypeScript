@@ -1,9 +1,12 @@
 import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
+    protocolTextSpanFromSubstring,
     TestSession,
     textSpanFromSubstring,
     verifyGetErrRequest,
@@ -205,6 +208,91 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                     baselineTsserverLogs("getEditsForFileRename", `works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, session);
                 });
             });
+        })
+    );
+
+    [true, false].forEach(canUseWatchEvents =>
+        it(`works when moving file to and from folder${canUseWatchEvents ? " canUseWatchEvents" : ""}`, () => {
+            const alertText = dedent`
+                export function alert(message: string) {
+                    console.log(\`ALERT: \${message}\`);
+                }
+            `;
+            const projectRootPath = "/home/src/myprojects/project";
+            const indexTs = `${projectRootPath}/index.ts`;
+            const indexFileText = dedent`
+                import { alert } from '@app/components/whatever/alert';
+                alert('Hello, world!');
+            `;
+            const componentsWhatever = `${projectRootPath}/components/whatever`;
+            const functionsWhatever = `${projectRootPath}/functions/whatever`;
+            const host = createServerHost({
+                "/home/src/myprojects/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es2016",
+                        module: "commonjs",
+                        paths: {
+                            "@app/*": [
+                                "./*",
+                            ],
+                        },
+                        esModuleInterop: true,
+                        forceConsistentCasingInFileNames: true,
+                        strict: true,
+                        skipLibCheck: true,
+                    },
+                }),
+                [indexTs]: indexFileText,
+                [`${componentsWhatever}/alert.ts`]: alertText,
+                [`${functionsWhatever}/placeholder.txt`]: "",
+                "/a/lib/lib.es2016.full.d.ts": libContent,
+            });
+            const session = new TestSession({ host, canUseWatchEvents, canUseEvents: true });
+            openFilesForSession([{ file: indexTs, projectRootPath }], session);
+            host.renameFolder(componentsWhatever, functionsWhatever, /*skipFolderEntryWatches*/ true);
+            if (canUseWatchEvents) session.invokeWatchChanges();
+            openFilesForSession([{
+                file: `${functionsWhatever}/alert.ts`,
+                content: alertText,
+                projectRootPath,
+            }], session);
+            session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
+                command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
+                arguments: { oldFilePath: componentsWhatever, newFilePath: functionsWhatever },
+            });
+            // Apply edit to index.ts
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: indexTs,
+                        textChanges: [{
+                            ...protocolTextSpanFromSubstring(indexFileText, "@app/components/whatever/alert"),
+                            newText: "@app/functions/whatever/alert",
+                        }],
+                    }],
+                },
+            });
+            host.runQueuedTimeoutCallbacks();
+            host.renameFolder(functionsWhatever, componentsWhatever, /*skipFolderEntryWatches*/ true);
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    openFiles: [{
+                        file: `${componentsWhatever}/alert.ts`,
+                        fileContent: alertText,
+                        projectRootPath,
+                    }],
+                    closedFiles: [`${functionsWhatever}/alert.ts`],
+                },
+            });
+            session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
+                command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
+                arguments: { oldFilePath: functionsWhatever, newFilePath: componentsWhatever },
+            });
+            if (canUseWatchEvents) session.invokeWatchChanges();
+            host.runQueuedTimeoutCallbacks();
+            baselineTsserverLogs("getEditsForFileRename", `works when moving file to and from folder${canUseWatchEvents ? " canUseWatchEvents" : ""}`, session);
         })
     );
 });
