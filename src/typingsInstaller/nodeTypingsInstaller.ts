@@ -135,7 +135,7 @@ export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
-    override handleRequest(req: ts.server.TypingInstallerRequestUnion) {
+    override handleRequest(req: ts.server.TypingInstallerRequestUnion): void {
         if (this.delayedInitializationError) {
             // report initializationFailed error
             this.sendResponse(this.delayedInitializationError);
@@ -144,7 +144,7 @@ export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         super.handleRequest(req);
     }
 
-    protected sendResponse(response: ts.server.TypingInstallerResponseUnion) {
+    protected sendResponse(response: ts.server.TypingInstallerResponseUnion): void {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Sending response:${ts.server.stringifyIndented(response)}`);
         }

@@ -316,7 +316,7 @@ function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
 /** @deprecated use ts.server.protocol.CommandTypes */
 export type CommandNames = protocol.CommandTypes;
 /** @deprecated use ts.server.protocol.CommandTypes */
-export const CommandNames = (protocol as any).CommandTypes;
+export const CommandNames: CommandNames = (protocol as any).CommandTypes;
 
 export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -1227,7 +1227,7 @@ export class Session<TMessage = string> implements EventSender {
         this.logger.msg(msg, Msg.Err);
     }
 
-    public send(msg: protocol.Message) {
+    public send(msg: protocol.Message): void {
         if (msg.type === "event" && !this.canUseEvents) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Session does not support events: ignored event: ${stringifyIndented(msg)}`);
@@ -1237,7 +1237,7 @@ export class Session<TMessage = string> implements EventSender {
         this.writeMessage(msg);
     }
 
-    protected writeMessage(msg: protocol.Message) {
+    protected writeMessage(msg: protocol.Message): void {
         const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
         this.host.write(msgText);
     }
@@ -3289,12 +3289,12 @@ export class Session<TMessage = string> implements EventSender {
         return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
     }
 
-    getCanonicalFileName(fileName: string) {
+    getCanonicalFileName(fileName: string): string {
         const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
         return normalizePath(name);
     }
 
-    exit() {/*overridden*/}
+    exit(): void {/*overridden*/}
 
     private notRequired(request: protocol.Request | undefined): HandlerResponse {
         if (request) this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ true, this.performanceData);
@@ -3710,7 +3710,7 @@ export class Session<TMessage = string> implements EventSender {
         },
     }));
 
-    public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
+    public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse): void {
         if (this.handlers.has(command)) {
             throw new Error(`Protocol handler already exists for command "${command}"`);
         }
@@ -3759,7 +3759,7 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    public onMessage(message: TMessage) {
+    public onMessage(message: TMessage): void {
         this.gcTimer.scheduleCollect();
         let start: [number, number] | undefined;
         const currentPerformanceData = this.performanceData;
