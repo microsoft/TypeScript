@@ -3762,7 +3762,7 @@ function convertJsonOptionOfListType(
  *  \*\*        # matches the recursive directory wildcard "**".
  *  \/?$        # matches an optional trailing directory separator at the end of the string.
  */
-const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+const invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
 
 /**
  * Matches the portion of a wildcard path that does not contain wildcards.

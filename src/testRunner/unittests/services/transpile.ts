@@ -40,7 +40,7 @@ describe("unittests:: services:: Transpile", () => {
 
                 transpileOptions.reportDiagnostics = true;
 
-                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/gi, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
                 const toBeCompiled = [{
                     unitName,
                     content: input,

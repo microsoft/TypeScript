@@ -681,7 +681,7 @@ export function validateLocaleAndSetLanguage(
     errors?: Diagnostic[],
 ) {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)(?:[_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -691,7 +691,7 @@ export function validateLocaleAndSetLanguage(
     }
 
     const language = matchResult[1];
-    const territory = matchResult[3];
+    const territory = matchResult[2];
 
     // First try the entire locale, then fall back to just language if that's all we have.
     // Either ways do not fail, and fallback to the English diagnostic strings.

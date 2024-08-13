@@ -64,6 +64,7 @@
         "esbuild": "^0.23.0",
         "eslint": "^9.9.0",
         "eslint-formatter-autolinkable-stylish": "^1.4.0",
+        "eslint-plugin-regexp": "^2.6.0",
         "fast-xml-parser": "^4.4.1",
         "glob": "^10.4.5",
         "globals": "^15.9.0",

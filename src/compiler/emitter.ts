@@ -4005,7 +4005,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.comment) {
             const text = getTextOfJSDocComment(node.comment);
             if (text) {
-                const lines = text.split(/\r\n?|\n/g);
+                const lines = text.split(/\r\n?|\n/);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -4880,7 +4880,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeLines(text: string): void {
-        const lines = text.split(/\r\n?|\n/g);
+        const lines = text.split(/\r\n?|\n/);
         const indentation = guessIndentation(lines);
         for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;
