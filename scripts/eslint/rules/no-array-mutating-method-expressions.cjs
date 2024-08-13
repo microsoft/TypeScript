@@ -8,7 +8,7 @@ const { getConstrainedTypeAtLocation, isTypeArrayTypeOrUnionOfArrayTypes } = req
 void 0;
 
 module.exports = createRule({
-    name: "no-array-mutation-method-returns",
+    name: "no-array-mutating-method-expressions",
     meta: {
         docs: {
             description: ``,
