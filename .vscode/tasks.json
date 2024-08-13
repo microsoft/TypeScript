@@ -25,7 +25,12 @@
             "label": "tsc: watch ./src",
             "type": "shell",
             "command": "node",
-            "args": ["${workspaceFolder}/node_modules/typescript/lib/tsc.js", "--build", "${workspaceFolder}/src", "--watch"],
+            "args": [
+                "${workspaceFolder}/node_modules/typescript/lib/tsc.js",
+                "--build",
+                "${workspaceFolder}/src",
+                "--watch"
+            ],
             "group": "build",
             "isBackground": true,
             "problemMatcher": [
@@ -36,7 +41,10 @@
             "label": "npm: build:compiler",
             "type": "npm",
             "script": "build:compiler",
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": [
                 "$tsc"
             ]

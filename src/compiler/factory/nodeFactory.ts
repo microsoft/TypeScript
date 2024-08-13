@@ -7445,20 +7445,16 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
 
     // `annotatedNodes` are not merged as they should only present on the parse tree node of a `SourceFile`.
 
-    // `leadingComments` are concatenated with any existing leading comments on the destination
+    // `leadingComments` overwrites the destination
     if (leadingComments) {
         // We use `.slice()` in case `destEmitNode.leadingComments` is pushed to later
-        for (const comment of leadingComments.slice()) {
-            destEmitNode.leadingComments = appendIfUnique(destEmitNode.leadingComments, comment);
-        }
+        destEmitNode.leadingComments = leadingComments.slice();
     }
 
-    // `trailingComments` are concatenated with any existing trailing comments on the destination
+    // `trailingComments` overwrites the destination
     if (trailingComments) {
         // We use `.slice()` in case `destEmitNode.trailingComments` is pushed to later
-        for (const comment of trailingComments) {
-            destEmitNode.trailingComments = appendIfUnique(destEmitNode.trailingComments, comment);
-        }
+        destEmitNode.trailingComments = trailingComments.slice();
     }
 
     // `commentRange` overwrites the destination
