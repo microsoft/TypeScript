@@ -8,16 +8,16 @@ var v: string;
 for (v of [0, ""].values()) { }
 >v : string
 >  : ^^^^^^
->[0, ""].values() : BuiltinIterator<string | number, any, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->[0, ""].values : () => BuiltinIterator<string | number, any, any>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, ""].values() : ArrayIterator<string | number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, ""].values : () => ArrayIterator<string | number>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >"" : ""
 >   : ^^
->values : () => BuiltinIterator<string | number, any, any>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => ArrayIterator<string | number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
