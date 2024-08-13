@@ -3318,6 +3318,7 @@ declare namespace ts {
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
             private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
+            private sendSourceFileChange;
             /**
              * This function rebuilds the project for every file opened by the client
              * This does not reload contents of open files from disk. But we could do that if needed

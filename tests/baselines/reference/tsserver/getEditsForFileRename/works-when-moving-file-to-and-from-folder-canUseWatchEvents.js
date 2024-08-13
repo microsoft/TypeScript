@@ -347,20 +347,39 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/myprojects/project/functions/whatever :: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/myprojects/project/components/whatever :: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /home/src/myprojects/project/components/whatever/alert.ts:: 2
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/myprojects/project/components/whatever :: WatchInfo: /home/src/myprojects/project 1 undefined Config: /home/src/myprojects/project/tsconfig.json WatchType: Wild card directory
 After request
 
 Timeout callback:: count: 2
-3: /home/src/myprojects/project/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+5: /home/src/myprojects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
+/home/src/myprojects/project/components/whatever/alert.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
+    containingProjects: 0 *changed*
+        /home/src/myprojects/project/tsconfig.json *deleted*
+/home/src/myprojects/project/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json *default*
 
 Before request
 
@@ -380,27 +399,78 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json, 
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/project/functions/whatever/alert.ts ProjectRootPath: /home/src/myprojects/project:: Result: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 7,
+        "path": "/home/src/myprojects/project/components",
+        "recursive": true,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 8,
+        "path": "/home/src/myprojects/project/node_modules",
+        "recursive": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 9,
+        "path": "/home/src/myprojects/node_modules",
+        "recursive": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
 	../../../../a/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
-	components/whatever/alert.ts
-	  Imported via '@app/components/whatever/alert' from file 'index.ts'
 	index.ts
 	  Matched by default include pattern '**/*'
 	functions/whatever/alert.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 3
+      }
+    }
+Custom watchFile:: Close:: {"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -421,11 +491,35 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/a/lib/lib.es2016.full.d.ts:
+  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
+/home/src/myprojects/project/tsconfig.json:
+  {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+
+PolledWatches *deleted*::
+/home/src/myprojects/project/components/whatever/alert.ts:
+  {"event":{"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}}
+
+FsWatchesRecursive::
+/home/src/myprojects/node_modules: *new*
+  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
+/home/src/myprojects/node_modules/@types:
+  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project:
+  {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project/components: *new*
+  {"event":{"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project/node_modules: *new*
+  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
+/home/src/myprojects/project/node_modules/@types:
+  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+
 Timeout callback:: count: 2
-3: /home/src/myprojects/project/tsconfig.json *deleted*
-4: *ensureProjectForOpenFiles* *deleted*
-5: /home/src/myprojects/project/tsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
+5: /home/src/myprojects/project/tsconfig.json *deleted*
+6: *ensureProjectForOpenFiles* *deleted*
+7: /home/src/myprojects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
@@ -438,10 +532,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts
+/home/src/myprojects/project/components/whatever/alert.ts *deleted*
     version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /home/src/myprojects/project/functions/whatever/alert.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -500,10 +595,6 @@ ScriptInfos::
     sourceMapFilePath: false *changed*
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -560,10 +651,6 @@ ScriptInfos::
     sourceMapFilePath: false
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -574,26 +661,53 @@ ScriptInfos::
         /home/src/myprojects/project/tsconfig.json *default*
 
 Before running Timeout callback:: count: 2
-5: /home/src/myprojects/project/tsconfig.json
-6: *ensureProjectForOpenFiles*
+7: /home/src/myprojects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 7
+      }
+    }
+Custom watchDirectory:: Close:: {"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 8
+      }
+    }
+Custom watchDirectory:: Close:: {"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 9
+      }
+    }
+Custom watchDirectory:: Close:: {"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
-
-
-	../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
-	functions/whatever/alert.ts
-	  Imported via '@app/functions/whatever/alert' from file 'index.ts'
-	  Matched by default include pattern '**/*'
-	index.ts
-	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -632,6 +746,28 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+PolledWatches::
+/a/lib/lib.es2016.full.d.ts:
+  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
+/home/src/myprojects/project/tsconfig.json:
+  {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+
+FsWatchesRecursive::
+/home/src/myprojects/node_modules/@types:
+  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project:
+  {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project/node_modules/@types:
+  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+
+FsWatchesRecursive *deleted*::
+/home/src/myprojects/node_modules:
+  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
+/home/src/myprojects/project/components:
+  {"event":{"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
+/home/src/myprojects/project/node_modules:
+  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
+
 Projects::
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
@@ -639,25 +775,6 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
         /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
-
-ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/myprojects/project/tsconfig.json *deleted*
-/home/src/myprojects/project/functions/whatever/alert.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json *default*
-/home/src/myprojects/project/index.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json *default*
 
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/functions/whatever deleted
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/components/whatever created
@@ -690,19 +807,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 3
-      }
-    }
-Custom watchFile:: Close:: {"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Invoking /home/src/myprojects/project/tsconfig.json:: wildcard for open scriptInfo:: /home/src/myprojects/project/components/whatever/alert.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myprojects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/project/components/whatever/alert.ts ProjectRootPath: /home/src/myprojects/project:: Result: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -712,13 +821,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 7,
+        "id": 10,
         "path": "/home/src/myprojects/project/functions",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":10,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -727,12 +836,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 8,
+        "id": 11,
         "path": "/home/src/myprojects/project/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":11,"path":"/home/src/myprojects/project/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -741,186 +850,38 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 9,
+        "id": 12,
         "path": "/home/src/myprojects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":12,"path":"/home/src/myprojects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions/whatever/alert.ts 500 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 10,
-        "path": "/home/src/myprojects/project/functions/whatever/alert.ts"
-      }
-    }
-Custom watchFile:: Added:: {"id":10,"path":"/home/src/myprojects/project/functions/whatever/alert.ts"}
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
+	/home/src/myprojects/project/components/whatever/alert.ts SVC-2-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
 	../../../../a/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	index.ts
 	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/home/src/myprojects/project/components/whatever/alert.ts",
-        "configFile": "/home/src/myprojects/project/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/myprojects/project/functions/whatever/alert.ts' not found.\n  The file is in the program because:\n    Matched by default include pattern '**/*'",
-            "code": 6053,
-            "category": "error"
-          }
-        ]
-      }
-    }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myprojects/project/tsconfig.json ProjectRootPath: /home/src/myprojects/project:: Result: undefined
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 11,
-        "path": "/home/src/myprojects/project/components/whatever/tsconfig.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":11,"path":"/home/src/myprojects/project/components/whatever/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 12,
-        "path": "/home/src/myprojects/project/components/whatever/jsconfig.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":12,"path":"/home/src/myprojects/project/components/whatever/jsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 13,
-        "path": "/home/src/myprojects/project/components/tsconfig.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":13,"path":"/home/src/myprojects/project/components/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 14,
-        "path": "/home/src/myprojects/project/components/jsconfig.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":14,"path":"/home/src/myprojects/project/components/jsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 15,
-        "path": "/home/src/myprojects/project/jsconfig.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":15,"path":"/home/src/myprojects/project/jsconfig.json"}
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 16,
-        "path": "/a/lib/lib.d.ts"
-      }
-    }
-Custom watchFile:: Added:: {"id":16,"path":"/a/lib/lib.d.ts"}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 17,
-        "path": "/home/src/myprojects/project/components/whatever/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":17,"path":"/home/src/myprojects/project/components/whatever/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 18,
-        "path": "/home/src/myprojects/project/components/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":18,"path":"/home/src/myprojects/project/components/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
-
-
-	alert.ts
-	  Root file specified for compilation
+	components/whatever/alert.ts
+	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/myprojects/project/index.ts ProjectRootPath: /home/src/myprojects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/myprojects/project/components/whatever/alert.ts ProjectRootPath: /home/src/myprojects/project
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -932,55 +893,30 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"event":{"id":16,"path":"/a/lib/lib.d.ts"}}
 /a/lib/lib.es2016.full.d.ts:
   {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
-/home/src/myprojects/project/components/jsconfig.json: *new*
-  {"event":{"id":14,"path":"/home/src/myprojects/project/components/jsconfig.json"}}
-/home/src/myprojects/project/components/tsconfig.json: *new*
-  {"event":{"id":13,"path":"/home/src/myprojects/project/components/tsconfig.json"}}
-/home/src/myprojects/project/components/whatever/jsconfig.json: *new*
-  {"event":{"id":12,"path":"/home/src/myprojects/project/components/whatever/jsconfig.json"}}
-/home/src/myprojects/project/components/whatever/tsconfig.json: *new*
-  {"event":{"id":11,"path":"/home/src/myprojects/project/components/whatever/tsconfig.json"}}
-/home/src/myprojects/project/functions/whatever/alert.ts: *new*
-  {"event":{"id":10,"path":"/home/src/myprojects/project/functions/whatever/alert.ts"}}
-/home/src/myprojects/project/jsconfig.json: *new*
-  {"event":{"id":15,"path":"/home/src/myprojects/project/jsconfig.json"}}
 /home/src/myprojects/project/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
 
-PolledWatches *deleted*::
-/home/src/myprojects/project/components/whatever/alert.ts:
-  {"event":{"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}}
-
 FsWatchesRecursive::
 /home/src/myprojects/node_modules: *new*
-  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
+  {"event":{"id":12,"path":"/home/src/myprojects/node_modules","recursive":true}}
 /home/src/myprojects/node_modules/@types:
   {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project:
   {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/components/node_modules/@types: *new*
-  {"event":{"id":18,"path":"/home/src/myprojects/project/components/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/components/whatever/node_modules/@types: *new*
-  {"event":{"id":17,"path":"/home/src/myprojects/project/components/whatever/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/functions: *new*
-  {"event":{"id":7,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":10,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/node_modules: *new*
-  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
+  {"event":{"id":11,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
 /home/src/myprojects/project/node_modules/@types:
   {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Timeout callback:: count: 2
-7: /home/src/myprojects/project/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+11: /home/src/myprojects/project/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/dev/null/inferredProject1* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 4 *changed*
@@ -991,11 +927,10 @@ ScriptInfos::
     sourceMapFilePath: false
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *default* *new*
+/home/src/myprojects/project/components/whatever/alert.ts (Open) *new*
+    version: SVC-2-0
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json *default*
 /home/src/myprojects/project/functions/whatever/alert.ts *deleted*
     open: false *changed*
     version: SVC-1-0
@@ -1020,15 +955,29 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "fileName": "/home/src/myprojects/project/index.ts",
+          "textChanges": [
+            {
+              "start": {
+                "line": 1,
+                "offset": 24
+              },
+              "end": {
+                "line": 1,
+                "offset": 53
+              },
+              "newText": "@app/components/whatever/alert"
+            }
+          ]
+        }
+      ],
       "responseRequired": true
     }
 After request
 
 Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4
@@ -1063,127 +1012,29 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 After request
 
 Timeout callback:: count: 2
-7: /home/src/myprojects/project/tsconfig.json *deleted*
-8: *ensureProjectForOpenFiles* *deleted*
-11: /home/src/myprojects/project/tsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
+11: /home/src/myprojects/project/tsconfig.json *deleted*
+12: *ensureProjectForOpenFiles* *deleted*
+15: /home/src/myprojects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-11: /home/src/myprojects/project/tsconfig.json
-12: *ensureProjectForOpenFiles*
+15: /home/src/myprojects/project/tsconfig.json
+16: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 11
-      }
-    }
-Custom watchFile:: Close:: {"id":11,"path":"/home/src/myprojects/project/components/whatever/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 12
-      }
-    }
-Custom watchFile:: Close:: {"id":12,"path":"/home/src/myprojects/project/components/whatever/jsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 13
-      }
-    }
-Custom watchFile:: Close:: {"id":13,"path":"/home/src/myprojects/project/components/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 14
-      }
-    }
-Custom watchFile:: Close:: {"id":14,"path":"/home/src/myprojects/project/components/jsconfig.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 15
-      }
-    }
-Custom watchFile:: Close:: {"id":15,"path":"/home/src/myprojects/project/jsconfig.json"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/functions/whatever/alert.ts 500 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 10
-      }
-    }
-Custom watchFile:: Close:: {"id":10,"path":"/home/src/myprojects/project/functions/whatever/alert.ts"}
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
-	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
-
-
-	../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
-	index.ts
-	  Matched by default include pattern '**/*'
-	components/whatever/alert.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/home/src/myprojects/project/tsconfig.json",
-        "configFile": "/home/src/myprojects/project/tsconfig.json",
-        "diagnostics": []
-      }
-    }
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1191,32 +1042,9 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/myprojects/project/index.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/myprojects/project/components/whatever/alert.ts ProjectRootPath: /home/src/myprojects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "closeFileWatcher",
-      "body": {
-        "id": 16
-      }
-    }
-Custom watchFile:: Close:: {"id":16,"path":"/a/lib/lib.d.ts"}
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (0)
-
-
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1239,70 +1067,8 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
-/home/src/myprojects/project/tsconfig.json:
-  {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
-
-PolledWatches *deleted*::
-/a/lib/lib.d.ts:
-  {"event":{"id":16,"path":"/a/lib/lib.d.ts"}}
-/home/src/myprojects/project/components/jsconfig.json:
-  {"event":{"id":14,"path":"/home/src/myprojects/project/components/jsconfig.json"}}
-/home/src/myprojects/project/components/tsconfig.json:
-  {"event":{"id":13,"path":"/home/src/myprojects/project/components/tsconfig.json"}}
-/home/src/myprojects/project/components/whatever/jsconfig.json:
-  {"event":{"id":12,"path":"/home/src/myprojects/project/components/whatever/jsconfig.json"}}
-/home/src/myprojects/project/components/whatever/tsconfig.json:
-  {"event":{"id":11,"path":"/home/src/myprojects/project/components/whatever/tsconfig.json"}}
-/home/src/myprojects/project/functions/whatever/alert.ts:
-  {"event":{"id":10,"path":"/home/src/myprojects/project/functions/whatever/alert.ts"}}
-/home/src/myprojects/project/jsconfig.json:
-  {"event":{"id":15,"path":"/home/src/myprojects/project/jsconfig.json"}}
-
-FsWatchesRecursive::
-/home/src/myprojects/node_modules:
-  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
-/home/src/myprojects/node_modules/@types:
-  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project:
-  {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/components/node_modules/@types:
-  {"event":{"id":18,"path":"/home/src/myprojects/project/components/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/components/whatever/node_modules/@types:
-  {"event":{"id":17,"path":"/home/src/myprojects/project/components/whatever/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/functions:
-  {"event":{"id":7,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/node_modules:
-  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
-/home/src/myprojects/project/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-
 Projects::
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 2 *changed*
-    isOrphan: true *changed*
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
-    projectProgramVersion: 5 *changed*
+    projectProgramVersion: 4
     dirty: false *changed*
-    documentPositionMappers: 0 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
-
-ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
-/home/src/myprojects/project/components/whatever/alert.ts (Open) *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /home/src/myprojects/project/tsconfig.json *default* *new*
-        /dev/null/inferredProject1* *deleted*
-/home/src/myprojects/project/index.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json *default*
