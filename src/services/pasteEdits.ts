@@ -12,6 +12,7 @@ import {
     isIdentifier,
     Program,
     rangeContainsPosition,
+    rangeContainsRange,
     SourceFile,
     Statement,
     SymbolFlags,
@@ -124,13 +125,14 @@ function pasteEdits(
             });
 
             updatedRanges.forEach(range => {
-                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), ancestorNode => rangeContainsPosition(ancestorNode, range.end));
+                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), ancestorNode => rangeContainsRange(ancestorNode, range));
                 if (!enclosingNode) return;
-                forEachChild(enclosingNode, function cb(node) {
+                forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
                     if (isIdentifier(node) && rangeContainsPosition(range, node.getStart(updatedFile)) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
                         importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
+                        return;
                     }
-                    node.forEachChild(cb);
+                    node.forEachChild(importUnresolvedIdentifiers);
                 });
             });
         }

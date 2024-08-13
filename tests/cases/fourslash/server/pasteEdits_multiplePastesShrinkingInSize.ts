@@ -35,16 +35,16 @@
 // @Filename: /tsconfig.json
 ////{ "files": ["a.ts", "b.ts", "c.ts"] }
 
-const range = test.ranges();
 verify.pasteEdits({
     args: {
-        pastedText: [ `console.log("Good ");`,`const k = figs + juices;`,
+        pastedText: [ 
+            `console.log("Good ");`,`const k = figs + juices;`,
             `    console.log(tomato);`,
-`(kiwi: string) {
+            `(kiwi: string) {
             const cherry=tomato;
         }`
 ],
-        pasteLocations: [range[0], range[1], range[2], range[3]],
+        pasteLocations: test.ranges(),
     },
     newFileContents: {
         "/a.ts":
