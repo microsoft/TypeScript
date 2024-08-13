@@ -3,7 +3,7 @@ import { jsonToReadableText } from "../helpers.js";
 import { FsContents } from "./contents.js";
 import { libFile } from "./virtualFileSystemWithWatch.js";
 
-export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
+export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean): string {
     return jsonToReadableText({
         name: `@types/${packageName}`,
         version: "1.0.0",
@@ -17,7 +17,7 @@ export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: st
     });
 }
 
-export function getFsContentsForAlternateResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
+export function getFsContentsForAlternateResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean): string {
     return jsonToReadableText({
         name: packageName,
         version: "1.0.0",

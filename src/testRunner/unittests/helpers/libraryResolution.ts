@@ -1,4 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
@@ -8,6 +9,7 @@ import { loadProjectFromFiles } from "./vfs.js";
 import {
     createServerHost,
     createWatchedSystem,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
 function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
@@ -56,7 +58,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
     };
 }
 
-export function getFsForLibResolution(libRedirection: true | undefined) {
+export function getFsForLibResolution(libRedirection: true | undefined): FileSystem {
     return loadProjectFromFiles(
         getFsContentsForLibResolution(libRedirection),
         {
@@ -66,7 +68,7 @@ export function getFsForLibResolution(libRedirection: true | undefined) {
     );
 }
 
-export function getSysForLibResolution(libRedirection?: true) {
+export function getSysForLibResolution(libRedirection?: true): TestServerHost {
     return createWatchedSystem(
         getFsContentsForLibResolution(libRedirection),
         {
@@ -76,7 +78,7 @@ export function getSysForLibResolution(libRedirection?: true) {
     );
 }
 
-export function getServerHostForLibResolution(libRedirection?: true) {
+export function getServerHostForLibResolution(libRedirection?: true): TestServerHost {
     return createServerHost(
         getFsContentsForLibResolution(libRedirection),
         {
@@ -86,7 +88,7 @@ export function getServerHostForLibResolution(libRedirection?: true) {
     );
 }
 
-export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined) {
+export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined): string[] {
     return withoutConfig ?
         ["project1/core.d.ts", "project1/utils.d.ts", "project1/file.ts", "project1/index.ts", "project1/file2.ts", "--lib", "es5,dom", "--traceResolution", "--explainFiles"] :
         ["-p", "project1", "--explainFiles"];
@@ -115,7 +117,7 @@ function getFsContentsForLibResolutionUnknown(): FsContents {
     };
 }
 
-export function getFsForLibResolutionUnknown() {
+export function getFsForLibResolutionUnknown(): FileSystem {
     return loadProjectFromFiles(
         getFsContentsForLibResolutionUnknown(),
         {
@@ -125,7 +127,7 @@ export function getFsForLibResolutionUnknown() {
     );
 }
 
-export function getSysForLibResolutionUnknown() {
+export function getSysForLibResolutionUnknown(): TestServerHost {
     return createWatchedSystem(
         getFsContentsForLibResolutionUnknown(),
         {

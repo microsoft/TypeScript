@@ -1,4 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
@@ -9,9 +10,10 @@ import {
     createServerHost,
     createWatchedSystem,
     libFile,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
+export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -81,7 +83,7 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
     };
 }
 
-export function getFsForSampleProjectReferences() {
+export function getFsForSampleProjectReferences(): FileSystem {
     return loadProjectFromFiles(
         getFsContentsForSampleProjectReferences(),
         {
@@ -91,7 +93,7 @@ export function getFsForSampleProjectReferences() {
     );
 }
 
-export function getSysForSampleProjectReferences(withNodeNext?: boolean) {
+export function getSysForSampleProjectReferences(withNodeNext?: boolean): TestServerHost {
     return createWatchedSystem(
         getFsContentsForSampleProjectReferences(withNodeNext),
         {
@@ -100,7 +102,7 @@ export function getSysForSampleProjectReferences(withNodeNext?: boolean) {
     );
 }
 
-export function getServerHostForSampleProjectReferences() {
+export function getServerHostForSampleProjectReferences(): TestServerHost {
     return createServerHost(
         getFsContentsForSampleProjectReferences(),
         {

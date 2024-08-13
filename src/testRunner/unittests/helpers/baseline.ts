@@ -5,7 +5,7 @@ import { jsonToReadableText } from "../helpers.js";
 import { TscCompileSystem } from "./tsc.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function sanitizeSysOutput(output: string) {
+export function sanitizeSysOutput(output: string): string {
     return output
         .replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms")
         .replace(/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s(A|P)M/g, "HH:MM:SS AM");
@@ -48,7 +48,7 @@ export function commandLineCallbacks(
     };
 }
 
-export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
+export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined): void {
     for (let i = 0; i < programs.length; i++) {
         baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
     }
@@ -127,7 +127,7 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
     baseline.push("");
 }
 
-export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
+export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }): void {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
     for (const mapFile of mapFileNames) {
         const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
@@ -398,7 +398,7 @@ export function baselineBuildInfo(
     options: ts.CompilerOptions,
     sys: TscCompileSystem | TestServerHost,
     originalReadCall?: ts.System["readFile"],
-) {
+): void {
     const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(options);
     if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
     if (!sys.fileExists(buildInfoPath)) return;

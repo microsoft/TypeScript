@@ -33,7 +33,7 @@ export const noChangeRun: TestTscEdit = {
     caption: "no-change-run",
     edit: ts.noop,
 };
-export const noChangeOnlyRuns = [noChangeRun];
+export const noChangeOnlyRuns: TestTscEdit[] = [noChangeRun];
 
 export interface TestTscCompile extends TestTscCompileLikeBase {
     baselineSourceMap?: boolean;
@@ -56,7 +56,7 @@ export interface TestTscCompileLike extends TestTscCompileLikeBase {
 /**
  * Initialize FS, run compile function and save baseline
  */
-export function testTscCompileLike(input: TestTscCompileLike) {
+export function testTscCompileLike(input: TestTscCompileLike): TscCompileSystem {
     const initialFs = input.fs();
     const inputFs = initialFs.shadow();
     const {
@@ -101,7 +101,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`,
     return sys;
 }
 
-export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
+export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string): void {
     if (versionToWrite) {
         fakes.patchHostForBuildInfoWrite(sys, versionToWrite);
     }
@@ -124,7 +124,7 @@ export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite
 /**
  * Initialize Fs, execute command line and save baseline
  */
-export function testTscCompile(input: TestTscCompile) {
+export function testTscCompile(input: TestTscCompile): TscCompileSystem {
     let actualReadFileMap: ts.MapLike<number> | undefined;
     let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
     return testTscCompileLike({
@@ -205,7 +205,7 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
     }
 }
 
-export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
+export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }): void {
     it(`Generates files matching the baseline`, () => {
         const { file, text } = sys().baseLine();
         Harness.Baseline.runBaseline(file, text);
@@ -221,7 +221,7 @@ export interface VerifyTscCompileLike {
 /**
  * Verify by baselining after initializing FS and custom compile
  */
-export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
+export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T): void {
     describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
         describe(input.scenario, () => {
             describe(input.subScenario, () => {
@@ -562,7 +562,7 @@ export function verifyTsc({
     baselineReadFileCalls,
     baselinePrograms,
     edits,
-}: VerifyTscWithEditsInput) {
+}: VerifyTscWithEditsInput): void {
     describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
         let sys: TscCompileSystem;
         let baseFs: vfs.FileSystem;

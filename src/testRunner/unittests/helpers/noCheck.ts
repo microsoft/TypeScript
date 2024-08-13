@@ -6,7 +6,7 @@ import {
 } from "./tsc.js";
 import { loadProjectFromFiles } from "./vfs.js";
 
-export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
+export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p"): void {
     const commandLineArgs = buildType === "-b" ?
         ["-b", "/src/tsconfig.json", "-v"] :
         ["-p", "/src/tsconfig.json"];

@@ -36,7 +36,7 @@ export function loadProjectFromFiles(
     return fs;
 }
 
-export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
+export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string): void {
     if (!fs.statSync(path).isFile()) {
         throw new Error(`File ${path} does not exist`);
     }
@@ -48,7 +48,7 @@ export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, n
     fs.writeFileSync(path, newContent, "utf-8");
 }
 
-export function prependText(fs: vfs.FileSystem, path: string, additionalContent: string) {
+export function prependText(fs: vfs.FileSystem, path: string, additionalContent: string): void {
     if (!fs.statSync(path).isFile()) {
         throw new Error(`File ${path} does not exist`);
     }
@@ -56,7 +56,7 @@ export function prependText(fs: vfs.FileSystem, path: string, additionalContent:
     fs.writeFileSync(path, `${additionalContent}${old}`, "utf-8");
 }
 
-export function appendText(fs: vfs.FileSystem, path: string, additionalContent: string) {
+export function appendText(fs: vfs.FileSystem, path: string, additionalContent: string): void {
     if (!fs.statSync(path).isFile()) {
         throw new Error(`File ${path} does not exist`);
     }
@@ -64,11 +64,11 @@ export function appendText(fs: vfs.FileSystem, path: string, additionalContent: 
     fs.writeFileSync(path, `${old}${additionalContent}`);
 }
 
-export function enableStrict(fs: vfs.FileSystem, path: string) {
+export function enableStrict(fs: vfs.FileSystem, path: string): void {
     replaceText(fs, path, `"strict": false`, `"strict": true`);
 }
 
-export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
+export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string): void {
     prependText(
         fs,
         path,
@@ -77,7 +77,7 @@ export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: stri
     );
 }
 
-export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
+export function addShebang(fs: vfs.FileSystem, project: string, file: string): void {
     prependText(
         fs,
         `src/${project}/${file}.ts`,
@@ -95,23 +95,23 @@ function nonrestContent(project: string, file: string) {
     return `function for${project}${file}Rest() { }`;
 }
 
-export function addRest(fs: vfs.FileSystem, project: string, file: string) {
+export function addRest(fs: vfs.FileSystem, project: string, file: string): void {
     appendText(fs, `src/${project}/${file}.ts`, restContent(project, file));
 }
 
-export function removeRest(fs: vfs.FileSystem, project: string, file: string) {
+export function removeRest(fs: vfs.FileSystem, project: string, file: string): void {
     replaceText(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
 }
 
-export function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
+export function addStubFoo(fs: vfs.FileSystem, project: string, file: string): void {
     appendText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
 }
 
-export function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
+export function changeStubToRest(fs: vfs.FileSystem, project: string, file: string): void {
     replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
 }
 
-export function addSpread(fs: vfs.FileSystem, project: string, file: string) {
+export function addSpread(fs: vfs.FileSystem, project: string, file: string): void {
     const path = `src/${project}/${file}.ts`;
     const content = fs.readFileSync(path, "utf8");
     fs.writeFileSync(
@@ -135,7 +135,7 @@ export function getTripleSlashRef(project: string) {
     return `/src/${project}/tripleRef.d.ts`;
 }
 
-export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
+export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string): void {
     fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
     prependText(
         fs,

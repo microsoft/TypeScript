@@ -279,7 +279,7 @@ export function forEachMonorepoSymlinkScenario(
         edits: () => readonly TscWatchCompileChange[],
         indexFile: string,
     ) => void,
-) {
+): void {
     describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {
         forEachMonorepoSymlinkedSiblingPackagesSys(forTsserver, action);
     });

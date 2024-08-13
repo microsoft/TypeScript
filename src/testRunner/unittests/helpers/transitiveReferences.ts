@@ -7,14 +7,14 @@ import {
 } from "./contents.js";
 import { libFile } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForTransitiveReferencesRefsAdts() {
+export function getFsContentsForTransitiveReferencesRefsAdts(): string {
     return dedent`
         export class X {}
         export class A {}
     `;
 }
 
-export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -29,7 +29,7 @@ export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolea
     });
 }
 
-export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),

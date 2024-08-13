@@ -1,11 +1,11 @@
 import * as ts from "../../_namespaces/ts.js";
 import { libFile } from "./virtualFileSystemWithWatch.js";
 
-export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
+export function compilerOptionsToConfigJson(options: ts.CompilerOptions): object {
     return ts.optionMapToObject(ts.serializeCompilerOptions(options));
 }
 
-export const libContent = `${libFile.content}
+export const libContent: string = `${libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
@@ -28,6 +28,9 @@ export function libPath(forLib: string) {
     return `${ts.getDirectoryPath(libFile.path)}/lib.${forLib}.d.ts`;
 }
 
-export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined) {
+export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined): {
+    module: string;
+    target: string;
+} | undefined {
     return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
 }

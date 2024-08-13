@@ -1,4 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
@@ -8,9 +9,10 @@ import { loadProjectFromFiles } from "./vfs.js";
 import {
     createWatchedSystem,
     libFile,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
+export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object): string {
     return jsonToReadableText({
         extends: "../tsconfig-base.json",
         compilerOptions: {
@@ -128,7 +130,7 @@ export function getFsContentsForDemoProjectReferences(): FsContents {
     };
 }
 
-export function getFsForDemoProjectReferences() {
+export function getFsForDemoProjectReferences(): FileSystem {
     return loadProjectFromFiles(
         getFsContentsForDemoProjectReferences(),
         {
@@ -138,7 +140,7 @@ export function getFsForDemoProjectReferences() {
     );
 }
 
-export function getSysForDemoProjectReferences() {
+export function getSysForDemoProjectReferences(): TestServerHost {
     return createWatchedSystem(
         getFsContentsForDemoProjectReferences(),
         {

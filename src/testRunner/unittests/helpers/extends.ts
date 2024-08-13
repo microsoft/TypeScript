@@ -86,7 +86,7 @@ export function getConfigDirExtendsSys(): FsContents {
     };
 }
 
-export function modifyFirstExtendedConfigOfConfigDirExtendsSys(sys: TestServerHost) {
+export function modifyFirstExtendedConfigOfConfigDirExtendsSys(sys: TestServerHost): void {
     sys.modifyFile(
         "/home/src/projects/configs/first/tsconfig.json",
         jsonToReadableText({

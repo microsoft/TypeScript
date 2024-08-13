@@ -15,7 +15,7 @@ export function createSolutionBuilderHostForBaseline(
     sys: TscCompileSystem | TestServerHost,
     versionToWrite?: string,
     originalRead?: (TscCompileSystem | TestServerHost)["readFile"],
-) {
+): ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
     const { cb } = commandLineCallbacks(sys, originalRead);
     const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
@@ -23,18 +23,18 @@ export function createSolutionBuilderHostForBaseline(
     return host;
 }
 
-export function createSolutionBuilder(system: TestServerHost, rootNames: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function createSolutionBuilder(system: TestServerHost, rootNames: readonly string[], originalRead?: TestServerHost["readFile"]): ts.SolutionBuilder<ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     const host = createSolutionBuilderHostForBaseline(system, /*versionToWrite*/ undefined, originalRead);
     return ts.createSolutionBuilder(host, rootNames, {});
 }
 
-export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]) {
+export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]): void {
     // ts build should succeed
     solutionBuildWithBaseline(host, rootNames);
     assert.equal(host.getOutput().length, 0, jsonToReadableText(host.getOutput()));
 }
 
-export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]): TestServerHost {
     if (sys.writtenFiles === undefined) {
         const originalReadFile = sys.readFile;
         const originalWrite = sys.write;

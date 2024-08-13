@@ -60,7 +60,7 @@ function getFsContentsForRootsFromReferencedProject(serverFirst: boolean): FsCon
     };
 }
 
-export function forEachScenarioForRootsFromReferencedProject(action: (subScenario: string, getFsContents: () => FsContents) => void) {
+export function forEachScenarioForRootsFromReferencedProject(action: (subScenario: string, getFsContents: () => FsContents) => void): void {
     action("when root file is from referenced project", () => getFsContentsForRootsFromReferencedProject(/*serverFirst*/ true));
     action("when root file is from referenced project and shared is first", () => getFsContentsForRootsFromReferencedProject(/*serverFirst*/ false));
 }

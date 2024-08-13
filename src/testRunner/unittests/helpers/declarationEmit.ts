@@ -5,7 +5,7 @@ import { jsonToReadableText } from "../helpers.js";
 import { libContent } from "./contents.js";
 import { loadProjectFromFiles } from "./vfs.js";
 
-export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
+export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined): FileSystem {
     return loadProjectFromFiles({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -40,7 +40,7 @@ export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incr
     });
 }
 
-export function getFsForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
+export function getFsForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined): FileSystem {
     return loadProjectFromFiles({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -74,7 +74,7 @@ export function forEachDeclarationEmitWithErrorsScenario(
         fs: () => FileSystem,
     ) => void,
     withComposite: boolean,
-) {
+): void {
     for (const outFile of [false, true]) {
         for (const incremental of [undefined, true] as const) {
             action(
