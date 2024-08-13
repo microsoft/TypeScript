@@ -179,7 +179,7 @@ import {
 // Compound nodes
 
 /** @internal */
-export function createEmptyExports(factory: NodeFactory) {
+export function createEmptyExports(factory: NodeFactory): ExportDeclaration {
     return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
 }
 
@@ -512,7 +512,13 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
  *
  * @internal
  */
-export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
+export function expandPreOrPostfixIncrementOrDecrementExpression(
+    factory: NodeFactory,
+    node: PrefixUnaryExpression | PostfixUnaryExpression,
+    expression: Expression,
+    recordTempVariable: (node: Identifier) => void,
+    resultVariable: Identifier | undefined,
+): Expression {
     const operator = node.operator;
     Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
 
@@ -546,7 +552,7 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFa
  *
  * @internal
  */
-export function isInternalName(node: Identifier) {
+export function isInternalName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
 }
 
@@ -555,7 +561,7 @@ export function isInternalName(node: Identifier) {
  *
  * @internal
  */
-export function isLocalName(node: Identifier) {
+export function isLocalName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
 }
 
@@ -565,7 +571,7 @@ export function isLocalName(node: Identifier) {
  *
  * @internal
  */
-export function isExportName(node: Identifier) {
+export function isExportName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
 }
 
@@ -589,7 +595,7 @@ export function findUseStrictPrologue(statements: readonly Statement[]): Stateme
 }
 
 /** @internal */
-export function startsWithUseStrict(statements: readonly Statement[]) {
+export function startsWithUseStrict(statements: readonly Statement[]): boolean {
     const firstStatement = firstOrUndefined(statements);
     return firstStatement !== undefined
         && isPrologueDirective(firstStatement)
@@ -621,7 +627,7 @@ export function getJSDocTypeAssertionType(node: JSDocTypeAssertion): TypeNode {
 }
 
 /** @internal */
-export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
+export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
     switch (node.kind) {
         case SyntaxKind.ParenthesizedExpression:
             if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
@@ -656,7 +662,7 @@ export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.Al
 }
 
 /** @internal */
-export function walkUpOuterExpressions(node: Expression, kinds = OuterExpressionKinds.All): Node {
+export function walkUpOuterExpressions(node: Expression, kinds: OuterExpressionKinds = OuterExpressionKinds.All): Node {
     let parent = node.parent;
     while (isOuterExpression(parent, kinds)) {
         parent = parent.parent;
@@ -671,21 +677,21 @@ export function startOnNewLine<T extends Node>(node: T): T {
 }
 
 /** @internal */
-export function getExternalHelpersModuleName(node: SourceFile) {
+export function getExternalHelpersModuleName(node: SourceFile): Identifier | undefined {
     const parseNode = getOriginalNode(node, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return emitNode && emitNode.externalHelpersModuleName;
 }
 
 /** @internal */
-export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+export function hasRecordedExternalHelpers(sourceFile: SourceFile): boolean {
     const parseNode = getOriginalNode(sourceFile, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
 }
 
 /** @internal */
-export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean): ImportDeclaration | undefined {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
@@ -800,7 +806,7 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
  *
  * @internal
  */
-export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions): StringLiteral | undefined {
     const moduleName = getExternalModuleName(importNode);
     if (moduleName && isStringLiteral(moduleName)) {
         return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
@@ -1078,7 +1084,7 @@ export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmen
 }
 
 /** @internal */
-export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined): Identifier | undefined {
     if (fullName) {
         let rightNode = fullName;
         while (true) {
@@ -1504,7 +1510,7 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
  *
  * @internal
  */
-export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier): Node | GeneratedIdentifier | GeneratedPrivateIdentifier {
     const autoGenerate = name.emitNode.autoGenerate;
     if (autoGenerate.flags & GeneratedIdentifierFlags.Node) {
         const autoGenerateId = autoGenerate.id;
@@ -1597,7 +1603,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
  *
  * @internal
  */
-export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
+export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined): PropertyDeclaration {
     return factory.updatePropertyDeclaration(
         node,
         modifiers,
@@ -1711,7 +1717,7 @@ function flattenCommaListWorker(node: Expression, expressions: Expression[]) {
  *
  * @internal
  */
-export function flattenCommaList(node: Expression) {
+export function flattenCommaList(node: Expression): Expression[] {
     const expressions: Expression[] = [];
     flattenCommaListWorker(node, expressions);
     return expressions;

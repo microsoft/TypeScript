@@ -231,7 +231,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext) {
+export function transformTypeScript(context: TransformationContext): (node: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

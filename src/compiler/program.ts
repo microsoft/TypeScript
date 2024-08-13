@@ -519,7 +519,15 @@ export function changeCompilerHostLikeToUseCache(
     host: CompilerHostLikeForCache,
     toPath: (fileName: string) => Path,
     getSourceFile?: CompilerHost["getSourceFile"],
-) {
+): {
+    originalReadFile: (fileName: string, encoding?: string) => string | undefined;
+    originalFileExists: (fileName: string) => boolean;
+    originalDirectoryExists: ((directory: string) => boolean) | undefined;
+    originalCreateDirectory: ((directory: string) => void) | undefined;
+    originalWriteFile: WriteFileCallback | undefined;
+    getSourceFileWithCache: ((fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean) => SourceFile | undefined) | undefined;
+    readFileWithCache: (fileName: string) => string | undefined;
+} {
     const originalReadFile = host.readFile;
     const originalFileExists = host.fileExists;
     const originalDirectoryExists = host.directoryExists;
@@ -702,7 +710,7 @@ function getCategoryFormat(category: DiagnosticCategory): ForegroundColorEscapeS
 }
 
 /** @internal */
-export function formatColorAndReset(text: string, formatStyle: string) {
+export function formatColorAndReset(text: string, formatStyle: string): string {
     return formatStyle + text + resetEscapeSequence;
 }
 
@@ -761,7 +769,7 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
 }
 
 /** @internal */
-export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
+export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color: typeof formatColorAndReset = formatColorAndReset): string {
     const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
     const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
@@ -852,7 +860,7 @@ export interface SourceFileImportsList {
  * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
  * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
  */
-export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode) {
+export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode {
     return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
 }
 
@@ -879,7 +887,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
 }
 
 /** @internal */
-export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
+export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration | JSDocImportTag): boolean {
     if (isExportDeclaration(decl)) {
         return decl.isTypeOnly;
     }
@@ -927,7 +935,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * should be the options of the referenced project, not the referencing project.
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
+export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions): ResolutionMode {
     return getModeForUsageLocationWorker(file, usage, compilerOptions);
 }
 
@@ -980,7 +988,7 @@ function getEmitSyntaxForUsageLocationWorker(file: Pick<SourceFile, "fileName" |
 }
 
 /** @internal */
-export function getResolutionModeOverride(node: ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
+export function getResolutionModeOverride(node: ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void): ModuleKind.CommonJS | ModuleKind.ESNext | undefined {
     if (!node) return undefined;
     if (length(node.elements) !== 1) {
         grammarErrorOnNode?.(
@@ -1180,13 +1188,13 @@ function forEachProjectReference<T>(
 export const inferredTypesContainingFile = "__inferred type names__.ts";
 
 /** @internal */
-export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string) {
+export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string): string {
     const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
     return combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
 }
 
 /** @internal */
-export function getLibraryNameFromLibFileName(libFileName: string) {
+export function getLibraryNameFromLibFileName(libFileName: string): string {
     // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
     //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
     //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
@@ -1391,7 +1399,7 @@ export function getImpliedNodeFormatForFileWorker(
     packageJsonInfoCache: PackageJsonInfoCache | undefined,
     host: ModuleResolutionHost,
     options: CompilerOptions,
-) {
+): ModuleKind.CommonJS | ModuleKind.ESNext | Partial<CreateSourceFileOptions> | undefined {
     const moduleResolution = getEmitModuleResolutionKind(options);
     const shouldLookupFromPackageJson = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
         || pathContainsNodeModules(fileName);

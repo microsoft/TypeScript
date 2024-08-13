@@ -251,7 +251,11 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
  *
  * @internal
  */
-export function transformDeclarations(context: TransformationContext) {
+export function transformDeclarations(context: TransformationContext): {
+    (node: Bundle): Bundle;
+    (node: SourceFile): SourceFile;
+    (node: SourceFile | Bundle): SourceFile | Bundle;
+} {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;

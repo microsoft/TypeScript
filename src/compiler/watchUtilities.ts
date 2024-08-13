@@ -398,7 +398,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
     extendedConfigFilesMap: Map<Path, SharedExtendedConfigFileWatcher<T>>,
     createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
     toPath: (fileName: string) => Path,
-) {
+): void {
     const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
     // remove project from all unrelated watchers
     extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
@@ -437,7 +437,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
 export function clearSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
     extendedConfigFilesMap: Map<Path, SharedExtendedConfigFileWatcher<T>>,
-) {
+): void {
     extendedConfigFilesMap.forEach(watcher => {
         if (watcher.projects.delete(projectPath)) watcher.close();
     });
@@ -452,7 +452,7 @@ export function cleanExtendedConfigCache(
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry>,
     extendedConfigFilePath: Path,
     toPath: (fileName: string) => Path,
-) {
+): void {
     if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
     extendedConfigCache.forEach(({ extendedResult }, key) => {
         if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
@@ -470,7 +470,7 @@ export function updateMissingFilePathsWatch(
     program: Program,
     missingFileWatches: Map<Path, FileWatcher>,
     createMissingFileWatch: (missingFilePath: Path, missingFileName: string) => FileWatcher,
-) {
+): void {
     // Update the missing file paths watcher
     mutateMap(
         missingFileWatches,
@@ -503,7 +503,7 @@ export function updateWatchingWildcardDirectories<T extends FileWatcher>(
     existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher<T>>,
     wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined,
     watchDirectory: (directory: string, flags: WatchDirectoryFlags) => T,
-) {
+): void {
     if (wildcardDirectories) {
         mutateMap(
             existingWatchedForWildcards,
@@ -653,7 +653,7 @@ export function isIgnoredFileFromWildCardWatching({
 }
 
 /** @internal */
-export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
+export function isEmittedFileOfProgram(program: Program | undefined, file: string): boolean {
     if (!program) {
         return false;
     }
@@ -830,6 +830,6 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
 }
 
 /** @internal */
-export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
+export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T): void {
     objWithWatcher.watcher.close();
 }

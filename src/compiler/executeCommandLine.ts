@@ -733,7 +733,7 @@ function executeCommandLineWorker(
 }
 
 /** @internal */
-export function isBuild(commandLineArgs: readonly string[]) {
+export function isBuild(commandLineArgs: readonly string[]): boolean {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
         return firstOption === "build" || firstOption === "b";

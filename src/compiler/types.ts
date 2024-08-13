@@ -10055,7 +10055,78 @@ export interface PragmaDefinition<T1 extends string = string, T2 extends string 
 // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
 //  fancy effectively defining it twice, once in value-space and once in type-space
 /** @internal */
-export const commentPragmas = {
+export const commentPragmas: {
+    readonly "reference": {
+        readonly args: readonly [{
+            readonly name: "types";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "lib";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "path";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "no-default-lib";
+            readonly optional: true;
+        }, {
+            readonly name: "resolution-mode";
+            readonly optional: true;
+        }, {
+            readonly name: "preserve";
+            readonly optional: true;
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "amd-dependency": {
+        readonly args: readonly [{
+            readonly name: "path";
+        }, {
+            readonly name: "name";
+            readonly optional: true;
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "amd-module": {
+        readonly args: readonly [{
+            readonly name: "name";
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "ts-check": {
+        readonly kind: PragmaKindFlags.SingleLine;
+    };
+    readonly "ts-nocheck": {
+        readonly kind: PragmaKindFlags.SingleLine;
+    };
+    readonly "jsx": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsxfrag": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsximportsource": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsxruntime": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+} = {
     "reference": {
         args: [
             { name: "types", optional: true, captureSpan: true },

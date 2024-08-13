@@ -14,7 +14,7 @@ import {
 } from "../../_namespaces/ts.js";
 
 /** @internal */
-export function transformImpliedNodeFormatDependentModule(context: TransformationContext) {
+export function transformImpliedNodeFormatDependentModule(context: TransformationContext): (node: SourceFile | Bundle) => SourceFile | Bundle {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
 

@@ -161,7 +161,7 @@ export function canProduceDiagnostics(node: Node): node is DeclarationDiagnostic
 }
 
 /** @internal */
-export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
+export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
     if (isSetAccessor(node) || isGetAccessor(node)) {
         return getAccessorNameVisibilityError;
     }
@@ -603,7 +603,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 }
 
 /** @internal */
-export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
+export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (node: Node) => DiagnosticWithLocation {
     const relatedSuggestionByDeclarationKind = {
         [SyntaxKind.ArrowFunction]: Diagnostics.Add_a_return_type_to_the_function_expression,
         [SyntaxKind.FunctionExpression]: Diagnostics.Add_a_return_type_to_the_function_expression,

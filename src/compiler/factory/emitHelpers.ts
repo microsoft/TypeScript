@@ -685,7 +685,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 }
 
 /** @internal */
-export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
+export function compareEmitHelpers(x: EmitHelper, y: EmitHelper): Comparison {
     if (x === y) return Comparison.EqualTo;
     if (x.priority === y.priority) return Comparison.EqualTo;
     if (x.priority === undefined) return Comparison.GreaterThan;
