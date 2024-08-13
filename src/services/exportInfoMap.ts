@@ -376,9 +376,10 @@ export function isImportable(
 ): boolean {
     if (!toFile) {
         // Ambient module
+        let useNodePrefix;
         const moduleName = stripQuotes(toModule.name);
-        if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(fromFile, program)) {
-            return false;
+        if (JsTyping.nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+            return useNodePrefix === startsWith(moduleName, "node:");
         }
         return !packageJsonFilter
             || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)

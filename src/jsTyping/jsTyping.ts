@@ -27,6 +27,7 @@ import {
     some,
     toFileNameLowerCase,
     TypeAcquisition,
+    unprefixedNodeCoreModules,
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts.js";
@@ -61,60 +62,15 @@ export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVers
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
 
-const unprefixedNodeCoreModuleList = [
-    "assert",
-    "assert/strict",
-    "async_hooks",
-    "buffer",
-    "child_process",
-    "cluster",
-    "console",
-    "constants",
-    "crypto",
-    "dgram",
-    "diagnostics_channel",
-    "dns",
-    "dns/promises",
-    "domain",
-    "events",
-    "fs",
-    "fs/promises",
-    "http",
-    "https",
-    "http2",
-    "inspector",
-    "module",
-    "net",
-    "os",
-    "path",
-    "perf_hooks",
-    "process",
-    "punycode",
-    "querystring",
-    "readline",
-    "repl",
-    "stream",
-    "stream/promises",
-    "string_decoder",
-    "timers",
-    "timers/promises",
-    "tls",
-    "trace_events",
-    "tty",
-    "url",
-    "util",
-    "util/types",
-    "v8",
-    "vm",
-    "wasi",
-    "worker_threads",
-    "zlib",
-];
-
-const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
-
 /** @internal */
-export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
+export const nodeCoreModuleList: readonly string[] = [
+    ...unprefixedNodeCoreModules,
+    ...[...unprefixedNodeCoreModules].map(name => `node:${name}`),
+    "node:sea",
+    "node:sqlite",
+    "node:test",
+    "node:test/reporters",
+];
 
 /** @internal */
 export const nodeCoreModules = new Set(nodeCoreModuleList);

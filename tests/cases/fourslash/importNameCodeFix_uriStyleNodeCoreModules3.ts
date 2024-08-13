@@ -31,12 +31,12 @@
 //// import "path";
 //// writeFile/*mixed2*/
 
-verify.importFixModuleSpecifiers("noPrefix", ["fs", "fs/promises", "node:fs", "node:fs/promises"]);
-verify.importFixModuleSpecifiers("prefix", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("noPrefix", ["fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("prefix", ["node:fs", "node:fs/promises"]);
 
 // We're doing as little work as possible to decide which module specifiers
 // to use, so we just take the *first* recognized node core module in the file
 // and copy its style.
 
-verify.importFixModuleSpecifiers("mixed1", ["fs", "fs/promises", "node:fs", "node:fs/promises"]);
-verify.importFixModuleSpecifiers("mixed2", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("mixed1", ["fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("mixed2", ["node:fs", "node:fs/promises"]);
