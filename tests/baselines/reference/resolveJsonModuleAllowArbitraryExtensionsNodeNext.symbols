@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/resolveJsonModuleAllowArbitraryExtensionsNodeNext.ts] ////
+
+=== cjs/foo.d.json.ts ===
+declare const data: ["foo", "bar", "baz"];
+>data : Symbol(data, Decl(foo.d.json.ts, 0, 13))
+
+export = data;
+>data : Symbol(data, Decl(foo.d.json.ts, 0, 13))
+
+=== cjs/index.mts ===
+import data from "./foo.json" with { type: "json" };
+>data : Symbol(data, Decl(index.mts, 0, 6))
+
+data.default; // foo.d.json.ts is cjs format - error (`default` is whole file, file has no `default` member)
+>data : Symbol(data, Decl(index.mts, 0, 6))
+
+import data2 = require("./foo.json");
+>data2 : Symbol(data2, Decl(index.mts, 1, 13))
+
+data2.default; // `data2` is the whole json object, no `default`
+>data2 : Symbol(data2, Decl(index.mts, 1, 13))
+
+=== cjs/secondary.cts ===
+import data from "./foo.json";
+>data : Symbol(data, Decl(secondary.cts, 0, 6))
+
+data.default; // error (cjs format `.d.json.ts`, export= object is require result)
+>data : Symbol(data, Decl(secondary.cts, 0, 6))
+
+import data2 = require("./foo.json");
+>data2 : Symbol(data2, Decl(secondary.cts, 1, 13))
+
+data2.default; // `data2` is the whole json object, no `default`
+>data2 : Symbol(data2, Decl(secondary.cts, 1, 13))
+
+=== esm/foo.d.json.ts ===
+declare const data: ["foo", "bar", "baz"];
+>data : Symbol(data, Decl(foo.d.json.ts, 0, 13))
+
+export = data;
+>data : Symbol(data, Decl(foo.d.json.ts, 0, 13))
+
+=== esm/index.mts ===
+import data from "./foo.json" with { type: "json" };
+>data : Symbol(data, Decl(index.mts, 0, 6))
+
+data.default; // foo.d.json.ts is cjs format despite package - error! (default import is already the whole json object)
+>data : Symbol(data, Decl(index.mts, 0, 6))
+
+import data2 = require("./foo.json");
+>data2 : Symbol(data2, Decl(index.mts, 1, 13))
+
+data2.default; // `data2` is the whole json object, no `default`
+>data2 : Symbol(data2, Decl(index.mts, 1, 13))
+
+=== esm/secondary.cts ===
+import data from "./foo.json";
+>data : Symbol(data, Decl(secondary.cts, 0, 6))
+
+data.default; // `export=` object is the whole `require` result, hoisted to `default` by interop helper, no 2nd default
+>data : Symbol(data, Decl(secondary.cts, 0, 6))
+
+import data2 = require("./foo.json");
+>data2 : Symbol(data2, Decl(secondary.cts, 1, 13))
+
+data2.default; // `data2` is the whole json object, no `default`
+>data2 : Symbol(data2, Decl(secondary.cts, 1, 13))
+
+=== root.mts ===
+
+import "./cjs/index.mjs";
+import "./cjs/secondary.mjs";
+import "./mjs/index.mjs";
+import "./mjs/secondary.mjs";
+
