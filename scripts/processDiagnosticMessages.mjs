@@ -92,6 +92,7 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "    return { code, category, key, message, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated };",
         "}",
         "",
+        "/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion*/", // type assertions are needed for isolatedDeclarations
         "/** @internal */",
         "export const Diagnostics = {",
     ];
