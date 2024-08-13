@@ -30,7 +30,12 @@ module.exports = createRule({
 
         const checker = services.program.getTypeChecker();
 
-        /** @type {(callee: TSESTree.MemberExpression) => boolean} */
+        /**
+         * This is a heuristic to ignore cases where the mutating method appears to be
+         * operating on a "fresh" array.
+         *
+         * @type {(callee: TSESTree.MemberExpression) => boolean}
+         */
         const isFreshArray = callee => {
             const object = callee.object;
 
