@@ -6433,6 +6433,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.approximateLength += idText(name).length;
                     return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                 }
+                if (context.depth < context.unfoldDepth && objectFlags & ObjectFlags.ClassOrInterface) {
+                    context.depth += 1;
+                    return createAnonymousTypeNode(type as InterfaceType);
+                }
                 // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                 if (type.symbol) {
                     return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
