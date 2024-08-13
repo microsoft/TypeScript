@@ -316,7 +316,7 @@ function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
 /** @deprecated use ts.server.protocol.CommandTypes */
 export type CommandNames = protocol.CommandTypes;
 /** @deprecated use ts.server.protocol.CommandTypes */
-export const CommandNames: CommandNames = (protocol as any).CommandTypes;
+export const CommandNames: any = (protocol as any).CommandTypes;
 
 export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
