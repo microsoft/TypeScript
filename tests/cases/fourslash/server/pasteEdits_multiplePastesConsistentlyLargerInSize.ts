@@ -2,31 +2,35 @@
 
 // @Filename: /a.ts
 //// function foo() {
-////     console.[|log("Hello");|]
+////    const p = 1;
+////    [|console.log("yes");|]
 //// }
 //// class bar {
-////     [|constru|]ctor() {
+////     constructor() {
 ////         function a() {
-////             console.log("hii");
+////             [|console.log("have a good day");|]
 ////         }
 ////         a();
 ////         function b() {
 ////            function c() {
-////                [|console.log("hola");|]
+////                const test = [|1 + 2|] + 3;
 ////            }  
 ////         }
 ////         b();
 ////     }
 ////     c() {
 ////         console.log("hello again");
-////         [||]
+////         [|function k() {
+////             const happy = banana + avocados;
+////         }|]
 ////     }
 //// }
 
 // @Filename: /b.ts
 //// export const juice = 1;
 //// export const sauce = 2;
-//// export const tomato = 3;
+//// export const fig = 3;
+//// export const tomato = 4;
 
 // @Filename: /tsconfig.json
 ////{ "files": ["a.ts", "b.ts"] }
@@ -34,30 +38,31 @@
 const range = test.ranges();
 verify.pasteEdits({
     args: {
-        pastedText: [ `const mango = 2 + sauce;`,`const apple = 1 + juice`,
-            `const strawberry = 1;`,
-            `function k() {
-                const cherry = 3 + tomato + cucumber;
-            }`
+        pastedText: [ `const t = 1 + juice + p;`,`function avacado() { return sauce; }`,
+            `fig + kiwi`,
+`function k() {
+            const cherry = 3 + tomato + cucumber;
+        }`
 ],
         pasteLocations: [range[0], range[1], range[2], range[3]],
     },
     newFileContents: {
         "/a.ts":
-`import { sauce, tomato } from "./b";
+`import { juice, sauce, fig, tomato } from "./b";
 
 function foo() {
-    console.const mango = 2 + sauce;
+   const p = 1;
+   const t = 1 + juice + p;
 }
 class bar {
-    const apple = 1 + juicector() {
+    constructor() {
         function a() {
-            console.log("hii");
+            function avacado() { return sauce; }
         }
         a();
         function b() {
            function c() {
-               const strawberry = 1;
+               const test = fig + kiwi + 3;
            }  
         }
         b();
@@ -65,8 +70,8 @@ class bar {
     c() {
         console.log("hello again");
         function k() {
-                const cherry = 3 + tomato + cucumber;
-            }
+            const cherry = 3 + tomato + cucumber;
+        }
     }
 }`
     }
