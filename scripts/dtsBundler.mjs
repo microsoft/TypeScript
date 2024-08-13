@@ -132,7 +132,6 @@ const WriteTarget = {
     Public: 1 << 0,
     Internal: 1 << 1,
     Both: (1 << 0) | (1 << 1),
-    PublicBaseline: 1 << 2,
 };
 
 /**
@@ -510,7 +509,7 @@ formatter.setConfig({
  * @returns {string}
  */
 function dprint(contents) {
-    const result = formatter.formatText("dummy.d.ts", contents);
+    const result = formatter.formatText({ filePath: "dummy.d.ts", fileText: contents });
     return result.replace(/\r\n/g, "\n");
 }
 

@@ -1191,10 +1191,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocEnumTag:
                 bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                 break;
-            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.JSDocImportTag:
                 bindJSDocImportTag(node as JSDocImportTag);
                 break;
+            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.SourceFile: {
                 bindEachFunctionsFirst((node as SourceFile).statements);
                 bind((node as SourceFile).endOfFileToken);
@@ -2105,7 +2105,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindJSDocImportTag(node: JSDocImportTag) {
+        // don't bind the importClause yet; that's delayed until bindJSDocImports
         bind(node.tagName);
+        bind(node.moduleSpecifier);
+        bind(node.attributes);
 
         if (typeof node.comment !== "string") {
             bindEach(node.comment);

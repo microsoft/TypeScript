@@ -204,9 +204,9 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 
 var cfilter = curry1(filter);
 >cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
->        : ^ ^^  ^^^ ^^ ^^^^^       ^^^^^     ^^^     ^^^
+>        : ^ ^^  ^^^ ^^ ^^^^^       ^^^^^^  ^^^^^^^^^^^^^
 >curry1(filter) : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
->               : ^ ^^  ^^^ ^^ ^^^^^       ^^^^^     ^^^     ^^^
+>               : ^ ^^  ^^^ ^^ ^^^^^       ^^^^^^  ^^^^^^^^^^^^^
 >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
 >       : ^ ^^ ^^ ^^ ^^                 ^^^^^                       
 >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
@@ -240,7 +240,7 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >cfilter(pred) : (bx: A[]) => A[]
 >              : ^  ^^^^^^^^^^^^^
 >cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
->        : ^^^^^^  ^^^ ^^   ^^^^^       ^^^^^     ^^^^^     ^^^^^
+>        : ^^^^^^  ^^^ ^^   ^^^^^       ^^^^^^  ^^^^^^^^^^^^^^^^^
 >pred : (a: A) => boolean
 >     : ^ ^^ ^^^^^       
 }
@@ -261,7 +261,7 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >cfilter(pred) : (bx: A[]) => A[]
 >              : ^  ^^^^^^^^^^^^^
 >cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
->        : ^^^^^^  ^^^ ^^   ^^^^^       ^^^^^     ^^^^^     ^^^^^
+>        : ^^^^^^  ^^^ ^^   ^^^^^       ^^^^^^  ^^^^^^^^^^^^^^^^^
 >pred : (a: A) => boolean
 >     : ^ ^^ ^^^^^       
 

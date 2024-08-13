@@ -1208,8 +1208,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "mylib",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "mylib",
@@ -1228,8 +1228,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "mylib",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "mylib",
@@ -1255,6 +1255,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

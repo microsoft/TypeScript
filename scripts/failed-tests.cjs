@@ -45,7 +45,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
                 try {
                     reporter = require(reporterOptions.reporter);
                 }
-                catch (_) {
+                catch {
                     reporter = require(path.resolve(process.cwd(), reporterOptions.reporter));
                 }
             }
@@ -124,7 +124,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
 
         function readTests() {
             return fs.readFileSync(file, "utf8")
-                .split(/\r?\n/g)
+                .split(/\r?\n/)
                 .map(line => line.trim())
                 .filter(line => line.length > 0);
         }

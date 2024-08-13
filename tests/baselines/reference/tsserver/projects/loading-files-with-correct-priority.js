@@ -318,6 +318,8 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /a/tsconfig.json:: wildcard for open scriptInfo:: /a/main.js
+Info seq  [hh:mm:ss:mss] Project: /a/tsconfig.json Detected output file: /a/main.js
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/main.js ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:

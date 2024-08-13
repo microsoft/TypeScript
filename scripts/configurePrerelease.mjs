@@ -57,7 +57,7 @@ function main() {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
+    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, undefined, 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
@@ -112,7 +112,7 @@ function getPrereleasePatch(tag, plainPatch) {
     // but we'd prefer to just remove separators and limit ourselves to YYYYMMDD.
     // UTC time will always be implicit here.
     const now = new Date();
-    const timeStr = now.toISOString().replace(/:|T|\.|-/g, "").slice(0, 8);
+    const timeStr = now.toISOString().replace(/[:T.-]/g, "").slice(0, 8);
 
     return `${plainPatch}-${tag}.${timeStr}`;
 }

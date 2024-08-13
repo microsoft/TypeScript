@@ -3,7 +3,7 @@
 === generatorReturnTypeIndirectReferenceToGlobalType.ts ===
 interface I1 extends Iterator<0, 1, 2> {}
 >I1 : Symbol(I1, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 0, 0))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 function* f1(): I1 {
 >f1 : Symbol(f1, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 0, 41))

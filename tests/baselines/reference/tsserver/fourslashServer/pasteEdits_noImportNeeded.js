@@ -259,24 +259,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/b.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "newText": "export"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }

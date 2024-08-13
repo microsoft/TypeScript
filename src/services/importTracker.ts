@@ -787,10 +787,9 @@ function getContainingModuleSymbol(importer: Importer, checker: TypeChecker): Sy
 }
 
 function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): SourceFileLike {
-    if (node.kind === SyntaxKind.CallExpression) {
+    if (node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.JSDocImportTag) {
         return node.getSourceFile();
     }
-
     const { parent } = node;
     if (parent.kind === SyntaxKind.SourceFile) {
         return parent as SourceFile;

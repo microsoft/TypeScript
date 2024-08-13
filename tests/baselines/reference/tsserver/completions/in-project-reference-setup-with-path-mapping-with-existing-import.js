@@ -864,8 +864,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
@@ -877,8 +877,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/helper",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
@@ -887,6 +887,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -1382,8 +1387,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
@@ -1395,8 +1400,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/helper",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
@@ -1410,8 +1415,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/other",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
@@ -1420,6 +1425,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1964,8 +1974,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
@@ -1977,8 +1987,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/helper",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
@@ -1992,8 +2002,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/other",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
@@ -2002,6 +2012,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2502,14 +2517,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
