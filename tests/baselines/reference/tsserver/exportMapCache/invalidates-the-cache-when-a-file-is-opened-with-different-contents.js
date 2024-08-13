@@ -297,10 +297,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render(): Element {\n}",
-            "filterText": "render",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render(): Element {\n}",
+            "filterText": "render"
           },
           {
             "name": "abstract",
@@ -380,7 +380,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -572,10 +573,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render2(): Element {\n}",
-            "filterText": "render2",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render2(): Element {\n}",
+            "filterText": "render2"
           },
           {
             "name": "abstract",
@@ -655,7 +656,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true,
       "performanceData": {

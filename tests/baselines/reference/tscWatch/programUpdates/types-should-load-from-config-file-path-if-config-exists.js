@@ -43,6 +43,14 @@ var x = 1;
 
 
 
+PolledWatches::
+/a/b/node_modules/@types/node/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/b/app.ts: *new*
   {}

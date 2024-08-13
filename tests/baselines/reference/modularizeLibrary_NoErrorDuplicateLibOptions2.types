@@ -58,14 +58,14 @@ m.clear();
 
 // Using ES6 iterable
 m.keys();
->m.keys() : BuiltinIterator<string, any, any>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->m.keys : () => BuiltinIterator<string, any, any>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m.keys() : MapIterator<string>
+>         : ^^^^^^^^^^^^^^^^^^^
+>m.keys : () => MapIterator<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : Map<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^
->keys : () => BuiltinIterator<string, any, any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>keys : () => MapIterator<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Using ES6 function
 function Baz() { }

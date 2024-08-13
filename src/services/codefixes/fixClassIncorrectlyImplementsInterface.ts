@@ -108,7 +108,7 @@ function addMissingDeclarations(
     function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
         const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
         if (indexInfoOfKind) {
-            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
         }
     }
 

@@ -966,7 +966,7 @@ export class TestState {
         const annotations = ts.map(hints.sort(sortHints), hint => {
             if (hint.displayParts) {
                 hint.displayParts = ts.map(hint.displayParts, part => {
-                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                    if (part.file && /lib.*\.d\.ts$/.test(part.file)) {
                         part.span!.start = -1;
                     }
                     return part;
@@ -1024,7 +1024,7 @@ export class TestState {
         }
 
         if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
-            this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            this.raiseError(`Expected 'isGlobalCompletion' to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
         }
 
         if (ts.hasProperty(options, "optionalReplacementSpan")) {
@@ -1032,6 +1032,14 @@ export class TestState {
                 actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
                 options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
                 "Expected 'optionalReplacementSpan' properties to match",
+            );
+        }
+
+        if (ts.hasProperty(options, "defaultCommitCharacters")) {
+            assert.deepEqual(
+                actualCompletions.defaultCommitCharacters?.sort(),
+                options.defaultCommitCharacters?.sort(),
+                "Expected 'defaultCommitCharacters' properties to match",
             );
         }
 
@@ -1181,6 +1189,13 @@ export class TestState {
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
         assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
+        if (ts.hasProperty(expected, "commitCharacters")) {
+            assert.deepEqual(
+                actual.commitCharacters?.sort(),
+                expected.commitCharacters?.sort(),
+                `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
+            );
+        }
         if (expected.sourceDisplay && actual.sourceDisplay) {
             assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
         }
@@ -1532,7 +1547,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
+        const isLibFile = /lib.*\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -1606,7 +1621,7 @@ export class TestState {
             }
         }
         let pos = 0;
-        const sortedDetails = ts.stableSort(details, (a, b) => ts.compareValues(a.location, b.location));
+        const sortedDetails = ts.toSorted(details, (a, b) => ts.compareValues(a.location, b.location));
         if (!canDetermineContextIdInline) {
             // Assign contextIds
             sortedDetails.forEach(({ span, type }) => {
@@ -2499,7 +2514,7 @@ export class TestState {
                     for (const part of tag.text ?? ts.emptyArray) {
                         if (part.kind === "linkName") {
                             const link = part as ts.JSDocLinkDisplayPart;
-                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                            if (/lib.*\.d\.ts$/.test(link.target.fileName)) {
                                 // The object literal isn't a complete TextSpan, but we're only going to
                                 // use these results in the baseline for diffing, so just overwrite.
                                 (link.target.textSpan as any) = { start: "--", length: "--" };
