@@ -14,7 +14,7 @@ class FooComponent {
 
     @Input foo: string;
 >Input : (bindingPropertyName?: string) => any
->      : ^                   ^^^      ^^^^^^^^
+>      : ^                   ^^^      ^^^^^   
 >foo : string
 >    : ^^^^^^
 }
@@ -32,7 +32,7 @@ class Person {
 
     @tracked person; any;
 >tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^        ^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^        ^^^^^   ^
 >person : any
 >       : ^^^
 >any : any
@@ -51,7 +51,7 @@ class MultiplyByTwo {
 >tracked('args') : any
 >                : ^^^
 >tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^        ^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^        ^^^^^   ^
 >'args' : "args"
 >       : ^^^^^^
 
@@ -130,7 +130,7 @@ declare const anyDec: any;
 
 @noArgs
 >noArgs : () => OmniDecorator
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             
 
 class A {
 >A : A
@@ -138,20 +138,20 @@ class A {
 
     @noArgs foo: any;
 >noArgs : () => OmniDecorator
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             
 >foo : any
 >    : ^^^
 
     @noArgs bar() { }
 >noArgs : () => OmniDecorator
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }
 
 @allRest
 >allRest : (...args: any[]) => OmniDecorator
->        : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^     ^^^^^             
 
 class B {
 >B : B
@@ -159,20 +159,20 @@ class B {
 
     @allRest foo: any;
 >allRest : (...args: any[]) => OmniDecorator
->        : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^     ^^^^^             
 >foo : any
 >    : ^^^
 
     @allRest bar() { }
 >allRest : (...args: any[]) => OmniDecorator
->        : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^     ^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }
 
 @oneOptional
 >oneOptional : (x?: any) => OmniDecorator
->            : ^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^^^^             
 
 class C {
 >C : C
@@ -180,20 +180,20 @@ class C {
 
     @oneOptional foo: any;
 >oneOptional : (x?: any) => OmniDecorator
->            : ^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^^^^             
 >foo : any
 >    : ^^^
 
     @oneOptional bar() { }
 >oneOptional : (x?: any) => OmniDecorator
->            : ^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }
 
 @twoOptional
 >twoOptional : (x?: any, y?: any) => OmniDecorator
->            : ^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^ ^^^   ^^^^^             
 
 class D {
 >D : D
@@ -201,20 +201,20 @@ class D {
 
     @twoOptional foo: any;
 >twoOptional : (x?: any, y?: any) => OmniDecorator
->            : ^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^ ^^^   ^^^^^             
 >foo : any
 >    : ^^^
 
     @twoOptional bar() { }
 >twoOptional : (x?: any, y?: any) => OmniDecorator
->            : ^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^   ^^ ^^^   ^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }
 
 @threeOptional
 >threeOptional : (x?: any, y?: any, z?: any) => OmniDecorator
->              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^             
 
 class E {
 >E : E
@@ -222,20 +222,20 @@ class E {
 
     @threeOptional foo: any;
 >threeOptional : (x?: any, y?: any, z?: any) => OmniDecorator
->              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^             
 >foo : any
 >    : ^^^
 
     @threeOptional bar() { }
 >threeOptional : (x?: any, y?: any, z?: any) => OmniDecorator
->              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }
 
 @oneOptionalWithRest
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
->                    : ^ ^^^   ^^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^   ^^^^^    ^^     ^^^^^             
 
 class F {
 >F : F
@@ -243,13 +243,13 @@ class F {
 
     @oneOptionalWithRest foo: any;
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
->                    : ^ ^^^   ^^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^   ^^^^^    ^^     ^^^^^             
 >foo : any
 >    : ^^^
 
     @oneOptionalWithRest bar() { }
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
->                    : ^ ^^^   ^^^^^    ^^     ^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^   ^^^^^    ^^     ^^^^^             
 >bar : () => void
 >    : ^^^^^^^^^^
 }

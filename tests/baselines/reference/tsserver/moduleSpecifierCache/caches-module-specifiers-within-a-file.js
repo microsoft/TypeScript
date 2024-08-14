@@ -229,7 +229,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 
@@ -320,7 +328,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -407,7 +419,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -484,15 +500,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 4,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *,
-        "createAutoImportProviderProgramDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -959,17 +967,25 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/src/a",
+            "hasAction": true,
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1020,6 +1036,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "11",
+            "source": "./a",
             "insertText": "import { foo$1 } from \"./a\";",
             "replacementSpan": {
               "start": {
@@ -1031,14 +1048,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "offset": 7
               }
             },
-            "isSnippet": true,
-            "source": "./a",
             "sourceDisplay": [
               {
                 "text": "./a",
                 "kind": "text"
               }
             ],
+            "isSnippet": true,
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
@@ -1052,6 +1068,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "11",
+            "source": "mobx",
             "insertText": "import { observable$1 } from \"mobx\";",
             "replacementSpan": {
               "start": {
@@ -1063,14 +1080,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "offset": 7
               }
             },
-            "isSnippet": true,
-            "source": "mobx",
             "sourceDisplay": [
               {
                 "text": "mobx",
                 "kind": "text"
               }
             ],
+            "isSnippet": true,
             "isPackageJsonImport": true,
             "isImportStatementCompletion": true,
             "data": {
@@ -1087,13 +1103,15 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
 After request
 
 Info seq  [hh:mm:ss:mss] mobxCache: {
+  "kind": "node_modules",
   "modulePaths": [
     {
       "path": "/node_modules/mobx/index.d.ts",

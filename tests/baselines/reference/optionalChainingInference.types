@@ -50,7 +50,7 @@ const v1: number = unbox(b1);
 >unbox(b1) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b1 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -76,7 +76,7 @@ const v2: number = unbox(b2);
 >unbox(b2) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b2 : { value: number | undefined; }
 >   : ^^^^^^^^^                  ^^^
 
@@ -102,9 +102,9 @@ const v3: number = unbox(b3);
 >unbox(b3) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
->b3 : { value: number; }
->   : ^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
+>b3 : { value: number | undefined; }
+>   : ^^^^^^^^^                  ^^^
 
 const b4 = { value: fnu?.() };
 >b4 : { value: number; }
@@ -116,7 +116,7 @@ const b4 = { value: fnu?.() };
 >fnu?.() : number
 >        : ^^^^^^
 >fnu : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 const v4: number = unbox(b4);
 >v4 : number
@@ -124,7 +124,7 @@ const v4: number = unbox(b4);
 >unbox(b4) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b4 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -148,7 +148,7 @@ const v5: number = unbox(b5);
 >unbox(b5) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b5 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -164,7 +164,7 @@ const b6 = { value: osu?.prop.length };
 >osu?.prop : string
 >          : ^^^^^^
 >osu : { prop: string; }
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^      ^^^
 >prop : string
 >     : ^^^^^^
 >length : number
@@ -176,7 +176,7 @@ const v6: number = unbox(b6);
 >unbox(b6) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b6 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -192,7 +192,7 @@ const b7 = { value: osu?.prop["length"] };
 >osu?.prop : string
 >          : ^^^^^^
 >osu : { prop: string; }
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^      ^^^
 >prop : string
 >     : ^^^^^^
 >"length" : "length"
@@ -204,7 +204,7 @@ const v7: number = unbox(b7);
 >unbox(b7) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b7 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -218,11 +218,11 @@ const b8 = { value: ofnu?.prop() };
 >ofnu?.prop() : number
 >             : ^^^^^^
 >ofnu?.prop : () => number
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >ofnu : { prop: () => number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^            ^^^
 >prop : () => number
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
 const v8: number = unbox(b8);
 >v8 : number
@@ -230,7 +230,7 @@ const v8: number = unbox(b8);
 >unbox(b8) : number
 >          : ^^^^^^
 >unbox : <T>(box: { value: T | undefined; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >b8 : { value: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 

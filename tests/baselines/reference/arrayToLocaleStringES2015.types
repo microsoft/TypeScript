@@ -25,11 +25,11 @@ str = arr.toLocaleString(); // OK
 >arr.toLocaleString() : string
 >                     : ^^^^^^
 >arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                   : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 
 str = arr.toLocaleString('en-US'); // OK
 >str = arr.toLocaleString('en-US') : string
@@ -39,11 +39,11 @@ str = arr.toLocaleString('en-US'); // OK
 >arr.toLocaleString('en-US') : string
 >                            : ^^^^^^
 >arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                   : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -55,11 +55,11 @@ str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                    : ^^^^^^
 >arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                   : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -95,11 +95,11 @@ str = dates.toLocaleString(); // OK
 >dates.toLocaleString() : string
 >                       : ^^^^^^
 >dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 
 str = dates.toLocaleString('fr'); // OK
 >str = dates.toLocaleString('fr') : string
@@ -109,11 +109,11 @@ str = dates.toLocaleString('fr'); // OK
 >dates.toLocaleString('fr') : string
 >                           : ^^^^^^
 >dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'fr' : "fr"
 >     : ^^^^
 
@@ -125,11 +125,11 @@ str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
 >dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
 >                                                : ^^^^^^
 >dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'fr' : "fr"
 >     : ^^^^
 >{ timeZone: 'UTC' } : { timeZone: string; }
@@ -165,11 +165,11 @@ str = mixed.toLocaleString(); // OK
 >mixed.toLocaleString() : string
 >                       : ^^^^^^
 >mixed.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 
 str = mixed.toLocaleString('fr'); // OK
 >str = mixed.toLocaleString('fr') : string
@@ -179,11 +179,11 @@ str = mixed.toLocaleString('fr'); // OK
 >mixed.toLocaleString('fr') : string
 >                           : ^^^^^^
 >mixed.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'fr' : "fr"
 >     : ^^^^
 
@@ -195,11 +195,11 @@ str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
 >                                                                   : ^^^^^^
 >mixed.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'de' : "de"
 >     : ^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -221,7 +221,7 @@ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: '
 >(mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
 >                                                                                                                      : ^^^^^^
 >(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                                                       : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>                                                       : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >(mixed as ReadonlyArray<number | Date>) : readonly (number | Date)[]
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed as ReadonlyArray<number | Date> : readonly (number | Date)[]
@@ -229,7 +229,7 @@ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: '
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                                                     ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
 >'de' : "de"
 >     : ^^^^
 >{ currency: 'EUR', style: 'currency', timeZone: 'UTC' } : { currency: string; style: "currency"; timeZone: string; }
@@ -265,11 +265,11 @@ str = int8Array.toLocaleString(); // OK
 >int8Array.toLocaleString() : string
 >                           : ^^^^^^
 >int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                         : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int8Array : Int8Array
 >          : ^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = int8Array.toLocaleString('en-US'); // OK
 >str = int8Array.toLocaleString('en-US') : string
@@ -279,11 +279,11 @@ str = int8Array.toLocaleString('en-US'); // OK
 >int8Array.toLocaleString('en-US') : string
 >                                  : ^^^^^^
 >int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                         : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int8Array : Int8Array
 >          : ^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -295,11 +295,11 @@ str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' });
 >int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                          : ^^^^^^
 >int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                         : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int8Array : Int8Array
 >          : ^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -331,11 +331,11 @@ str = uint8Array.toLocaleString(); // OK
 >uint8Array.toLocaleString() : string
 >                            : ^^^^^^
 >uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8Array : Uint8Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = uint8Array.toLocaleString('en-US'); // OK
 >str = uint8Array.toLocaleString('en-US') : string
@@ -345,11 +345,11 @@ str = uint8Array.toLocaleString('en-US'); // OK
 >uint8Array.toLocaleString('en-US') : string
 >                                   : ^^^^^^
 >uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8Array : Uint8Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -361,11 +361,11 @@ str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                           : ^^^^^^
 >uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8Array : Uint8Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -397,11 +397,11 @@ str = uint8ClampedArray.toLocaleString(); // OK
 >uint8ClampedArray.toLocaleString() : string
 >                                   : ^^^^^^
 >uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                                 : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8ClampedArray : Uint8ClampedArray
 >                  : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = uint8ClampedArray.toLocaleString('en-US'); // OK
 >str = uint8ClampedArray.toLocaleString('en-US') : string
@@ -411,11 +411,11 @@ str = uint8ClampedArray.toLocaleString('en-US'); // OK
 >uint8ClampedArray.toLocaleString('en-US') : string
 >                                          : ^^^^^^
 >uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                                 : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8ClampedArray : Uint8ClampedArray
 >                  : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -427,11 +427,11 @@ str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: '
 >uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                                  : ^^^^^^
 >uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                                 : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint8ClampedArray : Uint8ClampedArray
 >                  : ^^^^^^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -463,11 +463,11 @@ str = int16Array.toLocaleString(); // OK
 >int16Array.toLocaleString() : string
 >                            : ^^^^^^
 >int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int16Array : Int16Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = int16Array.toLocaleString('en-US'); // OK
 >str = int16Array.toLocaleString('en-US') : string
@@ -477,11 +477,11 @@ str = int16Array.toLocaleString('en-US'); // OK
 >int16Array.toLocaleString('en-US') : string
 >                                   : ^^^^^^
 >int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int16Array : Int16Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -493,11 +493,11 @@ str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                           : ^^^^^^
 >int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int16Array : Int16Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -529,11 +529,11 @@ str = uint16Array.toLocaleString(); // OK
 >uint16Array.toLocaleString() : string
 >                             : ^^^^^^
 >uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint16Array : Uint16Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = uint16Array.toLocaleString('en-US'); // OK
 >str = uint16Array.toLocaleString('en-US') : string
@@ -543,11 +543,11 @@ str = uint16Array.toLocaleString('en-US'); // OK
 >uint16Array.toLocaleString('en-US') : string
 >                                    : ^^^^^^
 >uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint16Array : Uint16Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -559,11 +559,11 @@ str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }
 >uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                            : ^^^^^^
 >uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint16Array : Uint16Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -595,11 +595,11 @@ str = int32Array.toLocaleString(); // OK
 >int32Array.toLocaleString() : string
 >                            : ^^^^^^
 >int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int32Array : Int32Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = int32Array.toLocaleString('en-US'); // OK
 >str = int32Array.toLocaleString('en-US') : string
@@ -609,11 +609,11 @@ str = int32Array.toLocaleString('en-US'); // OK
 >int32Array.toLocaleString('en-US') : string
 >                                   : ^^^^^^
 >int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int32Array : Int32Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -625,11 +625,11 @@ str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                           : ^^^^^^
 >int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                          : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >int32Array : Int32Array
 >           : ^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -661,11 +661,11 @@ str = uint32Array.toLocaleString(); // OK
 >uint32Array.toLocaleString() : string
 >                             : ^^^^^^
 >uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint32Array : Uint32Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = uint32Array.toLocaleString('en-US'); // OK
 >str = uint32Array.toLocaleString('en-US') : string
@@ -675,11 +675,11 @@ str = uint32Array.toLocaleString('en-US'); // OK
 >uint32Array.toLocaleString('en-US') : string
 >                                    : ^^^^^^
 >uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint32Array : Uint32Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -691,11 +691,11 @@ str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }
 >uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                            : ^^^^^^
 >uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                           : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >uint32Array : Uint32Array
 >            : ^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -727,11 +727,11 @@ str = float32Array.toLocaleString(); // OK
 >float32Array.toLocaleString() : string
 >                              : ^^^^^^
 >float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float32Array : Float32Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = float32Array.toLocaleString('en-US'); // OK
 >str = float32Array.toLocaleString('en-US') : string
@@ -741,11 +741,11 @@ str = float32Array.toLocaleString('en-US'); // OK
 >float32Array.toLocaleString('en-US') : string
 >                                     : ^^^^^^
 >float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float32Array : Float32Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -757,11 +757,11 @@ str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' 
 >float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                             : ^^^^^^
 >float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float32Array : Float32Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
@@ -793,11 +793,11 @@ str = float64Array.toLocaleString(); // OK
 >float64Array.toLocaleString() : string
 >                              : ^^^^^^
 >float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float64Array : Float64Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 
 str = float64Array.toLocaleString('en-US'); // OK
 >str = float64Array.toLocaleString('en-US') : string
@@ -807,11 +807,11 @@ str = float64Array.toLocaleString('en-US'); // OK
 >float64Array.toLocaleString('en-US') : string
 >                                     : ^^^^^^
 >float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float64Array : Float64Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -823,11 +823,11 @@ str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' 
 >float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                             : ^^^^^^
 >float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->                            : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >float64Array : Float64Array
 >             : ^^^^^^^^^^^^
 >toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^^^^^^^^^^       ^^                 ^^       ^^^                        ^^^^^^^^^^^^
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }

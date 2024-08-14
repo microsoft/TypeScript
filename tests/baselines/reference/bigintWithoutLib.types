@@ -78,11 +78,11 @@ bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
 >bigintVal.valueOf() : Object
 >                    : ^^^^^^
 >bigintVal.valueOf : () => Object
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >valueOf : () => Object
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
 >stringVal : string
@@ -90,11 +90,11 @@ let stringVal: string = bigintVal.toString(); // should not error - bigintVal in
 >bigintVal.toString() : string
 >                     : ^^^^^^
 >bigintVal.toString : () => string
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
 >stringVal = bigintVal.toString(2) : string
@@ -104,11 +104,11 @@ stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
 >bigintVal.toString(2) : string
 >                      : ^^^^^^
 >bigintVal.toString : () => string
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >2 : 2
 >  : ^
 
@@ -120,11 +120,11 @@ stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred
 >bigintVal.toLocaleString() : string
 >                           : ^^^^^^
 >bigintVal.toLocaleString : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toLocaleString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 
 stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
 >stringVal = bigintVal.toLocaleString('de-DE') : string
@@ -134,11 +134,11 @@ stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal i
 >bigintVal.toLocaleString('de-DE') : string
 >                                  : ^^^^^^
 >bigintVal.toLocaleString : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toLocaleString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >'de-DE' : "de-DE"
 >        : ^^^^^^^
 
@@ -150,11 +150,11 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should 
 >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
 >                                                         : ^^^^^^
 >bigintVal.toLocaleString : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toLocaleString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >'de-DE' : "de-DE"
 >        : ^^^^^^^
 >{ style: 'currency' } : { style: string; }
@@ -172,11 +172,11 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
 >                                                                          : ^^^^^^
 >bigintVal.toLocaleString : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 >toLocaleString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >'de-DE' : "de-DE"
 >        : ^^^^^^^
 >{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
@@ -654,7 +654,7 @@ new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format(3000n) : string
 >                                          : ^^^^^^
 >new Intl.NumberFormat("fr").format : (value: number) => string
->                                   : ^     ^^      ^^^^^^^^^^^
+>                                   : ^     ^^      ^^^^^      
 >new Intl.NumberFormat("fr") : Intl.NumberFormat
 >                            : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -666,7 +666,7 @@ new Intl.NumberFormat("fr").format(3000n);
 >"fr" : "fr"
 >     : ^^^^
 >format : (value: number) => string
->       : ^     ^^      ^^^^^^^^^^^
+>       : ^     ^^      ^^^^^      
 >3000n : 3000n
 >      : ^^^^^
 
@@ -674,7 +674,7 @@ new Intl.NumberFormat("fr").format(bigintVal);
 >new Intl.NumberFormat("fr").format(bigintVal) : string
 >                                              : ^^^^^^
 >new Intl.NumberFormat("fr").format : (value: number) => string
->                                   : ^     ^^      ^^^^^^^^^^^
+>                                   : ^     ^^      ^^^^^      
 >new Intl.NumberFormat("fr") : Intl.NumberFormat
 >                            : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -686,7 +686,7 @@ new Intl.NumberFormat("fr").format(bigintVal);
 >"fr" : "fr"
 >     : ^^^^
 >format : (value: number) => string
->       : ^     ^^      ^^^^^^^^^^^
+>       : ^     ^^      ^^^^^      
 >bigintVal : bigint
 >          : ^^^^^^
 

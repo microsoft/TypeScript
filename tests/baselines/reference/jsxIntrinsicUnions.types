@@ -21,11 +21,11 @@ const El = Math.random() ? 'h1' : 'h2';
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >'h1' : "h1"
 >     : ^^^^
 >'h2' : "h2"

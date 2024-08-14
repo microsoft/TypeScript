@@ -127,7 +127,7 @@ var ResultIsAny5 = void obj;
 >void obj : undefined
 >         : ^^^^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsAny6 = void obj1;
 >ResultIsAny6 : any
@@ -221,7 +221,7 @@ var ResultIsAny14 = void foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsAny15 = void A.foo();
 >ResultIsAny15 : any

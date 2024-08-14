@@ -52,9 +52,9 @@ var p: { x: number; y: number; }
 
 var p = A.Point.Origin;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >A.Point.Origin : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^
 >A.Point : typeof A.Point
 >        : ^^^^^^^^^^^^^^
 >A : typeof A
@@ -62,11 +62,11 @@ var p = A.Point.Origin;
 >Point : typeof A.Point
 >      : ^^^^^^^^^^^^^^
 >Origin : { x: number; y: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^      ^^^
 
 var p = new A.Point(0, 0); // unexpected error here, bug 840000
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >new A.Point(0, 0) : A.Point
 >                  : ^^^^^^^
 >A.Point : typeof A.Point

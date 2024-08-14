@@ -10,11 +10,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inConstructor = 0;
 >this.inConstructor = 0 : 0
@@ -61,11 +61,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inMethod = 0;
 >this.inMethod = 0 : 0
@@ -148,11 +148,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
                 this.inNestedArrowFunction = 0;
 >this.inNestedArrowFunction = 0 : 0
@@ -189,11 +189,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inGetter = 0;
 >this.inGetter = 0 : 0
@@ -252,11 +252,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inSetter = 0;
 >this.inSetter = 0 : 0
@@ -294,11 +294,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inPropertyDeclaration = 0;
 >this.inPropertyDeclaration = 0 : 0
@@ -334,11 +334,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inStaticMethod = 0;
 >this.inStaticMethod = 0 : 0
@@ -376,11 +376,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
                 this.inStaticNestedArrowFunction = 0;
 >this.inStaticNestedArrowFunction = 0 : 0
@@ -417,11 +417,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inStaticGetter = 0;
 >this.inStaticGetter = 0 : 0
@@ -457,11 +457,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inStaticSetter = 0;
 >this.inStaticSetter = 0 : 0
@@ -499,11 +499,11 @@ class C {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
             this.inStaticPropertyDeclaration = 0;
 >this.inStaticPropertyDeclaration = 0 : 0

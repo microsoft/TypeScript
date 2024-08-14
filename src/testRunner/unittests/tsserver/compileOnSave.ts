@@ -1,9 +1,9 @@
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+} from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -11,12 +11,12 @@ import {
     protocolTextSpanFromSubstring,
     TestSession,
     toExternalFiles,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
     describe("for configured projects", () => {

@@ -15,7 +15,7 @@ AAA = A; // error.
 >AAA = A : typeof A
 >        : ^^^^^^^^
 >AAA : new () => A
->    : ^^^^^^^^^^^
+>    : ^^^^^^^^^^ 
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -23,7 +23,7 @@ AAA = "asdf";
 >AAA = "asdf" : "asdf"
 >             : ^^^^^^
 >AAA : new () => A
->    : ^^^^^^^^^^^
+>    : ^^^^^^^^^^ 
 >"asdf" : "asdf"
 >       : ^^^^^^
 

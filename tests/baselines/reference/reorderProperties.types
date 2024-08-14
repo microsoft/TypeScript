@@ -41,5 +41,5 @@ var d: D<{ n: number; s: string }> = c
 >s : string
 >  : ^^^^^^
 >c : C<{ s: string; n: number; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^      ^^^^
 

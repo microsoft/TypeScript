@@ -86,7 +86,7 @@ needsComponentOfSomeProps3({ renderAs: comp3 });
 >needsComponentOfSomeProps3({ renderAs: comp3 }) : void
 >                                                : ^^^^
 >needsComponentOfSomeProps3 : (...x: SomePropsClone[]) => void
->                           : ^^^^ ^^                ^^^^^^^^^
+>                           : ^^^^ ^^                ^^^^^    
 >{ renderAs: comp3 } : { renderAs: FunctionComponent2<SomePropsCloneX>; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >renderAs : FunctionComponent2<SomePropsCloneX>
@@ -109,7 +109,7 @@ needsComponentOfSomeProps2({ renderAs: comp2 });
 >needsComponentOfSomeProps2({ renderAs: comp2 }) : void
 >                                                : ^^^^
 >needsComponentOfSomeProps2 : (...x: SomeProps[]) => void
->                           : ^^^^ ^^           ^^^^^^^^^
+>                           : ^^^^ ^^           ^^^^^    
 >{ renderAs: comp2 } : { renderAs: FunctionComponent1<SomePropsX>; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >renderAs : FunctionComponent1<SomePropsX>

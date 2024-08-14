@@ -98,11 +98,11 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --dry
-[[90m12:00:22 AM[0m] A non-dry build would build project '/user/username/projects/sample1/core/tsconfig.json'
+[[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/core/tsconfig.json'
 
-[[90m12:00:23 AM[0m] A non-dry build would build project '/user/username/projects/sample1/logic/tsconfig.json'
+[[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/logic/tsconfig.json'
 
-[[90m12:00:24 AM[0m] A non-dry build would build project '/user/username/projects/sample1/tests/tsconfig.json'
+[[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/tests/tsconfig.json'
 
 exitCode:: ExitStatus.Success
 

@@ -25,7 +25,7 @@ repro({
 >repro({  params: 1,  callback: () => { return a => a + 1 },}) : void
 >                                                              : ^^^^
 >repro : <T>(config: { params: T; callback: () => (params: T) => number; }) => void
->      : ^ ^^      ^^                                                     ^^^^^^^^^
+>      : ^ ^^      ^^                                                     ^^^^^    
 >{  params: 1,  callback: () => { return a => a + 1 },} : { params: number; callback: () => (a: number) => number; }
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 

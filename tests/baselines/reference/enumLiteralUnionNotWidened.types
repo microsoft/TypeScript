@@ -67,7 +67,7 @@ function fn1(x: C): List<C> { return asList(x); }
 >asList(x) : List<C>
 >          : ^^^^^^^
 >asList : <T>(arg: T) => List<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^       
 >x : C
 >  : ^
 
@@ -80,7 +80,7 @@ function fn2(x: D): List<D> { return asList(x); }
 >asList(x) : List<D>
 >          : ^^^^^^^
 >asList : <T>(arg: T) => List<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^       
 >x : D
 >  : ^
 

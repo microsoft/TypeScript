@@ -57,6 +57,26 @@ export function foo(p = (ip = 10, v: number): void => {}): void{
 >v : number
 >  : ^^^^^^
 }
+type T = number
+>T : number
+>  : ^^^^^^
+
+export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+>foo2 : (p?: (ip: T | undefined, v: number) => void) => void
+>     : ^ ^^^^  ^^ ^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^    
+>p : (ip: T | undefined, v: number) => void
+>  : ^  ^^ ^^^^^^^^^^^^^^ ^^      ^^^^^    
+>(ip = 10 as T, v: number): void => {} : (ip: T | undefined, v: number) => void
+>                                      : ^  ^^ ^^^^^^^^^^^^^^ ^^      ^^^^^    
+>ip : number
+>   : ^^^^^^
+>10 as T : number
+>        : ^^^^^^
+>10 : 10
+>   : ^^
+>v : number
+>  : ^^^^^^
+
 export class Bar2 {
 >Bar2 : Bar2
 >     : ^^^^

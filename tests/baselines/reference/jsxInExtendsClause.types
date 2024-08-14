@@ -27,7 +27,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >createComponentClass(() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }}) : React.Component<unknown, {}>
 >                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
->                     : ^ ^^       ^^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^       ^^                             ^^^^^                       
 >() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : () => typeof (Anonymous class)
 >                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : typeof (Anonymous class)

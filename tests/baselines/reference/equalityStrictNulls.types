@@ -181,7 +181,7 @@ function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
 >c == null : boolean
 >          : ^^^^^^^
 >c : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
     if (d == null) {
 >d == null : boolean

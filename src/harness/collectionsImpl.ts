@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 export interface SortOptions<T> {
     comparer: (a: T, b: T) => number;
@@ -132,6 +132,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public *values() {
@@ -154,6 +155,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public *entries() {
@@ -179,6 +181,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public [Symbol.iterator]() {

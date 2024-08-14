@@ -11,11 +11,11 @@ function b1(b1: number) {
 >b1.toPrecision(2) : string
 >                  : ^^^^^^
 >b1.toPrecision : (precision?: number) => string
->               : ^         ^^^      ^^^^^^^^^^^
+>               : ^         ^^^      ^^^^^      
 >b1 : number
 >   : ^^^^^^
 >toPrecision : (precision?: number) => string
->            : ^         ^^^      ^^^^^^^^^^^
+>            : ^         ^^^      ^^^^^      
 >2 : 2
 >  : ^
 
@@ -49,11 +49,11 @@ var x = {
 >b.toPrecision(2) : string
 >                 : ^^^^^^
 >b.toPrecision : (precision?: number) => string
->              : ^         ^^^      ^^^^^^^^^^^
+>              : ^         ^^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 >toPrecision : (precision?: number) => string
->            : ^         ^^^      ^^^^^^^^^^^
+>            : ^         ^^^      ^^^^^      
 >2 : 2
 >  : ^
 

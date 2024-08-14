@@ -125,13 +125,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/redux/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -287,29 +280,22 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/s
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules: *new*
   {"pollingInterval":500}
-/Users/someuser/work/applications/frontend/package.json: *new*
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/package.json: *new*
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/redux/package.json: *new*
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/utils/package.json: *new*
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/package.json: *new*
-  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
-/Users/someuser/work/applications/package.json: *new*
-  {"pollingInterval":2000}
-/Users/someuser/work/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts: *new*
@@ -419,22 +405,8 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
-/Users/someuser/work/applications/frontend/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/redux/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/utils/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/package.json:
-  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
-/Users/someuser/work/applications/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
@@ -518,29 +490,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/s
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
-/Users/someuser/work/applications/frontend/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/redux/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/app/utils/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/applications/frontend/src/package.json:
-  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
-/Users/someuser/work/applications/package.json:
-  {"pollingInterval":2000}
-/Users/someuser/work/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:

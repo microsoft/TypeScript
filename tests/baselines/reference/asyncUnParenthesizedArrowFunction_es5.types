@@ -17,7 +17,7 @@ const x = async i => await someOtherFunction(i)
 >someOtherFunction(i) : Promise<void>
 >                     : ^^^^^^^^^^^^^
 >someOtherFunction : (i: any) => Promise<void>
->                  : ^ ^^   ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^   ^^^^^             
 >i : any
 
 const x1 = async (i) => await someOtherFunction(i);
@@ -31,6 +31,6 @@ const x1 = async (i) => await someOtherFunction(i);
 >someOtherFunction(i) : Promise<void>
 >                     : ^^^^^^^^^^^^^
 >someOtherFunction : (i: any) => Promise<void>
->                  : ^ ^^   ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^   ^^^^^             
 >i : any
 

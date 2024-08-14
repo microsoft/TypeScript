@@ -7,7 +7,7 @@ function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >b : string
@@ -33,17 +33,17 @@ suddenly(({ x: a, ...rest }) => rest.y);
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
 >         : ^ ^^              ^^^      ^^^                          ^^^^^^^^
 >({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
->                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^                 ^^^^^^^     ^^^      ^^^   ^^^^^      ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >a : { z: any; ka: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^
 >rest : { y: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >rest.y : string
 >       : ^^^^^^
 >rest : { y: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >y : string
 >  : ^^^^^^
 
@@ -52,7 +52,7 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
 >         : ^ ^^              ^^^      ^^^                          ^^^^^^^^
 >({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka : ({ x: { z, ...nested }, ...rest }?: { x: { z: any; ka: any; }; y: string; }) => string
->                                                                                                 : ^                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                 : ^                                ^^^^^^^^     ^^^      ^^^   ^^^^^      ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >z : any
@@ -62,7 +62,7 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >nested : { ka: any; }
 >       : ^^^^^^^^^^^^
 >rest : { y: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >{ x: { z: 1, ka: 1 }, y: 'noo' } : { x: { z: number; ka: number; }; y: string; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { z: number; ka: number; }
@@ -86,7 +86,7 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >rest.y : string
 >       : ^^^^^^
 >rest : { y: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >y : string
 >  : ^^^^^^
 >nested.ka : any
@@ -105,7 +105,7 @@ class C {
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >b : string
@@ -119,7 +119,7 @@ class C {
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >b : string

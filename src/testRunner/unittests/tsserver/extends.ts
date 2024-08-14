@@ -1,15 +1,15 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     getConfigDirExtendsSys,
     getSymlinkedExtendsSys,
     modifyFirstExtendedConfigOfConfigDirExtendsSys,
-} from "../helpers/extends";
+} from "../helpers/extends.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: extends::", () => {
     it("resolves the symlink path", () => {

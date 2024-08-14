@@ -30,7 +30,7 @@ function foo() {
 >returnType() : TokenType
 >             : ^^^^^^^^^
 >returnType : () => TokenType
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
     var x: TokenType = list['one'];
 >x : TokenType

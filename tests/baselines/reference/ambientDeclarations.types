@@ -203,11 +203,11 @@ var q = M1.fn();
 >M1.fn() : number
 >        : ^^^^^^
 >M1.fn : () => number
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >M1 : typeof M1
 >   : ^^^^^^^^^
 >fn : () => number
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name

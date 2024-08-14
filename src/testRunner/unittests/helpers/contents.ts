@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import { libFile } from "./virtualFileSystemWithWatch";
+import * as ts from "../../_namespaces/ts.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
     return ts.optionMapToObject(ts.serializeCompilerOptions(options));

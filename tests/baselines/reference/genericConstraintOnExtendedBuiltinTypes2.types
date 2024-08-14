@@ -41,11 +41,11 @@ module EndGate.Tweening {
 >      : ^
 >from.Clone() : any
 >from.Clone : () => any
->           : ^^^^^^^^^
+>           : ^^^^^^   
 >from : T
 >     : ^
 >Clone : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
         }
     }
 }

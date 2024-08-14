@@ -37,7 +37,7 @@ a.bar.toString();
 >a.bar.toString() : string
 >                 : ^^^^^^
 >a.bar.toString : (radix?: number) => string
->               : ^     ^^^      ^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^      
 >a.bar : number
 >      : ^^^^^^
 >a : { foo: () => void; bar: number; }
@@ -45,5 +45,5 @@ a.bar.toString();
 >bar : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 

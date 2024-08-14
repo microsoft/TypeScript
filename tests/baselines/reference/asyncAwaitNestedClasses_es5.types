@@ -24,13 +24,13 @@ class A {
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >(resolve) => { resolve(null); } : (resolve: (value: void | PromiseLike<void>) => void) => void
->                                : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >resolve : (value: void | PromiseLike<void>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >resolve(null) : void
 >              : ^^^^
 >resolve : (value: void | PromiseLike<void>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
         }
         static C = class C {
 >C : typeof C
@@ -50,11 +50,11 @@ class A {
 >B.func2() : Promise<void>
 >          : ^^^^^^^^^^^^^
 >B.func2 : () => Promise<void>
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             
 >B : typeof B
 >  : ^^^^^^^^
 >func2 : () => Promise<void>
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^             
             }
         }
     }

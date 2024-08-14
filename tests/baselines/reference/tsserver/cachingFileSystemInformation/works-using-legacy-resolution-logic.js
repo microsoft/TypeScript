@@ -63,7 +63,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /c/d/f0.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -249,10 +256,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
   {
     "key": "/c/d/f1.d.ts",
     "count": 1
-  },
-  {
-    "key": "/c/f1.ts",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] directoryExists:: [
@@ -351,10 +354,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
   },
   {
     "key": "/c/d/f1.d.ts",
-    "count": 1
-  },
-  {
-    "key": "/c/f1.ts",
     "count": 1
   }
 ]

@@ -53,7 +53,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >true : true
@@ -70,7 +70,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >false : false
@@ -87,7 +87,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >false : false
@@ -104,7 +104,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >true : true
@@ -121,7 +121,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >true : true
@@ -138,7 +138,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >true : true
@@ -157,7 +157,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 
@@ -174,7 +174,7 @@ function test1(x: MyUnion) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: MyUnion) => x is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 
@@ -233,11 +233,11 @@ function test3(foo: unknown) {
 >Array.isArray(foo) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >foo : unknown
 >    : ^^^^^^^
 >false : false
@@ -305,11 +305,11 @@ function test4() {
 >console.error(err) : void
 >                   : ^^^^
 >console.error : (...data: any[]) => void
->              : ^^^^    ^^     ^^^^^^^^^
+>              : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >error : (...data: any[]) => void
->      : ^^^^    ^^     ^^^^^^^^^
+>      : ^^^^    ^^     ^^^^^    
 >err : unknown
 >    : ^^^^^^^
         }
@@ -365,7 +365,7 @@ function test5(bin: Entity) {
 >isActor(bin) : boolean
 >             : ^^^^^^^
 >isActor : (entity: Entity) => entity is Actor
->        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^      ^^^^^               
 >bin : Entity
 >    : ^^^^^^
 >false : false
@@ -393,7 +393,7 @@ function test6(bin: Entity) {
 >isActor(bin) : boolean
 >             : ^^^^^^^
 >isActor : (entity: Entity) => entity is Actor
->        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^      ^^^^^               
 >bin : Entity
 >    : ^^^^^^
 >false : false
@@ -440,7 +440,7 @@ function test7(x: unknown) {
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : (x: unknown) => x is Function
->           : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 >false : false
@@ -456,7 +456,7 @@ function test7(x: unknown) {
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : (x: unknown) => x is Function
->           : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 >true : true

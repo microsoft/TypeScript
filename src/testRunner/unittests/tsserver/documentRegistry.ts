@@ -1,17 +1,17 @@
-import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;

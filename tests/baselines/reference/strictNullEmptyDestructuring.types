@@ -35,11 +35,11 @@ let { } = Math.random() ? {} : null;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >{} : {}
 >   : ^^
 
@@ -55,11 +55,11 @@ let { } = Math.random() ? {} : null;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >{} : {}
 >   : ^^
 
@@ -69,11 +69,11 @@ let { } = Math.random() ? {} : undefined;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >{} : {}
 >   : ^^
 >undefined : undefined
@@ -91,11 +91,11 @@ let { } = Math.random() ? {} : undefined;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >{} : {}
 >   : ^^
 >undefined : undefined
@@ -107,11 +107,11 @@ let { } = Math.random() ? null : undefined;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -127,11 +127,11 @@ let { } = Math.random() ? null : undefined;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >undefined : undefined
 >          : ^^^^^^^^^
 

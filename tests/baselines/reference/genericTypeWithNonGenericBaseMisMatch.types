@@ -36,5 +36,5 @@ var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 >i : I
 >  : ^
 >x : X<{ a: string; }>
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^
 

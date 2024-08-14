@@ -1,8 +1,8 @@
 import {
     createLoggerWithInMemoryLogs,
     replaceAll,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
+} from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -13,24 +13,24 @@ import {
     TestSession,
     TestSessionRequest,
     toExternalFile,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createTypesRegistry,
     customTypesMap,
     FileWithPackageName,
     loggerToTypingsInstallerLog,
-} from "../helpers/typingsInstaller";
+} from "../helpers/typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
-import { stringifyIndented } from "../../_namespaces/ts.server";
-import { jsonToReadableText } from "../helpers";
+import { stringifyIndented } from "../../_namespaces/ts.server.js";
+import { jsonToReadableText } from "../helpers.js";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {

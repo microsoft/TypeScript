@@ -62,9 +62,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
@@ -155,21 +152,22 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/config/file.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/config/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/tsconfig.json: *new*
@@ -226,21 +224,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/tsconfig.json:
@@ -292,21 +288,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/file.ts: *new*
@@ -356,8 +350,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/files/fi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -394,9 +386,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config 1 undefined Config: /a/b/projects/config/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config 1 undefined Config: /a/b/projects/config/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/config/tsconfig.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/config/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
@@ -413,7 +402,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -422,20 +418,14 @@ PolledWatches::
   {"pollingInterval":2000}
 /a/b/projects/files/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/files/tsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -507,8 +497,6 @@ Info seq  [hh:mm:ss:mss] 		Projects:
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -543,7 +531,10 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

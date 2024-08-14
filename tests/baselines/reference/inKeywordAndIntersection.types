@@ -29,13 +29,13 @@ function f10(obj: A & { x: string } | B) {
 >obj instanceof Object : boolean
 >                      : ^^^^^^^
 >obj : B | (A & { x: string; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 
         obj;  // A & { x: string } | B
 >obj : B | (A & { x: string; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^^
     }
     else {
         obj;  // Error
@@ -84,16 +84,16 @@ if (instance instanceof ClassOne) {
 >instance : InstanceOne | InstanceTwo
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassOne : (new () => InstanceOne) & { foo: true; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^           ^^^^^^^^^^^    ^^^
 
     instance.one();
 >instance.one() : void
 >               : ^^^^
 >instance.one : () => void
->             : ^^^^^^^^^^
+>             : ^^^^^^    
 >instance : InstanceOne
 >         : ^^^^^^^^^^^
 >one : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 

@@ -15,7 +15,7 @@ namespace C {
 >A.AA.func() : number
 >            : ^^^^^^
 >A.AA.func : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >A.AA : typeof A.AA
 >     : ^^^^^^^^^^^
 >A : typeof A
@@ -23,7 +23,7 @@ namespace C {
 >AA : typeof A.AA
 >   : ^^^^^^^^^^^
 >func : () => number
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
         static someConst = A.AA.foo;
 >someConst : string

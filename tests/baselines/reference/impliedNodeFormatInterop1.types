@@ -39,11 +39,11 @@ hljs.highlight("code");
 >hljs.highlight("code") : string
 >                       : ^^^^^^
 >hljs.highlight : (code: string) => string
->               : ^    ^^      ^^^^^^^^^^^
+>               : ^    ^^      ^^^^^      
 >hljs : import("highlight.js").HighlightAPI
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >highlight : (code: string) => string
->          : ^    ^^      ^^^^^^^^^^^
+>          : ^    ^^      ^^^^^      
 >"code" : "code"
 >       : ^^^^^^
 

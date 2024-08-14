@@ -220,7 +220,7 @@ var ResultIsNumber14 = --foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber15 = --A.foo();
 >ResultIsNumber15 : number
@@ -294,7 +294,7 @@ var ResultIsNumber20 = foo()--;
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber21 = A.foo()--;
 >ResultIsNumber21 : number
@@ -359,7 +359,7 @@ var ResultIsNumber22 = (STRING + STRING)--;
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 --objA.a;
 >--objA.a : number
@@ -433,7 +433,7 @@ foo()--;
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 objA.a--;
 >objA.a-- : number

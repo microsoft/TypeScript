@@ -21,7 +21,7 @@ const { [nameN]: n } = ab;
 >n : string | number
 >  : ^^^^^^^^^^^^^^^
 >ab : { n: number; } | { n: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^^^^^^^      ^^^
 
 class C { private p: number; }
 >C : C

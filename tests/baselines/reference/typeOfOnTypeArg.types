@@ -12,8 +12,8 @@ var A = { '': 3 };
 >  : ^
 
 function fill<B extends typeof A>(f: B) {
->fill : <B extends { '': number; }>(f: B) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>fill : <B extends typeof A>(f: B) => void
+>     : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >A : { '': number; }
 >  : ^^^^^^^^^^^^^^^
 >f : B
@@ -24,8 +24,8 @@ function fill<B extends typeof A>(f: B) {
 fill(32);
 >fill(32) : void
 >         : ^^^^
->fill : <B extends { '': number; }>(f: B) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>fill : <B extends typeof A>(f: B) => void
+>     : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >32 : 32
 >   : ^^
 

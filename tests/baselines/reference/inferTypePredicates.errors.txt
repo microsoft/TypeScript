@@ -2,7 +2,11 @@ inferTypePredicates.ts(4,7): error TS2322: Type '(number | null)[]' is not assig
   Type 'number | null' is not assignable to type 'number'.
     Type 'null' is not assignable to type 'number'.
 inferTypePredicates.ts(7,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+  Type 'number | null' is not assignable to type 'number'.
+    Type 'null' is not assignable to type 'number'.
 inferTypePredicates.ts(14,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+  Type 'number | null' is not assignable to type 'number'.
+    Type 'null' is not assignable to type 'number'.
 inferTypePredicates.ts(52,17): error TS18048: 'arr' is possibly 'undefined'.
 inferTypePredicates.ts(54,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -31,6 +35,8 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     const evenSquaresInline: number[] =  // should error
           ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'number | null' is not assignable to type 'number'.
+!!! error TS2322:     Type 'null' is not assignable to type 'number'.
         [1, 2, 3, 4]
             .map(x => x % 2 === 0 ? x * x : null)
             .filter(x => !!x); // tests truthiness, not non-nullishness
@@ -40,6 +46,8 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     const evenSquares: number[] =  // should error
           ~~~~~~~~~~~
 !!! error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'number | null' is not assignable to type 'number'.
+!!! error TS2322:     Type 'null' is not assignable to type 'number'.
         [1, 2, 3, 4]
         .map(x => x % 2 === 0 ? x * x : null)
           .filter(isTruthy);

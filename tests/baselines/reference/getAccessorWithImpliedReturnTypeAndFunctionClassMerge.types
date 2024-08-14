@@ -19,7 +19,7 @@ declare module _ {
 
     export function each<T>(
 >each : <T>(context?: any) => void
->     : ^^^^       ^^^   ^^^^^    
+>     : ^ ^^       ^^^   ^^^^^    
 
         //list: List<T>,
         //iterator: ListIterator<T, void>,

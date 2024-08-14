@@ -477,7 +477,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 
 declare var it: Iterator<number>;
 >it : Symbol(it, Decl(dependentDestructuredVariables.ts, 183, 11))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 const { value, done } = it.next();
 >value : Symbol(value, Decl(dependentDestructuredVariables.ts, 184, 7))

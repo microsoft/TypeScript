@@ -18,7 +18,7 @@ const A = require("./other");
 >require("./other") : typeof A
 >                   : ^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./other" : "./other"
 >          : ^^^^^^^^^
 

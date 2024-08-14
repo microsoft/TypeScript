@@ -35,7 +35,7 @@ declare function foo(...args: any[]): any;
 
 @foo
 >foo : (...args: any[]) => any
->    : ^^^^    ^^     ^^^^^^^^
+>    : ^^^^    ^^     ^^^^^   
 
 export class D {
 >D : D

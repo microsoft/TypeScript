@@ -32,11 +32,11 @@ let f = (n: number) => string => n.toString();
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 let o = {
 >o : { m(n: number): any; }

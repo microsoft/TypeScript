@@ -41,12 +41,12 @@ class Button extends React.Component<ButtonProp, any> {
 >                                                                                                        : ^^^^^^^^^^^
 >InnerButton : typeof InnerButton
 >            : ^^^^^^^^^^^^^^^^^^
->this.props : ButtonProp & { children?: React.ReactNode | undefined; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.props : ButtonProp & { children?: React.ReactNode; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->props : ButtonProp & { children?: React.ReactNode | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : ButtonProp & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : string
 >         : ^^^^^^
 

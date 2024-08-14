@@ -17,7 +17,7 @@ class C {
 >public : any
 >       : ^^^
 >dec : (target: any, propertyKey: string) => void
->    : ^      ^^   ^^           ^^      ^^^^^^^^^
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >prop : any
 >     : ^^^
 }

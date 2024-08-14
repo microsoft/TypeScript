@@ -19,21 +19,21 @@ enum Test {
 >Math.floor(Math.random() * 1000) : number
 >                                 : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >Math.random() * 1000 : number
 >                     : ^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >1000 : 1000
 >     : ^^^^
 

@@ -3,7 +3,7 @@
 === mod.d.ts ===
 declare function expect(spy: Function): void;
 >expect : { (spy: Function): void; (element: string): void; }
->       : ^^^   ^^        ^^^    ^^^       ^^      ^^^^^^^^^^
+>       : ^^^   ^^        ^^^    ^^^       ^^      ^^^    ^^^
 >spy : Function
 >    : ^^^^^^^^
 
@@ -28,7 +28,7 @@ declare global {
 
     function expect(element: string): void;
 >expect : { (spy: Function): void; (element: string): void; }
->       : ^^^   ^^        ^^^^^^^^^^       ^^      ^^^    ^^^
+>       : ^^^   ^^        ^^^    ^^^       ^^      ^^^    ^^^
 >element : string
 >        : ^^^^^^
 }

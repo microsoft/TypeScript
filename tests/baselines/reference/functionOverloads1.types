@@ -3,7 +3,7 @@
 === functionOverloads1.ts ===
 function foo();
 >foo : { (): any; (): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^      ^^^
 
 1+1;
 >1+1 : number

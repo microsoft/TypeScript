@@ -71,8 +71,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/projec
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/src/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -162,15 +160,16 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/username/project/src/index.ts ProjectRoot
 Info seq  [hh:mm:ss:mss] 		Projects: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
-
-PolledWatches::
-/a/username/project/package.json: *new*
-  {"pollingInterval":2000}
-/a/username/project/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -228,7 +227,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -241,8 +241,11 @@ Before running Timeout callback:: count: 1
 
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /a/username/project/src/file1.ts:: 1
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
@@ -250,17 +253,32 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 After running Timeout callback:: count: 5
 
 Timeout callback:: count: 5
-2: /a/username/project/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
-5: pollLowPollingIntervalQueue *new*
-6: pollPollingIntervalQueue *new*
+4: /a/username/project/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+7: pollLowPollingIntervalQueue *new*
+8: pollPollingIntervalQueue *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Before request
 
@@ -317,17 +335,15 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
-
-PolledWatches::
-/a/username/project/package.json:
-  {"pollingInterval":2000}
-/a/username/project/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -340,12 +356,12 @@ FsWatches::
   {"inode":7}
 
 Timeout callback:: count: 4
-3: *ensureProjectForOpenFiles* *deleted*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-2: /a/username/project/tsconfig.json
-5: pollLowPollingIntervalQueue
-6: pollPollingIntervalQueue
-7: *ensureProjectForOpenFiles* *new*
+5: *ensureProjectForOpenFiles* *deleted*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+4: /a/username/project/tsconfig.json
+7: pollLowPollingIntervalQueue
+8: pollPollingIntervalQueue
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
@@ -358,8 +374,9 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/username/project/src/file1.ts
+/a/username/project/src/file1.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file2.ts *new*

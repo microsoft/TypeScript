@@ -68,15 +68,15 @@ if ("function" === typeof strOrFunc) {
 >typeof strOrFunc : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrFunc : string | (() => void)
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^    ^
 
     func = strOrFunc;
 >func = strOrFunc : () => void
->                 : ^^^^^^^^^^
+>                 : ^^^^^^    
 >func : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >strOrFunc : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 }
 else {
     str = strOrFunc;

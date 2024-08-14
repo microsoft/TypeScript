@@ -17,7 +17,7 @@ export const cls = class {
 
 function id<T extends new (...a: any[]) => any>(cls: T) {
 >id : <T extends new (...a: any[]) => any>(cls: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^     ^^^^^   ^^   ^^ ^^^^^^
+>   : ^ ^^^^^^^^^                        ^^   ^^ ^^^^^^
 >a : any[]
 >  : ^^^^^
 >cls : T
@@ -41,7 +41,7 @@ export class Mix extends id(Base) {
 >id(Base) : Base
 >         : ^^^^
 >id : <T extends new (...a: any[]) => any>(cls: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^     ^^^^^^^^^^   ^^ ^^^^^^
+>   : ^ ^^^^^^^^^                        ^^   ^^ ^^^^^^
 >Base : typeof Base
 >     : ^^^^^^^^^^^
 

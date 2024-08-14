@@ -73,8 +73,6 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/myProject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/myProject/src/package.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
@@ -150,6 +148,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

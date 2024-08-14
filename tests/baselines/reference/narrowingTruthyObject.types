@@ -23,11 +23,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object | null
 >  : ^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (typeof x === 'object' && x) {
 >typeof x === 'object' && x : false | object | null
@@ -47,11 +47,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (x && typeof x === 'object') {
 >x && typeof x === 'object' : unknown
@@ -71,11 +71,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (b && x && typeof x === 'object') {
 >b && x && typeof x === 'object' : unknown
@@ -99,11 +99,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (x && b && typeof x === 'object') {
 >x && b && typeof x === 'object' : unknown
@@ -127,11 +127,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (x && b && b && typeof x === 'object') {
 >x && b && b && typeof x === 'object' : unknown
@@ -159,11 +159,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
     if (b && b && x && b && b && typeof x === 'object') {
 >b && b && x && b && b && typeof x === 'object' : unknown
@@ -199,11 +199,11 @@ function foo(x: unknown, b: boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
 }
 
@@ -233,11 +233,11 @@ function f1(x: unknown): any {
 >x.hasOwnProperty('x') : boolean
 >                      : ^^^^^^^
 >x.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >x : object
 >  : ^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'x' : "x"
 >    : ^^^
 }

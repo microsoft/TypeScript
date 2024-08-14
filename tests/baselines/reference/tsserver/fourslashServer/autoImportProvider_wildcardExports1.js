@@ -100,6 +100,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -268,6 +279,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -1089,8 +1112,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/a1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/a1",
@@ -1111,8 +1134,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/b/b1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/b/b1.js",
@@ -1133,8 +1156,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/c1.js",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/c1.js",
@@ -1155,8 +1178,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/c/subfolder/c2.mjs",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/c/subfolder/c2.mjs",
@@ -1177,8 +1200,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "pkg/d/d1",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "pkg/d/d1",
@@ -1206,6 +1229,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

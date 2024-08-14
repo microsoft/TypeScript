@@ -15,7 +15,7 @@ var y = x;
 
 function map<U>() {
 >map : <U>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var ys: U[] = [];
 >ys : U[]

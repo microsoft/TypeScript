@@ -1,28 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import {
-    buildMonorepoSymlinkedSiblingPackage1,
-    cleanMonorepoSymlinkedSiblingPackage1,
-    getMonorepoSymlinkedSiblingPackagesSys,
-} from "../helpers/monorepoSymlinkedSiblingPackages";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { forEachMonorepoSymlinkScenario } from "../helpers/monorepoSymlinkedSiblingPackages.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
+    forEachTscWatchEdit,
     openFilesForSession,
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-    osFlavorToString,
     SymLink,
     TestServerHost,
-    TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: symLinks::", () => {
     it("rename in common file renames all project", () => {
@@ -272,41 +267,17 @@ new C();`,
         baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
     });
 
-    describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {
-        verify(/*built*/ false);
-        verify(/*built*/ true);
-        verify(/*built*/ false, TestServerHostOsFlavor.Linux);
-        verify(/*built*/ true, TestServerHostOsFlavor.Linux);
-        function verify(built: boolean, osFlavor?: TestServerHostOsFlavor) {
-            it(`monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, () => {
-                const indexFile = "/home/src/projects/project/packages/package2/src/index.ts";
-                const host = getMonorepoSymlinkedSiblingPackagesSys(/*forTsserver*/ true, built, osFlavor);
-                const session = new TestSession(host);
+    forEachMonorepoSymlinkScenario(/*forTsserver*/ true, (scenario, getHost, edits, project) => {
+        [undefined, true].forEach(canUseWatchEvents => {
+            it(`${scenario}${canUseWatchEvents ? " canUseWatchEvents" : ""}`, () => {
+                const host = getHost();
+                const indexFile = ts.normalizePath(ts.combinePaths(host.getCurrentDirectory(), project, "src/index.ts"));
+                const session = new TestSession({ host, canUseWatchEvents });
                 openFilesForSession([indexFile], session);
                 verifyGetErrRequest({ session, files: [indexFile] });
-
-                if (!built) {
-                    buildMonorepoSymlinkedSiblingPackage1(host);
-                    host.runQueuedTimeoutCallbacks();
-                    host.runQueuedTimeoutCallbacks();
-                    host.runQueuedTimeoutCallbacks();
-                    verifyGetErrRequest({ session, files: [indexFile] });
-                }
-
-                cleanMonorepoSymlinkedSiblingPackage1(host);
-                host.runQueuedTimeoutCallbacks();
-                host.runQueuedTimeoutCallbacks();
-                host.runQueuedTimeoutCallbacks();
-                verifyGetErrRequest({ session, files: [indexFile] });
-
-                buildMonorepoSymlinkedSiblingPackage1(host);
-                host.runQueuedTimeoutCallbacks();
-                host.runQueuedTimeoutCallbacks();
-                host.runQueuedTimeoutCallbacks();
-                verifyGetErrRequest({ session, files: [indexFile] });
-
-                baselineTsserverLogs("symLinks", `monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, session);
+                forEachTscWatchEdit(session, edits(), () => verifyGetErrRequest({ session, files: [indexFile] }));
+                baselineTsserverLogs("symLinks", `${scenario}${canUseWatchEvents ? " canUseWatchEvents" : ""}`, session);
             });
-        }
+        });
     });
 });

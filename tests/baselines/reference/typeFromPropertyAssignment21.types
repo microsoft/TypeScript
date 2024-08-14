@@ -10,7 +10,7 @@ Event.prototype.removeChildren = function () {
 >Event.prototype : Event
 >                : ^^^^^
 >Event : { new (type: string, eventInitDict?: EventInit): Event; prototype: Event; readonly NONE: 0; readonly CAPTURING_PHASE: 1; readonly AT_TARGET: 2; readonly BUBBLING_PHASE: 3; }
->      : ^^^^^^^    ^^      ^^             ^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^    ^^      ^^             ^^^         ^^^     ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >prototype : Event
 >          : ^^^^^
 >removeChildren : any

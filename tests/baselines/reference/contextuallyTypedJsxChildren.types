@@ -77,9 +77,9 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 
   {({ onClose }) => (
 >({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
->                                                                                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
 >onClose : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
 >                                                                         : ^^^^^^^^^^^
 
@@ -95,9 +95,9 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 >button : any
 >       : ^^^
 >onClick : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >onClose : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >button : any
 >       : ^^^
 
@@ -126,11 +126,11 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 
   children={({ onClose }) => (
 >children : ({ onClose }: { onClose: () => void; }) => JSX.Element
->         : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
 >({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
->                                                                                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
 >onClose : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
 >                                                                         : ^^^^^^^^^^^
 
@@ -146,9 +146,9 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 >button : any
 >       : ^^^
 >onClick : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >onClose : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >button : any
 >       : ^^^
 

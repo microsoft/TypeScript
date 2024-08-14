@@ -171,9 +171,9 @@ var r = c.foo(); // e.foo would return string
 >c.foo() : number
 >        : ^^^^^^
 >c.foo : () => number
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >c : C
 >  : ^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

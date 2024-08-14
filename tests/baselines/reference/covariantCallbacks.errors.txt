@@ -1,13 +1,13 @@
 covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
-  Type 'A' is not assignable to type 'B'.
+  Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
         Types of parameters 'item' and 'item' are incompatible.
-          Type 'A' is not assignable to type 'B'.
+          Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(43,5): error TS2322: Type 'AList2' is not assignable to type 'BList2'.
   Types of property 'forEach' are incompatible.
     Types of parameters 'cb' and 'cb' are incompatible.
@@ -22,7 +22,7 @@ covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to ty
     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
         Types of parameters 'item' and 'item' are incompatible.
-          Type 'A' is not assignable to type 'B'.
+          Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(98,1): error TS2322: Type 'SetLike1<(x: string) => void>' is not assignable to type 'SetLike1<(x: unknown) => void>'.
   Type '(x: string) => void' is not assignable to type '(x: unknown) => void'.
     Types of parameters 'x' and 'x' are incompatible.
@@ -58,7 +58,8 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
-!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 covariantCallbacks.ts:8:25: 'b' is declared here.
     }
     
     interface AList1 {
@@ -78,7 +79,8 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
 !!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:           Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 covariantCallbacks.ts:8:25: 'b' is declared here.
     }
     
     interface AList2 {
@@ -135,7 +137,8 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
 !!! error TS2322:     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:           Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 covariantCallbacks.ts:8:25: 'b' is declared here.
     }
     
     // Repro from #51620
