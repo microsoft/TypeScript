@@ -10105,14 +10105,15 @@ export const emptyFileSystemEntries: FileSystemEntries = {
 };
 
 /**
- * patternOrStrings contains both patterns (containing "*") and regular strings.
+ * `parsedPatterns` contains both patterns (containing "*") and regular strings.
  * Return an exact match if possible, or a pattern match, or undefined.
  * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
  *
  * @internal
  */
-export function matchPatternOrExact(patternOrStrings: ParsedPatterns, candidate: string): string | Pattern | undefined {
-    const { matchableStringSet, patterns } = patternOrStrings;
+export function matchPatternOrExact(parsedPatterns: ParsedPatterns, candidate: string): string | Pattern | undefined {
+    const { matchableStringSet, patterns } = parsedPatterns;
+
 
     if (matchableStringSet?.has(candidate)) {
         return candidate;
