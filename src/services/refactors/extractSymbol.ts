@@ -1081,11 +1081,11 @@ function extractFunctionInScope(
     });
 
     const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }));
-    const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
+    typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-    const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
+    const typeParameters: readonly TypeParameterDeclaration[] | undefined = typeParametersAndDeclarations.length === 0
         ? undefined
-        : mapDefined(sortedTypeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
+        : mapDefined(typeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.

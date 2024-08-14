@@ -60,7 +60,8 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     const res: OutliningSpan[] = [];
     addNodeOutliningSpans(sourceFile, cancellationToken, res);
     addRegionOutliningSpans(sourceFile, res);
-    return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
+    res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
+    return res;
 }
 
 function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
