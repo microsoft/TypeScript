@@ -9,11 +9,10 @@ unreachableDeclarations.ts(64,14): error TS2448: Block-scoped variable 'blah' us
 unreachableDeclarations.ts(64,14): error TS2454: Variable 'blah' is used before being assigned.
 unreachableDeclarations.ts(65,18): error TS2449: Class 'Foo' used before its declaration.
 unreachableDeclarations.ts(78,2): error TS7027: Unreachable code detected.
-unreachableDeclarations.ts(82,2): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 
 
-==== unreachableDeclarations.ts (13 errors) ====
+==== unreachableDeclarations.ts (12 errors) ====
     function func1() {
         aFunc();
     
@@ -119,12 +118,14 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
     
     	const blah = { prop: 1234 };
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
+    
     
     	enum Bar { A }
+    ~~~~~~~~~~~~~~~
+    
     
     	class Foo { x = 1234 }
-    	~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~
     
     
     	namespace Baz { export const value = 1234 }
