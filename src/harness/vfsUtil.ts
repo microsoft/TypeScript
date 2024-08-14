@@ -1354,20 +1354,8 @@ export class Stats {
     }
 }
 
-export const IOErrorMessages: Readonly<{
-    EACCES: "access denied";
-    EIO: "an I/O error occurred";
-    ENOENT: "no such file or directory";
-    EEXIST: "file already exists";
-    ELOOP: "too many symbolic links encountered";
-    ENOTDIR: "no such directory";
-    EISDIR: "path is a directory";
-    EBADF: "invalid file descriptor";
-    EINVAL: "invalid value";
-    ENOTEMPTY: "directory not empty";
-    EPERM: "operation not permitted";
-    EROFS: "file system is read-only";
-}> = Object.freeze({
+// IOErrorMessages is defined like this to reduce duplication for --isolatedDeclarations
+const TemplateIOErrorMessages = {
     EACCES: "access denied",
     EIO: "an I/O error occurred",
     ENOENT: "no such file or directory",
@@ -1380,7 +1368,8 @@ export const IOErrorMessages: Readonly<{
     ENOTEMPTY: "directory not empty",
     EPERM: "operation not permitted",
     EROFS: "file system is read-only",
-});
+} as const;
+export const IOErrorMessages: typeof TemplateIOErrorMessages = Object.freeze(TemplateIOErrorMessages);
 
 export function createIOError(code: keyof typeof IOErrorMessages, details = ""): NodeJS.ErrnoException {
     const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);

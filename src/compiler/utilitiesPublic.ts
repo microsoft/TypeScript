@@ -669,7 +669,7 @@ function getNodeFlags(node: Node) {
 }
 
 /** @internal */
-export const supportedLocaleDirectories: string[] = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"] as const;
 
 /**
  * Checks to see if the locale is in the appropriate format,
