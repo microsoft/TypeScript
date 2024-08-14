@@ -4123,7 +4123,7 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 }
 
 /** @internal */
-export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean | undefined {
+export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean {
     const decisionFromFile = firstDefined(file.imports, node => {
         if (JsTyping.nodeCoreModules.has(node.text)) {
             return startsWith(node.text, "node:");

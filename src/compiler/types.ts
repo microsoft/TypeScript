@@ -4867,12 +4867,10 @@ export interface Program extends ScriptReferenceHost {
     redirectTargetsMap: MultiMap<Path, string>;
     /**
      * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers.
-     * `false` indicates that an unprefixed builtin module was seen; `undefined` indicates that no
-     * builtin modules were seen.
      *
      * @internal
      */
-    readonly usesUriStyleNodeCoreModules: boolean | undefined;
+    readonly usesUriStyleNodeCoreModules: boolean;
     /**
      * Map from libFileName to actual resolved location of the lib
      * @internal
