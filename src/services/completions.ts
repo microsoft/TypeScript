@@ -63,6 +63,7 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
+    fileContainsPackageImport,
     filter,
     find,
     findAncestor,
@@ -4207,9 +4208,8 @@ function getCompletionData(
                 if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
                     return false;
                 }
-                return packageJsonFilter
-                    ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
-                    : true;
+                return (packageJsonFilter?.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson)) ?? true)
+                    || fileContainsPackageImport(sourceFile, moduleName);
             }
             return isImportableFile(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,

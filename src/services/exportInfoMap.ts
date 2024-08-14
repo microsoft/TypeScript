@@ -402,7 +402,8 @@ export function isImportableFile(
     return hasImportablePath;
 }
 
-function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+/** @internal */
+export function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
     return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
