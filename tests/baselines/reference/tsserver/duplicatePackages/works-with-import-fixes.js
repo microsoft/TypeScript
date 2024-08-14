@@ -430,28 +430,6 @@ Info seq  [hh:mm:ss:mss] response:
               ]
             }
           ]
-        },
-        {
-          "fixName": "import",
-          "description": "Add import from \"foo\"",
-          "changes": [
-            {
-              "fileName": "/b/user.ts",
-              "textChanges": [
-                {
-                  "start": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "newText": "import { foo } from \"foo\";\n\n"
-                }
-              ]
-            }
-          ]
         }
       ],
       "responseRequired": true
