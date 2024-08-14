@@ -113,24 +113,36 @@ function pasteEdits(
             //
             // We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
             // identifier lies within the updated range and if it is not resolved, we try resolving it.
-            const updatedRanges: TextRange[] = [];
             let offset = 0;
             pasteLocations.forEach((location, i) => {
                 const oldTextLength = location.end - location.pos;
                 const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
                 const startPos = location.pos + offset;
                 const endPos = startPos + textToBePasted.length;
-                updatedRanges.push({ pos: startPos, end: endPos });
+                const range = { pos: startPos, end: endPos } satisfies TextRange;
                 offset += textToBePasted.length - oldTextLength;
-            });
-
-            updatedRanges.forEach(range => {
-                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), ancestorNode => rangeContainsRange(ancestorNode, range));
+                const enclosingNode = findAncestor(
+                    getTokenAtPosition(context.sourceFile, range.pos),
+                    ancestorNode => rangeContainsRange(ancestorNode, range),
+                );
                 if (!enclosingNode) return;
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
-                    if (isIdentifier(node) && rangeContainsPosition(range, node.getStart(updatedFile)) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
-                        importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                        return;
+                    if (
+                        isIdentifier(node) && rangeContainsPosition(
+                            range,
+                            node.getStart(updatedFile),
+                        ) && !originalProgram?.getTypeChecker().resolveName(
+                            node.text,
+                            node,
+                            SymbolFlags.All,
+                            /*excludeGlobals*/ false,
+                        )
+                    ) {
+                        return importAdder.addImportForUnresolvedIdentifier(
+                            context,
+                            node,
+                            /*useAutoImportProvider*/ true,
+                        );
                     }
                     node.forEachChild(importUnresolvedIdentifiers);
                 });
