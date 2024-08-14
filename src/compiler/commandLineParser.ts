@@ -259,6 +259,8 @@ export const libs = libEntries.map(entry => entry[0]);
 export const libMap = new Map(libEntries);
 
 // Watch related options
+
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const optionsForWatch: CommandLineOption[] = [
     {
@@ -1619,6 +1621,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
 ];
 
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const optionDeclarations: CommandLineOption[] = [
     ...commonOptionsWithBuild,
@@ -1702,6 +1705,7 @@ export const buildOpts: CommandLineOption[] = [
     ...optionsForBuild,
 ];
 
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const typeAcquisitionDeclarations: CommandLineOption[] = [
     {
@@ -1764,7 +1768,9 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap,
 };
 
-const defaultInitCompilerOptions: CompilerOptions = {
+// Do not delete this without updating the website's tsconfig generation.
+/** @internal @knipignore */
+export const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
     strict: true,
@@ -3756,7 +3762,7 @@ function convertJsonOptionOfListType(
  *  \*\*        # matches the recursive directory wildcard "**".
  *  \/?$        # matches an optional trailing directory separator at the end of the string.
  */
-const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+const invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
 
 /**
  * Matches the portion of a wildcard path that does not contain wildcards.

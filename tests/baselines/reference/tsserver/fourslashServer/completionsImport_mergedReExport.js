@@ -1116,8 +1116,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@jest/types/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Config",
@@ -1138,6 +1138,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2101,8 +2106,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "@jest/types",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "@jest/types",
@@ -2130,6 +2135,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

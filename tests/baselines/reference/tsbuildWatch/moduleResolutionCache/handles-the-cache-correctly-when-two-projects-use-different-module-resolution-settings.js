@@ -105,7 +105,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-12737086933-export const foo = 10;","impliedFormat":1},{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},{"version":"-12737086933-export const foo = 10;","impliedFormat":1},{"version":"-12042713060-export const bar = 10;","impliedFormat":1}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -132,8 +132,13 @@ export {};
       "affectsGlobalScope": true
     },
     "./node_modules/file/index.d.ts": {
+      "original": {
+        "version": "-12737086933-export const foo = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12737086933-export const foo = 10;",
-      "signature": "-12737086933-export const foo = 10;"
+      "signature": "-12737086933-export const foo = 10;",
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
       "original": {
@@ -144,12 +149,22 @@ export {};
       "signature": "-3531856636-export {};\n"
     },
     "../node_modules/@types/foo/index.d.ts": {
+      "original": {
+        "version": "-12737086933-export const foo = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12737086933-export const foo = 10;",
-      "signature": "-12737086933-export const foo = 10;"
+      "signature": "-12737086933-export const foo = 10;",
+      "impliedFormat": "commonjs"
     },
     "../node_modules/@types/bar/index.d.ts": {
+      "original": {
+        "version": "-12042713060-export const bar = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12042713060-export const bar = 10;",
-      "signature": "-12042713060-export const bar = 10;"
+      "signature": "-12042713060-export const bar = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -168,7 +183,7 @@ export {};
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 943
+  "size": 1033
 }
 
 //// [/user/username/projects/myproject/project2/index.js]
@@ -181,7 +196,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;"],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},{"version":"-12737086933-export const foo = 10;","impliedFormat":1}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -219,8 +234,13 @@ export {};
       "signature": "-3531856636-export {};\n"
     },
     "../node_modules/@types/foo/index.d.ts": {
+      "original": {
+        "version": "-12737086933-export const foo = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12737086933-export const foo = 10;",
-      "signature": "-12737086933-export const foo = 10;"
+      "signature": "-12737086933-export const foo = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -239,16 +259,34 @@ export {};
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 846
+  "size": 876
 }
 
 
 PolledWatches::
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/project1/node_modules/file/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/project1/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/project1/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -366,7 +404,7 @@ var bar = 10;
 
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-7561100220-import { foo } from \"file\";const bar = 10;","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-12737086933-export const foo = 10;","impliedFormat":1},{"version":"-7561100220-import { foo } from \"file\";const bar = 10;","signature":"-3531856636-export {};\n"},{"version":"-12737086933-export const foo = 10;","impliedFormat":1},{"version":"-12042713060-export const bar = 10;","impliedFormat":1}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -393,8 +431,13 @@ var bar = 10;
       "affectsGlobalScope": true
     },
     "./node_modules/file/index.d.ts": {
+      "original": {
+        "version": "-12737086933-export const foo = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12737086933-export const foo = 10;",
-      "signature": "-12737086933-export const foo = 10;"
+      "signature": "-12737086933-export const foo = 10;",
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
       "original": {
@@ -405,12 +448,22 @@ var bar = 10;
       "signature": "-3531856636-export {};\n"
     },
     "../node_modules/@types/foo/index.d.ts": {
+      "original": {
+        "version": "-12737086933-export const foo = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12737086933-export const foo = 10;",
-      "signature": "-12737086933-export const foo = 10;"
+      "signature": "-12737086933-export const foo = 10;",
+      "impliedFormat": "commonjs"
     },
     "../node_modules/@types/bar/index.d.ts": {
+      "original": {
+        "version": "-12042713060-export const bar = 10;",
+        "impliedFormat": 1
+      },
       "version": "-12042713060-export const bar = 10;",
-      "signature": "-12042713060-export const bar = 10;"
+      "signature": "-12042713060-export const bar = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -429,7 +482,7 @@ var bar = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 958
+  "size": 1048
 }
 
 

@@ -92,9 +92,17 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'typerefs1', containing file '/f1.ts', root directory '/node_modules/@types'. ========
 Resolving with primary search path '/node_modules/@types'.
-File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/@types/typerefs1/index.d.ts' exists - use it as a name resolution result.
 ======== Type reference directive 'typerefs1' was successfully resolved to '/node_modules/@types/typerefs1/index.d.ts', primary: true. ========
 ======== Resolving module './b1' from '/f1.ts'. ========
@@ -103,7 +111,7 @@ File '/b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to '/b1.ts'. ========
 ======== Resolving type reference directive 'typerefs2', containing file '/f2.ts', root directory '/node_modules/@types'. ========
 Resolving with primary search path '/node_modules/@types'.
-File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/@types/typerefs2/index.d.ts' exists - use it as a name resolution result.
 ======== Type reference directive 'typerefs2' was successfully resolved to '/node_modules/@types/typerefs2/index.d.ts', primary: true. ========
 ======== Resolving module './b2' from '/f2.ts'. ========
@@ -217,9 +225,25 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'typerefs1', containing file '/f1.ts', root directory '/node_modules/@types'. ========
 Resolving with primary search path '/node_modules/@types'.
-File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/@types/typerefs1/index.d.ts' exists - use it as a name resolution result.
 ======== Type reference directive 'typerefs1' was successfully resolved to '/node_modules/@types/typerefs1/index.d.ts', primary: true. ========
 ======== Resolving module './b1' from '/f1.ts'. ========
@@ -322,6 +346,22 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b1' from '/f1.ts'. ========
 Explicitly specified module resolution kind: 'Classic'.
 File '/b1.ts' exists - use it as a name resolution result.
@@ -422,6 +462,22 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b1' from '/f1.ts'. ========
 Explicitly specified module resolution kind: 'Classic'.
 File '/b1.ts' exists - use it as a name resolution result.
@@ -521,6 +577,14 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b1' from '/f1.ts'. ========
 Explicitly specified module resolution kind: 'Classic'.
 File '/b1.ts' exists - use it as a name resolution result.
@@ -618,6 +682,22 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b1' from '/f1.ts'. ========
 Explicitly specified module resolution kind: 'Classic'.
 File '/b1.ts' exists - use it as a name resolution result.
@@ -709,6 +789,22 @@ typerefs2: {
   ]
 }
 
+File '/node_modules/@types/typerefs1/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
+File '/node_modules/@types/typerefs2/package.json' does not exist.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs1/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'typerefs2' from '/f2.ts' of old program, it was successfully resolved to '/node_modules/@types/typerefs2/index.d.ts'.
 Reusing resolution of module './b2' from '/f2.ts' of old program, it was successfully resolved to '/b2.ts'.
 Reusing resolution of module './f1' from '/f2.ts' of old program, it was successfully resolved to '/f1.ts'.

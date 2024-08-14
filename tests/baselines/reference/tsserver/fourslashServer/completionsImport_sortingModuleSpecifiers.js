@@ -1058,8 +1058,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "path",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "path",
@@ -1078,8 +1078,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "path/posix",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "path/posix",
@@ -1098,8 +1098,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "path/win32",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "path/win32",
@@ -1125,6 +1125,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

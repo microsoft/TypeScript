@@ -14,6 +14,7 @@ import {
     attachFileToDiagnostics,
     AwaitExpression,
     BaseNodeFactory,
+    BigIntLiteral,
     BinaryExpression,
     BinaryOperatorToken,
     BindingElement,
@@ -2692,7 +2693,8 @@ namespace Parser {
     function isLiteralPropertyName(): boolean {
         return tokenIsIdentifierOrKeyword(token()) ||
             token() === SyntaxKind.StringLiteral ||
-            token() === SyntaxKind.NumericLiteral;
+            token() === SyntaxKind.NumericLiteral ||
+            token() === SyntaxKind.BigIntLiteral;
     }
 
     function isImportAttributeName(): boolean {
@@ -2700,8 +2702,8 @@ namespace Parser {
     }
 
     function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
-        if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-            const node = parseLiteralNode() as StringLiteral | NumericLiteral;
+        if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.BigIntLiteral) {
+            const node = parseLiteralNode() as StringLiteral | NumericLiteral | BigIntLiteral;
             node.text = internIdentifier(node.text);
             return node;
         }
@@ -8058,6 +8060,7 @@ namespace Parser {
             tokenIsIdentifierOrKeyword(token()) ||
             token() === SyntaxKind.StringLiteral ||
             token() === SyntaxKind.NumericLiteral ||
+            token() === SyntaxKind.BigIntLiteral ||
             token() === SyntaxKind.AsteriskToken ||
             token() === SyntaxKind.OpenBracketToken
         ) {
@@ -10650,8 +10653,8 @@ function getNamedArgRegEx(name: string): RegExp {
     return result;
 }
 
-const tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/im;
-const singleLinePragmaRegEx = /^\/\/\/?\s*@([^\s:]+)(.*)\s*$/im;
+const tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/m;
+const singleLinePragmaRegEx = /^\/\/\/?\s*@([^\s:]+)((?:[^\S\r\n]|:).*)?$/m;
 function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, text: string) {
     const tripleSlash = range.kind === SyntaxKind.SingleLineCommentTrivia && tripleSlashXMLCommentStartRegEx.exec(text);
     if (tripleSlash) {
@@ -10697,7 +10700,7 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
     }
 
     if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
-        const multiLinePragmaRegEx = /@(\S+)(\s+.*)?$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
+        const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
         let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
             addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);

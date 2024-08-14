@@ -13,21 +13,17 @@ mdast;
 >mdast : Symbol(mdast, Decl(index.ts, 0, 6))
 
 mdast.toString();
->mdast.toString : Symbol(mdast.toString, Decl(index.d.ts, 0, 0))
 >mdast : Symbol(mdast, Decl(index.ts, 0, 6))
->toString : Symbol(mdast.toString, Decl(index.d.ts, 0, 0))
 
 const mdast2 = await import('mdast-util-to-string');
 >mdast2 : Symbol(mdast2, Decl(index.ts, 4, 5))
->'mdast-util-to-string' : Symbol(mdast, Decl(index.d.ts, 0, 0))
+>'mdast-util-to-string' : Symbol("/node_modules/mdast-util-to-string/index", Decl(index.d.ts, 0, 0))
 
 mdast2.toString();
->mdast2.toString : Symbol(mdast.toString, Decl(index.d.ts, 0, 0))
+>mdast2.toString : Symbol(toString, Decl(index.d.ts, 0, 0))
 >mdast2 : Symbol(mdast2, Decl(index.ts, 4, 5))
->toString : Symbol(mdast.toString, Decl(index.d.ts, 0, 0))
+>toString : Symbol(toString, Decl(index.d.ts, 0, 0))
 
 mdast2.default;
->mdast2.default : Symbol(mdast.default)
 >mdast2 : Symbol(mdast2, Decl(index.ts, 4, 5))
->default : Symbol(mdast.default)
 

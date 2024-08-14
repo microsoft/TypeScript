@@ -265,6 +265,7 @@ import {
     isConstructorDeclaration,
     isConstTypeReference,
     isDeclaration,
+    isDeclarationFileName,
     isDecorator,
     isElementAccessExpression,
     isEnumDeclaration,
@@ -510,7 +511,6 @@ import {
     skipTrivia,
     SnippetKind,
     some,
-    sort,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -545,6 +545,7 @@ import {
     TokenFlags,
     tokenToString,
     toPath,
+    toSorted,
     tracing,
     TransformFlags,
     TransientSymbol,
@@ -1257,6 +1258,16 @@ export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFil
     }
 
     return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
+}
+
+/** @internal */
+export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
+    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
+    if (!lastModifier) {
+        return getTokenPosOfNode(node, sourceFile);
+    }
+
+    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
 }
 
 /** @internal */
@@ -2207,6 +2218,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
             return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
@@ -2610,12 +2622,12 @@ export function getJSDocCommentRanges(node: Node, text: string) {
         text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
 }
 
-const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashLibReferenceRegEx = /^(\/\/\/\s*<reference\s+lib\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
-const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
+const fullTripleSlashReferencePathRegEx = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^\/\/\/\s*<reference\s+types\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashLibReferenceRegEx = /^\/\/\/\s*<reference\s+lib\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashAMDReferencePathRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+(?:\S.*?)??\/>/;
+const defaultLibReferenceRegEx = /^\/\/\/\s*<reference\s+no-default-lib\s*=\s*(?:'[^']*'|"[^"]*")\s*\/>/;
 
 export function isPartOfTypeNode(node: Node): boolean {
     if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -5221,6 +5233,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
             const nameExpression = name.expression;
@@ -5975,10 +5988,10 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
 // There is no reason for this other than that JSON.stringify does not handle it either.
-const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
+const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -7188,7 +7201,8 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
-function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+/** @internal */
+export function isBinaryLogicalOperator(token: SyntaxKind): boolean {
     return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
 }
 
@@ -8351,7 +8365,7 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
 
 /** @internal */
 export function formatStringFromArgs(text: string, args: DiagnosticArguments): string {
-    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
+    return text.replace(/\{(\d+)\}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
 let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -9151,10 +9165,16 @@ export function getJSXTransformEnabled(options: CompilerOptions): boolean {
 export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
     const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
     const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
+    const jsxRuntimePragmas = file?.pragmas.get("jsxruntime");
+    const jsxRuntimePragma = isArray(jsxRuntimePragmas) ? jsxRuntimePragmas[jsxRuntimePragmas.length - 1] : jsxRuntimePragmas;
+    if (jsxRuntimePragma?.arguments.factory === "classic") {
+        return undefined;
+    }
     return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||
-            jsxImportSourcePragma ?
+            jsxImportSourcePragma ||
+            jsxRuntimePragma?.arguments.factory === "automatic" ?
         jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
         undefined;
 }
@@ -9583,7 +9603,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
         visited.set(canonicalPath, true);
         const { files, directories } = getFileSystemEntries(path);
 
-        for (const current of sort<string>(files, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(files, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -9606,7 +9626,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             }
         }
 
-        for (const current of sort<string>(directories, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(directories, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (
@@ -9764,6 +9784,12 @@ export function hasJSFileExtension(fileName: string): boolean {
 /** @internal */
 export function hasTSFileExtension(fileName: string): boolean {
     return some(supportedTSExtensionsFlat, extension => fileExtensionIs(fileName, extension));
+}
+
+/** @internal */
+export function hasImplementationTSFileExtension(fileName: string): boolean {
+    return some(supportedTSImplementationExtensions, extension => fileExtensionIs(fileName, extension))
+        && !isDeclarationFileName(fileName);
 }
 
 /**
@@ -10597,7 +10623,7 @@ export function isFunctionExpressionOrArrowFunction(node: Node): node is Functio
 
 /** @internal */
 export function escapeSnippetText(text: string): string {
-    return text.replace(/\$/gm, () => "\\$");
+    return text.replace(/\$/g, () => "\\$");
 }
 
 /** @internal */

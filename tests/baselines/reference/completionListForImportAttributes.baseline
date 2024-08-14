@@ -146,6 +146,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -173,6 +178,7 @@
             "start": 215,
             "length": 0
           },
+          "commitCharacters": [],
           "displayParts": [
             {
               "text": "json",
@@ -180,6 +186,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -248,6 +259,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -268,6 +284,7 @@
           "kind": "string",
           "kindModifiers": "",
           "sortText": "11",
+          "commitCharacters": [],
           "displayParts": [
             {
               "text": "\"json\"",
@@ -328,6 +345,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

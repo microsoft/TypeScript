@@ -267,11 +267,11 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     // Ignore "/", "c:/"
     if (length <= 1) return 1;
     let indexAfterOsRoot = 1;
-    let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
+    let isDosStyle = pathComponents[0].search(/[a-z]:/i) === 0;
     if (
         pathComponents[0] !== directorySeparator &&
         !isDosStyle && // Non dos style paths
-        pathComponents[1].search(/[a-zA-Z]\$$/) === 0 // Dos style nextPart
+        pathComponents[1].search(/[a-z]\$$/i) === 0 // Dos style nextPart
     ) {
         // ignore "//vda1cs4850/c$/folderAtRoot"
         if (length === 2) return 2;

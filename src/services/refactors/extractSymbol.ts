@@ -61,6 +61,7 @@ import {
     hasEffectiveModifier,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArray,
     isArrowFunction,
     isAssignmentExpression,
@@ -1062,7 +1063,7 @@ function extractFunctionInScope(
             let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             type = checker.getBaseTypeOfLiteralType(type);
-            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
+            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
         }
 
         const paramDecl = factory.createParameterDeclaration(
@@ -1096,7 +1097,7 @@ function extractFunctionInScope(
     // to avoid problems when there are literal types present
     if (isExpression(node) && !isJS) {
         const contextualType = checker.getContextualType(node);
-        returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames); // TODO: GH#18217
     }
 
     const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
@@ -1138,6 +1139,7 @@ function extractFunctionInScope(
                         checker.getTypeAtLocation(range.thisNode!),
                         scope,
                         NodeBuilderFlags.NoTruncation,
+                        InternalNodeBuilderFlags.AllowUnresolvedNames,
                     ),
                     /*initializer*/ undefined,
                 ),
@@ -1228,6 +1230,7 @@ function extractFunctionInScope(
                     checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
                     scope,
                     NodeBuilderFlags.NoTruncation,
+                    InternalNodeBuilderFlags.AllowUnresolvedNames,
                 );
 
                 typeElements.push(factory.createPropertySignature(
@@ -1378,7 +1381,7 @@ function extractConstantInScope(
 
     let variableType = isJS || !checker.isContextSensitive(node)
         ? undefined
-        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames); // TODO: GH#18217
 
     let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
@@ -1512,7 +1515,7 @@ function extractConstantInScope(
                 const paramType = checker.getTypeAtLocation(p);
                 if (paramType === checker.getAnyType()) hasAny = true;
 
-                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames), p.initializer));
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.
@@ -1521,7 +1524,7 @@ function extractConstantInScope(
         if (hasAny) return { variableType, initializer };
         variableType = undefined;
         if (isArrowFunction(initializer)) {
-            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.equalsGreaterThanToken, initializer.body);
+            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames), initializer.equalsGreaterThanToken, initializer.body);
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
@@ -1538,7 +1541,7 @@ function extractConstantInScope(
                             /*dotDotDotToken*/ undefined,
                             "this",
                             /*questionToken*/ undefined,
-                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation),
+                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames),
                         ),
                     );
                 }
