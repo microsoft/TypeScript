@@ -5594,6 +5594,7 @@ export interface ThisTypePredicate extends TypePredicateBase {
     kind: TypePredicateKind.This;
     parameterName: undefined;
     parameterIndex: undefined;
+    isDestructuringParameter: undefined;
     type: Type;
 }
 
@@ -5601,6 +5602,7 @@ export interface IdentifierTypePredicate extends TypePredicateBase {
     kind: TypePredicateKind.Identifier;
     parameterName: string;
     parameterIndex: number;
+    isDestructuringParameter: boolean | undefined;
     type: Type;
 }
 
@@ -5608,6 +5610,7 @@ export interface AssertsThisTypePredicate extends TypePredicateBase {
     kind: TypePredicateKind.AssertsThis;
     parameterName: undefined;
     parameterIndex: undefined;
+    isDestructuringParameter: undefined;
     type: Type | undefined;
 }
 
@@ -5809,6 +5812,8 @@ export interface EmitResolver {
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
+    getDestructuringParameterIndexFromTypePredicate(node: Node): number | undefined;
+    generateNameForDestructuringParameter(node: Node, index: number): string;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;

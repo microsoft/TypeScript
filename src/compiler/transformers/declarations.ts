@@ -618,7 +618,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags, type?: TypeNode): ParameterDeclaration {
+    function ensureParameter(p: ParameterDeclaration, modifierMask?: ModifierFlags, type?: TypeNode, name?: string): ParameterDeclaration {
         let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
         if (!suppressNewDiagnosticContexts) {
             oldDiag = getSymbolAccessibilityDiagnostic;
@@ -628,7 +628,7 @@ export function transformDeclarations(context: TransformationContext) {
             p,
             maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
-            filterBindingPatternInitializers(p.name),
+            name ?? filterBindingPatternInitializers(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
             ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
             ensureNoInitializer(p),
@@ -768,7 +768,16 @@ export function transformDeclarations(context: TransformationContext) {
         if (hasEffectiveModifier(node, ModifierFlags.Private)) {
             return factory.createNodeArray();
         }
-        const newParams = map(params, p => ensureParameter(p, modifierMask));
+        const inferedParameterIndex = resolver.getDestructuringParameterIndexFromTypePredicate(node);
+        const newParams = map(params, (p, index) =>
+            ensureParameter(
+                p,
+                modifierMask,
+                /*type*/ undefined,
+                inferedParameterIndex === index ?
+                    resolver.generateNameForDestructuringParameter(node, inferedParameterIndex)
+                    : undefined,
+            ));
         if (!newParams) {
             return factory.createNodeArray();
         }

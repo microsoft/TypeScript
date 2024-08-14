@@ -1755,3 +1755,143 @@ function isA2(x: X) {
 >'A' : "A"
 >    : ^^^
 }
+function isA3({ type }: X, arg_0: string,) {
+>isA3 : ({ type }: X, arg_0: string) => arg_0_ is { type: "A"; a: string; }
+>     : ^        ^^ ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>arg_0 : string
+>      : ^^^^^^
+
+  return type === 'A';
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+}
+function isA4({ type }: X, arg_0: string, arg_0_: string) {
+>isA4 : ({ type }: X, arg_0: string, arg_0_: string) => arg_0__ is { type: "A"; a: string; }
+>     : ^        ^^ ^^     ^^      ^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>arg_0 : string
+>      : ^^^^^^
+>arg_0_ : string
+>       : ^^^^^^
+
+  return type === 'A';
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+}
+function isA5({ type }: X) {
+>isA5 : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>     : ^        ^^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+
+  const arg_0 = 1;
+>arg_0 : 1
+>      : ^
+>1 : 1
+>  : ^
+
+  return type === 'A';
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+}
+
+interface AInferrer {
+  isA(x: X): x is { type: 'A'; a: string };
+>isA : (x: X) => x is { type: "A"; a: string; }
+>    : ^ ^^ ^^^^^                              
+>x : X
+>  : ^
+>type : "A"
+>     : ^^^
+>a : string
+>  : ^^^^^^
+}
+
+class AInferrerImpl implements AInferrer {
+>AInferrerImpl : AInferrerImpl
+>              : ^^^^^^^^^^^^^
+
+  isA({type}: X) {
+>isA : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>    : ^        ^^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+
+    return type === 'A';
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+  }
+}
+
+const aInf = new AInferrerImpl();
+>aInf : AInferrerImpl
+>     : ^^^^^^^^^^^^^
+>new AInferrerImpl() : AInferrerImpl
+>                    : ^^^^^^^^^^^^^
+>AInferrerImpl : typeof AInferrerImpl
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+if (aInf.isA(xs[0])) {
+>aInf.isA(xs[0]) : boolean
+>                : ^^^^^^^
+>aInf.isA : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>         : ^        ^^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>aInf : AInferrerImpl
+>     : ^^^^^^^^^^^^^
+>isA : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>    : ^        ^^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>xs[0] : X
+>      : ^
+>xs : X[]
+>   : ^^^
+>0 : 0
+>  : ^
+
+  let t: 'A' = xs[0].type;  // should ok
+>t : "A"
+>  : ^^^
+>xs[0].type : "A"
+>           : ^^^
+>xs[0] : { type: "A"; a: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
+>xs : X[]
+>   : ^^^
+>0 : 0
+>  : ^
+>type : "A"
+>     : ^^^
+
+} else {
+  let t: 'B' = xs[0].type;  // should ok
+>t : "B"
+>  : ^^^
+>xs[0].type : "B"
+>           : ^^^
+>xs[0] : { type: "B"; b: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
+>xs : X[]
+>   : ^^^
+>0 : 0
+>  : ^
+>type : "B"
+>     : ^^^
+}

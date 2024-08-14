@@ -6354,18 +6354,21 @@ declare namespace ts {
         kind: TypePredicateKind.This;
         parameterName: undefined;
         parameterIndex: undefined;
+        isDestructuringParameter: undefined;
         type: Type;
     }
     interface IdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
+        isDestructuringParameter: boolean | undefined;
         type: Type;
     }
     interface AssertsThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.AssertsThis;
         parameterName: undefined;
         parameterIndex: undefined;
+        isDestructuringParameter: undefined;
         type: Type | undefined;
     }
     interface AssertsIdentifierTypePredicate extends TypePredicateBase {

@@ -828,3 +828,83 @@ function isA2(x: X) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 287, 14))
 >type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
 }
+function isA3({ type }: X, arg_0: string,) {
+>isA3 : Symbol(isA3, Decl(inferTypePredicates.ts, 289, 1))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 290, 15))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+>arg_0 : Symbol(arg_0, Decl(inferTypePredicates.ts, 290, 26))
+
+  return type === 'A';
+>type : Symbol(type, Decl(inferTypePredicates.ts, 290, 15))
+}
+function isA4({ type }: X, arg_0: string, arg_0_: string) {
+>isA4 : Symbol(isA4, Decl(inferTypePredicates.ts, 292, 1))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 293, 15))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+>arg_0 : Symbol(arg_0, Decl(inferTypePredicates.ts, 293, 26))
+>arg_0_ : Symbol(arg_0_, Decl(inferTypePredicates.ts, 293, 41))
+
+  return type === 'A';
+>type : Symbol(type, Decl(inferTypePredicates.ts, 293, 15))
+}
+function isA5({ type }: X) {
+>isA5 : Symbol(isA5, Decl(inferTypePredicates.ts, 295, 1))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 296, 15))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+
+  const arg_0 = 1;
+>arg_0 : Symbol(arg_0, Decl(inferTypePredicates.ts, 297, 7))
+
+  return type === 'A';
+>type : Symbol(type, Decl(inferTypePredicates.ts, 296, 15))
+}
+
+interface AInferrer {
+>AInferrer : Symbol(AInferrer, Decl(inferTypePredicates.ts, 299, 1))
+
+  isA(x: X): x is { type: 'A'; a: string };
+>isA : Symbol(AInferrer.isA, Decl(inferTypePredicates.ts, 301, 21))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 302, 6))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 302, 6))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 302, 19))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 302, 30))
+}
+
+class AInferrerImpl implements AInferrer {
+>AInferrerImpl : Symbol(AInferrerImpl, Decl(inferTypePredicates.ts, 303, 1))
+>AInferrer : Symbol(AInferrer, Decl(inferTypePredicates.ts, 299, 1))
+
+  isA({type}: X) {
+>isA : Symbol(AInferrerImpl.isA, Decl(inferTypePredicates.ts, 305, 42))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 306, 7))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+
+    return type === 'A';
+>type : Symbol(type, Decl(inferTypePredicates.ts, 306, 7))
+  }
+}
+
+const aInf = new AInferrerImpl();
+>aInf : Symbol(aInf, Decl(inferTypePredicates.ts, 311, 5))
+>AInferrerImpl : Symbol(AInferrerImpl, Decl(inferTypePredicates.ts, 303, 1))
+
+if (aInf.isA(xs[0])) {
+>aInf.isA : Symbol(AInferrerImpl.isA, Decl(inferTypePredicates.ts, 305, 42))
+>aInf : Symbol(aInf, Decl(inferTypePredicates.ts, 311, 5))
+>isA : Symbol(AInferrerImpl.isA, Decl(inferTypePredicates.ts, 305, 42))
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+
+  let t: 'A' = xs[0].type;  // should ok
+>t : Symbol(t, Decl(inferTypePredicates.ts, 313, 5))
+>xs[0].type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10))
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10))
+
+} else {
+  let t: 'B' = xs[0].type;  // should ok
+>t : Symbol(t, Decl(inferTypePredicates.ts, 315, 5))
+>xs[0].type : Symbol(type, Decl(inferTypePredicates.ts, 279, 37))
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 37))
+}

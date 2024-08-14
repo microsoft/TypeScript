@@ -1133,6 +1133,8 @@ export const notImplementedResolver: EmitResolver = {
     isReferencedAliasDeclaration: notImplemented,
     isTopLevelValueImportEqualsWithEntityName: notImplemented,
     hasNodeCheckFlag: notImplemented,
+    getDestructuringParameterIndexFromTypePredicate: notImplemented,
+    generateNameForDestructuringParameter: notImplemented,
     isDeclarationVisible: notImplemented,
     isLateBound: (_node): _node is LateBoundDeclaration => false,
     collectLinkedAliases: notImplemented,

@@ -291,6 +291,33 @@ function isA1({ type }: X) {
 function isA2(x: X) {
   return x.type === 'A';
 }
+function isA3({ type }: X, arg_0: string,) {
+  return type === 'A';
+}
+function isA4({ type }: X, arg_0: string, arg_0_: string) {
+  return type === 'A';
+}
+function isA5({ type }: X) {
+  const arg_0 = 1;
+  return type === 'A';
+}
+
+interface AInferrer {
+  isA(x: X): x is { type: 'A'; a: string };
+}
+
+class AInferrerImpl implements AInferrer {
+  isA({type}: X) {
+    return type === 'A';
+  }
+}
+
+const aInf = new AInferrerImpl();
+if (aInf.isA(xs[0])) {
+  let t: 'A' = xs[0].type;  // should ok
+} else {
+  let t: 'B' = xs[0].type;  // should ok
+}
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -562,6 +589,35 @@ function isA1(_a) {
 function isA2(x) {
     return x.type === 'A';
 }
+function isA3(_a, arg_0) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA4(_a, arg_0, arg_0_) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA5(_a) {
+    var type = _a.type;
+    var arg_0 = 1;
+    return type === 'A';
+}
+var AInferrerImpl = /** @class */ (function () {
+    function AInferrerImpl() {
+    }
+    AInferrerImpl.prototype.isA = function (_a) {
+        var type = _a.type;
+        return type === 'A';
+    };
+    return AInferrerImpl;
+}());
+var aInf = new AInferrerImpl();
+if (aInf.isA(xs[0])) {
+    var t = xs[0].type; // should ok
+}
+else {
+    var t = xs[0].type; // should ok
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -670,7 +726,7 @@ declare const filtered2: {
     type: 'A';
     a: string;
 }[];
-declare function isA1({ type }: X): arg_0 is {
+declare function isA1(arg_0: X): arg_0 is {
     type: "A";
     a: string;
 };
@@ -678,3 +734,28 @@ declare function isA2(x: X): x is {
     type: "A";
     a: string;
 };
+declare function isA3(arg_0_: X, arg_0: string): arg_0_ is {
+    type: "A";
+    a: string;
+};
+declare function isA4(arg_0__: X, arg_0: string, arg_0_: string): arg_0__ is {
+    type: "A";
+    a: string;
+};
+declare function isA5(arg_0_: X): arg_0_ is {
+    type: "A";
+    a: string;
+};
+interface AInferrer {
+    isA(x: X): x is {
+        type: 'A';
+        a: string;
+    };
+}
+declare class AInferrerImpl implements AInferrer {
+    isA(arg_0: X): arg_0 is {
+        type: "A";
+        a: string;
+    };
+}
+declare const aInf: AInferrerImpl;
