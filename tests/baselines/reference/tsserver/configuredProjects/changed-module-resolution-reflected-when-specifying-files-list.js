@@ -47,6 +47,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/solution/projects/project/file1.ts ProjectRootPath: undefined:: Result: /users/username/solution/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/username/solution/projects/project/tsconfig.json, currentDirectory: /users/username/solution/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/solution/projects/project/tsconfig.json 2000 undefined Project: /users/username/solution/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /users/username/solution/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/users/username/solution/projects/project/file1.ts"
+ ],
+ "options": {
+  "module": 2,
+  "configFilePath": "/users/username/solution/projects/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -57,15 +66,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /users/username/solution/projects/project/file1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /users/username/solution/projects/project/tsconfig.json : {
- "rootNames": [
-  "/users/username/solution/projects/project/file1.ts"
- ],
- "options": {
-  "module": 2,
-  "configFilePath": "/users/username/solution/projects/project/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/solution/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/solution/projects/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info

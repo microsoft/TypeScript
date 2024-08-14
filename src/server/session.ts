@@ -2193,6 +2193,9 @@ export class Session<TMessage = string> implements EventSender {
         const references: ReferenceEntry[] = [];
         const seen = createDocumentSpanSet(this.host.useCaseSensitiveFileNames);
 
+        // TODO:: sheetal: Are we suppose to do like find All references loading more projects:
+        // Eg test getFileReferences_deduplicate.ts and getFileReferences_server2.ts checks for file references from two projects
+        // but we dont open those projects by default any more for opening tsconfig.json file
         forEachProjectInProjects(projects, /*path*/ undefined, project => {
             if (project.getCancellationToken().isCancellationRequested()) return;
 

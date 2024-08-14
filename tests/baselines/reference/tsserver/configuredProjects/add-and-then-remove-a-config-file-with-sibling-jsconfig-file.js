@@ -54,6 +54,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -64,14 +72,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -207,40 +207,15 @@ ScriptInfos::
 1: When config file is deleted and then another file is opened
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before request
 //// [/user/username/projects/myproject/folder/tsconfig.json] deleted
 
-PolledWatches::
-/user/username/projects/myproject/folder/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json: *new*
-  {}
-/user/username/projects/myproject/folder/tsconfig.json:
-  {}
-
-Timeout callback:: count: 2
-1: /user/username/projects/myproject/folder/jsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
-    dirty: true
-    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -258,16 +233,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Change in config file /user/username/projects/myproject/folder/tsconfig.json detected, Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
-      }
-    }
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -281,6 +248,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
@@ -394,13 +371,27 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/myproject/folder/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/folder/jsconfig.json: *new*
+  {}
+/user/username/projects/myproject/folder/tsconfig.json:
+  {}
+
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    dirty: false *changed*
-    initialLoadPending: false *changed*
-    autoImportProviderHost: false *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -428,10 +419,9 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
-Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/folder/jsconfig.json
-3: /user/username/projects/myproject/folder/tsconfig.json
-4: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 2
+2: /user/username/projects/myproject/folder/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/folder/tsconfig.json]
 {
   "files": [
@@ -440,11 +430,10 @@ Before running Timeout callback:: count: 3
 }
 
 
-Timeout callback:: count: 3
-2: *ensureProjectForOpenFiles* *deleted*
-1: /user/username/projects/myproject/folder/jsconfig.json
-3: /user/username/projects/myproject/folder/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 2
+1: *ensureProjectForOpenFiles* *deleted*
+2: /user/username/projects/myproject/folder/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/folder/jsconfig.json (Configured)
@@ -458,7 +447,6 @@ Projects::
     isOrphan: false *changed*
     deferredClose: undefined *changed*
 
-Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1198,6 +1186,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1208,14 +1204,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -1349,16 +1337,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -1372,6 +1350,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
@@ -1486,11 +1474,11 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 1
-5: *ensureProjectForOpenFiles*
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/folder/tsconfig.json] deleted
 
 Timeout callback:: count: 1
-5: *ensureProjectForOpenFiles* *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/folder/jsconfig.json (Configured)
@@ -1636,8 +1624,8 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-6: /user/username/projects/myproject/folder/tsconfig.json
-7: *ensureProjectForOpenFiles*
+5: /user/username/projects/myproject/folder/tsconfig.json
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/folder/tsconfig.json]
 {
   "files": [
@@ -1647,8 +1635,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-6: /user/username/projects/myproject/folder/tsconfig.json *new*
-7: *ensureProjectForOpenFiles* *new*
+5: /user/username/projects/myproject/folder/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject2* (Inferred)
@@ -2485,6 +2473,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -2495,14 +2491,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -2624,40 +2612,15 @@ ScriptInfos::
 3: Check when both files are closed when config file is deleted
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before request
 //// [/user/username/projects/myproject/folder/tsconfig.json] deleted
 
-PolledWatches::
-/user/username/projects/myproject/folder/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json: *new*
-  {}
-/user/username/projects/myproject/folder/tsconfig.json:
-  {}
-
-Timeout callback:: count: 2
-8: /user/username/projects/myproject/folder/jsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+7: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
-    dirty: true
-    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -2675,16 +2638,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Change in config file /user/username/projects/myproject/folder/tsconfig.json detected, Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
-      }
-    }
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -2698,6 +2653,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
@@ -2764,13 +2729,27 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/myproject/folder/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/folder/jsconfig.json: *new*
+  {}
+/user/username/projects/myproject/folder/tsconfig.json:
+  {}
+
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    dirty: false *changed*
-    initialLoadPending: false *changed*
-    autoImportProviderHost: false *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -3188,6 +3167,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -3198,14 +3185,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -3328,42 +3307,16 @@ ScriptInfos::
 4: Check when both files are closed one by one when file is deleted
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/folder/jsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before request
 //// [/user/username/projects/myproject/folder/tsconfig.json] deleted
 
-PolledWatches::
-/user/username/projects/myproject/folder/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json: *new*
-  {}
-/user/username/projects/myproject/folder/tsconfig.json:
-  {}
-
-Timeout callback:: count: 2
-8: /user/username/projects/myproject/folder/jsconfig.json *deleted*
-9: *ensureProjectForOpenFiles* *deleted*
-10: /user/username/projects/myproject/folder/jsconfig.json *new*
-11: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+7: *ensureProjectForOpenFiles* *deleted*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
-    dirty: true
-    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -3381,16 +3334,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Change in config file /user/username/projects/myproject/folder/tsconfig.json detected, Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
-      }
-    }
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -3404,6 +3349,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
@@ -3470,13 +3425,27 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/myproject/folder/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/folder/jsconfig.json: *new*
+  {}
+/user/username/projects/myproject/folder/tsconfig.json:
+  {}
+
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    dirty: false *changed*
-    initialLoadPending: false *changed*
-    autoImportProviderHost: false *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -3599,7 +3568,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -3647,13 +3615,11 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects/myproject/folder/commonFile1.ts:
+  {}
 /user/username/projects/myproject/folder/jsconfig.json:
   {}
 /user/username/projects/myproject/folder/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/folder/commonFile1.ts:
   {}
 
 Projects::
@@ -3678,7 +3644,7 @@ ScriptInfos::
         /user/username/projects/myproject/folder/tsconfig.json
         /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject5* *new*
-/user/username/projects/myproject/folder/commonFile1.ts *deleted*
+/user/username/projects/myproject/folder/commonFile1.ts
     version: SVC-4-0
     containingProjects: 1
         /user/username/projects/myproject/folder/tsconfig.json
@@ -3745,6 +3711,8 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects/myproject/folder/commonFile1.ts:
+  {}
 /user/username/projects/myproject/folder/commonFile2.ts: *new*
   {}
 /user/username/projects/myproject/folder/jsconfig.json:
@@ -3776,6 +3744,10 @@ ScriptInfos::
         /user/username/projects/myproject/folder/tsconfig.json
         /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject5*
+/user/username/projects/myproject/folder/commonFile1.ts
+    version: SVC-4-0
+    containingProjects: 1
+        /user/username/projects/myproject/folder/tsconfig.json
 /user/username/projects/myproject/folder/commonFile2.ts *changed*
     open: false *changed*
     version: SVC-4-0
@@ -3841,6 +3813,8 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects/myproject/folder/commonFile1.ts:
+  {}
 /user/username/projects/myproject/folder/commonFile2.ts:
   {}
 /user/username/projects/myproject/folder/jsconfig.json:
@@ -3874,6 +3848,10 @@ ScriptInfos::
         /user/username/projects/myproject/folder/tsconfig.json
         /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject5*
+/user/username/projects/myproject/folder/commonFile1.ts
+    version: SVC-4-0
+    containingProjects: 1
+        /user/username/projects/myproject/folder/tsconfig.json
 /user/username/projects/myproject/folder/commonFile2.ts
     version: SVC-4-0
     containingProjects: 1
@@ -3953,6 +3931,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -3995,6 +3974,8 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/user/username/projects/myproject/folder/commonFile1.ts:
+  {}
 /user/username/projects/myproject/folder/commonFile2.ts:
   {}
 /user/username/projects/myproject/folder/jsconfig.json:
@@ -4030,6 +4011,10 @@ ScriptInfos::
         /dev/null/inferredProject5*
         /user/username/projects/myproject/folder/tsconfig.json *deleted*
         /user/username/projects/myproject/folder/jsconfig.json *deleted*
+/user/username/projects/myproject/folder/commonFile1.ts *deleted*
+    version: SVC-4-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/folder/tsconfig.json *deleted*
 /user/username/projects/myproject/folder/commonFile2.ts *deleted*
     version: SVC-4-0
     containingProjects: 0 *changed*
@@ -4122,6 +4107,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -4132,14 +4125,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -4261,42 +4246,16 @@ ScriptInfos::
 5: Check when both files are closed one by one when file is deleted order changed
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/folder/jsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/folder/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
 Before request
 //// [/user/username/projects/myproject/folder/tsconfig.json] deleted
 
-PolledWatches::
-/user/username/projects/myproject/folder/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json: *new*
-  {}
-/user/username/projects/myproject/folder/tsconfig.json:
-  {}
-
-Timeout callback:: count: 2
-10: /user/username/projects/myproject/folder/jsconfig.json *deleted*
-11: *ensureProjectForOpenFiles* *deleted*
-12: /user/username/projects/myproject/folder/jsconfig.json *new*
-13: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+8: *ensureProjectForOpenFiles* *deleted*
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
-    dirty: true
-    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -4314,16 +4273,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Change in config file /user/username/projects/myproject/folder/tsconfig.json detected, Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
-      }
-    }
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -4337,6 +4288,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
@@ -4403,13 +4364,27 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/myproject/folder/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/folder/jsconfig.json: *new*
+  {}
+/user/username/projects/myproject/folder/tsconfig.json:
+  {}
+
 Projects::
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    dirty: false *changed*
-    initialLoadPending: false *changed*
-    autoImportProviderHost: false *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -4482,6 +4457,18 @@ FsWatches::
 /user/username/projects/myproject/folder/tsconfig.json:
   {}
 
+Projects::
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+    autoImportProviderHost: false
+/user/username/projects/myproject/folder/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true
+    deferredClose: true
+
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
@@ -4532,11 +4519,28 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] `remove Project::
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts
+	/user/username/projects/myproject/folder/commonFile2.ts
+
+
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	commonFile2.ts
+	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -4579,11 +4583,13 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
+/user/username/projects/myproject/folder/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
 /user/username/projects/myproject/folder/commonFile2.ts:
   {}
 /user/username/projects/myproject/folder/jsconfig.json:
-  {}
-/user/username/projects/myproject/folder/tsconfig.json:
   {}
 
 Projects::
@@ -4591,10 +4597,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/user/username/projects/myproject/folder/jsconfig.json (Configured)
+/user/username/projects/myproject/folder/jsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-    autoImportProviderHost: false
+    isClosed: true *changed*
+    noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -4604,18 +4612,18 @@ Projects::
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
-    containingProjects: 3 *changed*
+    containingProjects: 2 *changed*
         /user/username/projects/myproject/folder/tsconfig.json
-        /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject6* *new*
+        /user/username/projects/myproject/folder/jsconfig.json *deleted*
 /user/username/projects/myproject/folder/commonFile1.ts (Open)
     version: SVC-5-0
     containingProjects: 1
         /user/username/projects/myproject/folder/tsconfig.json
-/user/username/projects/myproject/folder/commonFile2.ts
+/user/username/projects/myproject/folder/commonFile2.ts *deleted*
     version: SVC-5-0
-    containingProjects: 1
-        /user/username/projects/myproject/folder/jsconfig.json
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/folder/jsconfig.json *deleted*
 /user/username/projects/random/random.ts (Open) *new*
     version: SVC-8-0
     containingProjects: 1
@@ -4634,10 +4642,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/commonFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -4677,10 +4681,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/folder/commonFile1.ts: *new*
   {}
-/user/username/projects/myproject/folder/commonFile2.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json:
-  {}
 /user/username/projects/myproject/folder/tsconfig.json:
   {}
 
@@ -4688,11 +4688,6 @@ Projects::
 /dev/null/inferredProject6* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-    autoImportProviderHost: false
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true *changed*
     autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -4704,19 +4699,14 @@ Projects::
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
-    containingProjects: 3
+    containingProjects: 2
         /user/username/projects/myproject/folder/tsconfig.json
-        /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject6*
 /user/username/projects/myproject/folder/commonFile1.ts *changed*
     open: false *changed*
     version: SVC-5-0
     containingProjects: 1
         /user/username/projects/myproject/folder/tsconfig.json
-/user/username/projects/myproject/folder/commonFile2.ts
-    version: SVC-5-0
-    containingProjects: 1
-        /user/username/projects/myproject/folder/jsconfig.json
 /user/username/projects/random/random.ts (Open)
     version: SVC-8-0
     containingProjects: 1
@@ -4736,10 +4726,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/random/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/random/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -4779,10 +4765,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/folder/commonFile1.ts:
   {}
-/user/username/projects/myproject/folder/commonFile2.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json:
-  {}
 /user/username/projects/myproject/folder/tsconfig.json:
   {}
 
@@ -4792,11 +4774,6 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
-    autoImportProviderHost: false
-/user/username/projects/myproject/folder/jsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
     autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -4808,18 +4785,13 @@ Projects::
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
-    containingProjects: 3
+    containingProjects: 2
         /user/username/projects/myproject/folder/tsconfig.json
-        /user/username/projects/myproject/folder/jsconfig.json
         /dev/null/inferredProject6*
 /user/username/projects/myproject/folder/commonFile1.ts
     version: SVC-5-0
     containingProjects: 1
         /user/username/projects/myproject/folder/tsconfig.json
-/user/username/projects/myproject/folder/commonFile2.ts
-    version: SVC-5-0
-    containingProjects: 1
-        /user/username/projects/myproject/folder/jsconfig.json
 /user/username/projects/random/random.ts *deleted*
     open: false *changed*
     version: SVC-8-0
@@ -4875,28 +4847,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/folder/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts
-	/user/username/projects/myproject/folder/commonFile2.ts
-
-
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	commonFile2.ts
-	  Part of 'files' list in tsconfig.json
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/folder/commonFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -4940,10 +4891,6 @@ FsWatches::
 FsWatches *deleted*::
 /user/username/projects/myproject/folder/commonFile1.ts:
   {}
-/user/username/projects/myproject/folder/commonFile2.ts:
-  {}
-/user/username/projects/myproject/folder/jsconfig.json:
-  {}
 /user/username/projects/myproject/folder/tsconfig.json:
   {}
 
@@ -4953,12 +4900,6 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
-    autoImportProviderHost: undefined *changed*
-/user/username/projects/myproject/folder/jsconfig.json (Configured) *deleted*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    isClosed: true *changed*
-    noOpenRef: true
     autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
@@ -4974,15 +4915,10 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject6*
         /user/username/projects/myproject/folder/tsconfig.json *deleted*
-        /user/username/projects/myproject/folder/jsconfig.json *deleted*
 /user/username/projects/myproject/folder/commonFile1.ts *deleted*
     version: SVC-5-0
     containingProjects: 0 *changed*
         /user/username/projects/myproject/folder/tsconfig.json *deleted*
-/user/username/projects/myproject/folder/commonFile2.ts *deleted*
-    version: SVC-5-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/folder/jsconfig.json *deleted*
 /user/username/projects/random/random.ts (Open) *new*
     version: SVC-9-0
     containingProjects: 1
@@ -5072,6 +5008,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/commonFile1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/tsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/folder/commonFile1.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -5082,14 +5026,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/folder/commonFile1.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/folder/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/tsconfig.json WatchType: Type roots
@@ -5223,16 +5159,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/folder/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/folder/jsconfig.json, currentDirectory: /user/username/projects/myproject/folder
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/jsconfig.json 2000 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/folder/commonFile2.ts"
@@ -5246,6 +5172,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/folder/jsconf
   "configFilePath": "/user/username/projects/myproject/folder/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/folder/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/folder/commonFile2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/folder/jsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder/node_modules/@types 1 undefined Project: /user/username/projects/myproject/folder/jsconfig.json WatchType: Type roots

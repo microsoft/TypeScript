@@ -581,7 +581,7 @@ testCompositeFunction('why hello there', 42);`,
         baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
     });
 
-    it("when finding local reference doesnt load ancestor/sibling projects", () => {
+    it("when finding local reference doesnt load ancestor sibling projects", () => {
         const solutionLocation = "/user/username/projects/solution";
         const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
@@ -661,7 +661,7 @@ testCompositeFunction('why hello there', 42);`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs("projectReferences", "finding local reference doesnt load ancestor sibling projects", session);
     });
 
     it("when finding references in overlapping projects", () => {

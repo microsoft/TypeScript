@@ -688,14 +688,6 @@ export class ScriptInfo {
         return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
-    /** @internal */
-    isContainedByBackgroundProject() {
-        return some(
-            this.containingProjects,
-            isBackgroundProject,
-        );
-    }
-
     /**
      *  @param line 1 based index
      */
@@ -745,4 +737,20 @@ function failIfInvalidLocation(location: protocol.Location) {
 
     Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
     Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
+}
+
+/** @internal */
+export function scriptInfoIsContainedByBackgroundProject(info: ScriptInfo) {
+    return some(
+        info.containingProjects,
+        isBackgroundProject,
+    );
+}
+
+/** @internal */
+export function scriptInfoIsContainedByDeferredClosedProject(info: ScriptInfo) {
+    return some(
+        info.containingProjects,
+        isProjectDeferredClose,
+    );
 }
