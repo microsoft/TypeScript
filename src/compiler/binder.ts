@@ -3791,7 +3791,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 node.kind === SyntaxKind.ClassDeclaration ||
                 // report errors on enums with preserved emit
                 (node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options))) ||
-                // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                // report error on instantiated modules
                 (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 
             if (reportError) {
