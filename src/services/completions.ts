@@ -173,7 +173,7 @@ import {
     isIdentifierPart,
     isIdentifierStart,
     isIdentifierText,
-    isImportable,
+    isImportableFile,
     isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -272,6 +272,7 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
+    JsTyping,
     JsxAttribute,
     JsxAttributes,
     JsxClosingElement,
@@ -340,6 +341,7 @@ import {
     SemanticMeaning,
     setEmitFlags,
     setSnippetElement,
+    shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
     SignatureKind,
     singleElementArray,
@@ -389,7 +391,7 @@ import {
     UnionType,
     UserPreferences,
     VariableDeclaration,
-    walkUpParenthesizedExpressions
+    walkUpParenthesizedExpressions,
 } from "./_namespaces/ts.js";
 
 // Exported only for tests
@@ -4199,11 +4201,20 @@ function getCompletionData(
         );
 
         function isImportableExportInfo(info: SymbolExportInfo) {
-            return isImportable(
+            const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
+            if (!moduleFile) {
+                const moduleName = stripQuotes(info.moduleSymbol.name);
+                if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
+                    return false;
+                }
+                return packageJsonFilter
+                    ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
+                    : true;
+            }
+            return isImportableFile(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                 sourceFile,
-                tryCast(info.moduleSymbol.valueDeclaration, isSourceFile),
-                info.moduleSymbol,
+                moduleFile,
                 preferences,
                 packageJsonFilter,
                 getModuleSpecifierResolutionHost(info.isFromPackageJson),

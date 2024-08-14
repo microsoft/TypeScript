@@ -32,7 +32,6 @@ import {
     isKnownSymbol,
     isNonGlobalAmbientModule,
     isPrivateIdentifierSymbol,
-    JsTyping,
     LanguageServiceHost,
     mapDefined,
     ModuleSpecifierCache,
@@ -45,7 +44,6 @@ import {
     pathContainsNodeModules,
     Program,
     ScriptTarget,
-    shouldUseUriStyleNodeCoreModules,
     skipAlias,
     SourceFile,
     startsWith,
@@ -364,54 +362,41 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 }
 
 /** @internal */
-export function isImportable(
+export function isImportableFile(
     program: Program,
-    fromFile: SourceFile,
-    toFile: SourceFile | undefined,
-    toModule: Symbol,
+    from: SourceFile,
+    to: SourceFile,
     preferences: UserPreferences,
     packageJsonFilter: PackageJsonImportFilter | undefined,
     moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
     moduleSpecifierCache: ModuleSpecifierCache | undefined,
 ): boolean {
-    if (!toFile) {
-        // Ambient module
-        const moduleName = stripQuotes(toModule.name);
-        if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(fromFile, program)) {
-            return false;
-        }
-        return !packageJsonFilter
-            || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)
-            || fileContainsPackageImport(fromFile, moduleName);
-    }
-
-    Debug.assertIsDefined(toFile);
-    if (fromFile === toFile) return false;
-    const cachedResult = moduleSpecifierCache?.get(fromFile.path, toFile.path, preferences, {});
+    if (from === to) return false;
+    const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(fromFile, cachedResult.packageName);
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(from, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
     const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-        fromFile.fileName,
-        toFile.fileName,
+        from.fileName,
+        to.fileName,
         moduleSpecifierResolutionHost,
         /*preferSymlinks*/ false,
         toPath => {
             const toFile = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === toFile || !toFile) &&
-                isImportablePath(fromFile.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (toFile === to || !toFile) &&
+                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
         },
     );
 
     if (packageJsonFilter) {
-        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(toFile, moduleSpecifierResolutionHost) : undefined;
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(fromFile.path, toFile.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
-        return !!importInfo?.importable || !!importInfo?.packageName && fileContainsPackageImport(fromFile, importInfo.packageName);
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(to, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || !!importInfo?.packageName && fileContainsPackageImport(from, importInfo.packageName);
     }
 
     return hasImportablePath;
