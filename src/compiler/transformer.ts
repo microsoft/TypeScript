@@ -295,7 +295,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         set onSubstituteNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
-            Debug.assert(value !== undefined, "Value must not be 'undefined'");
+            Debug.assertIsDefined(value, "Value must not be 'undefined'");
             onSubstituteNode = value;
         },
         get onEmitNode() {
@@ -303,7 +303,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         set onEmitNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
-            Debug.assert(value !== undefined, "Value must not be 'undefined'");
+            Debug.assertIsDefined(value, "Value must not be 'undefined'");
             onEmitNode = value;
         },
         addDiagnostic(diag) {

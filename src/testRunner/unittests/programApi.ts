@@ -11,7 +11,7 @@ function verifyMissingFilePaths(missing: ReturnType<ts.Program["getMissingFilePa
     const map = new Set(expected);
     for (const missing of missingPaths) {
         const value = map.has(missing);
-        assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
+        assert.isTrue(value, `${missing} to be ${!value ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
         map.delete(missing);
     }
     const notFound = ts.arrayFrom(ts.mapDefinedIterator(map.keys(), k => map.has(k) ? k : undefined));

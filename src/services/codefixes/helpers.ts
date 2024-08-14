@@ -948,7 +948,7 @@ export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol
 }
 
 /** @internal */
-export function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {
+export function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node | undefined {
     const end = textSpanEnd(span);
     let token = getTokenAtPosition(sourceFile, span.start);
     while (token.end < end) {

@@ -736,10 +736,6 @@ function getCompletionEntriesForDirectoryFragment(
     exclude?: string,
     result = createNameAndKindSet(),
 ): NameAndKindSet {
-    if (fragment === undefined) {
-        fragment = "";
-    }
-
     fragment = normalizeSlashes(fragment);
 
     /**

@@ -2401,7 +2401,7 @@ export function isStatement(node: Node): node is Statement {
 
 function isBlockStatement(node: Node): node is Block {
     if (node.kind !== SyntaxKind.Block) return false;
-    if (node.parent !== undefined) {
+    if (node.parent) {
         if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
             return false;
         }

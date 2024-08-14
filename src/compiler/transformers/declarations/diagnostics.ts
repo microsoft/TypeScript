@@ -173,11 +173,11 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
     }
     function getAccessorNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
         const diagnosticMessage = getAccessorNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
-        return diagnosticMessage !== undefined ? {
+        return {
             diagnosticMessage,
             errorNode: node,
             typeName: (node as NamedDeclaration).name,
-        } : undefined;
+        };
     }
 
     function getAccessorNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -202,13 +202,13 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         }
     }
 
-    function getMethodNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
+    function getMethodNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
         const diagnosticMessage = getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
-        return diagnosticMessage !== undefined ? {
+        return {
             diagnosticMessage,
             errorNode: node,
             typeName: (node as NamedDeclaration).name,
-        } : undefined;
+        };
     }
 
     function getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -421,11 +421,11 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 
     function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
         const diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
-        return diagnosticMessage !== undefined ? {
+        return {
             diagnosticMessage,
             errorNode: node,
             typeName: (node as NamedDeclaration).name,
-        } : undefined;
+        };
     }
 
     function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult): DiagnosticMessage {

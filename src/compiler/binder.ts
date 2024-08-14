@@ -529,9 +529,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
     var blockScopeContainer: IsBlockScopedContainer;
     var lastContainer: HasLocals;
-    var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
+    var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[] | undefined;
     var seenThisKeyword: boolean;
-    var jsDocImports: JSDocImportTag[];
+    var jsDocImports: JSDocImportTag[] | undefined;
 
     // state used by control flow analysis
     var currentFlow: FlowNode;
@@ -611,8 +611,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         thisParentContainer = undefined!;
         blockScopeContainer = undefined!;
         lastContainer = undefined!;
-        delayedTypeAliases = undefined!;
-        jsDocImports = undefined!;
+        delayedTypeAliases = undefined;
+        jsDocImports = undefined;
         seenThisKeyword = false;
         currentFlow = undefined!;
         currentBreakTarget = undefined;

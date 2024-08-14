@@ -206,7 +206,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
             let newNameIndex: number | undefined;
             if (raw.sourceIndex !== undefined) {
                 newSourceIndex = sourceIndexToNewSourceIndexMap[raw.sourceIndex];
-                if (newSourceIndex === undefined) {
+                if (typeof newSourceIndex === "undefined") {
                     // Apply offsets to each position and fixup source entries
                     const rawPath = map.sources[raw.sourceIndex];
                     const relativePath = map.sourceRoot ? combinePaths(map.sourceRoot, rawPath) : rawPath;
@@ -222,7 +222,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
                 if (map.names && raw.nameIndex !== undefined) {
                     if (!nameIndexToNewNameIndexMap) nameIndexToNewNameIndexMap = [];
                     newNameIndex = nameIndexToNewNameIndexMap[raw.nameIndex];
-                    if (newNameIndex === undefined) {
+                    if (typeof newNameIndex === "undefined") {
                         nameIndexToNewNameIndexMap[raw.nameIndex] = newNameIndex = addName(map.names[raw.nameIndex]);
                     }
                 }
@@ -753,7 +753,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 
     function getSourceMappings(sourceIndex: number) {
         if (sourceMappings === undefined) {
-            const lists: SourceMappedPosition[][] = [];
+            const lists: (SourceMappedPosition)[][] = [];
             for (const mapping of getDecodedMappings()) {
                 if (!isSourceMappedPosition(mapping)) continue;
                 let list = lists[mapping.sourceIndex];
@@ -788,9 +788,11 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
             // if no exact match, closest is 2's complement of result
             targetIndex = ~targetIndex;
         }
-
+        if (targetIndex > sourceMappings.length - 1) {
+            return loc;
+        }
         const mapping = sourceMappings[targetIndex];
-        if (mapping === undefined || mapping.sourceIndex !== sourceIndex) {
+        if (mapping.sourceIndex !== sourceIndex) {
             return loc;
         }
 
@@ -806,9 +808,11 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
             // if no exact match, closest is 2's complement of result
             targetIndex = ~targetIndex;
         }
-
+        if (targetIndex > generatedMappings.length - 1) {
+            return loc;
+        }
         const mapping = generatedMappings[targetIndex];
-        if (mapping === undefined || !isSourceMappedPosition(mapping)) {
+        if (!isSourceMappedPosition(mapping)) {
             return loc;
         }
 

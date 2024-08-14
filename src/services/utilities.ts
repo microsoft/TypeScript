@@ -2012,7 +2012,7 @@ function removeOptionality(type: Type, isOptionalExpression: boolean, isOptional
 }
 
 /** @internal */
-export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
+export function isPossiblyTypeArgumentPosition(token: Node | undefined, sourceFile: SourceFile, checker: TypeChecker): boolean {
     const info = getPossibleTypeArgumentsInfo(token, sourceFile);
     return info !== undefined && (isPartOfTypeNode(info.called) ||
         getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0 ||

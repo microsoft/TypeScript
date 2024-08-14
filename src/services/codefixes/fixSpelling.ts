@@ -140,7 +140,6 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     else {
         const meaning = getMeaningFromLocation(node);
         const name = getTextOfNode(node);
-        Debug.assert(name !== undefined, "name should be defined");
         suggestedSymbol = checker.getSuggestedSymbolForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
     }
 

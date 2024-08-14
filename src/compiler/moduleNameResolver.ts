@@ -332,14 +332,14 @@ export interface ModuleResolutionState {
  * @internal
  */
 export interface PackageJsonPathFields {
-    typings?: string;
+    typings?: string | null; // eslint-disable-line no-restricted-syntax
     types?: string;
     typesVersions?: MapLike<MapLike<string[]>>;
     main?: string;
     tsconfig?: string;
     type?: string;
-    imports?: object;
-    exports?: object;
+    imports?: object | null; // eslint-disable-line no-restricted-syntax
+    exports?: object | null; // eslint-disable-line no-restricted-syntax
     name?: string;
     dependencies?: MapLike<string>;
     peerDependencies?: MapLike<string>;
@@ -351,8 +351,8 @@ interface PackageJson extends PackageJsonPathFields {
     version?: string;
 }
 
-function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
-function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined | null>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined; // eslint-disable-line no-restricted-syntax
+function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined | null>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures, no-restricted-syntax
 function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string" | "object", state: ModuleResolutionState): PackageJson[K] | undefined {
     if (!hasProperty(jsonContent, fieldName)) {
         if (state.traceEnabled) {
@@ -2265,7 +2265,7 @@ export function getEntrypointsFromPackageJsonInfo(
 
 function loadEntrypointsFromExportMap(
     scope: PackageJsonInfo,
-    exports: object,
+    exports: object | null, // eslint-disable-line no-restricted-syntax
     state: ModuleResolutionState & { host: GetPackageJsonEntrypointsHost; },
     extensions: Extensions,
 ): PathAndExtension[] | undefined {

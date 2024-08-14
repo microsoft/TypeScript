@@ -987,7 +987,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private performanceData: PerformanceData | undefined;
 
-    private currentRequestId!: number;
+    private currentRequestId: number | undefined;
     private errorCheck: MultistepOperation;
 
     protected host: ServerHost;
@@ -1024,7 +1024,7 @@ export class Session<TMessage = string> implements EventSender {
             : undefined;
         const multistepOperationHost: MultistepOperationHost = {
             executeWithRequestId: (requestId, action, performanceData) => this.executeWithRequestId(requestId, action, performanceData),
-            getCurrentRequestId: () => this.currentRequestId,
+            getCurrentRequestId: () => this.currentRequestId!, // TODO: GH#18217
             getPerformanceData: () => this.performanceData,
             getServerHost: () => this.host,
             logError: (err, cmd) => this.logError(err, cmd),
@@ -2614,7 +2614,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private reload(args: protocol.ReloadRequestArgs) {
         const file = toNormalizedPath(args.file);
-        const tempFileName = args.tmpfile === undefined ? undefined : toNormalizedPath(args.tmpfile);
+        const tempFileName = typeof args.tmpfile === "undefined" ? undefined : toNormalizedPath(args.tmpfile);
         const info = this.projectService.getScriptInfoForNormalizedPath(file);
         if (info) {
             this.changeSeq++;
@@ -2820,7 +2820,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
-        return (locationOrSpan as protocol.FileLocationRequestArgs).line !== undefined;
+        return typeof (locationOrSpan as protocol.FileLocationRequestArgs).line === "number";
     }
 
     private extractPositionOrRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): number | TextRange {
@@ -3725,7 +3725,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private resetCurrentRequest(requestId: number): void {
         Debug.assert(this.currentRequestId === requestId);
-        this.currentRequestId = undefined!; // TODO: GH#18217
+        this.currentRequestId = undefined;
         this.cancellationToken.resetRequest(requestId);
     }
 

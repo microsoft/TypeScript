@@ -1246,10 +1246,10 @@ function forEachChildInPartiallyEmittedExpression<T>(node: PartiallyEmittedExpre
  * that they appear in the source code. The language service depends on this property to locate nodes by position.
  */
 export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    if (node === undefined || node.kind <= SyntaxKind.LastToken) {
+    if (node.kind <= SyntaxKind.LastToken) {
         return;
     }
-    const fn = (forEachChildTable as Record<SyntaxKind, ForEachChildFunction<any>>)[node.kind];
+    const fn = (forEachChildTable as Partial<Record<SyntaxKind, ForEachChildFunction<any>>>)[node.kind];
     return fn === undefined ? undefined : fn(node, cbNode, cbNodes);
 }
 
@@ -9490,7 +9490,7 @@ namespace Parser {
 
             function parseSatisfiesTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocSatisfiesTag {
                 const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ false);
-                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                const comments = parseTrailingTagComments(start, getNodePos(), margin, indentText);
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
 
@@ -9506,7 +9506,7 @@ namespace Parser {
                 const moduleSpecifier = parseModuleSpecifier();
                 const attributes = tryParseImportAttributes();
 
-                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                const comments = parseTrailingTagComments(start, getNodePos(), margin, indentText);
                 return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start);
             }
 

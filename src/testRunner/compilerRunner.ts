@@ -166,7 +166,7 @@ class CompilerTest {
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     private otherFiles: Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: Required<TestCaseParser.CompilerSettings>) {
         const absoluteRootDir = vfs.srcFolder;
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
@@ -180,7 +180,7 @@ class CompilerTest {
                 if (configuredName) {
                     configuredName += ",";
                 }
-                configuredName += `${key.toLowerCase()}=${configurationOverrides[key].toLowerCase()}`;
+                configuredName += `${key.toLowerCase()}=${configurationOverrides[key]!.toLowerCase()}`;
             }
             if (configuredName) {
                 const extname = vpath.extname(this.justName);
@@ -284,11 +284,11 @@ class CompilerTest {
 
     public verifySourceMapRecord() {
         if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
-            const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
+            const record = this.result.getSourceMapRecord();
             const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                 ? null // eslint-disable-line no-restricted-syntax
-                : record;
+                : Utils.removeTestPathPrefixes(record);
             Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }

@@ -6,7 +6,7 @@ import * as ts from "../../_namespaces/ts.js";
 
 interface ClassificationEntry {
     value: any;
-    classification: ts.TokenClass;
+    classification: ts.TokenClass | undefined;
     position?: number;
 }
 
@@ -50,8 +50,7 @@ describe("unittests:: services:: Colorization", () => {
         return createClassification(text, ts.TokenClass.StringLiteral, position);
     }
     function finalEndOfLineState(value: number): ClassificationEntry {
-        // TODO: GH#18217
-        return { value, classification: undefined!, position: 0 };
+        return { value, classification: undefined, position: 0 };
     }
     function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
         return { value, classification, position };

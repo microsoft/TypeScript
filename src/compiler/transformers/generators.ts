@@ -370,7 +370,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     // allocating objects to store the same information to avoid GC overhead.
     //
     let labelOffsets: number[] | undefined; // The operation offset at which the label is defined.
-    let labelExpressions: Mutable<LiteralExpression>[][] | undefined; // The NumericLiteral nodes bound to each label.
+    let labelExpressions: (Mutable<LiteralExpression>[] | undefined)[] | undefined; // The NumericLiteral nodes bound to each label.
     let nextLabelId = 1; // The next label id to use.
 
     // Operations store information about generated code for the function body. This
@@ -2525,12 +2525,8 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             }
 
             const expression = factory.createNumericLiteral(Number.MAX_SAFE_INTEGER);
-            if (labelExpressions[label] === undefined) {
-                labelExpressions[label] = [expression];
-            }
-            else {
-                labelExpressions[label].push(expression);
-            }
+            labelExpressions[label] ??= [];
+            labelExpressions[label].push(expression);
 
             return expression;
         }
@@ -2944,12 +2940,8 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 if (labelNumbers === undefined) {
                     labelNumbers = [];
                 }
-                if (labelNumbers[labelNumber] === undefined) {
-                    labelNumbers[labelNumber] = [label];
-                }
-                else {
-                    labelNumbers[labelNumber].push(label);
-                }
+                labelNumbers[labelNumber] ??= [];
+                labelNumbers[labelNumber].push(label);
             }
         }
     }
@@ -2961,7 +2953,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         if (labelExpressions !== undefined && labelNumbers !== undefined) {
             for (let labelNumber = 0; labelNumber < labelNumbers.length; labelNumber++) {
                 const labels = labelNumbers[labelNumber];
-                if (labels !== undefined) {
+                if (labels) {
                     for (const label of labels) {
                         const expressions = labelExpressions[label];
                         if (expressions !== undefined) {

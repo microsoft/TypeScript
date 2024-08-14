@@ -1952,7 +1952,7 @@ export function createLanguageService(
     // TODO: GH#18217 frequently asserted as defined
     function getProgram(): Program | undefined {
         if (languageServiceMode === LanguageServiceMode.Syntactic) {
-            Debug.assert(program === undefined);
+            Debug.assert(!program);
             return undefined;
         }
 

@@ -457,7 +457,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
                 if (match) {
                     // if port is specified - use port + 1
                     // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    const currentPort = match[2] !== undefined
+                    const currentPort = typeof match[2] === "string"
                         ? +match[2]
                         : match[1].charAt(0) === "d" ? 5858 : 9229;
                     execArgv.push(`--${match[1]}=${currentPort + 1}`);

@@ -457,20 +457,18 @@ export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => 
 /** @internal */
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
     let result: T[] | undefined;
-    if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
-            const item = array[i];
-            const mapped = mapfn(item, i);
-            if (result || item !== mapped || isArray(mapped)) {
-                if (!result) {
-                    result = array.slice(0, i);
-                }
-                if (isArray(mapped)) {
-                    addRange(result, mapped);
-                }
-                else {
-                    result.push(mapped);
-                }
+    for (let i = 0; i < array.length; i++) {
+        const item = array[i];
+        const mapped = mapfn(item, i);
+        if (result || item !== mapped || isArray(mapped)) {
+            if (!result) {
+                result = array.slice(0, i);
+            }
+            if (isArray(mapped)) {
+                addRange(result, mapped);
+            }
+            else {
+                result.push(mapped);
             }
         }
     }
@@ -842,22 +840,20 @@ export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-
 /** @internal */
 export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function compact<T>(array: readonly T[]): readonly T[] {
+export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[] { // eslint-disable-line no-restricted-syntax
     let result: T[] | undefined;
-    if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
-            const v = array[i];
-            // Either the result has been initialized (and is looking to collect truthy values separately),
-            // or we've hit our first falsy value and need to copy over the current stretch of truthy values.
-            if (result ?? !v) {
-                result ??= array.slice(0, i);
-                if (v) {
-                    result.push(v);
-                }
+    for (let i = 0; i < array.length; i++) {
+        const v = array[i];
+        // Either the result has been initialized (and is looking to collect truthy values separately),
+        // or we've hit our first falsy value and need to copy over the current stretch of truthy values.
+        if (result ?? !v) {
+            result ??= array.slice(0, i) as T[];
+            if (v) {
+                result.push(v);
             }
         }
     }
-    return result ?? array;
+    return result ?? (array as T[]);
 }
 
 /**
@@ -1948,10 +1944,7 @@ export function equateValues<T>(a: T, b: T) {
  * @internal
  */
 export function equateStringsCaseInsensitive(a: string, b: string) {
-    return a === b
-        || a !== undefined
-            && b !== undefined
-            && a.toUpperCase() === b.toUpperCase();
+    return a === b || a.toUpperCase() === b.toUpperCase();
 }
 
 /**
@@ -2028,8 +2021,6 @@ export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined
  */
 export function compareStringsCaseInsensitive(a: string, b: string) {
     if (a === b) return Comparison.EqualTo;
-    if (a === undefined) return Comparison.LessThan;
-    if (b === undefined) return Comparison.GreaterThan;
     a = a.toUpperCase();
     b = b.toUpperCase();
     return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
@@ -2049,8 +2040,6 @@ export function compareStringsCaseInsensitive(a: string, b: string) {
  */
 export function compareStringsCaseInsensitiveEslintCompatible(a: string, b: string) {
     if (a === b) return Comparison.EqualTo;
-    if (a === undefined) return Comparison.LessThan;
-    if (b === undefined) return Comparison.GreaterThan;
     a = a.toLowerCase();
     b = b.toLowerCase();
     return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;

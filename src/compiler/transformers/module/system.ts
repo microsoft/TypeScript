@@ -597,7 +597,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             const parameterName = localName ? factory.getGeneratedNameForNode(localName) : factory.createUniqueName("");
             const statements: Statement[] = [];
             for (const entry of group.externalImports) {
-                const importVariableName = getLocalNameForExternalImport(factory, entry, currentSourceFile)!; // TODO: GH#18217
+                const importVariableName = getLocalNameForExternalImport(factory, entry, currentSourceFile);
                 switch (entry.kind) {
                     case SyntaxKind.ImportDeclaration:
                         if (!entry.importClause) {

@@ -4,7 +4,7 @@ import { Compiler } from "./harnessIO.js";
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
 export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
-    let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
+    let result: string | undefined = (source as (string & { replaceAll?: typeof source.replace; })).replaceAll?.(searchValue, replaceValue);
 
     if (result !== undefined) {
         return result;

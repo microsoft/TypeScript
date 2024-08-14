@@ -1679,7 +1679,7 @@ export class ProjectService {
     }
 
     findProject(projectName: string): Project | undefined {
-        if (projectName === undefined) {
+        if (typeof projectName === "undefined") {
             return undefined;
         }
         if (isInferredProjectName(projectName)) {
@@ -3708,7 +3708,7 @@ export class ProjectService {
 
     /** @internal */
     getSourceFileLike(fileName: string, projectNameOrProject: string | Project, declarationInfo?: ScriptInfo): SourceFileLike | undefined {
-        const project = (projectNameOrProject as Project).projectName ? projectNameOrProject as Project : this.findProject(projectNameOrProject as string);
+        const project = typeof projectNameOrProject === "string" ? this.findProject(projectNameOrProject) : projectNameOrProject;
         if (project) {
             const path = project.toPath(fileName);
             const sourceFile = project.getSourceFile(path);
@@ -5253,7 +5253,7 @@ export class ProjectService {
     }
 
     private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {
-        Debug.assert(project !== undefined);
+        Debug.assertIsDefined(project);
         let result = (this.packageJsonFilesMap ??= new Map()).get(path);
         if (!result) {
             // this.invalidateProjectPackageJson(path);
@@ -5334,7 +5334,7 @@ function createIncompleteCompletionsCache(): IncompleteCompletionsCache {
 export type ScriptInfoOrConfig = ScriptInfo | TsConfigSourceFile;
 /** @internal */
 export function isConfigFile(config: ScriptInfoOrConfig): config is TsConfigSourceFile {
-    return (config as TsConfigSourceFile).kind !== undefined;
+    return !!(config as TsConfigSourceFile).kind;
 }
 
 function printProjectWithoutFileNames(project: Project) {

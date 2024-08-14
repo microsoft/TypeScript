@@ -1218,12 +1218,6 @@ export * from "lib";
     }
 
     function assertListEqual(list1: readonly ts.Node[], list2: readonly ts.Node[]) {
-        if (list1 === undefined || list2 === undefined) {
-            assert.isUndefined(list1);
-            assert.isUndefined(list2);
-            return;
-        }
-
         assert.equal(list1.length, list2.length);
         for (let i = 0; i < list1.length; i++) {
             assertEqual(list1[i], list2[i]);

@@ -3370,8 +3370,8 @@ function getCompletionData(
     // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
     const isJsOnlyLocation = !insideJsDocTagTypeExpression && !insideJsDocImportTag && isSourceFileJS(sourceFile);
     const tokens = getRelevantTokens(position, sourceFile);
-    const previousToken = tokens.previousToken!;
-    let contextToken = tokens.contextToken!;
+    const previousToken = tokens.previousToken;
+    let contextToken = tokens.contextToken;
     log("getCompletionData: Get previous token: " + (timestamp() - start));
 
     // Find the node where completion is requested on.
@@ -3470,6 +3470,8 @@ function getCompletionData(
                 contextToken = parent;
                 parent = parent.parent;
             }
+
+            Debug.assertIsDefined(previousToken);
 
             // Fix location
             if (currentToken.parent === location) {
@@ -3578,7 +3580,7 @@ function getCompletionData(
         keywordFilters = KeywordCompletionFilters.None;
     }
     else if (isStartingCloseTag) {
-        const tagName = (contextToken.parent.parent as JsxElement).openingElement.tagName;
+        const tagName = (contextToken!.parent.parent as JsxElement).openingElement.tagName;
         const tagSymbol = typeChecker.getSymbolAtLocation(tagName);
         if (tagSymbol) {
             symbols = [tagSymbol];
@@ -3810,7 +3812,7 @@ function getCompletionData(
             const leftMostName = getLeftMostName(computedPropertyName.expression); // The completion is for `Symbol`, not `iterator`.
             const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
             // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
-            const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
+            const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken!, typeChecker);
             const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
             if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
@@ -3946,9 +3948,6 @@ function getCompletionData(
         completionKind = CompletionKind.Global;
         isNewIdentifierLocation = isNewIdentifierDefinitionLocation();
 
-        if (previousToken !== contextToken) {
-            Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
-        }
         // We need to find the node that will give us an appropriate scope to begin
         // aggregating completion candidates. This is achieved in 'getScopeNode'
         // by finding the first node that encompasses a position, accounting for whether a node
@@ -3974,9 +3973,14 @@ function getCompletionData(
         //   - 'contextToken' was adjusted to the token prior to 'previousToken'
         //      because we were at the end of an identifier.
         //   - 'previousToken' is defined.
-        const adjustedPosition = previousToken !== contextToken ?
-            previousToken.getStart() :
-            position;
+        let adjustedPosition: number;
+        if (previousToken !== contextToken) {
+            Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+            adjustedPosition = previousToken.getStart();
+        }
+        else {
+            adjustedPosition = position;
+        }
 
         const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
         isInSnippetScope = isSnippetScope(scopeNode);
@@ -4059,14 +4063,14 @@ function getCompletionData(
                     || isContextTokenTypeLocation(contextToken));
     }
 
-    function isContextTokenValueLocation(contextToken: Node) {
+    function isContextTokenValueLocation(contextToken: Node | undefined) {
         return contextToken &&
             ((contextToken.kind === SyntaxKind.TypeOfKeyword &&
                 (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent))) ||
                 (contextToken.kind === SyntaxKind.AssertsKeyword && contextToken.parent.kind === SyntaxKind.TypePredicate));
     }
 
-    function isContextTokenTypeLocation(contextToken: Node): boolean {
+    function isContextTokenTypeLocation(contextToken: Node | undefined): boolean {
         if (contextToken) {
             const parentKind = contextToken.parent.kind;
             switch (contextToken.kind) {
@@ -4643,6 +4647,7 @@ function getCompletionData(
     function tryGetClassLikeCompletionSymbols(): GlobalsSearch {
         const decl = tryGetObjectTypeDeclarationCompletionContainer(sourceFile, contextToken, location, position);
         if (!decl) return GlobalsSearch.Continue;
+        Debug.assertIsDefined(contextToken);
 
         // We're looking up possible property names from parent type.
         completionKind = CompletionKind.MemberLike;
@@ -4708,7 +4713,7 @@ function getCompletionData(
      * Returns the immediate owning class declaration of a context token,
      * on the condition that one exists and that the context implies completion should be given.
      */
-    function tryGetConstructorLikeCompletionContainer(contextToken: Node): ConstructorDeclaration | undefined {
+    function tryGetConstructorLikeCompletionContainer(contextToken: Node | undefined): ConstructorDeclaration | undefined {
         if (contextToken) {
             const parent = contextToken.parent;
             switch (contextToken.kind) {
@@ -4725,7 +4730,7 @@ function getCompletionData(
         return undefined;
     }
 
-    function tryGetFunctionLikeBodyCompletionContainer(contextToken: Node): FunctionLikeDeclaration | undefined {
+    function tryGetFunctionLikeBodyCompletionContainer(contextToken: Node | undefined): FunctionLikeDeclaration | undefined {
         if (contextToken) {
             let prev: Node;
             const container = findAncestor(contextToken.parent, (node: Node) => {
@@ -4742,7 +4747,7 @@ function getCompletionData(
         }
     }
 
-    function tryGetContainingJsxElement(contextToken: Node): JsxOpeningLikeElement | undefined {
+    function tryGetContainingJsxElement(contextToken: Node | undefined): JsxOpeningLikeElement | undefined {
         if (contextToken) {
             const parent = contextToken.parent;
             switch (contextToken.kind) {
@@ -4967,6 +4972,8 @@ function getCompletionData(
         if (ancestorClassLike && contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
             return false; // Don't block completions.
         }
+
+        Debug.assertIsDefined(previousToken);
 
         const ancestorPropertyDeclaraion = getAncestor(contextToken.parent, SyntaxKind.PropertyDeclaration);
         // If we are inside a class declaration and typing `constructor` after property declaration...
@@ -5278,13 +5285,13 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
     return undefined;
 }
 
-function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken: Node; previousToken: Node; } | { contextToken: undefined; previousToken: undefined; } {
+function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken?: Node; previousToken?: Node; } {
     const previousToken = findPrecedingToken(position, sourceFile);
     if (previousToken && position <= previousToken.end && (isMemberName(previousToken) || isKeyword(previousToken.kind))) {
-        const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
+        const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined);
         return { contextToken, previousToken };
     }
-    return { contextToken: previousToken as Node, previousToken: previousToken as Node };
+    return { contextToken: previousToken, previousToken };
 }
 
 function getAutoImportSymbolFromCompletionEntryData(name: string, data: CompletionEntryData, program: Program, host: LanguageServiceHost): { symbol: Symbol; origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport; } | undefined {
@@ -5320,10 +5327,9 @@ function getCompletionEntryDisplayNameForSymbol(
     }
     const name = originIncludesSymbolName(origin) ? origin.symbolName : symbol.name;
     if (
-        name === undefined
         // If the symbol is external module, don't show it in the completion list
         // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-        || symbol.flags & SymbolFlags.Module && isSingleOrDoubleQuote(name.charCodeAt(0))
+        symbol.flags & SymbolFlags.Module && isSingleOrDoubleQuote(name.charCodeAt(0))
         // If the symbol is the internal name of an ES symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
         || isKnownSymbol(symbol)
     ) {
@@ -5653,7 +5659,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
     }
 }
 
-function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
+function tryGetTypeLiteralNode(node: Node | undefined): TypeLiteralNode | undefined {
     if (!node) return undefined;
 
     const parent = node.parent;

@@ -1480,8 +1480,8 @@ function getCloseTokenForOpenToken(kind: SyntaxKind) {
 }
 
 let internedSizes: { tabSize: number; indentSize: number; };
-let internedTabsIndentation: string[] | undefined;
-let internedSpacesIndentation: string[] | undefined;
+let internedTabsIndentation: (string | undefined)[] | undefined;
+let internedSpacesIndentation: (string | undefined)[] | undefined;
 
 /** @internal */
 export function getIndentationString(indentation: number, options: EditorSettings): string {
@@ -1498,9 +1498,7 @@ export function getIndentationString(indentation: number, options: EditorSetting
         const spaces = indentation - tabs * options.tabSize!;
 
         let tabString: string;
-        if (!internedTabsIndentation) {
-            internedTabsIndentation = [];
-        }
+        internedTabsIndentation ??= [];
 
         if (internedTabsIndentation[tabs] === undefined) {
             internedTabsIndentation[tabs] = tabString = repeatString("\t", tabs);
@@ -1515,9 +1513,7 @@ export function getIndentationString(indentation: number, options: EditorSetting
         let spacesString: string;
         const quotient = Math.floor(indentation / options.indentSize!);
         const remainder = indentation % options.indentSize!;
-        if (!internedSpacesIndentation) {
-            internedSpacesIndentation = [];
-        }
+        internedSpacesIndentation ??= [];
 
         if (internedSpacesIndentation[quotient] === undefined) {
             spacesString = repeatString(" ", options.indentSize! * quotient);

@@ -2266,7 +2266,7 @@ const typeAcquisitionDeclaration: TsConfigOnlyOption = {
     elementOptions: getCommandLineTypeAcquisitionMap(),
     extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
 };
-let _tsconfigRootOptions: TsConfigOnlyOption;
+let _tsconfigRootOptions: TsConfigOnlyOption | undefined;
 function getTsconfigRootOptionsMap() {
     if (_tsconfigRootOptions === undefined) {
         _tsconfigRootOptions = {

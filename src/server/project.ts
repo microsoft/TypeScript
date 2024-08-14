@@ -291,7 +291,7 @@ interface GeneratedFileWatcher {
 }
 type GeneratedFileWatcherMap = GeneratedFileWatcher | Map<Path, GeneratedFileWatcher>;
 function isGeneratedFileWatcher(watch: GeneratedFileWatcherMap): watch is GeneratedFileWatcher {
-    return (watch as GeneratedFileWatcher).generatedFilePath !== undefined;
+    return !!(watch as GeneratedFileWatcher).generatedFilePath;
 }
 
 /** @internal */
@@ -1177,7 +1177,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     isClosed() {
-        return this.rootFilesMap === undefined;
+        return !this.rootFilesMap;
     }
 
     hasRoots() {

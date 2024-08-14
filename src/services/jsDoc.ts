@@ -426,7 +426,7 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
         const name = param.name.text;
         if (
             jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
-            || nameThusFar !== undefined && !startsWith(name, nameThusFar)
+            || !startsWith(name, nameThusFar)
         ) {
             return undefined;
         }

@@ -420,7 +420,7 @@ function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: 
     const nonNullableContextualType = contextualType.getNonNullableType();
 
     const symbol = nonNullableContextualType.symbol;
-    if (symbol === undefined) return undefined;
+    if (!symbol) return undefined;
 
     const signature = lastOrUndefined(nonNullableContextualType.getCallSignatures());
     if (signature === undefined) return undefined;

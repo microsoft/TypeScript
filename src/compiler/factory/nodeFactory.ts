@@ -1170,7 +1170,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         else if (isNodeArray(elements)) {
             if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
                 // Ensure the transform flags have been aggregated for this NodeArray
-                if (elements.transformFlags === undefined) {
+                if ((elements.transformFlags as TransformFlags | undefined) === undefined) {
                     aggregateChildrenFlags(elements as MutableNodeArray<T>);
                 }
                 Debug.attachNodeArrayDebugInfo(elements);
@@ -6351,7 +6351,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function cloneNode<T extends Node | undefined>(node: T): T;
-    function cloneNode<T extends Node>(node: T) {
+    function cloneNode<T extends Node>(node: T | undefined) {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).

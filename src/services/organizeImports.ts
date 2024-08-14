@@ -272,9 +272,7 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
     let groupIndex = 0;
     while (i < len) {
         if (isExportDeclaration(statements[i])) {
-            if (topLevelExportGroups[groupIndex] === undefined) {
-                topLevelExportGroups[groupIndex] = [];
-            }
+            topLevelExportGroups[groupIndex] ??= [];
             const exportDecl = statements[i] as ExportDeclaration;
             if (exportDecl.moduleSpecifier) {
                 topLevelExportGroups[groupIndex].push(exportDecl);
