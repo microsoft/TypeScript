@@ -265,3 +265,178 @@ function func4() {
 >     : ^^^^
 }
 
+function func5() {
+>func5 : () => void
+>      : ^^^^^^^^^^
+
+	aFunc();
+>aFunc() : void
+>        : ^^^^
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+	console.log(Bar.A);
+>console.log(Bar.A) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>Bar.A : Bar
+>      : ^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>A : Bar
+>  : ^^^
+
+	console.log(blah.prop);
+>console.log(blah.prop) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>blah.prop : number
+>          : ^^^^^^
+>blah : { prop: number; }
+>     : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+
+	console.log(new Foo())
+>console.log(new Foo()) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+	console.log(Baz.value);
+>console.log(Baz.value) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>Baz.value : 1234
+>          : ^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>value : 1234
+>      : ^^^^
+
+
+	return;
+
+	function aFunc() {
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+		console.log(Bar.A);
+>console.log(Bar.A) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>Bar.A : Bar
+>      : ^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>A : Bar
+>  : ^^^
+
+		console.log(blah.prop);
+>console.log(blah.prop) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>blah.prop : number
+>          : ^^^^^^
+>blah : { prop: number; }
+>     : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+
+		console.log(new Foo())
+>console.log(new Foo()) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+		console.log(Baz.value);
+>console.log(Baz.value) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>Baz.value : 1234
+>          : ^^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>value : 1234
+>      : ^^^^
+	}
+
+	const blah = { prop: 1234 };
+>blah : { prop: number; }
+>     : ^^^^^^^^^^^^^^^^^
+>{ prop: 1234 } : { prop: number; }
+>               : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
+
+	enum Bar { A }
+>Bar : Bar
+>    : ^^^
+>A : Bar.A
+>  : ^^^^^
+
+	class Foo { x = 1234 }
+>Foo : Foo
+>    : ^^^
+>x : number
+>  : ^^^^^^
+>1234 : 1234
+>     : ^^^^
+
+	namespace Baz { export const value = 1234 }
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>value : 1234
+>      : ^^^^
+>1234 : 1234
+>     : ^^^^
+}
+

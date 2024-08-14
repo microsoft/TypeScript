@@ -153,3 +153,93 @@ function func4() {
 >Value : Symbol(ClassA.Value, Decl(unreachableDeclarations.ts, 56, 18))
 }
 
+function func5() {
+>func5 : Symbol(func5, Decl(unreachableDeclarations.ts, 57, 1))
+
+	aFunc();
+>aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 68, 8))
+
+	console.log(Bar.A);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bar.A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
+>Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
+>A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
+
+	console.log(blah.prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>blah.prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
+>blah : Symbol(blah, Decl(unreachableDeclarations.ts, 77, 6))
+>prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
+
+	console.log(new Foo())
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
+
+	console.log(Baz.value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Baz.value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
+>Baz : Symbol(Baz, Decl(unreachableDeclarations.ts, 81, 23))
+>value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
+
+
+	return;
+
+	function aFunc() {
+>aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 68, 8))
+
+		console.log(Bar.A);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bar.A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
+>Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
+>A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
+
+		console.log(blah.prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>blah.prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
+>blah : Symbol(blah, Decl(unreachableDeclarations.ts, 77, 6))
+>prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
+
+		console.log(new Foo())
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
+
+		console.log(Baz.value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Baz.value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
+>Baz : Symbol(Baz, Decl(unreachableDeclarations.ts, 81, 23))
+>value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
+	}
+
+	const blah = { prop: 1234 };
+>blah : Symbol(blah, Decl(unreachableDeclarations.ts, 77, 6))
+>prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
+
+	enum Bar { A }
+>Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
+>A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
+
+	class Foo { x = 1234 }
+>Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
+>x : Symbol(Foo.x, Decl(unreachableDeclarations.ts, 81, 12))
+
+	namespace Baz { export const value = 1234 }
+>Baz : Symbol(Baz, Decl(unreachableDeclarations.ts, 81, 23))
+>value : Symbol(value, Decl(unreachableDeclarations.ts, 83, 29))
+}
+
