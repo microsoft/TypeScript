@@ -6390,7 +6390,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                if (context.depth >= context.unfoldDepth) {
+                if (!canUnfold()) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
@@ -6405,9 +6405,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
-                if (context.depth < context.unfoldDepth) {
+                if (canUnfold()) {
                     context.depth += 1;
-                    return createAnonymousTypeNode((type as TypeReference));
+                    return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true);
                 }
                 return (type as TypeReference).node ? visitAndTransformType(type as TypeReference, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
             }
@@ -6437,9 +6437,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.approximateLength += idText(name).length;
                     return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                 }
-                if (context.depth < context.unfoldDepth && objectFlags & ObjectFlags.ClassOrInterface) {
+                if (objectFlags & ObjectFlags.ClassOrInterface && canUnfold()) {
                     context.depth += 1;
-                    return createAnonymousTypeNode(type as InterfaceType);
+                    return createAnonymousTypeNode(type as InterfaceType, /*forceClassExpansion*/ true);
                 }
                 // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                 if (type.symbol) {
@@ -6513,6 +6513,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             return Debug.fail("Should be unreachable.");
+
+            function canUnfold(): boolean {
+                return context.depth < context.unfoldDepth && !context.visitedTypes?.has(type.id);
+            }
 
             function conditionalTypeToTypeNode(type: ConditionalType) {
                 const checkTypeNode = typeToTypeNodeHelper(type.checkType, context);
@@ -6648,7 +6652,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result;
             }
 
-            function createAnonymousTypeNode(type: ObjectType): TypeNode {
+            function createAnonymousTypeNode(type: ObjectType, forceClassExpansion = false): TypeNode {
                 const typeId = type.id;
                 const symbol = type.symbol;
                 if (symbol) {
@@ -6675,10 +6679,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Always use 'typeof T' for type of class, enum, and module objects
                     else if (
                         symbol.flags & SymbolFlags.Class
+                            && !forceClassExpansion
                             && !getBaseTypeVariableOfClass(symbol)
-                            && !(symbol.valueDeclaration && isClassLike(symbol.valueDeclaration) && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral && (!isClassDeclaration(symbol.valueDeclaration) || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible)) ||
-                        symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
-                        shouldWriteTypeOfFunctionSymbol()
+                            && !(symbol.valueDeclaration
+                                && isClassLike(symbol.valueDeclaration)
+                                && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+                                && (!isClassDeclaration(symbol.valueDeclaration)
+                                    || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible))
+                        || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
+                        || shouldWriteTypeOfFunctionSymbol()
                     ) {
                         return symbolToTypeNode(symbol, context, isInstanceType);
                     }

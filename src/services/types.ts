@@ -581,12 +581,10 @@ export interface LanguageService {
      *
      * @param fileName The path to the file
      * @param position A zero-based index of the character where you want the quick info
-     * 
      */
     getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
     /** @internal */
-    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined;  // eslint-disable-line @typescript-eslint/unified-signatures
-
+    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 

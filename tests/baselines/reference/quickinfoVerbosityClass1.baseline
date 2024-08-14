@@ -1,10 +1,10 @@
 // === QuickInfo ===
-=== /tests/cases/fourslash/quickinfoVerbosityInterface1.ts ===
+=== /tests/cases/fourslash/quickinfoVerbosityClass1.ts ===
 // {
-//     interface Foo {
-//         a: "a" | "c";
+//     class Foo {
+//         a!: "a" | "c";
 //     }
-//     const f: Foo = { a: "a" };
+//     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: {
@@ -19,69 +19,27 @@
 // | ----------------------------------------------------------------------
 // }
 // {
-//     interface Bar {
-//         b: "b" | "d";
+//     type FooParam = "a" | "b";
+//     class Foo {
+//         constructor(public x: string) {
+//             this.x = "a";
+//         }
+//         foo(p: FooParam): void {}
 //     }
-//     interface Foo extends Bar {
-//         a: "a" | "c";
-//     }
-//     const f: Foo = { a: "a", b: "b" };
+//     const f = new Foo("");
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: {
-// |     a: "a" | "c";
-// |     b: "b" | "d";
-// | }
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//           ^
-// | ----------------------------------------------------------------------
-// | const f: Foo
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-// }
-// {
-//     type BarParam = "b" | "d";
-//     interface Bar {
-//         bar(b: BarParam): string;
-//     }
-//     type FooType = "a" | "c";
-//     interface FooParam {
-//         param: FooType;
-//     }
-//     interface Foo extends Bar {
-//         a: FooType;
-//         foo: (a: FooParam) => number;
-//     }
-//     const f: Foo = { a: "a", bar: () => "b", foo: () => 1 };
-//           ^
-// | ----------------------------------------------------------------------
-// | const f: {
-// |     a: "a" | "c";
-// |     foo: (a: {
-// |         param: "a" | "c";
-// |     }) => number;
-// |     bar(b: "b" | "d"): string;
-// | }
-// | (verbosity level: 3)
-// | ----------------------------------------------------------------------
-//           ^
-// | ----------------------------------------------------------------------
-// | const f: {
-// |     a: "a" | "c";
-// |     foo: (a: {
-// |         param: FooType;
-// |     }) => number;
-// |     bar(b: "b" | "d"): string;
+// |     x: string;
+// |     foo(p: "a" | "b"): void;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: {
-// |     a: FooType;
-// |     foo: (a: FooParam) => number;
-// |     bar(b: BarParam): string;
+// |     x: string;
+// |     foo(p: FooParam): void;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -92,36 +50,23 @@
 // | ----------------------------------------------------------------------
 // }
 // {
-//     interface Bar<B> {
-//         bar(b: B): string;
+//     class Bar {
+//         a!: string;
+//         bar(): void {}
+//         baz(param: string): void {}
 //     }
-//     interface FooParam {
-//         param: "a" | "c";
+//     class Foo extends Bar {
+//         b!: boolean;
+//         override baz(param: string | number): void {}
 //     }
-//     interface Foo extends Bar<FooParam> {
-//         a: "a" | "c";
-//         foo: (a: FooParam) => number;
-//     }
-//     const f: Foo = { a: "a", bar: () => "b", foo: () => 1 };
+//     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: {
-// |     a: "a" | "c";
-// |     foo: (a: {
-// |         param: "a" | "c";
-// |     }) => number;
-// |     bar(b: {
-// |         param: "a" | "c";
-// |     }): string;
-// | }
-// | (verbosity level: 2)
-// | ----------------------------------------------------------------------
-//           ^
-// | ----------------------------------------------------------------------
-// | const f: {
-// |     a: "a" | "c";
-// |     foo: (a: FooParam) => number;
-// |     bar(b: FooParam): string;
+// |     b: boolean;
+// |     baz(param: string | number): void;
+// |     a: string;
+// |     bar(): void;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -130,63 +75,91 @@
 // | const f: Foo
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
-//     const b: Bar<number> = { bar: () => "" };
+// }
+// {
+//     class Bar<B extends string> {
+//         bar(param: B): void {}
+//         baz(): this { return this; }
+//     }
+//     class Foo extends Bar<"foo"> {
+//         foo(): this { return this; }
+//     }
+//     const b = new Bar();
 //           ^
 // | ----------------------------------------------------------------------
 // | const b: {
-// |     bar(b: number): string;
-// | }
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//           ^
-// | ----------------------------------------------------------------------
-// | const b: Bar<number>
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-// }
-// {
-//     interface Foo<A> {
-//         a: A;
-//     }
-//     type Alias = Foo<string>;
-//     const a: Alias = { a: "a" };
-//           ^
-// | ----------------------------------------------------------------------
-// | const a: {
-// |     a: string;
+// |     bar(param: string): void;
+// |     baz(): Bar<string>;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | const a: Foo<string>
+// | const b: {
+// |     bar(param: string): void;
+// |     baz(): Bar<string>;
+// | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | const a: Alias
+// | const b: Bar<string>
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
-// }
-// {
-//     interface Foo {
-//         a: "a";
-//     }
-//     interface Foo {
-//         b: "b";
-//     }
-//     const f: Foo = { a: "a", b: "b" };
+//     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: {
-// |     a: "a";
-// |     b: "b";
+// |     foo(): Foo;
+// |     bar(param: "foo"): void;
+// |     baz(): Foo;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
 // | const f: Foo
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     class Bar<B extends string> {
+//         bar(param: B): void {}
+//         baz(): this { return this; }
+//     }
+//     const noname = new (class extends Bar<"foo"> {
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | const noname: {
+// |     foo(): (Anonymous class);
+// |     bar(param: "foo"): void;
+// |     baz(): (Anonymous class);
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | const noname: (Anonymous class)
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         foo(): this { return this; }
+//     })();
+//     const klass = class extends Bar<"foo"> {
+//         foo(): this { return this; }
+//     };
+//     const k = new klass();
+//           ^
+// | ----------------------------------------------------------------------
+// | const k: {
+// |     foo(): klass;
+// |     bar(param: "foo"): void;
+// |     baz(): klass;
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | const k: klass
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 // }
@@ -194,15 +167,15 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 61,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 58,
       "name": "f1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 60,
+        "start": 57,
         "length": 1
       },
       "displayParts": [
@@ -228,7 +201,7 @@
         },
         {
           "text": "Foo",
-          "kind": "interfaceName"
+          "kind": "className"
         }
       ],
       "documentation": [],
@@ -237,15 +210,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 61,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 58,
       "name": "f1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 60,
+        "start": 57,
         "length": 1
       },
       "displayParts": [
@@ -332,15 +305,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 204,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 250,
       "name": "f2"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 203,
+        "start": 249,
         "length": 1
       },
       "displayParts": [
@@ -366,7 +339,7 @@
         },
         {
           "text": "Foo",
-          "kind": "interfaceName"
+          "kind": "className"
         }
       ],
       "documentation": [],
@@ -375,15 +348,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 204,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 250,
       "name": "f2"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 203,
+        "start": 249,
         "length": 1
       },
       "displayParts": [
@@ -420,7 +393,7 @@
           "kind": "space"
         },
         {
-          "text": "a",
+          "text": "x",
           "kind": "propertyName"
         },
         {
@@ -432,190 +405,8 @@
           "kind": "space"
         },
         {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"b\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"d\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 1
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 519,
-      "name": "f3"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 518,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
+          "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 0
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 519,
-      "name": "f3"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 518,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "FooType",
-          "kind": "aliasName"
         },
         {
           "text": ";",
@@ -631,22 +422,14 @@
         },
         {
           "text": "foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
+          "kind": "text"
         },
         {
           "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "a",
+          "text": "p",
           "kind": "parameterName"
         },
         {
@@ -659,62 +442,6 @@
         },
         {
           "text": "FooParam",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "b",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "BarParam",
           "kind": "aliasName"
         },
         {
@@ -730,7 +457,7 @@
           "kind": "space"
         },
         {
-          "text": "string",
+          "text": "void",
           "kind": "keyword"
         },
         {
@@ -752,15 +479,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 519,
-      "name": "f3"
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 250,
+      "name": "f2"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 518,
+        "start": 249,
         "length": 1
       },
       "displayParts": [
@@ -797,8 +524,44 @@
           "kind": "space"
         },
         {
-          "text": "a",
+          "text": "x",
           "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "p",
+          "kind": "parameterName"
         },
         {
           "text": ":",
@@ -825,166 +588,10 @@
           "kind": "space"
         },
         {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "param",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "FooType",
-          "kind": "aliasName"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "b",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "\"b\"",
           "kind": "stringLiteral"
         },
         {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"d\"",
-          "kind": "stringLiteral"
-        },
-        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -997,7 +604,7 @@
           "kind": "space"
         },
         {
-          "text": "string",
+          "text": "void",
           "kind": "keyword"
         },
         {
@@ -1019,298 +626,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 519,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 491,
       "name": "f3"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 518,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "param",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "b",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"b\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"d\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 3
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 805,
-      "name": "f4"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 804,
+        "start": 490,
         "length": 1
       },
       "displayParts": [
@@ -1336,7 +660,7 @@
         },
         {
           "text": "Foo",
-          "kind": "interfaceName"
+          "kind": "className"
         }
       ],
       "documentation": [],
@@ -1345,15 +669,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 805,
-      "name": "f4"
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 491,
+      "name": "f3"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 804,
+        "start": 490,
         "length": 1
       },
       "displayParts": [
@@ -1390,7 +714,7 @@
           "kind": "space"
         },
         {
-          "text": "a",
+          "text": "b",
           "kind": "propertyName"
         },
         {
@@ -1402,24 +726,8 @@
           "kind": "space"
         },
         {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
+          "text": "boolean",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -1434,23 +742,15 @@
           "kind": "space"
         },
         {
-          "text": "foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
+          "text": "baz",
+          "kind": "text"
         },
         {
           "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "a",
+          "text": "param",
           "kind": "parameterName"
         },
         {
@@ -1462,19 +762,15 @@
           "kind": "space"
         },
         {
-          "text": "FooParam",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "string",
+          "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
         },
         {
-          "text": "=>",
+          "text": "|",
           "kind": "punctuation"
         },
         {
@@ -1483,6 +779,50 @@
         },
         {
           "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
           "kind": "keyword"
         },
         {
@@ -1506,22 +846,6 @@
           "kind": "punctuation"
         },
         {
-          "text": "b",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "FooParam",
-          "kind": "interfaceName"
-        },
-        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -1534,7 +858,7 @@
           "kind": "space"
         },
         {
-          "text": "string",
+          "text": "void",
           "kind": "keyword"
         },
         {
@@ -1556,338 +880,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 805,
-      "name": "f4"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 804,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "param",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "b",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "param",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"c\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 2
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 866,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 706,
       "name": "b1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 865,
+        "start": 705,
         "length": 1
       },
       "displayParts": [
@@ -1913,14 +914,14 @@
         },
         {
           "text": "Bar",
-          "kind": "interfaceName"
+          "kind": "className"
         },
         {
           "text": "<",
           "kind": "punctuation"
         },
         {
-          "text": "number",
+          "text": "string",
           "kind": "keyword"
         },
         {
@@ -1934,15 +935,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 866,
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 706,
       "name": "b1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 865,
+        "start": 705,
         "length": 1
       },
       "displayParts": [
@@ -1987,7 +988,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "b",
+          "text": "param",
           "kind": "parameterName"
         },
         {
@@ -1999,7 +1000,7 @@
           "kind": "space"
         },
         {
-          "text": "number",
+          "text": "string",
           "kind": "keyword"
         },
         {
@@ -2015,8 +1016,56 @@
           "kind": "space"
         },
         {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Bar",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
           "text": "string",
           "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -2037,15 +1086,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 989,
-      "name": "a"
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 706,
+      "name": "b1"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 988,
+        "start": 705,
         "length": 1
       },
       "displayParts": [
@@ -2058,105 +1107,7 @@
           "kind": "space"
         },
         {
-          "text": "a",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Alias",
-          "kind": "aliasName"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 0
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 989,
-      "name": "a"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 988,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "verbosityLevel": 1
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 989,
-      "name": "a"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 988,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
+          "text": "b",
           "kind": "localName"
         },
         {
@@ -2180,8 +1131,16 @@
           "kind": "space"
         },
         {
-          "text": "a",
-          "kind": "propertyName"
+          "text": "bar",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
         },
         {
           "text": ":",
@@ -2194,6 +1153,70 @@
         {
           "text": "string",
           "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Bar",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -2214,15 +1237,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 1110,
-      "name": "f5"
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 731,
+      "name": "f4"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1109,
+        "start": 730,
         "length": 1
       },
       "displayParts": [
@@ -2248,7 +1271,7 @@
         },
         {
           "text": "Foo",
-          "kind": "interfaceName"
+          "kind": "className"
         }
       ],
       "documentation": [],
@@ -2257,15 +1280,15 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityInterface1.ts",
-      "position": 1110,
-      "name": "f5"
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 731,
+      "name": "f4"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1109,
+        "start": 730,
         "length": 1
       },
       "displayParts": [
@@ -2302,8 +1325,16 @@
           "kind": "space"
         },
         {
-          "text": "a",
-          "kind": "propertyName"
+          "text": "foo",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
         },
         {
           "text": ":",
@@ -2314,8 +1345,8 @@
           "kind": "space"
         },
         {
-          "text": "\"a\"",
-          "kind": "stringLiteral"
+          "text": "Foo",
+          "kind": "className"
         },
         {
           "text": ";",
@@ -2330,8 +1361,16 @@
           "kind": "space"
         },
         {
-          "text": "b",
-          "kind": "propertyName"
+          "text": "bar",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
         },
         {
           "text": ":",
@@ -2342,8 +1381,496 @@
           "kind": "space"
         },
         {
-          "text": "\"b\"",
+          "text": "\"foo\"",
           "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 873,
+      "name": "n1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 867,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "noname",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(Anonymous class)",
+          "kind": "className"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 873,
+      "name": "n1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 867,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "noname",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(Anonymous class)",
+          "kind": "className"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"foo\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(Anonymous class)",
+          "kind": "className"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 1055,
+      "name": "k1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1054,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "k",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "klass",
+          "kind": "className"
+        }
+      ],
+      "documentation": [],
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityClass1.ts",
+      "position": 1055,
+      "name": "k1"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1054,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "k",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "klass",
+          "kind": "className"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"foo\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "klass",
+          "kind": "className"
         },
         {
           "text": ";",

@@ -56,6 +56,24 @@
 ////     type Alias = Foo<string>;
 ////     const a/*a*/: Alias = { a: "a" };
 //// }
+// decl merging
+//// {
+////     interface Foo {
+////         a: "a";
+////     }
+////     interface Foo {
+////         b: "b";
+////     }
+////     const f/*f5*/: Foo = { a: "a", b: "b" };
+//// }
 
 
-verify.baselineQuickInfo({ f1: [0, 1], f2: [0, 1], f3: [0, 1, 2, 3], f4: [0, 1, 2], b1: [0, 1], a: [0, 1, 2] });
+verify.baselineQuickInfo({
+    f1: [0, 1],
+    f2: [0, 1],
+    f3: [0, 1, 2, 3],
+    f4: [0, 1, 2],
+    b1: [0, 1],
+    a: [0, 1, 2],
+    f5: [0, 1],
+});
