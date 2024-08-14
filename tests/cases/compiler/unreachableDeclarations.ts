@@ -46,3 +46,17 @@ function func3() {
 
     const enum EnumB { Value }
 }
+
+function func4() {
+    aFunc();
+
+    console.log(ClassA.Value);
+
+    return;
+
+    function aFunc() {
+        console.log(ClassA.Value);
+    }
+
+    class ClassA { static Value = 1234; }
+}

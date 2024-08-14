@@ -1,0 +1,83 @@
+unreachableDeclarations.ts(4,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableDeclarations.ts(14,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(21,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableDeclarations.ts(29,5): error TS7027: Unreachable code detected.
+unreachableDeclarations.ts(49,17): error TS2449: Class 'ClassA' used before its declaration.
+unreachableDeclarations.ts(57,5): error TS7027: Unreachable code detected.
+
+
+==== unreachableDeclarations.ts (6 errors) ====
+    function func1() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:14:10: 'EnumA' is declared here.
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+            console.log(EnumB.Value);
+        }
+    
+        enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+        const enum EnumB { Value }
+    }
+    
+    function func2() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:29:10: 'EnumA' is declared here.
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+        }
+    
+        enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function func3() {
+        aFunc();
+    
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumB.Value);
+        }
+    
+        const enum EnumB { Value }
+    }
+    
+    function func4() {
+        aFunc();
+    
+        console.log(ClassA.Value);
+                    ~~~~~~
+!!! error TS2449: Class 'ClassA' used before its declaration.
+!!! related TS2728 unreachableDeclarations.ts:57:11: 'ClassA' is declared here.
+    
+        return;
+    
+        function aFunc() {
+            console.log(ClassA.Value);
+        }
+    
+        class ClassA { static Value = 1234; }
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    

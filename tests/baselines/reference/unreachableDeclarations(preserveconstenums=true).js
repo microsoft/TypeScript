@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/unreachableEnum.ts] ////
+//// [tests/cases/compiler/unreachableDeclarations.ts] ////
 
-//// [unreachableEnum.ts]
+//// [unreachableDeclarations.ts]
 function func1() {
     aFunc();
 
@@ -46,7 +46,22 @@ function func3() {
     const enum EnumB { Value }
 }
 
-//// [unreachableEnum.js]
+function func4() {
+    aFunc();
+
+    console.log(ClassA.Value);
+
+    return;
+
+    function aFunc() {
+        console.log(ClassA.Value);
+    }
+
+    class ClassA { static Value = 1234; }
+}
+
+
+//// [unreachableDeclarations.js]
 "use strict";
 function func1() {
     aFunc();
@@ -89,4 +104,18 @@ function func3() {
     (function (EnumB) {
         EnumB[EnumB["Value"] = 0] = "Value";
     })(EnumB || (EnumB = {}));
+}
+function func4() {
+    aFunc();
+    console.log(ClassA.Value);
+    return;
+    function aFunc() {
+        console.log(ClassA.Value);
+    }
+    var ClassA = /** @class */ (function () {
+        function ClassA() {
+        }
+        ClassA.Value = 1234;
+        return ClassA;
+    }());
 }

@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/unreachableEnum.ts] ////
+//// [tests/cases/compiler/unreachableDeclarations.ts] ////
 
-=== unreachableEnum.ts ===
+=== unreachableDeclarations.ts ===
 function func1() {
 >func1 : () => void
 >      : ^^^^^^^^^^
@@ -15,11 +15,11 @@ function func1() {
 >console.log(EnumA.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumA.Value : EnumA
 >            : ^^^^^
 >EnumA : typeof EnumA
@@ -31,11 +31,11 @@ function func1() {
 >console.log(EnumB.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumB.Value : EnumB
 >            : ^^^^^
 >EnumB : typeof EnumB
@@ -53,11 +53,11 @@ function func1() {
 >console.log(EnumA.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumA.Value : EnumA
 >            : ^^^^^
 >EnumA : typeof EnumA
@@ -69,11 +69,11 @@ function func1() {
 >console.log(EnumB.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumB.Value : EnumB
 >            : ^^^^^
 >EnumB : typeof EnumB
@@ -109,11 +109,11 @@ function func2() {
 >console.log(EnumA.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumA.Value : EnumA
 >            : ^^^^^
 >EnumA : typeof EnumA
@@ -131,11 +131,11 @@ function func2() {
 >console.log(EnumA.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumA.Value : EnumA
 >            : ^^^^^
 >EnumA : typeof EnumA
@@ -165,11 +165,11 @@ function func3() {
 >console.log(EnumB.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumB.Value : EnumB
 >            : ^^^^^
 >EnumB : typeof EnumB
@@ -187,11 +187,11 @@ function func3() {
 >console.log(EnumB.Value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >EnumB.Value : EnumB
 >            : ^^^^^
 >EnumB : typeof EnumB
@@ -206,3 +206,62 @@ function func3() {
 >Value : EnumB.Value
 >      : ^^^^^^^^^^^
 }
+
+function func4() {
+>func4 : () => void
+>      : ^^^^^^^^^^
+
+    aFunc();
+>aFunc() : void
+>        : ^^^^
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+    console.log(ClassA.Value);
+>console.log(ClassA.Value) : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>ClassA.Value : number
+>             : ^^^^^^
+>ClassA : typeof ClassA
+>       : ^^^^^^^^^^^^^
+>Value : number
+>      : ^^^^^^
+
+    return;
+
+    function aFunc() {
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+        console.log(ClassA.Value);
+>console.log(ClassA.Value) : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>ClassA.Value : number
+>             : ^^^^^^
+>ClassA : typeof ClassA
+>       : ^^^^^^^^^^^^^
+>Value : number
+>      : ^^^^^^
+    }
+
+    class ClassA { static Value = 1234; }
+>ClassA : ClassA
+>       : ^^^^^^
+>Value : number
+>      : ^^^^^^
+>1234 : 1234
+>     : ^^^^
+}
+
