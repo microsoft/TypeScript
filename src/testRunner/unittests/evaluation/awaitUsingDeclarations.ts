@@ -1924,11 +1924,16 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     it("'await using' with downlevel generators", async () => {
         abstract class Iterator {
             return?(): void;
-            [evaluator.FakeSymbol.iterator]() { return this; }
-            [evaluator.FakeSymbol.dispose]() { this.return?.(); }
+            [evaluator.FakeSymbol.iterator]() {
+                return this;
+            }
+            [evaluator.FakeSymbol.dispose]() {
+                this.return?.();
+            }
         }
 
-        const { main } = evaluator.evaluateTypeScript(`
+        const { main } = evaluator.evaluateTypeScript(
+            `
             let exited = false;
 
             function * f() {
@@ -1948,11 +1953,14 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
 
                 return exited;
             }
-        `, {
-            target: ts.ScriptTarget.ES5,
-        }, {
-            Iterator
-        });
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                Iterator,
+            },
+        );
 
         const exited = await main();
         assert.isTrue(exited, "Expected 'await using' to dispose generator");
@@ -1961,11 +1969,16 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     it("'await using' with downlevel async generators", async () => {
         abstract class AsyncIterator {
             return?(): PromiseLike<void>;
-            [evaluator.FakeSymbol.asyncIterator]() { return this; }
-            async [evaluator.FakeSymbol.asyncDispose]() { await this.return?.(); }
+            [evaluator.FakeSymbol.asyncIterator]() {
+                return this;
+            }
+            async [evaluator.FakeSymbol.asyncDispose]() {
+                await this.return?.();
+            }
         }
 
-        const { main } = evaluator.evaluateTypeScript(`
+        const { main } = evaluator.evaluateTypeScript(
+            `
             let exited = false;
 
             async function * f() {
@@ -1985,11 +1998,14 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
 
                 return exited;
             }
-        `, {
-            target: ts.ScriptTarget.ES5,
-        }, {
-            AsyncIterator
-        });
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                AsyncIterator,
+            },
+        );
 
         const exited = await main();
         assert.isTrue(exited, "Expected 'await using' to dispose async generator");

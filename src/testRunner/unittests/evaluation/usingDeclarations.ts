@@ -1814,11 +1814,16 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     it("'using' with downlevel generators", () => {
         abstract class Iterator {
             return?(): void;
-            [evaluator.FakeSymbol.iterator]() { return this; }
-            [evaluator.FakeSymbol.dispose]() { this.return?.(); }
+            [evaluator.FakeSymbol.iterator]() {
+                return this;
+            }
+            [evaluator.FakeSymbol.dispose]() {
+                this.return?.();
+            }
         }
 
-        const { main } = evaluator.evaluateTypeScript(`
+        const { main } = evaluator.evaluateTypeScript(
+            `
             let exited = false;
 
             function * f() {
@@ -1838,11 +1843,14 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
                 return exited;
             }
-        `, {
-            target: ts.ScriptTarget.ES5,
-        }, {
-            Iterator
-        });
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                Iterator,
+            },
+        );
 
         const exited = main();
         assert.isTrue(exited, "Expected 'using' to dispose generator");
