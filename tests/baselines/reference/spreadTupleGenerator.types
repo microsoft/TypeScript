@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/spreadTupleGenerator.ts] ////
+
+=== spreadTupleGenerator.ts ===
+class V {
+>V : V
+>  : ^
+
+  *[Symbol.iterator](): TupleGenerator<[number, number]> {
+>[Symbol.iterator] : () => TupleGenerator<[number, number]>
+>                  : ^^^^^^                                
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+
+    yield 1; yield 2;
+>yield 1 : any
+>1 : 1
+>  : ^
+>yield 2 : any
+>2 : 2
+>  : ^
+  }
+}
+
+declare const v: V;
+>v : V
+>  : ^
+
+declare function foo(x: number, y: number): void;
+>foo : (x: number, y: number) => void
+>    : ^ ^^      ^^ ^^      ^^^^^    
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+foo(...v);
+>foo(...v) : void
+>          : ^^^^
+>foo : (x: number, y: number) => void
+>    : ^ ^^      ^^ ^^      ^^^^^    
+>...v : number
+>     : ^^^^^^
+>v : V
+>  : ^
+
+const a: [number, number] = [...v];
+>a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
+>[...v] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
+>...v : number
+>     : ^^^^^^
+>v : V
+>  : ^
+
