@@ -6420,6 +6420,10 @@
         "category": "Message",
         "code": 6806
     },
+    "This operation can be simplified. This shift is identical to `{0} {1} {2}`.": {
+        "category": "Error",
+        "code": 6807
+    },
 
     "one of:": {
         "category": "Message",
