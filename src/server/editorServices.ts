@@ -716,7 +716,7 @@ function forEachAncestorProject<T>(
     while (true) {
         // Skip if project is not composite and we are only looking for solution
         if (
-            !project.isInitialLoadPending() &&
+            !project.initialLoadPending &&
             (
                 !project.getCompilerOptions().composite ||
                 project.getCompilerOptions().disableSolutionSearching
@@ -746,7 +746,7 @@ function forEachAncestorProject<T>(
 
         // If this ancestor is new and was delay loaded, then set the project as potential project reference
         if (
-            ancestor.project.isInitialLoadPending() &&
+            ancestor.project.initialLoadPending &&
             project.getCompilerOptions().composite
         ) {
             // Set a potential project reference
@@ -909,7 +909,7 @@ function forEachAnyProjectReferenceKind<T>(
 ): T | undefined {
     return project.getCurrentProgram() ?
         project.forEachResolvedProjectReference(cb) :
-        project.isInitialLoadPending() ?
+        project.initialLoadPending ?
         forEachPotentialProjectReference(project, cbPotentialProjectRef) :
         forEach(project.getProjectReferences(), cbProjectRef);
 }
@@ -1978,7 +1978,7 @@ export class ProjectService {
             scheduledAnyProjectUpdate = true;
             if (projectCanonicalPath === canonicalConfigFilePath) {
                 // Skip refresh if project is not yet loaded
-                if (project.isInitialLoadPending()) return;
+                if (project.initialLoadPending) return;
                 project.pendingUpdateLevel = ProgramUpdateLevel.Full;
                 project.pendingUpdateReason = loadReason;
                 this.delayUpdateProjectGraph(project);
@@ -2056,7 +2056,7 @@ export class ProjectService {
 
             // If this was not already updated, and its new project, schedule for update
             // Existing projects dont need to update if they were not using the changed config in any way
-            if (tryAddToSet(updatedProjects, projectForInfo) && projectForInfo.isInitialLoadPending()) {
+            if (tryAddToSet(updatedProjects, projectForInfo) && projectForInfo.initialLoadPending) {
                 this.delayUpdateProjectGraph(projectForInfo);
             }
         });
@@ -3063,7 +3063,7 @@ export class ProjectService {
      * @internal
      */
     reloadConfiguredProject(project: ConfiguredProject, reason: string) {
-        project.isInitialLoadPending = returnFalse;
+        project.initialLoadPending = false;
         project.pendingUpdateReason = undefined;
         project.pendingUpdateLevel = ProgramUpdateLevel.Update;
 
@@ -3895,7 +3895,7 @@ export class ProjectService {
             const reason = `Reloading configured project in external project: ${externalProjectName}`;
             projects.forEach(project => {
                 if (this.getHostPreferences().lazyConfiguredProjectsFromExternalProject) {
-                    if (!project.isInitialLoadPending()) {
+                    if (!project.initialLoadPending) {
                         this.clearSemanticCache(project);
                         project.pendingUpdateLevel = ProgramUpdateLevel.Full;
                         project.pendingUpdateReason = reloadReason(reason);
@@ -4358,7 +4358,7 @@ export class ProjectService {
     /** @internal */
     loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
         forProjects ??= new Set(
-            mapDefinedIterator(this.configuredProjects.entries(), ([key, project]) => !project.isInitialLoadPending() ? key : undefined),
+            mapDefinedIterator(this.configuredProjects.entries(), ([key, project]) => !project.initialLoadPending ? key : undefined),
         );
 
         const seenProjects = new Set<NormalizedPath>();

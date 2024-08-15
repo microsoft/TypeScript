@@ -109,7 +109,6 @@ import {
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolvePackageNameToPackageJson,
     returnFalse,
-    returnTrue,
     ScriptKind,
     some,
     sortAndDeduplicate,
@@ -435,7 +434,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     protected projectErrors: Diagnostic[] | undefined;
 
-    protected isInitialLoadPending: () => boolean = returnFalse;
+    /** @internal */
+    initialLoadPending = false;
 
     /** @internal */
     dirty = false;
@@ -1911,7 +1911,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
-        if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
+        if (this.initialLoadPending) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
@@ -1991,7 +1991,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             : (files: Map<string, boolean>) => arrayFrom(files.keys());
 
         // Update the graph only if initial configured project load is not pending
-        if (!this.isInitialLoadPending()) {
+        if (!this.initialLoadPending) {
             updateProjectIfDirty(this);
         }
 
@@ -2882,7 +2882,7 @@ export class ConfiguredProject extends Project {
     projectOptions?: ProjectOptions | true;
 
     /** @internal */
-    override isInitialLoadPending: () => boolean = returnTrue;
+    override initialLoadPending = true;
 
     /** @internal */
     sendLoadingProjectFinish = false;
@@ -2972,7 +2972,7 @@ export class ConfiguredProject extends Project {
     override updateGraph(): boolean {
         if (this.deferredClose) return false;
         const isDirty = this.dirty;
-        this.isInitialLoadPending = returnFalse;
+        this.initialLoadPending = false;
         const updateLevel = this.pendingUpdateLevel;
         this.pendingUpdateLevel = ProgramUpdateLevel.Update;
         let result: boolean;
@@ -3032,7 +3032,7 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     setPotentialProjectReference(canonicalConfigPath: NormalizedPath) {
-        Debug.assert(this.isInitialLoadPending());
+        Debug.assert(this.initialLoadPending);
         (this.potentialProjectReferences || (this.potentialProjectReferences = new Set())).add(canonicalConfigPath);
     }
 
