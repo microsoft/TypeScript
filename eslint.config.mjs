@@ -51,9 +51,10 @@ export default tseslint.config(
         languageOptions: {
             parserOptions: {
                 warnOnUnsupportedTypeScriptVersion: false,
+                tsconfigRootDir: __dirname,
                 projectService: {
                     defaultProject: path.join(__dirname, "scripts", "tsconfig.json"),
-                    allowDefaultProject: ["*.js", "*.cjs", "*.mjs"],
+                    allowDefaultProject: ["*.js", "*.cjs", "*.mjs"].map(p => [p, `.${p}`]).flat(),
                 },
             },
             globals: globals.node,
