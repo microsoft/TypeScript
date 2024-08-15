@@ -6940,7 +6940,6 @@ declare namespace ts {
         exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
-        generateTrace?: string;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
         /** @deprecated */
@@ -9811,7 +9810,6 @@ declare namespace ts {
         sourceMap?: boolean;
         inlineSourceMap?: boolean;
         traceResolution?: boolean;
-        generateTrace?: string;
         [option: string]: CompilerOptionsValue | undefined;
     }
     type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
