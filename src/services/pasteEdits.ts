@@ -111,33 +111,35 @@ function pasteEdits(
             // `updatedRanges` represent the new ranges that account for the offset changes caused by pasting new text and
             // `offset` represents by how much the starting position of `pasteLocations` needs to be changed.
             //
-            // We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
-            // identifier lies within the updated range and if it is not resolved, we try resolving it.
+            // We iterate over each updated range to get the node that wholly encloses the updated range.
+            // For each child of that node, we checked for unresolved identifiers
+            // within the updated range and try importing it.
             let offset = 0;
             pasteLocations.forEach((location, i) => {
                 const oldTextLength = location.end - location.pos;
                 const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
                 const startPos = location.pos + offset;
                 const endPos = startPos + textToBePasted.length;
-                const range = { pos: startPos, end: endPos } satisfies TextRange;
+                const range: TextRange = { pos: startPos, end: endPos };
                 offset += textToBePasted.length - oldTextLength;
+
                 const enclosingNode = findAncestor(
                     getTokenAtPosition(context.sourceFile, range.pos),
                     ancestorNode => rangeContainsRange(ancestorNode, range),
                 );
                 if (!enclosingNode) return;
+
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
-                    if (
-                        isIdentifier(node) && rangeContainsPosition(
-                            range,
-                            node.getStart(updatedFile),
-                        ) && !originalProgram?.getTypeChecker().resolveName(
+                    const isImportCandidate = 
+                        isIdentifier(node) &&
+                        rangeContainsPosition(range, node.getStart(updatedFile)) &&
+                        !originalProgram?.getTypeChecker().resolveName(
                             node.text,
                             node,
                             SymbolFlags.All,
                             /*excludeGlobals*/ false,
-                        )
-                    ) {
+                        );
+                    if (isImportCandidate) {
                         return importAdder.addImportForUnresolvedIdentifier(
                             context,
                             node,

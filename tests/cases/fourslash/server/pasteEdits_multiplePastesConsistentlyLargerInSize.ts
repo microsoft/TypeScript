@@ -43,7 +43,7 @@ verify.pasteEdits({
             `function k() {
             const cherry = 3 + tomato + cucumber;
         }`
-    ],
+        ],
         pasteLocations: test.ranges(),
     },
     newFileContents: {

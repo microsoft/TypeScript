@@ -50,7 +50,7 @@ verify.pasteEdits({
             `function k() {
             const cherry =tomato + kiwi;
         }`
-],
+        ],
         pasteLocations: test.ranges(),
     },
     newFileContents: {

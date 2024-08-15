@@ -43,7 +43,7 @@ verify.pasteEdits({
             `(kiwi: string) {
             const cherry=tomato;
         }`
-],
+        ],
         pasteLocations: test.ranges(),
     },
     newFileContents: {
