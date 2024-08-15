@@ -3,6 +3,7 @@
         "lib": [
             "es2018"
         ],
+        "types": ["node"],
         "module": "Node16",
         "moduleResolution": "Node16",
         "target": "es2018",
