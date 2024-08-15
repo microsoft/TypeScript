@@ -130,8 +130,7 @@ function pasteEdits(
                 if (!enclosingNode) return;
 
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
-                    const isImportCandidate = 
-                        isIdentifier(node) &&
+                    const isImportCandidate = isIdentifier(node) &&
                         rangeContainsPosition(range, node.getStart(updatedFile)) &&
                         !originalProgram?.getTypeChecker().resolveName(
                             node.text,
