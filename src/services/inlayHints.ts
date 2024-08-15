@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     ArrowFunction,
@@ -5,7 +6,6 @@ import {
     CharacterCodes,
     createPrinterWithRemoveComments,
     createTextSpanFromNode,
-    Debug,
     ElementFlags,
     EmitHint,
     EnumMember,

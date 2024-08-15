@@ -8,7 +8,6 @@ import {
     CustomTransformer,
     CustomTransformerFactory,
     CustomTransformers,
-    Debug,
     DiagnosticWithLocation,
     disposeEmitNodes,
     EmitFlags,
@@ -74,6 +73,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {

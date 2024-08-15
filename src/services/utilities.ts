@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     addEmitFlags,
@@ -34,7 +35,6 @@ import {
     createScanner,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     Declaration,
     Decorator,
     DefaultClause,

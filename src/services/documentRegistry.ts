@@ -1,10 +1,10 @@
+import * as Debug from "../compiler/debug.js";
 import {
     arrayFrom,
     CompilerOptions,
     createGetCanonicalFileName,
     createLanguageServiceSourceFile,
     CreateSourceFileOptions,
-    Debug,
     ensureScriptKind,
     firstDefinedIterator,
     forEachEntry,

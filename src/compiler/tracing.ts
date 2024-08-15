@@ -1,7 +1,6 @@
 import {
     combinePaths,
     ConditionalType,
-    Debug,
     EvolvingArrayType,
     getLineAndCharacterOfPosition,
     getSourceFileOfNode,
@@ -22,6 +21,7 @@ import {
     UnionType,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 /* Tracing events for the compiler. */
 

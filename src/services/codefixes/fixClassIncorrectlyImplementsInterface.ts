@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -14,7 +15,6 @@ import {
     ClassLikeDeclaration,
     CodeFixAction,
     createSymbolTable,
-    Debug,
     Diagnostics,
     ExpressionWithTypeArguments,
     find,

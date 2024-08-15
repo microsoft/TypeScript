@@ -26,7 +26,6 @@ import {
     createModuleNotFoundChain,
     createProgram,
     CustomTransformers,
-    Debug,
     Diagnostic,
     DiagnosticCategory,
     DiagnosticMessageChain,
@@ -90,6 +89,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {

@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     __String,
     ANONYMOUS,
@@ -20,7 +21,6 @@ import {
     ContinueStatement,
     createDiagnosticForNode,
     createFileDiagnostic,
-    Debug,
     Declaration,
     Diagnostic,
     DiagnosticCategory,

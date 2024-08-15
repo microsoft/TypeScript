@@ -1,6 +1,5 @@
 import {
     CallExpression,
-    Debug,
     Expression,
     getSourceTextOfNodeFromSourceFile,
     hasInvalidEscape,
@@ -24,6 +23,7 @@ import {
     visitNode,
     Visitor,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /** @internal */
 export enum ProcessLevel {

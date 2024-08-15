@@ -4,7 +4,6 @@ import {
     CompilerOptions,
     computeSignatureWithDiagnostics,
     CustomTransformers,
-    Debug,
     EmitOnly,
     EmitOutput,
     emptyArray,
@@ -34,6 +33,7 @@ import {
     toPath,
     TypeChecker,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /** @internal */
 export function getFileEmitOutput(

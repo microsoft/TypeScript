@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     assign,
     clear,
@@ -7,7 +8,6 @@ import {
     computePositionOfLineAndCharacter,
     contains,
     createTextSpanFromBounds,
-    Debug,
     directorySeparator,
     DocumentPositionMapper,
     DocumentRegistryBucketKeyWithMode,

@@ -25,7 +25,6 @@ import {
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
     createSymbolTable,
-    Debug,
     Declaration,
     DeclarationDiagnosticProducing,
     DeclarationName,
@@ -214,6 +213,7 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /** @internal */
 export function getDeclarationDiagnostics(

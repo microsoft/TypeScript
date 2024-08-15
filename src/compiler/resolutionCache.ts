@@ -8,7 +8,6 @@ import {
     createModuleResolutionCache,
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
-    Debug,
     Diagnostics,
     directorySeparator,
     DirectoryWatcherCallback,
@@ -76,6 +75,7 @@ import {
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /** @internal */
 export interface HasInvalidatedFromResolutionCache {

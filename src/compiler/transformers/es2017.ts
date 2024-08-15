@@ -17,7 +17,6 @@ import {
     ClassDeclaration,
     ConciseBody,
     ConstructorDeclaration,
-    Debug,
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
@@ -100,6 +99,7 @@ import {
     visitParameterList,
     VisitResult,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 

@@ -8,7 +8,6 @@ import {
     cast,
     ClassDeclaration,
     ConciseBody,
-    Debug,
     Expression,
     FunctionDeclaration,
     getModifiers,
@@ -36,6 +35,7 @@ import {
     setTextRange,
     SyntaxKind,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /** @internal */
 export function createNodeConverters(factory: NodeFactory): NodeConverters {

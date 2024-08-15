@@ -3,7 +3,6 @@ import {
     append,
     appendIfUnique,
     AutoGenerateInfo,
-    Debug,
     EmitFlags,
     EmitHelper,
     EmitNode,
@@ -27,6 +26,7 @@ import {
     TypeNode,
     TypeParameterDeclaration,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /**
  * Associates a node with the current transformation, initializing

@@ -7,7 +7,6 @@ import {
     createExpressionForJsxFragment,
     createExpressionFromEntityName,
     createJsxFactoryExpression,
-    Debug,
     emptyArray,
     Expression,
     filter,
@@ -85,6 +84,7 @@ import {
     visitNode,
     VisitResult,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /** @internal */
 export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

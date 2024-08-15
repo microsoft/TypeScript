@@ -1,9 +1,9 @@
+import * as Debug from "../compiler/debug.js";
 import {
     CharacterCodes,
     compact,
     contains,
     createTextSpanFromBounds,
-    Debug,
     findIndex,
     first,
     getTokenPosOfNode,

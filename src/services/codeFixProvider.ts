@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     arrayFrom,
     cast,
@@ -11,7 +12,6 @@ import {
     computeSuggestionDiagnostics,
     contains,
     createMultiMap,
-    Debug,
     Diagnostic,
     DiagnosticOrDiagnosticAndArguments,
     diagnosticToString,

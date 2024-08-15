@@ -30,7 +30,6 @@ import {
     createWatchFactory,
     createWatchHost,
     CustomTransformers,
-    Debug,
     Diagnostic,
     DiagnosticArguments,
     DiagnosticMessage,
@@ -129,6 +128,7 @@ import {
     WriteFileCallback,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 const minimumDate = new Date(-8640000000000000);
 

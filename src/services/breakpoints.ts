@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     ArrayLiteralExpression,
     BinaryExpression,
@@ -10,7 +11,6 @@ import {
     CatchClause,
     ClassDeclaration,
     createTextSpanFromBounds,
-    Debug,
     DestructuringPattern,
     DoStatement,
     EnumDeclaration,

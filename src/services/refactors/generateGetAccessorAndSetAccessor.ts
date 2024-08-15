@@ -1,7 +1,7 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     codefix,
-    Debug,
     Diagnostics,
     emptyArray,
     getLocaleSpecificMessage,

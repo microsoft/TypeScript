@@ -1,9 +1,9 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     CallSignatureDeclaration,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
-    Debug,
     Diagnostics,
     displayPartsToString,
     EmitFlags,

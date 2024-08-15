@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     createTextRangeWithKind,
     TextRangeWithKind,
@@ -7,7 +8,6 @@ import {
 import {
     append,
     createScanner,
-    Debug,
     isJsxAttribute,
     isJsxElement,
     isJsxText,

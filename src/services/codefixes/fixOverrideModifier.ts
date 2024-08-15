@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixActionMaybeFixAll,
@@ -7,7 +8,6 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     ConstructorDeclaration,
-    Debug,
     DiagnosticMessage,
     Diagnostics,
     emptyArray,

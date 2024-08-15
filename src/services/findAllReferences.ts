@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     createImportTracker,
     ExportInfo,
@@ -32,7 +33,6 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     displayPart,
     DocumentSpan,

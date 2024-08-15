@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     ArrowFunction,
     BinaryExpression,
@@ -10,7 +11,6 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
-    Debug,
     ElementFlags,
     EmitHint,
     emptyArray,

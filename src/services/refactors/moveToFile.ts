@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -19,7 +20,6 @@ import {
     createFutureSourceFile,
     createModuleSpecifierResolutionHost,
     createTextRangeFromSpan,
-    Debug,
     Declaration,
     DeclarationStatement,
     Diagnostics,

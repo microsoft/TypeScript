@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     addRange,
     arrayFrom,
@@ -6,7 +7,6 @@ import {
     CheckFlags,
     contains,
     createPrinterWithRemoveComments,
-    Debug,
     displayPart,
     EmitHint,
     emptyArray,

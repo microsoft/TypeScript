@@ -1,8 +1,8 @@
+import * as Debug from "../compiler/debug.js";
 import {
     ApplyCodeActionCommandResult,
     assertType,
     createQueue,
-    Debug,
     JsTyping,
     MapLike,
     server,

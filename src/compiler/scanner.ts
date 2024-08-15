@@ -8,7 +8,6 @@ import {
     CommentKind,
     CommentRange,
     compareValues,
-    Debug,
     DiagnosticMessage,
     Diagnostics,
     forEach,
@@ -35,6 +34,7 @@ import {
     TextRange,
     TokenFlags,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
 

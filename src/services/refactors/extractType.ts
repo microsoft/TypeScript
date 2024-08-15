@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     addRange,
     addToSeen,
@@ -6,7 +7,6 @@ import {
     cast,
     concatenate,
     createTextRangeFromSpan,
-    Debug,
     Diagnostics,
     EmitFlags,
     emptyArray,

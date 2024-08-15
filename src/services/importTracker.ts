@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     AnyImportOrJsDocImport,
@@ -10,7 +11,6 @@ import {
     canHaveModifiers,
     canHaveSymbol,
     cast,
-    Debug,
     ExportAssignment,
     ExportDeclaration,
     FileReference,

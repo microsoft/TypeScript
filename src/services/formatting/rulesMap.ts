@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     anyContext,
     FormatContext,
@@ -8,7 +9,6 @@ import {
     RuleSpec,
 } from "../_namespaces/ts.formatting.js";
 import {
-    Debug,
     every,
     FormatCodeSettings,
     FormattingHost,

@@ -84,7 +84,6 @@ import {
     createScanner,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     Declaration,
     DeclarationName,
     DeclarationWithTypeParameterChildren,
@@ -590,6 +589,7 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];

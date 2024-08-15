@@ -1,5 +1,5 @@
+import * as Debug from "../compiler/debug.js";
 import {
-    Debug,
     DeprecationOptions,
     formatStringFromArgs,
     noop,

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import { StringCompletions } from "./_namespaces/ts.Completions.js";
 import {
     __String,
@@ -45,7 +46,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     Decorator,
     Diagnostics,

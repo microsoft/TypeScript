@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     addToSeen,
@@ -6,7 +7,6 @@ import {
     CancellationToken,
     consumesNodeCoreModules,
     createMultiMap,
-    Debug,
     emptyArray,
     ensureTrailingDirectorySeparator,
     findIndex,

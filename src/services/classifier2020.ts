@@ -1,10 +1,10 @@
+import * as Debug from "../compiler/debug.js";
 import {
     BindingElement,
     CancellationToken,
     Classifications,
     ClassifiedSpan2020,
     createTextSpan,
-    Debug,
     Declaration,
     EndOfLineState,
     forEachChild,

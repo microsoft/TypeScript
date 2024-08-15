@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -9,7 +10,6 @@ import {
     CodeFixContext,
     copyComments,
     createSymbolTable,
-    Debug,
     Diagnostics,
     Expression,
     factory,

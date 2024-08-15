@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     arrayFrom,
@@ -14,7 +15,6 @@ import {
     createGetCanonicalFileName,
     createTextSpanFromBounds,
     createTextSpanFromNode,
-    Debug,
     DefaultClause,
     find,
     FindAllReferences,

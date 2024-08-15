@@ -2,13 +2,13 @@ import {
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
-    Debug,
     emptyArray,
     every,
     isArray,
     map,
     some,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 // https://semver.org/#spec-item-2
 // > A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative

@@ -1,5 +1,4 @@
 import {
-    Debug,
     noop,
     Performance,
     PerformanceHooks,
@@ -8,6 +7,7 @@ import {
     timestamp,
     tryGetNativePerformanceHooks,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /** Performance measurements for the compiler. */
 

@@ -21,7 +21,6 @@ import {
     compareStringsCaseSensitive,
     CompilerOptions,
     ComputedPropertyName,
-    Debug,
     Declaration,
     DefaultKeyword,
     EmitFlags,
@@ -175,6 +174,7 @@ import {
     UnscopedEmitHelper,
     WrappedExpression,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 // Compound nodes
 

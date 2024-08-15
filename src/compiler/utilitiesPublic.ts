@@ -41,7 +41,6 @@ import {
     ConstructorTypeNode,
     contains,
     createCompilerDiagnostic,
-    Debug,
     Declaration,
     DeclarationName,
     DeclarationStatement,
@@ -291,6 +290,7 @@ import {
     UnaryExpression,
     VariableDeclaration,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1

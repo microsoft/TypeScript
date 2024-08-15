@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -8,7 +9,6 @@ import {
     BigIntLiteralType,
     CodeFixAction,
     CodeFixContext,
-    Debug,
     Diagnostics,
     Expression,
     factory,

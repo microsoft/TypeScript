@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     addRange,
     cloneCompilerOptions,
@@ -8,7 +9,6 @@ import {
     createProgram,
     createSourceFile,
     CustomTransformers,
-    Debug,
     Diagnostic,
     fileExtensionIs,
     filter,

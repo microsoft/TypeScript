@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -5,7 +6,6 @@ import {
 } from "../_namespaces/ts.codefix.js";
 import {
     CodeFixContextBase,
-    Debug,
     Diagnostics,
     factory,
     findAncestor,

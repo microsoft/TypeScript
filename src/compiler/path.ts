@@ -4,7 +4,6 @@ import {
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
-    Debug,
     endsWith,
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
@@ -17,6 +16,7 @@ import {
     some,
     startsWith,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.

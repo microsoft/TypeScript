@@ -16,7 +16,6 @@ import {
     containsIgnoredPath,
     containsPath,
     createGetCanonicalFileName,
-    Debug,
     directorySeparator,
     emptyArray,
     endsWith,
@@ -129,6 +128,7 @@ import {
     TypeChecker,
     UserPreferences,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 const stringToRegex = memoizeOne((pattern: string) => {
     try {

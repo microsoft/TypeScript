@@ -1,7 +1,7 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ClassLikeDeclaration,
     codefix,
-    Debug,
     findAncestor,
     FunctionLikeDeclaration,
     getUniqueName,

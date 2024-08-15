@@ -1,8 +1,8 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     CancellationToken,
     ClassDeclaration,
-    Debug,
     Diagnostics,
     emptyArray,
     EnumDeclaration,

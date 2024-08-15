@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -15,7 +16,6 @@ import {
     CodeFixContext,
     concatenate,
     createMultiMap,
-    Debug,
     Diagnostics,
     elementAt,
     emptyArray,

@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     createCodeFixAction,
     createCombinedCodeActions,
@@ -26,7 +27,6 @@ import {
     createModuleSpecifierResolutionHost,
     createMultiMap,
     createPackageJsonImportFilter,
-    Debug,
     DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     DiagnosticWithLocation,

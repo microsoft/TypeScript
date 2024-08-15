@@ -22,7 +22,6 @@ import {
     containsObjectRestOrSpread,
     createForOfBindingStatement,
     createSuperAccessVariableStatement,
-    Debug,
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
@@ -111,6 +110,7 @@ import {
     VoidExpression,
     YieldExpression,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 const enum ESNextSubstitutionFlags {
     None = 0,

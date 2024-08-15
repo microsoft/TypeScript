@@ -1,9 +1,9 @@
+import * as Debug from "../compiler/debug.js";
 import {
     combinePaths,
     createGetCanonicalFileName,
     createModuleSpecifierResolutionHost,
     createRange,
-    Debug,
     emptyArray,
     endsWith,
     ensurePathIsNonModuleName,

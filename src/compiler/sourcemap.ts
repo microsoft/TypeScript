@@ -4,7 +4,6 @@ import {
     CharacterCodes,
     combinePaths,
     compareValues,
-    Debug,
     DocumentPosition,
     DocumentPositionMapper,
     DocumentPositionMapperHost,
@@ -26,6 +25,7 @@ import {
     SourceMapGenerator,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {

@@ -2,7 +2,6 @@ import {
     CharacterCodes,
     Comparer,
     Comparison,
-    Debug,
     EqualityComparer,
     MapLike,
     Queue,
@@ -10,6 +9,7 @@ import {
     SortedReadonlyArray,
     TextSpan,
 } from "./_namespaces/ts.js";
+import * as Debug from "./debug.js";
 
 /* eslint-disable @typescript-eslint/prefer-for-of */
 

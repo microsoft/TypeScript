@@ -1,5 +1,4 @@
 import {
-    Debug,
     emptyArray,
     isNodeKind,
     Node,
@@ -7,6 +6,7 @@ import {
     SyntaxKind,
     SyntaxList,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 const sourceFileToNodeChildren = new WeakMap<SourceFileLike, WeakMap<Node, readonly Node[] | undefined>>();
 

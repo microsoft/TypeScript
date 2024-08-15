@@ -1,8 +1,8 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     codefix,
     createFutureSourceFile,
-    Debug,
     Diagnostics,
     emptyArray,
     findAncestor,

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     ArrowFunction,
     Block,
@@ -7,7 +8,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     DefaultClause,
     findChildOfKind,
     getLeadingCommentRanges,

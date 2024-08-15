@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     AccessExpression,
     append,
@@ -18,7 +19,6 @@ import {
     createTextRangeFromNode,
     createTextSpanFromBounds,
     createTextSpanFromRange,
-    Debug,
     Decorator,
     ElementAccessExpression,
     EmitHint,

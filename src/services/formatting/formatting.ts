@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     FormattingContext,
     FormattingRequestKind,
@@ -19,7 +20,6 @@ import {
     CommentRange,
     concatenate,
     createTextChangeFromStartLength,
-    Debug,
     Declaration,
     Diagnostic,
     EditorSettings,

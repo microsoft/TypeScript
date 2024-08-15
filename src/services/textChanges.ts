@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     addToSeen,
     ArrowFunction,
@@ -20,7 +21,6 @@ import {
     createTextSpan,
     createTextSpanFromRange,
     createTextWriter,
-    Debug,
     DeclarationStatement,
     EmitHint,
     EmitTextWriter,

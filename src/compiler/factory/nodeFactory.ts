@@ -59,7 +59,6 @@ import {
     createNodeConverters,
     createParenthesizerRules,
     createScanner,
-    Debug,
     DebuggerStatement,
     Declaration,
     DeclarationName,
@@ -458,6 +457,7 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 let nextAutoGenerateId = 0;
 

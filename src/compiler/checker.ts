@@ -130,7 +130,6 @@ import {
     createSymbolTable,
     createSyntacticTypeNodeBuilder,
     createTextWriter,
-    Debug,
     Declaration,
     DeclarationName,
     declarationNameToString,
@@ -1124,6 +1123,7 @@ import {
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

@@ -1,10 +1,10 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     BinaryExpression,
     BinaryOperator,
     copyTrailingAsLeadingComments,
     copyTrailingComments,
-    Debug,
     Diagnostics,
     emptyArray,
     Expression,

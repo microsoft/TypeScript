@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     createCodeFixAction,
     createCombinedCodeActions,
@@ -20,7 +21,6 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     createPrinter,
-    Debug,
     Declaration,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,

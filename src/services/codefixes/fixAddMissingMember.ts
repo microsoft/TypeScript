@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     createCodeFixAction,
     createCodeFixActionWithoutFixAll,
@@ -25,7 +26,6 @@ import {
     CodeFixContextBase,
     concatenate,
     createPropertyNameNodeForIdentifierOrLiteral,
-    Debug,
     Diagnostics,
     emptyArray,
     EnumDeclaration,

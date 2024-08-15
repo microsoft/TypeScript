@@ -1,9 +1,9 @@
+import * as Debug from "../compiler/debug.js";
 import {
     CharacterCodes,
     combinePaths,
     compareStringsCaseSensitive,
     CompilerOptions,
-    Debug,
     deduplicate,
     equateStringsCaseSensitive,
     Extension,

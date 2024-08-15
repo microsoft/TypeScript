@@ -1,6 +1,6 @@
+import * as Debug from "../compiler/debug.js";
 import {
     closeFileWatcher,
-    Debug,
     FileWatcher,
     ModulePath,
     ModuleSpecifierCache,

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     ArrowFunction,
     AssignmentDeclarationKind,
@@ -18,7 +19,6 @@ import {
     contains,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DeclarationName,
     declarationNameToString,

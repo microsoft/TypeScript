@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     ArrowFunction,
@@ -5,7 +6,6 @@ import {
     ConciseBody,
     copyComments,
     copyTrailingAsLeadingComments,
-    Debug,
     Diagnostics,
     emptyArray,
     factory,

@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     addEmitFlags,
     ApplicableRefactorInfo,
@@ -12,7 +13,6 @@ import {
     ConstructorDeclaration,
     contains,
     copyComments,
-    Debug,
     deduplicate,
     Diagnostics,
     ElementAccessExpression,

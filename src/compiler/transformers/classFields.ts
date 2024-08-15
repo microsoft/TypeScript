@@ -33,7 +33,6 @@ import {
     createAccessorPropertyGetRedirector,
     createAccessorPropertySetRedirector,
     createMemberAccessForPropertyName,
-    Debug,
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
@@ -226,6 +225,7 @@ import {
     visitParameterList,
     VisitResult,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 const enum ClassPropertySubstitutionFlags {
     None = 0,

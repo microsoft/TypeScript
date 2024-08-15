@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     addToSeen,
     arrayFrom,
@@ -20,7 +21,6 @@ import {
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,

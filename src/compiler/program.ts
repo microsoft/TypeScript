@@ -52,7 +52,6 @@ import {
     createTypeChecker,
     createTypeReferenceDirectiveResolutionCache,
     CustomTransformers,
-    Debug,
     DeclarationWithTypeParameterChildren,
     Diagnostic,
     DiagnosticArguments,
@@ -335,6 +334,7 @@ import {
     writeFileEnsuringDirectories,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

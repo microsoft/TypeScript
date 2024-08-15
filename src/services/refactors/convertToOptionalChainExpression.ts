@@ -1,10 +1,10 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     ApplicableRefactorInfo,
     BinaryExpression,
     CallExpression,
     ConditionalExpression,
     createTextSpanFromBounds,
-    Debug,
     Diagnostics,
     ElementAccessExpression,
     emptyArray,

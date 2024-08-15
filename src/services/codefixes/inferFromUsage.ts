@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
@@ -16,7 +17,6 @@ import {
     cast,
     createMultiMap,
     createSymbolTable,
-    Debug,
     Declaration,
     DiagnosticMessage,
     Diagnostics,

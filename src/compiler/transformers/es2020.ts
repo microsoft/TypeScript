@@ -6,7 +6,6 @@ import {
     CallExpression,
     cast,
     chainBundle,
-    Debug,
     DeleteExpression,
     EmitFlags,
     Expression,
@@ -37,6 +36,7 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 /** @internal */
 export function transformES2020(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

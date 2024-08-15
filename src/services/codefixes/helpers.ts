@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import { ImportAdder } from "../_namespaces/ts.codefix.js";
 import {
     AccessorDeclaration,
@@ -11,7 +12,6 @@ import {
     ClassLikeDeclaration,
     CodeFixContextBase,
     combine,
-    Debug,
     Declaration,
     Diagnostics,
     emptyArray,

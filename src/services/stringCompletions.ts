@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     CompletionKind,
     createCompletionDetails,
@@ -33,7 +34,6 @@ import {
     createSortedArray,
     createTextSpan,
     createTextSpanFromStringLiteralLikeContent,
-    Debug,
     deduplicate,
     directorySeparator,
     ElementAccessExpression,

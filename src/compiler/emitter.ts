@@ -54,7 +54,6 @@ import {
     createGetCanonicalFileName,
     createSourceMapGenerator,
     createTextWriter,
-    Debug,
     DebuggerStatement,
     DeclarationName,
     Decorator,
@@ -424,6 +423,7 @@ import {
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import * as Debug from "./debug.js";
 
 const brackets = createBracketsMap();
 

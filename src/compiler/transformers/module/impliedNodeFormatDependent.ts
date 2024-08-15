@@ -1,6 +1,5 @@
 import {
     Bundle,
-    Debug,
     EmitHint,
     isSourceFile,
     map,
@@ -13,6 +12,7 @@ import {
     Transformer,
     transformModule,
 } from "../../_namespaces/ts.js";
+import * as Debug from "../../debug.js";
 
 /** @internal */
 export function transformImpliedNodeFormatDependentModule(context: TransformationContext): Transformer<SourceFile | Bundle> {

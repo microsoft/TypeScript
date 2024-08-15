@@ -1,7 +1,7 @@
+import * as Debug from "../compiler/debug.js";
 import {
     CancellationToken,
     codefix,
-    Debug,
     fileShouldUseJavaScriptRequire,
     findAncestor,
     findIndex,

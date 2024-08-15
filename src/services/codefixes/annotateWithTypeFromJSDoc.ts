@@ -1,10 +1,10 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
 import {
-    Debug,
     Diagnostics,
     EmitFlags,
     emptyArray,

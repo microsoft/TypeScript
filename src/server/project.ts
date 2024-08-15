@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import * as ts from "./_namespaces/ts.js";
 import {
     addRange,
@@ -24,7 +25,6 @@ import {
     createLanguageService,
     createResolutionCache,
     createSymlinkCache,
-    Debug,
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,

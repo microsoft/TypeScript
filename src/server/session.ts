@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     arrayFrom,
     arrayReverseIterator,
@@ -22,7 +23,6 @@ import {
     createSet,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     decodedTextSpanIntersectsWith,
     deduplicate,
     DefinitionInfo,

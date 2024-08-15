@@ -1,9 +1,9 @@
+import * as Debug from "../compiler/debug.js";
 import {
     collapseTextChangeRangesAcrossMultipleVersions,
     computeLineStarts,
     createTextChangeRange,
     createTextSpan,
-    Debug,
     IScriptSnapshot,
     TextChangeRange,
     TextSpan,

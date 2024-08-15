@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug.js";
 import {
     __String,
     arrayToNumericMap,
@@ -15,7 +16,6 @@ import {
     couldStartTrivia,
     createScanner,
     createTextSpan,
-    Debug,
     decodedTextSpanIntersectsWith,
     EndOfLineState,
     EnumDeclaration,

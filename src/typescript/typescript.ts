@@ -1,4 +1,4 @@
-import { Debug } from "./_namespaces/ts.js";
+import * as Debug from "../compiler/debug.js";
 
 // enable deprecation logging
 declare const console: any;

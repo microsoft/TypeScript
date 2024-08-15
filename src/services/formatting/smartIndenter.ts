@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug.js";
 import {
     getRangeOfEnclosingComment,
     TextRangeWithKind,
@@ -11,7 +12,6 @@ import {
     ClassExpression,
     CommentRange,
     contains,
-    Debug,
     EditorSettings,
     find,
     findChildOfKind,

@@ -1,6 +1,6 @@
+import * as Debug from "../../compiler/debug.js";
 import { TextRangeWithKind } from "../_namespaces/ts.formatting.js";
 import {
-    Debug,
     findChildOfKind,
     FormatCodeSettings,
     Node,

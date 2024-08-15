@@ -34,7 +34,6 @@ import {
     createMemberAccessForPropertyName,
     createRange,
     createTokenRange,
-    Debug,
     Declaration,
     DoStatement,
     elementAt,
@@ -216,6 +215,7 @@ import {
     WhileStatement,
     YieldExpression,
 } from "../_namespaces/ts.js";
+import * as Debug from "../debug.js";
 
 const enum ES2015SubstitutionFlags {
     None = 0,
