@@ -278,6 +278,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -473,6 +474,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     autoImportProviderHost: false *changed*
 
 ScriptInfos::
@@ -1314,6 +1316,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1393,6 +1396,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
     noOpenRef: true *changed*
 
 ScriptInfos::
@@ -1565,6 +1569,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
     isClosed: true *changed*
     noOpenRef: true
 

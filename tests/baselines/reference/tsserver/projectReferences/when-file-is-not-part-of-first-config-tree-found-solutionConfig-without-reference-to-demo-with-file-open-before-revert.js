@@ -762,6 +762,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /home/src/projects/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -928,6 +929,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     noOpenRef: true *changed*
 /home/src/projects/random/tsconfig.json (Configured)
     projectStateVersion: 1

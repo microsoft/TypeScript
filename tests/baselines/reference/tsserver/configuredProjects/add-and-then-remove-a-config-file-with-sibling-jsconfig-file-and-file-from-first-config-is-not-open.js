@@ -275,6 +275,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -484,6 +485,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     autoImportProviderHost: false *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -1326,6 +1328,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1405,6 +1408,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
     noOpenRef: true *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -1576,6 +1580,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
     isClosed: true *changed*
     noOpenRef: true
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *deleted*

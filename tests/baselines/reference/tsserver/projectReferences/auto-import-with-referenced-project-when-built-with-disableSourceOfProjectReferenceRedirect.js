@@ -471,6 +471,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *new*

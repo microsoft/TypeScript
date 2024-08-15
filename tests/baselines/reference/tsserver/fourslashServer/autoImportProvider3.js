@@ -436,6 +436,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts
@@ -503,6 +504,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1003,3 +1005,4 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true

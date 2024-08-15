@@ -89,6 +89,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Before request
 
@@ -243,6 +244,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     autoImportProviderHost: false *changed*
 
 ScriptInfos::
