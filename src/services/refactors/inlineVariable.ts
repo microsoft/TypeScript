@@ -34,7 +34,6 @@ import {
     Node,
     Program,
     refactor,
-    skipParentheses,
     some,
     SourceFile,
     StringLiteral,
@@ -44,6 +43,7 @@ import {
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
+    walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
@@ -121,7 +121,7 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                const closestStringIdentifierParent = isStringLiteral(replacement) && isIdentifier(node) && skipParentheses(node.parent);
+                const closestStringIdentifierParent = isStringLiteral(replacement) && isIdentifier(node) && walkUpParenthesizedExpressions(node.parent);
                 if (closestStringIdentifierParent && isTemplateSpan(closestStringIdentifierParent) && !isTaggedTemplateExpression(closestStringIdentifierParent.parent.parent)) {
                     replaceTemplateStringVariableWithLiteral(tracker, file, closestStringIdentifierParent, replacement);
                 }
