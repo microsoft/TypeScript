@@ -158,7 +158,7 @@ export interface BuildOptions {
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ locale?: string;
     /** @internal */ generateCpuProfile?: string;
-    generateTrace?: string;
+    /** @internal */ generateTrace?: string;
 
     [option: string]: CompilerOptionsValue | undefined;
 }
