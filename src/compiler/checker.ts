@@ -2683,7 +2683,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (source.exports) {
                 if (!target.exports) target.exports = createSymbolTable();
-                mergeSymbolTable(target.exports, source.exports, unidirectional);
+                mergeSymbolTable(target.exports, source.exports, unidirectional, target);
             }
             if (!unidirectional) {
                 recordMergedSymbol(target, source);
@@ -2772,10 +2772,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return combined;
     }
 
-    function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false) {
+    function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false, mergedParent?: Symbol) {
         source.forEach((sourceSymbol, id) => {
             const targetSymbol = target.get(id);
-            target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : getMergedSymbol(sourceSymbol));
+            const merged = targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : getMergedSymbol(sourceSymbol);
+            if (mergedParent && targetSymbol) {
+                // If a merge was performed on the target symbol, set its parent to the merged parent that initiated the merge
+                // of its exports. Otherwise, `merged` came only from `sourceSymbol` and can keep its parent:
+                //
+                // // a.ts
+                // export interface A { x: number; }
+                //
+                // // b.ts
+                // declare module "./a" {
+                //   interface A { y: number; }
+                //   interface B {}
+                // }
+                //
+                // When merging the module augmentation into a.ts, the symbol for `A` will itself be merged, so its parent
+                // should be the merged module symbol. But the symbol for `B` has only one declaration, so its parent should
+                // be the module augmentation symbol, which contains its only declaration.
+                merged.parent = mergedParent;
+            }
+            target.set(id, merged);
         });
     }
 
