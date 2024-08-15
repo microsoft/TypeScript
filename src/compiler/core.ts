@@ -1917,7 +1917,7 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
     };
 }
 
-/** @internal */
+/** @internal @knipignore */
 export const enum AssertionLevel {
     None = 0,
     Normal = 1,

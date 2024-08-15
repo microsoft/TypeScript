@@ -115,10 +115,10 @@ export const enum AssertionLevel {
 
 let currentAssertionLevel = AssertionLevel.None;
 
-/** @internal */
+/** @internal @knipignore */
 export let currentLogLevel: LogLevel = LogLevel.Warning;
 
-/** @internal */
+/** @internal @knipignore */
 export function setCurrentLogLevel(newCurrentLogLevel: LogLevel): void {
     currentLogLevel = newCurrentLogLevel;
 }
@@ -139,7 +139,7 @@ export function setLoggingHost(newLoggingHost: LoggingHost | undefined): void {
     loggingHost = newLoggingHost;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function shouldLog(level: LogLevel): boolean {
     return currentLogLevel <= level;
 }
@@ -174,7 +174,7 @@ export namespace log {
     }
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function getAssertionLevel(): AssertionLevel {
     return currentAssertionLevel;
 }
@@ -352,11 +352,11 @@ export function assertOptionalNode(node: Node | undefined, test: ((node: Node) =
     }
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }>;
-/** @internal */
+/** @internal @knipignore */
 export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }> | undefined;
-/** @internal */
+/** @internal @knipignore */
 export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssert(AssertionLevel.Normal)) {
@@ -476,7 +476,7 @@ export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
     return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatSnippetKind(kind: SnippetKind | undefined): string {
     return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
 }
@@ -496,17 +496,17 @@ export function formatNodeCheckFlags(flags: NodeCheckFlags | undefined): string 
     return formatEnum(flags, (ts as any).NodeCheckFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatModifierFlags(flags: ModifierFlags | undefined): string {
     return formatEnum(flags, (ts as any).ModifierFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatTransformFlags(flags: TransformFlags | undefined): string {
     return formatEnum(flags, (ts as any).TransformFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatEmitFlags(flags: EmitFlags | undefined): string {
     return formatEnum(flags, (ts as any).EmitFlags, /*isFlags*/ true);
 }
@@ -521,7 +521,7 @@ export function formatTypeFlags(flags: TypeFlags | undefined): string {
     return formatEnum(flags, (ts as any).TypeFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatSignatureFlags(flags: SignatureFlags | undefined): string {
     return formatEnum(flags, (ts as any).SignatureFlags, /*isFlags*/ true);
 }
@@ -531,27 +531,27 @@ export function formatObjectFlags(flags: ObjectFlags | undefined): string {
     return formatEnum(flags, (ts as any).ObjectFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatFlowFlags(flags: FlowFlags | undefined): string {
     return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatRelationComparisonResult(result: RelationComparisonResult | undefined): string {
     return formatEnum(result, (ts as any).RelationComparisonResult, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatCheckMode(mode: CheckMode | undefined): string {
     return formatEnum(mode, (ts as any).CheckMode, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
     return formatEnum(mode, (ts as any).SignatureCheckMode, /*isFlags*/ true);
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatTypeFacts(facts: TypeFacts | undefined): string {
     return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
 }
@@ -876,7 +876,7 @@ export function formatVariance(varianceFlags: VarianceFlags): string {
 
 /** @internal */
 export type DebugType = Type & { __debugTypeToString(): string; }; // eslint-disable-line @typescript-eslint/naming-convention
-/** @internal */
+/** @internal @knipignore */
 export class DebugTypeMapper {
     declare kind: TypeMapKind;
     __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
@@ -916,12 +916,12 @@ export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
     return mapper;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function printControlFlowGraph(flowNode: FlowNode): void {
     return console.log(formatControlFlowGraph(flowNode));
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function formatControlFlowGraph(flowNode: FlowNode): string {
     let nextDebugFlowId = -1;
 
