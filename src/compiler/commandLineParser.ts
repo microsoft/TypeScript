@@ -437,7 +437,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         name: "generateTrace",
         type: "string",
         isFilePath: true,
-        isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
