@@ -34,6 +34,7 @@ import {
     Node,
     Program,
     refactor,
+    skipParentheses,
     some,
     SourceFile,
     StringLiteral,
@@ -120,8 +121,9 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                if (isStringLiteral(replacement) && isIdentifier(node) && isTemplateSpan(node.parent) && !isTaggedTemplateExpression(node.parent.parent.parent)) {
-                    replaceTemplateStringVariableWithLiteral(tracker, file, node.parent, replacement);
+                const closestStringIdentifierParent = isStringLiteral(replacement) && isIdentifier(node) && skipParentheses(node.parent);
+                if (closestStringIdentifierParent && isTemplateSpan(closestStringIdentifierParent) && !isTaggedTemplateExpression(closestStringIdentifierParent.parent.parent)) {
+                    replaceTemplateStringVariableWithLiteral(tracker, file, closestStringIdentifierParent, replacement);
                 }
                 else {
                     tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
