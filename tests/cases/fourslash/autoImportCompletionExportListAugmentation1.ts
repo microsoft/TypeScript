@@ -17,6 +17,7 @@
 ////   interface Container {
 ////     client: unknown;
 ////   }
+////   export { Container };
 //// }
 
 // @Filename: /index.ts
