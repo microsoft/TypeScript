@@ -132,7 +132,7 @@ function pasteEdits(
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
                     const isImportCandidate = isIdentifier(node) &&
                         rangeContainsPosition(range, node.getStart(updatedFile)) &&
-                        !originalProgram?.getTypeChecker().resolveName(
+                        !updatedProgram?.getTypeChecker().resolveName(
                             node.text,
                             node,
                             SymbolFlags.All,
