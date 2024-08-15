@@ -861,23 +861,36 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
     seenResolvedRefs?: Map<string, ConfiguredProjectLoadKind>,
 ): T | undefined {
     const loadKind = parentOptions.disableReferencedProjectLoad ? ConfiguredProjectLoadKind.Find : kind;
-    return forEach(resolvedProjectReferences, ref => {
-        if (!ref) return undefined;
-
-        const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-        const canonicalPath = projectService.toCanonicalFileName(configFileName);
-        const seenValue = seenResolvedRefs?.get(canonicalPath);
-        if (seenValue !== undefined && seenValue >= loadKind) {
-            return undefined;
-        }
-        const result = cb(ref, loadKind);
-        if (result) {
-            return result;
-        }
-
-        (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
-        return ref.references && forEachResolvedProjectReferenceProjectWorker(ref.references, ref.commandLine.options, cb, loadKind, projectService, seenResolvedRefs);
-    });
+    let skipChildren: Set<ResolvedProjectReference> | undefined;
+    return forEach(
+        resolvedProjectReferences,
+        ref => {
+            if (!ref) return undefined;
+            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+            const canonicalPath = projectService.toCanonicalFileName(configFileName);
+            const seenValue = seenResolvedRefs?.get(canonicalPath);
+            if (seenValue !== undefined && seenValue >= loadKind) {
+                (skipChildren ??= new Set()).add(ref);
+                return undefined;
+            }
+            const result = cb(ref, loadKind);
+            if (result) return result;
+            (seenResolvedRefs ??= new Map()).set(canonicalPath, loadKind);
+        },
+    ) || forEach(
+        resolvedProjectReferences,
+        ref =>
+            ref?.references && !skipChildren?.has(ref) ?
+                forEachResolvedProjectReferenceProjectWorker(
+                    ref.references,
+                    ref.commandLine.options,
+                    cb,
+                    loadKind,
+                    projectService,
+                    seenResolvedRefs,
+                ) :
+                undefined,
+    );
 }
 
 function forEachPotentialProjectReference<T>(

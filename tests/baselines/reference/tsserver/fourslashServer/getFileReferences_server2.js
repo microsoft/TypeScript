@@ -253,73 +253,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/shared/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/shared
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json",
-        "reason": "Creating project referenced in solution /home/src/workspaces/project/tsconfig.json to find possible configured project for /home/src/workspaces/project/tsconfig.json to open"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/packages/shared/src/referenced.ts Text-1 "export {};"
-
-
-	../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	../../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
-	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
-	src/referenced.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/home/src/workspaces/project/tsconfig.json",
-        "configFile": "/home/src/workspaces/project/packages/shared/tsconfig.json",
-        "diagnostics": []
-      }
-    }
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/client/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/client
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -391,6 +324,73 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/shared/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/shared
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json",
+        "reason": "Creating project referenced in solution /home/src/workspaces/project/tsconfig.json to find possible configured project for /home/src/workspaces/project/tsconfig.json to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/packages/shared/src/referenced.ts Text-1 "export {};"
+
+
+	../../../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	src/referenced.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/workspaces/project/tsconfig.json",
+        "configFile": "/home/src/workspaces/project/packages/shared/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -429,12 +429,12 @@ Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/server/t
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/client/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -560,22 +560,22 @@ ScriptInfos::
     version: Text-1
     containingProjects: 4
         /home/src/workspaces/project/packages/server/tsconfig.json
-        /home/src/workspaces/project/packages/shared/tsconfig.json
         /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 4
         /home/src/workspaces/project/packages/server/tsconfig.json
-        /home/src/workspaces/project/packages/shared/tsconfig.json
         /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
     version: Text-1
     containingProjects: 4
         /home/src/workspaces/project/packages/server/tsconfig.json
-        /home/src/workspaces/project/packages/shared/tsconfig.json
         /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json
         /dev/null/inferredProject1*
 /home/src/workspaces/project/packages/client/index.ts *new*
     version: Text-1
@@ -593,8 +593,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/server/tsconfig.json
-        /home/src/workspaces/project/packages/shared/tsconfig.json
         /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json
 /home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
