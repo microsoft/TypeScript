@@ -5461,7 +5461,7 @@ export const enum NodeBuilderFlags {
     AllowEmptyIndexInfoType                 = 1 << 21,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
-
+    
 
     IgnoreErrors = AllowThisInObjectLiteral | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
 
@@ -7341,7 +7341,7 @@ export interface CompilerOptions {
     experimentalDecorators?: boolean;
     forceConsistentCasingInFileNames?: boolean;
     /** @internal */ generateCpuProfile?: string;
-    generateTrace?: string;
+    /** @internal */ generateTrace?: string;
     /** @internal */ help?: boolean;
     ignoreDeprecations?: string;
     importHelpers?: boolean;
