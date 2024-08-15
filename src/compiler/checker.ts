@@ -8316,7 +8316,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * @param symbol - The symbol is used both to find an existing annotation if declaration is not provided, and to determine if `unique symbol` should be printed
          */
         function serializeTypeForDeclaration(context: NodeBuilderContext, declaration: Declaration | undefined, type: Type, symbol: Symbol) {
-            const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
+            const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const enclosingDeclaration = context.enclosingDeclaration;
             const restoreFlags = saveRestoreFlags(context);
             if (declaration && hasInferredType(declaration) && !(context.internalFlags & InternalNodeBuilderFlags.NoSyntacticPrinter)) {
@@ -10678,7 +10678,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (localName === InternalSymbolName.ExportEquals) {
                     localName = "_exports";
                 }
-                localName = isIdentifierText(localName, languageVersion) && !isStringANonContextualKeyword(localName) ? localName : "_" + localName.replace(/[^a-zA-Z0-9]/g, "_");
+                localName = isIdentifierText(localName, languageVersion) && !isStringANonContextualKeyword(localName) ? localName : "_" + localName.replace(/[^a-z0-9]/gi, "_");
                 return localName;
             }
 
@@ -18188,8 +18188,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     removeFromEach(typeSet, TypeFlags.Null);
                     result = getUnionType([getIntersectionType(typeSet, flags), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
-                else if (typeSet.length >= 4) {
-                    // When we have four or more constituents, some of which are unions, we employ a "divide and conquer" strategy
+                else if (typeSet.length >= 3 && types.length > 2) {
+                    // When we have three or more constituents, more than two inputs (to head off infinite reexpansion), some of which are unions, we employ a "divide and conquer" strategy
                     // where A & B & C & D is processed as (A & B) & (C & D). Since intersections of unions often produce far smaller
                     // unions of intersections than the full cartesian product (due to some intersections becoming `never`), this can
                     // dramatically reduce the overall work.
@@ -34355,7 +34355,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function containerSeemsToBeEmptyDomElement(containingType: Type) {
         return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
-            everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
+            everyContainedType(containingType, type => type.symbol && /^(?:EventTarget|Node|(?:HTML[a-zA-Z]*)?Element)$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
             isEmptyObjectType(containingType);
     }
 
@@ -39831,6 +39831,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (leftOk && rightOk) {
                         checkAssignmentOperator(resultType);
+                        switch (operator) {
+                            case SyntaxKind.LessThanLessThanToken:
+                            case SyntaxKind.LessThanLessThanEqualsToken:
+                            case SyntaxKind.GreaterThanGreaterThanToken:
+                            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                                const rhsEval = evaluate(right);
+                                if (typeof rhsEval.value === "number" && Math.abs(rhsEval.value) >= 32) {
+                                    errorOrSuggestion(
+                                        isEnumMember(walkUpParenthesizedExpressions(right.parent.parent)), // elevate from suggestion to error within an enum member
+                                        errorNode || operatorToken,
+                                        Diagnostics.This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
+                                        getTextOfNode(left),
+                                        tokenToString(operator),
+                                        rhsEval.value % 32,
+                                    );
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     return resultType;
                 }
@@ -44105,14 +44127,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
                         if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
                             const optionalDisposableType = getUnionType([globalAsyncDisposableType, globalDisposableType, nullType, undefinedType]);
-                            checkTypeAssignableTo(initializerType, optionalDisposableType, initializer, Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
+                            checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(initializerType, node), optionalDisposableType, initializer, Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
                         }
                     }
                     else if (blockScopeKind === NodeFlags.Using) {
                         const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
                         if (globalDisposableType !== emptyObjectType) {
                             const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
-                            checkTypeAssignableTo(initializerType, optionalDisposableType, initializer, Diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
+                            checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(initializerType, node), optionalDisposableType, initializer, Diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
                         }
                     }
                 }
@@ -49591,16 +49613,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getTypeFromTypeNode(typeNode);
         return containsUndefinedType(type);
     }
-    function requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag) {
-        return (isRequiredInitializedParameter(parameter) || isOptionalUninitializedParameterProperty(parameter)) && !declaredParameterTypeContainsUndefined(parameter);
+
+    function requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined) {
+        return (isRequiredInitializedParameter(parameter, enclosingDeclaration) || isOptionalUninitializedParameterProperty(parameter)) && !declaredParameterTypeContainsUndefined(parameter);
     }
 
-    function isRequiredInitializedParameter(parameter: ParameterDeclaration | JSDocParameterTag): boolean {
-        return !!strictNullChecks &&
-            !isOptionalParameter(parameter) &&
-            !isJSDocParameterTag(parameter) &&
-            !!parameter.initializer &&
-            !hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
+    function isRequiredInitializedParameter(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean {
+        if (!strictNullChecks || isOptionalParameter(parameter) || isJSDocParameterTag(parameter) || !parameter.initializer) {
+            return false;
+        }
+        if (hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier)) {
+            return !!enclosingDeclaration && isFunctionLikeDeclaration(enclosingDeclaration);
+        }
+        return true;
     }
 
     function isOptionalUninitializedParameterProperty(parameter: ParameterDeclaration | JSDocParameterTag) {

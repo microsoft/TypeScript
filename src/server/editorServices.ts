@@ -80,6 +80,7 @@ import {
     length,
     map,
     mapDefinedIterator,
+    memoize,
     missingFileModifiedTime,
     MultiMap,
     noop,
@@ -1910,6 +1911,11 @@ export class ProjectService {
             this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
             this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
             this.watchPackageJsonFile(file, fileOrDirectoryPath, wildCardWatcher);
+        }
+
+        if (!fsResult?.fileExists) {
+            // Ensure we send sourceFileChange
+            this.sendSourceFileChange(fileOrDirectoryPath);
         }
 
         const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
@@ -3838,6 +3844,34 @@ export class ProjectService {
         this.logger.close();
     }
 
+    private sendSourceFileChange(inPath: Path | undefined) {
+        this.filenameToScriptInfo.forEach(info => {
+            if (this.openFiles.has(info.path)) return; // Skip open files
+            if (!info.fileWatcher) return; // not watched file
+            const eventKind = memoize(() =>
+                this.host.fileExists(info.fileName) ?
+                    info.deferredDelete ?
+                        FileWatcherEventKind.Created :
+                        FileWatcherEventKind.Changed :
+                    FileWatcherEventKind.Deleted
+            );
+            if (inPath) {
+                // Skip node modules and files that are not in path
+                if (isScriptInfoWatchedFromNodeModules(info) || !info.path.startsWith(inPath)) return;
+                // If we are sending delete event and its already deleted, ignore
+                if (eventKind() === FileWatcherEventKind.Deleted && info.deferredDelete) return;
+                // In change cases, its hard to know if this is marked correctly across files and projects, so just send the event
+                this.logger.info(`Invoking sourceFileChange on ${info.fileName}:: ${eventKind()}`);
+            }
+
+            // Handle as if file is changed or deleted
+            this.onSourceFileChanged(
+                info,
+                eventKind(),
+            );
+        });
+    }
+
     /**
      * This function rebuilds the project for every file opened by the client
      * This does not reload contents of open files from disk. But we could do that if needed
@@ -3850,19 +3884,7 @@ export class ProjectService {
         // as there is no need to load contents of the files from the disk
 
         // Reload script infos
-        this.filenameToScriptInfo.forEach(info => {
-            if (this.openFiles.has(info.path)) return; // Skip open files
-            if (!info.fileWatcher) return; // not watched file
-            // Handle as if file is changed or deleted
-            this.onSourceFileChanged(
-                info,
-                this.host.fileExists(info.fileName) ?
-                    info.deferredDelete ?
-                        FileWatcherEventKind.Created :
-                        FileWatcherEventKind.Changed :
-                    FileWatcherEventKind.Deleted,
-            );
-        });
+        this.sendSourceFileChange(/*inPath*/ undefined);
         // Cancel all project updates since we will be updating them now
         this.pendingProjectUpdates.forEach((_project, projectName) => {
             this.throttledOperations.cancel(projectName);
@@ -5041,7 +5063,7 @@ export class ProjectService {
         if (
             !pluginConfigEntry.name ||
             isExternalModuleNameRelative(pluginConfigEntry.name) ||
-            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+            /[\\/]\.\.?(?:$|[\\/])/.test(pluginConfigEntry.name)
         ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;

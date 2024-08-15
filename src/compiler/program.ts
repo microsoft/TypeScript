@@ -3109,7 +3109,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
             // Stop searching if the line is not empty and not a comment
             const lineText = file.text.slice(lineStarts[line], lineStarts[line + 1]).trim();
-            if (lineText !== "" && !/^(\s*)\/\/(.*)$/.test(lineText)) {
+            if (lineText !== "" && !/^\s*\/\/.*$/.test(lineText)) {
                 return -1;
             }
 

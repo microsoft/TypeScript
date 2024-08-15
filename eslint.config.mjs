@@ -1,5 +1,6 @@
 // @ts-check
 import eslint from "@eslint/js";
+import * as regexpPlugin from "eslint-plugin-regexp";
 import fs from "fs";
 import globals from "globals";
 import { createRequire } from "module";
@@ -36,6 +37,7 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
+    regexpPlugin.configs["flat/recommended"],
     {
         plugins: {
             local: {
@@ -123,24 +125,15 @@ export default tseslint.config(
             "@typescript-eslint/no-var-requires": "off",
             "@typescript-eslint/no-empty-interface": "off",
             "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/ban-types": [
-                "error",
-                {
-                    extendDefaults: true,
-                    types: {
-                        // This is theoretically good, but ts-eslint appears to mistake our declaration of Symbol for the global Symbol type.
-                        // See: https://github.com/typescript-eslint/typescript-eslint/issues/7306
-                        "Symbol": false,
-                        "{}": false, // {} is a totally useful and valid type.
-                    },
-                },
-            ],
+            "@typescript-eslint/no-empty-object-type": "off", // {} is a totally useful and valid type.
+            "@typescript-eslint/no-require-imports": "off",
             "@typescript-eslint/no-unused-vars": [
                 "warn",
                 {
                     // Ignore: (solely underscores | starting with exactly one underscore)
                     argsIgnorePattern: "^(_+$|_[^_])",
                     varsIgnorePattern: "^(_+$|_[^_])",
+                    // Not setting an ignore pattern for caught errors; those can always be safely removed.
                 },
             ],
             "@typescript-eslint/no-inferrable-types": "off",
@@ -162,6 +155,7 @@ export default tseslint.config(
             "local/no-keywords": "error",
             "local/jsdoc-format": "error",
             "local/js-extensions": "error",
+            "local/no-array-mutating-method-expressions": "error",
         },
     },
     {
@@ -217,6 +211,7 @@ export default tseslint.config(
         files: ["src/harness/**", "src/testRunner/**"],
         rules: {
             "no-restricted-globals": "off",
+            "regexp/no-super-linear-backtracking": "off",
             "local/no-direct-import": "off",
         },
     },
@@ -239,7 +234,8 @@ export default tseslint.config(
             "@typescript-eslint/interface-name-prefix": "off",
             "@typescript-eslint/prefer-function-type": "off",
             "@typescript-eslint/unified-signatures": "off",
-            "@typescript-eslint/ban-types": "off",
+            "@typescript-eslint/no-unsafe-function-type": "off",
+            "@typescript-eslint/no-wrapper-object-types": "off",
             "@typescript-eslint/no-unused-vars": "off",
 
             // scripts/eslint/rules

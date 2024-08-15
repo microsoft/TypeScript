@@ -21,6 +21,7 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     find,
+    forEachAncestorDirectory,
     getAllowJSCompilerOption,
     getBaseFileName,
     getDirectoryPath,
@@ -198,7 +199,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         try {
             return createCachedFileSystemEntries(rootDir, rootDirPath);
         }
-        catch (_e) {
+        catch {
             // If there is exception to read directories, dont cache the result and direct the calls to host
             Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
             return undefined;
@@ -291,6 +292,13 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         return host.realpath ? host.realpath(s) : s;
     }
 
+    function clearFirstAncestorEntry(fileOrDirectoryPath: Path) {
+        forEachAncestorDirectory(
+            getDirectoryPath(fileOrDirectoryPath),
+            ancestor => cachedReadDirectoryResult.delete(ensureTrailingDirectorySeparator(ancestor)) ? true : undefined,
+        );
+    }
+
     function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
         const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
         if (existingResult !== undefined) {
@@ -302,6 +310,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
 
         const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
         if (!parentResult) {
+            clearFirstAncestorEntry(fileOrDirectoryPath);
             return undefined;
         }
 
@@ -338,6 +347,9 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
         if (parentResult) {
             updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
+        }
+        else {
+            clearFirstAncestorEntry(filePath);
         }
     }
 

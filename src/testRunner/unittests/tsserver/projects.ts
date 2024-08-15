@@ -1375,19 +1375,38 @@ describe("unittests:: tsserver:: projects::", () => {
         host.runQueuedTimeoutCallbacks();
 
         // file is deleted but watches are not yet invoked
-        const originalFileExists = host.fileExists;
-        host.fileExists = s => s === fileA.path ? false : originalFileExists.call(host, s);
+        const invokeFileWatcher = host.invokeFileWatcher;
+        const fileWatches: Parameters<typeof host.invokeFileWatcher>[] = [];
+        host.invokeFileWatcher = (fileFullPath, eventKind, modifiedTime) => {
+            fileWatches.push([fileFullPath, eventKind, modifiedTime]);
+        };
+        const invokeFsWatchesCallbacks = host.invokeFsWatchesCallbacks;
+        const fsWatches: Parameters<typeof host.invokeFsWatchesCallbacks>[] = [];
+        host.invokeFsWatchesCallbacks = (fullPath, eventName, eventFullPath, useTildeSuffix) => {
+            fsWatches.push([fullPath, eventName, eventFullPath, useTildeSuffix]);
+        };
+        const invokeFsWatchesRecursiveCallbacks = host.invokeFsWatchesRecursiveCallbacks;
+        const fsWatchesRecursive: Parameters<typeof host.invokeFsWatchesRecursiveCallbacks>[] = [];
+        host.invokeFsWatchesRecursiveCallbacks = (fullPath, eventName, eventFullPath, useTildeSuffix) => {
+            fsWatchesRecursive.push([fullPath, eventName, eventFullPath, useTildeSuffix]);
+        };
+
+        host.deleteFile(fileA.path);
+        host.ensureFileOrFolder(fileSubA);
         closeFilesForSession([fileA], session);
 
         // This should create inferred project since fileSubA not on the disk
         openFile(fileSubA);
 
         host.runQueuedTimeoutCallbacks(); // Update configured project and projects for open file
-        host.fileExists = originalFileExists;
+        host.invokeFileWatcher = invokeFileWatcher;
+        host.invokeFsWatchesCallbacks = invokeFsWatchesCallbacks;
+        host.invokeFsWatchesRecursiveCallbacks = invokeFsWatchesRecursiveCallbacks;
 
         // Actually trigger the file move
-        host.deleteFile(fileA.path);
-        host.ensureFileOrFolder(fileSubA);
+        fileWatches.forEach(args => host.invokeFileWatcher(...args));
+        fsWatches.forEach(args => host.invokeFsWatchesCallbacks(...args));
+        fsWatchesRecursive.forEach(args => host.invokeFsWatchesRecursiveCallbacks(...args));
 
         verifyGetErrRequest({ session, files: [fileB, fileSubA], existingTimeouts: true });
         baselineTsserverLogs("projects", "handles delayed directory watch invoke on file creation", session);
