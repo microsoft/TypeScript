@@ -6063,7 +6063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!location) {
                 return range;
             }
-            // Don't overwrite the original node if `range` has an `original` node that points either directly or indirectly to `location` 
+            // Don't overwrite the original node if `range` has an `original` node that points either directly or indirectly to `location`
             let original = range.original;
             while (original && original !== location) {
                 original = original.original;
