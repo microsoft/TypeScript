@@ -6063,10 +6063,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!location) {
                 return range;
             }
-            if (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(location))) {
-                return setOriginalNode(range, location); // if `location` is from another file, only set/update original pointer, and not positions, since copying text across files isn't supported by the emitter
+            // Don't overwrite the original node if `range` has an `original` node that points either directly or indirectly to `location` 
+            let original = range.original;
+            while (original && original !== location) {
+                original = original.original;
             }
-            return setTextRangeWorker(setOriginalNode(range, location), location);
+            if (!original) {
+                setOriginalNode(range, location);
+            }
+            // only set positions if range comes from the same file since copying text across files isn't supported by the emitter
+            if (context.enclosingFile && context.enclosingFile === getSourceFileOfNode(getOriginalNode(location))) {
+                return setTextRangeWorker(range, location);
+            }
+            return range;
         }
 
         /**
