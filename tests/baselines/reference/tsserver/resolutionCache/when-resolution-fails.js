@@ -289,3 +289,21 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/src/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src/somefolder 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src/somefolder 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/src/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/src/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/somefolder/module1.js
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/src/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+//// [/user/username/projects/myproject/src/somefolder/module1.js]
+export const x = 10;
+
+
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+After running Timeout callback:: count: 0

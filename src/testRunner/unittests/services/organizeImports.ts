@@ -470,6 +470,28 @@ console.log(A, B, a, b);`,
 console.log(A, B, a, b);`,
         });
 
+        testOrganizeImports("parseErrors", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.js",
+            content: `declare module 'mod1' {
+    declare export type P = {|
+    |};
+    declare export type F = {|
+        ...$Exact<Node>,
+        await?: Span,
+    |};
+    declare export type S = {|
+    |};
+    declare export type C = {|
+    |};
+}
+
+declare module 'mod2' {
+    import type {
+        U,
+    } from 'mod1';
+}`,
+        });
+
         testOrganizeImports("Renamed_used", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `
@@ -822,8 +844,7 @@ import { React, Other } from "react";
 `,
         }, reactLibFile);
 
-        // TS files are not JSX contexts, so the parser does not treat
-        // `<div/>` as a JSX element.
+        // TS files are not JSX contexts, so the parser does not treat `<div/>` as a JSX element.
         testOrganizeImports("JsxFactoryUsedTs", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `
@@ -1049,19 +1070,32 @@ export * from "lib";
             const { path: testPath, content: testContent } = testFile;
             const languageService = makeLanguageService(testFile, ...otherFiles);
             const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, ts.testFormatSettings, ts.emptyOptions);
-            assert.equal(changes.length, 1);
-            assert.equal(changes[0].fileName, testPath);
 
-            const newText = ts.textChanges.applyChanges(testContent, changes[0].textChanges);
-            Harness.Baseline.runBaseline(
-                baselinePath,
-                [
-                    "// ==ORIGINAL==",
-                    testContent,
-                    "// ==ORGANIZED==",
-                    newText,
-                ].join(newLineCharacter),
-            );
+            if (changes.length !== 0) {
+                assert.equal(changes.length, 1);
+                assert.equal(changes[0].fileName, testPath);
+
+                const newText = ts.textChanges.applyChanges(testContent, changes[0].textChanges);
+                Harness.Baseline.runBaseline(
+                    baselinePath,
+                    [
+                        "// ==ORIGINAL==",
+                        testContent,
+                        "// ==ORGANIZED==",
+                        newText,
+                    ].join(newLineCharacter),
+                );
+            }
+            else {
+                Harness.Baseline.runBaseline(
+                    baselinePath,
+                    [
+                        "// ==ORIGINAL==",
+                        "// ==NO CHANGES==",
+                        testContent,
+                    ].join(newLineCharacter),
+                );
+            }
         }
 
         function testDetectionBaseline(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {

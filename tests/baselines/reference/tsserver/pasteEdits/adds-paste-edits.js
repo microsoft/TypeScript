@@ -6,6 +6,10 @@ const a = 1;
 const b = 2;
 const c = 3;
 
+//// [/project/a/file1.ts]
+export const r = 1;
+export const s = 2;
+
 //// [/project/tsconfig.json]
 {}
 
@@ -47,6 +51,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Config: /project/tsconfig.json : {
  "rootNames": [
+  "/project/a/file1.ts",
   "/project/a/target.ts"
  ],
  "options": {
@@ -55,17 +60,21 @@ Info seq  [hh:mm:ss:mss] Config: /project/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project 1 undefined Config: /project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project 1 undefined Config: /project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
 	/project/a/target.ts SVC-1-0 "const a = 1;\nconst b = 2;\nconst c = 3;"
 
 
 	../a/lib/lib.d.ts
 	  Default library for target 'es5'
+	a/file1.ts
+	  Matched by default include pattern '**/*'
 	a/target.ts
 	  Matched by default include pattern '**/*'
 
@@ -93,8 +102,8 @@ Info seq  [hh:mm:ss:mss] event:
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 1,
-            "tsSize": 38,
+            "ts": 2,
+            "tsSize": 77,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
@@ -132,7 +141,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -154,6 +163,8 @@ After request
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
+/project/a/file1.ts: *new*
+  {}
 /project/tsconfig.json: *new*
   {}
 
@@ -168,6 +179,10 @@ Projects::
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/a/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
@@ -205,8 +220,9 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
 	/project/a/target.ts SVC-1-1 "const a = 1;const q = 1;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -217,6 +233,17 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "fileName": "/project/a/target.ts",
             "textChanges": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "newText": "import { r, s } from \"./file1\";\n\n"
+              },
               {
                 "start": {
                   "line": 1,
@@ -251,6 +278,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
+/project/a/file1.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a/target.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
@@ -281,8 +312,9 @@ Before running Timeout callback:: count: 1
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
 	/project/a/target.ts SVC-1-2 "const a = 1;\nconst b = 2;\nconst c = 3;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -293,8 +325,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/project/a/target.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -318,8 +349,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/project/a/target.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -337,8 +367,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/project/a/target.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -349,7 +378,15 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 3,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/project/a/target.ts"
+            }
+          ]
         }
       }
     }

@@ -53,7 +53,9 @@ var v2 = (s: string) => s.length || function (s) { s.length };
 >function (s) { s.length } : (s: any) => void
 >                          : ^ ^^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 >s.length : any
+>         : ^^^
 >s : any
 >  : ^^^
 >length : any

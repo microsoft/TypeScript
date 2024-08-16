@@ -256,6 +256,14 @@ const g2 = require("./g"); // { default: 0 }
 >require : Symbol(require)
 >"./g" : Symbol(g1, Decl(g.js, 0, 0))
 
+=== /main4.cjs ===
+exports.x = require("./g");
+>exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
+>exports : Symbol(x, Decl(main4.cjs, 0, 0))
+>x : Symbol(x, Decl(main4.cjs, 0, 0))
+>require : Symbol(require)
+>"./g" : Symbol("/g", Decl(g.js, 0, 0))
+
 === /dummy.ts ===
 
 export {}; // Silly test harness

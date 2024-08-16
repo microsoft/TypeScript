@@ -545,11 +545,11 @@ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => vo
 >args.slice(0, -1) : (((...values: T) => void) | T[number])[]
 >                  : ^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >args.slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
->           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^  
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >args : [...T, (...values: T) => void]
 >     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >-1 : -1

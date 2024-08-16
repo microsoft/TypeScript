@@ -285,7 +285,7 @@ function isInsideAwaitableBody(node: Node) {
 function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
     if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
         const exprType = checker.getTypeAtLocation(insertionSite);
-        const asyncIter = checker.getAsyncIterableType();
+        const asyncIter = checker.getAnyAsyncIterableType();
         if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
             const forOf = insertionSite.parent;
             changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));

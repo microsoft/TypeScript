@@ -1,4 +1,3 @@
-import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -118,6 +117,7 @@ import {
     ModifierLike,
     ModuleDeclaration,
     ModuleKind,
+    moduleSpecifiers,
     moduleSpecifierToValidIdentifier,
     NamedImportBindings,
     Node,
@@ -129,6 +129,7 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     QuotePreference,
+    rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
     RequireOrImportCall,
@@ -145,6 +146,7 @@ import {
     SyntaxKind,
     takeWhile,
     textChanges,
+    TextRange,
     TransformFlags,
     tryCast,
     TypeAliasDeclaration,
@@ -155,8 +157,10 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts.js";
-import { addTargetFileImports } from "../_namespaces/ts.refactor.js";
-import { registerRefactor } from "../refactorProvider.js";
+import {
+    addTargetFileImports,
+    registerRefactor,
+} from "../_namespaces/ts.refactor.js";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -356,7 +360,7 @@ function updateImportsInOtherFiles(
 
                 if (getStringComparer(!program.useCaseSensitiveFileNames())(pathToTargetFileWithExtension, sourceFile.fileName) === Comparison.EqualTo) return;
 
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newModuleSpecifier = moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -861,7 +865,7 @@ function isPureImport(node: Node): boolean {
 }
 
 /** @internal */
-export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set()): UsageInfo {
+export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set(), enclosingRange?: TextRange): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, [/*isValidTypeOnlyUseSite*/ boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>();
     const targetFileImportsFromOldFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
@@ -880,7 +884,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
-        forEachReference(statement, checker, (symbol, isValidTypeOnlyUseSite) => {
+        forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
             if (!symbol.declarations || isGlobalType(checker, symbol)) {
                 return;
             }
@@ -916,7 +920,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
         }
 
-        forEachReference(statement, checker, (symbol, isValidTypeOnlyUseSite) => {
+        forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
             if (movedSymbols.has(symbol)) oldFileImportsFromTargetFile.set(symbol, isValidTypeOnlyUseSite);
             unusedImportsFromOldFile.delete(symbol);
         });
@@ -959,9 +963,12 @@ function inferNewFileName(importsFromNewFile: Map<Symbol, unknown>, movedSymbols
     return forEachKey(importsFromNewFile, symbolNameNoDefault) || forEachKey(movedSymbols, symbolNameNoDefault) || "newFile";
 }
 
-function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
+function forEachReference(node: Node, checker: TypeChecker, enclosingRange: TextRange | undefined, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
     node.forEachChild(function cb(node) {
         if (isIdentifier(node) && !isDeclarationName(node)) {
+            if (enclosingRange && !rangeContainsRange(enclosingRange, node)) {
+                return;
+            }
             const sym = checker.getSymbolAtLocation(node);
             if (sym) onReference(sym, isValidTypeOnlyAliasUseSite(node));
         }
@@ -1140,7 +1147,7 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
     }
 
     for (const statement of statements) {
-        forEachReference(statement, checker, s => {
+        forEachReference(statement, checker, /*enclosingRange*/ undefined, s => {
             const symbol = skipAlias(s, checker);
             if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration).path === sourceFile.path) {
                 existingLocals.add(symbol);

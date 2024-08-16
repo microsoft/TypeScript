@@ -57,9 +57,9 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
     
     const ExtendedClass = BaseClass.extends({
 >ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^ 
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends({        f: function() {            return "something";        }    }) : new () => { f: () => "something"; } & import("deps/BaseClass")
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^ 
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends : <A>(a: A) => new () => A & import("deps/BaseClass")
 >                  : ^ ^^ ^^ ^^^^^                     ^^^^^^^^^^^^^^^^ 
 >BaseClass : typeof import("deps/BaseClass")
@@ -96,7 +96,7 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
 >exports : any
 >        : ^^^
 >ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^ 
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return module.exports;
 >module.exports : any

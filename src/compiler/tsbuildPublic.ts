@@ -66,7 +66,7 @@ import {
     getNonIncrementalBuildInfoRoots,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
-    getPendingEmitKind,
+    getPendingEmitKindWithSeen,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
     getWatchErrorSummaryDiagnosticMessage,
@@ -1511,8 +1511,14 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are errors, we need to build project again to report it
         if (
             !project.options.noCheck &&
-            (incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
-                (!project.options.noEmit && getEmitDeclarations(project.options) && incrementalBuildInfo.emitDiagnosticsPerFile?.length))
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
+                (
+                    getEmitDeclarations(project.options) &&
+                    incrementalBuildInfo.emitDiagnosticsPerFile?.length
+                )
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithErrors,
@@ -1523,8 +1529,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are pending changes that are not emitted, project is out of date
         if (
             !project.options.noEmit &&
-            ((incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined)
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                (incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
+                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithPendingEmit,
@@ -1533,7 +1542,18 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         }
 
         // Has not emitted some of the files, project is out of date
-        if (!project.options.noEmit && getPendingEmitKind(project.options, incrementalBuildInfo.options || {})) {
+        if (
+            (
+                !project.options.noEmit ||
+                (project.options.noEmit && getEmitDeclarations(project.options))
+            ) &&
+            getPendingEmitKindWithSeen(
+                project.options,
+                incrementalBuildInfo.options || {},
+                /*emitOnlyDtsFiles*/ undefined,
+                !!project.options.noEmit,
+            )
+        ) {
             return {
                 type: UpToDateStatusType.OutOfDateOptions,
                 buildInfoFile: buildInfoPath,

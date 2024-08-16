@@ -556,33 +556,33 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.addFileOrFolderInFolder(baseFolder, newFile);
     }
 
-    renameFolder(folderName: string, newFolderName: string) {
+    renameFolder(folderName: string, newFolderName: string, skipFolderEntryWatches?: true) {
         const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
         const path = this.toPath(fullPath);
         const folder = this.fs.get(path) as FsFolder;
         Debug.assert(!!folder);
 
+        const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+        const newFolder = this.toFsFolder(newFullPath);
+
+        // Invoke watches for files in the folder as deleted (from old path)
+        this.renameFolderEntries(folder, newFolder, skipFolderEntryWatches);
+
         // Only remove the folder
         this.removeFileOrFolder(folder, /*isRenaming*/ true);
 
         // Add updated folder with new folder name
-        const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
-        const newFolder = this.toFsFolder(newFullPath);
         const newPath = newFolder.path;
-        const basePath = getDirectoryPath(path);
-        Debug.assert(basePath !== path);
-        Debug.assert(basePath === getDirectoryPath(newPath));
+        const basePath = getDirectoryPath(newPath);
+        this.ensureFileOrFolder({ path: getDirectoryPath(newFullPath) });
         const baseFolder = this.fs.get(basePath) as FsFolder;
         this.addFileOrFolderInFolder(baseFolder, newFolder);
-
-        // Invoke watches for files in the folder as deleted (from old path)
-        this.renameFolderEntries(folder, newFolder);
     }
 
-    private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder) {
+    private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder, skipWatches: true | undefined) {
         for (const entry of oldFolder.entries) {
             this.fs.delete(entry.path);
-            this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted, entry.fullPath);
+            if (!skipWatches) this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted, entry.fullPath);
 
             entry.fullPath = combinePaths(newFolder.fullPath, getBaseFileName(entry.fullPath));
             entry.path = this.toPath(entry.fullPath);
@@ -591,9 +591,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             }
             this.fs.set(entry.path, entry);
             this.setInode(entry.path);
-            this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created, entry.fullPath);
+            if (!skipWatches) this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created, entry.fullPath);
             if (isFsFolder(entry)) {
-                this.renameFolderEntries(entry, entry);
+                this.renameFolderEntries(entry, entry, skipWatches);
             }
         }
     }

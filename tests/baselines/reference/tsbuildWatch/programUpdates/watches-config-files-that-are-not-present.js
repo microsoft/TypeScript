@@ -321,23 +321,23 @@ export declare const m: typeof mod;
   "semanticDiagnosticsPerFile": [
     [
       "../../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../core/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../core/anothermodule.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../logic/index.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",
