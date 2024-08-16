@@ -135,7 +135,7 @@ export interface BuildOptions {
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
-    noDownstreamOnError?: boolean;
+    stopBuildOnErrors?: boolean;
 
     /** @internal */ clean?: boolean;
     /** @internal */ watch?: boolean;
@@ -1475,7 +1475,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
 
             // An upstream project is blocked
             if (
-                state.options.noDownstreamOnError && (
+                state.options.stopBuildOnErrors && (
                     refStatus.type === UpToDateStatusType.Unbuildable ||
                     refStatus.type === UpToDateStatusType.UpstreamBlocked
                 )
@@ -1881,7 +1881,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
     buildResult: BuildResultFlags,
 ) {
     // Queue only if there are no errors
-    if (state.options.noDownstreamOnError && (buildResult & BuildResultFlags.AnyErrors)) return;
+    if (state.options.stopBuildOnErrors && (buildResult & BuildResultFlags.AnyErrors)) return;
     // Only composite projects can be referenced by other projects
     if (!config.options.composite) return;
     // Always use build order to queue projects

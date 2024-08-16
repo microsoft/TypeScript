@@ -97,7 +97,7 @@ export const m = mod;
 
 
 Output::
-/a/lib/tsc --b tests --verbose --noDownstreamOnError
+/a/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -267,7 +267,7 @@ Input::
 
 
 Output::
-/a/lib/tsc --b tests --verbose --noDownstreamOnError
+/a/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -314,7 +314,7 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 Output::
-/a/lib/tsc --b tests --verbose --noDownstreamOnError
+/a/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json

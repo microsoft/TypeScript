@@ -9802,7 +9802,7 @@ declare namespace ts {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
-        noDownstreamOnError?: boolean;
+        stopBuildOnErrors?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         declaration?: boolean;

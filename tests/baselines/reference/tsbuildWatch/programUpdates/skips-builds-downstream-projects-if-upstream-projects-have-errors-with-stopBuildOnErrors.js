@@ -64,6 +64,9 @@ export const m = mod;
 {
   "references": [
     {
+      "path": "../core"
+    },
+    {
       "path": "../logic"
     }
   ],
@@ -90,7 +93,7 @@ export const m = mod;
 
 
 
-/a/lib/tsc.js --b -w tests --verbose --noDownstreamOnError
+/a/lib/tsc.js --b -w tests --verbose --stopBuildOnErrors
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -118,9 +121,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/logic/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
-[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' was not built
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' was not built
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
