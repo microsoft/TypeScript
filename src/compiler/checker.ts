@@ -38376,7 +38376,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
         yieldType = resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || unknownType;
         returnType = resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || unknownType;
-        nextType = resolver.resolveIterationType(nextType, /*errorNode*/ undefined) || unknownType;
         if (globalGeneratorType === emptyGenericType) {
             // Fall back to the global IterableIterator type.
             const globalIterableIteratorType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
@@ -40287,9 +40286,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const iterationTypes = returnType && getIterationTypesOfGeneratorFunctionReturnType(returnType, isAsync);
         const signatureYieldType = iterationTypes && iterationTypes.yieldType || anyType;
         const signatureNextType = iterationTypes && iterationTypes.nextType || anyType;
-        const resolvedSignatureNextType = isAsync ? getAwaitedType(signatureNextType) || anyType : signatureNextType;
         const yieldExpressionType = node.expression ? checkExpression(node.expression) : undefinedWideningType;
-        const yieldedType = getYieldedTypeOfYieldExpression(node, yieldExpressionType, resolvedSignatureNextType, isAsync);
+        const yieldedType = getYieldedTypeOfYieldExpression(node, yieldExpressionType, signatureNextType, isAsync);
         if (returnType && yieldedType) {
             checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureYieldType, node.expression || node, node.expression);
         }
