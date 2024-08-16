@@ -40826,10 +40826,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkConstEnumAccess(node: Expression | QualifiedName, type: Type) {
-        if (isUseOfPreservedConstEnum(node, type)) {
-            return;
-        }
-
         // enum object type for const enums are only permitted in:
         // - 'left' in property access
         // - 'object' in indexed access
@@ -40840,7 +40836,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (node.parent.kind === SyntaxKind.TypeQuery && (node.parent as TypeQueryNode).exprName === node)) ||
             (node.parent.kind === SyntaxKind.ExportSpecifier); // We allow reexporting const enums
 
-        if (!ok) {
+        if (!ok && !isUseOfPreservedConstEnum(node, type)) {
             error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
         }
 
@@ -40860,7 +40856,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     /*excludeGlobals*/ true,
                 )
         ) {
-            error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+            if (!isUseOfPreservedConstEnum(node, type)) {
+                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+            }
         }
     }
 
