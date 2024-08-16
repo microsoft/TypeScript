@@ -7,6 +7,7 @@ import {
     findIndex,
     forEachChild,
     formatting,
+    getNewLineOrDefaultFromHost,
     getQuotePreference,
     getTokenAtPosition,
     isIdentifier,
@@ -60,16 +61,16 @@ function pasteEdits(
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
 ) {
-    let actualPastedText: string[] | undefined;
+    let actualPastedText: string | undefined;
     if (pastedText.length !== pasteLocations.length) {
-        actualPastedText = pastedText.length === 1 ? pastedText : [pastedText.join("\n")];
+        actualPastedText = pastedText.length === 1 ? pastedText[0] : pastedText.join(getNewLineOrDefaultFromHost(formatContext.host, formatContext.options));
     }
 
     const statements: Statement[] = [];
     let newText = targetFile.text;
     for (let i = pasteLocations.length - 1; i >= 0; i--) {
         const { pos, end } = pasteLocations[i];
-        newText = actualPastedText ? newText.slice(0, pos) + actualPastedText[0] + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
+        newText = actualPastedText ? newText.slice(0, pos) + actualPastedText + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
     }
 
     let importAdder: codefix.ImportAdder;
@@ -117,7 +118,7 @@ function pasteEdits(
             let offset = 0;
             pasteLocations.forEach((location, i) => {
                 const oldTextLength = location.end - location.pos;
-                const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
+                const textToBePasted = actualPastedText ?? pastedText[i];
                 const startPos = location.pos + offset;
                 const endPos = startPos + textToBePasted.length;
                 const range: TextRange = { pos: startPos, end: endPos };
@@ -162,8 +163,7 @@ function pasteEdits(
         changes.replaceRangeWithText(
             targetFile,
             { pos: paste.pos, end: paste.end },
-            actualPastedText ?
-                actualPastedText[0] : pastedText[i],
+            actualPastedText ?? pastedText[i],
         );
     });
 }
