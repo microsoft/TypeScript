@@ -48,11 +48,11 @@ var i = b.inverse(); // used to get the type wrong here.
 >b.inverse() : BiMap<number, string>
 >            : ^^^^^^^^^^^^^^^^^^^^^
 >b.inverse : () => BiMap<number, string>
->          : ^^^^^^      ^^^^^^  ^^^^^^ 
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : BiMap<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >inverse : () => BiMap<number, string>
->        : ^^^^^^      ^^^^^^  ^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b = i.get(1); 
 >r2b : string

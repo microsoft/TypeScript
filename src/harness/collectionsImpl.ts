@@ -132,6 +132,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public *values() {
@@ -154,6 +155,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public *entries() {
@@ -179,6 +181,7 @@ export class SortedMap<K, V> {
                 this._copyOnWrite = false;
             }
         }
+        return undefined;
     }
 
     public [Symbol.iterator]() {

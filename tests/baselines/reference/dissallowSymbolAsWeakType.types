@@ -104,12 +104,12 @@ wm.has(s);
 wm.get(s);
 >wm.get(s) : boolean
 >          : ^^^^^^^
->wm.get : (key: object) => boolean | undefined
->       : ^   ^^^^^^^^^^^^^^^^^^^^            
+>wm.get : (key: object) => boolean
+>       : ^   ^^^^^^^^^^^^^^^^^^^^
 >wm : WeakMap<object, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->get : (key: object) => boolean | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^            
+>get : (key: object) => boolean
+>    : ^   ^^^^^^^^^^^^^^^^^^^^
 >s : symbol
 >  : ^^^^^^
 
@@ -138,12 +138,12 @@ const wr = new WeakRef(s);
 wr.deref();
 >wr.deref() : object
 >           : ^^^^^^
->wr.deref : () => object | undefined
->         : ^^^^^^^^^^^^            
+>wr.deref : () => object
+>         : ^^^^^^^^^^^^
 >wr : WeakRef<object>
 >   : ^^^^^^^^^^^^^^^
->deref : () => object | undefined
->      : ^^^^^^^^^^^^            
+>deref : () => object
+>      : ^^^^^^^^^^^^
 
 const f = new FinalizationRegistry(() => {});
 >f : FinalizationRegistry<unknown>

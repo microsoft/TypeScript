@@ -127,7 +127,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -395,7 +394,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1060,8 +1059,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1070,11 +1069,24 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1086,8 +1098,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -1106,6 +1118,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1288,7 +1305,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1966,8 +1983,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1976,11 +1993,24 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1992,8 +2022,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -2012,6 +2042,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

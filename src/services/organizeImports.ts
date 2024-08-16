@@ -56,11 +56,10 @@ import {
     Scanner,
     setEmitFlags,
     some,
-    sort,
     SourceFile,
-    stableSort,
     SyntaxKind,
     textChanges,
+    toSorted,
     TransformFlags,
     tryCast,
     UserPreferences,
@@ -159,7 +158,7 @@ export function organizeImports(
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)
             : [oldImportDecls];
         const sortedImportGroups = shouldSort
-            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer.moduleSpecifierComparer ?? defaultComparer))
+            ? toSorted(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer.moduleSpecifierComparer ?? defaultComparer))
             : oldImportGroups;
         const newImportDecls = flatMap(sortedImportGroups, importGroup =>
             getExternalModuleName(importGroup[0].moduleSpecifier) || importGroup[0].moduleSpecifier === undefined
@@ -199,7 +198,7 @@ export function organizeImports(
         const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
             if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
             if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, detectedModuleCaseComparer, specifierComparer, sourceFile);
-            if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, detectedModuleCaseComparer));
+            if (shouldSort) importGroup = toSorted(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, detectedModuleCaseComparer));
             return importGroup;
         };
 
@@ -428,7 +427,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
     const importGroupsByAttributes = groupBy(importGroup, decl => {
         if (decl.attributes) {
             let attrs = decl.attributes.token + " ";
-            for (const x of sort(decl.attributes.elements, (x, y) => compareStringsCaseSensitive(x.name.text, y.name.text))) {
+            for (const x of toSorted(decl.attributes.elements, (x, y) => compareStringsCaseSensitive(x.name.text, y.name.text))) {
                 attrs += x.name.text + ":";
                 attrs += isStringLiteralLike(x.value) ? `"${x.value.text}"` : x.value.getText() + " ";
             }
@@ -461,7 +460,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
                 continue;
             }
 
-            const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
+            const sortedNamespaceImports = toSorted(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
 
             for (const namespaceImport of sortedNamespaceImports) {
                 // Drop the name, if any
@@ -493,7 +492,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
             newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = factory.createNodeArray(
-                stableSort(newImportSpecifiers, specifierComparer),
+                toSorted(newImportSpecifiers, specifierComparer),
                 firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
             );
 
@@ -579,7 +578,7 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], specif
         const newExportSpecifiers: ExportSpecifier[] = [];
         newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
-        const sortedExportSpecifiers = stableSort(newExportSpecifiers, specifierComparer);
+        const sortedExportSpecifiers = toSorted(newExportSpecifiers, specifierComparer);
 
         const exportDecl = exportGroup[0];
         coalescedExports.push(

@@ -19,15 +19,5 @@ verify.pasteEdits({
 */`],
     pasteLocations: [range[0]],
     },
-    newFileContents: {
-        "/target.ts":
-`const a = 10;
-const b = 10;/**
-* Testing comment line 1
-* line 2
-* line 3
-* line 4
-*/
-const c = 10;`
-    }
+    newFileContents: {}
 });

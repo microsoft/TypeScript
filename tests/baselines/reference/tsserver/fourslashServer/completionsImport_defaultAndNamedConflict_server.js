@@ -122,7 +122,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -738,8 +737,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/someModule",
+            "hasAction": true,
             "data": {
               "exportName": "default",
               "exportMapKey": "10 * someModule ",
@@ -751,14 +750,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/someModule",
+            "hasAction": true,
             "data": {
               "exportName": "someModule",
               "exportMapKey": "10 * someModule ",
               "fileName": "/someModule.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

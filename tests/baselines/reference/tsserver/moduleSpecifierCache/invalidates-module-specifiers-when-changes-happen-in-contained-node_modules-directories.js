@@ -967,14 +967,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/src/a",
+            "hasAction": true,
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1031,6 +1036,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "11",
+            "source": "./a",
             "insertText": "import { foo$1 } from \"./a\";",
             "replacementSpan": {
               "start": {
@@ -1042,14 +1048,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "offset": 7
               }
             },
-            "isSnippet": true,
-            "source": "./a",
             "sourceDisplay": [
               {
                 "text": "./a",
                 "kind": "text"
               }
             ],
+            "isSnippet": true,
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
@@ -1063,6 +1068,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "11",
+            "source": "mobx",
             "insertText": "import { observable$1 } from \"mobx\";",
             "replacementSpan": {
               "start": {
@@ -1074,14 +1080,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "offset": 7
               }
             },
-            "isSnippet": true,
-            "source": "mobx",
             "sourceDisplay": [
               {
                 "text": "mobx",
                 "kind": "text"
               }
             ],
+            "isSnippet": true,
             "isPackageJsonImport": true,
             "isImportStatementCompletion": true,
             "data": {
@@ -1098,7 +1103,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
