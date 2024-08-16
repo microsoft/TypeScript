@@ -28,7 +28,7 @@ class FileLog implements ts.server.typingsInstaller.Log {
         try {
             fs.appendFileSync(this.logFile, `[${ts.server.nowString()}] ${text}${sys.newLine}`);
         }
-        catch (e) {
+        catch {
             this.logFile = undefined;
         }
     };

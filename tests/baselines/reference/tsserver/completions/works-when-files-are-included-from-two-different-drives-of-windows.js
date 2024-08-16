@@ -752,8 +752,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "e:/myproject/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "Component",
               "exportMapKey": "9 * Component ",
@@ -764,8 +764,15 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "BrowserRouter",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true

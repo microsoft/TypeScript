@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/yieldStarContextualType.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === yieldStarContextualType.ts ===
 declare const g: <T, U, V>() => Generator<T, U, V>;
 >g : <T, U, V>() => Generator<T, U, V>

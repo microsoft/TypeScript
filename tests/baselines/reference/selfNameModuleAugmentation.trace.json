@@ -1,9 +1,11 @@
 [
+    "File '/node_modules/acorn-walk/dist/package.json' does not exist.",
+    "Found 'package.json' at '/node_modules/acorn-walk/package.json'.",
     "======== Resolving module 'acorn-walk' from '/node_modules/acorn-walk/dist/walk.d.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
     "Resolving in CJS mode with conditions 'import', 'types'.",
-    "File '/node_modules/acorn-walk/dist/package.json' does not exist.",
-    "Found 'package.json' at '/node_modules/acorn-walk/package.json'.",
+    "File '/node_modules/acorn-walk/dist/package.json' does not exist according to earlier cached lookups.",
+    "File '/node_modules/acorn-walk/package.json' exists according to earlier cached lookups.",
     "Entering conditional exports.",
     "Matched 'exports' condition 'import'.",
     "Using 'exports' subpath '.' with target './dist/walk.mjs'.",

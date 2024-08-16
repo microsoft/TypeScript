@@ -967,14 +967,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/src/a",
+            "hasAction": true,
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

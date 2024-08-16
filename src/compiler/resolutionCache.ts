@@ -38,7 +38,6 @@ import {
     isDiskPathRoot,
     isEmittedFileOfProgram,
     isExternalModuleNameRelative,
-    isExternalOrCommonJsModule,
     isNodeModulesDirectory,
     isRootedDiskPath,
     isTraceEnabled,
@@ -268,11 +267,11 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     // Ignore "/", "c:/"
     if (length <= 1) return 1;
     let indexAfterOsRoot = 1;
-    let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
+    let isDosStyle = pathComponents[0].search(/[a-z]:/i) === 0;
     if (
         pathComponents[0] !== directorySeparator &&
         !isDosStyle && // Non dos style paths
-        pathComponents[1].search(/[a-zA-Z]\$$/) === 0 // Dos style nextPart
+        pathComponents[1].search(/[a-z]\$$/i) === 0 // Dos style nextPart
     ) {
         // ignore "//vda1cs4850/c$/folderAtRoot"
         if (length === 2) return 2;
@@ -779,7 +778,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (newProgram !== oldProgram) {
             cleanupLibResolutionWatching(newProgram);
             newProgram?.getSourceFiles().forEach(newFile => {
-                const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                const expected = newFile.packageJsonLocations?.length ?? 0;
                 const existing = impliedFormatPackageJsons.get(newFile.resolvedPath) ?? emptyArray;
                 for (let i = existing.length; i < expected; i++) {
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);

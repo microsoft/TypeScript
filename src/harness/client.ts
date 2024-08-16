@@ -300,6 +300,7 @@ export class SessionClient implements LanguageService {
 
                 return entry as { name: string; kind: ScriptElementKind; kindModifiers: string; sortText: string; }; // TODO: GH#18217
             }),
+            defaultCommitCharacters: response.body!.defaultCommitCharacters,
         };
     }
 

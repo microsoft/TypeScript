@@ -22,18 +22,18 @@ foo("", function* () {
 >    : ^ ^^ ^^ ^^ ^^   ^^                           ^^    ^^           ^^^^^ 
 >"" : ""
 >   : ^^
->function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Generator<(x: string) => number, void, undefined>
->                                                                                                       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Generator<(x: string) => number, void, any>
+>                                                                                                       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* {
 >yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : void
 >                                                                                    : ^^^^
->{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, undefined>; }
->                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, any>; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         *[Symbol.iterator]() {
->[Symbol.iterator] : () => Generator<(x: string) => number, void, undefined>
->                  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.iterator] : () => Generator<(x: string) => number, void, any>
+>                  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -42,8 +42,7 @@ foo("", function* () {
 >         : ^^^^^^^^^^^^^
 
             yield x => x.length
->yield x => x.length : undefined
->                    : ^^^^^^^^^
+>yield x => x.length : any
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string

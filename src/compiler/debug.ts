@@ -79,11 +79,11 @@ import {
     SignatureFlags,
     SnippetKind,
     SortedReadonlyArray,
-    stableSort,
     Symbol,
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    toSorted,
     TransformFlags,
     Type,
     TypeFacts,
@@ -436,7 +436,7 @@ export namespace Debug {
             }
         }
 
-        const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const sorted = toSorted<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }
@@ -581,7 +581,7 @@ export namespace Debug {
                         // This regex can trigger slow backtracking because of overlapping potential captures.
                         // We don't care, this is debug code that's only enabled with a debugger attached -
                         // we're just taking note of it for anyone checking regex performance in the future.
-                        defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
+                        defaultValue = String(defaultValue).replace(/(?:,[\s\w]+:[^,]+)+\]$/, "]");
                         return `NodeArray ${defaultValue}`;
                     },
                 },

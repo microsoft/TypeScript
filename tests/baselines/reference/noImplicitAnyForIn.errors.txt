@@ -3,10 +3,11 @@ noImplicitAnyForIn.ts(7,18): error TS7053: Element implicitly has an 'any' type 
 noImplicitAnyForIn.ts(14,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
   No index signature with a parameter of type 'string' was found on type '{}'.
 noImplicitAnyForIn.ts(28,5): error TS7005: Variable 'n' implicitly has an 'any[][]' type.
+noImplicitAnyForIn.ts(28,9): error TS2872: This kind of expression is always truthy.
 noImplicitAnyForIn.ts(30,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
 
 
-==== noImplicitAnyForIn.ts (4 errors) ====
+==== noImplicitAnyForIn.ts (5 errors) ====
     var x: {}[] = [[1, 2, 3], ["hello"]];
     
     for (var i in x) {
@@ -43,6 +44,8 @@ noImplicitAnyForIn.ts(30,6): error TS2405: The left-hand side of a 'for...in' st
     var n = [[]] || [];
         ~
 !!! error TS7005: Variable 'n' implicitly has an 'any[][]' type.
+            ~~~~
+!!! error TS2872: This kind of expression is always truthy.
     
     for (n[idx++] in m);
          ~~~~~~~~

@@ -234,6 +234,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/src/sub/fooBar.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -277,6 +280,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *deleted*
+2: *ensureProjectForOpenFiles* *deleted*
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
@@ -319,16 +328,16 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne
 
-Invoking Timeout callback:: timeoutId:: 3:: checkOne
+Invoking Timeout callback:: timeoutId:: 5:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -378,16 +387,16 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne
 
-Invoking Timeout callback:: timeoutId:: 4:: checkOne
+Invoking Timeout callback:: timeoutId:: 6:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
