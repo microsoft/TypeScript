@@ -7058,7 +7058,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context.flags & NodeBuilderFlags.NoTruncation) {
                         return [];
                     }
-                    
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
                 const typeElements: TypeElement[] = [];
