@@ -301,6 +301,9 @@ export function addNewNodeForMemberSymbol(
             }
 
             for (const signature of signatures) {
+                if (signature.declaration && (signature.declaration.flags & NodeFlags.Ambient)) {
+                    continue;
+                }
                 // Ensure nodes are fresh so they can have different positions when going through formatting.
                 outputMethod(quotePreference, signature, modifiers, createName(declarationName));
             }
