@@ -77,11 +77,11 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([undefined, Error] | [unknown, undefined])[]
 >                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >promises.map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
->             : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>             : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
 >         : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [undefined, Error] | [unknown, undefined]
 >                                                                                                                                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >result : PromiseSettledResult<unknown>

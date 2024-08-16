@@ -37,7 +37,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -79,10 +86,6 @@ Info seq  [hh:mm:ss:mss] event:
         "request_seq": 2
       }
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -105,9 +108,5 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 3
       }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request

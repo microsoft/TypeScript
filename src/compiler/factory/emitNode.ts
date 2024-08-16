@@ -364,7 +364,7 @@ export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifi
     return node;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
     return node.emitNode?.autoGenerate;
 }

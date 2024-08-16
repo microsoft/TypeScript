@@ -274,7 +274,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/projects/server/src/ser
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/projects/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

@@ -254,13 +254,15 @@ Output::
   "affectedFilesPendingEmit": [
     [
       [
-        "./main.ts"
+        "./main.ts",
+        1
       ],
       "Js"
     ],
     [
       [
-        "./other.ts"
+        "./other.ts",
+        1
       ],
       "Js"
     ]

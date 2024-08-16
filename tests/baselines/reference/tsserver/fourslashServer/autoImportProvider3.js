@@ -77,6 +77,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/common-dependency/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -283,6 +294,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/common-dependency/package.json
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -842,8 +865,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/common-dependency/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "CommonDependency",
@@ -857,8 +880,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/package-dependency/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "PackageDependency",
@@ -867,6 +890,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

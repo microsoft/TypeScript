@@ -73,6 +73,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/jsdocCompletion_typedef.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -314,49 +325,65 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -364,6 +391,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -562,49 +594,65 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -612,6 +660,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -810,49 +863,65 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -860,6 +929,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

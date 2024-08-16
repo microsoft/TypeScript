@@ -125,15 +125,15 @@ define("b", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -267,15 +267,15 @@ define("b", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -543,15 +543,15 @@ define("b", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -673,15 +673,15 @@ No shapes updated in the builder::
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -773,15 +773,15 @@ define("b", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -1099,19 +1099,19 @@ define("c", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/c.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -1217,19 +1217,19 @@ define("c", ["require", "exports"], function (require, exports) {
   "semanticDiagnosticsPerFile": [
     [
       "./lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/b.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/c.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,

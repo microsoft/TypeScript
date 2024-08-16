@@ -53,6 +53,24 @@ num = arr[1n]; // should error
 >1n : 1n
 >   : ^^
 
+num = [1, 2, 3][1n]; // should error
+>num = [1, 2, 3][1n] : any
+>                    : ^^^
+>num : number
+>    : ^^^^^^
+>[1, 2, 3][1n] : any
+>              : ^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>1n : 1n
+>   : ^^
+
 let key: keyof any; // should be type "string | number | symbol"
 >key : string | number | symbol
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -159,41 +177,4 @@ typedArray[2] = 0xCC;
 >  : ^
 >0xCC : 204
 >     : ^^^
-
-// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-=== b.ts ===
-// BigInt cannot be used as an object literal property
-const a = {1n: 123};
->a : {}
->  : ^^
->{ : {}
->  : ^^
->1n : 1n
->   : ^^
->123 : 123
->    : ^^^
-
-const b = {[1n]: 456};
->b : {}
->  : ^^
->{[1n]: 456} : {}
->            : ^^
->[1n] : number
->     : ^^^^^^
->1n : 1n
->   : ^^
->456 : 456
->    : ^^^
-
-const c = {[bigNum]: 789};
->c : {}
->  : ^^
->{[bigNum]: 789} : {}
->                : ^^
->[bigNum] : number
->         : ^^^^^^
->bigNum : bigint
->       : ^^^^^^
->789 : 789
->    : ^^^
 

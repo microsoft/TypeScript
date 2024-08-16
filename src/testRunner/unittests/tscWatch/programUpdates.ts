@@ -2166,6 +2166,48 @@ import { x } from "../b";`,
 
     verifyTscWatch({
         scenario,
+        subScenario: "when changing `allowImportingTsExtensions` of config file 2",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `export const foo = 10;`,
+            };
+            const module2: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `export * as a from "./a.ts";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        noEmit: true,
+                        allowImportingTsExtensions: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change allowImportingTsExtensions to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                noEmit: true,
+                                allowImportingTsExtensions: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
         subScenario: "when changing checkJs of config file",
         commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
         sys: () => {
@@ -2196,6 +2238,42 @@ import { x } from "../b";`,
                         jsonToReadableText({
                             compilerOptions: {
                                 checkJs: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing noUncheckedSideEffectImports of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `import "does-not-exist";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        noUncheckedSideEffectImports: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change noUncheckedSideEffectImports to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                noUncheckedSideEffectImports: true,
                             },
                         }),
                     ),

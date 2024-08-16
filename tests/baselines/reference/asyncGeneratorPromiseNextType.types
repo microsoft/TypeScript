@@ -1,0 +1,215 @@
+//// [tests/cases/conformance/asyncGenerators/asyncGeneratorPromiseNextType.ts] ////
+
+=== asyncGeneratorPromiseNextType.ts ===
+// https://github.com/microsoft/TypeScript/issues/44808
+
+type Result = {message: string}
+>Result : Result
+>       : ^^^^^^
+>message : string
+>        : ^^^^^^
+
+async function *saverGen(): AsyncGenerator<void, void, Promise<Result> | undefined> {
+>saverGen : () => AsyncGenerator<void, void, Promise<Result> | undefined>
+>         : ^^^^^^                                                       
+
+    let pending: Promise<Result>[] = [];
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    while (true) {
+>true : true
+>     : ^^^^
+
+        const p: Promise<Result> | undefined = yield;
+>p : Promise<Result> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield : Promise<Result> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        if (p != null)
+>p != null : boolean
+>          : ^^^^^^^
+>p : Promise<Result> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            pending.push(p);
+>pending.push(p) : number
+>                : ^^^^^^
+>pending.push : (...items: Promise<Result>[]) => number
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>push : (...items: Promise<Result>[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>p : Promise<Result>
+>  : ^^^^^^^^^^^^^^^
+
+        else {
+            const results = await Promise.all(pending);
+>results : Result[]
+>        : ^^^^^^^^
+>await Promise.all(pending) : Result[]
+>                           : ^^^^^^^^
+>Promise.all(pending) : Promise<Result[]>
+>                     : ^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+
+            pending = [];
+>pending = [] : never[]
+>             : ^^^^^^^
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+            console.log('Storing...');
+>console.log('Storing...') : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>'Storing...' : "Storing..."
+>             : ^^^^^^^^^^^^
+
+            await storeResults(results);
+>await storeResults(results) : void
+>                            : ^^^^
+>storeResults(results) : Promise<void>
+>                      : ^^^^^^^^^^^^^
+>storeResults : (results: Result[]) => Promise<void>
+>             : ^       ^^        ^^^^^^^^^^^^^^^^^^
+>results : Result[]
+>        : ^^^^^^^^
+        }
+    }
+}
+
+function storeResults(results: Result[]) {
+>storeResults : (results: Result[]) => Promise<void>
+>             : ^       ^^        ^^^^^^^^^^^^^^^^^^
+>results : Result[]
+>        : ^^^^^^^^
+
+    console.log(results);
+>console.log(results) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>results : Result[]
+>        : ^^^^^^^^
+
+    return Promise.resolve();
+>Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+}
+
+async function *saverGen2() {
+>saverGen2 : () => AsyncGenerator<undefined, void, Promise<Result> | undefined>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let pending: Promise<Result>[] = [];
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    while (true) {
+>true : true
+>     : ^^^^
+
+        const p: Promise<Result> | undefined = yield;
+>p : Promise<Result> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield : any
+
+        if (p != null)
+>p != null : boolean
+>          : ^^^^^^^
+>p : Promise<Result> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            pending.push(p);
+>pending.push(p) : number
+>                : ^^^^^^
+>pending.push : (...items: Promise<Result>[]) => number
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>push : (...items: Promise<Result>[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^      
+>p : Promise<Result>
+>  : ^^^^^^^^^^^^^^^
+
+        else {
+            const results = await Promise.all(pending);
+>results : Result[]
+>        : ^^^^^^^^
+>await Promise.all(pending) : Result[]
+>                           : ^^^^^^^^
+>Promise.all(pending) : Promise<Result[]>
+>                     : ^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+
+            pending = [];
+>pending = [] : never[]
+>             : ^^^^^^^
+>pending : Promise<Result>[]
+>        : ^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+            console.log('Storing...');
+>console.log('Storing...') : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>'Storing...' : "Storing..."
+>             : ^^^^^^^^^^^^
+
+            await storeResults(results);
+>await storeResults(results) : void
+>                            : ^^^^
+>storeResults(results) : Promise<void>
+>                      : ^^^^^^^^^^^^^
+>storeResults : (results: Result[]) => Promise<void>
+>             : ^       ^^        ^^^^^^^^^^^^^^^^^^
+>results : Result[]
+>        : ^^^^^^^^
+        }
+    }
+}
+

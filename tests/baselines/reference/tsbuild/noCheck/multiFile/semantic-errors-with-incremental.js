@@ -141,15 +141,15 @@ exports.b = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -273,15 +273,15 @@ export declare const a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -532,7 +532,7 @@ export declare const a: number;
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -771,7 +771,7 @@ export declare const a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -1129,7 +1129,7 @@ export declare const a: number;
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./c.ts",
@@ -1264,7 +1264,7 @@ export declare const a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./c.ts",

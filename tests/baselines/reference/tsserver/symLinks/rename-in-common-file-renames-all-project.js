@@ -171,7 +171,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/a/a.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -350,7 +357,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/b/b.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -442,7 +456,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/a/c/fc.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -531,7 +549,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/b/c/fc.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 

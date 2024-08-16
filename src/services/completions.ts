@@ -63,6 +63,7 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
+    fileContainsPackageImport,
     filter,
     find,
     findAncestor,
@@ -84,7 +85,6 @@ import {
     getEffectiveBaseTypeNode,
     getEffectiveModifierFlags,
     getEffectiveTypeAnnotationNode,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxAttributeName,
@@ -106,6 +106,7 @@ import {
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
+    getResolvePackageJsonExports,
     getRootDeclaration,
     getSourceFileOfModule,
     getSwitchedType,
@@ -301,7 +302,6 @@ import {
     ModuleDeclaration,
     moduleExportNameTextEscaped,
     ModuleReference,
-    moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
     newCaseClauseTracker,
     Node,
@@ -352,7 +352,6 @@ import {
     SortedArray,
     SourceFile,
     SpreadAssignment,
-    stableSort,
     startsWith,
     stringToToken,
     stripQuotes,
@@ -374,6 +373,7 @@ import {
     Token,
     TokenSyntaxKind,
     tokenToString,
+    toSorted,
     tryCast,
     tryGetImportFromModuleSpecifier,
     tryGetTextOfPropertyName,
@@ -398,7 +398,7 @@ import {
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */
@@ -629,12 +629,16 @@ function resolvingModuleSpecifiers<TReturn>(
     cb: (context: ModuleSpecifierResolutionContext) => TReturn,
 ): TReturn {
     const start = timestamp();
-    // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
+    // Under `--moduleResolution nodenext` or `bundler`, we have to resolve module specifiers up front, because
     // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    // Finally, `autoImportSpecifierExcludeRegexes` necessitates eagerly resolving module specifiers
+    // because completion items are being explcitly filtered out by module specifier.
+    const needsFullResolution = isForImportStatementCompletion
+        || getResolvePackageJsonExports(program.getCompilerOptions())
+        || preferences.autoImportSpecifierExcludeRegexes?.length;
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;
@@ -683,6 +687,14 @@ function resolvingModuleSpecifiers<TReturn>(
 }
 
 /** @internal */
+export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): string[] {
+    if (isNewIdentifierLocation) {
+        return [];
+    }
+    return [".", ",", ";"];
+}
+
+/** @internal */
 export function getCompletionsAtPosition(
     host: LanguageServiceHost,
     program: Program,
@@ -704,7 +716,14 @@ export function getCompletionsAtPosition(
     if (triggerCharacter === " ") {
         // `isValidTrigger` ensures we are at `import |`
         if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
-            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            return {
+                isGlobalCompletion: true,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: true,
+                isIncomplete: true,
+                entries: [],
+                defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
+            };
         }
         return undefined;
     }
@@ -887,7 +906,13 @@ function continuePreviousIncompleteResponse(
 }
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+    return {
+        isGlobalCompletion: false,
+        isMemberCompletion: false,
+        isNewIdentifierLocation: false,
+        entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+    };
 }
 
 function getJSDocParameterCompletions(
@@ -1161,11 +1186,13 @@ function getJSDocParamAnnotation(
                             ? createSnippetPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             })
                             : createPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             });
                         setEmitFlags(typeNode, EmitFlags.SingleLine);
@@ -1210,6 +1237,7 @@ function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNe
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries: entries.slice(),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1385,6 +1413,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1459,6 +1488,7 @@ function getExhaustiveCaseSnippets(
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
+            moduleResolution: options.moduleResolution,
             target: options.target,
             newLine: getNewLineKind(newLineChar),
         });
@@ -1593,7 +1623,14 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
             kindModifiers: undefined,
             sortText: SortText.LocationPriority,
         };
-        return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: true,
+            isNewIdentifierLocation: false,
+            optionalReplacementSpan: replacementSpan,
+            entries: [entry],
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
     return;
 }
@@ -1619,6 +1656,7 @@ function getJSCompletionEntries(
                 kindModifiers: "",
                 sortText: SortText.JavascriptIdentifiers,
                 isFromUncheckedFile: true,
+                commitCharacters: [],
             }, compareCompletionEntries);
         }
     });
@@ -1630,7 +1668,13 @@ function completionNameForLiteral(sourceFile: SourceFile, preferences: UserPrefe
 }
 
 function createCompletionEntryForLiteral(sourceFile: SourceFile, preferences: UserPreferences, literal: string | number | PseudoBigInt): CompletionEntry {
-    return { name: completionNameForLiteral(sourceFile, preferences, literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+    return {
+        name: completionNameForLiteral(sourceFile, preferences, literal),
+        kind: ScriptElementKind.string,
+        kindModifiers: ScriptElementKindModifier.none,
+        sortText: SortText.LocationPriority,
+        commitCharacters: [],
+    };
 }
 
 function createCompletionEntry(
@@ -1720,7 +1764,7 @@ function createCompletionEntry(
     if (originIsResolvedExport(origin)) {
         sourceDisplay = [textPart(origin.moduleSpecifier)];
         if (importStatementCompletion) {
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, options, preferences));
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, program, preferences));
             isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
         }
     }
@@ -1860,9 +1904,11 @@ function createCompletionEntry(
 
     // Use a 'sortText' of 0' so that all symbol completion entries come before any other
     // entries (like JavaScript identifier entries).
+    const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+    const commitCharacters = (kind === ScriptElementKind.warning || kind === ScriptElementKind.string) ? [] : undefined;
     return {
         name,
-        kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
+        kind,
         kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
         sortText,
         source,
@@ -1877,6 +1923,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        commitCharacters,
         ...includeSymbol ? { symbol } : undefined,
     };
 }
@@ -1978,6 +2025,7 @@ function getEntryForMemberCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2204,6 +2252,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2218,6 +2267,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const signaturePrinter = createPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: true,
     });
@@ -2278,7 +2328,7 @@ function createObjectLiteralMethod(
                 // We don't support overloads in object literals.
                 return undefined;
             }
-            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, /*internalFlags*/ undefined, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
             if (!typeNode || !isFunctionTypeNode(typeNode)) {
                 return undefined;
             }
@@ -2413,7 +2463,7 @@ function createSnippetPrinter(
         });
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2460,7 +2510,7 @@ function createSnippetPrinter(
         );
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2520,14 +2570,14 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
     return unresolvedOrigin;
 }
 
-function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
+function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, program: Program, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
     const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind = origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
         ExportKind.Named;
     const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
-    const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
+    const importKind = codefix.getImportKind(sourceFile, exportKind, program, /*forceImportKeyword*/ true);
     const isImportSpecifierTypeOnly = importStatementCompletion.couldBeTypeOnlyImportSpecifier;
     const topLevelTypeOnlyText = importStatementCompletion.isTopLevelTypeOnly ? ` ${tokenToString(SyntaxKind.TypeKeyword)} ` : " ";
     const importSpecifierTypeOnlyText = isImportSpecifierTypeOnly ? `${tokenToString(SyntaxKind.TypeKeyword)} ` : "";
@@ -2748,7 +2798,13 @@ export function getCompletionEntriesFromSymbols(
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
     const entries = getLabelStatementCompletions(node);
     if (entries.length) {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries,
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
 }
 
@@ -4152,9 +4208,8 @@ function getCompletionData(
                 if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
                     return false;
                 }
-                return packageJsonFilter
-                    ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
-                    : true;
+                return (packageJsonFilter?.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson)) ?? true)
+                    || fileContainsPackageImport(sourceFile, moduleName);
             }
             return isImportableFile(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
@@ -5472,9 +5527,17 @@ function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefin
 /** @internal */
 export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
     const hasCompletionsType = completionsType && completionsType !== contextualType;
+    const promiseFilteredContextualType = checker.getUnionType(
+        filter(
+            contextualType.flags & TypeFlags.Union ?
+                (contextualType as UnionType).types :
+                [contextualType],
+            t => !checker.getPromisedTypeOfPromise(t),
+        ),
+    );
     const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
-        ? checker.getUnionType([contextualType, completionsType])
-        : contextualType;
+        ? checker.getUnionType([promiseFilteredContextualType, completionsType])
+        : promiseFilteredContextualType;
 
     const properties = getApparentProperties(type, obj, checker);
     return type.isClass() && containsNonPublicProperties(properties) ? [] :

@@ -126,6 +126,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/BaseClass/Source.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -315,6 +326,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/BaseClass/Sour
 Info seq  [hh:mm:ss:mss] 		Projects: /tests/cases/fourslash/server/buttonClass/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/buttonClass/Source.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tests/cases/fourslash/server/buttonClass/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:

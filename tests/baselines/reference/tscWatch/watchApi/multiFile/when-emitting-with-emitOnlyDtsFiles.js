@@ -266,13 +266,15 @@ CreatingProgramWith::
   "affectedFilesPendingEmit": [
     [
       [
-        "./a.ts"
+        "./a.ts",
+        1
       ],
       "Js"
     ],
     [
       [
-        "./b.ts"
+        "./b.ts",
+        1
       ],
       "Js"
     ]

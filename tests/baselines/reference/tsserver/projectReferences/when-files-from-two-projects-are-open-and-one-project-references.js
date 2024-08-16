@@ -539,7 +539,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/main/src/f
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -742,7 +749,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/core/src/f
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1451,7 +1465,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 14,
         "symbolDisplayString": "const coreConst: 10"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

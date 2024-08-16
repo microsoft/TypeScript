@@ -1,3 +1,4 @@
+import sourceMapSupport from "source-map-support";
 import * as fakes from "./_namespaces/fakes.js";
 import * as FourSlashInterface from "./_namespaces/FourSlashInterface.js";
 import * as Harness from "./_namespaces/Harness.js";
@@ -962,10 +963,10 @@ export class TestState {
 
         const fileName = this.activeFile.fileName;
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
-        const annotations = ts.map(hints.sort(sortHints), hint => {
+        const annotations = ts.map(hints.slice().sort(sortHints), hint => {
             if (hint.displayParts) {
                 hint.displayParts = ts.map(hint.displayParts, part => {
-                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                    if (part.file && /lib.*\.d\.ts$/.test(part.file)) {
                         part.span!.start = -1;
                     }
                     return part;
@@ -1023,7 +1024,7 @@ export class TestState {
         }
 
         if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
-            this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            this.raiseError(`Expected 'isGlobalCompletion' to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
         }
 
         if (ts.hasProperty(options, "optionalReplacementSpan")) {
@@ -1031,6 +1032,14 @@ export class TestState {
                 actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
                 options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
                 "Expected 'optionalReplacementSpan' properties to match",
+            );
+        }
+
+        if (ts.hasProperty(options, "defaultCommitCharacters")) {
+            assert.deepEqual(
+                actualCompletions.defaultCommitCharacters?.sort(),
+                options.defaultCommitCharacters?.sort(),
+                "Expected 'defaultCommitCharacters' properties to match",
             );
         }
 
@@ -1180,6 +1189,13 @@ export class TestState {
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
         assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
+        if (ts.hasProperty(expected, "commitCharacters")) {
+            assert.deepEqual(
+                actual.commitCharacters?.sort(),
+                expected.commitCharacters?.sort(),
+                `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
+            );
+        }
         if (expected.sourceDisplay && actual.sourceDisplay) {
             assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
         }
@@ -1531,7 +1547,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
+        const isLibFile = /lib.*\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -1605,7 +1621,7 @@ export class TestState {
             }
         }
         let pos = 0;
-        const sortedDetails = ts.stableSort(details, (a, b) => ts.compareValues(a.location, b.location));
+        const sortedDetails = ts.toSorted(details, (a, b) => ts.compareValues(a.location, b.location));
         if (!canDetermineContextIdInline) {
             // Assign contextIds
             sortedDetails.forEach(({ span, type }) => {
@@ -2498,7 +2514,7 @@ export class TestState {
                     for (const part of tag.text ?? ts.emptyArray) {
                         if (part.kind === "linkName") {
                             const link = part as ts.JSDocLinkDisplayPart;
-                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                            if (/lib.*\.d\.ts$/.test(link.target.fileName)) {
                                 // The object literal isn't a complete TextSpan, but we're only going to
                                 // use these results in the baseline for diffing, so just overwrite.
                                 (link.target.textSpan as any) = { start: "--", length: "--" };
@@ -3241,8 +3257,8 @@ export class TestState {
             allSpanInsets.push({ text: "|]", pos: span.textSpan.start + span.textSpan.length });
         });
 
-        const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
-        ts.forEach(reverseSpans, span => {
+        allSpanInsets.sort((l, r) => r.pos - l.pos);
+        ts.forEach(allSpanInsets, span => {
             annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
         });
         Harness.IO.log(`\nMockup:\n${annotated}`);
@@ -3767,7 +3783,7 @@ export class TestState {
                 return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
             }
 
-            let inlineLinkedEditBaselines: { start: number; end: number; index: number; }[] = [];
+            const inlineLinkedEditBaselines: { start: number; end: number; index: number; }[] = [];
             let linkedEditInfoBaseline = "";
             for (const edit of linkedEditsByRange) {
                 const [linkedEdit, positions] = edit;
@@ -3786,7 +3802,7 @@ export class TestState {
                 offset++;
             }
 
-            inlineLinkedEditBaselines = inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
+            inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
             const fileText = activeFile.content;
             baselineContent += fileText.slice(0, inlineLinkedEditBaselines[0].start);
             for (let i = 0; i < inlineLinkedEditBaselines.length; i++) {
@@ -4042,7 +4058,7 @@ export class TestState {
     public verifyRefactorKindsAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
         const refactors = this.getApplicableRefactorsAtSelection("invoked", kind, preferences);
         const availableKinds = ts.flatMap(refactors, refactor => refactor.actions).map(action => action.kind);
-        assert.deepEqual(availableKinds.sort(), expected.sort(), `Expected kinds to be equal`);
+        assert.deepEqual(availableKinds.slice().sort(), expected.slice().sort(), `Expected kinds to be equal`);
     }
 
     public verifyRefactorsAvailable(names: readonly string[]): void {
@@ -4659,22 +4675,9 @@ function runCode(code: string, state: TestState, fileName: string): void {
     const generatedFile = ts.changeExtension(fileName, ".js");
     const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
-    type SourceMapSupportModule = typeof import("source-map-support") & {
-        // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
-        resetRetrieveHandlers(): void;
-    };
-
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
     // for test failures.
-    let sourceMapSupportModule: SourceMapSupportModule | undefined;
-    try {
-        sourceMapSupportModule = require("source-map-support");
-    }
-    catch {
-        // do nothing
-    }
-
-    sourceMapSupportModule?.install({
+    sourceMapSupport.install({
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
@@ -4700,7 +4703,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         throw err;
     }
     finally {
-        sourceMapSupportModule?.resetRetrieveHandlers();
+        sourceMapSupport.resetRetrieveHandlers();
     }
 }
 
@@ -4935,7 +4938,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
     const openRanges: RangeLocationInformation[] = [];
 
     /// A list of ranges we've collected so far */
-    let localRanges: Range[] = [];
+    const localRanges: Range[] = [];
 
     /// The latest position of the start of an unflushed plain text area
     let lastNormalCharPosition = 0;
@@ -5102,7 +5105,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
     }
 
     // put ranges in the correct order
-    localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
+    localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
     localRanges.forEach(r => ranges.push(r));
 
     return {

@@ -185,7 +185,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/src/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -226,7 +233,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/src/file2.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -313,7 +319,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/src/file2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -381,7 +394,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -461,7 +478,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -780,7 +804,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 5,
+      "success": true
     }
 After request
 
@@ -850,7 +878,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 6,
+      "success": true
     }
 After request
 
@@ -920,7 +952,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 7,
+      "success": true
     }
 After request
 
@@ -1017,7 +1053,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 8,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1104,7 +1147,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 9,
+      "success": true
     }
 After request
 
@@ -1221,7 +1268,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /file5.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 10,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
