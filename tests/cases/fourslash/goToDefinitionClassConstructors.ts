@@ -11,11 +11,11 @@
 //// }
 
 // @filename: main.ts
-//// import { Derived } from './base'
+//// import { Derived } from './definitions'
 //// const derived = new [|/*Derived*/Derived|](cArg)
 
 // @filename: defInSameFile.ts
-//// import { Base } from './base'
+//// import { Base } from './definitions'
 //// class SameFile extends Base {
 ////     readonly name: string = 'SameFile'
 //// }
@@ -23,7 +23,7 @@
 //// const wrapper = new [|/*Base*/Base|](cArg)
 
 // @filename: hasConstructor.ts
-//// import { Base } from './base'
+//// import { Base } from './definitions'
 //// class HasConstructor extends Base {
 ////     constructor() {}
 ////     readonly name: string = '';

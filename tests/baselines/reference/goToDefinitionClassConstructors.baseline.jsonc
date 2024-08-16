@@ -1,18 +1,37 @@
 // === goToDefinition ===
+// === /tests/cases/fourslash/definitions.ts ===
+// export class Base {
+//     [|{| defId: 1 |}constructor(protected readonly cArg: string) {}|]
+// }
+// 
+// <|export class [|{| defId: 0 |}Derived|] extends Base {
+//     readonly email = this.cArg.getByLabel('Email')
+//     readonly password =  this.cArg.getByLabel('Password')
+// }|>
+
 // === /tests/cases/fourslash/main.ts ===
-// <|import { [|Derived|] } from './base'|>
-// const derived = new /*GOTO DEF*/Derived(cArg)
+// import { Derived } from './definitions'
+// const derived = new /*GOTO DEF*/[|Derived|](cArg)
 
   // === Details ===
   [
    {
-    "kind": "alias",
+    "defId": 0,
+    "kind": "class",
     "name": "Derived",
-    "containerName": "",
-    "isLocal": true,
+    "containerName": "\"/tests/cases/fourslash/definitions\"",
+    "isLocal": false,
     "isAmbient": false,
-    "unverified": false,
-    "failedAliasResolution": true
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Base",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
    }
   ]
 
@@ -20,20 +39,39 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/defInSameFile.ts ===
-// import { Base } from './base'
-// <|class [|SameFile|] extends Base {
+// import { Base } from './definitions'
+// <|class [|{| defId: 0 |}SameFile|] extends Base {
 //     readonly name: string = 'SameFile'
 // }|>
 // const SameFile = new /*GOTO DEF*/SameFile(cArg)
 // const wrapper = new Base(cArg)
 
+// === /tests/cases/fourslash/definitions.ts ===
+// export class Base {
+//     [|{| defId: 1 |}constructor(protected readonly cArg: string) {}|]
+// }
+// 
+// export class Derived extends Base {
+// --- (line: 6) skipped ---
+
   // === Details ===
   [
    {
+    "defId": 0,
     "kind": "class",
     "name": "SameFile",
     "containerName": "",
     "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Base",
+    "isLocal": false,
     "isAmbient": false,
     "unverified": false,
     "failedAliasResolution": false
@@ -44,7 +82,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/hasConstructor.ts ===
-// import { Base } from './base'
+// import { Base } from './definitions'
 // <|class [|{| defId: 0 |}HasConstructor|] extends Base {
 //     [|{| defId: 1 |}constructor() {}|]
 //     readonly name: string = '';
@@ -78,23 +116,42 @@
 
 
 // === goToDefinition ===
+// === /tests/cases/fourslash/definitions.ts ===
+// <|export class [|{| defId: 0 |}Base|] {
+//     [|{| defId: 1 |}constructor(protected readonly cArg: string) {}|]
+// }|>
+// 
+// export class Derived extends Base {
+//     readonly email = this.cArg.getByLabel('Email')
+//     readonly password =  this.cArg.getByLabel('Password')
+// }
+
 // === /tests/cases/fourslash/defInSameFile.ts ===
-// <|import { [|Base|] } from './base'|>
+// import { Base } from './definitions'
 // class SameFile extends Base {
 //     readonly name: string = 'SameFile'
 // }
 // const SameFile = new SameFile(cArg)
-// const wrapper = new /*GOTO DEF*/Base(cArg)
+// const wrapper = new /*GOTO DEF*/[|Base|](cArg)
 
   // === Details ===
   [
    {
-    "kind": "alias",
+    "defId": 0,
+    "kind": "class",
     "name": "Base",
-    "containerName": "",
-    "isLocal": true,
+    "containerName": "\"/tests/cases/fourslash/definitions\"",
+    "isLocal": false,
     "isAmbient": false,
-    "unverified": false,
-    "failedAliasResolution": true
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Base",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
    }
   ]
