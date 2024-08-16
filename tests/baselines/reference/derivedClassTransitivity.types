@@ -9,7 +9,7 @@ class C {
 
     foo(x: number) { }
 >foo : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -33,7 +33,7 @@ class E extends D {
 
     foo(x?: string) { } // ok to add optional parameters
 >foo : (x?: string) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -64,11 +64,11 @@ var r = c.foo(1);
 >c.foo(1) : void
 >         : ^^^^
 >c.foo : (x: number) => void
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^
 >c : C
 >  : ^
 >foo : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -78,11 +78,11 @@ var r2 = e.foo('');
 >e.foo('') : void
 >          : ^^^^
 >e.foo : (x?: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^      ^^^^^^^^^
 >e : E
 >  : ^
 >foo : (x?: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 

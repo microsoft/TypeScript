@@ -26,7 +26,7 @@ class A1 {
 
     public fn(a: string): string {
 >fn : (a: string) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -58,7 +58,7 @@ class B1 {
 
     public fn(b: string): string {
 >fn : (b: string) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >b : string
 >  : ^^^^^^
 
@@ -76,7 +76,7 @@ class Base {
 
     private fn(b: string): string {
 >fn : (b: string) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >b : string
 >  : ^^^^^^
 
@@ -97,13 +97,13 @@ class B2 extends Base { }
 
 interface A3 { f(a: number): string; }
 >f : (a: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 
 interface B3 { f(a: number): string; }
 >f : (a: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 

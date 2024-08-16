@@ -3,7 +3,7 @@
 === nonexistentPropertyOnUnion.ts ===
 function f(x: string | Promise<string>) {
 >f : (x: string | Promise<string>) => void
->  : ^^^^                        ^^^^^^^^^
+>  : ^ ^^                        ^^^^^^^^^
 >x : string | Promise<string>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

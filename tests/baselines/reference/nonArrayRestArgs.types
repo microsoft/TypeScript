@@ -3,7 +3,7 @@
 === nonArrayRestArgs.ts ===
 function foo(...rest: number) { // error
 >foo : (...rest: number) => string
->    : ^^^^^^^^^^      ^^^^^^^^^^^
+>    : ^^^^    ^^      ^^^^^^^^^^^
 >rest : number
 >     : ^^^^^^
 

@@ -183,7 +183,7 @@ noHelpComment3();
   */
 function sum(a: number, b: number) {
 >sum : (a: number, b: number) => number
->    : ^^^^      ^^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -201,7 +201,7 @@ sum(10, 20);
 >sum(10, 20) : number
 >            : ^^^^^^
 >sum : (a: number, b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -216,7 +216,7 @@ sum(10, 20);
 /** @param e LastParam @anotherTag*/
 function multiply(a: number, b: number, c?: number, d?, e?) {
 >multiply : (a: number, b: number, c?: number, d?: any, e?: any) => void
->         : ^^^^      ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^ ^^      ^^ ^^^      ^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -231,20 +231,20 @@ function multiply(a: number, b: number, c?: number, d?, e?) {
 */
 function f1(a: number);
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
 function f1(b: string);
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
 /**@param opt optional parameter*/
 function f1(aOrb, opt?) {
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >aOrb : any
 >opt : any
 
@@ -261,7 +261,7 @@ function f1(aOrb, opt?) {
 */
 function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
 >subtract : (a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) => void
->         : ^^^^      ^^^^^      ^^^^^^            ^^^^^^            ^^^^^^            ^^^^^^            ^^^^^^^^^
+>         : ^ ^^      ^^ ^^      ^^ ^^^            ^^ ^^^            ^^ ^^^            ^^ ^^^            ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -282,7 +282,7 @@ function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: 
 */
 function square(a: number) {
 >square : (a: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -301,7 +301,7 @@ function square(a: number) {
 */
 function divide(a: number, b: number) {
 >divide : (a: number, b: number) => void
->       : ^^^^      ^^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -313,7 +313,7 @@ function divide(a: number, b: number) {
 */
 function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
 >jsDocParamTest : (a: number, b: number, c: number, d: number) => number
->               : ^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number

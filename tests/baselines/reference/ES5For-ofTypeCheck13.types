@@ -13,11 +13,11 @@ strSet.add('Hello')
 >strSet.add('Hello') : Set<string>
 >                    : ^^^^^^^^^^^
 >strSet.add : (value: string) => Set<string>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >strSet : Set<string>
 >       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >'Hello' : "Hello"
 >        : ^^^^^^^
 
@@ -25,11 +25,11 @@ strSet.add('World')
 >strSet.add('World') : Set<string>
 >                    : ^^^^^^^^^^^
 >strSet.add : (value: string) => Set<string>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >strSet : Set<string>
 >       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >'World' : "World"
 >        : ^^^^^^^
 

@@ -49,7 +49,7 @@ if (!(result instanceof RegExp)) {
 interface OnChanges {
     onChanges(changes: Record<string, unknown>): void
 >onChanges : (changes: Record<string, unknown>) => void
->          : ^^^^^^^^^^                       ^^^^^    
+>          : ^       ^^                       ^^^^^    
 >changes : Record<string, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
 }

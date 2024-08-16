@@ -7,7 +7,7 @@ class B {
 
     baz(a: string, y = 10) { }
 >baz : (a: string, y?: number) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >y : number
@@ -27,7 +27,7 @@ class C extends B {
 
     baz(a: string, y:number) {
 >baz : (a: string, y: number) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >y : number
@@ -37,11 +37,11 @@ class C extends B {
 >super.baz(a, y) : void
 >                : ^^^^
 >super.baz : (a: string, y?: number) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >super : B
 >      : ^
 >baz : (a: string, y?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >y : number
@@ -85,11 +85,11 @@ class D extends C {
 >super.baz("hello", 10) : void
 >                       : ^^^^
 >super.baz : (a: string, y: number) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^
 >super : C
 >      : ^
 >baz : (a: string, y: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >10 : 10

@@ -24,7 +24,7 @@ class Parameter<T4> {
 
     method(t: T4) { }
 >method : (t: T4) => void
->       : ^^^^  ^^^^^^^^^
+>       : ^ ^^  ^^^^^^^^^
 >t : T4
 >  : ^^
 }
@@ -71,7 +71,7 @@ class C<T1> extends CBase<T1> {
 
     public method(t: Wrapper<T1>) { }
 >method : (t: Wrapper<T1>) => void
->       : ^^^^           ^^^^^^^^^
+>       : ^ ^^           ^^^^^^^^^
 >t : Wrapper<T1>
 >  : ^^^^^^^^^^^
 }

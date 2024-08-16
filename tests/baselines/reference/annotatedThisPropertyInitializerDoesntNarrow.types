@@ -5,7 +5,7 @@
 /** @param {{ [s: string]: number }} map */
 function mappy(map) {}
 >mappy : (map: { [s: string]: number; }) => void
->      : ^^^^^^                        ^^^^^^^^^
+>      : ^   ^^                        ^^^^^^^^^
 >map : { [s: string]: number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ export class C {
 >mappy(this.assets) : void
 >                   : ^^^^
 >mappy : (map: { [s: string]: number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^                        ^^^^^^^^^
 >this.assets : { [assetName: string]: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this

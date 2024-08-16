@@ -1,12 +1,10 @@
 //// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM2.tsx] ////
 
 === Performance Stats ===
-Subtype cache: 800 / 800 (nearest 100)
-Identity cache: 200 / 200 (nearest 100)
-Assignability cache: 4,200 / 4,200 (nearest 100)
-Type Count: 9,200 / 9,200 (nearest 100)
-Instantiation count: 150,500 / 150,500 (nearest 500)
-Symbol count: 89,000 / 89,000 (nearest 500)
+Assignability cache: 5,000
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 100,000
 
 === reactTagNameComponentWithPropsNoOOM2.tsx ===
 /// <reference path="react16.d.ts" />

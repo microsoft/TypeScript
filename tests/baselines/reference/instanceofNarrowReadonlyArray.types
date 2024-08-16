@@ -5,7 +5,7 @@
 
 function narrow(x: readonly number[] | number): readonly number[] {
 >narrow : (x: readonly number[] | number) => readonly number[]
->       : ^^^^                          ^^^^^                 
+>       : ^ ^^                          ^^^^^                 
 >x : number | readonly number[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -21,7 +21,7 @@ class Point implements IPoint {
 
     public move(xo:number,yo:number) {
 >move : (xo: number, yo: number) => this
->     : ^^^^^      ^^^^^^      ^^^^^^^^^
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^
 >xo : number
 >   : ^^^^^^
 >yo : number
@@ -101,7 +101,7 @@ result+=(new Point(3,4).move(2,2));
 >new Point(3,4).move(2,2) : Point
 >                         : ^^^^^
 >new Point(3,4).move : (xo: number, yo: number) => Point
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >new Point(3,4) : Point
 >               : ^^^^^
 >Point : typeof Point
@@ -111,7 +111,7 @@ result+=(new Point(3,4).move(2,2));
 >4 : 4
 >  : ^
 >move : (xo: number, yo: number) => Point
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >2 : 2
 >  : ^
 >2 : 2
@@ -144,7 +144,7 @@ result+=(M.origin.move(1,1));
 >M.origin.move(1,1) : Point
 >                   : ^^^^^
 >M.origin.move : (xo: number, yo: number) => Point
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >M.origin : Point
 >         : ^^^^^
 >M : typeof M
@@ -152,7 +152,7 @@ result+=(M.origin.move(1,1));
 >origin : Point
 >       : ^^^^^
 >move : (xo: number, yo: number) => Point
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >1 : 1
 >  : ^
 >1 : 1

@@ -11,7 +11,7 @@ module M {
 
         public f(x:string,...rest:number[]) {
 >f : (x: string, ...rest: number[]) => string
->  : ^^^^      ^^^^^^^^^^^        ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >rest : number[]
@@ -80,7 +80,7 @@ module M {
 
         public fnope(x:string,...rest:number) {
 >fnope : (x: string, ...rest: number) => void
->      : ^^^^      ^^^^^^^^^^^      ^^^^^^^^^
+>      : ^ ^^      ^^^^^    ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >rest : number
@@ -90,7 +90,7 @@ module M {
 
         public fonly(...rest:string[]) {
 >fonly : (...rest: string[]) => any
->      : ^^^^^^^^^^        ^^^^^^^^
+>      : ^^^^    ^^        ^^^^^^^^
 >rest : string[]
 >     : ^^^^^^^^
 
@@ -167,11 +167,11 @@ result+=x.f(x,3,3); // bad first param
 >x.f(x,3,3) : string
 >           : ^^^^^^
 >x.f : (x: string, ...rest: number[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
 >3 : 3
@@ -187,11 +187,11 @@ result+=x.f(3,"hello",3); // bad second param
 >x.f(3,"hello",3) : string
 >                 : ^^^^^^
 >x.f : (x: string, ...rest: number[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >"hello" : "hello"
@@ -207,11 +207,11 @@ result+=x.f("hello",3,3,3,3,3); // ok
 >x.f("hello",3,3,3,3,3) : string
 >                       : ^^^^^^
 >x.f : (x: string, ...rest: number[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >3 : 3
@@ -233,11 +233,11 @@ result+=x.f("hello"); // ok varargs length 0
 >x.f("hello") : string
 >             : ^^^^^^
 >x.f : (x: string, ...rest: number[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -249,11 +249,11 @@ result+=x.fonly(3); // ok conversion
 >x.fonly(3) : any
 >           : ^^^
 >x.fonly : (...rest: string[]) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^        ^^^^^^^^
 >x : M.C
 >  : ^^^
 >fonly : (...rest: string[]) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^        ^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -265,11 +265,11 @@ result+=x.fonly(x); // bad param
 >x.fonly(x) : any
 >           : ^^^
 >x.fonly : (...rest: string[]) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^        ^^^^^^^^
 >x : M.C
 >  : ^^^
 >fonly : (...rest: string[]) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^        ^^^^^^^^
 >x : M.C
 >  : ^^^
 
@@ -281,11 +281,11 @@ result+=x.fonly("a"); // ok
 >x.fonly("a") : any
 >             : ^^^
 >x.fonly : (...rest: string[]) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^        ^^^^^^^^
 >x : M.C
 >  : ^^^
 >fonly : (...rest: string[]) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^        ^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
@@ -297,11 +297,11 @@ result+=x.fonly("a","b","c","d"); //ok
 >x.fonly("a","b","c","d") : any
 >                         : ^^^
 >x.fonly : (...rest: string[]) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^        ^^^^^^^^
 >x : M.C
 >  : ^^^
 >fonly : (...rest: string[]) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^        ^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >"b" : "b"

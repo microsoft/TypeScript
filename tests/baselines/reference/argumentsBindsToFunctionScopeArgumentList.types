@@ -9,7 +9,7 @@ var arguments = 10;
 
 function foo(a) {
 >foo : (a: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 

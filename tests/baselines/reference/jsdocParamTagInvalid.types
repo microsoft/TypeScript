@@ -4,7 +4,7 @@
 /** @param {string} colour */
 function f(color) {}
 >f : (color: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^
 >color : any
 >      : ^^^
 

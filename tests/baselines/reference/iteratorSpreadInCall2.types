@@ -3,7 +3,7 @@
 === iteratorSpreadInCall2.ts ===
 function foo(s: symbol[]) { }
 >foo : (s: symbol[]) => void
->    : ^^^^        ^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^
 >s : symbol[]
 >  : ^^^^^^^^
 
@@ -56,7 +56,7 @@ foo(...new SymbolIterator);
 >foo(...new SymbolIterator) : void
 >                           : ^^^^
 >foo : (s: symbol[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^
 >...new SymbolIterator : symbol
 >                      : ^^^^^^
 >new SymbolIterator : SymbolIterator

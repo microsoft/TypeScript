@@ -3,7 +3,7 @@
 === narrowByClauseExpressionInSwitchTrue8.ts ===
 function foo(cond1: boolean, cond2: boolean) {
 >foo : (cond1: boolean, cond2: boolean) => void
->    : ^^^^^^^^       ^^^^^^^^^       ^^^^^^^^^
+>    : ^     ^^       ^^     ^^       ^^^^^^^^^
 >cond1 : boolean
 >      : ^^^^^^^
 >cond2 : boolean

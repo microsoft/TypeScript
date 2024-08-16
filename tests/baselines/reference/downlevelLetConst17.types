@@ -7,7 +7,7 @@
 
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 var x;
@@ -22,14 +22,14 @@ for (let x = 10; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
 use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 
 for (const x = 10; ;) {
@@ -41,7 +41,7 @@ for (const x = 10; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : 10
 >  : ^^
 }
@@ -56,7 +56,7 @@ for (; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -79,7 +79,7 @@ for (; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : 10
 >  : ^^
 }
@@ -90,7 +90,7 @@ for (let x; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 
     x = 1;
@@ -108,7 +108,7 @@ for (; ;) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 
     x = 1;
@@ -129,7 +129,7 @@ while (true) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 }
 
@@ -146,7 +146,7 @@ while (true) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : true
 >  : ^^^^
 }
@@ -158,7 +158,7 @@ do {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 
 } while (true);
@@ -172,7 +172,7 @@ do {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 
 } while (true);
@@ -188,7 +188,7 @@ for (let x in []) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -202,7 +202,7 @@ for (const x in []) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -215,6 +215,6 @@ for (const x of []) {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 }

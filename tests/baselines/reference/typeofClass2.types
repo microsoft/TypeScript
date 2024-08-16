@@ -18,24 +18,24 @@ class C {
 
     static foo(x: number);
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     static foo(x: C);
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : C
 >  : ^
 
     static foo(x) { }
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
     static bar(x) { }
 >bar : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 }
 
@@ -47,7 +47,7 @@ class D extends C {
 
     static baz(x: number) { }
 >baz : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 

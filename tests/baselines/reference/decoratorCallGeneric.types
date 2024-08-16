@@ -12,13 +12,13 @@ interface I<T> {
 }
 function dec<T>(c: I<T>) { }
 >dec : <T>(c: I<T>) => void
->    : ^ ^^^^^    ^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^^^^
 >c : I<T>
 >  : ^^^^
 
 @dec
 >dec : <T>(c: I<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^^^^
 
 class C {
 >C : C

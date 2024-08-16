@@ -1,17 +1,15 @@
+import { noop } from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
-    dedent,
-} from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
+    noChangeOnlyRuns,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
@@ -90,6 +88,58 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                 }),
             );
         },
+        edits: noChangeOnlyRuns,
+    });
+
+    verifyTsc({
+        scenario: "projectReferenceWithRootDirInParent",
+        subScenario: "reports error for same tsbuildinfo file without incremental",
+        fs: () => projFs,
+        commandLineArgs: ["--b", "/src/src/main", "--verbose"],
+        modifyFs: fs => {
+            fs.writeFileSync(
+                "/src/src/main/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { outDir: "../../dist/" },
+                    references: [{ path: "../other" }],
+                }),
+            );
+            fs.writeFileSync(
+                "/src/src/other/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                }),
+            );
+        },
+    });
+
+    verifyTsc({
+        scenario: "projectReferenceWithRootDirInParent",
+        subScenario: "reports error for same tsbuildinfo file without incremental with tsc",
+        fs: () => projFs,
+        commandLineArgs: ["--b", "/src/src/other", "--verbose"],
+        modifyFs: fs => {
+            fs.writeFileSync(
+                "/src/src/main/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { outDir: "../../dist/" },
+                    references: [{ path: "../other" }],
+                }),
+            );
+            fs.writeFileSync(
+                "/src/src/other/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                }),
+            );
+        },
+        edits: [
+            {
+                caption: "Running tsc on main",
+                edit: noop,
+                commandLineArgs: ["-p", "/src/src/main"],
+            },
+        ],
     });
 
     verifyTsc({
@@ -114,5 +164,6 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                 }),
             );
         },
+        edits: noChangeOnlyRuns,
     });
 });

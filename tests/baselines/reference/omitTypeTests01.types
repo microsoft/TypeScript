@@ -25,7 +25,7 @@ export type Baz = Omit<Foo, "b" | "c">;
 
 export function getBarA(bar: Bar) {
 >getBarA : (bar: Bar) => string
->        : ^^^^^^   ^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^
 >bar : Bar
 >    : ^^^
 
@@ -40,7 +40,7 @@ export function getBarA(bar: Bar) {
 
 export function getBazA(baz: Baz) {
 >getBazA : (baz: Baz) => string
->        : ^^^^^^   ^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^
 >baz : Baz
 >    : ^^^
 

@@ -35,8 +35,8 @@ declare global {
 interface MockComponentInterface {
 	new (): {
         __properties__: { bar?: number } & { __children__: () => number };
->__properties__ : { bar?: number | undefined; } & { __children__: () => number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>__properties__ : { bar?: number; } & { __children__: () => number; }
+>               : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^            ^^^
 >bar : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >__children__ : () => number

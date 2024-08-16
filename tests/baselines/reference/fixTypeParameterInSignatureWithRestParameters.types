@@ -3,7 +3,7 @@
 === fixTypeParameterInSignatureWithRestParameters.ts ===
 function bar<T>(item1: T, item2: T) { }
 >bar : <T>(item1: T, item2: T) => void
->    : ^ ^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^     ^^ ^^     ^^ ^^^^^^^^^
 >item1 : T
 >      : ^
 >item2 : T
@@ -13,7 +13,7 @@ bar(1, ""); // Should be ok
 >bar(1, "") : void
 >           : ^^^^
 >bar : <T>(item1: T, item2: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^ ^^     ^^ ^^^^^^^^^
 >1 : 1
 >  : ^
 >"" : ""

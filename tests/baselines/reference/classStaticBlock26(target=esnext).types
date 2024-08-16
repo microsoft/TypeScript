@@ -82,7 +82,7 @@ class C {
     static {
         function f(await) { }
 >f : (await: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^
 >await : any
 >      : ^^^
 

@@ -3,7 +3,7 @@
 === emitDefaultParametersFunction.ts ===
 function foo(x: string, y = 10) { }
 >foo : (x: string, y?: number) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : number
@@ -13,7 +13,7 @@ function foo(x: string, y = 10) { }
 
 function baz(x: string, y = 5, ...rest) { }
 >baz : (x: string, y?: number, ...rest: any[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : number
@@ -25,7 +25,7 @@ function baz(x: string, y = 5, ...rest) { }
 
 function bar(y = 10) { }
 >bar : (y?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >10 : 10
@@ -33,7 +33,7 @@ function bar(y = 10) { }
 
 function bar1(y = 10, ...rest) { }
 >bar1 : (y?: number, ...rest: any[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >10 : 10

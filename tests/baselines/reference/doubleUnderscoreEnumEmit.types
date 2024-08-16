@@ -56,7 +56,7 @@ namespace Bar {
 
     export function __call(x: number): number {
 >__call : (x: number) => number
->       : ^^^^      ^^^^^      
+>       : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 

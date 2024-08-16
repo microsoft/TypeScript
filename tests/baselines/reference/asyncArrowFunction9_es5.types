@@ -9,11 +9,11 @@ var foo = async (a = await => await): Promise<void> => {
 >async : any
 >      : ^^^
 >a = await => await : (await: any) => any
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >await => await : (await: any) => any
->               : ^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^
 >await : any
 >      : ^^^
 >await : any

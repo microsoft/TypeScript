@@ -3,7 +3,7 @@
 === restParameterNoTypeAnnotation.ts ===
 function foo(...rest) {   
 >foo : (...rest: any[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
 

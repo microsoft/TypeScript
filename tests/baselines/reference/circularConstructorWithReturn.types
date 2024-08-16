@@ -7,11 +7,11 @@ export type Client = ReturnType<typeof getPrismaClient> extends new () => infer 
 >Client : PrismaClient
 >       : ^^^^^^^^^^^^
 >getPrismaClient : (options?: any) => typeof PrismaClient
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function getPrismaClient(options?: any) {
 >getPrismaClient : (options?: any) => typeof PrismaClient
->                : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >options : any
 
   class PrismaClient {
@@ -38,8 +38,8 @@ export function getPrismaClient(options?: any) {
 >     : ^^^^^^^^^^^^
 >applyModelsAndClientExtensions(this) : PrismaClient
 >                                     : ^^^^^^^^^^^^
->applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
+>                               : ^      ^^      ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
     }
@@ -52,7 +52,7 @@ export function getPrismaClient(options?: any) {
 
 export function applyModelsAndClientExtensions(client: Client) {
 >applyModelsAndClientExtensions : (client: Client) => PrismaClient
->                               : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>                               : ^      ^^      ^^^^^^^^^^^^^^^^^
 >client : PrismaClient
 >       : ^^^^^^^^^^^^
 

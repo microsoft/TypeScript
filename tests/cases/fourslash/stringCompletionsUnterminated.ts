@@ -18,15 +18,15 @@
 
 // @Filename: file4.ts
 //// const a = { "foo.bar": 1 }
-//// a["[|foo./*4*/b|]
+//// a["[|foo./*4*/|]b
 
 // @Filename: file5.ts
 //// const a = { "foo.bar": 1 }
-//// a['[|foo./*5*/b|]
+//// a['[|foo./*5*/|]b
 
 // @Filename: file6.ts
 //// const a = { "foo.bar": 1 }
-//// a[`[|foo./*6*/b|]
+//// a[`[|foo./*6*/|]b
 
 // @Filename: file7.ts
 //// const a = { "foo.bar": 1 }
@@ -44,19 +44,39 @@
 //// const a = { "foo.bar": 1 }
 //// a["[|foo/*10*/|]"
 
+// @Filename: file11.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|f/*11*/|]oo.b
+
+// @Filename: file12.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|f/*12*/oo.b|]"
+
+// @Filename: file13.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|f/*13*/oo.b|]" // some comment!!
+
+// @Filename: file14.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|f/*14*/|]oo.b // some comment!!
+
+// @Filename: file15.ts
+//// const a = { "foo.bar": 1 }
+//// a[`[|foo.b/*15*/|]
+
 // @Filename: empty1.ts
 //// const a = { "foo.bar": 1 }
-//// a[`/*11*/
+//// a[`/*a*/
 
 // @Filename: empty2.ts
 //// const a = { "foo.bar": 1 }
-//// a["/*12*/
+//// a["/*b*/
 
 // @Filename: empty3.ts
 //// const a = { "foo.bar": 1 }
-//// a['/*13*/
+//// a['/*c*/
 
-// tests 11-13 should return no replacementSpan
+// tests a,b,c should return no replacementSpan
 const markers = test.markers();
 const ranges = test.ranges();
 

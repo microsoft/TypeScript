@@ -20,9 +20,9 @@ A.toUpperCase();
 >A.toUpperCase() : string
 >                : ^^^^^^
 >A.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >A : "a"
 >  : ^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

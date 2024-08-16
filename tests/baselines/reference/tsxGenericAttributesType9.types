@@ -7,7 +7,7 @@ import React = require('react');
 
 export function makeP<P>(Ctor: React.ComponentClass<P>) {
 >makeP : <P>(Ctor: React.ComponentClass<P>) => typeof (Anonymous class)
->      : ^ ^^^^^^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^    ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Ctor : React.ComponentClass<P>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : any

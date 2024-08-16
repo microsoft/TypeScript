@@ -74,64 +74,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/beta/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2892088637-import { m } from '@alpha/a'","signature":"-3531856636-export {};\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[[2,[{"file":"../b.ts","start":18,"length":10,"messageText":"Output file '/alpha/bin/a.d.ts' has not been built from source file '/alpha/a.ts'.","category":1,"code":6305}]],1],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2892088637-import { m } from '@alpha/a'","signature":"-3531856636-export {};\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"semanticDiagnosticsPerFile":[[2,[{"start":18,"length":10,"messageText":"Output file '/alpha/bin/a.d.ts' has not been built from source file '/alpha/a.ts'.","category":1,"code":6305}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/beta/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../b.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "../b.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../b.ts": {
-        "original": {
-          "version": "2892088637-import { m } from '@alpha/a'",
-          "signature": "-3531856636-export {};\n"
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../b.ts": {
+      "original": {
         "version": "2892088637-import { m } from '@alpha/a'",
         "signature": "-3531856636-export {};\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../b.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      [
-        "../b.ts",
-        [
-          {
-            "file": "../b.ts",
-            "start": 18,
-            "length": 10,
-            "messageText": "Output file '/alpha/bin/a.d.ts' has not been built from source file '/alpha/a.ts'.",
-            "category": 1,
-            "code": 6305
-          }
-        ]
-      ],
-      "../../lib/lib.d.ts"
-    ],
-    "latestChangedDtsFile": "./b.d.ts"
+      },
+      "version": "2892088637-import { m } from '@alpha/a'",
+      "signature": "-3531856636-export {};\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "../b.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../b.ts",
+      [
+        {
+          "start": 18,
+          "length": 10,
+          "messageText": "Output file '/alpha/bin/a.d.ts' has not been built from source file '/alpha/a.ts'.",
+          "category": 1,
+          "code": 6305
+        }
+      ]
+    ]
+  ],
+  "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 982
+  "size": 932
 }
 

@@ -3,7 +3,7 @@
 === noUnusedLocals_writeOnly.ts ===
 function f(x = 0, b = false) {
 >f : (x?: number, b?: boolean) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -165,7 +165,7 @@ function f(x = 0, b = false) {
 >f(y++) : void
 >       : ^^^^
 >f : (x?: number, b?: boolean) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >y++ : number
 >    : ^^^^^^
 >y : number
@@ -181,7 +181,7 @@ function f(x = 0, b = false) {
 >f(z = 1) : void
 >         : ^^^^
 >f : (x?: number, b?: boolean) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >z = 1 : 1
 >      : ^
 >z : number
@@ -191,7 +191,7 @@ function f(x = 0, b = false) {
 }
 function f2(_: ReadonlyArray<number>): void {}
 >f2 : (_: ReadonlyArray<number>) => void
->   : ^^^^                     ^^^^^    
+>   : ^ ^^                     ^^^^^    
 >_ : readonly number[]
 >  : ^^^^^^^^^^^^^^^^^
 

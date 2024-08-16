@@ -3,7 +3,7 @@
 === parserErrorRecovery_ParameterList1.ts ===
 function f(a {
 >f : (a: any, {}: {}) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^  ^^^^^^^^^^^^
 >a : any
 >  : ^^^
 }

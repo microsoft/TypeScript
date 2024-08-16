@@ -16,7 +16,7 @@ class Road {
 
     public AddCars(cars: Car[]) {
 >AddCars : (cars: Car[]) => void
->        : ^^^^^^^     ^^^^^^^^^
+>        : ^    ^^     ^^^^^^^^^
 >cars : Car[]
 >     : ^^^^^
 

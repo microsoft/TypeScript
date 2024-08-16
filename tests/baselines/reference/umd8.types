@@ -14,11 +14,11 @@ y.foo();
 >y.foo() : number
 >        : ^^^^^^
 >y.foo : () => number
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >y : ff
 >  : ^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 let z: Foo.SubThing; // OK in ns position
 >z : ff.SubThing

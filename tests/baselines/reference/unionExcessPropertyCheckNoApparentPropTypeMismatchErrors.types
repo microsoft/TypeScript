@@ -14,11 +14,11 @@ interface INumberDictionary<V> {
 
 declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
 >forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
->        : ^ ^^^^^^^^                                           ^^^^^^^^^^^^                                                           ^^^^^^^^
+>        : ^ ^^    ^^                                           ^^        ^^                                                           ^^^^^^^^
 >from : IStringDictionary<T> | INumberDictionary<T>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (entry: { key: any; value: T; }, remove: () => void) => any
->         : ^^^^^^^^                       ^^^^^^^^^^          ^^^^^   
+>         : ^     ^^                       ^^      ^^          ^^^^^   
 >entry : { key: any; value: T; }
 >      : ^^^^^^^   ^^^^^^^^^ ^^^
 >key : any
@@ -36,7 +36,7 @@ let count = 0;
 forEach({ toString: 123 }, () => count++);
 >forEach({ toString: 123 }, () => count++) : any
 >forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^    ^^                                           ^^        ^^                                                           ^^^^^^^^
 >{ toString: 123 } : { toString: number; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^
 >toString : number

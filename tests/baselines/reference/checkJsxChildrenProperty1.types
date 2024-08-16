@@ -23,7 +23,7 @@ interface Prop {
 
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^    ^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >p : Prop
 >  : ^^^^
 
@@ -49,7 +49,7 @@ let k = <Comp a={10} b="hi" children ="lol" />;
 ><Comp a={10} b="hi" children ="lol" /> : JSX.Element
 >                                       : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -67,7 +67,7 @@ let k1 =
 ><Comp a={10} b="hi">        hi hi hi!    </Comp> : JSX.Element
 >                                                 : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -78,7 +78,7 @@ let k1 =
         hi hi hi!
     </Comp>;
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 
 let k2 =
 >k2 : JSX.Element
@@ -88,7 +88,7 @@ let k2 =
 ><Comp a={10} b="hi">        <div>hi hi hi!</div>    </Comp> : JSX.Element
 >                                                            : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -106,5 +106,5 @@ let k2 =
 
     </Comp>;
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 

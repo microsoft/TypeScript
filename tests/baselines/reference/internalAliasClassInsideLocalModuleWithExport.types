@@ -11,7 +11,7 @@ export module x {
 
         foo(a: number) {
 >foo : (a: number) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -52,11 +52,11 @@ export module m2 {
 >cProp.foo(10) : number
 >              : ^^^^^^
 >cProp.foo : (a: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >cProp : c
 >      : ^
 >foo : (a: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
     }

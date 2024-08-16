@@ -16,7 +16,7 @@ class C1 {
 >decorator((x: C1) => x.#x) : any
 >decorator : any
 >(x: C1) => x.#x : (x: C1) => any
->                : ^^^^  ^^^^^^^^
+>                : ^ ^^  ^^^^^^^^
 >x : C1
 >  : ^^
 >x.#x : any
@@ -37,11 +37,11 @@ class C2 {
 
     y(@decorator((x: C2) => x.#x) p) {}
 >y : (p: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >decorator((x: C2) => x.#x) : any
 >decorator : any
 >(x: C2) => x.#x : (x: C2) => any
->                : ^^^^  ^^^^^^^^
+>                : ^ ^^  ^^^^^^^^
 >x : C2
 >  : ^^
 >x.#x : any

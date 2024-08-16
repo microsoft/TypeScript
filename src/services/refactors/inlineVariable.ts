@@ -24,6 +24,9 @@ import {
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isShorthandPropertyAssignment,
+    isStringLiteral,
+    isTaggedTemplateExpression,
+    isTemplateSpan,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
     isVariableStatement,
@@ -33,16 +36,19 @@ import {
     refactor,
     some,
     SourceFile,
+    StringLiteral,
     SymbolFlags,
+    TemplateSpan,
     textChanges,
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
-} from "../_namespaces/ts";
+    walkUpParenthesizedExpressions,
+} from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -115,7 +121,13 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
+                const closestStringIdentifierParent = isStringLiteral(replacement) && isIdentifier(node) && walkUpParenthesizedExpressions(node.parent);
+                if (closestStringIdentifierParent && isTemplateSpan(closestStringIdentifierParent) && !isTaggedTemplateExpression(closestStringIdentifierParent.parent.parent)) {
+                    replaceTemplateStringVariableWithLiteral(tracker, file, closestStringIdentifierParent, replacement);
+                }
+                else {
+                    tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
+                }
             }
             tracker.delete(file, declaration);
         });
@@ -254,4 +266,18 @@ function getReplacementExpression(reference: Node, replacement: Expression) {
     }
 
     return replacement;
+}
+
+function replaceTemplateStringVariableWithLiteral(tracker: textChanges.ChangeTracker, sourceFile: SourceFile, reference: TemplateSpan, replacement: StringLiteral) {
+    const templateExpression = reference.parent;
+    const index = templateExpression.templateSpans.indexOf(reference);
+    const prevNode = index === 0 ? templateExpression.head : templateExpression.templateSpans[index - 1];
+    tracker.replaceRangeWithText(
+        sourceFile,
+        {
+            pos: prevNode.getEnd() - 2,
+            end: reference.literal.getStart() + 1,
+        },
+        replacement.text.replace(/\\/g, "\\\\").replace(/`/g, "\\`"),
+    );
 }

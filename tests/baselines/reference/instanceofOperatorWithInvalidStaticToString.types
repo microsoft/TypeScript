@@ -12,7 +12,7 @@ declare class StaticToString {
 
 function foo(staticToString: StaticToString) {
 >foo : (staticToString: StaticToString) => boolean
->    : ^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^
+>    : ^              ^^              ^^^^^^^^^^^^
 >staticToString : StaticToString
 >               : ^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ declare class StaticToNumber {
 }
 function bar(staticToNumber: StaticToNumber) {
 >bar : (staticToNumber: StaticToNumber) => boolean
->    : ^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^
+>    : ^              ^^              ^^^^^^^^^^^^
 >staticToNumber : StaticToNumber
 >               : ^^^^^^^^^^^^^^
 
@@ -58,7 +58,7 @@ declare class NormalToString {
 }
 function baz(normal: NormalToString) {
 >baz : (normal: NormalToString) => boolean
->    : ^^^^^^^^^              ^^^^^^^^^^^^
+>    : ^      ^^              ^^^^^^^^^^^^
 >normal : NormalToString
 >       : ^^^^^^^^^^^^^^
 

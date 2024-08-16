@@ -3,7 +3,7 @@
 === targetTypeCastTest.ts ===
 declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
 >Point : new (x: number, y: number) => { x: number; y: number; }
->      : ^^^^^^^^      ^^^^^      ^^^^^                         
+>      : ^^^^^ ^^      ^^ ^^      ^^^^^                         
 >x : number
 >  : ^^^^^^
 >y : number
@@ -15,7 +15,7 @@ declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
 
 function Point(x, y) {
 >Point : (x: any, y: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -60,7 +60,7 @@ var add = <Adder>function(x,y) {    return x+ y;   }
 ><Adder>function(x,y) {    return x+ y;   } : Adder
 >                                           : ^^^^^
 >function(x,y) {    return x+ y;   } : (x: number, y: number) => number
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -85,7 +85,7 @@ var add2: Adder2 = function(x,y) {
 >add2 : Adder2
 >     : ^^^^^^
 >function(x,y) {    return 0;} : (x: number, y: number) => number
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -98,7 +98,7 @@ var add2: Adder2 = function(x,y) {
 
 function add3(x,y) {x}
 >add3 : (x: any, y: any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

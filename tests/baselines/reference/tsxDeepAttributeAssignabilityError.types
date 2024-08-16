@@ -23,7 +23,7 @@ interface MyInnerProps {
 
 export function MyComponent(_props: MyProps) {
 >MyComponent : (_props: MyProps) => JSX.Element
->            : ^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>            : ^      ^^       ^^^^^^^^^^^^^^^^
 >_props : MyProps
 >       : ^^^^^^^
 
@@ -43,7 +43,7 @@ import * as React from 'react'
 
 import { MyComponent } from './my-component'
 >MyComponent : (_props: MyProps) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const result = <MyComponent x="yes" y={{
 >result : JSX.Element
@@ -51,7 +51,7 @@ export const result = <MyComponent x="yes" y={{
 ><MyComponent x="yes" y={{    value: 42}} /> : JSX.Element
 >                                            : ^^^^^^^^^^^
 >MyComponent : (_props: MyProps) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : { value: number; }

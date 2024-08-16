@@ -15,7 +15,7 @@ fn(data.foo);
 >fn(data.foo) : void
 >             : ^^^^
 >fn : (arg: Foo[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^     ^^^^^^^^^
 >data.foo : { bool: boolean; str: string; }[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : { foo: { bool: boolean; str: string; }[]; }
@@ -27,7 +27,7 @@ fn(data.foo); // <-- shouldn't error!
 >fn(data.foo) : void
 >             : ^^^^
 >fn : (arg: Foo[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^     ^^^^^^^^^
 >data.foo : { bool: boolean; str: string; }[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : { foo: { bool: boolean; str: string; }[]; }
@@ -37,7 +37,7 @@ fn(data.foo); // <-- shouldn't error!
 
 function fn(arg: Foo[]) { }
 >fn : (arg: Foo[]) => void
->   : ^^^^^^     ^^^^^^^^^
+>   : ^   ^^     ^^^^^^^^^
 >arg : Foo[]
 >    : ^^^^^
 

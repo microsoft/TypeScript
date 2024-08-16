@@ -50,7 +50,7 @@ class HelloWorld {
 
   handleEvent1(event: T1) {} // Error
 >handleEvent1 : (event: T1) => void
->             : ^^^^^^^^  ^^^^^^^^^
+>             : ^     ^^  ^^^^^^^^^
 >event : T1
 >      : ^^
   
@@ -64,7 +64,7 @@ class HelloWorld {
 
   handleEvent2(event: T2) {} // Ok
 >handleEvent2 : (event: T2) => void
->             : ^^^^^^^^  ^^^^^^^^^
+>             : ^     ^^  ^^^^^^^^^
 >event : T2
 >      : ^^
 
@@ -116,7 +116,7 @@ class HelloWorld {
 
   handleEvent3(event: C3): T1 { return undefined! } // Ok, Error
 >handleEvent3 : (event: C3) => T1
->             : ^^^^^^^^  ^^^^^  
+>             : ^     ^^  ^^^^^  
 >event : C3
 >      : ^^
 >undefined! : undefined

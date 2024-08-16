@@ -27,7 +27,7 @@ type T21 = readonly [number, number];
 
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
 >f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => readonly [string, string]
->   : ^^^^^        ^^^^^^                 ^^^^^^                ^^^^^^                         ^^^^^                         
+>   : ^  ^^        ^^  ^^                 ^^  ^^                ^^  ^^                         ^^^^^                         
 >ma : string[]
 >   : ^^^^^^^^
 >ra : readonly string[]

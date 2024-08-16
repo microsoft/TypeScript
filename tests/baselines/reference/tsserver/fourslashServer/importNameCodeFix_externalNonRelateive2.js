@@ -45,8 +45,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/tsconfig.json :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/tsconfig.json ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /apps/app1/tsconfig.json 2000 undefined Project: /apps/app1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -173,6 +172,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/app.ts: *new*
@@ -302,8 +312,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /apps/app1/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1/src
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/src/index.ts :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/src/index.ts ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 
@@ -317,6 +326,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: un
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
+    }
 After Request
 watchedFiles::
 /apps/app1/src/app.ts:
@@ -570,6 +587,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -635,6 +660,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /apps/app1/src/app.ts
@@ -687,8 +720,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /apps/app1/src/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1/src
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/src/app.ts :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/src/app.ts ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
@@ -718,6 +750,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: und
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 11,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/utils.ts:
@@ -969,6 +1012,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 18,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -1034,6 +1085,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /apps/app1/src/app.ts (Open) *changed*
@@ -1086,8 +1145,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /shared/data.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /shared
-Info seq  [hh:mm:ss:mss] For info: /shared/data.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /shared/data.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
@@ -1119,6 +1177,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /shared/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 20,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/utils.ts:
@@ -1368,6 +1437,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 27,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -1432,6 +1509,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 28,
+      "success": true
     }
 After Request
 ScriptInfos::

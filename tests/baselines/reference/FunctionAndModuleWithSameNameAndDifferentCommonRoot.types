@@ -59,7 +59,7 @@ var fn: () => { x: number; y: number };
 
 var fn = A.Point;
 >fn : () => { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^                         
 >A.Point : () => { x: number; y: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
@@ -77,7 +77,7 @@ var cl: { x: number; y: number; }
 
 var cl = B.Point.Origin;
 >cl : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >B.Point.Origin : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >B.Point : typeof B.Point

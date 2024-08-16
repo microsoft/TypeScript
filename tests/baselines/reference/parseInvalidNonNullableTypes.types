@@ -3,7 +3,7 @@
 === parseInvalidNonNullableTypes.ts ===
 function f1(a: string): a is string! {
 >f1 : (a: string) => a is string
->   : ^^^^      ^^^^^           
+>   : ^ ^^      ^^^^^           
 >a : string
 >  : ^^^^^^
 
@@ -14,7 +14,7 @@ function f1(a: string): a is string! {
 
 function f2(a: string): a is !string {
 >f2 : (a: string) => a is string
->   : ^^^^      ^^^^^           
+>   : ^ ^^      ^^^^^           
 >a : string
 >  : ^^^^^^
 
@@ -25,25 +25,25 @@ function f2(a: string): a is !string {
 
 function f3(a: string!) {}
 >f3 : (a: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function f4(a: number!) {}
 >f4 : (a: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
 function f5(a: !string) {}
 >f5 : (a: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function f6(a: !number) {}
 >f6 : (a: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 

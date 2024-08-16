@@ -142,7 +142,7 @@ interface I12 {
 
     foo: (x) => number;
 >foo : (x: any) => number
->    : ^^^^^^^^^^^^      
+>    : ^ ^^^^^^^^^^      
 >x : any
 }
 
@@ -154,7 +154,7 @@ interface I13 {
 
     foo: <T>(x:T) => T;
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

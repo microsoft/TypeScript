@@ -101,15 +101,15 @@ var ResultIsBoolean5 = !{ x: 1, y: (n: number) => { return n; } };
 >!{ x: 1, y: (n: number) => { return n; } } : boolean
 >                                           : ^^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->                                          : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >y : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             : ^^^^      ^^^^^^^^^^^
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -160,7 +160,7 @@ var ResultIsBoolean9 = !foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
@@ -244,7 +244,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 !objA.a;
 >!objA.a : boolean

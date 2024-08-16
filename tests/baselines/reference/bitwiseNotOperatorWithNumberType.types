@@ -101,15 +101,15 @@ var ResultIsNumber5 = ~{ x: 1, y: (n: number) => { return n; } };
 >~{ x: 1, y: (n: number) => { return n; } } : number
 >                                           : ^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->                                          : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >y : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             : ^^^^      ^^^^^^^^^^^
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -160,7 +160,7 @@ var ResultIsNumber9 = ~foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber10 = ~A.foo();
 >ResultIsNumber10 : number
@@ -238,7 +238,7 @@ var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 ~objA.a;
 >~objA.a : number

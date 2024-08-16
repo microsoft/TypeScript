@@ -42,7 +42,7 @@ function Zet(t) {
  */
 Zet.prototype.add = function(v, id) {
 >Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
->                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                    : ^ ^^ ^^  ^^     ^^^^^^
 >Zet.prototype.add : any
 >                  : ^^^
 >Zet.prototype : any
@@ -54,7 +54,7 @@ Zet.prototype.add = function(v, id) {
 >add : any
 >    : ^^^
 >function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^ ^^ ^^  ^^     ^^^^^^
 >v : T
 >  : ^
 >id : Id<T>

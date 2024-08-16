@@ -7,7 +7,7 @@ class C1 {
 
 public func(param: C2): any { }
 >func : (param: C2) => any
->     : ^^^^^^^^  ^^^^^   
+>     : ^     ^^  ^^^^^   
 >param : C2
 >      : ^^
 }

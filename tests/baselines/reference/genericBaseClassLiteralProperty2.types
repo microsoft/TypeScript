@@ -38,7 +38,7 @@ class DataView2 extends BaseCollection2<CollectionItem2> {
 
     fillItems(item: CollectionItem2) {
 >fillItems : (item: CollectionItem2) => void
->          : ^^^^^^^               ^^^^^^^^^
+>          : ^    ^^               ^^^^^^^^^
 >item : CollectionItem2
 >     : ^^^^^^^^^^^^^^^
 

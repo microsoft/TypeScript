@@ -46,7 +46,7 @@ module A {
 
             static fromOrigin(p: Point) {
 >fromOrigin : (p: Point) => Line
->           : ^^^^     ^^^^^^^^^
+>           : ^ ^^     ^^^^^^^^^
 >p : Point
 >  : ^^^^^
 

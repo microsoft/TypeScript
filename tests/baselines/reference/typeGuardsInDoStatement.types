@@ -7,7 +7,7 @@ let cond: boolean;
 
 function a(x: string | number | boolean) {
 >a : (x: string | number | boolean) => void
->  : ^^^^                         ^^^^^^^^^
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -48,7 +48,7 @@ function a(x: string | number | boolean) {
 }
 function b(x: string | number | boolean) {
 >b : (x: string | number | boolean) => void
->  : ^^^^                         ^^^^^^^^^
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -93,7 +93,7 @@ function b(x: string | number | boolean) {
 }
 function c(x: string | number) {
 >c : (x: string | number) => void
->  : ^^^^               ^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 

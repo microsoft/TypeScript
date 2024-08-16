@@ -4,7 +4,7 @@
 interface I {
     foo(...x): typeof x;
 >foo : (...x: any[]) => typeof x
->    : ^^^^^^^^^^^^^^^^^        
+>    : ^^^^ ^^^^^^^^^^^^        
 >x : any[]
 >  : ^^^^^
 >x : any[]
@@ -12,7 +12,7 @@ interface I {
 
     foo2(a: number, ...x): typeof x;
 >foo2 : (a: number, ...x: any[]) => typeof x
->     : ^^^^      ^^^^^^^^^^^^^^^^^^        
+>     : ^ ^^      ^^^^^ ^^^^^^^^^^^^        
 >a : number
 >  : ^^^^^^
 >x : any[]
@@ -22,7 +22,7 @@ interface I {
 
     foo3(b: string, ...x: string[]): typeof x;
 >foo3 : (b: string, ...x: string[]) => typeof x
->     : ^^^^      ^^^^^^^^        ^^^^^        
+>     : ^ ^^      ^^^^^ ^^        ^^^^^        
 >b : string
 >  : ^^^^^^
 >x : string[]

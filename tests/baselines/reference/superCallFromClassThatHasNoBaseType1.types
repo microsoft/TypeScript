@@ -7,7 +7,7 @@ class A {
 
     constructor(private map: (value: number) => string) {
 >map : (value: number) => string
->    : ^^^^^^^^      ^^^^^      
+>    : ^     ^^      ^^^^^      
 >value : number
 >      : ^^^^^^
 
@@ -24,7 +24,7 @@ class B {
 >super : any
 >      : ^^^
 >value => String(value) : (value: any) => string
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 >String(value) : string

@@ -3,7 +3,7 @@
 === a.ts ===
 export function assertNever(x: never, msg: string) {
 >assertNever : (x: never, msg: string) => void
->            : ^^^^     ^^^^^^^      ^^^^^^^^^
+>            : ^ ^^     ^^   ^^      ^^^^^^^^^
 >x : never
 >  : ^^^^^
 >msg : string

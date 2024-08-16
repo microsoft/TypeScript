@@ -60,7 +60,7 @@ class FooIterator {
 
 function fun([a, ...b] = new FooIterator) { }
 >fun : ([a, ...b]?: FooIterator) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^         ^^^^^^^^^^^^^^^^^^^^^^^
 >a : Foo
 >  : ^^^
 >b : Foo[]
@@ -74,7 +74,7 @@ fun(new FooIterator);
 >fun(new FooIterator) : void
 >                     : ^^^^
 >fun : ([a, ...b]?: FooIterator) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^         ^^^^^^^^^^^^^^^^^^^^^^^
 >new FooIterator : FooIterator
 >                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator

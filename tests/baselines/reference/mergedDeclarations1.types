@@ -48,7 +48,7 @@ module point {
 
     export function equals(p1: Point, p2: Point) {
 >equals : (p1: Point, p2: Point) => boolean
->       : ^^^^^     ^^^^^^     ^^^^^^^^^^^^
+>       : ^  ^^     ^^  ^^     ^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >p2 : Point
@@ -115,11 +115,11 @@ var b = point.equals(p1, p2);
 >point.equals(p1, p2) : boolean
 >                     : ^^^^^^^
 >point.equals : (p1: Point, p2: Point) => boolean
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^     ^^  ^^     ^^^^^^^^^^^^
 >point : typeof point
 >      : ^^^^^^^^^^^^
 >equals : (p1: Point, p2: Point) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^     ^^  ^^     ^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >p2 : Point

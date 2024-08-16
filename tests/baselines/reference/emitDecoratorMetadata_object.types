@@ -27,7 +27,7 @@ class A {
 
     method(there: object) {}
 >method : (there: object) => void
->       : ^^^^^^^^      ^^^^^^^^^
+>       : ^     ^^      ^^^^^^^^^
 >there : object
 >      : ^^^^^^
 }

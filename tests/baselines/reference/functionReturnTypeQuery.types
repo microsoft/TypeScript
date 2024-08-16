@@ -7,7 +7,7 @@ declare let foo: number;
 
 declare function test1(foo: string, bar: typeof foo): typeof foo;
 >test1 : (foo: string, bar: typeof foo) => typeof foo
->      : ^^^^^^      ^^^^^^^          ^^^^^          
+>      : ^   ^^      ^^   ^^          ^^^^^          
 >foo : string
 >    : ^^^^^^
 >bar : string
@@ -19,7 +19,7 @@ declare function test1(foo: string, bar: typeof foo): typeof foo;
 
 declare function test2({foo}: {foo: string}, bar: typeof foo): typeof foo;
 >test2 : ({ foo }: { foo: string; }, bar: typeof foo) => typeof foo
->      : ^^^^^^^^^^                ^^^^^^^          ^^^^^          
+>      : ^       ^^                ^^   ^^          ^^^^^          
 >foo : string
 >    : ^^^^^^
 >foo : string

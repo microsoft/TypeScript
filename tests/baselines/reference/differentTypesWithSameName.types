@@ -15,7 +15,7 @@ module m {
   }
   export function doSomething(v: m.variable) {
 >doSomething : (v: m.variable) => void
->            : ^^^^          ^^^^^^^^^
+>            : ^ ^^          ^^^^^^^^^
 >v : variable
 >  : ^^^^^^^^
 >m : any
@@ -46,11 +46,11 @@ m.doSomething(v);
 >m.doSomething(v) : void
 >                 : ^^^^
 >m.doSomething : (v: m.variable) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^          ^^^^^^^^^
 >m : typeof m
 >  : ^^^^^^^^
 >doSomething : (v: m.variable) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^          ^^^^^^^^^
 >v : variable
 >  : ^^^^^^^^
 

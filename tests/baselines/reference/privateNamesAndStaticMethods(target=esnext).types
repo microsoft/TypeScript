@@ -7,19 +7,19 @@ class A {
 
     static #foo(a: number) {}
 >#foo : (a: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
     static async #bar(a: number) {}
 >#bar : (a: number) => Promise<void>
->     : ^^^^      ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
     static async *#baz(a: number) {
 >#baz : (a: number) => AsyncGenerator<never, number, unknown>
->     : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -62,7 +62,7 @@ class A {
 >A.#foo(30) : void
 >           : ^^^^
 >A.#foo : (a: number) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -72,7 +72,7 @@ class A {
 >A.#bar(30) : Promise<void>
 >           : ^^^^^^^^^^^^^
 >A.#bar : (a: number) => Promise<void>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -82,7 +82,7 @@ class A {
 >A.#bar(30) : Promise<void>
 >           : ^^^^^^^^^^^^^
 >A.#bar : (a: number) => Promise<void>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -122,7 +122,7 @@ class B extends A {
 
     static #foo(a: string) {}
 >#foo : (a: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -137,7 +137,7 @@ class B extends A {
 >B.#foo("str") : void
 >              : ^^^^
 >B.#foo : (a: string) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 >"str" : "str"

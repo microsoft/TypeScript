@@ -49,8 +49,8 @@ type AfterMethod = {
 
     [placeType in PlaceType]?: void;
     model(duration: number): 'hour' | 'day';
->model : (duration: number) => 'hour' | 'day'
->      : ^^^^^^^^^^^      ^^^^^              
+>model : (duration: number) => "hour" | "day"
+>      : ^        ^^      ^^^^^              
 >duration : number
 >         : ^^^^^^
 }

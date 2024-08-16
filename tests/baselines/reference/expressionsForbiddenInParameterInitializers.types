@@ -3,7 +3,7 @@
 === bar.ts ===
 export async function foo({ foo = await import("./bar") }) {
 >foo : ({ foo }: { foo?: typeof import("bar"); }) => Promise<void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : typeof import("bar")
 >    : ^^^^^^^^^^^^^^^^^^^^
 >await import("./bar") : typeof import("bar")
@@ -16,7 +16,7 @@ export async function foo({ foo = await import("./bar") }) {
 
 export function* foo2({ foo = yield "a" }) {
 >foo2 : ({ foo }: { foo?: any; }) => Generator<never, void, unknown>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
 >    : ^^^
 >yield "a" : any

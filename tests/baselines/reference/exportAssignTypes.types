@@ -61,15 +61,15 @@ var v6 = iAny;
 
 import iGeneric = require('./expGeneric');
 >iGeneric : <T>(a: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^
 
 var v7: {<x>(p1: x): x} = iGeneric;
 >v7 : <x>(p1: x) => x
->   : ^ ^^^^^^ ^^^^^ 
+>   : ^ ^^  ^^ ^^^^^ 
 >p1 : x
 >   : ^
 >iGeneric : <T>(a: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^
 
 === expString.ts ===
 var x = "test";
@@ -149,7 +149,7 @@ export = x;
 === expGeneric.ts ===
 function x<T>(a: T){
 >x : <T>(a: T) => T
->  : ^ ^^^^^ ^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >a : T
 >  : ^
 
@@ -159,5 +159,5 @@ function x<T>(a: T){
 }
 export = x;
 >x : <T>(a: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 

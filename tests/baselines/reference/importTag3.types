@@ -17,7 +17,7 @@ export default interface Foo {
  */
 export function f(foo) {}
 >f : (foo: Foo) => void
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^   ^^^^^^^^^^^^^^
 >foo : Foo
 >    : ^^^
 

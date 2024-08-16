@@ -4,7 +4,7 @@
 interface Comparable<T> {
    compareTo(other: T): number;
 >compareTo : (other: T) => number
->          : ^^^^^^^^ ^^^^^      
+>          : ^     ^^ ^^^^^      
 >other : T
 >      : ^
 }
@@ -22,7 +22,7 @@ class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
 >A : A<T>
 >  : ^^^^
 >compareTo : (other: T) => number
->          : ^^^^^^^^ ^^^^^^^^^^^
+>          : ^     ^^ ^^^^^^^^^^^
 >other : T
 >      : ^
 >1 : 1

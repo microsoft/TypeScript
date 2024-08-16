@@ -3,7 +3,7 @@
 === index.js ===
 function defineCommonExtensionSymbols(apiPrivate) {
 >defineCommonExtensionSymbols : (apiPrivate: any) => void
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^          ^^^^^^^^^^^^^^
 >apiPrivate : any
 
     /** @enum {string} */

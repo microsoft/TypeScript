@@ -89,7 +89,7 @@ var m;
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
 >f6 : (n?: number) => void
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >m : number
@@ -105,7 +105,7 @@ function f6(n = m) {
 // Function signature with initializer referencing other parameter to the right
 function f7(n = m, m?) {
 >f7 : (n?: any, m?: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >n : any
 >  : ^^^
 >m : any

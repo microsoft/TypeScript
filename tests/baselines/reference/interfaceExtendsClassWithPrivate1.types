@@ -7,7 +7,7 @@ class C {
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -23,7 +23,7 @@ class C {
 interface I extends C {
     other(x: any): any;
 >other : (x: any) => any
->      : ^^^^   ^^^^^   
+>      : ^ ^^   ^^^^^   
 >x : any
 >  : ^^^
 }
@@ -36,7 +36,7 @@ class D extends C implements I {
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -44,7 +44,7 @@ class D extends C implements I {
 
     other(x: any) { return x; }
 >other : (x: any) => any
->      : ^^^^   ^^^^^^^^
+>      : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 >x : any

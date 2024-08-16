@@ -12,31 +12,31 @@ type DataFetchFns = {
 
         requiresLicense: (id: string) => boolean;
 >requiresLicense : (id: string) => boolean
->                : ^^^^^      ^^^^^       
+>                : ^  ^^      ^^^^^       
 >id : string
 >   : ^^^^^^
 
         maxGroundSpeed: (id: string) => number;
 >maxGroundSpeed : (id: string) => number
->               : ^^^^^      ^^^^^      
+>               : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         description: (id: string) => string;
 >description : (id: string) => string
->            : ^^^^^      ^^^^^      
+>            : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         displacement: (id: string) => number;
 >displacement : (id: string) => number
->             : ^^^^^      ^^^^^      
+>             : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         name: (id: string) => string;
 >name : (id: string) => string
->     : ^^^^^      ^^^^^      
+>     : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
@@ -47,31 +47,31 @@ type DataFetchFns = {
 
         requiresLicense: (id: string) => boolean;
 >requiresLicense : (id: string) => boolean
->                : ^^^^^      ^^^^^       
+>                : ^  ^^      ^^^^^       
 >id : string
 >   : ^^^^^^
 
         maxGroundSpeed: (id: string) => number;
 >maxGroundSpeed : (id: string) => number
->               : ^^^^^      ^^^^^      
+>               : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         maxTakeoffWeight: (id: string) => number;
 >maxTakeoffWeight : (id: string) => number
->                 : ^^^^^      ^^^^^      
+>                 : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         maxCruisingAltitude: (id: string) => number;
 >maxCruisingAltitude : (id: string) => number
->                    : ^^^^^      ^^^^^      
+>                    : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 
         name: (id: string) => string;
 >name : (id: string) => string
->     : ^^^^^      ^^^^^      
+>     : ^  ^^      ^^^^^      
 >id : string
 >   : ^^^^^^
     }

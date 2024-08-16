@@ -5,13 +5,13 @@
 
 export const a = {
 >a : { "new"(x: number): number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 >{  new(x: number) { return x + 1 }} : { "new"(x: number): number; }
->                                    : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                    : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 
   new(x: number) { return x + 1 }
 >new : (x: number) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -23,13 +23,13 @@ export const a = {
 }
 export const b = {
 >b : { "new"(x: number): number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 >{  "new"(x: number) { return x + 1 }} : { "new"(x: number): number; }
->                                      : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                      : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 
   "new"(x: number) { return x + 1 }
 >"new" : (x: number) => number
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -41,13 +41,13 @@ export const b = {
 }
 export const c = {
 >c : { "new"(x: number): number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 >{  ["new"](x: number) { return x + 1 }} : { "new"(x: number): number; }
->                                        : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                        : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 
   ["new"](x: number) { return x + 1 }
 >["new"] : (x: number) => number
->        : ^^^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >"new" : "new"
 >      : ^^^^^
 >x : number

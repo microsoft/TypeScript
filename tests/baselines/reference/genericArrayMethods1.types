@@ -7,7 +7,7 @@ var x:string[] =  [0,1].slice(0); // this should be an error
 >[0,1].slice(0) : number[]
 >               : ^^^^^^^^
 >[0,1].slice : (start?: number, end?: number) => number[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >[0,1] : number[]
 >      : ^^^^^^^^
 >0 : 0
@@ -15,7 +15,7 @@ var x:string[] =  [0,1].slice(0); // this should be an error
 >1 : 1
 >  : ^
 >slice : (start?: number, end?: number) => number[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

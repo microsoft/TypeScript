@@ -20,7 +20,7 @@ module Y2 {
 
     public function fn(x: string) { }
 >fn : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -42,7 +42,7 @@ module YY {
 
     static function fn(x: string) { }
 >fn : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -65,7 +65,7 @@ module YY3 {
 
     private function fn(x: string) { }
 >fn : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }

@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxChildrenIndividualErrorElaborations.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,700 / 7,700 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === index.tsx ===
 /// <reference path="react16.d.ts" />
@@ -15,14 +15,14 @@ import * as React from "react";
 interface Props {
   children: (x: number) => string;
 >children : (x: number) => string
->         : ^^^^      ^^^^^      
+>         : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 }
 
 export function Blah(props: Props) {
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^     ^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 
@@ -38,11 +38,11 @@ var a = <Blah>
 ><Blah>  {x => x}</Blah> : JSX.Element
 >                        : ^^^^^^^^^^^
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -50,7 +50,7 @@ var a = <Blah>
 
 </Blah>
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
 // Blah components don't accept text as child elements
 var a = <Blah>
@@ -59,12 +59,12 @@ var a = <Blah>
 ><Blah>  Hello unexpected text!</Blah> : JSX.Element
 >                                      : ^^^^^^^^^^^
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
   Hello unexpected text!
 </Blah>
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
 // Blah components don't accept multiple children.
 var a = <Blah>
@@ -73,11 +73,11 @@ var a = <Blah>
 ><Blah>  {x => "" + x}  {x => "" + x}</Blah> : JSX.Element
 >                                            : ^^^^^^^^^^^
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
   {x => "" + x}
 >x => "" + x : (x: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >"" + x : string
@@ -89,7 +89,7 @@ var a = <Blah>
 
   {x => "" + x}
 >x => "" + x : (x: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >"" + x : string
@@ -101,19 +101,19 @@ var a = <Blah>
 
 </Blah>
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^^^^^^^^
 
 interface PropsArr {
   children: ((x: number) => string)[];
 >children : ((x: number) => string)[]
->         : ^^^^^      ^^^^^      ^^^
+>         : ^^ ^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 }
 
 export function Blah2(props: PropsArr) {
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^        ^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 >props : PropsArr
 >      : ^^^^^^^^
 
@@ -129,11 +129,11 @@ var a = <Blah2>
 ><Blah2>  {x => x}</Blah2> : JSX.Element
 >                          : ^^^^^^^^^^^
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
   {x => x}
 >x => x : (x: any) => any
->       : ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -141,7 +141,7 @@ var a = <Blah2>
 
 </Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
 // Blah2 components don't accept text as child elements
 var a = <Blah2>
@@ -150,12 +150,12 @@ var a = <Blah2>
 ><Blah2>  Hello unexpected text!</Blah2> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
   Hello unexpected text!
 </Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
 // Blah2 components don't accept multiple children of the wrong type.
 var a = <Blah2>
@@ -164,11 +164,11 @@ var a = <Blah2>
 ><Blah2>  {x => x}  {x => x}</Blah2> : JSX.Element
 >                                    : ^^^^^^^^^^^
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -176,7 +176,7 @@ var a = <Blah2>
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -184,7 +184,7 @@ var a = <Blah2>
 
 </Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^        ^^^^^^^^^^^^^^^^
 
 type Cb = (x: number) => string;
 >Cb : Cb
@@ -200,7 +200,7 @@ interface PropsMixed {
 
 export function Blah3(props: PropsMixed) {
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^          ^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 >props : PropsMixed
 >      : ^^^^^^^^^^
 
@@ -216,11 +216,11 @@ var a = <Blah3>
 ><Blah3>  {x => x}</Blah3> : JSX.Element
 >                          : ^^^^^^^^^^^
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -228,7 +228,7 @@ var a = <Blah3>
 
 </Blah3>
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 
 // Blah3 components don't accept text as child elements
 var a = <Blah3>
@@ -237,12 +237,12 @@ var a = <Blah3>
 ><Blah3>  Hello unexpected text!</Blah3> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 
   Hello unexpected text!
 </Blah3>
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 
 // Blah3 components don't accept multiple children of the wrong type.
 var a = <Blah3>
@@ -251,11 +251,11 @@ var a = <Blah3>
 ><Blah3>  {x => x}  {x => x}</Blah3> : JSX.Element
 >                                    : ^^^^^^^^^^^
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -263,7 +263,7 @@ var a = <Blah3>
 
   {x => x}
 >x => x : (x: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -271,5 +271,5 @@ var a = <Blah3>
 
 </Blah3>
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^          ^^^^^^^^^^^^^^^^
 

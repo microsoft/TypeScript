@@ -1,0 +1,523 @@
+//// [tests/cases/compiler/setMethods.ts] ////
+
+=== setMethods.ts ===
+let numberSet = new Set([0, 1, 2]);
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>new Set([0, 1, 2]) : Set<number>
+>                   : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[0, 1, 2] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+let stringSet = new Set(["a", "b"]);
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+>new Set(["a", "b"]) : Set<string>
+>                    : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>["a", "b"] : string[]
+>           : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+let numberMap = new Map([[4, {}], [5, {}]]);
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+>new Map([[4, {}], [5, {}]]) : Map<number, {}>
+>                            : ^^^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>[[4, {}], [5, {}]] : [number, {}][]
+>                   : ^^^^^^^^^^^^^^
+>[4, {}] : [number, {}]
+>        : ^^^^^^^^^^^^
+>4 : 4
+>  : ^
+>{} : {}
+>   : ^^
+>[5, {}] : [number, {}]
+>        : ^^^^^^^^^^^^
+>5 : 5
+>  : ^
+>{} : {}
+>   : ^^
+
+let numberSetLike = {
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>{  size: 1,  *keys() { yield 3 },  has(x) { return x === 3 },} : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+  size: 1,
+>size : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+
+  *keys() { yield 3 },
+>keys : () => Generator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield 3 : any
+>        : ^^^
+>3 : 3
+>  : ^
+
+  has(x) { return x === 3 },
+>has : (x: any) => boolean
+>    : ^ ^^^^^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>x === 3 : boolean
+>        : ^^^^^^^
+>x : any
+>  : ^^^
+>3 : 3
+>  : ^
+
+};
+
+numberSet.union([]);
+>numberSet.union([]) : Set<unknown>
+>                    : ^^^^^^^^^^^^
+>numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>      : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.union(new Set);
+>numberSet.union(new Set) : Set<unknown>
+>                         : ^^^^^^^^^^^^
+>numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>      : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.union(stringSet);
+>numberSet.union(stringSet) : Set<string | number>
+>                           : ^^^^^^^^^^^^^^^^^^^^
+>numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>      : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.union(numberMap);
+>numberSet.union(numberMap) : Set<number>
+>                           : ^^^^^^^^^^^
+>numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>      : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.union(numberSetLike);
+>numberSet.union(numberSetLike) : Set<any>
+>                               : ^^^^^^^^
+>numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>      : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.intersection([]);
+>numberSet.intersection([]) : Set<number>
+>                           : ^^^^^^^^^^^
+>numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>                       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.intersection(new Set);
+>numberSet.intersection(new Set) : Set<number>
+>                                : ^^^^^^^^^^^
+>numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>                       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.intersection(stringSet);
+>numberSet.intersection(stringSet) : Set<never>
+>                                  : ^^^^^^^^^^
+>numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>                       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.intersection(numberMap);
+>numberSet.intersection(numberMap) : Set<number>
+>                                  : ^^^^^^^^^^^
+>numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>                       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.intersection(numberSetLike);
+>numberSet.intersection(numberSetLike) : Set<any>
+>                                      : ^^^^^^^^
+>numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>                       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.difference([]);
+>numberSet.difference([]) : Set<number>
+>                         : ^^^^^^^^^^^
+>numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>                     : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>           : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.difference(new Set);
+>numberSet.difference(new Set) : Set<number>
+>                              : ^^^^^^^^^^^
+>numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>                     : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>           : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.difference(stringSet);
+>numberSet.difference(stringSet) : Set<number>
+>                                : ^^^^^^^^^^^
+>numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>                     : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>           : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.difference(numberMap);
+>numberSet.difference(numberMap) : Set<number>
+>                                : ^^^^^^^^^^^
+>numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>                     : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>           : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.difference(numberSetLike);
+>numberSet.difference(numberSetLike) : Set<number>
+>                                    : ^^^^^^^^^^^
+>numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>                     : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+>           : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.symmetricDifference([]);
+>numberSet.symmetricDifference([]) : Set<unknown>
+>                                  : ^^^^^^^^^^^^
+>numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                              : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.symmetricDifference(new Set);
+>numberSet.symmetricDifference(new Set) : Set<unknown>
+>                                       : ^^^^^^^^^^^^
+>numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                              : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.symmetricDifference(stringSet);
+>numberSet.symmetricDifference(stringSet) : Set<string | number>
+>                                         : ^^^^^^^^^^^^^^^^^^^^
+>numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                              : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.symmetricDifference(numberMap);
+>numberSet.symmetricDifference(numberMap) : Set<number>
+>                                         : ^^^^^^^^^^^
+>numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                              : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.symmetricDifference(numberSetLike);
+>numberSet.symmetricDifference(numberSetLike) : Set<any>
+>                                             : ^^^^^^^^
+>numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                              : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+>                    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.isSubsetOf([]);
+>numberSet.isSubsetOf([]) : boolean
+>                         : ^^^^^^^
+>numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                     : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>           : ^     ^^                        ^^^^^       
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.isSubsetOf(new Set);
+>numberSet.isSubsetOf(new Set) : boolean
+>                              : ^^^^^^^
+>numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                     : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>           : ^     ^^                        ^^^^^       
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.isSubsetOf(stringSet);
+>numberSet.isSubsetOf(stringSet) : boolean
+>                                : ^^^^^^^
+>numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                     : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>           : ^     ^^                        ^^^^^       
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.isSubsetOf(numberMap);
+>numberSet.isSubsetOf(numberMap) : boolean
+>                                : ^^^^^^^
+>numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                     : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>           : ^     ^^                        ^^^^^       
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.isSubsetOf(numberSetLike);
+>numberSet.isSubsetOf(numberSetLike) : boolean
+>                                    : ^^^^^^^
+>numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                     : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+>           : ^     ^^                        ^^^^^       
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.isSupersetOf([]);
+>numberSet.isSupersetOf([]) : boolean
+>                           : ^^^^^^^
+>numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                       : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>             : ^     ^^                        ^^^^^       
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.isSupersetOf(new Set);
+>numberSet.isSupersetOf(new Set) : boolean
+>                                : ^^^^^^^
+>numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                       : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>             : ^     ^^                        ^^^^^       
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.isSupersetOf(stringSet);
+>numberSet.isSupersetOf(stringSet) : boolean
+>                                  : ^^^^^^^
+>numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                       : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>             : ^     ^^                        ^^^^^       
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.isSupersetOf(numberMap);
+>numberSet.isSupersetOf(numberMap) : boolean
+>                                  : ^^^^^^^
+>numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                       : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>             : ^     ^^                        ^^^^^       
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.isSupersetOf(numberSetLike);
+>numberSet.isSupersetOf(numberSetLike) : boolean
+>                                      : ^^^^^^^
+>numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>                       : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+>             : ^     ^^                        ^^^^^       
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+numberSet.isDisjointFrom([]);
+>numberSet.isDisjointFrom([]) : boolean
+>                             : ^^^^^^^
+>numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>                         : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>               : ^     ^^                        ^^^^^       
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+numberSet.isDisjointFrom(new Set);
+>numberSet.isDisjointFrom(new Set) : boolean
+>                                  : ^^^^^^^
+>numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>                         : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>               : ^     ^^                        ^^^^^       
+>new Set : Set<unknown>
+>        : ^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+numberSet.isDisjointFrom(stringSet);
+>numberSet.isDisjointFrom(stringSet) : boolean
+>                                    : ^^^^^^^
+>numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>                         : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>               : ^     ^^                        ^^^^^       
+>stringSet : Set<string>
+>          : ^^^^^^^^^^^
+
+numberSet.isDisjointFrom(numberMap);
+>numberSet.isDisjointFrom(numberMap) : boolean
+>                                    : ^^^^^^^
+>numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>                         : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>               : ^     ^^                        ^^^^^       
+>numberMap : Map<number, {}>
+>          : ^^^^^^^^^^^^^^^
+
+numberSet.isDisjointFrom(numberSetLike);
+>numberSet.isDisjointFrom(numberSetLike) : boolean
+>                                        : ^^^^^^^
+>numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>                         : ^     ^^                        ^^^^^       
+>numberSet : Set<number>
+>          : ^^^^^^^^^^^
+>isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+>               : ^     ^^                        ^^^^^       
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+

@@ -11,7 +11,7 @@
 // Error
 function a({while}) { }
 >a : ({ while:  }: { while: any; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >while : any
 >      : ^^^
 > : any
@@ -19,13 +19,13 @@ function a({while}) { }
 
 function a1({public}) { }
 >a1 : ({ public }: { public: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >public : any
 >       : ^^^
 
 function a4([while, for, public]){ }
 >a4 : ([]: any[]) => any
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^^
 >, : any
 >  : ^^^
 > : any
@@ -55,13 +55,13 @@ function a5(...while) { }
 
 function a6(...public) { }
 >a6 : (...public: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^^^^^^^^^^^^
 >public : any[]
 >       : ^^^^^
 
 function a7(...a: string) { }
 >a7 : (...a: string) => void
->   : ^^^^^^^      ^^^^^^^^^
+>   : ^^^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -69,7 +69,7 @@ a({ while: 1 });
 >a({ while: 1 }) : void
 >                : ^^^^
 >a : ({ while:  }: { while: any; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ while: 1 } : { while: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >while : number
@@ -80,7 +80,7 @@ a({ while: 1 });
 // No Error
 function b1({public: x}) { }
 >b1 : ({ public: x }: { public: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >public : any
 >       : ^^^
 >x : any
@@ -88,7 +88,7 @@ function b1({public: x}) { }
 
 function b2({while: y}) { }
 >b2 : ({ while: y }: { while: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >while : any
 >      : ^^^
 >y : any
@@ -98,7 +98,7 @@ b1({ public: 1 });
 >b1({ public: 1 }) : void
 >                  : ^^^^
 >b1 : ({ public: x }: { public: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ public: 1 } : { public: number; }
 >              : ^^^^^^^^^^^^^^^^^^^
 >public : number
@@ -110,7 +110,7 @@ b2({ while: 1 });
 >b2({ while: 1 }) : void
 >                 : ^^^^
 >b2 : ({ while: y }: { while: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ while: 1 } : { while: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >while : number

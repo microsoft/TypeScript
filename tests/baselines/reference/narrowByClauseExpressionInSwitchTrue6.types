@@ -38,7 +38,7 @@ type MyType = A | B | C;
 
 function isA(x: MyType) {
 >isA : (x: MyType) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : MyType
 >  : ^^^^^^
 

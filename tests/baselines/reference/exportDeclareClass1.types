@@ -11,7 +11,7 @@
 
         static tsF(param:any) { };
 >tsF : (param: any) => void
->    : ^^^^^^^^   ^^^^^^^^^
+>    : ^     ^^   ^^^^^^^^^
 >param : any
 >      : ^^^
 
@@ -27,7 +27,7 @@
 
         static tsF(param:any);
 >tsF : (param: any) => any
->    : ^^^^^^^^   ^^^^^^^^
+>    : ^     ^^   ^^^^^^^^
 >param : any
 >      : ^^^
 

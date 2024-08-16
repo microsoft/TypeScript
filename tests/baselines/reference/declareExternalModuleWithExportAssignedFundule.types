@@ -23,17 +23,17 @@ declare module "express" {
 
             enable(name: string): ExpressServer;
 >enable : (name: string) => ExpressServer
->       : ^^^^^^^      ^^^^^             
+>       : ^    ^^      ^^^^^             
 >name : string
 >     : ^^^^^^
 
             post(path: RegExp, handler: (req: Function) => void ): void;
 >post : (path: RegExp, handler: (req: Function) => void) => void
->     : ^^^^^^^      ^^^^^^^^^^^                       ^^^^^    
+>     : ^    ^^      ^^       ^^                       ^^^^^    
 >path : RegExp
 >     : ^^^^^^
 >handler : (req: Function) => void
->        : ^^^^^^        ^^^^^    
+>        : ^   ^^        ^^^^^    
 >req : Function
 >    : ^^^^^^^^
 

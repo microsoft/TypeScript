@@ -24,7 +24,7 @@ export class User {
 
     method(input: number) {
 >method : (input: number) => void
->       : ^^^^^^^^      ^^^^^^^^^
+>       : ^     ^^      ^^^^^^^^^
 >input : number
 >      : ^^^^^^
 

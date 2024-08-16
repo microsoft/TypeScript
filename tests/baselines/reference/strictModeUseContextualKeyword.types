@@ -13,7 +13,7 @@ var as = 0;
 
 function foo(as: string) { }
 >foo : (as: string) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^
 >as : string
 >   : ^^^^^^
 

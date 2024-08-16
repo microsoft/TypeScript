@@ -18,7 +18,7 @@ import db from './db';
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
->              : ^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^^^^^^^^^^^^
 >target : any
 >       : ^^^
 
@@ -28,7 +28,7 @@ function someDecorator(target) {
 }
 @someDecorator
 >someDecorator : (target: any) => any
->              : ^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^^^^^^^^^^^^
 
 class MyClass {
 >MyClass : MyClass

@@ -19,7 +19,7 @@ const boo: Foo = { bar: 'bar' };
 
 function a(aboo1?: Foo) {
 >a : (aboo1?: Foo) => void
->  : ^^^^^^^^^   ^^^^^^^^^
+>  : ^     ^^^   ^^^^^^^^^
 >aboo1 : Foo | undefined
 >      : ^^^^^^^^^^^^^^^
 

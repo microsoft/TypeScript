@@ -46,7 +46,7 @@ class Derived2 extends Base {
 
 function classy(base: Base, someDerived: Derived1 | Derived2) {
 >classy : (base: Base, someDerived: Derived1 | Derived2) => void
->       : ^^^^^^^    ^^^^^^^^^^^^^^^                   ^^^^^^^^^
+>       : ^    ^^    ^^           ^^                   ^^^^^^^^^
 >base : Base
 >     : ^^^^
 >someDerived : Derived1 | Derived2

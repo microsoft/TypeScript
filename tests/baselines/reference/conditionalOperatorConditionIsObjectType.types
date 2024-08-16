@@ -122,9 +122,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >((a: string) => a.length) ? exprAny1 : exprAny2 : any
 >                                                : ^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -142,9 +142,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >((a: string) => a.length) ? exprBoolean1 : exprBoolean2 : boolean
 >                                                        : ^^^^^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -273,11 +273,11 @@ C.doIt() ? exprString1 : exprString2;
 >C.doIt() : void
 >         : ^^^^
 >C.doIt : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >C : typeof C
 >  : ^^^^^^^^
 >doIt : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >exprString1 : string
 >            : ^^^^^^
 >exprString2 : string
@@ -289,11 +289,11 @@ condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >condObject.valueOf() : Object
 >                     : ^^^^^^
 >condObject.valueOf : () => Object
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >condObject : Object
 >           : ^^^^^^
 >valueOf : () => Object
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >exprIsObject1 : Object
 >              : ^^^^^^
 >exprIsObject2 : Object
@@ -390,9 +390,9 @@ var resultIsAny2 = ((a: string) => a.length) ? exprAny1 : exprAny2;
 >((a: string) => a.length) ? exprAny1 : exprAny2 : any
 >                                                : ^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -412,9 +412,9 @@ var resultIsBoolean2 = ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
 >((a: string) => a.length) ? exprBoolean1 : exprBoolean2 : boolean
 >                                                        : ^^^^^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -558,11 +558,11 @@ var resultIsString3 = C.doIt() ? exprString1 : exprString2;
 >C.doIt() : void
 >         : ^^^^
 >C.doIt : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >C : typeof C
 >  : ^^^^^^^^
 >doIt : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >exprString1 : string
 >            : ^^^^^^
 >exprString2 : string
@@ -576,11 +576,11 @@ var resultIsObject3 = condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >condObject.valueOf() : Object
 >                     : ^^^^^^
 >condObject.valueOf : () => Object
->                   : ^^^^^^^^^^^^
+>                   : ^^^^^^      
 >condObject : Object
 >           : ^^^^^^
 >valueOf : () => Object
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >exprIsObject1 : Object
 >              : ^^^^^^
 >exprIsObject2 : Object
@@ -594,11 +594,11 @@ var resultIsStringOrBoolean3 = C.doIt() ? exprString1 : exprBoolean1; // union
 >C.doIt() : void
 >         : ^^^^
 >C.doIt : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >C : typeof C
 >  : ^^^^^^^^
 >doIt : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >exprString1 : string
 >            : ^^^^^^
 >exprBoolean1 : boolean

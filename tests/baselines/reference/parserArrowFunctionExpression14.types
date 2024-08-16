@@ -9,7 +9,7 @@ a() ? (b: number, c?: string): void => d() : e; // Not legal JS; "Unexpected tok
 >a : any
 >  : ^^^
 >(b: number, c?: string): void => d() : (b: number, c?: string) => void
->                                     : ^^^^      ^^^^^^      ^^^^^    
+>                                     : ^ ^^      ^^ ^^^      ^^^^^    
 >b : number
 >  : ^^^^^^
 >c : string
@@ -30,7 +30,7 @@ a() ? (b: number, c?: string): void => d() : e;
 >a : any
 >  : ^^^
 >(b: number, c?: string): void => d() : (b: number, c?: string) => void
->                                     : ^^^^      ^^^^^^      ^^^^^    
+>                                     : ^ ^^      ^^ ^^^      ^^^^^    
 >b : number
 >  : ^^^^^^
 >c : string

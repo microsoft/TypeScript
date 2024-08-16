@@ -7,7 +7,7 @@ class A {
 
     public static createSelectableViewModel(initialState?: any, selectedValue?: any) {
 >createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }
->                          : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^            ^^^   ^^             ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >initialState : any
 >selectedValue : any
 

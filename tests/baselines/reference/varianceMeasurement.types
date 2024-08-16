@@ -11,7 +11,7 @@ interface Foo1<T> {
 
   y: Foo1<(arg: T) => void>;
 >y : Foo1<(arg: T) => void>
->  : ^^^^^^^^^^^ ^^^^^    ^
+>  : ^^^^^^   ^^ ^^^^^    ^
 >arg : T
 >    : ^
 }
@@ -43,11 +43,11 @@ interface Foo2<T> {
 >y : { x: (arg: T) => void; y: Foo2<(arg: T) => void>; }
 >  : ^^^^^                ^^^^^                      ^^^
 >x : (arg: T) => void
->  : ^^^^^^ ^^^^^    
+>  : ^   ^^ ^^^^^    
 >arg : T
 >    : ^
 >y : Foo2<(arg: T) => void>
->  : ^^^^^^^^^^^ ^^^^^    ^
+>  : ^^^^^^   ^^ ^^^^^    ^
 >arg : T
 >    : ^
 }
@@ -81,7 +81,7 @@ type Foo3<T> = {
 
   y: Foo3<(arg: T) => void>;
 >y : Foo3<(arg: T) => void>
->  : ^^^^^^^^^^^ ^^^^^    ^
+>  : ^^^^^^   ^^ ^^^^^    ^
 >arg : T
 >    : ^
 }
@@ -116,11 +116,11 @@ type Foo4<T> = {
 >y : { x: (arg: T) => void; y: Foo4<(arg: T) => void>; }
 >  : ^^^^^                ^^^^^                      ^^^
 >x : (arg: T) => void
->  : ^^^^^^ ^^^^^    
+>  : ^   ^^ ^^^^^    
 >arg : T
 >    : ^
 >y : Foo4<(arg: T) => void>
->  : ^^^^^^^^^^^ ^^^^^    ^
+>  : ^^^^^^   ^^ ^^^^^    ^
 >arg : T
 >    : ^
 }
@@ -150,7 +150,7 @@ interface Fn<A, B> {
 
   then<C>(next: Fn<B, C>): Fn<A, C>;
 >then : <C>(next: Fn<B, C>) => Fn<A, C>
->     : ^ ^^^^^^^^        ^^^^^        
+>     : ^ ^^    ^^        ^^^^^        
 >next : Fn<B, C>
 >     : ^^^^^^^^
 }

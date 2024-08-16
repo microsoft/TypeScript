@@ -7,7 +7,7 @@ class A {
 
     a(completed: () => any): void;
 >a : (completed: () => any) => void
->  : ^^^^^^^^^^^^         ^^^^^    
+>  : ^         ^^         ^^^^^    
 >completed : () => any
 >          : ^^^^^^   
 }

@@ -12,7 +12,7 @@ interface Attributes {
 }
 function createElement(name: string, attributes: Attributes | undefined, ...contents: string[]) {
 >createElement : (name: string, attributes: Attributes | undefined, ...contents: string[]) => string
->              : ^^^^^^^      ^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^        ^^^^^^^^^^^
+>              : ^    ^^      ^^          ^^                      ^^^^^        ^^        ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >attributes : Attributes | undefined
@@ -32,7 +32,7 @@ namespace createElement.JSX {
 
 function Button(attributes: Attributes | undefined, contents: string[]) {
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
->       : ^^^^^^^^^^^^^                      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 >attributes : Attributes | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^^
 >contents : string[]
@@ -46,7 +46,7 @@ const b = <Button></Button>
 >b : error
 ><Button></Button> : error
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 

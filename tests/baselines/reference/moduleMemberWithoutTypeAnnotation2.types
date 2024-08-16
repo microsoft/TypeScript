@@ -12,7 +12,7 @@ module TypeScript {
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^    
+>      : ^      ^^      ^^^^^    
 >output : string
 >       : ^^^^^^
         }
@@ -22,7 +22,7 @@ module TypeScript {
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >output : string
 >       : ^^^^^^
 

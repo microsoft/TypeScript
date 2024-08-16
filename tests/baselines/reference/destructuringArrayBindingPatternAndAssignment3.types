@@ -30,20 +30,20 @@ const [c, d = c, e = e] = [1]; // error for e = e
 >  : ^
 
 const [f, g = f, h = i, i = f] = [1]; // error for h = i
->f : any
->  : ^^^
->g : any
->  : ^^^
->f : any
->  : ^^^
->h : any
->  : ^^^
->i : any
->  : ^^^
->i : any
->  : ^^^
->f : any
->  : ^^^
+>f : number
+>  : ^^^^^^
+>g : number
+>  : ^^^^^^
+>f : number
+>  : ^^^^^^
+>h : number
+>  : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i : number
+>  : ^^^^^^
+>f : number
+>  : ^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1
@@ -53,9 +53,9 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 >(function ([a, b = a]) { // ok})([1]) : void
 >                                      : ^^^^
 >(function ([a, b = a]) { // ok}) : ([a, b]: number[]) => void
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^      ^^^^^^^^^^^^^^^^^^^
 >function ([a, b = a]) { // ok} : ([a, b]: number[]) => void
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^      ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -73,9 +73,9 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 >(function ([c, d = c, e = e]) { // error for e = e})([1]) : void
 >                                                          : ^^^^
 >(function ([c, d = c, e = e]) { // error for e = e}) : ([c, d, e]: number[]) => void
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                     : ^         ^^^^^^^^^^^^^^^^^^^
 >function ([c, d = c, e = e]) { // error for e = e} : ([c, d, e]: number[]) => void
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^         ^^^^^^^^^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
 >d : number
@@ -97,9 +97,9 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 >(function ([f, g = f, h = i, i = f]) { // error for h = i})([1]) : void
 >                                                                 : ^^^^
 >(function ([f, g = f, h = i, i = f]) { // error for h = i}) : ([f, g, h, i]: number[]) => void
->                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                            : ^            ^^^^^^^^^^^^^^^^^^^
 >function ([f, g = f, h = i, i = f]) { // error for h = i} : ([f, g, h, i]: number[]) => void
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^            ^^^^^^^^^^^^^^^^^^^
 >f : number
 >  : ^^^^^^
 >g : number

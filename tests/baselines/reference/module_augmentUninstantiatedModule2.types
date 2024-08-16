@@ -17,7 +17,7 @@ declare module ng {
    export interface IAngularStatic {
        module: (s: string) => IModule;
 >module : (s: string) => IModule
->       : ^^^^      ^^^^^       
+>       : ^ ^^      ^^^^^       
 >s : string
 >  : ^^^^^^
    }

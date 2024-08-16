@@ -4,7 +4,7 @@
 // Functions
 function f1(arguments: number, ...restParameters) { //arguments is error
 >f1 : (arguments: number, ...restParameters: any[]) => void
->   : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^         ^^      ^^^^^              ^^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >restParameters : any[]
@@ -18,7 +18,7 @@ function f1(arguments: number, ...restParameters) { //arguments is error
 }
 function f12(i: number, ...arguments) { //arguments is error
 >f12 : (i: number, ...arguments: any[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -30,7 +30,7 @@ function f12(i: number, ...arguments) { //arguments is error
 }
 function f1NoError(arguments: number) { // no error
 >f1NoError : (arguments: number) => void
->          : ^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^         ^^      ^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
@@ -43,7 +43,7 @@ function f1NoError(arguments: number) { // no error
 
 declare function f2(i: number, ...arguments); // no error - no code gen
 >f2 : (i: number, ...arguments: any[]) => any
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -51,7 +51,7 @@ declare function f2(i: number, ...arguments); // no error - no code gen
 
 declare function f21(arguments: number, ...rest); // no error - no code gen
 >f21 : (arguments: number, ...rest: any[]) => any
->    : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^         ^^      ^^^^^    ^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >rest : any[]
@@ -59,13 +59,13 @@ declare function f21(arguments: number, ...rest); // no error - no code gen
 
 declare function f2NoError(arguments: number); // no error
 >f2NoError : (arguments: number) => any
->          : ^^^^^^^^^^^^      ^^^^^^^^
+>          : ^         ^^      ^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
 function f3(...restParameters) {
 >f3 : (...restParameters: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^              ^^^^^^^^^^^^^^^^
 >restParameters : any[]
 >               : ^^^^^
 
@@ -88,7 +88,7 @@ function f3NoError() {
 
 function f4(arguments: number, ...rest); // no codegen no error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >rest : any[]
@@ -96,7 +96,7 @@ function f4(arguments: number, ...rest); // no codegen no error
 
 function f4(arguments: string, ...rest); // no codegen no error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 >rest : any[]
@@ -104,7 +104,7 @@ function f4(arguments: string, ...rest); // no codegen no error
 
 function f4(arguments: any, ...rest) { // error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : any
 >          : ^^^
 >rest : any[]
@@ -116,7 +116,7 @@ function f4(arguments: any, ...rest) { // error
 }
 function f42(i: number, ...arguments); // no codegen no error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -124,7 +124,7 @@ function f42(i: number, ...arguments); // no codegen no error
 
 function f42(i: string, ...arguments); // no codegen no error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : string
 >  : ^^^^^^
 >arguments : any[]
@@ -132,7 +132,7 @@ function f42(i: string, ...arguments); // no codegen no error
 
 function f42(i: any, ...arguments) { // error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : any
 >  : ^^^
 >arguments : any[]
@@ -144,19 +144,19 @@ function f42(i: any, ...arguments) { // error
 }
 function f4NoError(arguments: number); // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
 function f4NoError(arguments: string); // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 
 function f4NoError(arguments: any) { // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : any
 >          : ^^^
 
@@ -167,7 +167,7 @@ function f4NoError(arguments: any) { // no error
 
 declare function f5(arguments: number, ...rest); // no codegen no error
 >f5 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >rest : any[]
@@ -175,7 +175,7 @@ declare function f5(arguments: number, ...rest); // no codegen no error
 
 declare function f5(arguments: string, ...rest); // no codegen no error
 >f5 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 >rest : any[]
@@ -183,7 +183,7 @@ declare function f5(arguments: string, ...rest); // no codegen no error
 
 declare function f52(i: number, ...arguments); // no codegen no error
 >f52 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -191,7 +191,7 @@ declare function f52(i: number, ...arguments); // no codegen no error
 
 declare function f52(i: string, ...arguments); // no codegen no error
 >f52 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : string
 >  : ^^^^^^
 >arguments : any[]
@@ -199,13 +199,13 @@ declare function f52(i: string, ...arguments); // no codegen no error
 
 declare function f6(arguments: number); // no codegen no error
 >f6 : { (arguments: number): any; (arguments: string): any; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
 declare function f6(arguments: string); // no codegen no error
 >f6 : { (arguments: number): any; (arguments: string): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>   : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 

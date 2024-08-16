@@ -8,7 +8,7 @@
  */
 export function foo(a, b) {}
 >foo : (a: number, b: string) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : string

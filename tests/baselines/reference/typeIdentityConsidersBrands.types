@@ -39,7 +39,7 @@ class Y_1 {
 
 function foo(arg: X){}
 >foo : (arg: X) => void
->    : ^^^^^^ ^^^^^^^^^
+>    : ^   ^^ ^^^^^^^^^
 >arg : X
 >    : ^
  
@@ -71,7 +71,7 @@ foo(a); // ok
 >foo(a) : void
 >       : ^^^^
 >foo : (arg: X) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^^^^^^^^
 >a : Y
 >  : ^
 
@@ -93,7 +93,7 @@ var b2 = new X_1();
 
 function foo2(arg: X_1) { }
 >foo2 : (arg: X_1) => void
->     : ^^^^^^   ^^^^^^^^^
+>     : ^   ^^   ^^^^^^^^^
 >arg : X_1
 >    : ^^^
 
@@ -109,7 +109,7 @@ foo2(a2); // should error
 >foo2(a2) : void
 >         : ^^^^
 >foo2 : (arg: X_1) => void
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^   ^^   ^^^^^^^^^
 >a2 : Y_1
 >   : ^^^
 

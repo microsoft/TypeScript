@@ -12,7 +12,7 @@ module Midori
 
         function Foo(src)
 >Foo : (src: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^^
 >src : any
         {
         }

@@ -33,7 +33,7 @@ class CreateCopyOfWorkItemDialog {
 }
 function createWorkItemDialog<P0>(dialogType: P0) {
 >createWorkItemDialog : <P0>(dialogType: P0) => void
->                     : ^  ^^^^^^^^^^^^^^  ^^^^^^^^^
+>                     : ^  ^^          ^^  ^^^^^^^^^
 >dialogType : P0
 >           : ^^
 }
@@ -49,7 +49,7 @@ class WITDialogs {
 >createWorkItemDialog(CreateCopyOfWorkItemDialog) : void
 >                                                 : ^^^^
 >createWorkItemDialog : <P0>(dialogType: P0) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^  ^^          ^^  ^^^^^^^^^
 >CreateCopyOfWorkItemDialog : typeof CreateCopyOfWorkItemDialog
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }

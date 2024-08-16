@@ -1,17 +1,17 @@
 //// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,300 (nearest 100)
-Type Count: 6,900 / 7,000 (nearest 100)
-Instantiation count: 73,000 / 73,500 (nearest 500)
-Symbol count: 70,500 / 70,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
 
 === test.tsx ===
 /// <reference path="react16.d.ts" />
 
 export function T1(a: any) {
 >T1 : (a: any) => JSX.Element
->   : ^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 
     return <div className={"T1"} { ...a }>T1</div>;
@@ -30,7 +30,7 @@ export function T1(a: any) {
 
 export function T2(a: any, b: any) {
 >T2 : (a: any, b: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 
@@ -51,7 +51,7 @@ export function T2(a: any, b: any) {
 
 export function T3(a: any, b: any) {
 >T3 : (a: any, b: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 
@@ -72,7 +72,7 @@ export function T3(a: any, b: any) {
 
 export function T4(a: any, b: any) {
 >T4 : (a: any, b: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 
@@ -94,7 +94,7 @@ export function T4(a: any, b: any) {
 
 export function T5(a: any, b: any, c: any, d: any) {
 >T5 : (a: any, b: any, c: any, d: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -122,7 +122,7 @@ export function T5(a: any, b: any, c: any, d: any) {
 
 export function T6(a: any, b: any, c: any, d: any) {
 >T6 : (a: any, b: any, c: any, d: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -149,7 +149,7 @@ export function T6(a: any, b: any, c: any, d: any) {
 
 export function T7(a: any, b: any, c: any, d: any) {
 >T7 : (a: any, b: any, c: any, d: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -166,7 +166,7 @@ export function T7(a: any, b: any, c: any, d: any) {
 
 export function T8(a: any, b: any, c: any, d: any) {
 >T8 : (a: any, b: any, c: any, d: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -195,7 +195,7 @@ export function T8(a: any, b: any, c: any, d: any) {
 
 export function T9(a: any, b: any, c: any, d: any) {
 >T9 : (a: any, b: any, c: any, d: any) => JSX.Element
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -224,7 +224,7 @@ declare const __proto__: string;
 
 export function T10(a: any, b: any, c: any, d: any) {
 >T10 : (a: any, b: any, c: any, d: any) => JSX.Element
->    : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -251,7 +251,7 @@ export function T10(a: any, b: any, c: any, d: any) {
 
 export function T11(a: any, b: any, c: any, d: any) {
 >T11 : (a: any, b: any, c: any, d: any) => JSX.Element
->    : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -278,7 +278,7 @@ export function T11(a: any, b: any, c: any, d: any) {
 
 export function T12(a: any, b: any, c: any, d: any) {
 >T12 : (a: any, b: any, c: any, d: any) => JSX.Element
->    : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any

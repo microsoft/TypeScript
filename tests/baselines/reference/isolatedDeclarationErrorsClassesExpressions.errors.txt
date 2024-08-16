@@ -1,0 +1,39 @@
+isolatedDeclarationErrorsClassesExpressions.ts(1,20): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+isolatedDeclarationErrorsClassesExpressions.ts(15,26): error TS9021: Extends clause can't contain an expression with --isolatedDeclarations.
+isolatedDeclarationErrorsClassesExpressions.ts(19,25): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+isolatedDeclarationErrorsClassesExpressions.ts(19,35): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+
+
+==== isolatedDeclarationErrorsClassesExpressions.ts (4 errors) ====
+    export const cls = class {
+                       ~~~~~
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsClassesExpressions.ts:1:14: Add a type annotation to the variable cls.
+        foo: string = "";
+    }
+    
+    
+    function id<T extends new (...a: any[]) => any>(cls: T) {
+        return cls;
+    }
+    
+    
+    export class Base {
+    
+    }
+    
+    export class Mix extends id(Base) {
+                             ~~~~~~~~
+!!! error TS9021: Extends clause can't contain an expression with --isolatedDeclarations.
+    
+    }
+    
+    export const classes = [class {}, class{}] as const
+                            ~~~~~
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsClassesExpressions.ts:19:14: Add a type annotation to the variable classes.
+!!! related TS9035 isolatedDeclarationErrorsClassesExpressions.ts:19:25: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+                                      ~~~~~
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+!!! related TS9027 isolatedDeclarationErrorsClassesExpressions.ts:19:14: Add a type annotation to the variable classes.
+!!! related TS9035 isolatedDeclarationErrorsClassesExpressions.ts:19:35: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.

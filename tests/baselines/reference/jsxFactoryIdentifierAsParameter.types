@@ -15,7 +15,7 @@ export class AppComponent {
 
     render(createElement) {
 >render : (createElement: any) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^             ^^^^^^^^^^^^^
 >createElement : any
 
         return <div />;

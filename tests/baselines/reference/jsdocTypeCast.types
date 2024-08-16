@@ -6,7 +6,7 @@
  */
  function f(x) {
 >f : (x: string) => void
->  : ^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

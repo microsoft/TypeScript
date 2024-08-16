@@ -9,6 +9,9 @@ import { foo } from "./helpers";
 enum A {
     a = foo,
     b,
+    c = 10,
+    d = (c)! satisfies number as any,
+    e,
 }
 
 // @filename: ./good.ts
@@ -28,4 +31,12 @@ enum C {
 enum D {
     a = (2),
     b,
+}
+enum E {
+    a,
+    b,
+    c = a,
+    d,
+    e = d | b,
+    f,
 }

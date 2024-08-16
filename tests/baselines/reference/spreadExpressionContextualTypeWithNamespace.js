@@ -38,7 +38,8 @@ getStuff().exportedDirectly;
 "use strict";
 // Repro from #44179 with some modification
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obj = exports.klass = exports.func = void 0;
+exports.obj = exports.klass = void 0;
+exports.func = func;
 exports.exportedDirectly = exportedDirectly;
 function func() { }
 var klass = /** @class */ (function () {

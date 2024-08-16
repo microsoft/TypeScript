@@ -19,7 +19,7 @@ class Foo {
 
     myMethod(x: IProps) {
 >myMethod : (x: IProps) => void
->         : ^^^^      ^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >x : IProps
 >  : ^^^^^^
 

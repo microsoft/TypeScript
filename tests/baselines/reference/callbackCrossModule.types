@@ -36,8 +36,8 @@ function C() {
 === use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
->f : (k: import('./mod1').Con) => any
->  : ^^^^                    ^^^^^^^^
+>f : (k: import("./mod1").Con) => any
+>  : ^ ^^                    ^^^^^^^^
 >k : import("mod1").Con
 >  : ^^^^^^^^^^^^^^^^^^
 

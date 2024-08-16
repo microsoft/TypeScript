@@ -8,7 +8,7 @@ class CDoc {
         constructor() {
         function doSomething(a: Function) {
 >doSomething : (a: Function) => void
->            : ^^^^        ^^^^^^^^^
+>            : ^ ^^        ^^^^^^^^^
 >a : Function
 >  : ^^^^^^^^
         }
@@ -16,7 +16,7 @@ class CDoc {
 >doSomething(() => undefined) : void
 >                             : ^^^^
 >doSomething : (a: Function) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^        ^^^^^^^^^
 >() => undefined : () => any
 >                : ^^^^^^^^^
 >undefined : undefined
@@ -26,7 +26,7 @@ class CDoc {
 >doSomething(function () { }) : void
 >                             : ^^^^
 >doSomething : (a: Function) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^        ^^^^^^^^^
 >function () { } : () => void
 >                : ^^^^^^^^^^
     }

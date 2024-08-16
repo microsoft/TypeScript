@@ -27,7 +27,7 @@ class B {
 
 function f(value: A | B): number {
 >f : (value: A | B) => number
->  : ^^^^^^^^     ^^^^^      
+>  : ^     ^^     ^^^^^      
 >value : A | B
 >      : ^^^^^
 

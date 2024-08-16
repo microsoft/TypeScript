@@ -209,9 +209,9 @@ var r20 = a + ((a: string) => { return a });
 >a + ((a: string) => { return a }) : any
 >a : any
 >((a: string) => { return a }) : (a: string) => string
->                              : ^^^^      ^^^^^^^^^^^
+>                              : ^ ^^      ^^^^^^^^^^^
 >(a: string) => { return a } : (a: string) => string
->                            : ^^^^      ^^^^^^^^^^^
+>                            : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string

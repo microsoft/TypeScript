@@ -46,6 +46,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+PolledWatches::
+/a/b/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/b/file1.ts: *new*
   {}
@@ -101,6 +105,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -116,6 +121,10 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+
+PolledWatches *deleted*::
+/a/b/node_modules/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/file1.ts:

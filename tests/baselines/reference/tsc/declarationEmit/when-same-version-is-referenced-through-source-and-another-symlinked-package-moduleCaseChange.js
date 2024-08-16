@@ -115,8 +115,10 @@ File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.d
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.tsx' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
+File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -145,8 +147,10 @@ File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa.d
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.ts' does not exist.
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.tsx' does not exist.
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
+File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 plugin-one/node_modules/typescript-fsa/index.d.ts

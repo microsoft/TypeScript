@@ -30,7 +30,7 @@ module.exports.C = C
 /** @param {X} c */
 function demo(c) {
 >demo : (c: X) => void
->     : ^^^^ ^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^
 >c : import("mod1").C
 >  : ^^^^^^^^^^^^^^^^
 

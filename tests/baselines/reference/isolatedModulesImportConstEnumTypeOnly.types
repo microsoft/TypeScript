@@ -14,7 +14,7 @@ import { Foo } from "./enum";
 
 function f(foo: Foo) { return; }
 >f : (foo: Foo) => void
->  : ^^^^^^   ^^^^^^^^^
+>  : ^   ^^   ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 

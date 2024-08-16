@@ -3,7 +3,7 @@
 === parserEqualsGreaterThanAfterFunction2.ts ===
 function (a => b;
 > : (a: any, b: any) => any
-> : ^^^^^^^^^^^^^^^^^^^^^^^
+> : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any

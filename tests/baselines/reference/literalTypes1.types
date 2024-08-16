@@ -29,7 +29,7 @@ let oneOrTwo: 1 | 2 = <1 | 2>1;
 
 function f1(x: 0 | 1 | 2) {
 >f1 : (x: 0 | 1 | 2) => void
->   : ^^^^         ^^^^^^^^^
+>   : ^ ^^         ^^^^^^^^^
 >x : 0 | 1 | 2
 >  : ^^^^^^^^^
 
@@ -73,7 +73,7 @@ function f1(x: 0 | 1 | 2) {
 
 function f2(x: 0 | 1 | 2) {
 >f2 : (x: 0 | 1 | 2) => void
->   : ^^^^         ^^^^^^^^^
+>   : ^ ^^         ^^^^^^^^^
 >x : 0 | 1 | 2
 >  : ^^^^^^^^^
 
@@ -114,7 +114,7 @@ type Falsy = false | 0 | "" | null | undefined;
 
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : Falsy
 >  : ^^^^^
 
@@ -135,7 +135,7 @@ function f3(x: Falsy) {
 
 function f4(x: 0 | 1 | true | string) {
 >f4 : (x: 0 | 1 | true | string) => void
->   : ^^^^                     ^^^^^^^^^
+>   : ^ ^^                     ^^^^^^^^^
 >x : string | true | 0 | 1
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -200,7 +200,7 @@ function f4(x: 0 | 1 | true | string) {
 
 function f5(x: string | number | boolean) {
 >f5 : (x: string | number | boolean) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -3,7 +3,7 @@
 === indexedAccessWithFreshObjectLiteral.ts ===
 function foo (id: string) {
 >foo : (id: string) => string | number | boolean | undefined
->    : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 
@@ -37,8 +37,8 @@ function foo (id: string) {
 }
 
 function bar (id: 'a' | 'b') {
->bar : (id: 'a' | 'b') => string | number
->    : ^^^^^         ^^^^^^^^^^^^^^^^^^^^
+>bar : (id: "a" | "b") => string | number
+>    : ^  ^^         ^^^^^^^^^^^^^^^^^^^^
 >id : "a" | "b"
 >   : ^^^^^^^^^
 
@@ -72,8 +72,8 @@ function bar (id: 'a' | 'b') {
 }
 
 function baz (id: '1' | '2') {
->baz : (id: '1' | '2') => string | number
->    : ^^^^^         ^^^^^^^^^^^^^^^^^^^^
+>baz : (id: "1" | "2") => string | number
+>    : ^  ^^         ^^^^^^^^^^^^^^^^^^^^
 >id : "1" | "2"
 >   : ^^^^^^^^^
 
@@ -108,7 +108,7 @@ function baz (id: '1' | '2') {
 
 function qux (id: 1 | 2) {
 >qux : (id: 1 | 2) => string | number
->    : ^^^^^     ^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^     ^^^^^^^^^^^^^^^^^^^^
 >id : 1 | 2
 >   : ^^^^^
 
@@ -142,8 +142,8 @@ function qux (id: 1 | 2) {
 }
 
 function quux (id: 'a' | 'b' | 'z') {
->quux : (id: 'a' | 'b' | 'z') => string | number | undefined
->     : ^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>quux : (id: "a" | "b" | "z") => string | number | undefined
+>     : ^  ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : "a" | "b" | "z"
 >   : ^^^^^^^^^^^^^^^
 
@@ -178,7 +178,7 @@ function quux (id: 'a' | 'b' | 'z') {
 
 function corge(id: string) {
 >corge : (id: string) => string | number
->      : ^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 
@@ -211,7 +211,7 @@ function corge(id: string) {
 
 function grault(id: string) {
 >grault : (id: string) => string | number
->       : ^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 

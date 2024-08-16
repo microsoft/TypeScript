@@ -3,7 +3,7 @@
 === app.js ===
 function require(a) {
 >require : (a: any) => any
->        : ^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^
 >a : any
 
     return a;
@@ -14,7 +14,7 @@ const fs = require("fs");
 >fs : error
 >require("fs") : any
 >require : (a: any) => any
->        : ^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^
 >"fs" : "fs"
 >     : ^^^^
 

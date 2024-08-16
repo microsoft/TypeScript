@@ -8,6 +8,11 @@ enum Foo {
     A = `${BAR}`,
     B = "2" + BAR,
     C = (`${BAR}`),
-    D = (`${BAR}}`) as string,
-    E = `${BAR}`!,
+
+    F = BAR,
+    G = 2 + BAR,
+
+    H = A,
+    I = H + BAR,
+    J = H
 }

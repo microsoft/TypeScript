@@ -3,7 +3,7 @@
 === commentsAfterCaseClauses3.ts ===
 function getSecurity(level) {
 >getSecurity : (level: any) => "Hi" | "hello" | "world"
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >level : any
 
     switch(level){

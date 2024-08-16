@@ -3,7 +3,7 @@
 === implicitAnyInAmbientDeclaration2.d.ts ===
 declare function foo(x);  // this should be an error
 >foo : (x: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -25,13 +25,13 @@ declare class C {
 
     public publicFunction(x);  // this should be an error
 >publicFunction : (x: any) => any
->               : ^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
     private privateFunction(privateParam);  // this should not be an error
 >privateFunction : (privateParam: any) => any
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^            ^^^^^^^^^^^^^
 >privateParam : any
 >             : ^^^
 

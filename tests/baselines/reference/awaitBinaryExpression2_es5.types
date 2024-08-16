@@ -25,7 +25,7 @@ async function func(): Promise<void> {
 >before() : void
 >         : ^^^^
 >before : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
     var b = await p && a;
 >b : boolean
@@ -43,5 +43,5 @@ async function func(): Promise<void> {
 >after() : void
 >        : ^^^^
 >after : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 }

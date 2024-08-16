@@ -27,7 +27,7 @@ export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 >blah : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x: string) => {} : (x: string) => void
->                  : ^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

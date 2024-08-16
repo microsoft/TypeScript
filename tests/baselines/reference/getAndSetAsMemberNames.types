@@ -28,7 +28,7 @@ class C3 {
 
     set (x) {
 >set : (x: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >x : any
 
         return x + 1;

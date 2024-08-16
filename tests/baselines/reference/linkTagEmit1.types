@@ -21,7 +21,7 @@ declare namespace NS {
  */
 function computeCommonSourceDirectoryOfFilenames(integer) {
 >computeCommonSourceDirectoryOfFilenames : (integer: number) => number
->                                        : ^^^^^^^^^^      ^^^^^^^^^^^
+>                                        : ^       ^^      ^^^^^^^^^^^
 >integer : number
 >        : ^^^^^^
 

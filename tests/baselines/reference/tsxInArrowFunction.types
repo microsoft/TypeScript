@@ -40,7 +40,7 @@ declare namespace JSX {
 >div : any
 >    : ^^^
 >x => <div text="wat" /> : (x: any) => JSX.Element
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^
 >x : any
 ><div text="wat" /> : JSX.Element
 >                   : ^^^^^^^^^^^

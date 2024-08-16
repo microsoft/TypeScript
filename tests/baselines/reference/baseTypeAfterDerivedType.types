@@ -4,7 +4,7 @@
 interface Derived extends Base {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
->       : ^^^^^^^^^^     ^^^^^    
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
 >     : ^^^^^
 }
@@ -12,7 +12,7 @@ interface Derived extends Base {
 interface Base {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
->       : ^^^^^^^^^^     ^^^^^    
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
 >     : ^^^^^
 }
@@ -23,7 +23,7 @@ class Derived2 implements Base2 {
 
     method(...args: any[]): void { }
 >method : (...args: any[]) => void
->       : ^^^^^^^^^^     ^^^^^    
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
 >     : ^^^^^
 }
@@ -31,7 +31,7 @@ class Derived2 implements Base2 {
 interface Base2 {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
->       : ^^^^^^^^^^     ^^^^^    
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
 >     : ^^^^^
 }

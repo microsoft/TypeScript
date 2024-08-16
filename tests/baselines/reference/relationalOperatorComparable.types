@@ -3,7 +3,7 @@
 === relationalOperatorComparable.ts ===
 function f(onethree: 1 | 3, two: 2) {
 >f : (onethree: 1 | 3, two: 2) => void
->  : ^^^^^^^^^^^     ^^^^^^^ ^^^^^^^^^
+>  : ^        ^^     ^^   ^^ ^^^^^^^^^
 >onethree : 1 | 3
 >         : ^^^^^
 >two : 2

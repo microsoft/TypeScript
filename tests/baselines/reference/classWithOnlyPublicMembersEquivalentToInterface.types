@@ -13,7 +13,7 @@ class C {
 
     public y(a: number): number { return null; }
 >y : (a: number) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 
@@ -49,7 +49,7 @@ interface I {
 
     y(b: number): number;
 >y : (b: number) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 

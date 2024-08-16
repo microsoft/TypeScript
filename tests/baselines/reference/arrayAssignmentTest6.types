@@ -24,7 +24,7 @@ module Test {
     interface IMode {
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->         : ^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^^^           
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -38,7 +38,7 @@ module Test {
 
         public tokenize(line:string, tokens:IToken[], includeStates:boolean):ILineTokens {
 >tokenize : (line: string, tokens: IToken[], includeStates: boolean) => ILineTokens
->         : ^^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^       ^^^^^           
+>         : ^    ^^      ^^      ^^        ^^             ^^       ^^^^^           
 >line : string
 >     : ^^^^^^
 >tokens : IToken[]

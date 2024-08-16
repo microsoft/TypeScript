@@ -1,8 +1,8 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -637,7 +637,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer;
+    public readFileSync(path: string, encoding?: null): Buffer; // eslint-disable-line no-restricted-syntax
     /**
      * Read from a file.
      *
@@ -649,8 +649,8 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;
-    public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-null/no-null
+    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-restricted-syntax
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (isDirectory(node)) throw createIOError("EISDIR");
@@ -665,7 +665,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
         if (this.isReadonly) throw createIOError("EROFS");
 
@@ -788,8 +788,8 @@ export class FileSystem {
     }
 
     private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
-        while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
-        while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+        changedNode = walkSameNodes(changedNode);
+        baseNode = walkSameNodes(baseNode);
 
         // no difference if the nodes are the same reference
         if (changedNode === baseNode) return false;
@@ -827,6 +827,15 @@ export class FileSystem {
 
         container[basename] = new File(changedBuffer.data, { encoding: changedBuffer.encoding });
         return true;
+
+        function walkSameNodes(node: FileInode) {
+            while (
+                !node.buffer &&
+                node.shadowRoot &&
+                (!options.includeChangedFileWithSameContent || node.mtimeMs === node.shadowRoot.mtimeMs)
+            ) node = node.shadowRoot;
+            return node;
+        }
     }
 
     private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {
@@ -1141,7 +1150,7 @@ export class FileSystem {
             const path = dirname ? vpath.resolve(dirname, key) : key;
             vpath.validate(path, vpath.ValidationFlags.Absolute);
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                 if (this.stringComparer(vpath.dirname(path), path) === 0) {
                     throw new TypeError("Roots cannot be deleted.");
@@ -1371,7 +1380,7 @@ export function createIOError(code: keyof typeof IOErrorMessages, details = "") 
  * A template used to populate files, directories, links, etc. in a virtual file system.
  */
 export interface FileSet {
-    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined;
+    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined; // eslint-disable-line no-restricted-syntax
 }
 
 export type DirectoryLike = FileSet | Directory;
@@ -1572,7 +1581,7 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
     return builtLocalCS;
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 function normalizeFileSetEntry(value: FileSet[string]) {
     if (
         value === undefined ||
@@ -1595,14 +1604,14 @@ export function formatPatch(patch: FileSet | undefined): string | null;
 export function formatPatch(patch: FileSet | undefined) {
     return patch ? formatPatchWorker("", patch) : null;
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 function formatPatchWorker(dirname: string, container: FileSet): string {
     let text = "";
     for (const name of Object.keys(container)) {
         const entry = normalizeFileSetEntry(container[name]);
         const file = dirname ? vpath.combine(dirname, name) : name;
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (entry === null || entry === undefined || entry instanceof Unlink) {
             text += `//// [${file}] unlink\r\n`;
         }
@@ -1635,8 +1644,8 @@ function formatPatchWorker(dirname: string, container: FileSet): string {
     return text;
 }
 
-export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-    // eslint-disable-next-line no-null/no-null
+export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null { // eslint-disable-line no-restricted-syntax
+    // eslint-disable-next-line no-restricted-syntax
     return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
 }
 

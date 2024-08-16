@@ -7,13 +7,13 @@ class B {
 
     foo (v) {}
 >foo : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 >  : ^^^
 
     fooo (v) {}
 >fooo : (v: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >v : any
 >  : ^^^
 }
@@ -26,14 +26,14 @@ class D extends B {
 
     override foo (v) {}
 >foo : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 >  : ^^^
 
     /** @override */
     fooo (v) {}
 >fooo : (v: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >v : any
 >  : ^^^
 }

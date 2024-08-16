@@ -3,11 +3,11 @@
 === noCollisionThisExpressionAndLocalVarInFunction.ts ===
 var console: {
 >console : { log(val: any): any; }
->        : ^^^^^^^^^^^   ^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 
     log(val: any);
 >log : (val: any) => any
->    : ^^^^^^   ^^^^^^^^
+>    : ^   ^^   ^^^^^^^^
 >val : any
 }
 function x() {
@@ -22,15 +22,15 @@ function x() {
 
     x => { console.log(_this); };
 >x => { console.log(_this); } : (x: any) => void
->                             : ^^^^^^^^^^^^^^^^
+>                             : ^ ^^^^^^^^^^^^^^
 >x : any
 >console.log(_this) : any
 >console.log : (val: any) => any
->            : ^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^
 >console : { log(val: any): any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (val: any) => any
->    : ^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^
 >_this : number
 >      : ^^^^^^
 }

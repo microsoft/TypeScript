@@ -4,7 +4,7 @@
 // ========let
 function foo0(x) {
 >foo0 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let x of []) {
@@ -46,7 +46,7 @@ function foo0(x) {
 
 function foo0_1(x) {
 >foo0_1 : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let x in []) {
@@ -93,7 +93,7 @@ function foo0_1(x) {
 
 function foo1(x) {
 >foo1 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let x = 0; x < 1; ++x) {
@@ -150,7 +150,7 @@ function foo1(x) {
 
 function foo2(x) {
 >foo2 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     while (1 === 1) {
@@ -195,7 +195,7 @@ function foo2(x) {
 
 function foo3(x) {
 >foo3 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     do {
@@ -243,7 +243,7 @@ function foo3(x) {
 
 function foo4(x) {
 >foo4 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let y = 0; y < 1; ++y) {
@@ -306,7 +306,7 @@ function foo4(x) {
 
 function foo5(x) {
 >foo5 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let x = 0, y = 1; x < 1; ++x) {
@@ -376,7 +376,7 @@ function foo5(x) {
 
 function foo6(x) {
 >foo6 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     while (1 === 1) {
@@ -429,7 +429,7 @@ function foo6(x) {
 
 function foo7(x) {
 >foo7 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     do {
@@ -483,7 +483,7 @@ function foo7(x) {
 
 function foo8(x) {
 >foo8 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (let y = 0; y < 1; ++y) {
@@ -554,7 +554,7 @@ function foo8(x) {
 ///=======const
 function foo0_c(x) {
 >foo0_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const x of []) {
@@ -596,7 +596,7 @@ function foo0_c(x) {
 
 function foo0_1_c(x) {
 >foo0_1_c : (x: any) => void
->         : ^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const x in []) {
@@ -643,7 +643,7 @@ function foo0_1_c(x) {
 
 function foo1_c(x) {
 >foo1_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const x = 0; x < 1;) {
@@ -696,7 +696,7 @@ function foo1_c(x) {
 
 function foo2_c(x) {
 >foo2_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     while (1 === 1) {
@@ -741,7 +741,7 @@ function foo2_c(x) {
 
 function foo3_c(x) {
 >foo3_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     do {
@@ -796,7 +796,7 @@ function foo3_c(x) {
 
 function foo4_c(x) {
 >foo4_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const y = 0; y < 1;) {
@@ -855,7 +855,7 @@ function foo4_c(x) {
 
 function foo5_c(x) {
 >foo5_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const x = 0, y = 1; x < 1;) {
@@ -921,7 +921,7 @@ function foo5_c(x) {
 
 function foo6_c(x) {
 >foo6_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     while (1 === 1) {
@@ -988,7 +988,7 @@ function foo6_c(x) {
 
 function foo7_c(x) {
 >foo7_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     do {
@@ -1056,7 +1056,7 @@ function foo7_c(x) {
 
 function foo8_c(x) {
 >foo8_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 
     for (const y = 0; y < 1;) {

@@ -27,13 +27,13 @@ class B {
 
     foo (v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
     fooo (v: string) {}
 >fooo : (v: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -66,13 +66,13 @@ class D extends B {
 
     override foo (v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
     fooo (v: string) {}
 >fooo : (v: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 

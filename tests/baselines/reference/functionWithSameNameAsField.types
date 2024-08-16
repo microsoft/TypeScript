@@ -11,7 +11,7 @@ class TestProgressBar {
 
     public total(total: number) {
 >total : (total: number) => this
->      : ^^^^^^^^      ^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^
 >total : number
 >      : ^^^^^^
 

@@ -33,13 +33,13 @@ class E<T> {
 
     foo(x: T);
 >foo : (x: T) => any
->    : ^^^^ ^^^^^^^^
+>    : ^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
     static foo(x: number); // error
 >foo : (x: number) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -50,13 +50,13 @@ class F<T> {
 
     static foo(x: number);
 >foo : (x: number) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: T); // error    
 >foo : (x: T) => any
->    : ^^^^ ^^^^^^^^
+>    : ^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 }

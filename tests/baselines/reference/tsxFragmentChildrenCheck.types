@@ -6,7 +6,7 @@ declare var React: any;
 
 export function MyComponent(props: any) {
 >MyComponent : (props: any) => JSX.Element
->            : ^^^^^^^^   ^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^^^^^^^^^^^^
 >props : any
 
     return <span>my component</span>;
@@ -25,7 +25,7 @@ import * as React from 'react'
 
 import { MyComponent } from './my-component'
 >MyComponent : (props: any) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^^^^^^^^^^^^
 
 const MY_STRING: string = 'Ceci n\'est pas une string.'
 >MY_STRING : string
@@ -65,7 +65,7 @@ class RenderString extends React.PureComponent<any, any> {
 ><MyComponent /> : JSX.Element
 >                : ^^^^^^^^^^^
 >MyComponent : (props: any) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^^^^^^^^^^^^
 
         <span>{ MY_STRING }</span>
 ><span>{ MY_STRING }</span> : JSX.Element

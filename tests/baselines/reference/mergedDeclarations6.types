@@ -10,7 +10,7 @@ export class A {
 
     protected setProtected(val: any) {
 >setProtected : (val: any) => void
->             : ^^^^^^   ^^^^^^^^^
+>             : ^   ^^   ^^^^^^^^^
 >val : any
 
         this.protected = val;

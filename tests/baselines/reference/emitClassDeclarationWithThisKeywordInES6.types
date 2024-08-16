@@ -26,7 +26,7 @@ class B {
     }
     static log(a: number) { }
 >log : (a: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -38,11 +38,11 @@ class B {
 >B.log(this.x) : void
 >              : ^^^^
 >B.log : (a: number) => void
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 >log : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this

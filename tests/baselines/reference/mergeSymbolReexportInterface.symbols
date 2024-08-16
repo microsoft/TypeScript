@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/mergeSymbolReexportInterface.ts] ////
+
+=== main.ts ===
+import {Row2, C} from '.'
+>Row2 : Symbol(Row2, Decl(main.ts, 0, 8))
+>C : Symbol(C, Decl(main.ts, 0, 13))
+
+const x : Row2 = { }
+>x : Symbol(x, Decl(main.ts, 1, 5))
+>Row2 : Symbol(Row2, Decl(main.ts, 0, 8))
+
+const y : C = { s: '' }
+>y : Symbol(y, Decl(main.ts, 2, 5))
+>C : Symbol(C, Decl(main.ts, 0, 13))
+>s : Symbol(s, Decl(main.ts, 2, 15))
+
+ 
+=== ./a.d.ts ===
+import '.'
+declare module '.' {
+>'.' : Symbol("index", Decl(index.d.ts, 0, 0), Decl(a.d.ts, 0, 10))
+
+  type Row2 = { a: string }
+>Row2 : Symbol(Row2, Decl(a.d.ts, 1, 20))
+>a : Symbol(a, Decl(a.d.ts, 2, 15))
+
+  type C = { s : string }
+>C : Symbol(C, Decl(a.d.ts, 2, 27))
+>s : Symbol(s, Decl(a.d.ts, 3, 12))
+}
+ 
+=== ./index.d.ts ===
+export type {Row2} from './common';
+>Row2 : Symbol(Row2, Decl(index.d.ts, 0, 13))
+ 
+=== ./common.d.ts ===
+export interface Row2 { b: string }
+>Row2 : Symbol(Row2, Decl(common.d.ts, 0, 0))
+>b : Symbol(Row2.b, Decl(common.d.ts, 0, 23))
+

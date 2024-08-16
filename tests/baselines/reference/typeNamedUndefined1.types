@@ -21,7 +21,7 @@ export namespace ns {
 
     export function x(p: undefined): undefined { // global undefined
 >x : (p: undefined) => undefined
->  : ^^^^         ^^^^^         
+>  : ^ ^^         ^^^^^         
 >p : undefined
 >  : ^^^^^^^^^
 
@@ -33,7 +33,7 @@ export namespace ns {
 
 export function x(p: ns.undefined) { // undefined from the namespace
 >x : (p: ns.undefined) => symbol
->  : ^^^^            ^^^^^^^^^^^
+>  : ^ ^^            ^^^^^^^^^^^
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >ns : any

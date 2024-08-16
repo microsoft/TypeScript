@@ -75,11 +75,11 @@ class SomeClass {
 >this.state.data : string
 >                : ^^^^^^
 >this.state : { type: "stringVariant"; data: string; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^               ^^^^^^^^      ^^^
 >this : this
 >     : ^^^^
 >state : { type: "stringVariant"; data: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^               ^^^^^^^^      ^^^
 >data : string
 >     : ^^^^^^
         }
@@ -128,11 +128,11 @@ class SomeClass2 {
 >this.state.data : number
 >                : ^^^^^^
 >this.state : { type: "numberVariant"; data: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^               ^^^^^^^^      ^^^
 >this : this
 >     : ^^^^
 >state : { type: "numberVariant"; data: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^               ^^^^^^^^      ^^^
 >data : number
 >     : ^^^^^^
         }

@@ -3,7 +3,7 @@
 === taggedTemplatesInDifferentScopes.ts ===
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^                    ^^^^^^^^^^^^^     ^^^^^^^^^^^
+>    : ^     ^^                    ^^^^^      ^^     ^^^^^^^^^^^
 >parts : TemplateStringsArray
 >      : ^^^^^^^^^^^^^^^^^^^^
 >values : any[]
@@ -25,7 +25,7 @@ function foo() {
 >tag `foo` : string
 >          : ^^^^^^
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                    ^^^^^      ^^     ^^^^^^^^^^^
 >`foo` : "foo"
 >      : ^^^^^
 
@@ -33,7 +33,7 @@ function foo() {
 >tag `foo2` : string
 >           : ^^^^^^
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                    ^^^^^      ^^     ^^^^^^^^^^^
 >`foo2` : "foo2"
 >       : ^^^^^^
 }
@@ -46,7 +46,7 @@ function bar() {
 >tag `bar` : string
 >          : ^^^^^^
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                    ^^^^^      ^^     ^^^^^^^^^^^
 >`bar` : "bar"
 >      : ^^^^^
 
@@ -54,7 +54,7 @@ function bar() {
 >tag `bar2` : string
 >           : ^^^^^^
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                    ^^^^^      ^^     ^^^^^^^^^^^
 >`bar2` : "bar2"
 >       : ^^^^^^
 }

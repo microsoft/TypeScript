@@ -17,13 +17,13 @@ class C {
 
     public foo(arguments: any) { }
 >foo : (arguments: any) => void
->    : ^^^^^^^^^^^^   ^^^^^^^^^
+>    : ^         ^^   ^^^^^^^^^
 >arguments : any
 >          : ^^^
 
     private bar(eval:any) {
 >bar : (eval: any) => void
->    : ^^^^^^^   ^^^^^^^^^
+>    : ^    ^^   ^^^^^^^^^
 >eval : any
 >     : ^^^
 

@@ -22,7 +22,7 @@ type Modify<T> = { [P in keyof T as P extends string? `bool${P}`: P]: T[P] };
 
 function fun<T>(val: T) {
 >fun : <T>(val: T) => void
->    : ^ ^^^^^^^ ^^^^^^^^^
+>    : ^ ^^   ^^ ^^^^^^^^^
 >val : T
 >    : ^
 
@@ -57,7 +57,7 @@ type ModifyExclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]
 
 function fun2<T>(val: T) {
 >fun2 : <T>(val: T) => void
->     : ^ ^^^^^^^ ^^^^^^^^^
+>     : ^ ^^   ^^ ^^^^^^^^^
 >val : T
 >    : ^
 

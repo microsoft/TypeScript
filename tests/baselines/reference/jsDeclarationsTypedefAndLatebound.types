@@ -21,11 +21,11 @@ stringSet.addAll(stringSet);
 >stringSet.addAll(stringSet) : void
 >                            : ^^^^
 >stringSet.addAll : (iterable: LazySet) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^        ^^       ^^^^^^^^^
 >stringSet : LazySet
 >          : ^^^^^^^
 >addAll : (iterable: LazySet) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^        ^^       ^^^^^^^^^
 >stringSet : LazySet
 >          : ^^^^^^^
 
@@ -44,7 +44,7 @@ class LazySet {
      */
     addAll(iterable) {}
 >addAll : (iterable: LazySet) => void
->       : ^^^^^^^^^^^       ^^^^^^^^^
+>       : ^        ^^       ^^^^^^^^^
 >iterable : import("LazySet")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -23,13 +23,13 @@ function Foo(); // error
 
 function F1(s:string);
 >F1 : (s: string) => any
->   : ^^^^      ^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 function F1(a:any) { return a;}
 >F1 : (s: string) => any
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >a : any
 >  : ^^^
 >a : any

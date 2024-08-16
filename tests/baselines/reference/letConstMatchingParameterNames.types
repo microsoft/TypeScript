@@ -15,7 +15,7 @@ const parent2 = true;
 
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 function a() {
@@ -36,7 +36,7 @@ function a() {
 
     function b(parent: string, parent2: number) {
 >b : (parent: string, parent2: number) => void
->  : ^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^
+>  : ^      ^^      ^^       ^^      ^^^^^^^^^
 >parent : string
 >       : ^^^^^^
 >parent2 : number
@@ -45,14 +45,14 @@ function a() {
         use(parent);
 >use(parent) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >parent : string
 >       : ^^^^^^
 
         use(parent2);
 >use(parent2) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >parent2 : number
 >        : ^^^^^^
     }

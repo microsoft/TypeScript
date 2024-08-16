@@ -9,7 +9,7 @@
  */
 function foo(a, b, c) {}
 >foo : (a: number, b?: number, c: number) => void
->    : ^^^^      ^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number

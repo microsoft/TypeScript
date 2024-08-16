@@ -7,7 +7,7 @@
  */
 function g(xyz) {
 >g : (xyz: object) => any
->  : ^^^^^^      ^^^^^^^^
+>  : ^   ^^      ^^^^^^^^
 >xyz : any
 >    : ^^^
 

@@ -6,13 +6,13 @@
 interface AbstractSchema<S, V> {
   m1<T> (v: T): SchemaType<S, Exclude<V, T>>;
 >m1 : <T>(v: T) => SchemaType<S, Exclude<V, T>>
->   : ^ ^^^^^ ^^^^^                            
+>   : ^ ^^ ^^ ^^^^^                            
 >v : T
 >  : ^
 
   m2<T> (v: T): SchemaType<S, T>;
 >m2 : <T>(v: T) => SchemaType<S, T>
->   : ^ ^^^^^ ^^^^^                
+>   : ^ ^^ ^^ ^^^^^                
 >v : T
 >  : ^
 }

@@ -14,7 +14,7 @@ declare class C<T> { t: T }
 /** @param {C.<number,>} skipped */
 function f(x, y, skipped) {
 >f : (x: any, y: any, skipped: C<number>) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^
+>  : ^ ^^^^^^^ ^^^^^^^       ^^         ^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -44,7 +44,7 @@ var x = f({ t: 1000 }, { t: 3000 }, { t: 5000 });
 >f({ t: 1000 }, { t: 3000 }, { t: 5000 }) : any
 >                                         : ^^^
 >f : (x: any, y: any, skipped: C<number>) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^ ^^^^^^^       ^^         ^^^^^^^^
 >{ t: 1000 } : { t: number; }
 >            : ^^^^^^^^^^^^^^
 >t : number

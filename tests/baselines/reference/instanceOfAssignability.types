@@ -57,7 +57,7 @@ class Giraffe extends Mammal { neck; }
 
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : (x: Array<number> | Array<string> | boolean) => void
->    : ^^^^                                       ^^^^^^^^^
+>    : ^ ^^                                       ^^^^^^^^^
 >x : boolean | number[] | string[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ function fn1(x: Array<number>|Array<string>|boolean) {
 
 function fn2(x: Base) {
 >fn2 : (x: Base) => void
->    : ^^^^    ^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^
 >x : Base
 >  : ^^^^
 
@@ -105,7 +105,7 @@ function fn2(x: Base) {
 
 function fn3(x: Base|Derived1) {
 >fn3 : (x: Base | Derived1) => void
->    : ^^^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^
 >x : Base | Derived1
 >  : ^^^^^^^^^^^^^^^
 
@@ -129,7 +129,7 @@ function fn3(x: Base|Derived1) {
 
 function fn4(x: Base|Derived2) {
 >fn4 : (x: Base | Derived2) => void
->    : ^^^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^
 >x : Base | Derived2
 >  : ^^^^^^^^^^^^^^^
 
@@ -153,7 +153,7 @@ function fn4(x: Base|Derived2) {
 
 function fn5(x: Derived1) {
 >fn5 : (x: Derived1) => void
->    : ^^^^        ^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^
 >x : Derived1
 >  : ^^^^^^^^
 
@@ -177,7 +177,7 @@ function fn5(x: Derived1) {
 
 function fn6(x: Animal|Mammal) {
 >fn6 : (x: Animal | Mammal) => void
->    : ^^^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^
 >x : Animal | Mammal
 >  : ^^^^^^^^^^^^^^^
 
@@ -201,7 +201,7 @@ function fn6(x: Animal|Mammal) {
 
 function fn7(x: Array<number>|Array<string>) {
 >fn7 : (x: Array<number> | Array<string>) => void
->    : ^^^^                             ^^^^^^^^^
+>    : ^ ^^                             ^^^^^^^^^
 >x : number[] | string[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -241,7 +241,7 @@ class ABC { a; b; c; }
 
 function fn8(x: Alpha|Beta|Gamma) {
 >fn8 : (x: Alpha | Beta | Gamma) => void
->    : ^^^^                    ^^^^^^^^^
+>    : ^ ^^                    ^^^^^^^^^
 >x : Alpha | Beta | Gamma
 >  : ^^^^^^^^^^^^^^^^^^^^
 

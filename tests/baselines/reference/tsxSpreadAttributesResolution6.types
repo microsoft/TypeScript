@@ -19,7 +19,7 @@ type TextProps = { editable: false }
 >true : true
 >     : ^^^^
 >onEdit : (newText: string) => void
->       : ^^^^^^^^^^      ^^^^^    
+>       : ^       ^^      ^^^^^    
 >newText : string
 >        : ^^^^^^
 

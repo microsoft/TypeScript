@@ -24,7 +24,7 @@ export class publicClassT<T> {
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> { // Error
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -52,7 +52,7 @@ export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -80,7 +80,7 @@ export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -108,7 +108,7 @@ interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -136,7 +136,7 @@ interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -148,7 +148,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -195,7 +195,7 @@ export module publicModule {
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -223,7 +223,7 @@ export module publicModule {
     export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -251,7 +251,7 @@ export module publicModule {
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -279,7 +279,7 @@ export module publicModule {
     interface privateInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -307,7 +307,7 @@ export module publicModule {
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -319,7 +319,7 @@ export module publicModule {
     interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -366,7 +366,7 @@ module privateModule {
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -394,7 +394,7 @@ module privateModule {
     export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -422,7 +422,7 @@ module privateModule {
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -450,7 +450,7 @@ module privateModule {
     interface privateInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -478,7 +478,7 @@ module privateModule {
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -490,7 +490,7 @@ module privateModule {
     interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 

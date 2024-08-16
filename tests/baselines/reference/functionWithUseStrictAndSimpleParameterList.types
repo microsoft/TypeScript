@@ -3,7 +3,7 @@
 === functionWithUseStrictAndSimpleParameterList.ts ===
 function a(a = 10) {
 >a : (a?: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -22,7 +22,7 @@ export var foo = 10;
 
 function b(a = 10) {
 >b : (a?: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -39,7 +39,7 @@ function container() {
 
     function f(a = 10) {
 >f : (a?: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -49,7 +49,7 @@ function container() {
 
 function rest(...args: any[]) {
 >rest : (...args: any[]) => void
->     : ^^^^^^^^^^     ^^^^^^^^^
+>     : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -60,7 +60,7 @@ function rest(...args: any[]) {
 
 function rest1(a = 1, ...args) {
 >rest1 : (a?: number, ...args: any[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -75,7 +75,7 @@ function rest1(a = 1, ...args) {
 
 function paramDefault(param = 1) {
 >paramDefault : (param?: number) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^^^^
 >param : number
 >      : ^^^^^^
 >1 : 1
@@ -88,7 +88,7 @@ function paramDefault(param = 1) {
 
 function objectBindingPattern({foo}: any) {
 >objectBindingPattern : ({ foo }: any) => void
->                     : ^^^^^^^^^^   ^^^^^^^^^
+>                     : ^       ^^   ^^^^^^^^^
 >foo : any
 >    : ^^^
 
@@ -99,7 +99,7 @@ function objectBindingPattern({foo}: any) {
 
 function arrayBindingPattern([foo]: any[]) {
 >arrayBindingPattern : ([foo]: any[]) => void
->                    : ^^^^^^^^     ^^^^^^^^^
+>                    : ^     ^^     ^^^^^^^^^
 >foo : any
 >    : ^^^
 
@@ -110,7 +110,7 @@ function arrayBindingPattern([foo]: any[]) {
 
 function manyParameter(a = 10, b = 20) {
 >manyParameter : (a?: number, b?: number) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -127,7 +127,7 @@ function manyParameter(a = 10, b = 20) {
 
 function manyPrologue(a = 10, b = 20) {
 >manyPrologue : (a?: number, b?: number) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -148,7 +148,7 @@ function manyPrologue(a = 10, b = 20) {
 
 function invalidPrologue(a = 10, b = 20) {
 >invalidPrologue : (a?: number, b?: number) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10

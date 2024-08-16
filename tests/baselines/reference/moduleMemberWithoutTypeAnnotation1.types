@@ -33,7 +33,7 @@ module TypeScript {
 
         public childIndex(child: ISyntaxElement) {
 >childIndex : (child: ISyntaxElement) => void
->           : ^^^^^^^^              ^^^^^^^^^
+>           : ^     ^^              ^^^^^^^^^
 >child : ISyntaxElement
 >      : ^^^^^^^^^^^^^^
 
@@ -74,7 +74,7 @@ module TypeScript {
 
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
 >findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^               
+>          : ^        ^^      ^^                    ^^^       ^^^^^               
 >position : number
 >         : ^^^^^^
 >includeSkippedTokens : boolean
@@ -86,11 +86,11 @@ module TypeScript {
 >positionedToken : any
 >this.findTokenInternal(null, position, 0) : any
 >this.findTokenInternal : (x: any, y: any, z: any) => any
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >findTokenInternal : (x: any, y: any, z: any) => any
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >position : number
 >         : ^^^^^^
 >0 : 0
@@ -100,7 +100,7 @@ module TypeScript {
         }
         findTokenInternal(x, y, z) {
 >findTokenInternal : (x: any, y: any, z: any) => any
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
 >y : any
 >z : any
@@ -126,7 +126,7 @@ module TypeScript.Syntax {
 
         private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
 >findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken
->                  : ^^^^^^^^^                 ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                  : ^      ^^                 ^^        ^^      ^^         ^^      ^^^^^^^^^^^^^^^^^^^^
 >parent : PositionedElement
 >       : ^^^^^^^^^^^^^^^^^
 >position : number

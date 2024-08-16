@@ -73,7 +73,7 @@ module A {
 
         static fromorigin2d(p: Point): Line<Point>{
 >fromorigin2d : (p: Point) => Line<Point>
->             : ^^^^     ^^^^^           
+>             : ^ ^^     ^^^^^           
 >p : Point
 >  : ^^^^^
 

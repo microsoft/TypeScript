@@ -10,25 +10,25 @@ interface Number {
 interface NotNumber {
     toString(radix?: number): string;
 >toString : (radix?: number) => string
->         : ^^^^^^^^^      ^^^^^      
+>         : ^     ^^^      ^^^^^      
 >radix : number
 >      : ^^^^^^
 
     toFixed(fractionDigits?: number): string;
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^      ^^^^^      
+>        : ^              ^^^      ^^^^^      
 >fractionDigits : number
 >               : ^^^^^^
 
     toExponential(fractionDigits?: number): string;
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^      ^^^^^      
+>              : ^              ^^^      ^^^^^      
 >fractionDigits : number
 >               : ^^^^^^
 
     toPrecision(precision?: number): string;
 >toPrecision : (precision?: number) => string
->            : ^^^^^^^^^^^^^      ^^^^^      
+>            : ^         ^^^      ^^^^^      
 >precision : number
 >          : ^^^^^^
 

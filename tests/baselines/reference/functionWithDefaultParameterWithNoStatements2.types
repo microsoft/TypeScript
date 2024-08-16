@@ -3,7 +3,7 @@
 === functionWithDefaultParameterWithNoStatements2.ts ===
 function foo(x = 0) {
 >foo : (x?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

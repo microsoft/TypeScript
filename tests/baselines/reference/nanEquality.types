@@ -172,7 +172,7 @@ if (NaN === y[0][1]) {}
 
 function t1(value: number, NaN: number) {
 >t1 : (value: number, NaN: number) => boolean
->   : ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^
+>   : ^     ^^      ^^   ^^      ^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >NaN : number
@@ -189,7 +189,7 @@ function t1(value: number, NaN: number) {
 
 function t2(value: number, NaN: number) {
 >t2 : (value: number, NaN: number) => boolean
->   : ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^
+>   : ^     ^^      ^^   ^^      ^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >NaN : number
@@ -206,7 +206,7 @@ function t2(value: number, NaN: number) {
 
 function t3(NaN: number) {
 >t3 : (NaN: number) => boolean
->   : ^^^^^^      ^^^^^^^^^^^^
+>   : ^   ^^      ^^^^^^^^^^^^
 >NaN : number
 >    : ^^^^^^
 

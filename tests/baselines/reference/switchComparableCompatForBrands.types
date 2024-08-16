@@ -12,7 +12,7 @@ class MyBrand
 
 function test(strInput: string & MyBrand) {
 >test : (strInput: string & MyBrand) => 1 | 0
->     : ^^^^^^^^^^^                ^^^^^^^^^^
+>     : ^        ^^                ^^^^^^^^^^
 >strInput : string & MyBrand
 >         : ^^^^^^^^^^^^^^^^
 

@@ -11,11 +11,11 @@ export class C1 {
 
     bar() {
 >bar : () => (t: typeof C1) => void
->    : ^^^^^^^^^^         ^^^^^^^^^
+>    : ^^^^^^^ ^^         ^^^^^^^^^
 
         return function (t: typeof C1) {
 >function (t: typeof C1) {        } : (t: typeof C1) => void
->                                   : ^^^^         ^^^^^^^^^
+>                                   : ^ ^^         ^^^^^^^^^
 >t : typeof C1
 >  : ^^^^^^^^^
 >C1 : typeof C1
@@ -34,11 +34,11 @@ export class C2 {
 
     bar() {
 >bar : () => (t: typeof C2) => void
->    : ^^^^^^^^^^         ^^^^^^^^^
+>    : ^^^^^^^ ^^         ^^^^^^^^^
 
         return function (t: typeof C2) {
 >function (t: typeof C2) {        } : (t: typeof C2) => void
->                                   : ^^^^         ^^^^^^^^^
+>                                   : ^ ^^         ^^^^^^^^^
 >t : typeof C2
 >  : ^^^^^^^^^
 >C2 : typeof C2
@@ -60,11 +60,11 @@ export class C3 {
 
     bar() {
 >bar : () => (t: typeof C3) => void
->    : ^^^^^^^^^^         ^^^^^^^^^
+>    : ^^^^^^^ ^^         ^^^^^^^^^
 
         return function (t: typeof C3) {
 >function (t: typeof C3) {        } : (t: typeof C3) => void
->                                   : ^^^^         ^^^^^^^^^
+>                                   : ^ ^^         ^^^^^^^^^
 >t : typeof C3
 >  : ^^^^^^^^^
 >C3 : typeof C3
@@ -84,11 +84,11 @@ export class C4 {
 
     bar() {
 >bar : () => (t: typeof C4) => void
->    : ^^^^^^^^^^         ^^^^^^^^^
+>    : ^^^^^^^ ^^         ^^^^^^^^^
 
         return function (t: typeof C4) {
 >function (t: typeof C4) {        } : (t: typeof C4) => void
->                                   : ^^^^         ^^^^^^^^^
+>                                   : ^ ^^         ^^^^^^^^^
 >t : typeof C4
 >  : ^^^^^^^^^
 >C4 : typeof C4

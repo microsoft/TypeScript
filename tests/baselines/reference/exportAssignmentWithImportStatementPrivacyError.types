@@ -11,13 +11,13 @@ module m2 {
     export interface connectExport {
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
->    : ^^^^^^             ^^^^^             
+>    : ^   ^^             ^^^^^             
 >mod : connectModule
 >    : ^^^^^^^^^^^^^
 
         listen: (port: number) => void;
 >listen : (port: number) => void
->       : ^^^^^^^      ^^^^^    
+>       : ^    ^^      ^^^^^    
 >port : number
 >     : ^^^^^^
     }

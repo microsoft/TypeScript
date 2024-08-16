@@ -14,7 +14,7 @@ class C {
 
 function foo(defaultParam = 10 /*emit only once*/) {}
 >foo : (defaultParam?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^            ^^^^^^^^^^^^^^^^^^
 >defaultParam : number
 >             : ^^^^^^
 >10 : 10

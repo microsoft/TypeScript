@@ -3,7 +3,7 @@
 === /node_modules/tslib/index.d.ts ===
 export declare function __decorate(...args: any[]): any;
 >__decorate : (...args: any[]) => any
->           : ^^^^^^^^^^     ^^^^^   
+>           : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 

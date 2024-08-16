@@ -3,7 +3,7 @@
 === recursiveInference1.ts ===
 function fib(x:number) { return x <= 1 ? x : fib(x - 1) + fib(x - 2); }
 >fib : (x: number) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x <= 1 ? x : fib(x - 1) + fib(x - 2) : any
@@ -18,7 +18,7 @@ function fib(x:number) { return x <= 1 ? x : fib(x - 1) + fib(x - 2); }
 >fib(x - 1) + fib(x - 2) : any
 >fib(x - 1) : any
 >fib : (x: number) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >x - 1 : number
 >      : ^^^^^^
 >x : number
@@ -27,7 +27,7 @@ function fib(x:number) { return x <= 1 ? x : fib(x - 1) + fib(x - 2); }
 >  : ^
 >fib(x - 2) : any
 >fib : (x: number) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >x - 2 : number
 >      : ^^^^^^
 >x : number
@@ -39,7 +39,7 @@ var result = fib(5);
 >result : any
 >fib(5) : any
 >fib : (x: number) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >5 : 5
 >  : ^
 

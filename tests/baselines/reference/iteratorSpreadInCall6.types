@@ -3,7 +3,7 @@
 === iteratorSpreadInCall6.ts ===
 function foo(...s: (symbol | number)[]) { }
 >foo : (...s: (symbol | number)[]) => void
->    : ^^^^^^^                   ^^^^^^^^^
+>    : ^^^^ ^^                   ^^^^^^^^^
 >s : (number | symbol)[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -98,8 +98,8 @@ class _StringIterator {
 foo(...new SymbolIterator, ...new _StringIterator);
 >foo(...new SymbolIterator, ...new _StringIterator) : void
 >                                                   : ^^^^
->foo : (...s: (number | symbol)[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (...s: (symbol | number)[]) => void
+>    : ^^^^ ^^                   ^^^^^^^^^
 >...new SymbolIterator : symbol
 >                      : ^^^^^^
 >new SymbolIterator : SymbolIterator

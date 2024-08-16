@@ -14,11 +14,11 @@ z.bar("hello"); // This should be ok
 >z.bar("hello") : foo.A
 >               : ^^^^^
 >z.bar : (name: string) => foo.A
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^      ^^^^^^^^^^
 >z : foo
 >  : ^^^
 >bar : (name: string) => foo.A
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -50,7 +50,7 @@ declare module "foo"
     interface B {
         bar(name: string): B.A;
 >bar : (name: string) => B.A
->    : ^^^^^^^      ^^^^^   
+>    : ^    ^^      ^^^^^   
 >name : string
 >     : ^^^^^^
 >B : any

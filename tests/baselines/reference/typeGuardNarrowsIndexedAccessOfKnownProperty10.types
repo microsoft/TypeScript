@@ -15,7 +15,7 @@ const bar: { [id: string]: number } = {};
 
 (foo: Foo) => {
 >(foo: Foo) => {	bar[id]++;	const id = foo.bar;} : (foo: Foo) => void
->                                                : ^^^^^^   ^^^^^^^^^
+>                                                : ^   ^^   ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 

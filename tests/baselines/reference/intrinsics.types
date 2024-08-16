@@ -48,7 +48,7 @@ class Foo<__proto__> { }
 
 var foo: (__proto__: number) => void;
 >foo : (__proto__: number) => void
->    : ^^^^^^^^^^^^      ^^^^^    
+>    : ^         ^^      ^^^^^    
 >__proto__ : number
 >          : ^^^^^^
 

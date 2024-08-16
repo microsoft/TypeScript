@@ -20,8 +20,7 @@ function* g(): IterableIterator<Foo> {
 >  : ^^^^^^                     
 
     yield;
->yield : undefined
->      : ^^^^^^^^^
+>yield : any
 
     yield * [new Bar];
 >yield * [new Bar] : any

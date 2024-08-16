@@ -18,7 +18,7 @@ enum E { a, b, c }
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 

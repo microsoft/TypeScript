@@ -1,10 +1,10 @@
 import {
     IO,
     userSpecifiedRoot,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
-export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project";
+export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "transpile";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-server";
 
@@ -55,7 +55,7 @@ export abstract class RunnerBase {
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
         // If its a full path (starts with "C:" or "/") replace with just the filename
-        let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
+        let fixedPath = /^(?:\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;

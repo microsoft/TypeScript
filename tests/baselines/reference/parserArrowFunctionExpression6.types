@@ -3,7 +3,7 @@
 === parserArrowFunctionExpression6.ts ===
 function foo(q: string, b: number) {
 >foo : (q: string, b: number) => boolean | (() => void)
->    : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : string
 >  : ^^^^^^
 >b : number

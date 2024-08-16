@@ -104,7 +104,7 @@ class IceCreamMonster {
 */
     public eatIceCream(amount: number): boolean {
 >eatIceCream : (amount: number) => boolean
->            : ^^^^^^^^^      ^^^^^       
+>            : ^      ^^      ^^^^^       
 >amount : number
 >       : ^^^^^^
 

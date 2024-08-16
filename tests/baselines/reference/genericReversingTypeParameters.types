@@ -11,7 +11,7 @@ class BiMap<K, V> {
 
     public get(key: K): V { return null; }
 >get : (key: K) => V
->    : ^^^^^^ ^^^^^ 
+>    : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 
@@ -34,11 +34,11 @@ var r1 = b.get('');
 >b.get('') : number
 >          : ^^^^^^
 >b.get : (key: string) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^^^^^^^^^^^^^^^^^^
 >b : BiMap<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -60,11 +60,11 @@ var r2b = i.get(1);
 >i.get(1) : string
 >         : ^^^^^^
 >i.get : (key: number) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^^^^^^^^^^^^^^^^^^
 >i : BiMap<number, string>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

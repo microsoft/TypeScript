@@ -3,7 +3,7 @@
 === optionalParamReferencingOtherParams1.ts ===
 function strange(x: number, y = x * 1, z = x + y) {
 >strange : (x: number, y?: number, z?: number) => number
->        : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number

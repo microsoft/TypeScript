@@ -24,11 +24,11 @@ catch (e) {
 >e.toUpperCase() : string
 >                : ^^^^^^
 >e.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >e : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 
     if (typeof e === 'string') {
@@ -44,11 +44,11 @@ catch (e) {
 >e.toUpperCase() : string
 >                : ^^^^^^
 >e.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >e : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -100,11 +100,11 @@ catch (e) {
 >e.toUpperCase() : string
 >                : ^^^^^^
 >e.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >e : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 

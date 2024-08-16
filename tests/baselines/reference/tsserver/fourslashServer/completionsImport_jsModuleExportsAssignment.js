@@ -42,8 +42,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -159,6 +158,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /index.ts: *new*
@@ -267,8 +277,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -282,6 +291,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -377,7 +394,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1042,8 +1059,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1052,11 +1069,24 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1068,8 +1098,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -1088,6 +1118,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1104,6 +1139,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 5,
+      "success": true
     }
 After Request
 Projects::
@@ -1157,6 +1200,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 6,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1254,7 +1305,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1932,8 +1983,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1942,11 +1993,24 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1958,8 +2022,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -1978,6 +2042,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2140,6 +2209,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "import { defaults } from \"./third_party/marked/src/defaults\";\n\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
     }
 After Request
 Projects::

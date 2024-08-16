@@ -14,7 +14,7 @@ class Test24554 {
 }
 function test24554(x: Test24554) {
 >test24554 : (x: Test24554) => any
->          : ^^^^         ^^^^^^^^
+>          : ^ ^^         ^^^^^^^^
 >x : Test24554
 >  : ^^^^^^^^^
 

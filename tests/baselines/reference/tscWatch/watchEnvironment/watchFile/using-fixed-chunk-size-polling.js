@@ -94,6 +94,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -102,6 +103,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -110,6 +112,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -145,6 +148,7 @@ Before running Timeout callback:: count: 2
 6: timerToUpdateProgram
 7: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
@@ -197,6 +201,7 @@ Input::
 Before running Timeout callback:: count: 1
 8: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1

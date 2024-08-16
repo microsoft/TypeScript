@@ -20,7 +20,7 @@ class MyClass
 
     public SetCount(value: number)
 >SetCount : (value: number) => void
->         : ^^^^^^^^      ^^^^^^^^^
+>         : ^     ^^      ^^^^^^^^^
 >value : number
 >      : ^^^^^^
     {

@@ -3,7 +3,7 @@
 === anyAsReturnTypeForNewOnCall.ts ===
 function Point(x, y) {
 >Point : (x: any, y: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >y : any
 
@@ -31,7 +31,7 @@ var o = new Point(3, 4);
 >o : any
 >new Point(3, 4) : any
 >Point : (x: any, y: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4

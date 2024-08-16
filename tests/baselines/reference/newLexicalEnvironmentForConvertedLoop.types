@@ -3,7 +3,7 @@
 === newLexicalEnvironmentForConvertedLoop.ts ===
 function baz(x: any) {
 >baz : (x: any) => any[][]
->    : ^^^^   ^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^
 >x : any
 
   return [[x, x]];
@@ -17,7 +17,7 @@ function baz(x: any) {
 
 function foo(set: any) {
 >foo : (set: any) => void
->    : ^^^^^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >set : any
 
   for (const [value, i] of baz(set.values)) {
@@ -28,7 +28,7 @@ function foo(set: any) {
 >baz(set.values) : any[][]
 >                : ^^^^^^^
 >baz : (x: any) => any[][]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^
 >set.values : any
 >set : any
 >    : ^^^

@@ -25,11 +25,11 @@ class Sub extends C {
 >super.m2() : void
 >           : ^^^^
 >super.m2 : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >super : C
 >      : ^
 >m2 : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
     }
 }
 

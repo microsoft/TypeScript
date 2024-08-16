@@ -33,7 +33,7 @@ export class Foo {
 
 export function foo1(
 >foo1 : (reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number) => void
->     : ^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^                                ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>     : ^             ^^               ^^              ^^                                ^^           ^^   ^^^^^^^^^^^^^^             ^^      ^^^^^^^^^
 
     // Type node is accurate, preserve
     reuseTypeNode: Map | undefined = {},

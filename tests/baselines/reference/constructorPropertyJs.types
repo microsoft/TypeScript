@@ -10,7 +10,7 @@ class C {
      */
     foo(a) {
 >foo : (a: any) => void
->    : ^^^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >a : any
 
         this.constructor = a;

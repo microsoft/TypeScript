@@ -39,7 +39,7 @@ class TextBase implements IText {
 
         public subText(span: TextSpan): IText {
 >subText : (span: TextSpan) => IText
->        : ^^^^^^^        ^^^^^     
+>        : ^    ^^        ^^^^^     
 >span : TextSpan
 >     : ^^^^^^^^
 

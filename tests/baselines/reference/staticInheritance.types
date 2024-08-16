@@ -3,7 +3,7 @@
 === staticInheritance.ts ===
 function doThing(x: { n: string }) { }
 >doThing : (x: { n: string; }) => void
->        : ^^^^              ^^^^^^^^^
+>        : ^ ^^              ^^^^^^^^^
 >x : { n: string; }
 >  : ^^^^^      ^^^
 >n : string
@@ -23,7 +23,7 @@ class A {
 >doThing(A) : void
 >           : ^^^^
 >doThing : (x: { n: string; }) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^              ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 }
@@ -39,7 +39,7 @@ class B extends A {
 >doThing(A) : void
 >           : ^^^^
 >doThing : (x: { n: string; }) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^              ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -49,7 +49,7 @@ class B extends A {
 >doThing(B) : void
 >           : ^^^^
 >doThing : (x: { n: string; }) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^              ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 }
@@ -57,7 +57,7 @@ doThing(B); //OK
 >doThing(B) : void
 >           : ^^^^
 >doThing : (x: { n: string; }) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^              ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 

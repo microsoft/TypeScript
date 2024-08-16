@@ -7,7 +7,7 @@ class List<T> {
 
    add(item: T) { }
 >add : (item: T) => void
->    : ^^^^^^^ ^^^^^^^^^
+>    : ^    ^^ ^^^^^^^^^
 >item : T
 >     : ^
 }
@@ -16,7 +16,7 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 >List.prototype.add("abc") : void
 >                          : ^^^^
 >List.prototype.add : (item: any) => void
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   : ^    ^^^^^^^^^^^^^^
 >List.prototype : List<any>
 >               : ^^^^^^^^^
 >List : typeof List
@@ -24,7 +24,7 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 >prototype : List<any>
 >          : ^^^^^^^^^
 >add : (item: any) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^^^^^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 

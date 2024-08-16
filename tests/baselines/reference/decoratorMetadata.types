@@ -30,7 +30,7 @@ class MyComponent {
 
     method(x: this) {
 >method : (x: this) => void
->       : ^^^^    ^^^^^^^^^
+>       : ^ ^^    ^^^^^^^^^
 >x : this
 >  : ^^^^
     }

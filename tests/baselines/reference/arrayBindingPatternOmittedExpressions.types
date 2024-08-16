@@ -37,7 +37,7 @@ var results: string[];
 
 function f([, a, , b, , , , s, , , ] = results) {
 >f : ([, a, , b, , , , s, , ,]?: string[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^                        ^^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >a : string

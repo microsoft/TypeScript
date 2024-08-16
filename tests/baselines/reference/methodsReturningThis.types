@@ -31,7 +31,7 @@ Class.prototype.containsError = function () { return this.notPresent; };
 // lots of methods that return this, which caused out-of-memory in #9527
 Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
 >Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => this
->                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
 >Class.prototype.m1 : any
 >Class.prototype : any
 >                : ^^^
@@ -42,7 +42,7 @@ Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
 >m1 : any
 >   : ^^^
 >function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => this
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -54,7 +54,7 @@ Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
 
 Class.prototype.m2 = function (x, y) { return this; };
 >Class.prototype.m2 = function (x, y) { return this; } : (x: any, y: any) => this
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >Class.prototype.m2 : any
 >Class.prototype : any
 >                : ^^^
@@ -65,7 +65,7 @@ Class.prototype.m2 = function (x, y) { return this; };
 >m2 : any
 >   : ^^^
 >function (x, y) { return this; } : (x: any, y: any) => this
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >y : any
 >this : this
@@ -73,7 +73,7 @@ Class.prototype.m2 = function (x, y) { return this; };
 
 Class.prototype.m3 = function (x, y) { return this; };
 >Class.prototype.m3 = function (x, y) { return this; } : (x: any, y: any) => this
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >Class.prototype.m3 : any
 >Class.prototype : any
 >                : ^^^
@@ -84,7 +84,7 @@ Class.prototype.m3 = function (x, y) { return this; };
 >m3 : any
 >   : ^^^
 >function (x, y) { return this; } : (x: any, y: any) => this
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >y : any
 >this : this
@@ -92,7 +92,7 @@ Class.prototype.m3 = function (x, y) { return this; };
 
 Class.prototype.m4 = function (angle) { return this; };
 >Class.prototype.m4 = function (angle) { return this; } : (angle: any) => this
->                                                       : ^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^     ^^^^^^^^^^^^^^
 >Class.prototype.m4 : any
 >Class.prototype : any
 >                : ^^^
@@ -103,14 +103,14 @@ Class.prototype.m4 = function (angle) { return this; };
 >m4 : any
 >   : ^^^
 >function (angle) { return this; } : (angle: any) => this
->                                  : ^^^^^^^^^^^^^^^^^^^^
+>                                  : ^     ^^^^^^^^^^^^^^
 >angle : any
 >this : this
 >     : ^^^^
 
 Class.prototype.m5 = function (matrix) { return this; };
 >Class.prototype.m5 = function (matrix) { return this; } : (matrix: any) => this
->                                                        : ^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^      ^^^^^^^^^^^^^^
 >Class.prototype.m5 : any
 >Class.prototype : any
 >                : ^^^
@@ -121,14 +121,14 @@ Class.prototype.m5 = function (matrix) { return this; };
 >m5 : any
 >   : ^^^
 >function (matrix) { return this; } : (matrix: any) => this
->                                   : ^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^      ^^^^^^^^^^^^^^
 >matrix : any
 >this : this
 >     : ^^^^
 
 Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; };
 >Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => this
->                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                              : ^ ^^^^^^^ ^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^        ^^^^^^^     ^^^^^^^     ^^^^^^^^^^^^^^
 >Class.prototype.m6 : any
 >Class.prototype : any
 >                : ^^^
@@ -139,7 +139,7 @@ Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, s
 >m6 : any
 >   : ^^^
 >function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => this
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^ ^^^^^^^ ^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^        ^^^^^^^     ^^^^^^^     ^^^^^^^^^^^^^^
 >x : any
 >y : any
 >pivotX : any
@@ -154,7 +154,7 @@ Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, s
 
 Class.prototype.m7 = function(matrix) { return this; };
 >Class.prototype.m7 = function(matrix) { return this; } : (matrix: any) => this
->                                                       : ^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^      ^^^^^^^^^^^^^^
 >Class.prototype.m7 : any
 >Class.prototype : any
 >                : ^^^
@@ -165,7 +165,7 @@ Class.prototype.m7 = function(matrix) { return this; };
 >m7 : any
 >   : ^^^
 >function(matrix) { return this; } : (matrix: any) => this
->                                  : ^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^      ^^^^^^^^^^^^^^
 >matrix : any
 >this : this
 >     : ^^^^

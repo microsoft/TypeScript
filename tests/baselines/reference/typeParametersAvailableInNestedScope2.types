@@ -3,7 +3,7 @@
 === typeParametersAvailableInNestedScope2.ts ===
 function foo<T, U>(x: T, y: U) {
 >foo : <T, U>(x: T, y: U) => void
->    : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -11,13 +11,13 @@ function foo<T, U>(x: T, y: U) {
 
     function bar<V>(z: V) {
 >bar : <V>(z: V) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >z : V
 >  : ^
 
         function baz<W>(a: W) {
 >baz : <W>(a: W) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >a : W
 >  : ^
 

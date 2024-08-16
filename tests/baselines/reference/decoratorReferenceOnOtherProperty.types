@@ -12,7 +12,7 @@ import {Yoha} from './yoha';
 
 function foo(...args: any[]) {}
 >foo : (...args: any[]) => void
->    : ^^^^^^^^^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -22,9 +22,9 @@ class Bar {
 
   yoha(@foo yoha, bar: Yoha) {}
 >yoha : (yoha: any, bar: Yoha) => void
->     : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>     : ^    ^^^^^^^   ^^    ^^^^^^^^^
 >foo : (...args: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >yoha : any
 >bar : Yoha
 >    : ^^^^
@@ -39,7 +39,7 @@ import {Yoha} from './yoha';
 
 function foo(...args: any[]) {}
 >foo : (...args: any[]) => void
->    : ^^^^^^^^^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -49,9 +49,9 @@ class Bar {
 
   yoha(@foo yoha, ...bar: Yoha[]) {}
 >yoha : (yoha: any, ...bar: Yoha[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>     : ^    ^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : (...args: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >yoha : any
 >bar : Yoha[]
 >    : ^^^^^^

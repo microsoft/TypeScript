@@ -74,13 +74,13 @@ export module m1 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -147,13 +147,13 @@ export module m1 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -242,13 +242,13 @@ module m2 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -315,13 +315,13 @@ module m2 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -405,13 +405,13 @@ export interface C7_public {
 
     f1(a1: C5_public);
 >f1 : (a1: C5_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C5_public
 >   : ^^^^^^^^^
 
     f2(a1: C6_private);
 >f2 : (a1: C6_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C6_private
 >   : ^^^^^^^^^^
 
@@ -478,13 +478,13 @@ interface C8_private {
 
     f1(a1: C5_public);
 >f1 : (a1: C5_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C5_public
 >   : ^^^^^^^^^
 
     f2(a1: C6_private);
 >f2 : (a1: C6_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C6_private
 >   : ^^^^^^^^^^
 

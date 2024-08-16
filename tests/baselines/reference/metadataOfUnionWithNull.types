@@ -3,7 +3,7 @@
 === metadataOfUnionWithNull.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^      ^^^^^^^^^^^               ^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propKey : string | symbol
@@ -20,7 +20,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     x: "foo" | null;
 >x : "foo"
@@ -28,7 +28,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     y: true | never;
 >y : true
@@ -38,7 +38,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     z: "foo" | undefined;
 >z : "foo"
@@ -46,7 +46,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     a: null;
 >a : null
@@ -54,7 +54,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     b: never;
 >b : never
@@ -62,7 +62,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     c: undefined;
 >c : undefined
@@ -70,7 +70,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     d: undefined | null;
 >d : null
@@ -78,7 +78,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     e: symbol | null;
 >e : symbol
@@ -86,7 +86,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     f: symbol | A;
 >f : symbol | A
@@ -94,7 +94,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     g: A | null;
 >g : A
@@ -102,7 +102,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     h: null | B;
 >h : B
@@ -110,7 +110,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     j: null | symbol;
 >j : symbol

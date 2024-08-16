@@ -151,7 +151,7 @@ class C7 {
 
     method1(@await [x]) {}
 >method1 : ([x]: [any]) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^^^
 > : any
 > : ^^^
 >x : any
@@ -159,7 +159,7 @@ class C7 {
 
     method2(@await(1) [x]) {}
 >method2 : ([x]: [any]) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^^^
 >await(1) : any
 >         : ^^^
 > : any
@@ -171,7 +171,7 @@ class C7 {
 
     method3(@(await) [x]) {}
 >method3 : ([x]: [any]) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^^^
 >(await) : any
 >        : ^^^
 >await : any

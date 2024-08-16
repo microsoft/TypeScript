@@ -1,12 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    baselineParseConfig,
-} from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
     interface VerifyWatchOptions {
@@ -97,6 +93,18 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
                         watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
+        },
+        {
+            json: {
+                extends: "./base/tsconfig.json",
+            },
+            additionalFiles: {
+                "/base/tsconfig.json": jsonToReadableText({
+                    watchOptions: {
+                        excludeFiles: ["${configDir}/temp/*.ts"], // eslint-disable-line no-template-curly-in-string
                     },
                 }),
             },

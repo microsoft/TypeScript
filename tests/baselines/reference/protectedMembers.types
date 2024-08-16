@@ -293,7 +293,7 @@ class C extends A {
 
     static foo(a: A, b: B, c: C, d: D, e: E) {
 >foo : (a: A, b: B, c: C, d: D, e: E) => void
->    : ^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >a : A
 >  : ^
 >b : B

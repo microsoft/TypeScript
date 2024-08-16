@@ -3,9 +3,9 @@
 === sourceMapValidationLambdaSpanningMultipleLines.ts ===
 ((item: string) =>
 >((item: string) =>    item) : (item: string) => string
->                            : ^^^^^^^      ^^^^^^^^^^^
+>                            : ^    ^^      ^^^^^^^^^^^
 >(item: string) =>    item : (item: string) => string
->                          : ^^^^^^^      ^^^^^^^^^^^
+>                          : ^    ^^      ^^^^^^^^^^^
 >item : string
 >     : ^^^^^^
 

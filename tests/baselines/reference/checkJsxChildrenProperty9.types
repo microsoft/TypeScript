@@ -42,7 +42,7 @@ let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
 >h2 : any
 >   : ^^^
 >(user: any) => <h2>{user.name}</h2> : (user: any) => JSX.Element
->                                    : ^^^^^^^   ^^^^^^^^^^^^^^^^
+>                                    : ^    ^^   ^^^^^^^^^^^^^^^^
 >user : any
 ><h2>{user.name}</h2> : JSX.Element
 >                     : ^^^^^^^^^^^

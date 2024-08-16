@@ -17,7 +17,7 @@ type U3 = | () => number
 
 type U4 = | (foo?: number) => void;
 >U4 : (foo?: number) => void
->   : ^^^^^^^      ^^^^^    
+>   : ^   ^^^      ^^^^^    
 >foo : number
 >    : ^^^^^^
 

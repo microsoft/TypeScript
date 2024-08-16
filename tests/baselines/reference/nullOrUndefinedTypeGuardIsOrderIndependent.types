@@ -3,7 +3,7 @@
 === nullOrUndefinedTypeGuardIsOrderIndependent.ts ===
 function test(strOrNull: string | null, strOrUndefined: string | undefined) {
 >test : (strOrNull: string | null, strOrUndefined: string | undefined) => void
->     : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>     : ^         ^^             ^^              ^^                  ^^^^^^^^^
 >strOrNull : string | null
 >          : ^^^^^^^^^^^^^
 >strOrUndefined : string | undefined

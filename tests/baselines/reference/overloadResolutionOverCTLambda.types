@@ -3,9 +3,9 @@
 === overloadResolutionOverCTLambda.ts ===
 function foo(b: (item: number) => boolean) { }
 >foo : (b: (item: number) => boolean) => void
->    : ^^^^                         ^^^^^^^^^
+>    : ^ ^^                         ^^^^^^^^^
 >b : (item: number) => boolean
->  : ^^^^^^^      ^^^^^       
+>  : ^    ^^      ^^^^^       
 >item : number
 >     : ^^^^^^
 
@@ -13,9 +13,9 @@ foo(a => a); // can not convert (number)=>bool to (number)=>number
 >foo(a => a) : void
 >            : ^^^^
 >foo : (b: (item: number) => boolean) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                         ^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number

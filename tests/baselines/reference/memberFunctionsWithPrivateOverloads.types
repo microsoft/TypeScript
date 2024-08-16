@@ -7,13 +7,13 @@ class C {
 
     private foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     private foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -21,27 +21,27 @@ class C {
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     private bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -49,7 +49,7 @@ class C {
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -57,13 +57,13 @@ class C {
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     private static foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -71,27 +71,27 @@ class C {
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     private static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -99,7 +99,7 @@ class C {
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -112,13 +112,13 @@ class D<T> {
 
     private foo(x: number);
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     private foo(x: T, y: T);
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -126,27 +126,27 @@ class D<T> {
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     private bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private bar(x: T, y: T);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -154,7 +154,7 @@ class D<T> {
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -162,13 +162,13 @@ class D<T> {
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: number): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     private static foo(x: number, y: number);
 >foo : { (x: number): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -176,27 +176,27 @@ class D<T> {
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     private static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private static bar(x: number, y: number);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -204,7 +204,7 @@ class D<T> {
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -222,11 +222,11 @@ var r = c.foo(1); // error
 >c.foo(1) : any
 >         : ^^^
 >c.foo : { (x: number): any; (x: number, y: string): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >c : C
 >  : ^
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -240,11 +240,11 @@ var r2 = d.foo(2); // error
 >d.foo(2) : any
 >         : ^^^
 >d.foo : { (x: number): any; (x: number, y: number): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >d : D<number>
 >  : ^^^^^^^^^
 >foo : { (x: number): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -254,11 +254,11 @@ var r3 = C.foo(1); // error
 >C.foo(1) : any
 >         : ^^^
 >C.foo : { (x: number): any; (x: number, y: string): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -268,11 +268,11 @@ var r4 = D.bar(''); // error
 >D.bar('') : any
 >          : ^^^
 >D.bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 

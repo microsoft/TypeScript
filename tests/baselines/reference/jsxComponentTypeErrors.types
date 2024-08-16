@@ -71,11 +71,11 @@ const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >FunctionComponent : typeof FunctionComponent
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassComponent : typeof ClassComponent

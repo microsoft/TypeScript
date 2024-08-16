@@ -29,7 +29,7 @@ type B = Omit<A, 'a'>;
 
 function f(x: B) {
 >f : (x: B) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >x : B
 >  : ^
 

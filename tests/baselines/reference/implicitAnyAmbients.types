@@ -15,19 +15,19 @@ declare module m {
 
     function f(x); // error 
 >f : (x: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
     function f2(x: any); // error
 >f2 : (x: any) => any
->   : ^^^^   ^^^^^^^^
+>   : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 
     function f3(x: any): any;
 >f3 : (x: any) => any
->   : ^^^^   ^^^^^   
+>   : ^ ^^   ^^^^^   
 >x : any
 >  : ^^^
 
@@ -38,13 +38,13 @@ declare module m {
 
         foo2(x: any); // error
 >foo2 : (x: any) => any
->     : ^^^^   ^^^^^^^^
+>     : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 
         foo3(x: any): any;
 >foo3 : (x: any) => any
->     : ^^^^   ^^^^^   
+>     : ^ ^^   ^^^^^   
 >x : any
 >  : ^^^
     }
@@ -59,13 +59,13 @@ declare module m {
 
         foo2(x: any); // error
 >foo2 : (x: any) => any
->     : ^^^^   ^^^^^^^^
+>     : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 
         foo3(x: any): any;
 >foo3 : (x: any) => any
->     : ^^^^   ^^^^^   
+>     : ^ ^^   ^^^^^   
 >x : any
 >  : ^^^
     }

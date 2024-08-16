@@ -3,7 +3,7 @@
 === blockScopedSameNameFunctionDeclarationES5.ts ===
 function foo(a: number) {
 >foo : (a: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -70,7 +70,7 @@ foo(10);
 >foo(10) : void
 >        : ^^^^
 >foo : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >10 : 10
 >   : ^^
 
@@ -78,5 +78,5 @@ foo(); // not ok - needs number
 >foo() : void
 >      : ^^^^
 >foo : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 

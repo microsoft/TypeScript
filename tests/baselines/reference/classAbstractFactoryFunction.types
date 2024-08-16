@@ -13,7 +13,7 @@ abstract class B extends A {}
 
 function NewA(Factory: typeof A) {
 >NewA : (Factory: typeof A) => A
->     : ^^^^^^^^^^        ^^^^^^
+>     : ^       ^^        ^^^^^^
 >Factory : typeof A
 >        : ^^^^^^^^
 >A : typeof A
@@ -28,7 +28,7 @@ function NewA(Factory: typeof A) {
 
 function NewB(Factory: typeof B) {
 >NewB : (Factory: typeof B) => any
->     : ^^^^^^^^^^        ^^^^^^^^
+>     : ^       ^^        ^^^^^^^^
 >Factory : typeof B
 >        : ^^^^^^^^
 >B : typeof B
@@ -45,7 +45,7 @@ NewA(A);
 >NewA(A) : A
 >        : ^
 >NewA : (Factory: typeof A) => A
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^        ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -53,7 +53,7 @@ NewA(B);
 >NewA(B) : A
 >        : ^
 >NewA : (Factory: typeof A) => A
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^        ^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -61,7 +61,7 @@ NewB(A);
 >NewB(A) : any
 >        : ^^^
 >NewB : (Factory: typeof B) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^        ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -69,7 +69,7 @@ NewB(B);
 >NewB(B) : any
 >        : ^^^
 >NewB : (Factory: typeof B) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^        ^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 

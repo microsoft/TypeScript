@@ -35,7 +35,6 @@ const a = {};
 module.exports = a;
 //// [file.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
 const a = {};
 module.exports = a;

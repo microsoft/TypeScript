@@ -3,7 +3,7 @@
 === functionWithDefaultParameterWithNoStatements6.ts ===
 function foo(a = true) { }
 >foo : (a?: boolean) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >true : true
@@ -11,7 +11,7 @@ function foo(a = true) { }
 
 function bar(a = true) {
 >bar : (a?: boolean) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >true : true

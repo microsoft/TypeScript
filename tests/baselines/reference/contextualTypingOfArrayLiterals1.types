@@ -33,9 +33,9 @@ r2.getDate();
 >r2.getDate() : number
 >             : ^^^^^^
 >r2.getDate : () => number
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >r2 : Date
 >   : ^^^^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 

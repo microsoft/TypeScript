@@ -35,7 +35,7 @@ import {StringHash, StringHash2} from "./b";
 export {
     doSome
 >doSome : (arg1: string, arg2?: StringHash, arg3?: StringHash2) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^    ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 const MAP: StringHash = {
@@ -68,7 +68,7 @@ const MAP2: StringHash2 = {
 
 function doSome(arg1: string,
 >doSome : (arg1: string, arg2?: StringHash, arg3?: StringHash2) => void
->       : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^    ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string
 >     : ^^^^^^
 

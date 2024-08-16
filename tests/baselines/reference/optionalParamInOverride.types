@@ -17,7 +17,7 @@ class Y extends Z {
 
     public func(value?: any): void { }
 >func : (value?: any) => void
->     : ^^^^^^^^^   ^^^^^    
+>     : ^     ^^^   ^^^^^    
 >value : any
 }
 

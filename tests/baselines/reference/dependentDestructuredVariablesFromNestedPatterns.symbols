@@ -70,7 +70,7 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
       : [undefined, new Error(String(result.reason))],
 >undefined : Symbol(undefined)
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 >result.reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
 >result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
 >reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))

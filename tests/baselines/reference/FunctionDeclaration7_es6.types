@@ -8,7 +8,7 @@ function*bar() {
   // 'yield' here is an identifier, and not a yield expression.
   function*foo(a = yield) {
 >foo : (a?: any) => Generator<never, void, unknown>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >yield : any

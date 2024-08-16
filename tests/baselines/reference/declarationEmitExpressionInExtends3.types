@@ -37,7 +37,7 @@ interface LocalInterface {
 
 function getLocalClass<T>(c: T) {
 >getLocalClass : <T>(c: T) => typeof LocalClass
->              : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >c : T
 >  : ^
 
@@ -48,7 +48,7 @@ function getLocalClass<T>(c: T) {
 
 function getExportedClass<T>(c: T) {
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->                 : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : T
 >  : ^
 
@@ -65,7 +65,7 @@ export class MyClass extends getLocalClass<LocalInterface>(undefined)<string, nu
 >getLocalClass<LocalInterface>(undefined) : LocalClass<string, number>
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getLocalClass : <T>(c: T) => typeof LocalClass
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }
@@ -77,7 +77,7 @@ export class MyClass2 extends getExportedClass<LocalInterface>(undefined)<string
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<string>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }
@@ -89,7 +89,7 @@ export class MyClass3 extends getExportedClass<LocalInterface>(undefined)<LocalI
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<LocalInterface>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }
@@ -101,7 +101,7 @@ export class MyClass4 extends getExportedClass<LocalInterface>(undefined)<Export
 >getExportedClass<LocalInterface>(undefined) : ExportedClass<ExportedInterface>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }

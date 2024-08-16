@@ -179,7 +179,7 @@ class Benchmark {
 
     public addTimingFor(name: string, timing: number) {
 >addTimingFor : (name: string, timing: number) => void
->             : ^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^
+>             : ^    ^^      ^^      ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >timing : number

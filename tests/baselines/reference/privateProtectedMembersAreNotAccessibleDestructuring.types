@@ -115,7 +115,7 @@ let { priv: a, prot: b, privateMethod: pm } = k; // error
 
 function f({ priv, prot, privateMethod }: K) {
 >f : ({ priv, prot, privateMethod }: K) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^                             ^^ ^^^^^^^^^
 >priv : any
 >     : ^^^
 >prot : any

@@ -1,7 +1,7 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
 
 function getParsedCommandJson(
     jsonText: string,
@@ -15,9 +15,9 @@ function getParsedCommandJson(
     return ts.parseJsonConfigFileContent(
         parsed.config,
         host,
-        basePath ?? host.sys.getCurrentDirectory(),
+        basePath ?? ts.getNormalizedAbsolutePath(ts.getDirectoryPath(configFileName), host.sys.getCurrentDirectory()),
         existingOptions,
-        configFileName,
+        ts.getNormalizedAbsolutePath(configFileName, host.sys.getCurrentDirectory()),
         /*resolutionStack*/ undefined,
         /*extraFileExtensions*/ undefined,
         /*extendedConfigCache*/ undefined,
@@ -37,9 +37,9 @@ function getParsedCommandJsonSourceFile(
     return ts.parseJsonSourceFileConfigFileContent(
         parsed,
         host,
-        basePath ?? host.sys.getCurrentDirectory(),
+        basePath ?? ts.getNormalizedAbsolutePath(ts.getDirectoryPath(configFileName), host.sys.getCurrentDirectory()),
         existingOptions,
-        configFileName,
+        ts.getNormalizedAbsolutePath(configFileName, host.sys.getCurrentDirectory()),
         /*resolutionStack*/ undefined,
         /*extraFileExtensions*/ undefined,
         /*extendedConfigCache*/ undefined,

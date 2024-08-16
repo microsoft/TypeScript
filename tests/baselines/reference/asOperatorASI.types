@@ -7,7 +7,7 @@ class Foo { }
 
 declare function as(...args: any[]);
 >as : (...args: any[]) => any
->   : ^^^^^^^^^^     ^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -21,7 +21,7 @@ var x = 10
 as `Hello world`; // should not error
 >as `Hello world` : any
 >as : (...args: any[]) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^
 >`Hello world` : "Hello world"
 >              : ^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ var y = 20
 as(Foo); // should emit
 >as(Foo) : any
 >as : (...args: any[]) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

@@ -167,6 +167,7 @@ Before running Timeout callback:: count: 2
 4: timerToUpdateProgram
 5: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -278,6 +279,7 @@ Before running Timeout callback:: count: 2
 9: timerToUpdateProgram
 10: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

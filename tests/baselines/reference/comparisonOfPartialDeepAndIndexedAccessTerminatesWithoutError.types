@@ -12,7 +12,7 @@ type Many<T> = T | readonly T[];
 interface Collection<T> {
     sortBy(...iteratees: Many<PartialDeep<T>>[]): Collection<T>;
 >sortBy : (...iteratees: Many<PartialDeep<T>>[]) => Collection<T>
->       : ^^^^^^^^^^^^^^^                      ^^^^^             
+>       : ^^^^         ^^                      ^^^^^             
 >iteratees : Many<PartialDeep<T>>[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 }

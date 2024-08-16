@@ -3,7 +3,7 @@
 === taggedTemplateStringsWithWhitespaceEscapesES6.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
->  : ^^^^^^^^^^     ^^^^^^^^^
+>  : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 }
@@ -12,7 +12,7 @@ f `\t\n\v\f\r\\`;
 >f `\t\n\v\f\r\\` : void
 >                 : ^^^^
 >f : (...args: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^     ^^^^^^^^^
 >`\t\n\v\f\r\\` : "\t\n\v\f\r\\"
 >               : ^^^^^^^^^^^^^^
 

@@ -16,7 +16,7 @@ declare var foo;         // error at "foo"
 
 function func(k) { y };  // error at "k"
 >func : (k: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >k : any
 >  : ^^^
 >y : any
@@ -26,7 +26,7 @@ func(x);
 >func(x) : void
 >        : ^^^^
 >func : (k: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
 

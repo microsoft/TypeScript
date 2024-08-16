@@ -3,7 +3,7 @@
 === inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
 >f : <T>(array: T[], ...args: any[]) => void
->  : ^ ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^     ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >array : T[]
 >      : ^^^
 >args : any[]
@@ -11,7 +11,7 @@ function f<T>(array: T[], ...args) { }
 
 function g(array: number[], ...args) { }
 >g : (array: number[], ...args: any[]) => void
->  : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^        ^^^^^    ^^^^^^^^^^^^^^^^
 >array : number[]
 >      : ^^^^^^^^
 >args : any[]
@@ -19,7 +19,7 @@ function g(array: number[], ...args) { }
 
 function h<T>(nonarray: T, ...args) { }
 >h : <T>(nonarray: T, ...args: any[]) => void
->  : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^        ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >nonarray : T
 >         : ^
 >args : any[]
@@ -27,7 +27,7 @@ function h<T>(nonarray: T, ...args) { }
 
 function i<T>(array: T[], opt?: any[]) { }
 >i : <T>(array: T[], opt?: any[]) => void
->  : ^ ^^^^^^^^^   ^^^^^^^^     ^^^^^^^^^
+>  : ^ ^^     ^^   ^^   ^^^     ^^^^^^^^^
 >array : T[]
 >      : ^^^
 >opt : any[]
@@ -53,7 +53,7 @@ f(a); // OK
 >f(a) : void
 >     : ^^^^
 >f : <T>(array: T[], ...args: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^     ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 
@@ -61,7 +61,7 @@ g(a); // OK
 >g(a) : void
 >     : ^^^^
 >g : (array: number[], ...args: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^        ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 
@@ -69,7 +69,7 @@ h(a); // OK
 >h(a) : void
 >     : ^^^^
 >h : <T>(nonarray: T, ...args: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^        ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 
@@ -77,7 +77,7 @@ i(a); // OK
 >i(a) : void
 >     : ^^^^
 >i : <T>(array: T[], opt?: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^     ^^   ^^   ^^^     ^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 

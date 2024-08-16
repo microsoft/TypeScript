@@ -3,7 +3,7 @@
 === classStaticBlock8.ts ===
 function foo (v: number) {
 >foo : (v: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 

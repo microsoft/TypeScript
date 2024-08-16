@@ -3,7 +3,7 @@
 === foo.ts ===
 function id<T>(x: T) {
 >id : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -18,7 +18,7 @@ export const result = id `hello world`;
 >id `hello world` : TemplateStringsArray
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
 

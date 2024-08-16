@@ -32,9 +32,9 @@ export function Fragment(): void;
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <><div></div></>
 ><><div></div></> : any
@@ -51,7 +51,7 @@ import {h, Fragment} from "./renderer";
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 <><span></span></>
 ><><span></span></> : any
@@ -70,9 +70,9 @@ import {jsx} from "./renderer";
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <></>
 ><></> : any
@@ -83,7 +83,7 @@ import {h, Fragment} from "./renderer";
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 <></>
 ><></> : any
@@ -96,7 +96,7 @@ import {jsx} from "./renderer";
  */
 import {Fragment} from "./renderer";
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <></>
 ><></> : any
@@ -117,9 +117,9 @@ import {} from "./renderer";
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >Fragment : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 <div></div>
 ><div></div> : any
@@ -134,7 +134,7 @@ import {h, Fragment} from "./renderer";
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 <div></div>
 ><div></div> : any
@@ -150,7 +150,7 @@ import {jsx} from "./renderer";
  */
 import {h} from "./renderer";
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 function Component() { return null; }
 >Component : () => any

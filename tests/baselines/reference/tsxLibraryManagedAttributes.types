@@ -87,7 +87,7 @@ declare class ReactComponent<P={}, S={}> {
 
     setState(s: Partial<S>): S;
 >setState : (s: Partial<S>) => S
->         : ^^^^          ^^^^^ 
+>         : ^ ^^          ^^^^^ 
 >s : Partial<S>
 >  : ^^^^^^^^^^
 

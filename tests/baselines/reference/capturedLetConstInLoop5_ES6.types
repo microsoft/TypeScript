@@ -3,14 +3,14 @@
 === capturedLetConstInLoop5_ES6.ts ===
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 >  : ^^^
 
 //====let
 function foo0(x) {
 >foo0 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -66,14 +66,14 @@ function foo0(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
 
 function foo00(x) {
 >foo00 : (x: any) => void
->      : ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -129,14 +129,14 @@ function foo00(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
 
 function foo1(x) {
 >foo1 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -202,14 +202,14 @@ function foo1(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo2(x) {
 >foo2 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -273,14 +273,14 @@ function foo2(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo3(x) {
 >foo3 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -339,14 +339,14 @@ function foo3(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
 
 function foo4(x) {
 >foo4 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -418,14 +418,14 @@ function foo4(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo5(x) {
 >foo5 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -503,7 +503,7 @@ function foo5(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -511,7 +511,7 @@ function foo5(x) {
 
 function foo6(x) {
 >foo6 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -583,14 +583,14 @@ function foo6(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
 
 function foo7(x) {
 >foo7 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -661,7 +661,7 @@ function foo7(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
@@ -669,7 +669,7 @@ function foo7(x) {
 
 function foo8(x) {
 >foo8 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -749,7 +749,7 @@ function foo8(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -757,7 +757,7 @@ function foo8(x) {
 //====const
 function foo0_c(x) {
 >foo0_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -813,14 +813,14 @@ function foo0_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
 
 function foo00_c(x) {
 >foo00_c : (x: any) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -876,14 +876,14 @@ function foo00_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
 
 function foo1_c(x) {
 >foo1_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -945,14 +945,14 @@ function foo1_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo2_c(x) {
 >foo2_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1016,14 +1016,14 @@ function foo2_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo3_c(x) {
 >foo3_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1084,14 +1084,14 @@ function foo3_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 >  : ^^^
 }
 
 function foo4_c(x) {
 >foo4_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1159,14 +1159,14 @@ function foo4_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo5_c(x) {
 >foo5_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1240,7 +1240,7 @@ function foo5_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -1248,7 +1248,7 @@ function foo5_c(x) {
 
 function foo6_c(x) {
 >foo6_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1324,14 +1324,14 @@ function foo6_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
 
 function foo7_c(x) {
 >foo7_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1406,7 +1406,7 @@ function foo7_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -1414,7 +1414,7 @@ function foo7_c(x) {
 
 function foo8_c(x) {
 >foo8_c : (x: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -1490,7 +1490,7 @@ function foo8_c(x) {
 >use(v) : any
 >       : ^^^
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }

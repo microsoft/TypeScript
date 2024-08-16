@@ -147,7 +147,7 @@ module Everest {
 
         var v5:(k:K1.I3)=>void=v1;
 >v5 : (k: K1.I3) => void
->   : ^^^^     ^^^^^    
+>   : ^ ^^     ^^^^^    
 >k : K1.I3
 >  : ^^^^^
 >K1 : any

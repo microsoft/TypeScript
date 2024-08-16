@@ -33,7 +33,7 @@ interface i2NoError {
 interface i3 {
     foo (_i: number, ...restParameters); // no error - no code gen
 >foo : (_i: number, ...restParameters: any[]) => any
->    : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^              ^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >restParameters : any[]
@@ -41,7 +41,7 @@ interface i3 {
 
     fooNoError (_i: number);  // no error
 >fooNoError : (_i: number) => any
->           : ^^^^^      ^^^^^^^^
+>           : ^  ^^      ^^^^^^^^
 >_i : number
 >   : ^^^^^^
 }

@@ -28,7 +28,7 @@ class NavigateAction {
 
     f(editor: DiffEditor<any, any, any>) {
 >f : (editor: DiffEditor<any, any, any>) => void
->  : ^^^^^^^^^                         ^^^^^^^^^
+>  : ^      ^^                         ^^^^^^^^^
 >editor : DiffEditor<any, any, any>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }

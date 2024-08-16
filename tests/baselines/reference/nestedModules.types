@@ -97,7 +97,7 @@ var p: { x: number; y: number; }
 
 var p: M2.X.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >M2 : any
 >   : ^^^
 >X : any

@@ -3,11 +3,11 @@
 === main.ts ===
 import { fa } from "ext";
 >fa : () => import("ext").A
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^  ^
 
 import { fb } from "ext/other";
 >fb : () => import("ext/other").B
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^  ^
 
 export const va = fa();
 >va : import("ext").A
@@ -15,7 +15,7 @@ export const va = fa();
 >fa() : import("ext").A
 >     : ^^^^^^^^^^^^^^^
 >fa : () => import("ext").A
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^  ^
 
 export const vb = fb();
 >vb : import("ext/other").B
@@ -23,7 +23,7 @@ export const vb = fb();
 >fb() : import("ext/other").B
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >fb : () => import("ext/other").B
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^  ^
 
 === node_modules/ext/ts3.1/index.d.ts ===
 declare module "ext" {

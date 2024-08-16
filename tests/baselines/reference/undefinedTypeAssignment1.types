@@ -7,7 +7,7 @@ type undefined = string;
 
 function p(undefined = "wat") {
 >p : (undefined?: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^         ^^^^^^^^^^^^^^^^^^^^
 >undefined : string
 >          : ^^^^^^
 >"wat" : "wat"

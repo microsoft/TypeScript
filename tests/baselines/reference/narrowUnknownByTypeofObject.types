@@ -3,7 +3,7 @@
 === narrowUnknownByTypeofObject.ts ===
 function foo(x: unknown) {
 >foo : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 

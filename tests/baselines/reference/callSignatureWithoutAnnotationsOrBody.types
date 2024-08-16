@@ -5,7 +5,7 @@
 
 function foo(x) { }
 >foo : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 
 var r = foo(1); // void since there's a body
@@ -14,7 +14,7 @@ var r = foo(1); // void since there's a body
 >foo(1) : void
 >       : ^^^^
 >foo : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

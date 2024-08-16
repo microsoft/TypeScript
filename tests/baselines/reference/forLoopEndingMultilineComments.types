@@ -6,7 +6,7 @@ declare var a: any;
 
 export function consoleTestResultHandler(testResult: any): boolean {
 >consoleTestResultHandler : (testResult: any) => boolean
->                         : ^^^^^^^^^^^^^   ^^^^^       
+>                         : ^          ^^   ^^^^^       
 >testResult : any
 
     // needed to get colors to show up when passing through Grunt

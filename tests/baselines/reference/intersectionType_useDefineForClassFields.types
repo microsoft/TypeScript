@@ -10,7 +10,7 @@ type Foo<T> = {
 
 function bar<T>(_p: T): { new(): Foo<T> } {
 >bar : <T>(_p: T) => { new (): Foo<T>; }
->    : ^ ^^^^^^ ^^^^^                   
+>    : ^ ^^  ^^ ^^^^^                   
 >_p : T
 >   : ^
 
@@ -23,8 +23,8 @@ class Baz extends bar({ x: 1 }) {
 >    : ^^^
 >bar({ x: 1 }) : Foo<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^
->bar : <T>(_p: T) => new () => Foo<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T>(_p: T) => { new (): Foo<T>; }
+>    : ^ ^^  ^^ ^^^^^                   
 >{ x: 1 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number

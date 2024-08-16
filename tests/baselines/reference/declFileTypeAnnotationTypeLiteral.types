@@ -22,7 +22,7 @@ module m {
 // Object literal with everything
 var x: {
 >x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
->  : ^^^^^^      ^^^ ^^^^^^      ^^^         ^^^^^^^^^^      ^^^ ^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^         ^^^^^^^^         ^^^^^^^^      ^^^^^^      ^^^^^^^^   ^^^      ^^^
+>  : ^^^ ^^      ^^^ ^^^ ^^      ^^^         ^^^^^^^ ^^      ^^^ ^^^^^^^ ^^      ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^         ^^^^^^^^         ^^^^^ ^^      ^^ ^^^      ^^^^^ ^^   ^^^      ^^^
 
     // Call signatures
     (a: number): c;
@@ -69,7 +69,7 @@ var x: {
 
     m2(a: string, b?: number, ...c: c[]): string;
 >m2 : (a: string, b?: number, ...c: c[]) => string
->   : ^^^^      ^^^^^^      ^^^^^^^^   ^^^^^      
+>   : ^ ^^      ^^ ^^^      ^^^^^ ^^   ^^^^^      
 >a : string
 >  : ^^^^^^
 >b : number
@@ -83,14 +83,14 @@ var x: {
 // Function type
 var y: (a: string) => string;
 >y : (a: string) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
 // constructor type
 var z: new (a: string) => m.c;
 >z : new (a: string) => m.c
->  : ^^^^^^^^      ^^^^^   
+>  : ^^^^^ ^^      ^^^^^   
 >a : string
 >  : ^^^^^^
 >m : any

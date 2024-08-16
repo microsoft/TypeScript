@@ -3,7 +3,7 @@
 === unusedSingleParameterInFunctionDeclaration.ts ===
 function greeter(person: string) {
 >greeter : (person: string) => void
->        : ^^^^^^^^^      ^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^
 >person : string
 >       : ^^^^^^
 

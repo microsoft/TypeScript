@@ -7,7 +7,7 @@ function foo() {
 
     function f1(arguments: number, ...restParameters) { //arguments is error
 >f1 : (arguments: number, ...restParameters: any[]) => void
->   : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^         ^^      ^^^^^              ^^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >restParameters : any[]
@@ -21,7 +21,7 @@ function foo() {
     }
     function f12(i: number, ...arguments) { //arguments is error
 >f12 : (i: number, ...arguments: any[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -33,7 +33,7 @@ function foo() {
     }
     function f1NoError(arguments: number) { // no error
 >f1NoError : (arguments: number) => void
->          : ^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^         ^^      ^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
@@ -46,7 +46,7 @@ function foo() {
 
     function f3(...restParameters) {
 >f3 : (...restParameters: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^              ^^^^^^^^^^^^^^^^
 >restParameters : any[]
 >               : ^^^^^
 
@@ -69,7 +69,7 @@ function foo() {
 
     function f4(arguments: number, ...rest); // no codegen no error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >rest : any[]
@@ -77,7 +77,7 @@ function foo() {
 
     function f4(arguments: string, ...rest); // no codegen no error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 >rest : any[]
@@ -85,7 +85,7 @@ function foo() {
 
     function f4(arguments: any, ...rest) { // error
 >f4 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^         ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >arguments : any
 >          : ^^^
 >rest : any[]
@@ -97,7 +97,7 @@ function foo() {
     }
     function f42(i: number, ...arguments); // no codegen no error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -105,7 +105,7 @@ function foo() {
 
     function f42(i: string, ...arguments); // no codegen no error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : string
 >  : ^^^^^^
 >arguments : any[]
@@ -113,7 +113,7 @@ function foo() {
 
     function f42(i: any, ...arguments) { // error
 >f42 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : any
 >  : ^^^
 >arguments : any[]
@@ -125,19 +125,19 @@ function foo() {
     }
     function f4NoError(arguments: number); // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 
     function f4NoError(arguments: string); // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : string
 >          : ^^^^^^
 
     function f4NoError(arguments: any) { // no error
 >f4NoError : { (arguments: number): any; (arguments: string): any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^         ^^      ^^^^^^^^^         ^^      ^^^^^^^^^
 >arguments : any
 >          : ^^^
 

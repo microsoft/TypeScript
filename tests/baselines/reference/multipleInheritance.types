@@ -104,7 +104,7 @@ class Baad extends Good {
 
     public g(n:number) { return 0; }
 >g : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >0 : 0

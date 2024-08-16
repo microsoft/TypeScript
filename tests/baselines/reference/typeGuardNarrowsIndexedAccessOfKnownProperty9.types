@@ -31,7 +31,7 @@ class C1 {
 
     getValue(key: "a" | "b") {
 >getValue : (key: "a" | "b") => string
->         : ^^^^^^         ^^^^^^^^^^^
+>         : ^   ^^         ^^^^^^^^^^^
 >key : "a" | "b"
 >    : ^^^^^^^^^
 

@@ -34,19 +34,19 @@ var cl: { x: number; y: number; }
 
 var cl = Point();
 >cl : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >Point() : { x: number; y: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
 var cl = Point.Origin;
 >cl : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >Point.Origin : { x: number; y: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^      ^^^^^      ^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 >Origin : { x: number; y: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^      ^^^
 

@@ -3,7 +3,7 @@
 === /index.ts ===
 function f(x) { } // noImplicitAny error
 >f : (x: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -15,9 +15,9 @@ y.toLowerCase(); // strictNullChecks error
 >y.toLowerCase() : string
 >                : ^^^^^^
 >y.toLowerCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >y : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

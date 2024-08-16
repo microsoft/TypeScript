@@ -3,7 +3,7 @@
 === literalTypes3.ts ===
 function f1(s: string) {
 >f1 : (s: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -43,7 +43,7 @@ function f1(s: string) {
 
 function f2(s: string) {
 >f2 : (s: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -81,7 +81,7 @@ function f2(s: string) {
 
 function f3(s: string) {
 >f3 : (s: string) => "foo" | "bar" | undefined
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -110,7 +110,7 @@ function f3(s: string) {
 
 function f4(x: number) {
 >f4 : (x: number) => 1 | 2
->   : ^^^^      ^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -143,7 +143,7 @@ function f4(x: number) {
 
 function f5(x: number, y: 1 | 2) {
 >f5 : (x: number, y: 1 | 2) => void
->   : ^^^^      ^^^^^     ^^^^^^^^^
+>   : ^ ^^      ^^ ^^     ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : 1 | 2
@@ -173,7 +173,7 @@ function f5(x: number, y: 1 | 2) {
 
 function f6(x: number, y: 1 | 2) {
 >f6 : (x: number, y: 1 | 2) => void
->   : ^^^^      ^^^^^     ^^^^^^^^^
+>   : ^ ^^      ^^ ^^     ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : 1 | 2
@@ -203,7 +203,7 @@ function f6(x: number, y: 1 | 2) {
 
 function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
 >f7 : (x: number | "foo" | "bar", y: 1 | 2 | string) => void
->   : ^^^^                      ^^^^^              ^^^^^^^^^
+>   : ^ ^^                      ^^ ^^              ^^^^^^^^^
 >x : number | "foo" | "bar"
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >y : string | 1 | 2
@@ -225,7 +225,7 @@ function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
 
 function f8(x: number | "foo" | "bar") {
 >f8 : (x: number | "foo" | "bar") => void
->   : ^^^^                      ^^^^^^^^^
+>   : ^ ^^                      ^^^^^^^^^
 >x : number | "foo" | "bar"
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 

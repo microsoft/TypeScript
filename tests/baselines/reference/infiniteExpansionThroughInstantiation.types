@@ -42,7 +42,7 @@ list = ownerList;
 
 function other<T>(x: T) {
 >other : <T>(x: T) => void
->      : ^ ^^^^^ ^^^^^^^^^
+>      : ^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

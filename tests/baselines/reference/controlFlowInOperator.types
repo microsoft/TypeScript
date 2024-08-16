@@ -111,7 +111,7 @@ if (d in c) {
 
 function uniqueID_54790(
 >uniqueID_54790 : (id: string | undefined, seenIDs: { [key: string]: string; }) => string
->               : ^^^^^                  ^^^^^^^^^^^                          ^^^^^      
+>               : ^  ^^                  ^^       ^^                          ^^^^^      
 
   id: string | undefined,
 >id : string
@@ -214,7 +214,7 @@ function uniqueID_54790(
 
 function uniqueID_54790_2(id: string | number, seenIDs: object) {
 >uniqueID_54790_2 : (id: string | number, seenIDs: object) => void
->                 : ^^^^^               ^^^^^^^^^^^      ^^^^^^^^^
+>                 : ^  ^^               ^^       ^^      ^^^^^^^^^
 >id : string | number
 >   : ^^^^^^^^^^^^^^^
 >seenIDs : object
@@ -265,7 +265,7 @@ function uniqueID_54790_2(id: string | number, seenIDs: object) {
 
 function uniqueID_54790_3(id: string | number, seenIDs: object) {
 >uniqueID_54790_3 : (id: string | number, seenIDs: object) => void
->                 : ^^^^^               ^^^^^^^^^^^      ^^^^^^^^^
+>                 : ^  ^^               ^^       ^^      ^^^^^^^^^
 >id : string | number
 >   : ^^^^^^^^^^^^^^^
 >seenIDs : object

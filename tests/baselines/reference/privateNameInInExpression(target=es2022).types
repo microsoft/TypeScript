@@ -27,7 +27,7 @@ class Foo {
 
     goodRhs(v: any) {
 >goodRhs : (v: any) => void
->        : ^^^^   ^^^^^^^^^
+>        : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -115,7 +115,7 @@ class Foo {
     }
     badRhs(v: any) {
 >badRhs : (v: any) => void
->       : ^^^^   ^^^^^^^^^
+>       : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -169,7 +169,7 @@ class Foo {
     }
     whitespace(v: any) {
 >whitespace : (v: any) => void
->           : ^^^^   ^^^^^^^^^
+>           : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -192,7 +192,7 @@ class Foo {
     }
     flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
 >flow : (u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) => void
->     : ^^^^       ^^^^^     ^^^^^^         ^^^^^^      ^^^^^   ^^^^^^^            ^^^^^^^^                  ^^^^^^^^^
+>     : ^ ^^       ^^ ^^     ^^  ^^         ^^  ^^      ^^ ^^   ^^   ^^            ^^    ^^                  ^^^^^^^^^
 >u : unknown
 >  : ^^^^^^^
 >n : never
@@ -410,7 +410,7 @@ class Foo {
 
             m(v: any) {
 >m : (v: any) => void
->  : ^^^^   ^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -451,7 +451,7 @@ class Bar { notFoo = true }
 
 function badSyntax(v: Foo) {
 >badSyntax : (v: Foo) => boolean
->          : ^^^^   ^^^^^^^^^^^^
+>          : ^ ^^   ^^^^^^^^^^^^
 >v : Foo
 >  : ^^^
 

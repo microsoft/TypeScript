@@ -3,7 +3,7 @@
 === sourceMap-Comments2.ts ===
 function foo(str: string, num: number): void {
 >foo : (str: string, num: number) => void
->    : ^^^^^^      ^^^^^^^      ^^^^^    
+>    : ^   ^^      ^^   ^^      ^^^^^    
 >str : string
 >    : ^^^^^^
 >num : number
@@ -17,7 +17,7 @@ function foo(str: string, num: number): void {
  */
 function bar(str: string, num: number): void {
 >bar : (str: string, num: number) => void
->    : ^^^^^^      ^^^^^^^      ^^^^^    
+>    : ^   ^^      ^^   ^^      ^^^^^    
 >str : string
 >    : ^^^^^^
 >num : number
@@ -29,7 +29,7 @@ function bar(str: string, num: number): void {
 // some sort of comment
 function baz(str: string, num: number): void {
 >baz : (str: string, num: number) => void
->    : ^^^^^^      ^^^^^^^      ^^^^^    
+>    : ^   ^^      ^^   ^^      ^^^^^    
 >str : string
 >    : ^^^^^^
 >num : number
@@ -40,7 +40,7 @@ function baz(str: string, num: number): void {
 
 function qat(str: string, num: number): void {
 >qat : (str: string, num: number) => void
->    : ^^^^^^      ^^^^^^^      ^^^^^    
+>    : ^   ^^      ^^   ^^      ^^^^^    
 >str : string
 >    : ^^^^^^
 >num : number

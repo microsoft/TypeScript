@@ -12,7 +12,7 @@ module mod1 {
 
         foo (bar:any):any;
 >foo : (bar: any) => any
->    : ^^^^^^   ^^^^^   
+>    : ^   ^^   ^^^^^   
 >bar : any
 >    : ^^^
 	}

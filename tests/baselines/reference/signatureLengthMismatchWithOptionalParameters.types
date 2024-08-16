@@ -3,7 +3,7 @@
 === signatureLengthMismatchWithOptionalParameters.ts ===
 function callee(n: number | undefined, m: string) { }
 >callee : (n: number | undefined, m: string) => void
->       : ^^^^                  ^^^^^      ^^^^^^^^^
+>       : ^ ^^                  ^^ ^^      ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >m : string
@@ -11,9 +11,9 @@ function callee(n: number | undefined, m: string) { }
 
 function caller(arg: (n?: number) => void) { }
 >caller : (arg: (n?: number) => void) => void
->       : ^^^^^^                    ^^^^^^^^^
+>       : ^   ^^                    ^^^^^^^^^
 >arg : (n?: number) => void
->    : ^^^^^      ^^^^^    
+>    : ^ ^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
@@ -21,7 +21,7 @@ caller(callee);
 >caller(callee) : void
 >               : ^^^^
 >caller : (arg: (n?: number) => void) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->callee : (n: number, m: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^                    ^^^^^^^^^
+>callee : (n: number | undefined, m: string) => void
+>       : ^ ^^                  ^^ ^^      ^^^^^^^^^
 

@@ -24,7 +24,7 @@ import I from "./a";
 
 function f(i: I) {
 >f : (i: I) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >i : I
 >  : ^
 

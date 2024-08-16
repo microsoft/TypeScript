@@ -3,7 +3,7 @@
 === getsetReturnTypes.ts ===
 function makePoint(x: number) { 
 >makePoint : (x: number) => { readonly x: number; }
->          : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -26,7 +26,7 @@ var x = makePoint(2).x;
 >makePoint(2) : { readonly x: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >x : number
@@ -40,7 +40,7 @@ var y: number = makePoint(2).x;
 >makePoint(2) : { readonly x: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >x : number

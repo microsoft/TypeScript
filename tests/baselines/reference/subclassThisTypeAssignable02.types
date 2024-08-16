@@ -4,7 +4,7 @@
 interface Lifecycle<Attrs, State extends Lifecycle<Attrs, State>> {
 	oninit?(vnode: Vnode<Attrs, State>): number;
 >oninit : ((vnode: Vnode<Attrs, State>) => number) | undefined
->       : ^^^^^^^^^                   ^^^^^      ^^^^^^^^^^^^^
+>       : ^^     ^^                   ^^^^^      ^^^^^^^^^^^^^
 >vnode : Vnode<Attrs, State>
 >      : ^^^^^^^^^^^^^^^^^^^
 
@@ -22,7 +22,7 @@ interface Vnode<Attrs, State extends Lifecycle<Attrs, State>> {
 interface Component<Attrs, State extends Lifecycle<Attrs, State>> {
 	view(this: State, vnode: Vnode<Attrs, State>): number;
 >view : (this: State, vnode: Vnode<Attrs, State>) => number
->     : ^^^^^^^     ^^^^^^^^^                   ^^^^^      
+>     : ^    ^^     ^^     ^^                   ^^^^^      
 >this : State
 >     : ^^^^^
 >vnode : Vnode<Attrs, State>
@@ -32,13 +32,13 @@ interface Component<Attrs, State extends Lifecycle<Attrs, State>> {
 interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
 	oninit?(vnode: Vnode<A, this>): number;
 >oninit : ((vnode: Vnode<A, this>) => number) | undefined
->       : ^^^^^^^^^              ^^^^^      ^^^^^^^^^^^^^
+>       : ^^     ^^              ^^^^^      ^^^^^^^^^^^^^
 >vnode : Vnode<A, this>
 >      : ^^^^^^^^^^^^^^
 
 	view(vnode: Vnode<A, this>): number;
 >view : (vnode: Vnode<A, this>) => number
->     : ^^^^^^^^              ^^^^^      
+>     : ^     ^^              ^^^^^      
 >vnode : Vnode<A, this>
 >      : ^^^^^^^^^^^^^^
 }
@@ -53,7 +53,7 @@ class C implements ClassComponent<MyAttrs> {
 
 	view(v: Vnode<MyAttrs, C>) { return 0; }
 >view : (v: Vnode<MyAttrs, C>) => number
->     : ^^^^                 ^^^^^^^^^^^
+>     : ^ ^^                 ^^^^^^^^^^^
 >v : Vnode<MyAttrs, C>
 >  : ^^^^^^^^^^^^^^^^^
 >0 : 0

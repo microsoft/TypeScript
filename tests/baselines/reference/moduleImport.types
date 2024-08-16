@@ -21,7 +21,7 @@ module A.B.C {
 
 	export function ping(x: number) {
 >ping : (x: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -65,7 +65,7 @@ module X {
 
 	export function pong(x: number) {
 >pong : (x: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -79,11 +79,11 @@ module X {
 >ABC.ping(x-1) : void
 >              : ^^^^
 >ABC.ping : (x: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >ABC : typeof ABC
 >    : ^^^^^^^^^^
 >ping : (x: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >x-1 : number
 >    : ^^^^^^
 >x : number

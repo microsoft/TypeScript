@@ -46,7 +46,7 @@ interface I2 {
 
 var a: {
 >a : new (x: any) => any
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^^^
 
     new (public x);
 >x : any
@@ -55,7 +55,7 @@ var a: {
 
 var b: {
 >b : new (x: any) => any
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^^^
 
     new (private x);
 >x : any

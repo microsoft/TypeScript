@@ -7,7 +7,7 @@
 
 function f(eval) {
 >f : (eval: any) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^^^^^^^^
 >eval : any
 >     : ^^^
 }

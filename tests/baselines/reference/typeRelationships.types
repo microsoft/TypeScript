@@ -107,7 +107,7 @@ class C {
     }
     f3(b: boolean) {
 >f3 : (b: boolean) => C
->   : ^^^^       ^^^^^^
+>   : ^ ^^       ^^^^^^
 >b : boolean
 >  : ^^^^^^^
 

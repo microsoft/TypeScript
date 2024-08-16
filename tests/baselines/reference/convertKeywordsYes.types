@@ -113,7 +113,7 @@ var declare = 0;
 
 function bigGeneric<
 >bigGeneric : <constructor, implements, interface, let, module, package, private, protected, public, set, static, get, yield, declare>(c: constructor, a: any, b2: boolean, i: implements, i2: interface, l: let, m: module, n: number, p: package, p2: private, p3: protected, p4: public, s: set, s2: static, s3: string, g: get, y: yield, d: declare) => void
->           : ^           ^^          ^^         ^^   ^^      ^^       ^^       ^^         ^^      ^^   ^^      ^^   ^^     ^^       ^^^^^           ^^^^^   ^^^^^^       ^^^^^          ^^^^^^         ^^^^^   ^^^^^      ^^^^^      ^^^^^       ^^^^^^       ^^^^^^         ^^^^^^      ^^^^^   ^^^^^^      ^^^^^^      ^^^^^   ^^^^^     ^^^^^       ^^^^^^^^^
+>           : ^           ^^          ^^         ^^   ^^      ^^       ^^       ^^         ^^      ^^   ^^      ^^   ^^     ^^       ^^ ^^           ^^ ^^   ^^  ^^       ^^ ^^          ^^  ^^         ^^ ^^   ^^ ^^      ^^ ^^      ^^ ^^       ^^  ^^       ^^  ^^         ^^  ^^      ^^ ^^   ^^  ^^      ^^  ^^      ^^ ^^   ^^ ^^     ^^ ^^       ^^^^^^^^^
 
     constructor,
     implements ,

@@ -9,7 +9,7 @@ class Bar {
 
     public getBar(foo: IFoo[]) {
 >getBar : (foo: IFoo[]) => void
->       : ^^^^^^      ^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^
 >foo : any[]
 >    : ^^^^^
     }

@@ -28,7 +28,7 @@ type X =
 const x: X = 4 as any as { x: 'x' | 'y', y: number };
 >x : X
 >  : ^
->4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
+>4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
 >                                        : ^^^^^         ^^^^^      ^^^
 >4 as any : any
 >4 : 4
@@ -60,7 +60,7 @@ type Y =
 const y: Y = 4 as any as { x: 'x' | 'y', y: number };
 >y : Y
 >  : ^
->4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
+>4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
 >                                        : ^^^^^         ^^^^^      ^^^
 >4 as any : any
 >4 : 4

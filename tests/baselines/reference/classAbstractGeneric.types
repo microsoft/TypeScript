@@ -15,7 +15,7 @@ abstract class A<T> {
 
     abstract bar(t: T);
 >bar : (t: T) => any
->    : ^^^^ ^^^^^^^^
+>    : ^ ^^ ^^^^^^^^
 >t : T
 >  : ^
 }
@@ -63,7 +63,7 @@ class F<T> extends A<T> { // error -- doesn't implement foo
 
     bar(t : T) {}
 >bar : (t: T) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 }
@@ -86,7 +86,7 @@ class G<T> extends A<T> {
 
     bar(t: T) { }
 >bar : (t: T) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 }

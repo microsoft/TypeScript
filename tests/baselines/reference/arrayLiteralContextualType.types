@@ -43,13 +43,13 @@ class Elephant {
 
 function foo(animals: IAnimal[]) { }
 >foo : (animals: IAnimal[]) => void
->    : ^^^^^^^^^^         ^^^^^^^^^
+>    : ^       ^^         ^^^^^^^^^
 >animals : IAnimal[]
 >        : ^^^^^^^^^
 
 function bar(animals: { [n: number]: IAnimal }) { }
 >bar : (animals: { [n: number]: IAnimal; }) => void
->    : ^^^^^^^^^^                         ^^^^^^^^^
+>    : ^       ^^                         ^^^^^^^^^
 >animals : { [n: number]: IAnimal; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -59,7 +59,7 @@ foo([
 >foo([    new Giraffe(),    new Elephant()]) : void
 >                                            : ^^^^
 >foo : (animals: IAnimal[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^         ^^^^^^^^^
 >[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -80,7 +80,7 @@ bar([
 >bar([    new Giraffe(),    new Elephant()]) : void
 >                                            : ^^^^
 >bar : (animals: { [n: number]: IAnimal; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^                         ^^^^^^^^^
 >[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -116,7 +116,7 @@ foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >foo(arr) : void
 >         : ^^^^
 >foo : (animals: IAnimal[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^         ^^^^^^^^^
 >arr : (Giraffe | Elephant)[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -124,7 +124,7 @@ bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >bar(arr) : void
 >         : ^^^^
 >bar : (animals: { [n: number]: IAnimal; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^                         ^^^^^^^^^
 >arr : (Giraffe | Elephant)[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 

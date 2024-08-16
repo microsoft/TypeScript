@@ -3,6 +3,6 @@
 === parserParameterList12.ts ===
 function F(a,) {
 >F : (a: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >a : any
 }

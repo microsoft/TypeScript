@@ -109,7 +109,7 @@ var h: { f(): void } = null;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->  : ^ ^^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
 >  : ^
 

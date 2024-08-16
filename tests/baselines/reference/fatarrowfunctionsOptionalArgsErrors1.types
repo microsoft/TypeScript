@@ -3,7 +3,7 @@
 === fatarrowfunctionsOptionalArgsErrors1.ts ===
 (arg1?, arg2) => 101;
 >(arg1?, arg2) => 101 : (arg1?: any, arg2: any) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^    ^^^^^^^^^^^^^^^^
 >arg1 : any
 >     : ^^^
 >arg2 : any
@@ -13,7 +13,7 @@
 
 (...arg?) => 102;
 >(...arg?) => 102 : (...arg?: any[]) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^   ^^^^^^^^^^^^^^^^^^^
 >arg : any[]
 >    : ^^^^^
 >102 : 102
@@ -21,7 +21,7 @@
 
 (...arg) => 103;
 >(...arg) => 103 : (...arg: any[]) => number
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^   ^^^^^^^^^^^^^^^^^^
 >arg : any[]
 >    : ^^^^^
 >103 : 103
@@ -29,7 +29,7 @@
 
 (...arg:number [] = []) => 104;
 >(...arg:number [] = []) => 104 : (...arg?: number[]) => number
->                               : ^^^^^^^^^^        ^^^^^^^^^^^
+>                               : ^^^^   ^^^        ^^^^^^^^^^^
 >arg : number[]
 >    : ^^^^^^^^
 >[] : undefined[]
@@ -40,7 +40,7 @@
 // Uninitialized parameter makes the initialized one required
 (arg1 = 1, arg2) => 1; 
 >(arg1 = 1, arg2) => 1 : (arg1: number, arg2: any) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^    ^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >arg1 : number
 >     : ^^^^^^
 >1 : 1

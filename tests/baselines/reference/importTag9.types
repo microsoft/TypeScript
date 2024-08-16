@@ -25,7 +25,7 @@ export interface B {
  */
 function f(a, b) {}
 >f : (a: types.A, b: types.B) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : types.A
 >  : ^^^^^^^
 >b : types.B

@@ -11,7 +11,7 @@ export class Foo {
 
     copy(other: import("./b").Foo) {
 >copy : (other: import("./b").Foo) => void
->     : ^^^^^^^^                 ^^^^^^^^^
+>     : ^     ^^                 ^^^^^^^^^
 >other : import("b").Foo
 >      : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -65,12 +65,12 @@ const b = new B();
 a.copy(b); // error
 >a.copy(b) : void
 >          : ^^^^
->a.copy : (other: B) => void
->       : ^^^^^^^^^^^^^^^^^^
+>a.copy : (other: import("b").Foo) => void
+>       : ^     ^^                     ^^^^^^^^^
 >a : A
 >  : ^
->copy : (other: B) => void
->     : ^^^^^^^^^^^^^^^^^^
+>copy : (other: import("b").Foo) => void
+>     : ^     ^^                     ^^^^^^^^^
 >b : B
 >  : ^
 

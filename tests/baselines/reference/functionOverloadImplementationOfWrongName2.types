@@ -3,7 +3,7 @@
 === functionOverloadImplementationOfWrongName2.ts ===
 function foo(x);
 >foo : { (x: any): any; (x: any, y: any): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -13,7 +13,7 @@ function bar() { }
 
 function foo(x, y);
 >foo : { (x: any): any; (x: any, y: any): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

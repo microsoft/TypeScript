@@ -45,11 +45,11 @@ if(!!foo.b){
 >foo.c(42) : number
 >          : ^^^^^^
 >foo.c : (a: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >c : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
@@ -78,7 +78,7 @@ module Foo {
 
 	export function c(a: number){
 >c : (a: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 

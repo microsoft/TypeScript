@@ -13,7 +13,7 @@ const { K } = require("./mod1");
 /** @param {K} k */
 function f(k) {
 >f : (k: K) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >k : K
 >  : ^
 

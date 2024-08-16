@@ -51,7 +51,7 @@ module editor {
 
   public foo(p1:modes.IMode) {
 >foo : (p1: modes.IMode) => void
->    : ^^^^^           ^^^^^^^^^
+>    : ^  ^^           ^^^^^^^^^
 >p1 : modes.IMode
 >   : ^^^^^^^^^^^
 >modes : any

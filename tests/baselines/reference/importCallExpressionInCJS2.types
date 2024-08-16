@@ -17,7 +17,7 @@ export function backup() { return "backup"; }
 === 2.ts ===
 async function compute(promise: Promise<any>) {
 >compute : (promise: Promise<any>) => Promise<any>
->        : ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^
+>        : ^       ^^            ^^^^^^^^^^^^^^^^^
 >promise : Promise<any>
 >        : ^^^^^^^^^^^^
 
@@ -64,7 +64,7 @@ compute(import("./0"));
 >compute(import("./0")) : Promise<any>
 >                       : ^^^^^^^^^^^^
 >compute : (promise: Promise<any>) => Promise<any>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^       ^^            ^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"

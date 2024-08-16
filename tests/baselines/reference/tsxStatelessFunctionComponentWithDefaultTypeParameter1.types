@@ -13,7 +13,7 @@ interface MyComponentProp {
 
 function MyComponent<T = MyComponentProp>(attr: T) {
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >attr : T
 >     : ^
 
@@ -33,7 +33,7 @@ let i = <MyComponent values />;  // We infer type arguments here
 ><MyComponent values /> : JSX.Element
 >                       : ^^^^^^^^^^^
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >values : true
 >       : ^^^^
 
@@ -43,7 +43,7 @@ let i1 = <MyComponent values="Hello"/>;
 ><MyComponent values="Hello"/> : JSX.Element
 >                              : ^^^^^^^^^^^
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >values : string
 >       : ^^^^^^
 

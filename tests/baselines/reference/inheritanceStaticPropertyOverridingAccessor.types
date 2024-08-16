@@ -13,7 +13,7 @@ class a {
     }
     static set x(aValue: () => string) {
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >aValue : () => string
 >       : ^^^^^^      
     }

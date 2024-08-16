@@ -15,7 +15,7 @@ interface KnockoutObservableBase<T> {
 interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
     equalityComparer(a: T, b: T): boolean;
 >equalityComparer : (a: T, b: T) => boolean
->                 : ^^^^ ^^^^^ ^^^^^       
+>                 : ^ ^^ ^^ ^^ ^^^^^       
 >a : T
 >  : ^
 >b : T
@@ -33,7 +33,7 @@ interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
 interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
     indexOf(searchElement: T, fromIndex?: number): number;
 >indexOf : (searchElement: T, fromIndex?: number) => number
->        : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^      ^^^^^      
+>        : ^             ^^ ^^         ^^^      ^^^^^      
 >searchElement : T
 >              : ^
 >fromIndex : number
@@ -41,7 +41,7 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     slice(start: number, end?: number): T[];
 >slice : (start: number, end?: number) => T[]
->      : ^^^^^^^^      ^^^^^^^^      ^^^^^   
+>      : ^     ^^      ^^   ^^^      ^^^^^   
 >start : number
 >      : ^^^^^^
 >end : number
@@ -49,7 +49,7 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     splice(start: number, deleteCount?: number, ...items: T[]): T[];
 >splice : (start: number, deleteCount?: number, ...items: T[]) => T[]
->       : ^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^   ^^^^^   
+>       : ^     ^^      ^^           ^^^      ^^^^^     ^^   ^^^^^   
 >start : number
 >      : ^^^^^^
 >deleteCount : number
@@ -63,7 +63,7 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     push(...items: T[]): void;
 >push : (...items: T[]) => void
->     : ^^^^^^^^^^^   ^^^^^    
+>     : ^^^^     ^^   ^^^^^    
 >items : T[]
 >      : ^^^
 
@@ -73,7 +73,7 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     unshift(...items: T[]): number;
 >unshift : (...items: T[]) => number
->        : ^^^^^^^^^^^   ^^^^^      
+>        : ^^^^     ^^   ^^^^^      
 >items : T[]
 >      : ^^^
 
@@ -83,9 +83,9 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     sort(compareFunction?: (a: T, b: T) => number): void;
 >sort : (compareFunction?: (a: T, b: T) => number) => void
->     : ^^^^^^^^^^^^^^^^^^^                      ^^^^^    
+>     : ^               ^^^                      ^^^^^    
 >compareFunction : (a: T, b: T) => number
->                : ^^^^ ^^^^^ ^^^^^      
+>                : ^ ^^ ^^ ^^ ^^^^^      
 >a : T
 >  : ^
 >b : T
@@ -93,7 +93,7 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     replace(oldItem: T, newItem: T): void;
 >replace : (oldItem: T, newItem: T) => void
->        : ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^    
+>        : ^       ^^ ^^       ^^ ^^^^^    
 >oldItem : T
 >        : ^
 >newItem : T
@@ -101,25 +101,25 @@ interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 
     remove(item: T): T[];
 >remove : (item: T) => T[]
->       : ^^^^^^^ ^^^^^   
+>       : ^    ^^ ^^^^^   
 >item : T
 >     : ^
 
     removeAll(items?: T[]): T[];
 >removeAll : (items?: T[]) => T[]
->          : ^^^^^^^^^   ^^^^^   
+>          : ^     ^^^   ^^^^^   
 >items : T[]
 >      : ^^^
 
     destroy(item: T): void;
 >destroy : (item: T) => void
->        : ^^^^^^^ ^^^^^    
+>        : ^    ^^ ^^^^^    
 >item : T
 >     : ^
 
     destroyAll(items?: T[]): void;
 >destroyAll : (items?: T[]) => void
->           : ^^^^^^^^^   ^^^^^    
+>           : ^     ^^^   ^^^^^    
 >items : T[]
 >      : ^^^
 }
@@ -180,7 +180,7 @@ module Portal.Controls.Validators {
 
         public _validate(value: TValue): number {return 0 }
 >_validate : (value: TValue) => number
->          : ^^^^^^^^      ^^^^^      
+>          : ^     ^^      ^^^^^      
 >value : TValue
 >      : ^^^^^^
 >0 : 0

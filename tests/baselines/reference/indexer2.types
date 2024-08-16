@@ -5,7 +5,7 @@ interface IHeapObjectProperty {}
 interface IDirectChildrenMap { 
         hasOwnProperty(objectId: number) : boolean; 
 >hasOwnProperty : (objectId: number) => boolean
->               : ^^^^^^^^^^^      ^^^^^       
+>               : ^        ^^      ^^^^^       
 >objectId : number
 >         : ^^^^^^
 

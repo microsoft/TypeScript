@@ -28,7 +28,7 @@ type Disjoint =
 
 function test1(result: Disjoint): string {
 >test1 : (result: Disjoint) => string
->      : ^^^^^^^^^        ^^^^^      
+>      : ^      ^^        ^^^^^      
 >result : Disjoint
 >       : ^^^^^^^^
 
@@ -68,13 +68,13 @@ type TrivialIntersection = { a: 1 } & { a: 1 };
 
 function want0(x: 0) {}
 >want0 : (x: 0) => void
->      : ^^^^ ^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^
 >x : 0
 >  : ^
 
 function test2(a: 0 | TrivialIntersection) {
 >test2 : (a: 0 | TrivialIntersection) => void
->      : ^^^^                       ^^^^^^^^^
+>      : ^ ^^                       ^^^^^^^^^
 >a : 0 | TrivialIntersection
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ function test2(a: 0 | TrivialIntersection) {
 >want0(a) : void
 >         : ^^^^
 >want0 : (x: 0) => void
->      : ^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^
 >a : 0
 >  : ^
     }

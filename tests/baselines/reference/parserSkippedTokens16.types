@@ -29,7 +29,7 @@ module M {
 
 function a(
 >a : (T: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 
     : T) { }
 >T : any

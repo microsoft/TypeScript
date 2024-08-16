@@ -9,7 +9,7 @@ class C<T> {
 
     foo(x: T, y: T) { }
 >foo : (x: T, y: T) => void
->    : ^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -24,7 +24,7 @@ class D<T> extends C<T> {
 
     foo(x: T) { } // ok to drop parameters
 >foo : (x: T) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 }
@@ -37,7 +37,7 @@ class E<T> extends D<T> {
 
     foo(x: T, y?: number) { } // ok to add optional parameters
 >foo : (x: T, y?: number) => void
->    : ^^^^ ^^^^^^      ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^      ^^^^^^^^^
 >x : T
 >  : ^
 >y : number
@@ -70,11 +70,11 @@ var r = c.foo('', '');
 >c.foo('', '') : void
 >              : ^^^^
 >c.foo : (x: string, y: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >c : C<string>
 >  : ^^^^^^^^^
 >foo : (x: string, y: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 >'' : ""
@@ -86,11 +86,11 @@ var r2 = e.foo('', 1);
 >e.foo('', 1) : void
 >             : ^^^^
 >e.foo : (x: string, y?: number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
 >e : E<string>
 >  : ^^^^^^^^^
 >foo : (x: string, y?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 >1 : 1

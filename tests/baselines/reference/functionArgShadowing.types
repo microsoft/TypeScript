@@ -15,7 +15,7 @@ class B { bar() { } }
 
 function foo(x: A) {
 >foo : (x: A) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : A
 >  : ^
 

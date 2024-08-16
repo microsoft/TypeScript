@@ -51,7 +51,7 @@ class Button extends React.Component<any, any> {
 
 function AnotherButton(p: any) {
 >AnotherButton : (p: any) => JSX.Element
->              : ^^^^   ^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^^^^^^^^^^^^^^^
 >p : any
 >  : ^^^
 
@@ -66,7 +66,7 @@ function AnotherButton(p: any) {
 
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^    ^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >p : Prop
 >  : ^^^^
 
@@ -92,7 +92,7 @@ let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 ><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -106,9 +106,9 @@ let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 ><AnotherButton /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >AnotherButton : (p: any) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^^^^^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 
 let k2 = <Comp a={10} b="hi"><Button />
 >k2 : JSX.Element
@@ -116,7 +116,7 @@ let k2 = <Comp a={10} b="hi"><Button />
 ><Comp a={10} b="hi"><Button />    <AnotherButton />  </Comp> : JSX.Element
 >                                                             : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -132,9 +132,9 @@ let k2 = <Comp a={10} b="hi"><Button />
 ><AnotherButton /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >AnotherButton : (p: any) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^^^^^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 
 let k3 = <Comp a={10} b="hi">    <Button />
 >k3 : JSX.Element
@@ -142,7 +142,7 @@ let k3 = <Comp a={10} b="hi">    <Button />
 ><Comp a={10} b="hi">    <Button />    <AnotherButton /></Comp> : JSX.Element
 >                                                               : ^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >10 : 10
@@ -158,7 +158,7 @@ let k3 = <Comp a={10} b="hi">    <Button />
 ><AnotherButton /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >AnotherButton : (p: any) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^^^^^^^^^^^^^^^
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^^^^^^^^
 

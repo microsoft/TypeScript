@@ -7,13 +7,13 @@ class C {
 
     private foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public foo(x: number, y: string); // error
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -21,27 +21,27 @@ class C {
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public bar(x: string); // error
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -49,7 +49,7 @@ class C {
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -57,13 +57,13 @@ class C {
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public static foo(x: number, y: string); // error
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -71,7 +71,7 @@ class C {
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -79,13 +79,13 @@ class C {
 
     protected baz(x: string); // error
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     protected baz(x: number, y: string); // error
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -93,27 +93,27 @@ class C {
 
     private baz(x: any, y?: any) { }
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public static bar(x: string); // error
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -121,27 +121,27 @@ class C {
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     protected static baz(x: 'hi');
->baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public static baz(x: string); // error
 >baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     protected static baz(x: number, y: string);
 >baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -149,7 +149,7 @@ class C {
 
     protected static baz(x: any, y?: any) { }
 >baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -162,13 +162,13 @@ class D<T> {
 
     private foo(x: number); 
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public foo(x: T, y: T); // error
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -176,27 +176,27 @@ class D<T> {
 
     private foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public bar(x: string); // error
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private bar(x: T, y: T);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -204,7 +204,7 @@ class D<T> {
 
     private bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -212,13 +212,13 @@ class D<T> {
 
     private baz(x: string); 
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     protected baz(x: number, y: string); // error
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -226,7 +226,7 @@ class D<T> {
 
     private baz(x: any, y?: any) { }
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -234,13 +234,13 @@ class D<T> {
 
     private static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public static foo(x: number, y: string); // error
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -248,27 +248,27 @@ class D<T> {
 
     private static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 
     private static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public static bar(x: string); // error
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     private static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -276,7 +276,7 @@ class D<T> {
 
     private static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -284,13 +284,13 @@ class D<T> {
 
     public static baz(x: string); // error
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     protected static baz(x: number, y: string);
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -298,7 +298,7 @@ class D<T> {
 
     protected static baz(x: any, y?: any) { }
 >baz : { (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -315,11 +315,11 @@ var r = c.foo(1); // error
 >c.foo(1) : any
 >         : ^^^
 >c.foo : { (x: number): any; (x: number, y: string): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >c : C
 >  : ^
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -333,11 +333,11 @@ var r2 = d.foo(2); // error
 >d.foo(2) : any
 >         : ^^^
 >d.foo : { (x: number): any; (x: number, y: number): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >d : D<number>
 >  : ^^^^^^^^^
 >foo : { (x: number): any; (x: number, y: number): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 

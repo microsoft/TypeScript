@@ -44,7 +44,7 @@ function annotation(): ClassDecorator {
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
->                           : ^^^^^^^^^   ^^^^^    
+>                           : ^      ^^   ^^^^^    
 >target : any
 }
 
@@ -54,7 +54,7 @@ function annotation1(): MethodDecorator {
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
->                           : ^^^^^^^^^   ^^^^^    
+>                           : ^      ^^   ^^^^^    
 >target : any
 }
 
@@ -62,7 +62,7 @@ function annotation1(): MethodDecorator {
 >annotation() : ClassDecorator
 >             : ^^^^^^^^^^^^^^
 >annotation : () => ClassDecorator
->           : ^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^              
 
 export class ClassA {
 >ClassA : ClassA
@@ -93,11 +93,11 @@ export class ClassA {
 >annotation1() : MethodDecorator
 >              : ^^^^^^^^^^^^^^^
 >annotation1 : () => MethodDecorator
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^               
 
     foo(... args: SomeClass1[]) {
 >foo : (...args: SomeClass1[]) => void
->    : ^^^^^^^^^^            ^^^^^^^^^
+>    : ^^^^    ^^            ^^^^^^^^^
 >args : SomeClass1[]
 >     : ^^^^^^^^^^^^
     }

@@ -46,7 +46,7 @@ module MsPortal.Util.TemplateEngine {
  
         public text(value?: string): any {
 >text : (value?: string) => any
->     : ^^^^^^^^^      ^^^^^   
+>     : ^     ^^^      ^^^^^   
 >value : string
 >      : ^^^^^^
 

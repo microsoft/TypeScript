@@ -12,7 +12,7 @@ type Params = {
 
 function example(parameters: Params) {
 >example : (parameters: Params) => boolean
->        : ^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>        : ^          ^^      ^^^^^^^^^^^^
 >parameters : Params
 >           : ^^^^^^
 
@@ -37,7 +37,7 @@ function example(parameters: Params) {
 
 function example2(parameters: Params) {
 >example2 : (parameters: Params) => string
->         : ^^^^^^^^^^^^^      ^^^^^^^^^^^
+>         : ^          ^^      ^^^^^^^^^^^
 >parameters : Params
 >           : ^^^^^^
 

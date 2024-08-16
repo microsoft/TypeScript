@@ -7,17 +7,17 @@ class foo {
 
    static fnOverload();
 >fnOverload : { (): any; (foo: string): any; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 
    static fnOverload(foo:string);
 >fnOverload : { (): any; (foo: string): any; }
->           : ^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 
    static fnOverload(foo?: any){ }
 >fnOverload : { (): any; (foo: string): any; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : any
 }
 

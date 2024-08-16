@@ -13,7 +13,7 @@ module M {
 
     function fn(M, p = x) { }
 >fn : (M: any, p?: number) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >M : any
 >p : number
 >  : ^^^^^^

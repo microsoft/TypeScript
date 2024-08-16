@@ -62,7 +62,7 @@ class FooIterator {
 
 function fun([a, b]) { }
 >fun : ([a, b]: [any, any]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -72,7 +72,7 @@ fun(new FooIterator);
 >fun(new FooIterator) : void
 >                     : ^^^^
 >fun : ([a, b]: [any, any]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^^^^^^^^^^^^^^^^^^^^
 >new FooIterator : FooIterator
 >                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator

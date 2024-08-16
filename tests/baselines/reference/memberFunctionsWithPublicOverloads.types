@@ -7,13 +7,13 @@ class C {
 
     public foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -21,25 +21,25 @@ class C {
 
     public foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 
     public bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     public bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -47,19 +47,19 @@ class C {
 
     public bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 
     public static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public static foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -67,25 +67,25 @@ class C {
 
     public static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 
     public static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     public static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -93,7 +93,7 @@ class C {
 
     public static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 }
@@ -104,13 +104,13 @@ class D<T> {
 
     public foo(x: number);
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public foo(x: T, y: T);
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -118,25 +118,25 @@ class D<T> {
 
     public foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >y : any
 
     public bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     public bar(x: T, y: T);
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -144,19 +144,19 @@ class D<T> {
 
     public bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
 >y : any
 
     public static foo(x: number);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     public static foo(x: number, y: string);
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -164,25 +164,25 @@ class D<T> {
 
     public static foo(x: any, y?: any) { }
 >foo : { (x: number): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 
     public static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 
     public static bar(x: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
     public static bar(x: number, y: string);
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -190,7 +190,7 @@ class D<T> {
 
     public static bar(x: any, y?: any) { }
 >bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >y : any
 

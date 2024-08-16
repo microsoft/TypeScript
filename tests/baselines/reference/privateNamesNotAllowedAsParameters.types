@@ -7,7 +7,7 @@ class A {
 
     setFoo(#foo: string) {}
 >setFoo : (#foo: string) => void
->       : ^^^^^^^      ^^^^^^^^^
+>       : ^    ^^      ^^^^^^^^^
 >#foo : string
 >     : ^^^^^^
 }

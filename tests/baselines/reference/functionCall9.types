@@ -3,7 +3,7 @@
 === functionCall9.ts ===
 function foo(a?:string, b?:number){};
 >foo : (a?: string, b?: number) => void
->    : ^^^^^      ^^^^^^      ^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -13,7 +13,7 @@ foo('foo', 1);
 >foo('foo', 1) : void
 >              : ^^^^
 >foo : (a?: string, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >1 : 1
@@ -23,7 +23,7 @@ foo('foo');
 >foo('foo') : void
 >           : ^^^^
 >foo : (a?: string, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -31,7 +31,7 @@ foo('foo','bar');
 >foo('foo','bar') : void
 >                 : ^^^^
 >foo : (a?: string, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >'bar' : "bar"
@@ -41,7 +41,7 @@ foo('foo', 1, 'bar');
 >foo('foo', 1, 'bar') : void
 >                     : ^^^^
 >foo : (a?: string, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >1 : 1
@@ -53,5 +53,5 @@ foo();
 >foo() : void
 >      : ^^^^
 >foo : (a?: string, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 

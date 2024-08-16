@@ -3,7 +3,7 @@
 === capturedParametersInInitializers2.ts ===
 function foo(
 >foo : (y?: typeof (Anonymous class), x?: number, z?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     y = class {
 >y : typeof (Anonymous class)
@@ -61,7 +61,7 @@ function foo(
 }
 function foo2(y = class {[x] = x}, x = 1) {
 >foo2 : (y?: typeof (Anonymous class), x?: number) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >y : typeof (Anonymous class)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {[x] = x} : typeof (Anonymous class)

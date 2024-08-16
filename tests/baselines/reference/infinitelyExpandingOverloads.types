@@ -9,9 +9,9 @@ interface KnockoutSubscription2<T> {
 interface KnockoutObservableBase2<T> {
     subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
 >subscribe : (callback: (newValue: T) => void, target?: any, topic?: string) => KnockoutSubscription2<T>
->          : ^^^^^^^^^^^                     ^^^^^^^^^^^   ^^^^^^^^^^      ^^^^^                        
+>          : ^        ^^                     ^^      ^^^   ^^     ^^^      ^^^^^                        
 >callback : (newValue: T) => void
->         : ^^^^^^^^^^^ ^^^^^    
+>         : ^        ^^ ^^^^^    
 >newValue : T
 >         : ^
 >target : any
@@ -21,7 +21,7 @@ interface KnockoutObservableBase2<T> {
 interface ValidationPlacement2<TValue> {
     initialize(validatable: Validatable2<TValue>): void;
 >initialize : (validatable: Validatable2<TValue>) => void
->           : ^^^^^^^^^^^^^^                    ^^^^^    
+>           : ^           ^^                    ^^^^^    
 >validatable : Validatable2<TValue>
 >            : ^^^^^^^^^^^^^^^^^^^^
 }

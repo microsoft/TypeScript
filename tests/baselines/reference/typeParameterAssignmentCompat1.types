@@ -4,14 +4,14 @@
 interface Foo<T> {
     frobble(value: T): T;
 >frobble : (value: T) => T
->        : ^^^^^^^^ ^^^^^ 
+>        : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 }
 
 function f<T, U>(): Foo<U> {
 >f : <T, U>() => Foo<U>
->  : ^^^^ ^^^^^^^      
+>  : ^ ^^ ^^^^^^^      
 
     var x: Foo<T>;
 >x : Foo<T>

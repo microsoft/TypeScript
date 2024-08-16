@@ -17,6 +17,6 @@ declare module "tslib" {
 
     function __importStar(m: any): void;
 >__importStar : (m: any) => void
->             : ^^^^   ^^^^^    
+>             : ^ ^^   ^^^^^    
 >m : any
 }

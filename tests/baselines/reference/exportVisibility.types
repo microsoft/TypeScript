@@ -16,7 +16,7 @@ export var foo = new Foo();
 
 export function test(foo: Foo) {
 >test : (foo: Foo) => boolean
->     : ^^^^^^   ^^^^^^^^^^^^
+>     : ^   ^^   ^^^^^^^^^^^^
 >foo : Foo
 >    : ^^^
 

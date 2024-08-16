@@ -7,7 +7,7 @@ declare function fun(): void;
 
 export default fun;
 >fun : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === b.mts ===
 import a from "./mod.cjs";
@@ -144,47 +144,47 @@ a.default();
 >a.default() : void
 >            : ^^^^
 >a.default : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >a : typeof a
 >  : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 b.default();
 >b.default() : void
 >            : ^^^^
 >b.default : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >b : typeof a
 >  : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 c.default();
 >c.default() : void
 >            : ^^^^
 >c.default : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >c : typeof a
 >  : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 d.default();
 >d.default() : void
 >            : ^^^^
 >d.default : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >d : typeof a
 >  : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 self.default.default();
 >self.default.default() : void
 >                       : ^^^^
 >self.default.default : () => void
->                     : ^^^^^^^^^^
+>                     : ^^^^^^    
 >self.default : typeof a
 >             : ^^^^^^^^
 >self : typeof self
@@ -192,13 +192,13 @@ self.default.default();
 >default : typeof a
 >        : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 self.def.default();
 >self.def.default() : void
 >                   : ^^^^
 >self.def.default : () => void
->                 : ^^^^^^^^^^
+>                 : ^^^^^^    
 >self.def : typeof a
 >         : ^^^^^^^^
 >self : typeof self
@@ -206,5 +206,5 @@ self.def.default();
 >def : typeof a
 >    : ^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 

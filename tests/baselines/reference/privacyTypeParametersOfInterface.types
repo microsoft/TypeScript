@@ -25,7 +25,7 @@ export class publicClassT<T> {
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
     myMethod(val: T): T; // Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -53,7 +53,7 @@ export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -81,7 +81,7 @@ export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -109,7 +109,7 @@ interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -137,7 +137,7 @@ interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -149,7 +149,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
