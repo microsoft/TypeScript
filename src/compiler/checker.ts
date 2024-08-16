@@ -6,6 +6,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -7054,6 +7055,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    if (context.flags & NodeBuilderFlags.NoTruncation) {
+                        return [];
+                    }
+                    
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
                 const typeElements: TypeElement[] = [];
@@ -7085,7 +7090,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                        typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        if (context.flags & NodeBuilderFlags.NoTruncation) {
+                            const typeElement = typeElements.pop()!;
+                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more ...`));
+                        }
+                        else {
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        }
                         addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                         break;
                     }
