@@ -229,16 +229,18 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     // Don't go to the component constructor definition for a JSX element, just go to the component definition.
     if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isJsxConstructorLike(calledDeclaration))) {
         const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration, failedAliasResolution);
+
         // For a function, if this is the original function definition, return just sigInfo.
         // If this is the original constructor definition, parent is the class.
-        let includeDeclarations: ((d: Declaration) => boolean) | undefined;
+        // Here, we filter declarations to not duplicate returned definitions.
+        let declarationFilter: (d: Declaration) => boolean = d => d !== calledDeclaration;
         if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration))) {
             if (!isConstructorDeclaration(calledDeclaration)) return [sigInfo];
 
-            // If we found a constructor declaration, we also return class declarations as definitions
-            includeDeclarations = (d: Declaration) => d !== calledDeclaration && (isClassDeclaration(d) || isClassExpression(d));
+            // If we found a constructor declaration, we also look for class declarations as definitions
+            declarationFilter = (d: Declaration) => d !== calledDeclaration && (isClassDeclaration(d) || isClassExpression(d));
         }
-        const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration, includeDeclarations) || emptyArray;
+        const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, declarationFilter) || emptyArray;
         // For a 'super()' call, put the signature first, else put the variable first.
         return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
     }
@@ -587,10 +589,10 @@ function isExpandoDeclaration(node: Declaration): boolean {
     return !!containingAssignment && getAssignmentDeclarationKind(containingAssignment) === AssignmentDeclarationKind.Property;
 }
 
-function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node, includeDeclarations?: (d: Declaration) => boolean): DefinitionInfo[] | undefined {
-    const excludeConstructorDeclaration = excludeDeclaration !== undefined && isConstructorDeclaration(excludeDeclaration);
-    const filteredDeclarations = filter(symbol.declarations, includeDeclarations ?? (d => d !== excludeDeclaration));
-    const signatureDefinition = !excludeConstructorDeclaration && (getConstructSignatureDefinition() || getCallSignatureDefinition());
+function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, declarationFilter?: (d: Declaration) => boolean): DefinitionInfo[] | undefined {
+    const filteredDeclarations = declarationFilter !== undefined ? filter(symbol.declarations, declarationFilter) : symbol.declarations;
+    // If we have a declaration filter, we are looking for specific declaration(s), so we should not return prematurely.
+    const signatureDefinition = !declarationFilter && (getConstructSignatureDefinition() || getCallSignatureDefinition());
     if (signatureDefinition) {
         return signatureDefinition;
     }
