@@ -806,6 +806,12 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /a/app/test1.csproj
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test1.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/commander/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/cordova/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/jquery/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/lodash/package.json 2000 undefined Project: /a/app/test1.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test1.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -948,6 +954,10 @@ Info seq  [hh:mm:ss:mss] event:
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: /a/app/test2.csproj
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test2.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/grunt/package.json 2000 undefined Project: /a/app/test2.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/package.json 2000 undefined Project: /a/app/test2.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/package.json 2000 undefined Project: /a/app/test2.csproj WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/gulp/package.json 2000 undefined Project: /a/app/test2.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test2.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1064,6 +1074,38 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/a/app/bower_components:
+  {"pollingInterval":500}
+/a/app/node_modules:
+  {"pollingInterval":500}
+/a/b/bower_components:
+  {"pollingInterval":500}
+/a/b/node_modules:
+  {"pollingInterval":500}
+/a/data/node_modules/@types/commander/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/cordova/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/grunt/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/gulp/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/jquery/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/lodash/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/file3.d.ts:
+  {}
 
 Projects::
 /a/app/test1.csproj (External) *changed*

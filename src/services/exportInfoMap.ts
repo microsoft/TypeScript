@@ -374,7 +374,7 @@ export function isImportableFile(
     if (from === to) return false;
     const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies;
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(from, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
@@ -394,12 +394,17 @@ export function isImportableFile(
     );
 
     if (packageJsonFilter) {
-        const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
-        return isAutoImportable;
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(to, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || !!importInfo?.packageName && fileContainsPackageImport(from, importInfo.packageName);
     }
 
     return hasImportablePath;
+}
+
+/** @internal */
+export function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+    return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
 /**

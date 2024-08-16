@@ -115,4 +115,42 @@ describe("unittests:: tsc:: projectReferences::", () => {
             }),
         commandLineArgs: ["--p", "src/project"],
     });
+
+    verifyTsc({
+        scenario: "projectReferences",
+        subScenario: "importing const enum from referenced project with preserveConstEnums and verbatimModuleSyntax",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/preserve/index.ts": "export const enum E { A = 1 }",
+                "/src/preserve/index.d.ts": "export declare const enum E { A = 1 }",
+                "/src/preserve/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        preserveConstEnums: true,
+                    },
+                }),
+                "/src/no-preserve/index.ts": "export const enum E { A = 1 }",
+                "/src/no-preserve/index.d.ts": "export declare const enum F { A = 1 }",
+                "/src/no-preserve/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        preserveConstEnums: false,
+                    },
+                }),
+                "/src/project/index.ts": `import { E } from "../preserve";\nimport { F } from "../no-preserve";\nE.A; F.A;`,
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        module: "preserve",
+                        verbatimModuleSyntax: true,
+                    },
+                    references: [
+                        { path: "../preserve" },
+                        { path: "../no-preserve" },
+                    ],
+                }),
+            }),
+        commandLineArgs: ["--p", "src/project", "--pretty", "false"],
+    });
 });

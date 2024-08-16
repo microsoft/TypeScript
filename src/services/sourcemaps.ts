@@ -27,7 +27,7 @@ import {
     tryParseRawSourceMap,
 } from "./_namespaces/ts.js";
 
-const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+/=]+)$)?/;
+const base64UrlRegExp = /^data:(?:application\/json;charset=[uU][tT][fF]-8;base64,([A-Za-z0-9+/=]+)$)?/;
 
 /** @internal */
 export interface SourceMapper {

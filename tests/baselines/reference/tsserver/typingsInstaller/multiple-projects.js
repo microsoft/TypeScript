@@ -480,6 +480,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/jquery/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/node_modules/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -613,6 +616,34 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+PolledWatches::
+/a/data/node_modules/@types/jquery/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/data/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/bower_components:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/project/package.json:
+  {}
+/user/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/project:
+  {}
+
 Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
@@ -661,6 +692,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/data/node_modules/@types/jquery/package.json:
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/a/data/node_modules/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/bower_components:
@@ -932,6 +969,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json' - done.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/data/node_modules/@types/jquery/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/data/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/data/node_modules/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
@@ -969,6 +1009,12 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
+/a/data/node_modules/@types/jquery/package.json:
+  {"pollingInterval":2000}
+/a/data/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/a/data/node_modules/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/bower_components:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules:

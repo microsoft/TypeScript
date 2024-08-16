@@ -159,7 +159,7 @@ function getProgramStructure(program: ts.Program | undefined) {
     const baseline: string[] = [];
     program?.getSourceFiles().slice().sort((f1, f2) => ts.comparePathsCaseSensitive(f1.path, f2.path)).forEach(f => {
         baseline.push(`  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`);
-        baseline.push(f.text.split(/\r?\n/g).map(l => l ? "    " + l : "").join("\n"));
+        baseline.push(f.text.split(/\r?\n/).map(l => l ? "    " + l : "").join("\n"));
         getResolutionCacheDetails(
             baseline,
             "Modules",
