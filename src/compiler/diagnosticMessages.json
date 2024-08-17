@@ -5716,6 +5716,14 @@
         "category": "Message",
         "code": 6361
     },
+    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6362
+    },
+    "Project '{0}' can't be built because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6363
+    },
     "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6364
@@ -5759,6 +5767,14 @@
     "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
         "category": "Message",
         "code": 6381
+    },
+    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6382
+    },
+    "Project '{0}' can't be built because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6383
     },
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
@@ -6094,6 +6110,10 @@
     "Allow importing helper functions from tslib once per project, instead of including them per-file.": {
         "category": "Message",
         "code": 6639
+    },
+    "Skip building downstream projects on error in upstream project.": {
+        "category": "Message",
+        "code": 6640
     },
     "Specify a list of glob patterns that match files to be included in compilation.": {
         "category": "Message",
