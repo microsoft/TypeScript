@@ -181,7 +181,7 @@ interface Set<T> {
     /**
      * Returns an iterable of [v,v] pairs for every value `v` in the set.
      */
-    entries(): SetIterator<[T, T]>;
+    entries(): SetIterator<T extends string | number | symbol ? { [K in T]: [K, K]; }[T] : [T, T]>;
     /**
      * Despite its name, returns an iterable of the values in the set.
      */
@@ -200,7 +200,7 @@ interface ReadonlySet<T> {
     /**
      * Returns an iterable of [v,v] pairs for every value `v` in the set.
      */
-    entries(): SetIterator<[T, T]>;
+    entries(): SetIterator<T extends string | number | symbol ? { [K in T]: [K, K]; }[T] : [T, T]>;
 
     /**
      * Despite its name, returns an iterable of the values in the set.
