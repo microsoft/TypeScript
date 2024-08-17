@@ -22,8 +22,8 @@ type TaggedUnion = TaggedA | TaggedB;
 const m: { result: NoInfer<TaggedUnion> }[] = [];
 >m : { result: NoInfer<TaggedUnion>; }[]
 >  : ^^^^^^^^^^                    ^^^^^
->result : NoInfer<TaggedUnion>
->       : ^^^^^^^^^^^^^^^^^^^^
+>result : NoInfer<TaggedA> | NoInfer<TaggedB>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
 
@@ -51,48 +51,48 @@ function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
 }
 
 const something = map(m, (_) =>
->something : ({ result: TaggedA; } | null)[]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map(m, (_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null,) : ({ result: TaggedA; } | null)[]
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>something : ({ result: NoInfer<TaggedA>; } | null)[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map(m, (_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null,) : ({ result: NoInfer<TaggedA>; } | null)[]
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) => B[]
 >    : ^ ^^ ^^     ^^            ^^ ^^                    ^^^^^^^^
 >m : { result: NoInfer<TaggedUnion>; }[]
 >  : ^^^^^^^^^^                    ^^^^^
->(_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null : (_: NoInfer<{ result: NoInfer<TaggedUnion>; }>) => { result: TaggedA; } | null
->                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null : (_: NoInfer<{ result: NoInfer<TaggedUnion>; }>) => { result: NoInfer<TaggedA>; } | null
+>                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : NoInfer<{ result: NoInfer<TaggedUnion>; }>
 >  : ^^^^^^^^^^^^^^^^^^                    ^^^^
 
   _.result._tag === "a" ? { ..._, result: _.result } : null,
->_.result._tag === "a" ? { ..._, result: _.result } : null : { result: TaggedA; } | null
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.result._tag === "a" ? { ..._, result: _.result } : null : { result: NoInfer<TaggedA>; } | null
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.result._tag === "a" : boolean
 >                      : ^^^^^^^
 >_.result._tag : "a" | "b"
 >              : ^^^^^^^^^
->_.result : TaggedUnion
->         : ^^^^^^^^^^^
+>_.result : NoInfer<TaggedA> | NoInfer<TaggedB>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : { result: NoInfer<TaggedUnion>; }
 >  : ^^^^^^^^^^                    ^^^
->result : TaggedUnion
->       : ^^^^^^^^^^^
+>result : NoInfer<TaggedA> | NoInfer<TaggedB>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_tag : "a" | "b"
 >     : ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
->{ ..._, result: _.result } : { result: TaggedA; }
->                           : ^^^^^^^^^^^^^^^^^^^^
+>{ ..._, result: _.result } : { result: NoInfer<TaggedA>; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : { result: NoInfer<TaggedUnion>; }
 >  : ^^^^^^^^^^                    ^^^
->result : TaggedA
->       : ^^^^^^^
->_.result : TaggedA
->         : ^^^^^^^
+>result : NoInfer<TaggedA>
+>       : ^^^^^^^^^^^^^^^^
+>_.result : NoInfer<TaggedA>
+>         : ^^^^^^^^^^^^^^^^
 >_ : { result: NoInfer<TaggedUnion>; }
 >  : ^^^^^^^^^^                    ^^^
->result : TaggedA
->       : ^^^^^^^
+>result : NoInfer<TaggedA>
+>       : ^^^^^^^^^^^^^^^^
 
 );
 

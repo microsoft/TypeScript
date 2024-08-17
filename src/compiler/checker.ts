@@ -16667,8 +16667,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedJSDocType;
     }
 
-    function getNoInferType(type: Type) {
-        return isNoInferTargetType(type) ? getOrCreateSubstitutionType(type, unknownType) : type;
+    function getNoInferType(type: Type): Type {
+        return mapType(type, t => {
+            if (isTupleType(t)) {
+                return createTupleType(
+                    map(getElementTypes(t), getNoInferType),
+                    t.target.elementFlags,
+                    t.target.readonly,
+                    t.target.labeledElementDeclarations,
+                );
+            }
+            return isNoInferTargetType(t) ? getOrCreateSubstitutionType(t, unknownType) : t;
+        });
     }
 
     function isNoInferTargetType(type: Type): boolean {

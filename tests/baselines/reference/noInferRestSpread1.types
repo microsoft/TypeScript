@@ -1,0 +1,123 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRestSpread1.ts] ////
+
+=== noInferRestSpread1.ts ===
+declare function call<A extends readonly unknown[]>(
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+
+  arg: (...args: NoInfer<A>) => void,
+>arg : (...args: NoInfer<A>) => void
+>    : ^^^^    ^^          ^^^^^    
+>args : NoInfer<A>
+>     : ^^^^^^^^^^
+
+  ...args: A
+>args : A
+>     : ^
+
+): A;
+
+const result1 = call((a: number) => {}, 1, 2);
+>result1 : [number, number]
+>        : ^^^^^^^^^^^^^^^^
+>call((a: number) => {}, 1, 2) : [number, number]
+>                              : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a: number) => {} : (a: number) => void
+>                  : ^ ^^      ^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const result2 = call((a: number, b: number) => {}, 1); // error
+>result2 : [number]
+>        : ^^^^^^^^
+>call((a: number, b: number) => {}, 1) : [number]
+>                                      : ^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a: number, b: number) => {} : (a: number, b: number) => void
+>                             : ^ ^^      ^^ ^^      ^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+declare function fn1<A extends unknown[]>(
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+
+  cb: (a: [number, ...NoInfer<A>]) => void,
+>cb : (a: [number, ...NoInfer<A>]) => void
+>   : ^ ^^                       ^^^^^    
+>a : [number, ...NoInfer<A>]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  args: A,
+>args : A
+>     : ^
+
+): A;
+
+declare const singleStr: [string];
+>singleStr : [string]
+>          : ^^^^^^^^
+
+const result3 = fn1((arg) => {
+>result3 : [string]
+>        : ^^^^^^^^
+>fn1((arg) => {  arg.length;}, singleStr) : [string]
+>                                         : ^^^^^^^^
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+>(arg) => {  arg.length;} : (arg: [number, string]) => void
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+
+  arg.length;
+>arg.length : 2
+>           : ^
+>arg : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+>length : 2
+>       : ^
+
+}, singleStr);
+>singleStr : [string]
+>          : ^^^^^^^^
+
+declare const tupleUnion: [string] | [number, boolean];
+>tupleUnion : [string] | [number, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const result4 = fn1((arg) => {
+>result4 : [string] | [number, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1((arg) => {  arg.length;}, tupleUnion) : [string] | [number, boolean]
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
+>    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
+>(arg) => {  arg.length;} : (arg: [number, string] | [number, number, boolean]) => void
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : [number, string] | [number, number, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  arg.length;
+>arg.length : 2 | 3
+>           : ^^^^^
+>arg : [number, string] | [number, number, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : 2 | 3
+>       : ^^^^^
+
+}, tupleUnion);
+>tupleUnion : [string] | [number, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

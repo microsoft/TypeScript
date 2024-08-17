@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRestSpread1.ts] ////
+
+=== noInferRestSpread1.ts ===
+declare function call<A extends readonly unknown[]>(
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+  arg: (...args: NoInfer<A>) => void,
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 0, 52))
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 1, 8))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+  ...args: A
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 1, 37))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+): A;
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 0, 22))
+
+const result1 = call((a: number) => {}, 1, 2);
+>result1 : Symbol(result1, Decl(noInferRestSpread1.ts, 5, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 5, 22))
+
+const result2 = call((a: number, b: number) => {}, 1); // error
+>result2 : Symbol(result2, Decl(noInferRestSpread1.ts, 6, 5))
+>call : Symbol(call, Decl(noInferRestSpread1.ts, 0, 0))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 6, 22))
+>b : Symbol(b, Decl(noInferRestSpread1.ts, 6, 32))
+
+declare function fn1<A extends unknown[]>(
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 6, 54))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 8, 21))
+
+  cb: (a: [number, ...NoInfer<A>]) => void,
+>cb : Symbol(cb, Decl(noInferRestSpread1.ts, 8, 42))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 9, 7))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 8, 21))
+
+  args: A,
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 9, 43))
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 8, 21))
+
+): A;
+>A : Symbol(A, Decl(noInferRestSpread1.ts, 8, 21))
+
+declare const singleStr: [string];
+>singleStr : Symbol(singleStr, Decl(noInferRestSpread1.ts, 13, 13))
+
+const result3 = fn1((arg) => {
+>result3 : Symbol(result3, Decl(noInferRestSpread1.ts, 15, 5))
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 6, 54))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 15, 21))
+
+  arg.length;
+>arg.length : Symbol(length)
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 15, 21))
+>length : Symbol(length)
+
+}, singleStr);
+>singleStr : Symbol(singleStr, Decl(noInferRestSpread1.ts, 13, 13))
+
+declare const tupleUnion: [string] | [number, boolean];
+>tupleUnion : Symbol(tupleUnion, Decl(noInferRestSpread1.ts, 19, 13))
+
+const result4 = fn1((arg) => {
+>result4 : Symbol(result4, Decl(noInferRestSpread1.ts, 21, 5))
+>fn1 : Symbol(fn1, Decl(noInferRestSpread1.ts, 6, 54))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 21, 21))
+
+  arg.length;
+>arg.length : Symbol(length)
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 21, 21))
+>length : Symbol(length)
+
+}, tupleUnion);
+>tupleUnion : Symbol(tupleUnion, Decl(noInferRestSpread1.ts, 19, 13))
+
