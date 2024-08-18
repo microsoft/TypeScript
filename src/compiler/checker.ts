@@ -24675,8 +24675,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const targetLen = getParameterCount(target);
-        for (let i = 0; i < targetLen; i++) {
+        const sourceLen = getParameterCount(source);
+        for (let i = 0; i < sourceLen; i++) {
             const s = getTypeAtPosition(source, i);
             const t = getTypeAtPosition(target, i);
             const related = compareTypes(t, s);
@@ -32257,22 +32257,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getContextualCallSignature(type, node);
         }
         let signatureList: Signature[] | undefined;
-        const types = (type as UnionType).types;
+        const types = (type as UnionType).types
+            .map(type => ({type, signature: getContextualCallSignature(type, node)}))
+            .filter(type => type.signature)
+            .sort((t1, t2) => t1.signature!.parameters.length - t2.signature!.parameters.length)
         for (const current of types) {
-            const signature = getContextualCallSignature(current, node);
-            if (signature) {
-                if (!signatureList) {
-                    // This signature will contribute to contextual union signature
-                    signatureList = [signature];
-                }
-                else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
-                    // Signatures aren't identical, do not use
-                    return undefined;
-                }
-                else {
-                    // Use this signature for contextual union signature
-                    signatureList.push(signature);
-                }
+            const signature = current.signature!;
+            if (!signatureList) {
+                // This signature will contribute to contextual union signature
+                signatureList = [signature];
+            }
+            else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
+                // Signatures aren't identical, do not use
+                return undefined;
+            }
+            else {
+                // Use this signature for contextual union signature
+                signatureList.push(signature);
             }
         }
         // Result is union of signatures collected (return type is union of return types of this signature set)
