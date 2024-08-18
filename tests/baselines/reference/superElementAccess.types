@@ -73,7 +73,9 @@ class MyDerived extends MyBase {
 
         var l2 = super["m1"].bind(this);                       // Should be allowed, can access properties as well as invoke
 >l2 : any
+>   : ^^^
 >super["m1"].bind(this) : any
+>                       : ^^^
 >super["m1"].bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >super["m1"] : (a: string) => string
@@ -101,6 +103,7 @@ class MyDerived extends MyBase {
 
         super["m2"].bind(this);                                // Should error, instance property, not a public instance member function
 >super["m2"].bind(this) : any
+>                       : ^^^
 >super["m2"].bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >super["m2"] : () => void
