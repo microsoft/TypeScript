@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 function foo1 () {
                 ^
 {
@@ -32,6 +33,23 @@ function foo1 () {
   "whitespaceBefore": true
 }
 
+    bar() {
+         ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "this"
+    }
+  ],
+  "position": 130,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
 const a = () => 1
             ^
 {
@@ -44,7 +62,7 @@ const a = () => 1
       "text": "number"
     }
   ],
-  "position": 135,
+  "position": 173,
   "kind": "Type",
   "whitespaceBefore": true
 }
@@ -61,7 +79,7 @@ const b = function () { return 1 }
       "text": "number"
     }
   ],
-  "position": 162,
+  "position": 200,
   "kind": "Type",
   "whitespaceBefore": true
 }
@@ -78,7 +96,7 @@ const c = (b) => 1
       "text": "number"
     }
   ],
-  "position": 189,
+  "position": 227,
   "kind": "Type",
   "whitespaceBefore": true
 }

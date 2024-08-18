@@ -1,0 +1,109 @@
+//// [tests/cases/conformance/es2021/es2021LocalesObjectArgument.ts] ////
+
+=== es2021LocalesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Intl.Locale
+>     : ^^^^^^^^^^^
+>new Intl.Locale("en-US") : Intl.Locale
+>                         : ^^^^^^^^^^^
+>Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>            : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>       : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"en-US" : "en-US"
+>        : ^^^^^^^
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Intl.Locale
+>     : ^^^^^^^^^^^
+>new Intl.Locale("de-DE") : Intl.Locale
+>                         : ^^^^^^^^^^^
+>Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>            : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>       : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"de-DE" : "de-DE"
+>        : ^^^^^^^
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Intl.Locale
+>     : ^^^^^^^^^^^
+>new Intl.Locale("ja-JP") : Intl.Locale
+>                         : ^^^^^^^^^^^
+>Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>            : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>       : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"ja-JP" : "ja-JP"
+>        : ^^^^^^^
+
+new Intl.ListFormat(enUS);
+>new Intl.ListFormat(enUS) : Intl.ListFormat
+>                          : ^^^^^^^^^^^^^^^
+>Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>           : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>enUS : Intl.Locale
+>     : ^^^^^^^^^^^
+
+new Intl.ListFormat([deDE, jaJP]);
+>new Intl.ListFormat([deDE, jaJP]) : Intl.ListFormat
+>                                  : ^^^^^^^^^^^^^^^
+>Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>           : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>[deDE, jaJP] : Intl.Locale[]
+>             : ^^^^^^^^^^^^^
+>deDE : Intl.Locale
+>     : ^^^^^^^^^^^
+>jaJP : Intl.Locale
+>     : ^^^^^^^^^^^
+
+Intl.ListFormat.supportedLocalesOf(enUS);
+>Intl.ListFormat.supportedLocalesOf(enUS) : string[]
+>                                         : ^^^^^^^^
+>Intl.ListFormat.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>           : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>enUS : Intl.Locale
+>     : ^^^^^^^^^^^
+
+Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
+>Intl.ListFormat.supportedLocalesOf([deDE, jaJP]) : string[]
+>                                                 : ^^^^^^^^
+>Intl.ListFormat.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>           : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>[deDE, jaJP] : Intl.Locale[]
+>             : ^^^^^^^^^^^^^
+>deDE : Intl.Locale
+>     : ^^^^^^^^^^^
+>jaJP : Intl.Locale
+>     : ^^^^^^^^^^^
+

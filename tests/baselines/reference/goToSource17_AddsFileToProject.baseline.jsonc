@@ -1,0 +1,20 @@
+// === goToSourceDefinition ===
+// === /node_modules/yargs/callback.js ===
+// export class Yargs { [|positional|]() { } }
+
+// === /index.ts ===
+// import { command } from "yargs";
+// command("foo", yargs => {
+//     yargs./*GOTO SOURCE DEF*/positional();
+// });
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

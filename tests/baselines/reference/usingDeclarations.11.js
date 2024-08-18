@@ -55,7 +55,7 @@ var __extends = (this && this.__extends) || (function () {
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-        var dispose;
+        var dispose, inner;
         if (async) {
             if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
             dispose = value[Symbol.asyncDispose];
@@ -63,8 +63,10 @@ var __addDisposableResource = (this && this.__addDisposableResource) || function
         if (dispose === void 0) {
             if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
             dispose = value[Symbol.dispose];
+            if (async) inner = dispose;
         }
         if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
         env.stack.push({ value: value, dispose: dispose, async: async });
     }
     else if (async) {
@@ -78,17 +80,22 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
             env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
             env.hasError = true;
         }
+        var r, s = 0;
         function next() {
-            while (env.stack.length) {
-                var rec = env.stack.pop();
+            while (r = env.stack.pop()) {
                 try {
-                    var result = rec.dispose && rec.dispose.call(rec.value);
-                    if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                    if (r.dispose) {
+                        var result = r.dispose.call(r.value);
+                        if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    }
+                    else s |= 1;
                 }
                 catch (e) {
                     fail(e);
                 }
             }
+            if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
             if (env.hasError) throw env.error;
         }
         return next();
@@ -105,10 +112,11 @@ var A = /** @class */ (function () {
 var C1 = /** @class */ (function (_super) {
     __extends(C1, _super);
     function C1() {
+        var _this = this;
         var env_1 = { stack: [], error: void 0, hasError: false };
         try {
             var x = __addDisposableResource(env_1, null, false);
-            return _super.call(this) || this;
+            _this = _super.call(this) || this;
         }
         catch (e_1) {
             env_1.error = e_1;
@@ -117,15 +125,17 @@ var C1 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_1);
         }
+        return _this;
     }
     return C1;
 }(A));
 var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
+        var _this = this;
         var env_2 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
+            _this = _super.call(this) || this;
             var x = __addDisposableResource(env_2, null, false);
         }
         catch (e_2) {
@@ -142,10 +152,11 @@ var C2 = /** @class */ (function (_super) {
 var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);
     function C3() {
+        var _this = this;
         var env_3 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_3, null, false);
+            _this = _super.call(this) || this;
             _this.y = 1;
         }
         catch (e_3) {
@@ -162,10 +173,11 @@ var C3 = /** @class */ (function (_super) {
 var C4 = /** @class */ (function (_super) {
     __extends(C4, _super);
     function C4(y) {
+        var _this = this;
         var env_4 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_4, null, false);
+            _this = _super.call(this) || this;
             _this.y = y;
         }
         catch (e_4) {
@@ -182,10 +194,11 @@ var C4 = /** @class */ (function (_super) {
 var C5 = /** @class */ (function (_super) {
     __extends(C5, _super);
     function C5(y) {
+        var _this = this;
         var env_5 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_5, null, false);
+            _this = _super.call(this) || this;
             _this.y = y;
             _this.z = 1;
         }

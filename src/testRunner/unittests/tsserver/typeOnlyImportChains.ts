@@ -1,15 +1,14 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     it("named export -> type-only namespace import -> named export -> named import", () => {
@@ -163,7 +162,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
 
 function assertUsageError(subScenario: string, files: readonly File[], openFile: File) {
     const host = createServerHost([...files, libFile]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([openFile], session);
     session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
         command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,

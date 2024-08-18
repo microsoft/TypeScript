@@ -3,6 +3,7 @@
 === parserES3Accessors2.ts ===
 class C {
 >C : C
+>  : ^
 
     set Foo(a) { }
 >Foo : any

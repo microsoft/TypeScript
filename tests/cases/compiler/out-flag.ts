@@ -2,7 +2,7 @@
 // @sourcemap: true
 // @declaration: true
 // @module: commonjs
-//// @out: bin\
+//// @outFile: bin\
 // @removeComments: false
 
 // my class comments

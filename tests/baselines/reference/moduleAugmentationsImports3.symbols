@@ -74,7 +74,7 @@ declare module "D" {
 }
 
 === e.ts ===
-/// <reference path="c.d.ts"/>
+/// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 >A : Symbol(A, Decl(e.ts, 1, 8))
 

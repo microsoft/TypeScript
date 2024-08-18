@@ -2,8 +2,6 @@
 
 === x.ts ===
 
-// ESM output
-
 export default 0;
 
 === y.tsx ===

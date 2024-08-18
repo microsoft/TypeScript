@@ -3,4 +3,5 @@
 === parserFunctionDeclaration2.d.ts ===
 function F() {
 >F : () => void
+>  : ^^^^^^^^^^
 }

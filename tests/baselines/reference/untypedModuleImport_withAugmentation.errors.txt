@@ -11,7 +11,5 @@
     x;
     
 ==== /node_modules/foo/index.js (0 errors) ====
-    // This tests that augmenting an untyped module is forbidden.
-    
     This file is not processed.
     

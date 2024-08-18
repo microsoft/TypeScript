@@ -24,12 +24,12 @@ export namespace Something {
 //// [this.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Something = exports.make = void 0;
+exports.Something = void 0;
+exports.make = make;
 var me = require("./this");
 function make(x) {
     return null;
 }
-exports.make = make;
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }

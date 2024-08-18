@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a.ts
 
 
@@ -14,13 +14,15 @@ a: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
 parent pointers are updated: true
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a.ts
 'use strict';
 
@@ -36,7 +38,9 @@ a: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

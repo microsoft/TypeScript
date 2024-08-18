@@ -1,0 +1,183 @@
+//// [tests/cases/compiler/jsxRuntimePragma.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== one.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : typeof React
+>      : ^^^^^^^^^^^^
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => JSX.Element
+>           : ^^^^^^^^^^^^^^^^^
+>() => <h1>Hello world</h1> : () => JSX.Element
+>                           : ^^^^^^^^^^^^^^^^^
+><h1>Hello world</h1> : JSX.Element
+>                     : ^^^^^^^^^^^
+>h1 : any
+>   : ^^^
+>h1 : any
+>   : ^^^
+
+export const frag = <><div></div></>;
+>frag : JSX.Element
+>     : ^^^^^^^^^^^
+><><div></div></> : JSX.Element
+>                 : ^^^^^^^^^^^
+><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : JSX.Element
+>            : ^^^^^^^^^^^
+><img src="./image.png" /> : JSX.Element
+>                          : ^^^^^^^^^^^
+>img : any
+>    : ^^^
+>src : string
+>    : ^^^^^^
+
+=== two.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => JSX.Element
+>           : ^^^^^^^^^^^^^^^^^
+>() => <h1>Hello world</h1> : () => JSX.Element
+>                           : ^^^^^^^^^^^^^^^^^
+><h1>Hello world</h1> : JSX.Element
+>                     : ^^^^^^^^^^^
+>h1 : any
+>   : ^^^
+>h1 : any
+>   : ^^^
+
+export const frag = <><div></div></>;
+>frag : JSX.Element
+>     : ^^^^^^^^^^^
+><><div></div></> : JSX.Element
+>                 : ^^^^^^^^^^^
+><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : JSX.Element
+>            : ^^^^^^^^^^^
+><img src="./image.png" /> : JSX.Element
+>                          : ^^^^^^^^^^^
+>img : any
+>    : ^^^
+>src : string
+>    : ^^^^^^
+
+=== three.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => JSX.Element
+>           : ^^^^^^^^^^^^^^^^^
+>() => <h1>Hello world</h1> : () => JSX.Element
+>                           : ^^^^^^^^^^^^^^^^^
+><h1>Hello world</h1> : JSX.Element
+>                     : ^^^^^^^^^^^
+>h1 : any
+>   : ^^^
+>h1 : any
+>   : ^^^
+
+export const frag = <><div></div></>;
+>frag : JSX.Element
+>     : ^^^^^^^^^^^
+><><div></div></> : JSX.Element
+>                 : ^^^^^^^^^^^
+><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : JSX.Element
+>            : ^^^^^^^^^^^
+><img src="./image.png" /> : JSX.Element
+>                          : ^^^^^^^^^^^
+>img : any
+>    : ^^^
+>src : string
+>    : ^^^^^^
+
+=== four.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : typeof React
+>      : ^^^^^^^^^^^^
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => JSX.Element
+>           : ^^^^^^^^^^^^^^^^^
+>() => <h1>Hello world</h1> : () => JSX.Element
+>                           : ^^^^^^^^^^^^^^^^^
+><h1>Hello world</h1> : JSX.Element
+>                     : ^^^^^^^^^^^
+>h1 : any
+>   : ^^^
+>h1 : any
+>   : ^^^
+
+export const frag = <><div></div></>;
+>frag : JSX.Element
+>     : ^^^^^^^^^^^
+><><div></div></> : JSX.Element
+>                 : ^^^^^^^^^^^
+><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>div : any
+>    : ^^^
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : JSX.Element
+>            : ^^^^^^^^^^^
+><img src="./image.png" /> : JSX.Element
+>                          : ^^^^^^^^^^^
+>img : any
+>    : ^^^
+>src : string
+>    : ^^^^^^
+
+=== index.ts ===
+export * as one from "./one.js";
+>one : typeof import("one")
+>    : ^^^^^^^^^^^^^^^^^^^^
+
+export * as two from "./two.js";
+>two : typeof import("two")
+>    : ^^^^^^^^^^^^^^^^^^^^
+
+export * as three from "./three.js";
+>three : typeof import("three")
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+export * as four from "./four.js";
+>four : typeof import("four")
+>     : ^^^^^^^^^^^^^^^^^^^^^
+

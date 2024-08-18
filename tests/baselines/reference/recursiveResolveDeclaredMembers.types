@@ -2,7 +2,6 @@
 
 === types.ts ===
 
-// #23025
 export interface F {
     (): E;
 }

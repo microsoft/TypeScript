@@ -1,3 +1,3 @@
 /* Generated file to emulate the vfs namespace. */
 
-export * from "../vfsUtil";
+export * from "../vfsUtil.js";

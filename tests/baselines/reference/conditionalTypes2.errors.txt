@@ -25,9 +25,8 @@ conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable 
           Type 'A' is not assignable to type 'B'.
             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
 conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-  Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
-    Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
-      Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+  Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+    Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
 conditionalTypes2.ts(74,12): error TS2345: Argument of type 'Extract<T, Foo & Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Property 'bat' is missing in type 'Foo & Bar' but required in type '{ foo: string; bat: string; }'.
 conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
@@ -145,10 +144,8 @@ conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Ba
         fooBat(x);  // Error
                ~
 !!! error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-!!! error TS2345:   Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
-!!! error TS2345:     Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:       Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
-!!! related TS2728 conditionalTypes2.ts:62:43: 'bat' is declared here.
+!!! error TS2345:   Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
 !!! related TS2728 conditionalTypes2.ts:62:43: 'bat' is declared here.
         fooBat(y);  // Error
                ~

@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsStringMethods.ts ===
 // var s = "foo".
 //               ^
@@ -9,7 +10,7 @@
 // | (method) String.lastIndexOf(searchString: string, position?: number): number
 // | (property) String.length: number
 // | (method) String.localeCompare(that: string): number (+1 overload)
-// | (method) String.match(regexp: string | RegExp): RegExpMatchArray
+// | (method) String.match(regexp: string | RegExp): RegExpMatchArray | null
 // | (method) String.replace(searchValue: string | RegExp, replaceValue: string): string (+1 overload)
 // | (method) String.search(regexp: string | RegExp): number
 // | (method) String.slice(start?: number, end?: number): string
@@ -889,6 +890,22 @@
             {
               "text": "RegExpMatchArray",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "null",
+              "kind": "keyword"
             }
           ],
           "documentation": [
@@ -2385,6 +2402,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

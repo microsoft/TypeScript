@@ -4,4 +4,5 @@
 /** b's comment*/
 export var b: number;
 >b : number
+>  : ^^^^^^
 

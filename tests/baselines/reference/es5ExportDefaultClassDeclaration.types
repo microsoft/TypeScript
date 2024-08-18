@@ -3,8 +3,10 @@
 === es5ExportDefaultClassDeclaration.ts ===
 export default class C {
 >C : C
+>  : ^
 
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 

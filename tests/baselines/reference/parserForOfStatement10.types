@@ -3,5 +3,7 @@
 === parserForOfStatement10.ts ===
 for (const v of X) {
 >v : any
+>  : ^^^
 >X : any
+>  : ^^^
 }

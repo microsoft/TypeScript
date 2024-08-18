@@ -5,7 +5,9 @@ export { };
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
   var x: number;
 >x : number
+>  : ^^^^^^
 }

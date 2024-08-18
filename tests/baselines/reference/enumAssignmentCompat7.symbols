@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/enumAssignmentCompat7.ts] ////
+
+=== enumAssignmentCompat7.ts ===
+namespace first {
+>first : Symbol(first, Decl(enumAssignmentCompat7.ts, 0, 0))
+
+    export enum E { A = 1 }
+>E : Symbol(E, Decl(enumAssignmentCompat7.ts, 0, 17))
+>A : Symbol(E.A, Decl(enumAssignmentCompat7.ts, 1, 19))
+}
+
+namespace second {
+>second : Symbol(second, Decl(enumAssignmentCompat7.ts, 2, 1))
+
+    export enum E { A = 2 }
+>E : Symbol(E, Decl(enumAssignmentCompat7.ts, 4, 18))
+>A : Symbol(E.A, Decl(enumAssignmentCompat7.ts, 5, 19))
+}
+
+class Base {
+>Base : Symbol(Base, Decl(enumAssignmentCompat7.ts, 6, 1))
+
+    method(param: first.E) {
+>method : Symbol(Base.method, Decl(enumAssignmentCompat7.ts, 8, 12))
+>param : Symbol(param, Decl(enumAssignmentCompat7.ts, 9, 11))
+>first : Symbol(first, Decl(enumAssignmentCompat7.ts, 0, 0))
+>E : Symbol(first.E, Decl(enumAssignmentCompat7.ts, 0, 17))
+
+    }
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(enumAssignmentCompat7.ts, 12, 1))
+>Base : Symbol(Base, Decl(enumAssignmentCompat7.ts, 6, 1))
+
+    override method(param: second.E) {
+>method : Symbol(Derived.method, Decl(enumAssignmentCompat7.ts, 14, 28))
+>param : Symbol(param, Decl(enumAssignmentCompat7.ts, 15, 20))
+>second : Symbol(second, Decl(enumAssignmentCompat7.ts, 2, 1))
+>E : Symbol(second.E, Decl(enumAssignmentCompat7.ts, 4, 18))
+    }
+}
+
+function overloadingFunction(): first.E
+>overloadingFunction : Symbol(overloadingFunction, Decl(enumAssignmentCompat7.ts, 17, 1), Decl(enumAssignmentCompat7.ts, 19, 39))
+>first : Symbol(first, Decl(enumAssignmentCompat7.ts, 0, 0))
+>E : Symbol(first.E, Decl(enumAssignmentCompat7.ts, 0, 17))
+
+function overloadingFunction(): second.E {
+>overloadingFunction : Symbol(overloadingFunction, Decl(enumAssignmentCompat7.ts, 17, 1), Decl(enumAssignmentCompat7.ts, 19, 39))
+>second : Symbol(second, Decl(enumAssignmentCompat7.ts, 2, 1))
+>E : Symbol(second.E, Decl(enumAssignmentCompat7.ts, 4, 18))
+
+    return second.E.B
+>second.E : Symbol(second.E, Decl(enumAssignmentCompat7.ts, 4, 18))
+>second : Symbol(second, Decl(enumAssignmentCompat7.ts, 2, 1))
+>E : Symbol(second.E, Decl(enumAssignmentCompat7.ts, 4, 18))
+}

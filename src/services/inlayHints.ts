@@ -1,10 +1,8 @@
 import {
     __String,
-    ArrayTypeNode,
     ArrowFunction,
     CallExpression,
-    ConditionalTypeNode,
-    ConstructorTypeNode,
+    CharacterCodes,
     createPrinterWithRemoveComments,
     createTextSpanFromNode,
     Debug,
@@ -12,6 +10,8 @@ import {
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
+    escapeString,
+    escapeTemplateSubstitution,
     Expression,
     findChildOfKind,
     findIndex,
@@ -19,90 +19,112 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
-    FunctionTypeNode,
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
+    getQuotePreference,
     hasContextSensitiveParameters,
     Identifier,
     idText,
-    ImportTypeNode,
-    IndexedAccessTypeNode,
-    InferTypeNode,
     InlayHint,
     InlayHintDisplayPart,
     InlayHintKind,
     InlayHintsContext,
-    IntersectionTypeNode,
+    isArrayBindingPattern,
+    isArrayTypeNode,
     isArrowFunction,
     isAssertionExpression,
+    isBindingElement,
     isBindingPattern,
     isCallExpression,
+    isCallSignatureDeclaration,
+    isConditionalTypeNode,
+    isConstructorTypeNode,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
     isFunctionExpression,
     isFunctionLikeDeclaration,
+    isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
     isIdentifierText,
+    isImportTypeNode,
+    isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
     isInfinityOrNaNString,
+    isIntersectionTypeNode,
     isLiteralExpression,
+    isLiteralTypeNode,
+    isMappedTypeNode,
     isMethodDeclaration,
+    isMethodSignature,
+    isNamedTupleMember,
     isNewExpression,
+    isObjectBindingPattern,
     isObjectLiteralExpression,
+    isOptionalTypeNode,
     isParameter,
-    isParameterDeclaration,
+    isParenthesizedTypeNode,
+    isPartOfParameterDeclaration,
+    isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyDeclaration,
+    isPropertySignature,
+    isQualifiedName,
+    isRestTypeNode,
     isSpreadElement,
+    isTemplateHead,
+    isTemplateLiteralTypeNode,
+    isTemplateLiteralTypeSpan,
+    isTemplateMiddle,
+    isTemplateTail,
+    isThisTypeNode,
+    isTupleTypeNode,
+    isTypeLiteralNode,
     isTypeNode,
+    isTypeOperatorNode,
+    isTypeParameterDeclaration,
+    isTypePredicateNode,
+    isTypeQueryNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
     isVarConst,
     isVariableDeclaration,
-    LiteralTypeNode,
-    MappedTypeNode,
+    LiteralLikeNode,
     MethodDeclaration,
-    NamedTupleMember,
     NewExpression,
     Node,
     NodeArray,
     NodeBuilderFlags,
-    NumericLiteral,
-    OptionalTypeNode,
     ParameterDeclaration,
-    ParenthesizedTypeNode,
     PrefixUnaryExpression,
     PropertyDeclaration,
-    PropertySignature,
-    QualifiedName,
-    RestTypeNode,
+    QuotePreference,
     Signature,
+    SignatureDeclarationBase,
     skipParentheses,
     some,
-    StringLiteral,
     Symbol,
     SymbolFlags,
     SyntaxKind,
+    TemplateLiteralLikeNode,
     textSpanIntersectsWith,
     tokenToString,
-    TupleTypeNode,
     TupleTypeReference,
     Type,
-    TypeLiteralNode,
-    TypeOperatorNode,
-    TypeParameterDeclaration,
-    TypePredicateNode,
-    TypeQueryNode,
-    TypeReferenceNode,
+    TypeFlags,
+    TypePredicate,
     unescapeLeadingUnderscores,
-    UnionTypeNode,
     UserPreferences,
     usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -125,6 +147,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
     const compilerOptions = program.getCompilerOptions();
+    const quotePreference = getQuotePreference(file, preferences);
 
     const checker = program.getTypeChecker();
     const result: InlayHint[] = [];
@@ -239,7 +262,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 
@@ -253,14 +279,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const hints = typeToInlayHintParts(declarationType);
-        if (hints) {
-            const hintText = typeof hints === "string" ? hints : hints.map(part => part.text).join("");
+        const hintParts = typeToInlayHintParts(declarationType);
+        if (hintParts) {
+            const hintText = typeof hintParts === "string" ? hintParts : hintParts.map(part => part.text).join("");
             const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), hintText);
             if (isVariableNameMatchesType) {
                 return;
             }
-            addTypeHints(hints, decl.name.end);
+            addTypeHints(hintParts, decl.name.end);
         }
     }
 
@@ -330,7 +356,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
@@ -380,14 +406,24 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
+        const typePredicate = checker.getTypePredicateOfSignature(signature);
+
+        if (typePredicate?.type) {
+            const hintParts = typePredicateToInlayHintParts(typePredicate);
+            if (hintParts) {
+                addTypeHints(hintParts, getTypeAnnotationPosition(decl));
+                return;
+            }
+        }
+
         const returnType = checker.getReturnTypeOfSignature(signature);
         if (isModuleReferenceType(returnType)) {
             return;
         }
 
-        const hint = typeToInlayHintParts(returnType);
-        if (hint) {
-            addTypeHints(hint, getTypeAnnotationPosition(decl));
+        const hintParts = typeToInlayHintParts(returnType);
+        if (hintParts) {
+            addTypeHints(hintParts, getTypeAnnotationPosition(decl));
         }
     }
 
@@ -416,16 +452,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 continue;
             }
 
-            const typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
-            if (!typeDisplayString) {
+            const typeHints = getParameterDeclarationTypeHints(signature.parameters[i]);
+            if (!typeHints) {
                 continue;
             }
 
-            addTypeHints(typeDisplayString, param.questionToken ? param.questionToken.end : param.name.end);
+            addTypeHints(typeHints, param.questionToken ? param.questionToken.end : param.name.end);
         }
     }
 
-    function getParameterDeclarationTypeDisplayString(symbol: Symbol) {
+    function getParameterDeclarationTypeHints(symbol: Symbol) {
         const valueDeclaration = symbol.valueDeclaration;
         if (!valueDeclaration || !isParameter(valueDeclaration)) {
             return undefined;
@@ -435,8 +471,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         if (isModuleReferenceType(signatureParamType)) {
             return undefined;
         }
-
-        return printTypeInSingleLine(signatureParamType);
+        return typeToInlayHintParts(signatureParamType);
     }
 
     function printTypeInSingleLine(type: Type) {
@@ -450,6 +485,17 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         });
     }
 
+    function printTypePredicateInSingleLine(typePredicate: TypePredicate) {
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const printer = createPrinterWithRemoveComments();
+
+        return usingSingleLineStringWriter(writer => {
+            const typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+            Debug.assertIsDefined(typePredicateNode, "should always get typePredicateNode");
+            printer.writeNode(EmitHint.Unspecified, typePredicateNode, /*sourceFile*/ file, writer);
+        });
+    }
+
     function typeToInlayHintParts(type: Type): InlayHintDisplayPart[] | string {
         if (!shouldUseInteractiveInlayHints(preferences)) {
             return printTypeInSingleLine(type);
@@ -457,10 +503,24 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
-        Debug.assertIsDefined(typeNode, "should always get typenode");
+        Debug.assertIsDefined(typeNode, "should always get typeNode");
+        return getInlayHintDisplayParts(typeNode);
+    }
 
+    function typePredicateToInlayHintParts(typePredicate: TypePredicate): InlayHintDisplayPart[] | string {
+        if (!shouldUseInteractiveInlayHints(preferences)) {
+            return printTypePredicateInSingleLine(typePredicate);
+        }
+
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const typeNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+        Debug.assertIsDefined(typeNode, "should always get typenode");
+        return getInlayHintDisplayParts(typeNode);
+    }
+
+    function getInlayHintDisplayParts(node: Node) {
         const parts: InlayHintDisplayPart[] = [];
-        visitForDisplayParts(typeNode);
+        visitForDisplayParts(node);
         return parts;
 
         function visitForDisplayParts(node: Node) {
@@ -474,11 +534,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 return;
             }
 
+            if (isLiteralExpression(node)) {
+                parts.push({ text: getLiteralText(node) });
+                return;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    const identifier = node as Identifier;
-                    const identifierText = idText(identifier);
-                    const name = identifier.symbol && identifier.symbol.declarations && identifier.symbol.declarations.length && getNameOfDeclaration(identifier.symbol.declarations[0]);
+                    Debug.assertNode(node, isIdentifier);
+                    const identifierText = idText(node);
+                    const name = node.symbol && node.symbol.declarations && node.symbol.declarations.length && getNameOfDeclaration(node.symbol.declarations[0]);
                     if (name) {
                         parts.push(getNodeDisplayPart(identifierText, name));
                     }
@@ -486,260 +551,352 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         parts.push({ text: identifierText });
                     }
                     break;
-                case SyntaxKind.NumericLiteral:
-                    parts.push({ text: (node as NumericLiteral).text });
-                    break;
-                case SyntaxKind.StringLiteral:
-                    parts.push({ text: `"${(node as StringLiteral).text}"` });
-                    break;
                 case SyntaxKind.QualifiedName:
-                    const qualifiedName = node as QualifiedName;
-                    visitForDisplayParts(qualifiedName.left);
+                    Debug.assertNode(node, isQualifiedName);
+                    visitForDisplayParts(node.left);
                     parts.push({ text: "." });
-                    visitForDisplayParts(qualifiedName.right);
+                    visitForDisplayParts(node.right);
                     break;
                 case SyntaxKind.TypePredicate:
-                    const predicate = node as TypePredicateNode;
-                    if (predicate.assertsModifier) {
+                    Debug.assertNode(node, isTypePredicateNode);
+                    if (node.assertsModifier) {
                         parts.push({ text: "asserts " });
                     }
-                    visitForDisplayParts(predicate.parameterName);
-                    if (predicate.type) {
+                    visitForDisplayParts(node.parameterName);
+                    if (node.type) {
                         parts.push({ text: " is " });
-                        visitForDisplayParts(predicate.type);
+                        visitForDisplayParts(node.type);
                     }
                     break;
                 case SyntaxKind.TypeReference:
-                    const typeReference = node as TypeReferenceNode;
-                    visitForDisplayParts(typeReference.typeName);
-                    if (typeReference.typeArguments) {
+                    Debug.assertNode(node, isTypeReferenceNode);
+                    visitForDisplayParts(node.typeName);
+                    if (node.typeArguments) {
                         parts.push({ text: "<" });
-                        visitDisplayPartList(typeReference.typeArguments, ", ");
+                        visitDisplayPartList(node.typeArguments, ", ");
                         parts.push({ text: ">" });
                     }
                     break;
                 case SyntaxKind.TypeParameter:
-                    const typeParameter = node as TypeParameterDeclaration;
-                    if (typeParameter.modifiers) {
-                        visitDisplayPartList(typeParameter.modifiers, " ");
+                    Debug.assertNode(node, isTypeParameterDeclaration);
+                    if (node.modifiers) {
+                        visitDisplayPartList(node.modifiers, " ");
                     }
-                    visitForDisplayParts(typeParameter.name);
-                    if (typeParameter.constraint) {
+                    visitForDisplayParts(node.name);
+                    if (node.constraint) {
                         parts.push({ text: " extends " });
-                        visitForDisplayParts(typeParameter.constraint);
+                        visitForDisplayParts(node.constraint);
                     }
-                    if (typeParameter.default) {
+                    if (node.default) {
                         parts.push({ text: " = " });
-                        visitForDisplayParts(typeParameter.default);
+                        visitForDisplayParts(node.default);
                     }
                     break;
                 case SyntaxKind.Parameter:
-                    const parameter = node as ParameterDeclaration;
-                    if (parameter.modifiers) {
-                        visitDisplayPartList(parameter.modifiers, " ");
+                    Debug.assertNode(node, isParameter);
+                    if (node.modifiers) {
+                        visitDisplayPartList(node.modifiers, " ");
                     }
-                    if (parameter.dotDotDotToken) {
+                    if (node.dotDotDotToken) {
                         parts.push({ text: "..." });
                     }
-                    visitForDisplayParts(parameter.name);
-                    if (parameter.questionToken) {
+                    visitForDisplayParts(node.name);
+                    if (node.questionToken) {
                         parts.push({ text: "?" });
                     }
-                    if (parameter.type) {
+                    if (node.type) {
                         parts.push({ text: ": " });
-                        visitForDisplayParts(parameter.type);
+                        visitForDisplayParts(node.type);
                     }
                     break;
                 case SyntaxKind.ConstructorType:
-                    const constructorType = node as ConstructorTypeNode;
+                    Debug.assertNode(node, isConstructorTypeNode);
                     parts.push({ text: "new " });
-                    if (constructorType.typeParameters) {
-                        parts.push({ text: "<" });
-                        visitDisplayPartList(constructorType.typeParameters, ", ");
-                        parts.push({ text: ">" });
-                    }
-                    parts.push({ text: "(" });
-                    visitDisplayPartList(constructorType.parameters, ", ");
-                    parts.push({ text: ")" });
+                    visitParametersAndTypeParameters(node);
                     parts.push({ text: " => " });
-                    visitForDisplayParts(constructorType.type);
+                    visitForDisplayParts(node.type);
                     break;
                 case SyntaxKind.TypeQuery:
-                    const typeQuery = node as TypeQueryNode;
+                    Debug.assertNode(node, isTypeQueryNode);
                     parts.push({ text: "typeof " });
-                    visitForDisplayParts(typeQuery.exprName);
-                    if (typeQuery.typeArguments) {
+                    visitForDisplayParts(node.exprName);
+                    if (node.typeArguments) {
                         parts.push({ text: "<" });
-                        visitDisplayPartList(typeQuery.typeArguments, ", ");
+                        visitDisplayPartList(node.typeArguments, ", ");
                         parts.push({ text: ">" });
                     }
                     break;
                 case SyntaxKind.TypeLiteral:
-                    const typeLiteral = node as TypeLiteralNode;
+                    Debug.assertNode(node, isTypeLiteralNode);
                     parts.push({ text: "{" });
-                    if (typeLiteral.members.length) {
+                    if (node.members.length) {
                         parts.push({ text: " " });
-                        visitDisplayPartList(typeLiteral.members, "; ");
+                        visitDisplayPartList(node.members, "; ");
                         parts.push({ text: " " });
                     }
                     parts.push({ text: "}" });
                     break;
                 case SyntaxKind.ArrayType:
-                    visitForDisplayParts((node as ArrayTypeNode).elementType);
+                    Debug.assertNode(node, isArrayTypeNode);
+                    visitForDisplayParts(node.elementType);
                     parts.push({ text: "[]" });
                     break;
                 case SyntaxKind.TupleType:
+                    Debug.assertNode(node, isTupleTypeNode);
                     parts.push({ text: "[" });
-                    visitDisplayPartList((node as TupleTypeNode).elements, ", ");
+                    visitDisplayPartList(node.elements, ", ");
                     parts.push({ text: "]" });
                     break;
                 case SyntaxKind.NamedTupleMember:
-                    const member = node as NamedTupleMember;
-                    if (member.dotDotDotToken) {
+                    Debug.assertNode(node, isNamedTupleMember);
+                    if (node.dotDotDotToken) {
                         parts.push({ text: "..." });
                     }
-                    visitForDisplayParts(member.name);
-                    if (member.questionToken) {
+                    visitForDisplayParts(node.name);
+                    if (node.questionToken) {
                         parts.push({ text: "?" });
                     }
                     parts.push({ text: ": " });
-                    visitForDisplayParts(member.type);
+                    visitForDisplayParts(node.type);
                     break;
                 case SyntaxKind.OptionalType:
-                    visitForDisplayParts((node as OptionalTypeNode).type);
+                    Debug.assertNode(node, isOptionalTypeNode);
+                    visitForDisplayParts(node.type);
                     parts.push({ text: "?" });
                     break;
                 case SyntaxKind.RestType:
+                    Debug.assertNode(node, isRestTypeNode);
                     parts.push({ text: "..." });
-                    visitForDisplayParts((node as RestTypeNode).type);
+                    visitForDisplayParts(node.type);
                     break;
                 case SyntaxKind.UnionType:
-                    visitDisplayPartList((node as UnionTypeNode).types, " | ");
+                    Debug.assertNode(node, isUnionTypeNode);
+                    visitDisplayPartList(node.types, " | ");
                     break;
                 case SyntaxKind.IntersectionType:
-                    visitDisplayPartList((node as IntersectionTypeNode).types, " & ");
+                    Debug.assertNode(node, isIntersectionTypeNode);
+                    visitDisplayPartList(node.types, " & ");
                     break;
                 case SyntaxKind.ConditionalType:
-                    const conditionalType = node as ConditionalTypeNode;
-                    visitForDisplayParts(conditionalType.checkType);
+                    Debug.assertNode(node, isConditionalTypeNode);
+                    visitForDisplayParts(node.checkType);
                     parts.push({ text: " extends " });
-                    visitForDisplayParts(conditionalType.extendsType);
+                    visitForDisplayParts(node.extendsType);
                     parts.push({ text: " ? " });
-                    visitForDisplayParts(conditionalType.trueType);
+                    visitForDisplayParts(node.trueType);
                     parts.push({ text: " : " });
-                    visitForDisplayParts(conditionalType.falseType);
+                    visitForDisplayParts(node.falseType);
                     break;
                 case SyntaxKind.InferType:
+                    Debug.assertNode(node, isInferTypeNode);
                     parts.push({ text: "infer " });
-                    visitForDisplayParts((node as InferTypeNode).typeParameter);
+                    visitForDisplayParts(node.typeParameter);
                     break;
                 case SyntaxKind.ParenthesizedType:
+                    Debug.assertNode(node, isParenthesizedTypeNode);
                     parts.push({ text: "(" });
-                    visitForDisplayParts((node as ParenthesizedTypeNode).type);
+                    visitForDisplayParts(node.type);
                     parts.push({ text: ")" });
                     break;
                 case SyntaxKind.TypeOperator:
-                    const typeOperator = node as TypeOperatorNode;
-                    parts.push({ text: `${tokenToString(typeOperator.operator)} ` });
-                    visitForDisplayParts(typeOperator.type);
+                    Debug.assertNode(node, isTypeOperatorNode);
+                    parts.push({ text: `${tokenToString(node.operator)} ` });
+                    visitForDisplayParts(node.type);
                     break;
                 case SyntaxKind.IndexedAccessType:
-                    const indexedAccess = node as IndexedAccessTypeNode;
-                    visitForDisplayParts(indexedAccess.objectType);
+                    Debug.assertNode(node, isIndexedAccessTypeNode);
+                    visitForDisplayParts(node.objectType);
                     parts.push({ text: "[" });
-                    visitForDisplayParts(indexedAccess.indexType);
+                    visitForDisplayParts(node.indexType);
                     parts.push({ text: "]" });
                     break;
                 case SyntaxKind.MappedType:
-                    const mappedType = node as MappedTypeNode;
+                    Debug.assertNode(node, isMappedTypeNode);
                     parts.push({ text: "{ " });
-                    if (mappedType.readonlyToken) {
-                        if (mappedType.readonlyToken.kind === SyntaxKind.PlusToken) {
+                    if (node.readonlyToken) {
+                        if (node.readonlyToken.kind === SyntaxKind.PlusToken) {
                             parts.push({ text: "+" });
                         }
-                        else if (mappedType.readonlyToken.kind === SyntaxKind.MinusToken) {
+                        else if (node.readonlyToken.kind === SyntaxKind.MinusToken) {
                             parts.push({ text: "-" });
                         }
                         parts.push({ text: "readonly " });
                     }
                     parts.push({ text: "[" });
-                    visitForDisplayParts(mappedType.typeParameter);
-                    if (mappedType.nameType) {
+                    visitForDisplayParts(node.typeParameter);
+                    if (node.nameType) {
                         parts.push({ text: " as " });
-                        visitForDisplayParts(mappedType.nameType);
+                        visitForDisplayParts(node.nameType);
                     }
                     parts.push({ text: "]" });
-                    if (mappedType.questionToken) {
-                        if (mappedType.questionToken.kind === SyntaxKind.PlusToken) {
+                    if (node.questionToken) {
+                        if (node.questionToken.kind === SyntaxKind.PlusToken) {
                             parts.push({ text: "+" });
                         }
-                        else if (mappedType.questionToken.kind === SyntaxKind.MinusToken) {
+                        else if (node.questionToken.kind === SyntaxKind.MinusToken) {
                             parts.push({ text: "-" });
                         }
                         parts.push({ text: "?" });
                     }
                     parts.push({ text: ": " });
-                    if (mappedType.type) {
-                        visitForDisplayParts(mappedType.type);
+                    if (node.type) {
+                        visitForDisplayParts(node.type);
                     }
                     parts.push({ text: "; }" });
                     break;
                 case SyntaxKind.LiteralType:
-                    visitForDisplayParts((node as LiteralTypeNode).literal);
+                    Debug.assertNode(node, isLiteralTypeNode);
+                    visitForDisplayParts(node.literal);
                     break;
                 case SyntaxKind.FunctionType:
-                    const functionType = node as FunctionTypeNode;
-                    if (functionType.typeParameters) {
-                        parts.push({ text: "<" });
-                        visitDisplayPartList(functionType.typeParameters, ", ");
-                        parts.push({ text: ">" });
-                    }
-                    parts.push({ text: "(" });
-                    visitDisplayPartList(functionType.parameters, ", ");
-                    parts.push({ text: ")" });
+                    Debug.assertNode(node, isFunctionTypeNode);
+                    visitParametersAndTypeParameters(node);
                     parts.push({ text: " => " });
-                    visitForDisplayParts(functionType.type);
+                    visitForDisplayParts(node.type);
                     break;
                 case SyntaxKind.ImportType:
-                    const importType = node as ImportTypeNode;
-                    if (importType.isTypeOf) {
+                    Debug.assertNode(node, isImportTypeNode);
+                    if (node.isTypeOf) {
                         parts.push({ text: "typeof " });
                     }
                     parts.push({ text: "import(" });
-                    visitForDisplayParts(importType.argument);
-                    if (importType.assertions) {
+                    visitForDisplayParts(node.argument);
+                    if (node.assertions) {
                         parts.push({ text: ", { assert: " });
-                        visitDisplayPartList(importType.assertions.assertClause.elements, ", ");
+                        visitDisplayPartList(node.assertions.assertClause.elements, ", ");
                         parts.push({ text: " }" });
                     }
                     parts.push({ text: ")" });
-                    if (importType.qualifier) {
+                    if (node.qualifier) {
                         parts.push({ text: "." });
-                        visitForDisplayParts(importType.qualifier);
+                        visitForDisplayParts(node.qualifier);
                     }
-                    if (importType.typeArguments) {
+                    if (node.typeArguments) {
                         parts.push({ text: "<" });
-                        visitDisplayPartList(importType.typeArguments, ", ");
+                        visitDisplayPartList(node.typeArguments, ", ");
                         parts.push({ text: ">" });
                     }
                     break;
                 case SyntaxKind.PropertySignature:
-                    const propertySignature = node as PropertySignature;
-                    if (propertySignature.modifiers) {
-                        visitDisplayPartList(propertySignature.modifiers, " ");
+                    Debug.assertNode(node, isPropertySignature);
+                    if (node.modifiers?.length) {
+                        visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
                     }
-                    visitForDisplayParts(propertySignature.name);
-                    if (propertySignature.questionToken) {
+                    visitForDisplayParts(node.name);
+                    if (node.questionToken) {
                         parts.push({ text: "?" });
                     }
-                    if (propertySignature.type) {
+                    if (node.type) {
                         parts.push({ text: ": " });
-                        visitForDisplayParts(propertySignature.type);
+                        visitForDisplayParts(node.type);
                     }
+                    break;
+                case SyntaxKind.IndexSignature:
+                    Debug.assertNode(node, isIndexSignatureDeclaration);
+                    parts.push({ text: "[" });
+                    visitDisplayPartList(node.parameters, ", ");
+                    parts.push({ text: "]" });
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
+                case SyntaxKind.MethodSignature:
+                    Debug.assertNode(node, isMethodSignature);
+                    if (node.modifiers?.length) {
+                        visitDisplayPartList(node.modifiers, " ");
+                        parts.push({ text: " " });
+                    }
+                    visitForDisplayParts(node.name);
+                    if (node.questionToken) {
+                        parts.push({ text: "?" });
+                    }
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
+                case SyntaxKind.CallSignature:
+                    Debug.assertNode(node, isCallSignatureDeclaration);
+                    visitParametersAndTypeParameters(node);
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
+                case SyntaxKind.ArrayBindingPattern:
+                    Debug.assertNode(node, isArrayBindingPattern);
+                    parts.push({ text: "[" });
+                    visitDisplayPartList(node.elements, ", ");
+                    parts.push({ text: "]" });
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                    Debug.assertNode(node, isObjectBindingPattern);
+                    parts.push({ text: "{" });
+                    if (node.elements.length) {
+                        parts.push({ text: " " });
+                        visitDisplayPartList(node.elements, ", ");
+                        parts.push({ text: " " });
+                    }
+                    parts.push({ text: "}" });
+                    break;
+                case SyntaxKind.BindingElement:
+                    Debug.assertNode(node, isBindingElement);
+                    visitForDisplayParts(node.name);
+                    break;
+                case SyntaxKind.PrefixUnaryExpression:
+                    Debug.assertNode(node, isPrefixUnaryExpression);
+                    parts.push({ text: tokenToString(node.operator) });
+                    visitForDisplayParts(node.operand);
+                    break;
+                case SyntaxKind.TemplateLiteralType:
+                    Debug.assertNode(node, isTemplateLiteralTypeNode);
+                    visitForDisplayParts(node.head);
+                    node.templateSpans.forEach(visitForDisplayParts);
+                    break;
+                case SyntaxKind.TemplateHead:
+                    Debug.assertNode(node, isTemplateHead);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.TemplateLiteralTypeSpan:
+                    Debug.assertNode(node, isTemplateLiteralTypeSpan);
+                    visitForDisplayParts(node.type);
+                    visitForDisplayParts(node.literal);
+                    break;
+                case SyntaxKind.TemplateMiddle:
+                    Debug.assertNode(node, isTemplateMiddle);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.TemplateTail:
+                    Debug.assertNode(node, isTemplateTail);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.ThisType:
+                    Debug.assertNode(node, isThisTypeNode);
+                    parts.push({ text: "this" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
             }
+        }
+
+        /**
+         * Visits the type parameters and parameters, returning something like:
+         *   <T1, T2>(p1: t1, p2: t2)
+         * which can be used for signature declaration nodes.
+         * @param signatureDeclaration Node to visit.
+         */
+        function visitParametersAndTypeParameters(signatureDeclaration: SignatureDeclarationBase) {
+            if (signatureDeclaration.typeParameters) {
+                parts.push({ text: "<" });
+                visitDisplayPartList(signatureDeclaration.typeParameters, ", ");
+                parts.push({ text: ">" });
+            }
+            parts.push({ text: "(" });
+            visitDisplayPartList(signatureDeclaration.parameters, ", ");
+            parts.push({ text: ")" });
         }
 
         function visitDisplayPartList<T extends Node>(nodes: NodeArray<T>, separator: string) {
@@ -750,6 +907,27 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 visitForDisplayParts(node);
             });
         }
+
+        function getLiteralText(node: LiteralLikeNode) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                    return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail: {
+                    const rawText = (node as TemplateLiteralLikeNode).rawText ?? escapeTemplateSubstitution(escapeString(node.text, CharacterCodes.backtick));
+                    switch (node.kind) {
+                        case SyntaxKind.TemplateHead:
+                            return "`" + rawText + "${";
+                        case SyntaxKind.TemplateMiddle:
+                            return "}" + rawText + "${";
+                        case SyntaxKind.TemplateTail:
+                            return "}" + rawText + "`";
+                    }
+                }
+            }
+            return node.text;
+        }
     }
 
     function isUndefined(name: __String) {
@@ -757,7 +935,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+        if ((isPartOfParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }

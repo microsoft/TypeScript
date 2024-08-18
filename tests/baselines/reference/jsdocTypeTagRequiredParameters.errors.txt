@@ -15,15 +15,15 @@ a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
     }
     
     f() // should error
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 a.js:1:21: An argument for '0' was not provided.
     g() // should error
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 a.js:4:13: An argument for 's' was not provided.
     h()
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 a.js:7:14: An argument for 's' was not provided.
     

@@ -24,7 +24,9 @@ Resolution:: {
 
 
 //// [/root/src/types/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -70,7 +72,9 @@ Resolution:: {
 
 
 //// [/root/src/node_modules/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -122,7 +126,9 @@ Resolution:: {
 
 
 //// [/root/src/node_modules/@types/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {

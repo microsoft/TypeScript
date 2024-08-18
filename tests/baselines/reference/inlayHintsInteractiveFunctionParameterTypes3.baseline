@@ -1,7 +1,16 @@
+// === Inlay Hints ===
     bar: function (x?): void {
                      ^
 {
-  "text": ": boolean",
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "boolean"
+    }
+  ],
   "position": 87,
   "kind": "Type",
   "whitespaceBefore": true
@@ -10,7 +19,15 @@
     set foo(value) { this.#value = value; }
                  ^
 {
-  "text": ": number",
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
   "position": 250,
   "kind": "Type",
   "whitespaceBefore": true

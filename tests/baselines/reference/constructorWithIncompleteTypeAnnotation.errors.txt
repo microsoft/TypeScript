@@ -476,7 +476,7 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
             private otherValue = 42;
     
             constructor(private value: number, public name: string)  :  }
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
                         ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.

@@ -3,12 +3,17 @@
 === parseErrorDoubleCommaInCall.ts ===
 Boolean({
 >Boolean({    x: 0,,}) : boolean
+>                      : ^^^^^^^
 >Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >{    x: 0,,} : { x: number; }
+>             : ^^^^^^^^^^^^^^
 
     x: 0,,
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 });
 

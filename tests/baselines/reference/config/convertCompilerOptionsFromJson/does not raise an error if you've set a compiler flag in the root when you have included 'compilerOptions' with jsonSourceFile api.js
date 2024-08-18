@@ -17,8 +17,8 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "module": 99,
- "configFilePath": "tsconfig.json"
+  "module": 99,
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

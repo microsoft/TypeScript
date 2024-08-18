@@ -1,7 +1,7 @@
 instanceofOperator.ts(7,11): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
 instanceofOperator.ts(12,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-instanceofOperator.ts(15,20): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
-instanceofOperator.ts(16,23): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+instanceofOperator.ts(15,20): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperator.ts(16,23): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
 instanceofOperator.ts(19,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperator.ts(21,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 
@@ -27,10 +27,10 @@ instanceofOperator.ts(21,5): error TS2358: The left-hand side of an 'instanceof'
         // Error and should be error
         obj instanceof 4;
                        ~
-!!! error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
         Object instanceof obj;
                           ~~~
-!!! error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     
         // Error on left hand side
         null instanceof null;

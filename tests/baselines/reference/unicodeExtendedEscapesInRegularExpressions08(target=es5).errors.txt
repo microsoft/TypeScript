@@ -1,0 +1,11 @@
+unicodeExtendedEscapesInRegularExpressions08.ts(4,20): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+
+
+==== unicodeExtendedEscapesInRegularExpressions08.ts (1 errors) ====
+    // ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
+    //  2. If cp ≤ 65535, return cp.
+    // (FFFF == 65535)
+    var x = /\u{FFFF}/gu;
+                       ~
+!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+    

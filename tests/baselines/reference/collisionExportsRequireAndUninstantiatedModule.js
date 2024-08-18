@@ -20,13 +20,12 @@ export function foo2(): exports.I {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo2 = exports.foo = void 0;
+    exports.foo = foo;
+    exports.foo2 = foo2;
     function foo() {
         return null;
     }
-    exports.foo = foo;
     function foo2() {
         return null;
     }
-    exports.foo2 = foo2;
 });

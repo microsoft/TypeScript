@@ -17,7 +17,7 @@ overloadsAndTypeArgumentArityErrors.ts(9,1): error TS2554: Expected 1 arguments,
     
     declare function f<A, B = {}>(arg: number): void;
     f<number>(); // wrong number of arguments (#25683)
-    ~~~~~~~~~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 overloadsAndTypeArgumentArityErrors.ts:8:31: An argument for 'arg' was not provided.
     

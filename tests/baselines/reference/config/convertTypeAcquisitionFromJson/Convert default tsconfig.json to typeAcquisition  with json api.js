@@ -12,9 +12,9 @@ Fs::
 configFileName:: tsconfig.json
 TypeAcquisition::
 {
- "enable": false,
- "include": [],
- "exclude": []
+  "enable": false,
+  "include": [],
+  "exclude": []
 }
 Errors::
 

@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a.ts
 
 
@@ -14,12 +14,14 @@ a: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a.ts
 
 
@@ -35,7 +37,9 @@ a: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

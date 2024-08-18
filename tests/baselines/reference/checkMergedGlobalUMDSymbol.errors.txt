@@ -1,4 +1,5 @@
-global.d.ts(6,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'THREE' must be of type 'typeof import("global")', but here has type 'typeof import("three")'.
+global.d.ts(3,21): error TS2451: Cannot redeclare block-scoped variable 'THREE'.
+global.d.ts(6,16): error TS2451: Cannot redeclare block-scoped variable 'THREE'.
 
 
 ==== three.d.ts (0 errors) ====
@@ -6,16 +7,19 @@ global.d.ts(6,16): error TS2403: Subsequent variable declarations must have the 
       export class Vector2 {}
     }
     
-==== global.d.ts (1 errors) ====
+==== global.d.ts (2 errors) ====
     import * as _three from './three';
     
     export as namespace THREE;
+                        ~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'THREE'.
+!!! related TS6203 global.d.ts:6:16: 'THREE' was also declared here.
     
     declare global {
       export const THREE: typeof _three;
                    ~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'THREE' must be of type 'typeof import("global")', but here has type 'typeof import("three")'.
-!!! related TS6203 global.d.ts:1:1: 'THREE' was also declared here.
+!!! error TS2451: Cannot redeclare block-scoped variable 'THREE'.
+!!! related TS6203 global.d.ts:3:21: 'THREE' was also declared here.
     }
     
 ==== test.ts (0 errors) ====

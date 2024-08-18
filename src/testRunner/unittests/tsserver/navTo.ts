@@ -1,15 +1,15 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     it("should not include type symbols", () => {
@@ -22,19 +22,19 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
             content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         // Try to find some interface type defined in lib.d.ts
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path },
-        }).response as ts.server.protocol.NavtoItem[];
+        });
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path },
-        }).response as ts.server.protocol.NavtoItem[];
+        });
         baselineTsserverLogs("navTo", "should not include type symbols", session);
     });
 
@@ -68,7 +68,7 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
 export const ghijkl = a.abcdef;`,
         };
         const host = createServerHost([configFile1, file1, configFile2, file2]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1, file2], session);
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
@@ -82,7 +82,7 @@ export const ghijkl = a.abcdef;`,
     it("should de-duplicate symbols when searching all projects", () => {
         const solutionConfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 references: [{ path: "./a" }, { path: "./b" }],
                 files: [],
             }),
@@ -116,7 +116,7 @@ export const ghijkl = a.abcdef;`,
 export const ghijkl = a.abcdef;`,
         };
         const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
@@ -136,7 +136,7 @@ export const ghijkl = a.abcdef;`,
             content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         // Try to find some interface type defined in lib.d.ts

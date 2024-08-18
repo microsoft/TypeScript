@@ -26,6 +26,7 @@ class D {
     constructor(/** @readonly */ x) {}
 }
 
+
 //// [foo.js]
 class C {
     /** @readonly */

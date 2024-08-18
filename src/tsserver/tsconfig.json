@@ -7,10 +7,7 @@
         ]
     },
     "references": [
-        { "path": "../compiler" },
-        { "path": "../services" },
-        { "path": "../jsTyping" },
-        { "path": "../server" }
+        { "path": "../typescript" }
     ],
     "include": ["**/*"]
 }

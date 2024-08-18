@@ -1,12 +1,11 @@
-import * as Utils from "../../_namespaces/Utils";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     verifyTscWatch({
@@ -16,7 +15,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         sys: () => {
             const configFile: File = {
                 path: "/project/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                         target: "es2020",
@@ -28,7 +27,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
             };
             const packageFile: File = {
                 path: "/project/package.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "some-proj",
                     version: "1.0.0",
                     description: "",

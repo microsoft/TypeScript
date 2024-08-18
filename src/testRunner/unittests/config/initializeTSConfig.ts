@@ -1,12 +1,12 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: initTSConfig", () => {
     function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
         describe(name, () => {
             const commandLine = ts.parseCommandLine(commandLinesArgs);
             const initResult = ts.generateTSConfig(commandLine.options, commandLine.fileNames, "\n");
-            const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 Harness.Baseline.runBaseline(outputFileName, initResult, { PrintDiff: true });

@@ -3,17 +3,23 @@
 === exportDefaultTypeClassAndValue.ts ===
 const foo = 1
 >foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
 export default foo
 >foo : 1
+>    : ^
 
 export default class Foo {}
 >Foo : foo
+>    : ^^^
 
 type Bar = {}
->Bar : {}
+>Bar : Bar
+>    : ^^^
 
 export default Bar
 >Bar : Bar
+>    : ^^^
 

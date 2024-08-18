@@ -4,13 +4,16 @@
 interface Error {
     stack2: string;
 >stack2 : string
+>       : ^^^^^^
 }
 
 === /a/app.ts ===
 /// <reference types="node"/>
 function foo(): Error {
 >foo : () => Error
+>    : ^^^^^^     
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
