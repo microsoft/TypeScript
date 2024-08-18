@@ -35,11 +35,11 @@ nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
 >                       : ^^^^^^^^
 >nodes.map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
->          : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >nodes : TreeNodeMiddleman[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >n => n.name : (n: TreeNodeMiddleman) => string
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : TreeNodeMiddleman

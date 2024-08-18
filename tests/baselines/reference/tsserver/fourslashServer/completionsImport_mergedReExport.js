@@ -123,7 +123,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -1116,8 +1115,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@jest/types/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Config",
@@ -1138,6 +1137,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2101,8 +2105,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "@jest/types",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "@jest/types",
@@ -2130,6 +2134,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

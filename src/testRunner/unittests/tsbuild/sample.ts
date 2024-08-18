@@ -359,6 +359,23 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             modifyFs: fs => replaceText(fs, "logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
             edits: noChangeOnlyRuns,
         });
+
+        [false, true].forEach(skipReferenceCoreFromTest =>
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: `skips builds downstream projects if upstream projects have errors with stopBuildOnErrors${skipReferenceCoreFromTest ? " when test does not reference core" : ""}`,
+                fs: () => getFsForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest),
+                commandLineArgs: ["--b", "tests", "--verbose", "--stopBuildOnErrors"],
+                modifyFs: fs => appendText(fs, "core/index.ts", `multiply();`),
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "fix error",
+                        edit: fs => replaceText(fs, "core/index.ts", "multiply();", ""),
+                    },
+                ],
+            })
+        );
     });
 
     describe("project invalidation", () => {

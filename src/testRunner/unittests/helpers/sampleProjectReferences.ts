@@ -26,7 +26,7 @@ export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean): FsContents {
+export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean): FsContents {
     return {
         [libFile.path]: libFile.content,
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
@@ -55,10 +55,14 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
             export const m = mod;
         `,
         "/user/username/projects/sample1/tests/tsconfig.json": jsonToReadableText({
-            references: [
-                { path: "../core" },
-                { path: "../logic" },
-            ],
+            references: !skipReferenceCoreFromTest ?
+                [
+                    { path: "../core" },
+                    { path: "../logic" },
+                ] :
+                [
+                    { path: "../logic" },
+                ],
             files: ["index.ts"],
             compilerOptions: {
                 ...getProjectConfigWithNodeNext(withNodeNext),
@@ -81,9 +85,9 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
     };
 }
 
-export function getFsForSampleProjectReferences() {
+export function getFsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
     return loadProjectFromFiles(
-        getFsContentsForSampleProjectReferences(),
+        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
         {
             cwd: "/user/username/projects/sample1",
             executingFilePath: libFile.path,
@@ -91,9 +95,9 @@ export function getFsForSampleProjectReferences() {
     );
 }
 
-export function getSysForSampleProjectReferences(withNodeNext?: boolean) {
+export function getSysForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
     return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(withNodeNext),
+        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
         {
             currentDirectory: "/user/username/projects/sample1",
         },

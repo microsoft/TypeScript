@@ -1,4 +1,10 @@
 [
+    "File '/a/b/node_modules/@types/node/package.json' does not exist.",
+    "File '/a/b/node_modules/@types/package.json' does not exist.",
+    "File '/a/b/node_modules/package.json' does not exist.",
+    "File '/a/b/package.json' does not exist.",
+    "File '/a/package.json' does not exist.",
+    "File '/package.json' does not exist.",
     "Module 'ph' was resolved as locally declared ambient module in file '/a/b/node_modules/@types/node/ph.d.ts'.",
     "======== Resolving module 'node:ph' from '/a/b/main.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",

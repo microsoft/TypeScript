@@ -131,6 +131,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -373,7 +374,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -393,6 +393,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -828,6 +829,7 @@ export function emitFiles(
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
+            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -903,8 +905,9 @@ export function emitFiles(
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
+                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
@@ -958,6 +961,7 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import ellision, no need to calculate it
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
@@ -2068,7 +2072,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //
@@ -4001,7 +4005,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.comment) {
             const text = getTextOfJSDocComment(node.comment);
             if (text) {
-                const lines = text.split(/\r\n?|\n/g);
+                const lines = text.split(/\r\n?|\n/);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -4504,7 +4508,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
-        emitList(parentNode, typeParameters, ListFormat.TypeParameters);
+        emitList(parentNode, typeParameters, ListFormat.TypeParameters | (isArrowFunction(parentNode) ? ListFormat.AllowTrailingComma : ListFormat.None));
     }
 
     function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
@@ -4876,7 +4880,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeLines(text: string): void {
-        const lines = text.split(/\r\n?|\n/g);
+        const lines = text.split(/\r\n?|\n/);
         const indentation = guessIndentation(lines);
         for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;

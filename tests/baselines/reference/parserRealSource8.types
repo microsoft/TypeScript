@@ -3761,16 +3761,16 @@ module TypeScript {
                 context.modDeclChain.pop();
 >context.modDeclChain.pop() : ModuleDeclaration
 >                           : ^^^^^^^^^^^^^^^^^
->context.modDeclChain.pop : () => ModuleDeclaration | undefined
->                         : ^^^^^^^^^^^^^^^^^^^^^^^            
+>context.modDeclChain.pop : () => ModuleDeclaration
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >context.modDeclChain : ModuleDeclaration[]
 >                     : ^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
 >modDeclChain : ModuleDeclaration[]
 >             : ^^^^^^^^^^^^^^^^^^^
->pop : () => ModuleDeclaration | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^            
+>pop : () => ModuleDeclaration
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
                 if (context.modDeclChain.length >= 1) {
 >context.modDeclChain.length >= 1 : boolean

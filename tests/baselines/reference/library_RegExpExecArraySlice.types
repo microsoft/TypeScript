@@ -10,21 +10,21 @@ regExpExecArrayValue.slice();
 >regExpExecArrayValue.slice() : string[]
 >                             : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
->                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
 >                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 
 regExpExecArrayValue.slice(0);
 >regExpExecArrayValue.slice(0) : string[]
 >                              : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
->                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
 >                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -32,11 +32,11 @@ regExpExecArrayValue.slice(0,1);
 >regExpExecArrayValue.slice(0,1) : string[]
 >                                : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
->                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
 >                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >1 : 1

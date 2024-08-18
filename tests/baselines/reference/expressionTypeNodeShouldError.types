@@ -67,12 +67,12 @@ type ItemType = "".typeof(nodes.item(0));
 >                : ^^^^^^^^^^^^^
 >nodes.item(0) : HTMLLIElement
 >              : ^^^^^^^^^^^^^
->nodes.item : (index: number) => HTMLLIElement | null
->           : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>nodes.item : (index: number) => HTMLLIElement
+>           : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >nodes : HTMLCollectionOf<HTMLLIElement>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item : (index: number) => HTMLLIElement | null
->     : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>item : (index: number) => HTMLLIElement
+>     : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -132,12 +132,12 @@ type ItemType2 = 4..typeof(nodes.item(0));
 >                : ^^^^^^^^^^^^^
 >nodes.item(0) : HTMLLIElement
 >              : ^^^^^^^^^^^^^
->nodes.item : (index: number) => HTMLLIElement | null
->           : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>nodes.item : (index: number) => HTMLLIElement
+>           : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >nodes : HTMLCollectionOf<HTMLLIElement>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item : (index: number) => HTMLLIElement | null
->     : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>item : (index: number) => HTMLLIElement
+>     : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -201,12 +201,12 @@ type ItemType3 = true.typeof(nodes.item(0));
 >                : ^^^^^^^^^^^^^
 >nodes.item(0) : HTMLLIElement
 >              : ^^^^^^^^^^^^^
->nodes.item : (index: number) => HTMLLIElement | null
->           : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>nodes.item : (index: number) => HTMLLIElement
+>           : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >nodes : HTMLCollectionOf<HTMLLIElement>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->item : (index: number) => HTMLLIElement | null
->     : ^     ^^      ^^^^^^^^^^^^^^^^^^       
+>item : (index: number) => HTMLLIElement
+>     : ^     ^^      ^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

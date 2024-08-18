@@ -80,7 +80,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             watchOrSolution: solutionBuilder,
         });
 
-        function flatArray<T>(arr: T[][]): readonly T[] {
+        function flatArray<T extends {}>(arr: T[][]): readonly T[] {
             return ts.flatMap(arr, ts.identity);
         }
         function pkgs<T>(cb: (index: number) => T): T[] {

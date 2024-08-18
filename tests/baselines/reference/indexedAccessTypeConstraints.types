@@ -61,11 +61,11 @@ export class Foo<C> extends Parent<IData<C>> {
 >this.getData() : Data<IData<C>>
 >               : ^^^^^^^^^^^^^^
 >this.getData : () => Data<IData<C>>
->             : ^^^^^^     ^^^^^^^^ 
+>             : ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getData : () => Data<IData<C>>
->        : ^^^^^^     ^^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^^^
 >get : <K extends "content">(prop: K) => IData<C>[K]
 >    : ^ ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
 >'content' : "content"
@@ -91,11 +91,11 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 >this.getData() : Data<T>
 >               : ^^^^^^^
 >this.getData : () => Data<T>
->             : ^^^^^^     ^ 
+>             : ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getData : () => Data<T>
->        : ^^^^^^     ^ 
+>        : ^^^^^^^^^^^^^
 >get : <K extends keyof T>(prop: K) => T[K]
 >    : ^ ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >'content' : "content"
