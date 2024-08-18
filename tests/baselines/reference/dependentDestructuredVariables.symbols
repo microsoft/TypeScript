@@ -1168,3 +1168,35 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
   }
 }
 
+// https://github.com/microsoft/TypeScript/issues/59652
+
+declare function mutuallyEnabledPair(): {
+>mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariables.ts, 463, 1))
+
+    discriminator: true,
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariables.ts, 467, 41))
+
+    value: string,
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 468, 24))
+
+  } | {
+    discriminator: false,
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariables.ts, 470, 7))
+
+    value: null | undefined,
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 471, 25))
+  }
+  
+  
+  export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariables.ts, 476, 16))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 468, 24), Decl(dependentDestructuredVariables.ts, 471, 25))
+>value59652 : Symbol(value59652, Decl(dependentDestructuredVariables.ts, 476, 31))
+>mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariables.ts, 463, 1))
+  
+  if (discriminator) {
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariables.ts, 476, 16))
+
+    value59652;
+>value59652 : Symbol(value59652, Decl(dependentDestructuredVariables.ts, 476, 31))
+  }

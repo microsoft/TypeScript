@@ -28816,7 +28816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // parameter declared in the same parameter list is a candidate.
                 if (isIdentifier(expr)) {
                     const symbol = getResolvedSymbol(expr);
-                    const declaration = symbol.valueDeclaration;
+                    const declaration = symbol.exportSymbol ? symbol.declarations?.[0] : symbol.valueDeclaration;
                     if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
                         return declaration;
                     }
