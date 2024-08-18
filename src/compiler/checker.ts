@@ -32424,9 +32424,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let signatureList: Signature[] | undefined;
         const types = (type as UnionType).types
-            .map(type => ({type, signature: getContextualCallSignature(type, node)}))
+            .map(type => ({ type, signature: getContextualCallSignature(type, node) }))
             .filter(type => type.signature)
-            .sort((t1, t2) => t1.signature!.parameters.length - t2.signature!.parameters.length)
+            .sort((t1, t2) => t1.signature!.parameters.length - t2.signature!.parameters.length);
         for (const current of types) {
             const signature = current.signature!;
             if (!signatureList) {
