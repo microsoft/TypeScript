@@ -13,6 +13,7 @@ noInferRestSpread1.ts(7,22): error TS2345: Argument of type '(a: number, b: numb
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: number, b: number) => void' is not assignable to parameter of type '(args_0: number) => void'.
 !!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
+    const result3 = call((a, b) => {}, 1, '');; // test contextual parameters
     
     declare function fn1<A extends unknown[]>(
       cb: (a: [number, ...NoInfer<A>]) => void,
@@ -21,13 +22,13 @@ noInferRestSpread1.ts(7,22): error TS2345: Argument of type '(a: number, b: numb
     
     declare const singleStr: [string];
     
-    const result3 = fn1((arg) => {
+    const result4 = fn1((arg) => {
       arg.length;
     }, singleStr);
     
     declare const tupleUnion: [string] | [number, boolean];
     
-    const result4 = fn1((arg) => {
+    const result5 = fn1((arg) => {
       arg.length;
     }, tupleUnion);
     

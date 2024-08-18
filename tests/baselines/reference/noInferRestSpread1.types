@@ -49,6 +49,24 @@ const result2 = call((a: number, b: number) => {}, 1); // error
 >1 : 1
 >  : ^
 
+const result3 = call((a, b) => {}, 1, '');; // test contextual parameters
+>result3 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a, b) => {}, 1, '') : [number, string]
+>                          : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a, b) => {} : (a: number, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
 declare function fn1<A extends unknown[]>(
 >fn1 : <A extends unknown[]>(cb: (a: [number, ...NoInfer<A>]) => void, args: A) => A
 >    : ^ ^^^^^^^^^         ^^  ^^                                    ^^    ^^ ^^^^^ 
@@ -69,8 +87,8 @@ declare const singleStr: [string];
 >singleStr : [string]
 >          : ^^^^^^^^
 
-const result3 = fn1((arg) => {
->result3 : [string]
+const result4 = fn1((arg) => {
+>result4 : [string]
 >        : ^^^^^^^^
 >fn1((arg) => {  arg.length;}, singleStr) : [string]
 >                                         : ^^^^^^^^
@@ -97,8 +115,8 @@ declare const tupleUnion: [string] | [number, boolean];
 >tupleUnion : [string] | [number, boolean]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-const result4 = fn1((arg) => {
->result4 : [string] | [number, boolean]
+const result5 = fn1((arg) => {
+>result5 : [string] | [number, boolean]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1((arg) => {  arg.length;}, tupleUnion) : [string] | [number, boolean]
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
