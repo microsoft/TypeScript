@@ -24829,8 +24829,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const sourceLen = getParameterCount(source);
-        for (let i = 0; i < sourceLen; i++) {
+        const targetLen = getParameterCount(target);
+        for (let i = 0; i < targetLen; i++) {
             const s = getTypeAtPosition(source, i);
             const t = getTypeAtPosition(target, i);
             const related = compareTypes(t, s);
@@ -32433,7 +32433,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // This signature will contribute to contextual union signature
                 signatureList = [signature];
             }
-            else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
+            else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesSubtypeOf)) {
                 // Signatures aren't identical, do not use
                 return undefined;
             }

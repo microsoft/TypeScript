@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/contextualSignatureWithExtraParameters.ts] ////
+
+=== contextualSignatureWithExtraParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/59309
+function f1(
+>f1 : (cb: ((item: number) => void) | ((item: number, extra: string) => void)) => void
+>   : ^  ^^                                                                  ^^^^^^^^^
+
+    cb: ((item: number) => void) | ((item: number, extra: string) => void),
+>cb : ((item: number) => void) | ((item: number, extra: string) => void)
+>   : ^^    ^^      ^^^^^    ^^^^^^    ^^      ^^     ^^      ^^^^^    ^
+>item : number
+>     : ^^^^^^
+>item : number
+>     : ^^^^^^
+>extra : string
+>      : ^^^^^^
+
+  ) {}
+  
+  f1((item) => {});
+>f1((item) => {}) : void
+>                 : ^^^^
+>f1 : (cb: ((item: number) => void) | ((item: number, extra: string) => void)) => void
+>   : ^  ^^                                                                  ^^^^^^^^^
+>(item) => {} : (item: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>item : number
+>     : ^^^^^^
+
+function f2<T>(
+>f2 : <T>(arr: T[], cb: ((item: T) => void) | ((item: T, extra: unknown) => void)) => void
+>   : ^ ^^   ^^   ^^  ^^                                                         ^^^^^^^^^
+
+    arr: T[],
+>arr : T[]
+>    : ^^^
+
+    cb: ((item: T) => void) | ((item: T, extra: unknown) => void),
+>cb : ((item: T) => void) | ((item: T, extra: unknown) => void)
+>   : ^^    ^^ ^^^^^    ^^^^^^    ^^ ^^     ^^       ^^^^^    ^
+>item : T
+>     : ^
+>item : T
+>     : ^
+>extra : unknown
+>      : ^^^^^^^
+
+  ) {}
+  
+f2([1, 2, 3], (item) => {});
+>f2([1, 2, 3], (item) => {}) : void
+>                            : ^^^^
+>f2 : <T>(arr: T[], cb: ((item: T) => void) | ((item: T, extra: unknown) => void)) => void
+>   : ^ ^^   ^^   ^^  ^^                                                         ^^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>(item) => {} : (item: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>item : number
+>     : ^^^^^^
+
+export interface AsyncResultCallback<T, E = Error> {
+    (err?: E | null, result?: T): void;
+>err : E
+>    : ^
+>result : T
+>       : ^
+}
+
+export interface AsyncResultIterator<T, R, E = Error> {
+    (item: T, callback: AsyncResultCallback<R, E>): void;
+>item : T
+>     : ^
+>callback : AsyncResultCallback<R, E>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+export interface AsyncResultIteratorPromise<T, R> {
+    (item: T): Promise<R>;
+>item : T
+>     : ^
+}
+
+declare function mapLimit<T, R, E = Error>(
+>mapLimit : <T, R, E = Error>(arr: T[], limit: number, iterator: AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>) => Promise<R[]>
+>         : ^ ^^ ^^ ^^^^^^^^^^   ^^   ^^     ^^      ^^        ^^                                                               ^^^^^            
+
+    arr: T[],
+>arr : T[]
+>    : ^^^
+
+    limit: number,
+>limit : number
+>      : ^^^^^^
+
+    iterator:  AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>,
+>iterator : AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): Promise<R[]>;
+
+mapLimit([1,2,3], 3, async (n) => {
+>mapLimit([1,2,3], 3, async (n) => {    return n ** 2;}) : Promise<number[]>
+>                                                        : ^^^^^^^^^^^^^^^^^
+>mapLimit : <T, R, E = Error>(arr: T[], limit: number, iterator: AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>) => Promise<R[]>
+>         : ^ ^^ ^^ ^^^^^^^^^^   ^^   ^^     ^^      ^^        ^^                                                               ^^^^^            
+>[1,2,3] : number[]
+>        : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>3 : 3
+>  : ^
+>async (n) => {    return n ** 2;} : (n: number) => Promise<number>
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    return n ** 2;
+>n ** 2 : number
+>       : ^^^^^^
+>n : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+});

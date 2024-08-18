@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/contextualSignatureWithExtraParameters.ts] ////
+
+=== contextualSignatureWithExtraParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/59309
+function f1(
+>f1 : Symbol(f1, Decl(contextualSignatureWithExtraParameters.ts, 0, 0))
+
+    cb: ((item: number) => void) | ((item: number, extra: string) => void),
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 1, 12))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 2, 10))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 2, 37))
+>extra : Symbol(extra, Decl(contextualSignatureWithExtraParameters.ts, 2, 50))
+
+  ) {}
+  
+  f1((item) => {});
+>f1 : Symbol(f1, Decl(contextualSignatureWithExtraParameters.ts, 0, 0))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 5, 6))
+
+function f2<T>(
+>f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 19))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 7, 12))
+
+    arr: T[],
+>arr : Symbol(arr, Decl(contextualSignatureWithExtraParameters.ts, 7, 15))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 7, 12))
+
+    cb: ((item: T) => void) | ((item: T, extra: unknown) => void),
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 8, 13))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 9, 10))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 7, 12))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 9, 32))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 7, 12))
+>extra : Symbol(extra, Decl(contextualSignatureWithExtraParameters.ts, 9, 40))
+
+  ) {}
+  
+f2([1, 2, 3], (item) => {});
+>f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 19))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 12, 15))
+
+export interface AsyncResultCallback<T, E = Error> {
+>AsyncResultCallback : Symbol(AsyncResultCallback, Decl(contextualSignatureWithExtraParameters.ts, 12, 28))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 14, 37))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 14, 39))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    (err?: E | null, result?: T): void;
+>err : Symbol(err, Decl(contextualSignatureWithExtraParameters.ts, 15, 5))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 14, 39))
+>result : Symbol(result, Decl(contextualSignatureWithExtraParameters.ts, 15, 20))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 14, 37))
+}
+
+export interface AsyncResultIterator<T, R, E = Error> {
+>AsyncResultIterator : Symbol(AsyncResultIterator, Decl(contextualSignatureWithExtraParameters.ts, 16, 1))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 18, 37))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 18, 39))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 18, 42))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    (item: T, callback: AsyncResultCallback<R, E>): void;
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 19, 5))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 18, 37))
+>callback : Symbol(callback, Decl(contextualSignatureWithExtraParameters.ts, 19, 13))
+>AsyncResultCallback : Symbol(AsyncResultCallback, Decl(contextualSignatureWithExtraParameters.ts, 12, 28))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 18, 39))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 18, 42))
+}
+export interface AsyncResultIteratorPromise<T, R> {
+>AsyncResultIteratorPromise : Symbol(AsyncResultIteratorPromise, Decl(contextualSignatureWithExtraParameters.ts, 20, 1))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 21, 44))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 21, 46))
+
+    (item: T): Promise<R>;
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 22, 5))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 21, 44))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 21, 46))
+}
+
+declare function mapLimit<T, R, E = Error>(
+>mapLimit : Symbol(mapLimit, Decl(contextualSignatureWithExtraParameters.ts, 23, 1))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 25, 26))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 25, 31))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    arr: T[],
+>arr : Symbol(arr, Decl(contextualSignatureWithExtraParameters.ts, 25, 43))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 25, 26))
+
+    limit: number,
+>limit : Symbol(limit, Decl(contextualSignatureWithExtraParameters.ts, 26, 13))
+
+    iterator:  AsyncResultIteratorPromise<T, R> | AsyncResultIterator<T, R, E>,
+>iterator : Symbol(iterator, Decl(contextualSignatureWithExtraParameters.ts, 27, 18))
+>AsyncResultIteratorPromise : Symbol(AsyncResultIteratorPromise, Decl(contextualSignatureWithExtraParameters.ts, 20, 1))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 25, 26))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
+>AsyncResultIterator : Symbol(AsyncResultIterator, Decl(contextualSignatureWithExtraParameters.ts, 16, 1))
+>T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 25, 26))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
+>E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 25, 31))
+
+): Promise<R[]>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
+
+mapLimit([1,2,3], 3, async (n) => {
+>mapLimit : Symbol(mapLimit, Decl(contextualSignatureWithExtraParameters.ts, 23, 1))
+>n : Symbol(n, Decl(contextualSignatureWithExtraParameters.ts, 31, 28))
+
+    return n ** 2;
+>n : Symbol(n, Decl(contextualSignatureWithExtraParameters.ts, 31, 28))
+
+});
