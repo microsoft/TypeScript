@@ -445,6 +445,7 @@ export const enum SyntaxKind {
 
     // Transformation nodes
     NotEmittedStatement,
+    NotEmittedTypeElement,
     PartiallyEmittedExpression,
     CommaListExpression,
     SyntheticReferenceExpression,
@@ -3308,6 +3309,10 @@ export interface Statement extends Node, JSDocContainer {
 // not-emitted node.
 export interface NotEmittedStatement extends Statement {
     readonly kind: SyntaxKind.NotEmittedStatement;
+}
+
+export interface NotEmittedTypeElement extends TypeElement {
+    readonly kind: SyntaxKind.NotEmittedTypeElement;
 }
 
 /**
@@ -9144,6 +9149,7 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
+    createNotEmittedTypeElement(): NotEmittedTypeElement;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;

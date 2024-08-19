@@ -7056,7 +7056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
                     if (context.flags & NodeBuilderFlags.NoTruncation) {
-                        return [];
+                        return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
                     }
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
