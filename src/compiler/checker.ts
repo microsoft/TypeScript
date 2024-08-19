@@ -32424,8 +32424,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         let signatures = mapDefined((type as UnionType).types, t => getContextualCallSignature(t, node));
-        if (hasSyntacticModifier(node, ModifierFlags.Async)) {
-            signatures = signatures.filter(s => !!getAwaitedTypeOfPromise(getReturnTypeOfSignature(s)));
+        const functionFlags = getFunctionFlags(node);
+        if (functionFlags === FunctionFlags.Async) {
+            signatures = filter(signatures, s => !!getAwaitedTypeOfPromise(getReturnTypeOfSignature(s)));
         }
         signatures.sort((s1, s2) => getMinArgumentCount(s1) - getMinArgumentCount(s2));
         if (!signatures.length) {
