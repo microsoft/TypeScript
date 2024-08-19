@@ -35,6 +35,7 @@ import {
     ExportKind,
     ExportMapInfoKey,
     factory,
+    fileContainsPackageImport,
     findAncestor,
     first,
     firstDefined,
@@ -1543,7 +1544,7 @@ function getExportInfos(
         const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(isFromPackageJson);
         if (
             toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
-            !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
+            (!toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost) || fileContainsPackageImport(fromFile, stripQuotes(moduleSymbol.name)))
         ) {
             const checker = program.getTypeChecker();
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });

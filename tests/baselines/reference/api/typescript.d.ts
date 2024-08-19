@@ -3318,6 +3318,7 @@ declare namespace ts {
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
             private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
+            private sendSourceFileChange;
             /**
              * This function rebuilds the project for every file opened by the client
              * This does not reload contents of open files from disk. But we could do that if needed
@@ -7346,9 +7347,10 @@ declare namespace ts {
         TypeAssertions = 2,
         NonNullAssertions = 4,
         PartiallyEmittedExpressions = 8,
+        ExpressionsWithTypeArguments = 16,
         Assertions = 6,
-        All = 15,
-        ExcludeJSDocTypeAssertion = 16,
+        All = 31,
+        ExcludeJSDocTypeAssertion = -2147483648,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
@@ -8240,6 +8242,7 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly autoImportSpecifierExcludeRegexes?: string[];
         readonly preferTypeOnlyAutoImports?: boolean;
         /**
          * Indicates whether imports should be organized in a case-insensitive manner.
@@ -9799,6 +9802,7 @@ declare namespace ts {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
+        stopBuildOnErrors?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         declaration?: boolean;

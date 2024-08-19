@@ -605,6 +605,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_key_1540" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Объявление "namespace" с использованием ключевого слова "module" недопустимо. Вместо него используйте ключевое слово "namespace".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_non_dry_build_would_build_project_0_6357" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>

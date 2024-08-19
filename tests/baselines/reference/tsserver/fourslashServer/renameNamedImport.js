@@ -103,92 +103,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /lib/tsconfig.json to open"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
- "rootNames": [
-  "/lib.d.ts",
-  "/lib.decorators.d.ts",
-  "/lib.decorators.legacy.d.ts",
-  "/lib/index.ts",
-  "/src/index.ts"
- ],
- "options": {
-  "configFilePath": "/tsconfig.json"
- }
-}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib/index.ts Text-1 "const unrelatedLocalVariable = 123;\nexport const someExportedVariable = unrelatedLocalVariable;"
-	/src/index.ts Text-1 "import { someExportedVariable } from '../lib/index';\nsomeExportedVariable;"
-
-
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.d.ts
-	  Matched by default include pattern '**/*'
-	lib/index.ts
-	  Matched by default include pattern '**/*'
-	  Imported via '../lib/index' from file 'src/index.ts'
-	src/index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/lib/tsconfig.json",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
-      }
-    }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/lib/tsconfig.json",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
-      }
-    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -211,10 +125,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -247,14 +157,8 @@ watchedFiles::
   {"pollingInterval":500}
 /lib/tsconfig.json: *new*
   {"pollingInterval":2000}
-/src/index.ts: *new*
-  {"pollingInterval":500}
-/tsconfig.json: *new*
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-: *new*
-  {}
 /lib: *new*
   {}
 
@@ -266,43 +170,31 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
-/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts *new*
     version: Text-1
-    containingProjects: 3
+    containingProjects: 2
         /lib/tsconfig.json
-        /tsconfig.json
         /dev/null/inferredProject1*
 /lib.decorators.d.ts *new*
     version: Text-1
-    containingProjects: 3
+    containingProjects: 2
         /lib/tsconfig.json
-        /tsconfig.json
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
-    containingProjects: 3
+    containingProjects: 2
         /lib/tsconfig.json
-        /tsconfig.json
         /dev/null/inferredProject1*
 /lib/index.ts *new*
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /lib/tsconfig.json
-        /tsconfig.json
 /lib/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/src/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -315,35 +207,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/index.ts ProjectRootPath: undefined:: Result: /lib/tsconfig.json
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.decorators.d.ts
-	/lib.decorators.legacy.d.ts
-	/lib.d.ts
-	/lib/index.ts
-	/src/index.ts
-
-
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	  Matched by default include pattern '**/*'
-	lib.d.ts
-	  Matched by default include pattern '**/*'
-	lib/index.ts
-	  Matched by default include pattern '**/*'
-	  Imported via '../lib/index' from file 'src/index.ts'
-	src/index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -379,17 +242,9 @@ watchedFiles::
 watchedFiles *deleted*::
 /lib/index.ts:
   {"pollingInterval":500}
-/src/index.ts:
-  {"pollingInterval":500}
-/tsconfig.json:
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /lib:
-  {}
-
-watchedDirectoriesRecursive *deleted*::
-:
   {}
 
 Projects::
@@ -400,45 +255,32 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
-/tsconfig.json (Configured) *deleted*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    isClosed: true *changed*
-    noOpenRef: true
 
 ScriptInfos::
-/lib.d.ts *changed*
+/lib.d.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 2
         /lib/tsconfig.json
         /dev/null/inferredProject1*
-        /tsconfig.json *deleted*
-/lib.decorators.d.ts *changed*
+/lib.decorators.d.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 2
         /lib/tsconfig.json
         /dev/null/inferredProject1*
-        /tsconfig.json *deleted*
-/lib.decorators.legacy.d.ts *changed*
+/lib.decorators.legacy.d.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 2
         /lib/tsconfig.json
         /dev/null/inferredProject1*
-        /tsconfig.json *deleted*
 /lib/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
-    containingProjects: 1 *changed*
+    containingProjects: 1
         /lib/tsconfig.json *default*
-        /tsconfig.json *deleted*
 /lib/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/src/index.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -480,7 +322,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/lib/index.ts Text-1 "const unrelatedLocalVariable = 123;\nexport const someExportedVariable = unrelatedLocalVariable;"
-	/src/index.ts SVC-2-0 "import { someExportedVariable } from '../lib/index';\nsomeExportedVariable;"
+	/src/index.ts SVC-1-0 "import { someExportedVariable } from '../lib/index';\nsomeExportedVariable;"
 
 
 	../lib.d.ts
@@ -604,7 +446,7 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 /src/index.ts (Open) *new*
-    version: SVC-2-0
+    version: SVC-1-0
     containingProjects: 1
         /src/tsconfig.json *default*
 

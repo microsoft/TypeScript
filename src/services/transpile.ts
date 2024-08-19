@@ -149,6 +149,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     }
     else {
         options.declaration = false;
+        options.declarationMap = false;
     }
 
     const newLine = getNewLineCharacter(options);

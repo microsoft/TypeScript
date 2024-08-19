@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/contextualOuterTypeParameters.ts] ////
+
+=== contextualOuterTypeParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/59450
+
+declare function f(fun: <T>(t: T) => void): void
+>f : (fun: <T>(t: T) => void) => void
+>  : ^   ^^                 ^^^^^    
+>fun : <T>(t: T) => void
+>    : ^ ^^ ^^ ^^^^^    
+>t : T
+>  : ^
+
+f(t => {
+>f(t => {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;}) : void
+>                                                                                                                                                    : ^^^^
+>f : (fun: <T>(t: T) => void) => void
+>  : ^   ^^                 ^^^^^    
+>t => {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;} : <T>(t: T) => void
+>                                                                                                                                                 : ^ ^^ ^^^^^^^^^^^^
+>t : T
+>  : ^
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : T[] extends string[] ? true : false
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
+>         : ^^^^^        ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>t : T
+>  : ^
+>x : string
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+});
+
+const fn1: <T>(x: T) => void = t => {
+>fn1 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+>t => {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;} : <T>(t: T) => void
+>                                                                                                                                                 : ^ ^^ ^^^^^^^^^^^^
+>t : T
+>  : ^
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : T[] extends string[] ? true : false
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
+>         : ^^^^^        ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>t : T
+>  : ^
+>x : string
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+};
+
+const fn2: <T>(x: T) => void = function test(t) {
+>fn2 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+>function test(t) {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;} : <T>(t: T) => void
+>                                                                                                                                                             : ^ ^^ ^^^^^^^^^^^^
+>test : <T>(t: T) => void
+>     : ^ ^^ ^^^^^^^^^^^^
+>t : T
+>  : ^
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : T[] extends string[] ? true : false
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
+>         : ^^^^^        ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>t : T
+>  : ^
+>x : string
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+};
+
+const obj: { f: <T>(x: T) => void } = {
+>obj : { f: <T>(x: T) => void; }
+>    : ^^^^^                 ^^^
+>f : <T>(x: T) => void
+>  : ^ ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+>{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f<T>(t: T): void; }
+>                                                                                                                                                                   : ^^^^ ^^ ^^^^^^^^^^^^^
+
+    f(t) {
+>f : <T>(t: T) => void
+>  : ^ ^^ ^^^^^^^^^^^^
+>t : T
+>  : ^
+
+        type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : T[] extends string[] ? true : false
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+        type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
+>         : ^^^^^        ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>t : T
+>  : ^
+>x : string
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+    }
+};
+
