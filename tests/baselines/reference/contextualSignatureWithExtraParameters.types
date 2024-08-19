@@ -18,7 +18,7 @@ function f1(
 
   ) {}
   
-  f1((item) => {});
+f1((item) => {});
 >f1((item) => {}) : void
 >                 : ^^^^
 >f1 : (cb: ((item: number) => void) | ((item: number, extra: string) => void)) => void
@@ -134,3 +134,122 @@ mapLimit([1,2,3], 3, async (n) => {
 >  : ^
 
 });
+
+function f3(
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+
+    cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f3((a) => {});
+>f3((a) => {}) : void
+>              : ^^^^
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f3((a, b) => {});
+>f3((a, b) => {}) : void
+>                 : ^^^^
+>f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                            ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+function f4(
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+
+    cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f4((a) => {});
+>f4((a) => {}) : void
+>              : ^^^^
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f4((a, b) => {});
+>f4((a, b) => {}) : void
+>                 : ^^^^
+>f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
+>   : ^  ^^                                                                           ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+function f5(
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+
+    cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)
+>cb : ((a: string, b: string) => void) | ((...rest: string[]) => void)
+>   : ^^ ^^      ^^ ^^      ^^^^^    ^^^^^^^^^    ^^        ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>rest : string[]
+>     : ^^^^^^^^
+
+  ) {}
+  
+f5((a) => {});
+>f5((a) => {}) : void
+>              : ^^^^
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>(a) => {} : (a: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+f5((a, b) => {});
+>f5((a, b) => {}) : void
+>                 : ^^^^
+>f5 : (cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+

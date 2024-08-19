@@ -13,12 +13,12 @@ function f1(
 
   ) {}
   
-  f1((item) => {});
+f1((item) => {});
 >f1 : Symbol(f1, Decl(contextualSignatureWithExtraParameters.ts, 0, 0))
->item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 5, 6))
+>item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 5, 4))
 
 function f2<T>(
->f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 19))
+>f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 17))
 >T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 7, 12))
 
     arr: T[],
@@ -36,7 +36,7 @@ function f2<T>(
   ) {}
   
 f2([1, 2, 3], (item) => {});
->f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 19))
+>f2 : Symbol(f2, Decl(contextualSignatureWithExtraParameters.ts, 5, 17))
 >item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 12, 15))
 
 export interface AsyncResultCallback<T, E = Error> {
@@ -115,3 +115,66 @@ mapLimit([1,2,3], 3, async (n) => {
 >n : Symbol(n, Decl(contextualSignatureWithExtraParameters.ts, 31, 28))
 
 });
+
+function f3(
+>f3 : Symbol(f3, Decl(contextualSignatureWithExtraParameters.ts, 33, 3))
+
+    cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 35, 12))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 36, 10))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 36, 20))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 36, 46))
+>rest : Symbol(rest, Decl(contextualSignatureWithExtraParameters.ts, 36, 56))
+
+  ) {}
+  
+f3((a) => {});
+>f3 : Symbol(f3, Decl(contextualSignatureWithExtraParameters.ts, 33, 3))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 39, 4))
+
+f3((a, b) => {});
+>f3 : Symbol(f3, Decl(contextualSignatureWithExtraParameters.ts, 33, 3))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 40, 4))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 40, 6))
+
+function f4(
+>f4 : Symbol(f4, Decl(contextualSignatureWithExtraParameters.ts, 40, 17))
+
+    cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 42, 12))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 43, 10))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 43, 20))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 43, 45))
+>rest : Symbol(rest, Decl(contextualSignatureWithExtraParameters.ts, 43, 55))
+
+  ) {}
+  
+f4((a) => {});
+>f4 : Symbol(f4, Decl(contextualSignatureWithExtraParameters.ts, 40, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 46, 4))
+
+f4((a, b) => {});
+>f4 : Symbol(f4, Decl(contextualSignatureWithExtraParameters.ts, 40, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 47, 4))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 47, 6))
+
+function f5(
+>f5 : Symbol(f5, Decl(contextualSignatureWithExtraParameters.ts, 47, 17))
+
+    cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 49, 12))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 50, 10))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 50, 20))
+>rest : Symbol(rest, Decl(contextualSignatureWithExtraParameters.ts, 50, 45))
+
+  ) {}
+  
+f5((a) => {});
+>f5 : Symbol(f5, Decl(contextualSignatureWithExtraParameters.ts, 47, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 53, 4))
+
+f5((a, b) => {});
+>f5 : Symbol(f5, Decl(contextualSignatureWithExtraParameters.ts, 47, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 54, 4))
+>b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 54, 6))
+

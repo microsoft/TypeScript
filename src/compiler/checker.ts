@@ -32424,11 +32424,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const signatures = mapDefined((type as UnionType).types, t => getContextualCallSignature(t, node));
-        signatures.sort((s1, s2) => s1.parameters.length - s2.parameters.length);
+        signatures.sort((s1, s2) => getMinArgumentCount(s1) - getMinArgumentCount(s2));
         if (!signatures.length) {
             return;
         }
-        
+
         for (let i = 1; i < signatures.length; i++) {
             if (!compareSignaturesIdentical(signatures[0], signatures[i], /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesSubtypeOf)) {
                 // Signatures aren't identical, do not use

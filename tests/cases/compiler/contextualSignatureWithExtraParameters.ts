@@ -3,7 +3,7 @@ function f1(
     cb: ((item: number) => void) | ((item: number, extra: string) => void),
   ) {}
   
-  f1((item) => {});
+f1((item) => {});
 
 function f2<T>(
     arr: T[],
@@ -32,3 +32,24 @@ declare function mapLimit<T, R, E = Error>(
 mapLimit([1,2,3], 3, async (n) => {
     return n ** 2;
 });
+
+function f3(
+    cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)
+  ) {}
+  
+f3((a) => {});
+f3((a, b) => {});
+
+function f4(
+    cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)
+  ) {}
+  
+f4((a) => {});
+f4((a, b) => {});
+
+function f5(
+    cb: ((a: string, b: string) => void) | ((...rest: string[]) => void)
+  ) {}
+  
+f5((a) => {});
+f5((a, b) => {});
