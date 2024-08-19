@@ -31744,7 +31744,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
         const constraint = getConstraintTypeFromMappedType(type);
         // special case for conditional types pretending to be negated types
-        if (isExcludedMappedPropertyName(constraint, propertyNameType)) {
+        if (type.nameType && isExcludedMappedPropertyName(type.nameType, propertyNameType) || isExcludedMappedPropertyName(constraint, propertyNameType)) {
             return;
         }
         const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
