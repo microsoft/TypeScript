@@ -1167,3 +1167,4 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
 >x : Symbol(x, Decl(dependentDestructuredVariables.ts, 456, 80))
   }
 }
+

@@ -474,3 +474,4 @@ dependentDestructuredVariables.ts(431,15): error TS2322: Type 'number' is not as
         x; // 1 | 3
       }
     }
+    

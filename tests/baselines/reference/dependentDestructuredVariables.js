@@ -466,6 +466,7 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
   }
 }
 
+
 //// [dependentDestructuredVariables.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
