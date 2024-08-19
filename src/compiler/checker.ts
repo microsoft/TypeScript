@@ -32422,30 +32422,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(type.flags & TypeFlags.Union)) {
             return getContextualCallSignature(type, node);
         }
-        let signatureList: Signature[] | undefined;
-        const types = (type as UnionType).types
-            .map(type => ({ type, signature: getContextualCallSignature(type, node) }))
-            .filter(type => type.signature)
-            .sort((t1, t2) => t1.signature!.parameters.length - t2.signature!.parameters.length);
-        for (const current of types) {
-            const signature = current.signature!;
-            if (!signatureList) {
-                // This signature will contribute to contextual union signature
-                signatureList = [signature];
-            }
-            else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesSubtypeOf)) {
+
+        const signatures = mapDefined((type as UnionType).types, t => getContextualCallSignature(t, node));
+        signatures.sort((s1, s2) => s1.parameters.length - s2.parameters.length);
+        if (!signatures.length) {
+            return;
+        }
+        
+        for (let i = 1; i < signatures.length; i++) {
+            if (!compareSignaturesIdentical(signatures[0], signatures[i], /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesSubtypeOf)) {
                 // Signatures aren't identical, do not use
                 return undefined;
             }
-            else {
-                // Use this signature for contextual union signature
-                signatureList.push(signature);
-            }
         }
         // Result is union of signatures collected (return type is union of return types of this signature set)
-        if (signatureList) {
-            return signatureList.length === 1 ? signatureList[0] : createUnionSignature(signatureList[0], signatureList);
-        }
+        return signatures.length === 1 ? signatures[0] : createUnionSignature(signatures[0], signatures);
     }
 
     function checkGrammarRegularExpressionLiteral(node: RegularExpressionLiteral) {
