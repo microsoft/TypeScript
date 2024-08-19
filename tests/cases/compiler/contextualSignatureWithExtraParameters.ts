@@ -62,3 +62,16 @@ function f6(
 ) {}
 
 f6(async (a) => {return 0});
+
+function f7(
+  cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)
+) {}
+
+f7(function* generator(a) {yield 0});
+
+function f8(
+  cb: ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)
+) {}
+
+f8(async function* generator(a) {yield 0});
+

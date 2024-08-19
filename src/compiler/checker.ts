@@ -32425,7 +32425,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let signatures = mapDefined((type as UnionType).types, t => getContextualCallSignature(t, node));
         const functionFlags = getFunctionFlags(node);
-        if (functionFlags === FunctionFlags.Async) {
+        if (functionFlags & FunctionFlags.Generator) {
+            signatures = filter(signatures, s => checkGeneratorInstantiationAssignabilityToReturnType(getReturnTypeOfSignature(s), functionFlags, /*errorNode*/ undefined));
+        }
+        else if (functionFlags & FunctionFlags.Async) {
             signatures = filter(signatures, s => !!getAwaitedTypeOfPromise(getReturnTypeOfSignature(s)));
         }
         signatures.sort((s1, s2) => getMinArgumentCount(s1) - getMinArgumentCount(s2));
