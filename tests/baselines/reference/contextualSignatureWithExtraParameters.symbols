@@ -43,7 +43,7 @@ export interface AsyncResultCallback<T, E = Error> {
 >AsyncResultCallback : Symbol(AsyncResultCallback, Decl(contextualSignatureWithExtraParameters.ts, 12, 28))
 >T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 14, 37))
 >E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 14, 39))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     (err?: E | null, result?: T): void;
 >err : Symbol(err, Decl(contextualSignatureWithExtraParameters.ts, 15, 5))
@@ -57,7 +57,7 @@ export interface AsyncResultIterator<T, R, E = Error> {
 >T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 18, 37))
 >R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 18, 39))
 >E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 18, 42))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     (item: T, callback: AsyncResultCallback<R, E>): void;
 >item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 19, 5))
@@ -75,7 +75,7 @@ export interface AsyncResultIteratorPromise<T, R> {
     (item: T): Promise<R>;
 >item : Symbol(item, Decl(contextualSignatureWithExtraParameters.ts, 22, 5))
 >T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 21, 44))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 21, 46))
 }
 
@@ -84,7 +84,7 @@ declare function mapLimit<T, R, E = Error>(
 >T : Symbol(T, Decl(contextualSignatureWithExtraParameters.ts, 25, 26))
 >R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
 >E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 25, 31))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     arr: T[],
 >arr : Symbol(arr, Decl(contextualSignatureWithExtraParameters.ts, 25, 43))
@@ -104,7 +104,7 @@ declare function mapLimit<T, R, E = Error>(
 >E : Symbol(E, Decl(contextualSignatureWithExtraParameters.ts, 25, 31))
 
 ): Promise<R[]>;
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >R : Symbol(R, Decl(contextualSignatureWithExtraParameters.ts, 25, 28))
 
 mapLimit([1,2,3], 3, async (n) => {
@@ -185,7 +185,7 @@ function f6(
 >cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 56, 12))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 8))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 34))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 ) {}
 
@@ -200,7 +200,7 @@ function f7(
 >cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 62, 12))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 63, 8))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 63, 34))
->Generator : Symbol(Generator)
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
 ) {}
 
@@ -216,7 +216,7 @@ function f8(
 >cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 68, 12))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 69, 8))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 69, 34))
->AsyncGenerator : Symbol(AsyncGenerator)
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 
 ) {}
 

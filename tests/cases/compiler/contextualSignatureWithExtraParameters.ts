@@ -1,4 +1,6 @@
 // @strict: true
+// @target: esnext
+// @lib: esnext
 // @noEmit: true
 
 // https://github.com/microsoft/TypeScript/issues/59309

@@ -298,14 +298,14 @@ f7(function* generator(a) {yield 0});
 >                                     : ^^^^
 >f7 : (cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)) => void
 >   : ^  ^^                                                                           ^^^^^^^^^
->function* generator(a) {yield 0} : (a: number) => {}
->                                 : ^ ^^^^^^^^^^^^^^^
->generator : (a: number) => {}
->          : ^ ^^^^^^^^^^^^^^^
+>function* generator(a) {yield 0} : (a: number) => Generator<number, void, unknown>
+>                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>generator : (a: number) => Generator<number, void, unknown>
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->yield 0 : any
->        : ^^^
+>yield 0 : unknown
+>        : ^^^^^^^
 >0 : 0
 >  : ^
 
@@ -328,14 +328,14 @@ f8(async function* generator(a) {yield 0});
 >                                           : ^^^^
 >f8 : (cb: ((a: string) => string) | ((a: number) => AsyncGenerator<number, void, unknown>)) => void
 >   : ^  ^^                                                                                ^^^^^^^^^
->async function* generator(a) {yield 0} : (a: number) => {}
->                                       : ^ ^^^^^^^^^^^^^^^
->generator : (a: number) => {}
->          : ^ ^^^^^^^^^^^^^^^
+>async function* generator(a) {yield 0} : (a: number) => AsyncGenerator<number, void, unknown>
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>generator : (a: number) => AsyncGenerator<number, void, unknown>
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->yield 0 : any
->        : ^^^
+>yield 0 : unknown
+>        : ^^^^^^^
 >0 : 0
 >  : ^
 
