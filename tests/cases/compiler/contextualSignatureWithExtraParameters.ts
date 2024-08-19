@@ -1,3 +1,6 @@
+// @strict: true
+// @noEmit: true
+
 // https://github.com/microsoft/TypeScript/issues/59309
 function f1(
     cb: ((item: number) => void) | ((item: number, extra: string) => void),

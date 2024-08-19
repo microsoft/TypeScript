@@ -68,10 +68,10 @@ f2([1, 2, 3], (item) => {});
 
 export interface AsyncResultCallback<T, E = Error> {
     (err?: E | null, result?: T): void;
->err : E
->    : ^
->result : T
->       : ^
+>err : E | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>result : T | undefined
+>       : ^^^^^^^^^^^^^
 }
 
 export interface AsyncResultIterator<T, R, E = Error> {
@@ -144,8 +144,8 @@ function f3(
 >   : ^^ ^^      ^^ ^^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^        ^^^^^    ^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rest : string[]
@@ -168,12 +168,12 @@ f3((a, b) => {});
 >                 : ^^^^
 >f3 : (cb: ((a: string, b?: string) => void) | ((a: string, ...rest: string[]) => void)) => void
 >   : ^  ^^                                                                            ^^^^^^^^^
->(a, b) => {} : (a: string, b: string) => void
->             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>(a, b) => {} : (a: string, b: string | undefined) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 function f4(
 >f4 : (cb: ((a: string, b: string) => void) | ((a: string, ...rest: string[]) => void)) => void
