@@ -4959,7 +4959,7 @@ export class ProjectService {
         if (cleanupAfter) {
             this.cleanupConfiguredProjects(
                 configuredProjects,
-                new Set(proj.projectFileName),
+                new Set([proj.projectFileName]),
             );
             this.printProjects();
         }
