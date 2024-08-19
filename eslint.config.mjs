@@ -53,7 +53,8 @@ export default tseslint.config(
                 warnOnUnsupportedTypeScriptVersion: false,
                 tsconfigRootDir: __dirname,
                 projectService: {
-                    defaultProject: path.join(__dirname, "scripts", "tsconfig.json"),
+                    // This is a reasonable config to use for loose files.
+                    defaultProject: "./scripts/tsconfig.json",
                     allowDefaultProject: ["*.js", "*.cjs", "*.mjs"].map(p => [p, `.${p}`]).flat(),
                 },
             },
