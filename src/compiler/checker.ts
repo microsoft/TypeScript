@@ -12192,14 +12192,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
         }
         else if (
-            isParameter(declaration)
-            || isPropertyDeclaration(declaration)
+            isPropertyDeclaration(declaration)
             || isPropertySignature(declaration)
             || isVariableDeclaration(declaration)
             || isBindingElement(declaration)
             || isJSDocPropertyLikeTag(declaration)
         ) {
             type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
+        }
+        else if (isParameter(declaration)) {
+            type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
+            if (declaration.dotDotDotToken) {
+                type = normalizeNoInferSpread(type);
+            }
         }
         // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.
         // Re-dispatch based on valueDeclaration.kind instead.
@@ -12424,7 +12429,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfInstantiatedSymbol(symbol: Symbol): Type {
         const links = getSymbolLinks(symbol);
-        return links.type || (links.type = instantiateType(getTypeOfSymbol(links.target!), links.mapper));
+        if (!links.type) {
+            const declaration = links.target!.valueDeclaration;
+            let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper);
+            if (declaration && isParameter(declaration) && declaration.dotDotDotToken) {
+                type = normalizeNoInferSpread(type);
+            }
+            links.type = type;
+        }
+        return links.type;
     }
 
     function getWriteTypeOfInstantiatedSymbol(symbol: Symbol): Type {
@@ -13692,7 +13705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
             const restSymbol = sig.parameters[restIndex];
-            const restType = normalizeNoInferTuple(getTypeOfSymbol(restSymbol));
+            const restType = getTypeOfSymbol(restSymbol);
             if (isTupleType(restType)) {
                 return [expandSignatureParametersWithTupleMembers(restType, restIndex, restSymbol)];
             }
@@ -16032,7 +16045,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function tryGetRestTypeOfSignature(signature: Signature): Type | undefined {
         if (signatureHasRestParameter(signature)) {
-            const sigRestType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+            const sigRestType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
             const restType = isTupleType(sigRestType) ? getRestTypeOfTupleType(sigRestType) : sigRestType;
             return restType && getIndexTypeOfType(restType, numberType);
         }
@@ -17392,7 +17405,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (target.combinedFlags & ElementFlags.Variadic) {
             elementTypes = sameMap(elementTypes, (t, i) => {
-                return target.elementFlags[i] & ElementFlags.Variadic ? normalizeNoInferTuple(t) : t;
+                return target.elementFlags[i] & ElementFlags.Variadic ? normalizeNoInferSpread(t) : t;
             });
             // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
             const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
@@ -17480,7 +17493,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function normalizeNoInferTuple(type: Type): Type {
+    function normalizeNoInferSpread(type: Type): Type {
         if (!isNoInferType(type)) {
             return type;
         }
@@ -31506,7 +31519,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const restIndex = signature.parameters.length - 1;
         return signatureHasRestParameter(signature) && argIndex >= restIndex ?
-            getIndexedAccessType(normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[restIndex])), getNumberLiteralType(argIndex - restIndex), AccessFlags.Contextual) :
+            getIndexedAccessType(getTypeOfSymbol(signature.parameters[restIndex]), getNumberLiteralType(argIndex - restIndex), AccessFlags.Contextual) :
             getTypeAtPosition(signature, argIndex);
     }
 
@@ -37525,7 +37538,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signature.parameters[pos].escapedName;
         }
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
-        const restType = overrideRestType || normalizeNoInferTuple(getTypeOfSymbol(restParameter));
+        const restType = overrideRestType || getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
             const tupleType = (restType as TypeReference).target as TupleType;
             const index = pos - paramCount;
@@ -37557,7 +37570,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const restType = normalizeNoInferTuple(getTypeOfSymbol(restParameter));
+        const restType = getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
             const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
             const index = pos - paramCount;
@@ -37592,7 +37605,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return decl && isValidDeclarationForTupleLabel(decl) ? decl : undefined;
         }
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
-        const restType = normalizeNoInferTuple(getTypeOfSymbol(restParameter));
+        const restType = getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
             const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
             const index = pos - paramCount;
@@ -37614,7 +37627,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We want to return the value undefined for an out of bounds parameter position,
             // so we need to check bounds here before calling getIndexedAccessType (which
             // otherwise would return the type 'undefined').
-            const restType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[paramCount]));
+            const restType = getTypeOfSymbol(signature.parameters[paramCount]);
             const index = pos - paramCount;
             if (!isTupleType(restType) || restType.target.combinedFlags & ElementFlags.Variable || index < restType.target.fixedLength) {
                 return getIndexedAccessType(restType, getNumberLiteralType(index));
@@ -37663,7 +37676,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getParameterCount(signature: Signature) {
         const length = signature.parameters.length;
         if (signatureHasRestParameter(signature)) {
-            const restType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[length - 1]));
+            const restType = getTypeOfSymbol(signature.parameters[length - 1]);
             if (isTupleType(restType)) {
                 return length + restType.target.fixedLength - (restType.target.combinedFlags & ElementFlags.Variable ? 0 : 1);
             }
@@ -37677,7 +37690,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (voidIsNonOptional || signature.resolvedMinArgumentCount === undefined) {
             let minArgumentCount: number | undefined;
             if (signatureHasRestParameter(signature)) {
-                const restType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
                 if (isTupleType(restType)) {
                     const firstOptionalIndex = findIndex(restType.target.elementFlags, f => !(f & ElementFlags.Required));
                     const requiredCount = firstOptionalIndex < 0 ? restType.target.fixedLength : firstOptionalIndex;
@@ -37709,7 +37722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function hasEffectiveRestParameter(signature: Signature) {
         if (signatureHasRestParameter(signature)) {
-            const restType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+            const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
             return !isTupleType(restType) || !!(restType.target.combinedFlags & ElementFlags.Variable);
         }
         return false;
@@ -37717,7 +37730,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getEffectiveRestType(signature: Signature) {
         if (signatureHasRestParameter(signature)) {
-            const restType = normalizeNoInferTuple(getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]));
+            const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
             if (!isTupleType(restType)) {
                 return isTypeAny(restType) ? anyArrayType : restType;
             }

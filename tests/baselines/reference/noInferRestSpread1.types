@@ -139,3 +139,23 @@ const result5 = fn1((arg) => {
 >tupleUnion : [string] | [number, boolean]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+>fn2 : (arg: (...args: NoInfer<[string, number]>) => void) => void
+>    : ^   ^^                                            ^^^^^    
+>arg : (args_0: string, args_1: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>args : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+
+fn2((a, ...rest) => {});
+>fn2((a, ...rest) => {}) : void
+>                        : ^^^^
+>fn2 : (arg: (...args: NoInfer<[string, number]>) => void) => void
+>    : ^   ^^                                            ^^^^^    
+>(a, ...rest) => {} : (a: string, rest_0: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : [number]
+>     : ^^^^^^^^
+

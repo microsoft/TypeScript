@@ -32,3 +32,7 @@ noInferRestSpread1.ts(7,22): error TS2345: Argument of type '(a: number, b: numb
       arg.length;
     }, tupleUnion);
     
+    declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+    
+    fn2((a, ...rest) => {});
+    

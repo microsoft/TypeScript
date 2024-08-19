@@ -84,3 +84,14 @@ const result5 = fn1((arg) => {
 }, tupleUnion);
 >tupleUnion : Symbol(tupleUnion, Decl(noInferRestSpread1.ts, 20, 13))
 
+declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+>fn2 : Symbol(fn2, Decl(noInferRestSpread1.ts, 24, 15))
+>arg : Symbol(arg, Decl(noInferRestSpread1.ts, 26, 21))
+>args : Symbol(args, Decl(noInferRestSpread1.ts, 26, 27))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+
+fn2((a, ...rest) => {});
+>fn2 : Symbol(fn2, Decl(noInferRestSpread1.ts, 24, 15))
+>a : Symbol(a, Decl(noInferRestSpread1.ts, 28, 5))
+>rest : Symbol(rest, Decl(noInferRestSpread1.ts, 28, 7))
+

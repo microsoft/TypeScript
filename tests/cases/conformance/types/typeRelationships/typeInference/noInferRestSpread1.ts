@@ -26,3 +26,7 @@ declare const tupleUnion: [string] | [number, boolean];
 const result5 = fn1((arg) => {
   arg.length;
 }, tupleUnion);
+
+declare function fn2(arg: (...args: NoInfer<[string, number]>) => void): void;
+
+fn2((a, ...rest) => {});
