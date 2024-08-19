@@ -607,7 +607,7 @@ export const generateTypesMap = task({
         const target = "built/local/typesMap.json";
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
-        await fs.promises.writeFile(target, contents);
+        await fs.promises.writeFile(target, contents.replace(/\r\n/g, "\n"));
     },
 });
 
