@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesWithExport.ts] ////
+
+=== dependentDestructuredVariablesWithExport.ts ===
+// https://github.com/microsoft/TypeScript/issues/59652
+
+declare function mutuallyEnabledPair(): {
+>mutuallyEnabledPair : () => { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
+>                    : ^^^^^^                                                                                            
+
+    discriminator: true,
+>discriminator : true
+>              : ^^^^
+>true : true
+>     : ^^^^
+
+    value: string,
+>value : string
+>      : ^^^^^^
+
+  } | {
+    discriminator: false,
+>discriminator : false
+>              : ^^^^^
+>false : false
+>      : ^^^^^
+
+    value: null | undefined,
+>value : null
+>      : ^^^^
+  }
+  
+  
+  export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+>discriminator : boolean
+>              : ^^^^^^^
+>value : any
+>      : ^^^
+>value59652 : string
+>           : ^^^^^^
+>mutuallyEnabledPair() : { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                ^^^
+>mutuallyEnabledPair : () => { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
+>                    : ^^^^^^                                                                                            
+  
+  if (discriminator) {
+>discriminator : boolean
+>              : ^^^^^^^
+
+    value59652;
+>value59652 : string
+>           : ^^^^^^
+  }

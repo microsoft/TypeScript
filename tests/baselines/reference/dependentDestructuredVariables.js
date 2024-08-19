@@ -466,24 +466,8 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
   }
 }
 
-// https://github.com/microsoft/TypeScript/issues/59652
-
-declare function mutuallyEnabledPair(): {
-    discriminator: true,
-    value: string,
-  } | {
-    discriminator: false,
-    value: null | undefined,
-  }
-  
-  
-  export const { discriminator, value: value59652 } = mutuallyEnabledPair()
-  
-  if (discriminator) {
-    value59652;
-  }
-
 //// [dependentDestructuredVariables.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -838,11 +822,156 @@ const parameterReassignedContextualRest1 = (x, y) => {
         x; // 1 | 3
     }
 };
-export const { discriminator, value: value59652 } = mutuallyEnabledPair();
-if (discriminator) {
-    value59652;
-}
 
 
 //// [dependentDestructuredVariables.d.ts]
-export declare const discriminator: boolean, value59652: string | null | undefined;
+type Action = {
+    kind: 'A';
+    payload: number;
+} | {
+    kind: 'B';
+    payload: string;
+};
+declare function f10({ kind, payload }: Action): void;
+declare function f11(action: Action): void;
+declare function f12({ kind, payload }: Action): void;
+declare function f13<T extends Action>({ kind, payload }: T): void;
+declare function f14<T extends Action>(t: T): void;
+type Action2 = {
+    kind: 'A';
+    payload: number | undefined;
+} | {
+    kind: 'B';
+    payload: string | undefined;
+};
+declare function f20({ kind, payload }: Action2): void;
+declare function f21(action: Action2): void;
+declare function f22(action: Action2): void;
+declare function f23({ kind, payload }: Action2): void;
+type Foo = {
+    kind: 'A';
+    isA: true;
+} | {
+    kind: 'B';
+    isA: false;
+} | {
+    kind: 'C';
+    isA: false;
+};
+declare function f30({ kind, isA }: Foo): void;
+type Args = ['A', number] | ['B', string];
+declare function f40(...[kind, data]: Args): void;
+interface A<T> {
+    variant: 'a';
+    value: T;
+}
+interface B<T> {
+    variant: 'b';
+    value: Array<T>;
+}
+type AB<T> = A<T> | B<T>;
+declare function printValue<T>(t: T): void;
+declare function printValueList<T>(t: Array<T>): void;
+declare function unrefined1<T>(ab: AB<T>): void;
+type Action3 = {
+    type: 'add';
+    payload: {
+        toAdd: number;
+    };
+} | {
+    type: 'remove';
+    payload: {
+        toRemove: number;
+    };
+};
+declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
+declare var it: Iterator<number>;
+declare const value: any, done: boolean | undefined;
+declare function f50(cb: (...args: Args) => void): void;
+declare const f51: (...args: ['A', number] | ['B', string]) => void;
+declare const f52: (...args: ['A', number] | ['B']) => void;
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+type ReducerArgs = ["add", {
+    a: number;
+    b: number;
+}] | ["concat", {
+    firstArr: any[];
+    secondArr: any[];
+}];
+declare const reducer: (...args: ReducerArgs) => void;
+type FooMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): void;
+};
+declare let fooM: FooMethod;
+type FooAsyncMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Promise<any>;
+};
+declare let fooAsyncM: FooAsyncMethod;
+type FooGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Generator<any, any, any>;
+};
+declare let fooGenM: FooGenMethod;
+type FooAsyncGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): AsyncGenerator<any, any, any>;
+};
+declare let fooAsyncGenM: FooAsyncGenMethod;
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+declare const f60: Func;
+declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
+    value1: any;
+    test1?: any;
+    test2?: any;
+    test3?: any;
+    test4?: any;
+    test5?: any;
+    test6?: any;
+    test7?: any;
+    test8?: any;
+    test9?: any;
+}): void;
+declare function fa1(x: [true, number] | [false, string]): void;
+declare function fa2(x: {
+    guard: true;
+    value: number;
+} | {
+    guard: false;
+    value: string;
+}): void;
+declare const fa3: (...args: [true, number] | [false, string]) => void;
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+declare class Client {
+    on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+declare const bot: Client;
+declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
+declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;
+declare function parameterReassigned1([x, y]: [1, 2] | [3, 4]): void;
+declare function parameterReassigned2([x, y]: [1, 2] | [3, 4]): void;
+declare const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void;
