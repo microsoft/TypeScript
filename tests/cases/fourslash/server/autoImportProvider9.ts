@@ -91,3 +91,5 @@
 verify.importFixModuleSpecifiers("", []);
 verify.importFixModuleSpecifiers("", []);
 
+edit.insertLine("import {} from 'lib2';");
+verify.importFixModuleSpecifiers("", ["lib1"]);
