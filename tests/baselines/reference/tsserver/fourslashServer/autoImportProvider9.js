@@ -164,6 +164,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -203,6 +204,13 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -302,6 +310,13 @@ Info seq  [hh:mm:ss:mss] response:
       "success": true,
       "body": []
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 6,
@@ -411,7 +426,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: attempted to add more than 10 dependencies. Aborting.
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
