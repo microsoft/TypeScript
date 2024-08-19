@@ -300,7 +300,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         const symbol = info.symbol || cachedSymbol || Debug.checkDefined(
             exportKind === ExportKind.ExportEquals
                 ? checker.resolveExternalModuleSymbol(moduleSymbol)
-                : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
+                : checker.tryGetMemberInModuleExports(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
             `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`,
         );
         symbols.set(id, [symbol, moduleSymbol]);
@@ -537,12 +537,12 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
                     checker,
                 );
             }
-            checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+            checker.getExportsOfModule(moduleSymbol).forEach(exported => {
+                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, exported.escapedName)) {
                     cache.add(
                         importingFile.path,
                         exported,
-                        key,
+                        exported.escapedName,
                         moduleSymbol,
                         moduleFile,
                         ExportKind.Named,
