@@ -619,10 +619,9 @@ export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder
     return getSynthesizedDeepClone(typeNode);
 }
 
-function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType, fullTypeArguments: readonly Type[]) : number {
-    if (fullTypeArguments !== type.typeArguments!) {
-        throw new Error('fullTypeArguments should be set')
-    }
+function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): number {
+    Debug.assert(type.typeArguments);
+    const fullTypeArguments = type.typeArguments;
     const target = type.target;
     next_cutoff: for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
         const typeArguments = fullTypeArguments.slice(0, cutoff);
@@ -635,7 +634,7 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType, fu
     }
     // If we make it all the way here, all the type arguments are required.
     return fullTypeArguments.length;
-    }
+}
 
 export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
     const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
@@ -645,9 +644,9 @@ export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, c
     if (isTypeReferenceNode(typeNode)) {
         const genericType = type as GenericType;
         if (genericType.typeArguments) {
-            const cutoff = endOfRequiredTypeParameters(checker, genericType, genericType.typeArguments);
+            const cutoff = endOfRequiredTypeParameters(checker, genericType);
             if (cutoff !== undefined && typeNode.typeArguments) {
-                // Looks like the wrong way to do this. What APIs should I use here?
+                // Cast to any to mutate the newly created TypeNode
                 (typeNode as any).typeArguments = typeNode.typeArguments.slice(0, cutoff);
             }
         }
