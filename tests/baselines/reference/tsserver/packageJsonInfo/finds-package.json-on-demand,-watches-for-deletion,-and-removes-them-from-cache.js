@@ -528,3 +528,13 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true

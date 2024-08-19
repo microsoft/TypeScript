@@ -269,6 +269,12 @@ Before running Timeout callback:: count: 1
 Timeout callback:: count: 1
 1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
+Projects::
+/user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -283,7 +289,6 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
-    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 2: /user/username/projects/myproject/src/tsconfig.json
@@ -352,7 +357,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
-    autoImportProviderHost: false
 
 Before request
 
@@ -475,7 +479,6 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
-    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 6: /user/username/projects/myproject/src/tsconfig.json
@@ -544,7 +547,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
-    autoImportProviderHost: false
 
 Before request
 
@@ -677,7 +679,6 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
-    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 10: /user/username/projects/myproject/src/tsconfig.json
@@ -775,7 +776,6 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
-    autoImportProviderHost: false
 
 Before request
 
@@ -911,7 +911,6 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
-    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 14: /user/username/projects/myproject/src/tsconfig.json
@@ -1009,7 +1008,6 @@ Projects::
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
-    autoImportProviderHost: false
 
 Before request
 
@@ -1125,7 +1123,6 @@ Projects::
     projectStateVersion: 6 *changed*
     projectProgramVersion: 5
     dirty: true *changed*
-    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 18: /user/username/projects/myproject/src/tsconfig.json
@@ -1229,7 +1226,6 @@ Projects::
     projectStateVersion: 6
     projectProgramVersion: 6 *changed*
     dirty: false *changed*
-    autoImportProviderHost: false
 
 Before request
 

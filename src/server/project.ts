@@ -1376,8 +1376,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     onPackageJsonChange() {
         this.moduleSpecifierCache.clear();
-        if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.markAsDirty();
+        if (this.autoImportProviderHost === false) {
+            this.autoImportProviderHost = undefined;
+        }
+        else {
+            this.autoImportProviderHost?.markAsDirty();
         }
     }
 
