@@ -5,6 +5,7 @@ export {};
 //// [main.ts]
 import "./folder/test"
 
+
 //// [outputfile.js]
 define("folder/test", ["require", "exports"], function (require, exports) {
     "use strict";

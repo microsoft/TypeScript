@@ -707,7 +707,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 5 >                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 6 >                                                                                                           ^
 7 >                                                                                                            ^^^
-8 >                                                                                                               ^^^^^^^^^^^^^->
+8 >                                                                                                               ^^^^^^^^^^^^^^^->
 1->
   >
   >    @dec
@@ -742,30 +742,30 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 6 >Emitted(117, 109) Source(20, 10) + SourceIndex(0)
 7 >Emitted(117, 112) Source(20, 11) + SourceIndex(0)
 ---
->>>        #z_accessor_storage = (__runInitializers(this, _y_extraInitializers), __runInitializers(this, _z_initializers, 1));
+>>>        #z_1_accessor_storage = (__runInitializers(this, _y_extraInitializers), __runInitializers(this, _z_initializers, 1));
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                       ^
-4 >                                                                                                                        ^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                                                         ^
+4 >                                                                                                                          ^^^
 1->
   >
   >    @dec
   >    @dec
   >    
 2 >        accessor z = 
-3 >                                                                                                                       1
-4 >                                                                                                                        ;
+3 >                                                                                                                         1
+4 >                                                                                                                          ;
 1->Emitted(118, 9) Source(24, 5) + SourceIndex(0)
-2 >Emitted(118, 120) Source(24, 18) + SourceIndex(0)
-3 >Emitted(118, 121) Source(24, 19) + SourceIndex(0)
-4 >Emitted(118, 124) Source(24, 20) + SourceIndex(0)
+2 >Emitted(118, 122) Source(24, 18) + SourceIndex(0)
+3 >Emitted(118, 123) Source(24, 19) + SourceIndex(0)
+4 >Emitted(118, 126) Source(24, 20) + SourceIndex(0)
 ---
->>>        get z() { return this.#z_accessor_storage; }
+>>>        get z() { return this.#z_1_accessor_storage; }
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                    ^^^^^^^->
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                      ^^^^^^^->
 1 >
 2 >        accessor 
 3 >            z
@@ -773,13 +773,13 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1 >Emitted(119, 9) Source(24, 5) + SourceIndex(0)
 2 >Emitted(119, 13) Source(24, 14) + SourceIndex(0)
 3 >Emitted(119, 14) Source(24, 15) + SourceIndex(0)
-4 >Emitted(119, 53) Source(24, 20) + SourceIndex(0)
+4 >Emitted(119, 55) Source(24, 20) + SourceIndex(0)
 ---
->>>        set z(value) { this.#z_accessor_storage = value; }
+>>>        set z(value) { this.#z_1_accessor_storage = value; }
 1->^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >        accessor 
 3 >            z
@@ -787,7 +787,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1->Emitted(120, 9) Source(24, 5) + SourceIndex(0)
 2 >Emitted(120, 13) Source(24, 14) + SourceIndex(0)
 3 >Emitted(120, 14) Source(24, 15) + SourceIndex(0)
-4 >Emitted(120, 59) Source(24, 20) + SourceIndex(0)
+4 >Emitted(120, 61) Source(24, 20) + SourceIndex(0)
 ---
 >>>        static {
 >>>            _C_y = { value: (__runInitializers(_classThis, _staticExtraInitializers), __runInitializers(_classThis, _static_private_y_initializers, 1)) };

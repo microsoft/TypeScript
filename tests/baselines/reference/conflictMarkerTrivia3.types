@@ -3,9 +3,13 @@
 === conflictMarkerTrivia3.tsx ===
 const x = <div>
 >x : any
+>  : ^^^
 ><div> : any
+>      : ^^^
 >div : any
+>    : ^^^
 
 <<<<<<< HEAD
 > : any
+> : ^^^
 

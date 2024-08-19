@@ -35,8 +35,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project/a
-Info seq  [hh:mm:ss:mss] For info: /project/a/index.ts :: Config file name: /project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a/index.ts ProjectRootPath: undefined:: Result: /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/tsconfig.json 2000 undefined Project: /project/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -68,7 +67,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/foo.d.ts 50
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/shared.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/lib.d.ts 500 undefined Project: /project/a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/project/a/foo.d.ts Text-1 "export const foo_a = 1;\n"
@@ -203,7 +202,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/a/index.ts ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -219,6 +225,25 @@ FsWatches::
 /project/shared.ts: *new*
   {}
 
+Projects::
+/project/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/project/a/foo.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/a/tsconfig.json
+/project/a/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /project/a/tsconfig.json *default*
+/project/shared.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -230,8 +255,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project/b
-Info seq  [hh:mm:ss:mss] For info: /project/b/index.ts :: Config file name: /project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/b/index.ts ProjectRootPath: undefined:: Result: /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/b/tsconfig.json 2000 undefined Project: /project/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -262,7 +286,7 @@ Info seq  [hh:mm:ss:mss] Config: /project/b/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/b/foo.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/lib.d.ts 500 undefined Project: /project/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/project/b/foo.d.ts Text-1 "export const foo_b = 1;\n"
@@ -403,7 +427,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/b/index.ts ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -422,6 +453,37 @@ FsWatches::
   {}
 /project/shared.ts:
   {}
+
+Projects::
+/project/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/project/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/project/a/foo.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/a/tsconfig.json
+/project/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /project/a/tsconfig.json *default*
+/project/b/foo.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/b/tsconfig.json
+/project/b/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /project/b/tsconfig.json *default*
+/project/shared.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /project/a/tsconfig.json
+        /project/b/tsconfig.json *new*
 
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/a/tsconfig.json:: 0
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/b/tsconfig.json:: 1

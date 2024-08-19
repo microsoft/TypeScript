@@ -23,7 +23,6 @@ import {
     getAllowSyntheticDefaultImports,
     getAssignmentDeclarationKind,
     getFunctionFlags,
-    getModeForUsageLocation,
     hasInitializer,
     hasPropertyAccessExpressionWithName,
     Identifier,
@@ -58,7 +57,7 @@ import {
     SyntaxKind,
     TypeChecker,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 
@@ -67,7 +66,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: DiagnosticWithLocation[] = [];
     const checker = program.getTypeChecker();
-    const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
+    const isCommonJSFile = program.getImpliedNodeFormatForEmit(sourceFile) === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
     if (
         !isCommonJSFile &&
@@ -88,7 +87,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             const importNode = importFromModuleSpecifier(moduleSpecifier);
             const name = importNameForConvertToDefaultImport(importNode);
             if (!name) continue;
-            const module = program.getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
+            const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
@@ -98,7 +97,8 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
 
     addRange(diags, sourceFile.bindSuggestionDiagnostics);
     addRange(diags, program.getSuggestionDiagnostics(sourceFile, cancellationToken));
-    return diags.sort((d1, d2) => d1.start - d2.start);
+    diags.sort((d1, d2) => d1.start - d2.start);
+    return diags;
 
     function check(node: Node) {
         if (isJsFile) {

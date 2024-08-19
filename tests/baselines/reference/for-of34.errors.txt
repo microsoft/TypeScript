@@ -3,7 +3,7 @@ for-of34.ts(11,10): error TS7022: 'v' implicitly has type 'any' because it does 
 
 
 ==== for-of34.ts (2 errors) ====
-    class StringIterator {
+    class MyStringIterator {
         next() {
         ~~~~
 !!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
@@ -15,6 +15,6 @@ for-of34.ts(11,10): error TS7022: 'v' implicitly has type 'any' because it does 
         }
     }
     
-    for (var v of new StringIterator) { }
+    for (var v of new MyStringIterator) { }
              ~
 !!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

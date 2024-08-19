@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputExternalModule.baseline
-// @out: declSingleFile.js
+// @outFile: declSingleFile.js
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true

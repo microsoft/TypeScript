@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputMapRoots.baseline
-// @out: declSingleFile.js
+// @outFile: declSingleFile.js
 // @sourceMap: true
 // @mapRoot: mapRootDir/
 

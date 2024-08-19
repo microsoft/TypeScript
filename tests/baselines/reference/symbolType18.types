@@ -6,20 +6,28 @@ interface Foo { prop }
 
 var x: symbol | Foo;
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 
 x;
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 
 if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
     x;
 >x : Foo
+>  : ^^^
 }
 else {
     x;
 >x : symbol
+>  : ^^^^^^
 }

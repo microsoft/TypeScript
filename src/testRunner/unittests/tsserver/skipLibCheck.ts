@@ -1,17 +1,13 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
     openFilesForSession,
     TestSession,
     toExternalFiles,
-} from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should be turned on for js-only inferred projects", () => {
@@ -197,7 +193,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: jsFile.path },
-        }).response as ts.server.protocol.Diagnostic[];
+        });
         baselineTsserverLogs("skipLibCheck", "reports semantic error in configured project with tscheck", session);
     });
 

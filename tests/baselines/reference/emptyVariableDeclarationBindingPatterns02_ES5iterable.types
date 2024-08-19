@@ -3,8 +3,11 @@
 === emptyVariableDeclarationBindingPatterns02_ES5iterable.ts ===
 (function () {
 >(function () {    var {};    let {};    const {};    var [];    let [];    const [];})() : void
+>                                                                                         : ^^^^
 >(function () {    var {};    let {};    const {};    var [];    let [];    const [];}) : () => void
+>                                                                                       : ^^^^^^^^^^
 >function () {    var {};    let {};    const {};    var [];    let [];    const [];} : () => void
+>                                                                                     : ^^^^^^^^^^
 
     var {};
     let {};

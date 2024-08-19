@@ -11,7 +11,7 @@
         "DifferentNamesNotSpecified/a.ts"
     ],
     "emittedFiles": [
-        "test.js",
-        "test.d.ts"
+        "DifferentNamesNotSpecified/test.js",
+        "DifferentNamesNotSpecified/test.d.ts"
     ]
 }

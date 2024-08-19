@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents.ts] ////
 
 === jsDeclarationsReactComponents1.jsx ===
-/// <reference path="react16.d.ts" />
+/// <reference path="react16.d.ts" preserve="true" />
 import React from "react";
 >React : Symbol(React, Decl(jsDeclarationsReactComponents1.jsx, 1, 6))
 

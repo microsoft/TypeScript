@@ -4,5 +4,6 @@
 export interface Test {
     [index: TypeNotFound]: any;
 >index : TypeNotFound
+>      : ^^^^^^^^^^^^
 }
 

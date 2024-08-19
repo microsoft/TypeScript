@@ -3,9 +3,13 @@
 === parserComputedPropertyName24.ts ===
 class C {
 >C : C
+>  : ^
 
     set [e](v) { }
 >[e] : any
+>    : ^^^
 >e : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

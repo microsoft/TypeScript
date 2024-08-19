@@ -3,5 +3,7 @@
 === declareModifierOnImport1.ts ===
 declare import a = b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

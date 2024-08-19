@@ -1,14 +1,14 @@
-import * as documents from "../_namespaces/documents";
-import * as evaluator from "../_namespaces/evaluator";
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import * as documents from "../_namespaces/documents.js";
+import * as evaluator from "../_namespaces/evaluator.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 import {
     NewLineKind,
     ScriptTarget,
     transpileModule,
-} from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
+} from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -592,13 +592,13 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);
         host.getSourceFile = () => transformedSourceFile;
         const program = ts.createProgram(["source.ts"], {
-            target: ts.ScriptTarget.ES3,
+            target: ts.ScriptTarget.ES5,
             module: ts.ModuleKind.None,
             noLib: true,
         }, host);

@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/reverseMappedTypeRecursiveInference.ts] ////
+
+=== reverseMappedTypeRecursiveInference.ts ===
+type Foo<V> = {
+>Foo : Symbol(Foo, Decl(reverseMappedTypeRecursiveInference.ts, 0, 0))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 0, 9))
+
+    [K in keyof V]: Foo<V[K]>;
+>K : Symbol(K, Decl(reverseMappedTypeRecursiveInference.ts, 1, 5))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 0, 9))
+>Foo : Symbol(Foo, Decl(reverseMappedTypeRecursiveInference.ts, 0, 0))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 0, 9))
+>K : Symbol(K, Decl(reverseMappedTypeRecursiveInference.ts, 1, 5))
+}
+
+type Bar<V> = {
+>Bar : Symbol(Bar, Decl(reverseMappedTypeRecursiveInference.ts, 2, 1))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 4, 9))
+
+    [K in keyof V]: V[K] extends object ? Bar<V[K]> : string;
+>K : Symbol(K, Decl(reverseMappedTypeRecursiveInference.ts, 5, 5))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 4, 9))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 4, 9))
+>K : Symbol(K, Decl(reverseMappedTypeRecursiveInference.ts, 5, 5))
+>Bar : Symbol(Bar, Decl(reverseMappedTypeRecursiveInference.ts, 2, 1))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 4, 9))
+>K : Symbol(K, Decl(reverseMappedTypeRecursiveInference.ts, 5, 5))
+}
+
+function test<V>(value: Foo<V>): V {
+>test : Symbol(test, Decl(reverseMappedTypeRecursiveInference.ts, 6, 1))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 8, 14))
+>value : Symbol(value, Decl(reverseMappedTypeRecursiveInference.ts, 8, 17))
+>Foo : Symbol(Foo, Decl(reverseMappedTypeRecursiveInference.ts, 0, 0))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 8, 14))
+>V : Symbol(V, Decl(reverseMappedTypeRecursiveInference.ts, 8, 14))
+
+  console.log(value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(reverseMappedTypeRecursiveInference.ts, 8, 17))
+
+  return undefined as any;
+>undefined : Symbol(undefined)
+}
+
+const bar: Bar<any> = {};
+>bar : Symbol(bar, Decl(reverseMappedTypeRecursiveInference.ts, 13, 5))
+>Bar : Symbol(Bar, Decl(reverseMappedTypeRecursiveInference.ts, 2, 1))
+
+test(bar);
+>test : Symbol(test, Decl(reverseMappedTypeRecursiveInference.ts, 6, 1))
+>bar : Symbol(bar, Decl(reverseMappedTypeRecursiveInference.ts, 13, 5))
+

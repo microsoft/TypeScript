@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/decoratorMetadataTypeOnlyImport.ts] ////
+
+=== ./a.ts ===
+import { List } from 'unknown-module';
+>List : Symbol(List, Decl(a.ts, 0, 8))
+
+export type MyList = List<number>;
+>MyList : Symbol(MyList, Decl(a.ts, 0, 38))
+>List : Symbol(List, Decl(a.ts, 0, 8))
+
+=== ./b.ts ===
+import { type MyList } from './a';
+>MyList : Symbol(MyList, Decl(b.ts, 0, 8))
+
+declare var Decorator: any;
+>Decorator : Symbol(Decorator, Decl(b.ts, 2, 11))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(b.ts, 2, 27))
+
+  @Decorator myList?: MyList;
+>Decorator : Symbol(Decorator, Decl(b.ts, 2, 11))
+>myList : Symbol(Foo.myList, Decl(b.ts, 4, 11))
+>MyList : Symbol(MyList, Decl(b.ts, 0, 8))
+}
+

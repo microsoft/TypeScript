@@ -1,8 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @importsNotUsedAsValues: error
-// @preserveValueImports: true
-// @isolatedModules: true
+// @verbatimModuleSyntax: true
 // @module: es2015
 
 // @Filename: /exports1.ts

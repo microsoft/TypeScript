@@ -3,11 +3,14 @@
 === ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts ===
 class C {
 >C : C
+>  : ^
 
     const
 >const : any
 
     x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }

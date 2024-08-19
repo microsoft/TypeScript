@@ -3,12 +3,15 @@
 === unusedClassesinModule1.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
         public handelChar() {
 >handelChar : () => void
+>           : ^^^^^^^^^^
         }
     }
 }

@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/thisPredicateInObjectLiteral.ts] ////
+
+=== thisPredicateInObjectLiteral.ts ===
+// Should be OK
+const foo2 = {
+>foo2 : { isNumber(): this is { b: string; }; }
+>     : ^^^^^^^^^^^^^^                      ^^^
+>{    isNumber(): this is { b: string } {        return true;    },} : { isNumber(): this is { b: string; }; }
+>                                                                    : ^^^^^^^^^^^^^^                      ^^^
+
+    isNumber(): this is { b: string } {
+>isNumber : () => this is { b: string; }
+>         : ^^^^^^                      
+>b : string
+>  : ^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+
+    },
+};
+
+// Still an error
+const foo3 = {
+>foo3 : { isNumber(x: any): x is this; }
+>     : ^^^^^^^^^^^ ^^   ^^^         ^^^
+>{    isNumber(x: any): x is this {        return true;    },} : { isNumber(x: any): x is this; }
+>                                                              : ^^^^^^^^^^^ ^^   ^^^         ^^^
+
+    isNumber(x: any): x is this {
+>isNumber : (x: any) => x is this
+>         : ^ ^^   ^^^^^         
+>x : any
+>  : ^^^
+
+        return true;
+>true : true
+>     : ^^^^
+
+    },
+};
+

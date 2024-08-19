@@ -27,8 +27,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/a.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/tsconfig.json 2000 undefined Project: /project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -59,7 +58,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/c.ts 500 unde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /project/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/project/a.ts SVC-1-0 "export const a = {};"
@@ -198,7 +197,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -220,6 +226,29 @@ FsWatchesRecursive::
 /project: *new*
   {}
 
+Projects::
+/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/project/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/b.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/c.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -232,8 +261,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/b.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/b.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -245,7 +273,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -269,6 +301,25 @@ FsWatchesRecursive::
 /project:
   {}
 
+ScriptInfos::
+/project/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/b.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/c.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -281,8 +332,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /project/c.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/c.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/c.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -296,7 +346,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -318,6 +372,25 @@ FsWatchesRecursive::
 /project:
   {}
 
+ScriptInfos::
+/project/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/b.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/c.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -330,8 +403,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /project/d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/d.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/d.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -347,7 +419,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -366,6 +442,25 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /project:
   {}
+
+ScriptInfos::
+/project/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/b.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/c.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/d.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
 
 Before request
 
@@ -386,14 +481,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 5,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 

@@ -48,7 +48,7 @@ import {
     SyntaxKind,
     TypeNode,
     UnaryExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {

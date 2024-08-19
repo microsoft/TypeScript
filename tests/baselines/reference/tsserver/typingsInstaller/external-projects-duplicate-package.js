@@ -33,8 +33,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.js 500 undefi
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /a/app/test.csproj WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.js Text-1 ""
@@ -52,6 +53,8 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types/node/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/app.js: *new*
@@ -60,6 +63,21 @@ FsWatches::
 FsWatchesRecursive::
 /node_modules: *new*
   {}
+
+Projects::
+/a/app/test.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/node_modules/@types/node/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -219,10 +237,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -237,6 +263,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/node_modules/@types/node/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/app.js:
@@ -245,3 +273,8 @@ FsWatches::
 FsWatchesRecursive::
 /node_modules:
   {}
+
+Projects::
+/a/app/test.csproj (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*

@@ -6,12 +6,14 @@ declare module JSX {
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 
 === react-consumer.tsx ===
 namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
 	export var React: any;
 >React : any
@@ -19,6 +21,7 @@ namespace M {
 
 namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
 	// Should emit M.React.createElement
 	//  and M.React.__spread
@@ -27,18 +30,27 @@ namespace M {
 
 	var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
+>        : ^^^^^^^^^^^
 ><div x='' {...foo} y='' /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >foo : any
 >y : string
+>  : ^^^^^^
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;
 >x : JSX.Element
+>  : ^^^^^^^^^^^
 ><div>This "quote" thing</div> : JSX.Element
+>                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 
 

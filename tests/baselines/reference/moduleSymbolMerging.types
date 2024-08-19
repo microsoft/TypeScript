@@ -1,16 +1,20 @@
 //// [tests/cases/compiler/moduleSymbolMerging.ts] ////
 
 === B.ts ===
-///<reference path="A.ts" />
+///<reference path="A.ts" preserve="true" />
 module A { ; }
 >A : typeof A
+>  : ^^^^^^^^
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
 	export function f(): A.I { return null; }
 >f : () => A.I
+>  : ^^^^^^   
 >A : any
+>  : ^^^
 }
 
 

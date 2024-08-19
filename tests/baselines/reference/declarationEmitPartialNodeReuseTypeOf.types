@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/declarationEmitPartialNodeReuseTypeOf.ts] ////
+
+=== a.ts ===
+export const nImported = "nImported"
+>nImported : "nImported"
+>          : ^^^^^^^^^^^
+>"nImported" : "nImported"
+>            : ^^^^^^^^^^^
+
+export const nNotImported = "nNotImported"
+>nNotImported : "nNotImported"
+>             : ^^^^^^^^^^^^^^
+>"nNotImported" : "nNotImported"
+>               : ^^^^^^^^^^^^^^
+
+const nPrivate = "private"
+>nPrivate : "private"
+>         : ^^^^^^^^^
+>"private" : "private"
+>          : ^^^^^^^^^
+
+export const o = (p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported }
+>o : (p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => { foo: typeof nImported; bar: typeof nPrivate; baz: typeof nNotImported; }
+>  : ^  ^^                ^^  ^^                   ^^  ^^               ^^^^^                                                                          
+>(p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported } : (p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => { foo: typeof nImported; bar: typeof nPrivate; baz: typeof nNotImported; }
+>                                                                                                                                                           : ^  ^^                ^^  ^^                   ^^  ^^               ^^^^^                                                                          
+>p1 : "nImported"
+>   : ^^^^^^^^^^^
+>nImported : "nImported"
+>          : ^^^^^^^^^^^
+>p2 : "nNotImported"
+>   : ^^^^^^^^^^^^^^
+>nNotImported : "nNotImported"
+>             : ^^^^^^^^^^^^^^
+>p3 : "private"
+>   : ^^^^^^^^^
+>nPrivate : "private"
+>         : ^^^^^^^^^
+>null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported } : { foo: typeof nImported; bar: typeof nPrivate; baz: typeof nNotImported; }
+>                                                                                   : ^^^^^^^                ^^^^^^^               ^^^^^^^                   ^^^
+>null! : never
+>      : ^^^^^
+>foo : "nImported"
+>    : ^^^^^^^^^^^
+>nImported : "nImported"
+>          : ^^^^^^^^^^^
+>bar : "private"
+>    : ^^^^^^^^^
+>nPrivate : "private"
+>         : ^^^^^^^^^
+>baz : "nNotImported"
+>    : ^^^^^^^^^^^^^^
+>nNotImported : "nNotImported"
+>             : ^^^^^^^^^^^^^^
+
+=== b.ts ===
+import { o, nImported } from "./a";
+>o : (p1: typeof nImported, p2: typeof import("a").nNotImported, p3: "private") => { foo: typeof nImported; bar: "private"; baz: typeof import("a").nNotImported; }
+>  : ^  ^^                ^^  ^^              ^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^                              ^^^^^^^^^                     ^^^  ^^^^^^^^^^^^   
+>nImported : "nImported"
+>          : ^^^^^^^^^^^
+
+export const g = o
+>g : (p1: typeof nImported, p2: typeof import("a").nNotImported, p3: "private") => { foo: typeof nImported; bar: "private"; baz: typeof import("a").nNotImported; }
+>  : ^  ^^                ^^  ^^              ^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^                              ^^^^^^^^^                     ^^^  ^^^^^^^^^^^^   
+>o : (p1: typeof nImported, p2: typeof import("a").nNotImported, p3: "private") => { foo: typeof nImported; bar: "private"; baz: typeof import("a").nNotImported; }
+>  : ^  ^^                ^^  ^^              ^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^                              ^^^^^^^^^                     ^^^  ^^^^^^^^^^^^   
+
+console.log(nImported);
+>console.log(nImported) : void
+>                       : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>nImported : "nImported"
+>          : ^^^^^^^^^^^
+
+=== c.ts ===
+import * as a from "./a";
+>a : typeof a
+>  : ^^^^^^^^
+
+export const g = a.o
+>g : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
+>  : ^  ^^       ^^^^^^^^^^^^^  ^^       ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^       ^^^^^^^^^              ^^^^^^^^^^^^^^   
+>a.o : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
+>    : ^  ^^       ^^^^^^^^^^^^^  ^^       ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^       ^^^^^^^^^              ^^^^^^^^^^^^^^   
+>a : typeof a
+>  : ^^^^^^^^
+>o : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
+>  : ^  ^^       ^^^^^^^^^^^^^  ^^       ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^       ^^^^^^^^^              ^^^^^^^^^^^^^^   
+

@@ -7,6 +7,7 @@ declare module outer {
     // .d.ts emit: should be 'extends outer.Beta'
     export interface Beta extends outer.Beta { }
 >outer : any
+>      : ^^^
   }
 }
 

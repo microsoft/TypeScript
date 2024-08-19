@@ -31,8 +31,7 @@ Resolution:: {
     "/sub/dir/node_modules/@types/a/index.d.ts",
     "/sub/node_modules/a.ts",
     "/sub/node_modules/a.tsx",
-    "/sub/node_modules/a.d.ts",
-    "/sub/node_modules/a/index"
+    "/sub/node_modules/a.d.ts"
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
@@ -61,8 +60,7 @@ Resolution:: {
     "/sub/dir/node_modules/@types/a/index.d.ts",
     "/sub/node_modules/a.ts",
     "/sub/node_modules/a.tsx",
-    "/sub/node_modules/a.d.ts",
-    "/sub/node_modules/a/index"
+    "/sub/node_modules/a.d.ts"
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"

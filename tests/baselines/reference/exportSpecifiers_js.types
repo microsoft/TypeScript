@@ -3,8 +3,11 @@
 === ./a.js ===
 const foo = 0;
 >foo : 0
+>    : ^
 >0 : 0
+>  : ^
 
 export { type foo };
 >foo : 0
+>    : ^
 
