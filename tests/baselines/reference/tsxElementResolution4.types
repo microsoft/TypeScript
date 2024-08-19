@@ -6,29 +6,42 @@ declare module JSX {
 	interface IntrinsicElements {
 	    div: { n: string; };
 >div : { n: string; }
+>    : ^^^^^      ^^^
 >n : string
+>  : ^^^^^^
 
 	    span: { m: string; };
 >span : { m: string; }
+>     : ^^^^^      ^^^
 >m : string
+>  : ^^^^^^
 	}
 }
 
 // OK
 <div n='x' />;
 ><div n='x' /> : JSX.Element
+>              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >n : string
+>  : ^^^^^^
 
 // OK
 <span m='ok' />;
 ><span m='ok' /> : JSX.Element
+>                : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >m : string
+>  : ^^^^^^
 
 // Error
 <span q='' />;
 ><span q='' /> : JSX.Element
+>              : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >q : string
+>  : ^^^^^^
 

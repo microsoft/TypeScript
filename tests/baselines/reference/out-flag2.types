@@ -3,8 +3,10 @@
 === a.ts ===
 class A { }
 >A : A
+>  : ^
 
 === b.ts ===
 class B { }
 >B : B
+>  : ^
 

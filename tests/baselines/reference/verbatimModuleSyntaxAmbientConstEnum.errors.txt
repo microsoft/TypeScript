@@ -1,0 +1,27 @@
+/a.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+/a.ts(4,1): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+/b.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+
+
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export declare const enum E { A, B, C }
+    declare global {
+      const enum F { A, B, C }
+    }
+    
+==== /a.ts (2 errors) ====
+    import { E } from "pkg"; // Error
+             ~
+!!! error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+    import type { E as _E } from "pkg"; // Ok
+    console.log(E.A); // Ok
+    F.A; // Error
+    ~
+!!! error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+    
+==== /b.ts (1 errors) ====
+    export { E } from "pkg"; // Error
+             ~
+!!! error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+    export type { E as _E } from "pkg"; // Ok
+    

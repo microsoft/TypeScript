@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesGenericTuples2.ts] ////
+
+=== mappedTypesGenericTuples2.ts ===
+// https://github.com/microsoft/TypeScript/issues/57389
+
+declare function getT<T>(): T;
+>getT : Symbol(getT, Decl(mappedTypesGenericTuples2.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypesGenericTuples2.ts, 2, 22))
+>T : Symbol(T, Decl(mappedTypesGenericTuples2.ts, 2, 22))
+
+Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
+>Promise.all([getT<string>(), ...getT<any>()]).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>getT : Symbol(getT, Decl(mappedTypesGenericTuples2.ts, 0, 0))
+>getT : Symbol(getT, Decl(mappedTypesGenericTuples2.ts, 0, 0))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(mappedTypesGenericTuples2.ts, 4, 52))
+
+  const head = result[0]; // string
+>head : Symbol(head, Decl(mappedTypesGenericTuples2.ts, 5, 7))
+>result : Symbol(result, Decl(mappedTypesGenericTuples2.ts, 4, 52))
+>0 : Symbol(0)
+
+  const tail = result.slice(1); // any[]
+>tail : Symbol(tail, Decl(mappedTypesGenericTuples2.ts, 6, 7))
+>result.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(mappedTypesGenericTuples2.ts, 4, 52))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+
+  tail satisfies string[]; // ok
+>tail : Symbol(tail, Decl(mappedTypesGenericTuples2.ts, 6, 7))
+
+});
+

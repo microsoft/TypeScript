@@ -1,4 +1,6 @@
 /// <reference lib="es2015.symbol" />
+/// <reference lib="es2015.iterable" />
+/// <reference lib="es2018.asynciterable" />
 
 interface SymbolConstructor {
     /**
@@ -25,7 +27,7 @@ interface SuppressedError extends Error {
     suppressed: any;
 }
 
-interface SuppressedErrorConstructor extends ErrorConstructor {
+interface SuppressedErrorConstructor {
     new (error: any, suppressed: any, message?: string): SuppressedError;
     (error: any, suppressed: any, message?: string): SuppressedError;
     readonly prototype: SuppressedError;
@@ -165,3 +167,9 @@ interface AsyncDisposableStackConstructor {
     readonly prototype: AsyncDisposableStack;
 }
 declare var AsyncDisposableStack: AsyncDisposableStackConstructor;
+
+interface IteratorObject<T, TReturn, TNext> extends Disposable {
+}
+
+interface AsyncIteratorObject<T, TReturn, TNext> extends AsyncDisposable {
+}

@@ -1,11 +1,10 @@
-import * as Utils from "../../_namespaces/Utils";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTsc } from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
@@ -100,7 +99,7 @@ describe("unittests:: tsc:: composite::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "const x = 10;",
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -114,5 +113,59 @@ describe("unittests:: tsc:: composite::", () => {
                 edit: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
             },
         ],
+    });
+
+    verifyTsc({
+        scenario: "composite",
+        subScenario: "synthetic jsx import of ESM module from CJS module no crash no jsx element",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/main.ts": "export default 42;",
+                "/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        module: "Node16",
+                        jsx: "react-jsx",
+                        jsxImportSource: "solid-js",
+                    },
+                }),
+                "/node_modules/solid-js/package.json": jsonToReadableText({
+                    name: "solid-js",
+                    type: "module",
+                }),
+                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                    export namespace JSX {
+                        type IntrinsicElements = { div: {}; };
+                    }
+                `,
+            }),
+        commandLineArgs: [],
+    });
+
+    verifyTsc({
+        scenario: "composite",
+        subScenario: "synthetic jsx import of ESM module from CJS module error on jsx element",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/main.tsx": "export default <div/>;",
+                "/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        module: "Node16",
+                        jsx: "react-jsx",
+                        jsxImportSource: "solid-js",
+                    },
+                }),
+                "/node_modules/solid-js/package.json": jsonToReadableText({
+                    name: "solid-js",
+                    type: "module",
+                }),
+                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                    export namespace JSX {
+                        type IntrinsicElements = { div: {}; };
+                    }
+                `,
+            }),
+        commandLineArgs: [],
     });
 });

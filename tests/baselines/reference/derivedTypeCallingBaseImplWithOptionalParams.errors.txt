@@ -15,6 +15,6 @@ derivedTypeCallingBaseImplWithOptionalParams.ts(13,3): error TS2554: Expected 1 
     
     var y: MyClass = new MyClass();
     y.myMethod(); // error
-      ~~~~~~~~~~
+      ~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 derivedTypeCallingBaseImplWithOptionalParams.ts:5:14: An argument for 'myList' was not provided.

@@ -90,7 +90,7 @@ genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is no
     declare function foo<T extends any[]>(cb: (...args: T) => void): void;
     
     foo<CoolArray<any>>();     // Error
-    ~~~~~~~~~~~~~~~~~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 genericRestParameters3.ts:33:39: An argument for 'cb' was not provided.
     foo<CoolArray<any>>(100);  // Error

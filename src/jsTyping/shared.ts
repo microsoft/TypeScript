@@ -1,6 +1,4 @@
-import {
-    sys,
-} from "./_namespaces/ts";
+import { sys } from "./_namespaces/ts.js";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";
@@ -64,4 +62,20 @@ export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();
     return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}.${d.getMilliseconds().toString().padStart(3, "0")}`;
+}
+
+const indentStr = "\n    ";
+
+/** @internal */
+export function indent(str: string): string {
+    return indentStr + str.replace(/\n/g, indentStr);
+}
+
+/**
+ * Put stringified JSON on the next line, indented.
+ *
+ * @internal
+ */
+export function stringifyIndented(json: {}): string {
+    return indent(JSON.stringify(json, undefined, 2));
 }

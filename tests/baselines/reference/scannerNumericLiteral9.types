@@ -3,4 +3,5 @@
 === scannerNumericLiteral9.ts ===
 009
 >009 : 9
+>    : ^
 

@@ -4,16 +4,27 @@
 //     export var x;
 // }
 // 
-// class Foo {
-//     [|constructor() {
+// <|class [|{| defId: 0 |}Foo|] {
+//     [|{| defId: 1 |}constructor() {
 //     }|]
-// }
+// }|>
 // 
 // var x = new /*GOTO DEF*/Foo();
 
   // === Details ===
   [
    {
+    "defId": 0,
+    "kind": "class",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
     "kind": "constructor",
     "name": "__constructor",
     "containerName": "Foo",

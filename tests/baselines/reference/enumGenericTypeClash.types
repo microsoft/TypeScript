@@ -3,8 +3,11 @@
 === enumGenericTypeClash.ts ===
 class X<A,B,C> { }
 >X : X<A, B, C>
+>  : ^^^^^^^^^^
 
 enum X { MyVal }
 >X : X
+>  : ^
 >MyVal : X.MyVal
+>      : ^^^^^^^
 

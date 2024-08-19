@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/declarationEmitTopLevelNodeFromCrossFile2.ts] ////
+
+=== a.ts ===
+import { boxedBox } from "./boxedBox";
+>boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^
+
+export const _ = boxedBox;
+>_ : import("box").Box<{ boxed: import("box").Box<number>; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^
+>boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^
+
+// At index 83
+/**
+ * wat
+ */
+
+=== boxedBox.d.ts ===
+export declare const boxedBox: import("./box").Box<{
+>boxedBox : import("box").Box<{ boxed: import("./box").Box<number>; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^
+
+    boxed: import("./box").Box<number>;
+>boxed : import("box").Box<number>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}>;                        // ^This is index 83 in this file
+
+=== box.d.ts ===
+export declare class Box<T> {
+>Box : Box<T>
+>    : ^^^^^^
+
+    value: T;
+>value : T
+>      : ^
+
+    constructor(value: T);
+>value : T
+>      : ^
+}
+export declare function box<T>(value: T): Box<T>;
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>value : T
+>      : ^
+

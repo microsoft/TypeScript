@@ -1,0 +1,13 @@
+/foo.js(2,15): error TS1109: Expression expected.
+/foo.js(3,2): error TS1005: 'from' expected.
+
+
+==== /foo.js (2 errors) ====
+    /**
+     * @import foo
+                  
+!!! error TS1109: Expression expected.
+     */
+     
+!!! error TS1005: 'from' expected.
+    

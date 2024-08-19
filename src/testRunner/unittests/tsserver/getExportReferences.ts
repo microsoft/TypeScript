@@ -1,15 +1,14 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getExportReferences", () => {
     function makeSampleSession() {
@@ -30,7 +29,7 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
             content: "{}",
         };
         const host = createServerHost([mainTs, modTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([mainTs, modTs], session);
         return { session, modTs };
     }

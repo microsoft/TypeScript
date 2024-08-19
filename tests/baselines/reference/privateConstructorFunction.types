@@ -8,16 +8,23 @@
     /** @private */
     function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
         this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
     new C()
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 }
 

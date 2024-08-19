@@ -1,0 +1,23 @@
+v2.ts(2,14): error TS2527: The inferred type of 'v2' references an inaccessible 'unique symbol' type. A type annotation is necessary.
+
+
+==== v1.ts (0 errors) ====
+    export const v1 = (...a: [n: "n", a: "a"]): {
+        /** r rest param */
+        a: typeof a,
+    } => {
+        return null!
+    }
+    
+==== v2.ts (1 errors) ====
+    const n = Symbol();
+    export const v2 = (...a: [n: "n", a: "a"]): {
+                 ~~
+!!! error TS2527: The inferred type of 'v2' references an inaccessible 'unique symbol' type. A type annotation is necessary.
+        /** r rest param */
+        a: typeof a,
+        /** module var */
+        n: typeof n,
+    } => {
+        return null!
+    }

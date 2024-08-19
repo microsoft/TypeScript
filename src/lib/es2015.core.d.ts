@@ -42,6 +42,8 @@ interface Array<T> {
      * @param end If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
+
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface ArrayConstructor {
@@ -342,6 +344,8 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
+
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface RegExp {
@@ -536,4 +540,40 @@ interface StringConstructor {
      * @param substitutions A set of substitution values.
      */
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
+}
+
+interface Int8Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint8Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint8ClampedArray {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Int16Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint16Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Int32Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Uint32Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Float32Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Float64Array {
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

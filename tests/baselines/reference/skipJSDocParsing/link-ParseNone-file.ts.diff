@@ -1,0 +1,66 @@
+===================================================================
+--- default
++++ ParseNone
+@@ -88,52 +88,9 @@
+                 "pos": 69,
+                 "end": 69,
+                 "hasTrailingComma": false,
+                 "transformFlags": 0
+-            },
+-            "jsDoc": [
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 32,
+-                    "end": 48,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "comment": {
+-                        "0": {
+-                            "kind": "JSDocText",
+-                            "pos": 32,
+-                            "end": 36,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "text": ""
+-                        },
+-                        "1": {
+-                            "kind": "JSDocLink",
+-                            "pos": 36,
+-                            "end": 45,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "name": {
+-                                "kind": "Identifier",
+-                                "pos": 43,
+-                                "end": 44,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "A"
+-                            },
+-                            "text": ""
+-                        },
+-                        "length": 2,
+-                        "pos": 32,
+-                        "end": 46,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                }
+-            ]
++            }
+         },
+         "length": 2,
+         "pos": 0,
+         "end": 70,
+@@ -214,6 +171,6 @@
+     "typeReferenceDirectives": [],
+     "libReferenceDirectives": [],
+     "amdDependencies": [],
+     "identifiers": {},
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 1
+ }
+\ No newline at end of file

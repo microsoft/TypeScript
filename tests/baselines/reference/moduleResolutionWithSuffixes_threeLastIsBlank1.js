@@ -13,21 +13,18 @@ export function base() {}
 //// [foo-ios.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ios = void 0;
-function ios() { }
 exports.ios = ios;
+function ios() { }
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [foo__native.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.native = void 0;
-function native() { }
 exports.native = native;
+function native() { }
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.base = void 0;
-function base() { }
 exports.base = base;
+function base() { }

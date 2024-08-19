@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates12.ts] ////
+
+=== unicodeExtendedEscapesInTemplates12.ts ===
+var x = `\u{FFFFFFFF}`;
+>x : string
+>  : ^^^^^^
+>`\u{FFFFFFFF}` : "\\u{FFFFFFFF}"
+>               : ^^^^^^^^^^^^^^^
+

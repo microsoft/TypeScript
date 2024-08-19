@@ -1,11 +1,4 @@
 import {
-    Debug,
-    every,
-    FormatCodeSettings,
-    FormattingHost,
-    SyntaxKind,
-} from "../_namespaces/ts";
-import {
     anyContext,
     FormatContext,
     FormattingContext,
@@ -13,7 +6,14 @@ import {
     Rule,
     RuleAction,
     RuleSpec,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.formatting.js";
+import {
+    Debug,
+    every,
+    FormatCodeSettings,
+    FormattingHost,
+    SyntaxKind,
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {

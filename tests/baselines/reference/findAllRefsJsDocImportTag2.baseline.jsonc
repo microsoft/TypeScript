@@ -1,0 +1,185 @@
+// === findAllReferences ===
+// === /player.js ===
+// <|import [|{| defId: 0, isWriteAccess: true |}Component|] from './component.js';|>
+// 
+// /**
+//  * @extends [|{| defId: 0 |}Component|]/*FIND ALL REFS*/
+//  */
+// export class Player extends [|{| defId: 0 |}Component|] {}
+
+// === /component.js ===
+// <|export default class [|{| defId: 1, isWriteAccess: true |}Component|] {
+//   constructor() {
+//     this.id_ = Math.random();
+//   }
+//   id() {
+//     return this.id_;
+//   }
+// }|>
+
+// === /spatial-navigation.js ===
+// /** <|@import [|{| defId: 2, isWriteAccess: true |}Component|] from './component.js'|> */
+// 
+// export class SpatialNavigation {
+//   /**
+//    * @param {[|{| defId: 2 |}Component|]} component
+//    */
+//   add(component) {}
+// }
+
+  // === Definitions ===
+  // === /player.js ===
+  // <|import [|{| defId: 0 |}Component|] from './component.js';|>
+  // 
+  // /**
+  //  * @extends Component/*FIND ALL REFS*/
+  //  */
+  // export class Player extends Component {}
+
+  // === /component.js ===
+  // <|export default class [|{| defId: 1 |}Component|] {
+  //   constructor() {
+  //     this.id_ = Math.random();
+  //   }
+  //   id() {
+  //     return this.id_;
+  //   }
+  // }|>
+
+  // === /spatial-navigation.js ===
+  // /** <|@import [|{| defId: 2 |}Component|] from './component.js'|> */
+  // 
+  // export class SpatialNavigation {
+  //   /**
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class Component\nimport Component",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Component",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Component",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class Component",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Component",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class Component\nimport Component",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Component",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Component",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

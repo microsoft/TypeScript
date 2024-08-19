@@ -3,18 +3,25 @@
 === a.ts ===
 export default module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export const Foo = 1;
 >Foo : 1
+>    : ^
 >1 : 1
+>  : ^
 }
 
 === b.ts ===
 import A from "./a"
 >A : typeof A
+>  : ^^^^^^^^
 
 A.Foo;
 >A.Foo : 1
+>      : ^
 >A : typeof A
+>  : ^^^^^^^^
 >Foo : 1
+>    : ^
 

@@ -10,7 +10,11 @@ declare module JSX {
 
 var x = </**/div></div>;
 >x : JSX.Element
+>  : ^^^^^^^^^^^
 ></**/div></div> : JSX.Element
+>                : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 

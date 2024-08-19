@@ -1,12 +1,14 @@
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { forEachScenarioForRootsFromReferencedProject } from "../helpers/projectRoots.js";
 import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
+    noChangeRun,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
+    appendText,
     loadProjectFromFiles,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: roots::", () => {
     verifyTsc({
@@ -17,7 +19,7 @@ describe("unittests:: tsbuild:: roots::", () => {
             loadProjectFromFiles({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -42,7 +44,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/file3.ts": `export const y = "world";`,
                 "/src/file4.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -69,7 +71,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random";
                 export const y = "world";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts"],
                 }),
@@ -109,7 +111,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random2";
                 export const nonConsecutive = "hello";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
                 }),
@@ -122,5 +124,29 @@ describe("unittests:: tsbuild:: roots::", () => {
                 fs.rimrafSync("/src/file1.d.ts");
             },
         }],
+    });
+
+    describe("when root file is from referenced project", () => {
+        forEachScenarioForRootsFromReferencedProject((subScenario, getFsContents) => {
+            verifyTsc({
+                scenario: "roots",
+                subScenario,
+                commandLineArgs: ["--b", "projects/server", "-v", "--traceResolution", "--explainFiles"],
+                fs: () => loadProjectFromFiles(getFsContents(), { cwd: "/home/src/workspaces" }),
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "edit logging file",
+                        edit: fs => appendText(fs, "/home/src/workspaces/projects/shared/src/logging.ts", "export const x = 10;"),
+                    },
+                    noChangeRun,
+                    {
+                        caption: "delete random file",
+                        edit: fs => fs.unlinkSync("/home/src/workspaces/projects/shared/src/random.ts"),
+                    },
+                    noChangeRun,
+                ],
+            });
+        });
     });
 });

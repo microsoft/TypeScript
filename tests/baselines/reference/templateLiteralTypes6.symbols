@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes6.ts] ////
+
+=== templateLiteralTypes6.ts ===
+// https://github.com/microsoft/TypeScript/issues/56659
+
+type Registry = {
+>Registry : Symbol(Registry, Decl(templateLiteralTypes6.ts, 0, 0))
+
+  a: { a1: {} };
+>a : Symbol(a, Decl(templateLiteralTypes6.ts, 2, 17))
+>a1 : Symbol(a1, Decl(templateLiteralTypes6.ts, 3, 6))
+
+  b: { b1: {} };
+>b : Symbol(b, Decl(templateLiteralTypes6.ts, 3, 16))
+>b1 : Symbol(b1, Decl(templateLiteralTypes6.ts, 4, 6))
+
+};
+
+type Keyof<T> = keyof T & string;
+>Keyof : Symbol(Keyof, Decl(templateLiteralTypes6.ts, 5, 2))
+>T : Symbol(T, Decl(templateLiteralTypes6.ts, 7, 11))
+>T : Symbol(T, Decl(templateLiteralTypes6.ts, 7, 11))
+
+declare function f1<
+>f1 : Symbol(f1, Decl(templateLiteralTypes6.ts, 7, 33))
+
+  Scope extends Keyof<Registry>,
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 9, 20))
+>Keyof : Symbol(Keyof, Decl(templateLiteralTypes6.ts, 5, 2))
+>Registry : Symbol(Registry, Decl(templateLiteralTypes6.ts, 0, 0))
+
+  Event extends Keyof<Registry[Scope]>,
+>Event : Symbol(Event, Decl(templateLiteralTypes6.ts, 10, 32))
+>Keyof : Symbol(Keyof, Decl(templateLiteralTypes6.ts, 5, 2))
+>Registry : Symbol(Registry, Decl(templateLiteralTypes6.ts, 0, 0))
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 9, 20))
+
+>(eventPath: `${Scope}:${Event}`): void;
+>eventPath : Symbol(eventPath, Decl(templateLiteralTypes6.ts, 12, 2))
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 9, 20))
+>Event : Symbol(Event, Decl(templateLiteralTypes6.ts, 10, 32))
+
+function f2<
+>f2 : Symbol(f2, Decl(templateLiteralTypes6.ts, 12, 40))
+
+  Scope extends Keyof<Registry>,
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 14, 12))
+>Keyof : Symbol(Keyof, Decl(templateLiteralTypes6.ts, 5, 2))
+>Registry : Symbol(Registry, Decl(templateLiteralTypes6.ts, 0, 0))
+
+  Event extends Keyof<Registry[Scope]>,
+>Event : Symbol(Event, Decl(templateLiteralTypes6.ts, 15, 32))
+>Keyof : Symbol(Keyof, Decl(templateLiteralTypes6.ts, 5, 2))
+>Registry : Symbol(Registry, Decl(templateLiteralTypes6.ts, 0, 0))
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 14, 12))
+
+>(scope: Scope, event: Event) {
+>scope : Symbol(scope, Decl(templateLiteralTypes6.ts, 17, 2))
+>Scope : Symbol(Scope, Decl(templateLiteralTypes6.ts, 14, 12))
+>event : Symbol(event, Decl(templateLiteralTypes6.ts, 17, 15))
+>Event : Symbol(Event, Decl(templateLiteralTypes6.ts, 15, 32))
+
+  f1(`${scope}:${event}`);
+>f1 : Symbol(f1, Decl(templateLiteralTypes6.ts, 7, 33))
+>scope : Symbol(scope, Decl(templateLiteralTypes6.ts, 17, 2))
+>event : Symbol(event, Decl(templateLiteralTypes6.ts, 17, 15))
+}
+

@@ -22,7 +22,7 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 "use strict";
 // Repro from #10811
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.speak = void 0;
+exports.speak = speak;
 function isPet(pet) {
     return typeof pet.name === "string";
 }
@@ -32,4 +32,3 @@ function speak(pet, voice) {
     }
     return voice(pet);
 }
-exports.speak = speak;

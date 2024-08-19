@@ -1,18 +1,17 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
@@ -41,10 +40,10 @@ import { something } from "something";
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         return { host, session, file1, file2, file3, something, configFile };
     }
@@ -103,10 +102,10 @@ import { something } from "something";
         const expectedErrorMessage = "')' expected.";
 
         const host = createServerHost([file1, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
 
         const service = session.getProjectService();
@@ -119,8 +118,8 @@ import { something } from "something";
         };
         const response = session.executeCommandSeq(request).response as ts.server.protocol.SyntacticDiagnosticsSyncResponse["body"];
         assert.isDefined(response);
-        assert.equal(response!.length, 1);
-        assert.equal((response![0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
+        assert.equal(response.length, 1);
+        assert.equal((response[0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
 
         const project = service.inferredProjects[0];
         const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file1.path);
@@ -168,10 +167,10 @@ function fooB() { }`,
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file1], session);
         baselineTsserverLogs("partialSemanticServer", "should not include referenced files from unopened files", session);
@@ -212,12 +211,13 @@ function fooB() { }`,
             content: "",
         };
         const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([indexTs], session);
         const project = service.inferredProjects[0];
         assert.isFalse(project.autoImportProviderHost);
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         assert.deepEqual(project.getPackageJsonsForAutoImport(), ts.emptyArray);
         baselineTsserverLogs("partialSemanticServer", "should not create autoImportProvider or handle package jsons", session);
     });

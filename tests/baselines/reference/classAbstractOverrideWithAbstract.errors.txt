@@ -1,4 +1,4 @@
-classAbstractOverrideWithAbstract.ts(19,7): error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'BB'
+classAbstractOverrideWithAbstract.ts(19,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member foo from class 'BB'.
 
 
 ==== classAbstractOverrideWithAbstract.ts (1 errors) ====
@@ -22,8 +22,7 @@ classAbstractOverrideWithAbstract.ts(19,7): error TS18052: Non-abstract class 'C
     
     class CC extends BB {} // error
           ~~
-!!! error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'BB'
-!!! related TS2515 classAbstractOverrideWithAbstract.ts:15:14: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
+!!! error TS2515: Non-abstract class 'CC' does not implement inherited abstract member foo from class 'BB'.
     
     class DD extends BB {
         foo() {}

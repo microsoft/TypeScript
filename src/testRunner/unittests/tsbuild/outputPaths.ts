@@ -1,15 +1,14 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeRun,
     TestTscEdit,
     TscCompileSystem,
     verifyTsc,
     VerifyTscWithEditsInput,
-} from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+} from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
@@ -48,7 +47,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                     },
@@ -62,7 +61,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         composite: true,
@@ -77,7 +76,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
@@ -93,7 +92,7 @@ describe("unittests:: tsbuild - output file paths", () => {
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
@@ -109,7 +108,7 @@ describe("unittests:: tsbuild - output file paths", () => {
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",

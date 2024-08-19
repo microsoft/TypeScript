@@ -4,12 +4,14 @@
 interface A {
     m: string;
 >m : string
+>  : ^^^^^^
 }
 interface B extends A {
 }
 interface C {
     m: number;
 >m : number
+>  : ^^^^^^
 }
 interface D extends C {
 }

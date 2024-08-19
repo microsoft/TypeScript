@@ -1,6 +1,6 @@
-/index.ts(6,50): error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
+/index.ts(6,50): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
 /index.ts(7,14): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
-/index.ts(7,49): error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
+/index.ts(7,49): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
 
 
 ==== /index.ts (3 errors) ====
@@ -11,12 +11,12 @@
     
     import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
+!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
                  ~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
+!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };

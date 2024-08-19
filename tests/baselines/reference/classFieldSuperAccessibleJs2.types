@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/classFieldSuperAccessibleJs2.ts] ////
+
+=== index.js ===
+class C {
+>C : C
+>  : ^
+
+  constructor() {
+    this.foo = () => {
+>this.foo = () => {      console.log("called arrow");    } : () => void
+>                                                          : ^^^^^^^^^^
+>this.foo : () => void
+>         : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+>() => {      console.log("called arrow");    } : () => void
+>                                               : ^^^^^^^^^^
+
+      console.log("called arrow");
+>console.log("called arrow") : void
+>                            : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"called arrow" : "called arrow"
+>               : ^^^^^^^^^^^^^^
+
+    };
+  }
+  foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("called method");
+>console.log("called method") : void
+>                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"called method" : "called method"
+>                : ^^^^^^^^^^^^^^^
+  }
+}
+
+class D extends C {
+>D : D
+>  : ^
+>C : C
+>  : ^
+
+  foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("SUPER:");
+>console.log("SUPER:") : void
+>                      : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"SUPER:" : "SUPER:"
+>         : ^^^^^^^^
+
+    super.foo();
+>super.foo() : void
+>            : ^^^^
+>super.foo : () => void
+>          : ^^^^^^^^^^
+>super : C
+>      : ^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("THIS:");
+>console.log("THIS:") : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"THIS:" : "THIS:"
+>        : ^^^^^^^
+
+    this.foo();
+>this.foo() : void
+>           : ^^^^
+>this.foo : () => void
+>         : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+  }
+}
+
+const obj = new D();
+>obj : D
+>    : ^
+>new D() : D
+>        : ^
+>D : typeof D
+>  : ^^^^^^^^
+
+obj.foo();
+>obj.foo() : void
+>          : ^^^^
+>obj.foo : () => void
+>        : ^^^^^^^^^^
+>obj : D
+>    : ^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+D.prototype.foo.call(obj);
+>D.prototype.foo.call(obj) : void
+>                          : ^^^^
+>D.prototype.foo.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>                     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>D.prototype.foo : () => void
+>                : ^^^^^^^^^^
+>D.prototype : D
+>            : ^
+>D : typeof D
+>  : ^^^^^^^^
+>prototype : D
+>          : ^
+>foo : () => void
+>    : ^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>obj : D
+>    : ^
+

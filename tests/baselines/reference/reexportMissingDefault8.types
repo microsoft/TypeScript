@@ -6,8 +6,10 @@ const b = null;
 
 export = b;
 >b : any
+>  : ^^^
 
 === a.ts ===
 export { default } from "./b";
 >default : any
+>        : ^^^
 

@@ -1,3 +1,4 @@
+// === Completions ===
 === /foo.ts ===
 // export class Observable<T> {
 //     pipe(): Observable<T>;
@@ -314,7 +315,8 @@
             }
           ]
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

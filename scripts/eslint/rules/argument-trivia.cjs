@@ -1,6 +1,12 @@
-const { AST_NODE_TYPES, TSESTree, ESLintUtils } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES, ESLintUtils } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
+
+/**
+ * @import { TSESTree } from "@typescript-eslint/utils"
+ * @typedef {TSESTree.CallExpression | TSESTree.NewExpression} CallOrNewExpression
+ */
+void 0;
 
 const unset = Symbol();
 /**
@@ -49,14 +55,14 @@ module.exports = createRule({
             }
 
             if (node.type === AST_NODE_TYPES.Literal) {
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 return node.value === null || node.value === true || node.value === false;
             }
 
             return false;
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => boolean} */
+        /** @type {(node: CallOrNewExpression) => boolean} */
         const shouldIgnoreCalledExpression = node => {
             if (node.callee && node.callee.type === AST_NODE_TYPES.MemberExpression) {
                 const methodName = node.callee.property.type === AST_NODE_TYPES.Identifier
@@ -170,15 +176,15 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
+        /** @type {(node: CallOrNewExpression) => void} */
         const checkArgumentTrivia = node => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }
 
             const getSignature = memoize(() => {
-                if (context.parserServices?.program) {
-                    const parserServices = ESLintUtils.getParserServices(context);
+                const parserServices = ESLintUtils.getParserServices(context, /*allowWithoutFullTypeInformation*/ true);
+                if (parserServices.program) {
                     const checker = parserServices.program.getTypeChecker();
                     const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
                     return checker.getResolvedSignature(tsNode);

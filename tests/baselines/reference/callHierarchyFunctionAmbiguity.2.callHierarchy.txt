@@ -1,3 +1,4 @@
+// === Call Hierarchy ===
 ╭ name: foo
 ├ kind: function
 ├ file: /tests/cases/fourslash/a.d.ts

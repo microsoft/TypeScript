@@ -7,19 +7,23 @@
 interface I {
     (x: string): string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I {
     (x: string): number;
 >x : string
+>  : ^^^^^^
 }
 
 interface I2<T> {
     (x: string): string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I2<T> {
     (x: string): number;
 >x : string
+>  : ^^^^^^
 }

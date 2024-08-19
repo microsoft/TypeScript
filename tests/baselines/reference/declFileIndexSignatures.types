@@ -4,44 +4,54 @@
 export interface IStringIndexSignature {
     [s: string]: string;
 >s : string
+>  : ^^^^^^
 }
 export interface INumberIndexSignature {
     [n: number]: number;
 >n : number
+>  : ^^^^^^
 }
 
 export interface IBothIndexSignature {
     [s: string]: any;
 >s : string
+>  : ^^^^^^
 
     [n: number]: number;
 >n : number
+>  : ^^^^^^
 }
 
 export interface IIndexSignatureWithTypeParameter<T> {
     [a: string]: T;
 >a : string
+>  : ^^^^^^
 }
 
 === declFileIndexSignatures_1.ts ===
 interface IGlobalStringIndexSignature {
     [s: string]: string;
 >s : string
+>  : ^^^^^^
 }
 interface IGlobalNumberIndexSignature {
     [n: number]: number;
 >n : number
+>  : ^^^^^^
 }
 
 interface IGlobalBothIndexSignature {
     [s: string]: any;
 >s : string
+>  : ^^^^^^
 
     [n: number]: number;
 >n : number
+>  : ^^^^^^
 }
 
 interface IGlobalIndexSignatureWithTypeParameter<T> {
     [a: string]: T;
 >a : string
+>  : ^^^^^^
 }

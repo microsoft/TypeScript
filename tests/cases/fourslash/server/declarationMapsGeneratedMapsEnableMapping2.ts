@@ -36,7 +36,7 @@
 ////instance.[|/*1*/methodName|]({member: 12});
 
 // @Filename: /dist/index.js.map
-////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE;YACrB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;SAClB;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
+////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
 
 // @Filename: /dist/index.js
 ////"use strict";
@@ -80,9 +80,7 @@
 goTo.file("/index.ts");
 verify.getEmitOutput(["/dist/index.js.map", "/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
 
-verify.baselineCommands(
-    { type: "goToImplementation", markerOrRange: "1" }, // getImplementationAtPosition
-    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition
-    { type: "goToDefinition", markerOrRange: "1" }, // getDefinitionAndBoundSpan
-    { type: "getDefinitionAtPosition", markerOrRange: "1" }, // getDefinitionAtPosition
-);
+verify.baselineGoToImplementation("1");// getImplementationAtPosition
+verify.baselineGoToType("1");// getTypeDefinitionAtPosition
+verify.baselineGoToDefinition("1");// getDefinitionAndBoundSpan
+verify.baselineGetDefinitionAtPosition("1"); // getDefinitionAtPosition

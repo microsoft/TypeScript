@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/fakeInfinity3.ts] ////
+
+=== fakeInfinity3.ts ===
+export enum Foo {
+>Foo : Foo
+>    : ^^^
+
+    A = 1e999,
+>A : Foo.A
+>  : ^^^^^
+>1e999 : Infinity
+>      : ^^^^^^^^
+
+    B = -1e999,
+>B : Foo.B
+>  : ^^^^^
+>-1e999 : -Infinity
+>       : ^^^^^^^^^
+>1e999 : Infinity
+>      : ^^^^^^^^
+}
+
+namespace X {
+>X : typeof X
+>  : ^^^^^^^^
+
+    type A = 1e999;
+>A : Infinity
+>  : ^^^^^^^^
+
+    type B = 2e999;
+>B : Infinity
+>  : ^^^^^^^^
+
+    export function f(): A {
+>f : () => Infinity
+>  : ^^^^^^^^^^^^^^
+
+        throw new Error()
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+    }
+}
+
+export const m = X.f();
+>m : Infinity
+>  : ^^^^^^^^
+>X.f() : Infinity
+>      : ^^^^^^^^
+>X.f : () => Infinity
+>    : ^^^^^^^^^^^^^^
+>X : typeof X
+>  : ^^^^^^^^
+>f : () => Infinity
+>  : ^^^^^^^^^^^^^^
+
+export const Infinity = "oops";
+>Infinity : "oops"
+>         : ^^^^^^
+>"oops" : "oops"
+>       : ^^^^^^
+

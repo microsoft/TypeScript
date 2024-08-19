@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression6.ts] ////
+
+=== parserRegularExpression6.ts ===
+declare var a;
+>a : Symbol(a, Decl(parserRegularExpression6.ts, 0, 11))
+
+a /= 1; // parse as infix
+>a : Symbol(a, Decl(parserRegularExpression6.ts, 0, 11))
+
+a = /=/; // parse as regexp
+>a : Symbol(a, Decl(parserRegularExpression6.ts, 0, 11))
+

@@ -18,8 +18,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-        var dispose;
+        var dispose, inner;
         if (async) {
             if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
             dispose = value[Symbol.asyncDispose];
@@ -55,8 +55,10 @@ var __addDisposableResource = (this && this.__addDisposableResource) || function
         if (dispose === void 0) {
             if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
             dispose = value[Symbol.dispose];
+            if (async) inner = dispose;
         }
         if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
         env.stack.push({ value: value, dispose: dispose, async: async });
     }
     else if (async) {
@@ -70,17 +72,22 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
             env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
             env.hasError = true;
         }
+        var r, s = 0;
         function next() {
-            while (env.stack.length) {
-                var rec = env.stack.pop();
+            while (r = env.stack.pop()) {
                 try {
-                    var result = rec.dispose && rec.dispose.call(rec.value);
-                    if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                    if (r.dispose) {
+                        var result = r.dispose.call(r.value);
+                        if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                    }
+                    else s |= 1;
                 }
                 catch (e) {
                     fail(e);
                 }
             }
+            if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
             if (env.hasError) throw env.error;
         }
         return next();
@@ -97,22 +104,22 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function main() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var _d, _e, _f, d1_1, env_1, d1, e_1_1;
-        var _g;
+        var _a, _b, _c, d1_1, env_1, d1, e_1_1;
+        var _d;
+        var _e, e_1, _f, _g;
         return __generator(this, function (_h) {
             switch (_h.label) {
                 case 0:
                     _h.trys.push([0, 5, 6, 11]);
-                    _d = true, _e = __asyncValues([(_g = {}, _g[Symbol.dispose] = function () { }, _g), null, undefined]);
+                    _a = true, _b = __asyncValues([(_d = {}, _d[Symbol.dispose] = function () { }, _d), null, undefined]);
                     _h.label = 1;
-                case 1: return [4 /*yield*/, _e.next()];
+                case 1: return [4 /*yield*/, _b.next()];
                 case 2:
-                    if (!(_f = _h.sent(), _a = _f.done, !_a)) return [3 /*break*/, 4];
-                    _c = _f.value;
-                    _d = false;
-                    d1_1 = _c;
+                    if (!(_c = _h.sent(), _e = _c.done, !_e)) return [3 /*break*/, 4];
+                    _g = _c.value;
+                    _a = false;
+                    d1_1 = _g;
                     env_1 = { stack: [], error: void 0, hasError: false };
                     try {
                         d1 = __addDisposableResource(env_1, d1_1, false);
@@ -126,7 +133,7 @@ function main() {
                     }
                     _h.label = 3;
                 case 3:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
@@ -135,8 +142,8 @@ function main() {
                     return [3 /*break*/, 11];
                 case 6:
                     _h.trys.push([6, , 9, 10]);
-                    if (!(!_d && !_a && (_b = _e.return))) return [3 /*break*/, 8];
-                    return [4 /*yield*/, _b.call(_e)];
+                    if (!(!_a && !_e && (_f = _b.return))) return [3 /*break*/, 8];
+                    return [4 /*yield*/, _f.call(_b)];
                 case 7:
                     _h.sent();
                     _h.label = 8;

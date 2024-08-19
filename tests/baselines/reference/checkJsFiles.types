@@ -3,10 +3,15 @@
 === a.js ===
 var x = "string";
 >x : string
+>  : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 x = 0;
 >x = 0 : 0
+>      : ^
 >x : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

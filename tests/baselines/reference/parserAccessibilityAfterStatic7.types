@@ -3,8 +3,10 @@
 === parserAccessibilityAfterStatic7.ts ===
 class Outer
 >Outer : Outer
+>      : ^^^^^
 {
 static public intI() {}
 >intI : () => void
+>     : ^^^^^^^^^^
 }
 
