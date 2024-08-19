@@ -61,7 +61,6 @@ import {
     isStringLiteral,
     isTypeNode,
     isTypeReferenceNode,
-    TypeReferenceNode,
     isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
@@ -636,6 +635,7 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     return fullTypeArguments.length;
 }
 
+/** @internal */
 export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
     const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
     if (!typeNode) {
