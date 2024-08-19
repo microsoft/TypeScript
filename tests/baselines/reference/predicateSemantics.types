@@ -192,3 +192,30 @@ while ((({}))) { }
 >{} : {}
 >   : ^^
 
+// Should be OK
+console.log((cond || undefined) && 1 / cond);
+>console.log((cond || undefined) && 1 / cond) : void
+>                                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>(cond || undefined) && 1 / cond : number
+>                                : ^^^^^^
+>(cond || undefined) : any
+>                    : ^^^
+>cond || undefined : any
+>                  : ^^^
+>cond : any
+>     : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>1 / cond : number
+>         : ^^^^^^
+>1 : 1
+>  : ^
+>cond : any
+>     : ^^^
+

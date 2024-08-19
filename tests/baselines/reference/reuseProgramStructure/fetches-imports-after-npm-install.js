@@ -105,6 +105,9 @@ File '/node_modules/a/index.ts' does not exist.
 File '/node_modules/a/index.tsx' does not exist.
 File '/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 ======== Module name 'a' was successfully resolved to '/node_modules/a/index.d.ts'. ========
+File '/node_modules/a/package.json' does not exist according to earlier cached lookups.
+File '/node_modules/package.json' does not exist.
+File '/package.json' does not exist.
 
 MissingPaths:: []
 

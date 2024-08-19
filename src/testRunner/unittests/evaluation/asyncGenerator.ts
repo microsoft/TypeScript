@@ -83,4 +83,26 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
             { done: true, value: 2 },
         ]);
     });
+    it("Supports global `AsyncIterator.prototype` if present", () => {
+        class AsyncIterator {}
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export async function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { AsyncIterator },
+        );
+        const g = gen();
+        assert.instanceOf(g, AsyncIterator);
+    });
+    it("Ignores global `AsyncIterator.prototype` if missing", () => {
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export async function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { AsyncIterator: undefined },
+        );
+        gen();
+    });
 });

@@ -38,6 +38,9 @@ while ({} satisfies unknown) { }
 while ((<any>({}))) { }
 while ((({}))) { }
 
+// Should be OK
+console.log((cond || undefined) && 1 / cond);
+
 
 //// [predicateSemantics.js]
 var _a, _b, _c, _d, _e, _f;
@@ -75,3 +78,5 @@ while ({}) { }
 while ({}) { }
 while (({})) { }
 while ((({}))) { }
+// Should be OK
+console.log((cond || undefined) && 1 / cond);

@@ -2,14 +2,22 @@
 /// Worker Async Iterable APIs
 /////////////////////////////
 
+interface FileSystemDirectoryHandleAsyncIterator<T> extends AsyncIteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<T>;
+}
+
 interface FileSystemDirectoryHandle {
-    [Symbol.asyncIterator](): BuiltinAsyncIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
-    entries(): BuiltinAsyncIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
-    keys(): BuiltinAsyncIterator<string, BuiltinIteratorReturn>;
-    values(): BuiltinAsyncIterator<FileSystemHandle, BuiltinIteratorReturn>;
+    [Symbol.asyncIterator](): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
+    entries(): FileSystemDirectoryHandleAsyncIterator<[string, FileSystemHandle]>;
+    keys(): FileSystemDirectoryHandleAsyncIterator<string>;
+    values(): FileSystemDirectoryHandleAsyncIterator<FileSystemHandle>;
+}
+
+interface ReadableStreamAsyncIterator<T> extends AsyncIteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.asyncIterator](): ReadableStreamAsyncIterator<T>;
 }
 
 interface ReadableStream<R = any> {
-    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): BuiltinAsyncIterator<R, BuiltinIteratorReturn>;
-    values(options?: ReadableStreamIteratorOptions): BuiltinAsyncIterator<R, BuiltinIteratorReturn>;
+    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): ReadableStreamAsyncIterator<R>;
+    values(options?: ReadableStreamIteratorOptions): ReadableStreamAsyncIterator<R>;
 }

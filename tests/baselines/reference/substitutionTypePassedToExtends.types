@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 500 -> 1,000
-Instantiation count: 100 -> 1,000
+Instantiation count: 100 -> 2,500
 
 === substitutionTypePassedToExtends.ts ===
 type Foo1<A,B> = [A, B] extends unknown[][] ? Bar1<[A, B]> : 'else'

@@ -127,7 +127,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -1060,8 +1059,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1073,8 +1072,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
@@ -1086,8 +1085,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1099,8 +1098,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -1984,8 +1983,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1997,8 +1996,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
@@ -2010,8 +2009,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -2023,8 +2022,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
