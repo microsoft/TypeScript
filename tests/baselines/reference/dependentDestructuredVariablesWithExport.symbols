@@ -21,15 +21,14 @@ declare function mutuallyEnabledPair(): {
   }
   
   
-export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+export const { discriminator, value } = mutuallyEnabledPair()
 >discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 11, 14))
->value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 3, 24), Decl(dependentDestructuredVariablesWithExport.ts, 6, 25))
->value59652 : Symbol(value59652, Decl(dependentDestructuredVariablesWithExport.ts, 11, 29))
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 11, 29))
 >mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariablesWithExport.ts, 0, 0))
 
 if (discriminator) {
 >discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 11, 14))
 
-   value59652;
->value59652 : Symbol(value59652, Decl(dependentDestructuredVariablesWithExport.ts, 11, 29))
+  value;
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 11, 29))
 }

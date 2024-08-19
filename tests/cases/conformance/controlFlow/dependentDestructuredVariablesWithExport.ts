@@ -1,3 +1,6 @@
+// @strict: true
+// @noEmit: true
+
 // https://github.com/microsoft/TypeScript/issues/59652
 
 declare function mutuallyEnabledPair(): {
@@ -9,8 +12,8 @@ declare function mutuallyEnabledPair(): {
   }
   
   
-export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+export const { discriminator, value } = mutuallyEnabledPair()
 
 if (discriminator) {
-   value59652;
+  value;
 }
