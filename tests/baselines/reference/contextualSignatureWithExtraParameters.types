@@ -253,3 +253,29 @@ f5((a, b) => {});
 >b : string
 >  : ^^^^^^
 
+function f6(
+>f6 : (cb: ((a: string) => string) | ((a: number) => Promise<number>)) => void
+>   : ^  ^^                                                          ^^^^^^^^^
+
+  cb: ((a: string) => string) | ((a: number) => Promise<number>)
+>cb : ((a: string) => string) | ((a: number) => Promise<number>)
+>   : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^               ^
+>a : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+) {}
+
+f6(async (a) => {return 0});
+>f6(async (a) => {return 0}) : void
+>                            : ^^^^
+>f6 : (cb: ((a: string) => string) | ((a: number) => Promise<number>)) => void
+>   : ^  ^^                                                          ^^^^^^^^^
+>async (a) => {return 0} : (a: number) => Promise<number>
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+

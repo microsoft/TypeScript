@@ -178,3 +178,18 @@ f5((a, b) => {});
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 54, 4))
 >b : Symbol(b, Decl(contextualSignatureWithExtraParameters.ts, 54, 6))
 
+function f6(
+>f6 : Symbol(f6, Decl(contextualSignatureWithExtraParameters.ts, 54, 17))
+
+  cb: ((a: string) => string) | ((a: number) => Promise<number>)
+>cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 56, 12))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 8))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 34))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+) {}
+
+f6(async (a) => {return 0});
+>f6 : Symbol(f6, Decl(contextualSignatureWithExtraParameters.ts, 54, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 60, 10))
+

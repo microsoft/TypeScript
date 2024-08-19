@@ -56,3 +56,9 @@ function f5(
   
 f5((a) => {});
 f5((a, b) => {});
+
+function f6(
+  cb: ((a: string) => string) | ((a: number) => Promise<number>)
+) {}
+
+f6(async (a) => {return 0});
