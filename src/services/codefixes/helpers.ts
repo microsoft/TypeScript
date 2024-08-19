@@ -650,7 +650,6 @@ export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, c
                 (typeNode as any).typeArguments = typeNode.typeArguments.slice(0, cutoff);
             }
         }
-
     }
     return typeNode;
 }

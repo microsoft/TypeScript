@@ -4,9 +4,9 @@ import {
     createImportAdder,
     eachDiagnostic,
     registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
     typePredicateToAutoImportableTypeNode,
     typeToMinimizedReferenceType,
-    typeNodeToAutoImportableTypeNode,
 } from "../_namespaces/ts.codefix.js";
 import {
     ArrayBindingPattern,
@@ -1097,7 +1097,7 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode|undefined {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
         const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
