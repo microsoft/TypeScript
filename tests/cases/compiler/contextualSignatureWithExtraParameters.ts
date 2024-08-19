@@ -60,10 +60,10 @@ f5((a) => {});
 f5((a, b) => {});
 
 function f6(
-  cb: ((a: string) => string) | ((a: number) => Promise<number>)
+  cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
 ) {}
 
-f6(async (a) => {return 0});
+f6(async (a) => a);
 
 function f7(
   cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)

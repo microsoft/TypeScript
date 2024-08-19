@@ -254,30 +254,30 @@ f5((a, b) => {});
 >  : ^^^^^^
 
 function f6(
->f6 : (cb: ((a: string) => string) | ((a: number) => Promise<number>)) => void
->   : ^  ^^                                                          ^^^^^^^^^
+>f6 : (cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
 
-  cb: ((a: string) => string) | ((a: number) => Promise<number>)
->cb : ((a: string) => string) | ((a: number) => Promise<number>)
->   : ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^               ^
+  cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
+>cb : ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
+>   : ^^ ^^      ^^^^^      ^^^^^^ ^^         ^^^^^                  ^
 >a : string
 >  : ^^^^^^
->a : number
->  : ^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
 
 ) {}
 
-f6(async (a) => {return 0});
->f6(async (a) => {return 0}) : void
->                            : ^^^^
->f6 : (cb: ((a: string) => string) | ((a: number) => Promise<number>)) => void
->   : ^  ^^                                                          ^^^^^^^^^
->async (a) => {return 0} : (a: number) => Promise<number>
->                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : number
->  : ^^^^^^
->0 : 0
->  : ^
+f6(async (a) => a);
+>f6(async (a) => a) : void
+>                   : ^^^^
+>f6 : (cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)) => void
+>   : ^  ^^                                                                ^^^^^^^^^
+>async (a) => a : (a: "a" | "b") => Promise<"a" | "b">
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
+>a : "a" | "b"
+>  : ^^^^^^^^^
 
 function f7(
 >f7 : (cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)) => void

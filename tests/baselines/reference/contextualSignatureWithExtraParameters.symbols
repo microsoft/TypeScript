@@ -181,7 +181,7 @@ f5((a, b) => {});
 function f6(
 >f6 : Symbol(f6, Decl(contextualSignatureWithExtraParameters.ts, 54, 17))
 
-  cb: ((a: string) => string) | ((a: number) => Promise<number>)
+  cb: ((a: string) => string) | ((a: "a" | "b") => Promise<"a" | "b">)
 >cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 56, 12))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 8))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 57, 34))
@@ -189,12 +189,13 @@ function f6(
 
 ) {}
 
-f6(async (a) => {return 0});
+f6(async (a) => a);
 >f6 : Symbol(f6, Decl(contextualSignatureWithExtraParameters.ts, 54, 17))
+>a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 60, 10))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 60, 10))
 
 function f7(
->f7 : Symbol(f7, Decl(contextualSignatureWithExtraParameters.ts, 60, 28))
+>f7 : Symbol(f7, Decl(contextualSignatureWithExtraParameters.ts, 60, 19))
 
   cb: ((a: string) => string) | ((a: number) => Generator<number, void, unknown>)
 >cb : Symbol(cb, Decl(contextualSignatureWithExtraParameters.ts, 62, 12))
@@ -205,7 +206,7 @@ function f7(
 ) {}
 
 f7(function* generator(a) {yield 0});
->f7 : Symbol(f7, Decl(contextualSignatureWithExtraParameters.ts, 60, 28))
+>f7 : Symbol(f7, Decl(contextualSignatureWithExtraParameters.ts, 60, 19))
 >generator : Symbol(generator, Decl(contextualSignatureWithExtraParameters.ts, 66, 3))
 >a : Symbol(a, Decl(contextualSignatureWithExtraParameters.ts, 66, 23))
 
