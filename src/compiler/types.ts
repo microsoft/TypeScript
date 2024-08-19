@@ -5031,7 +5031,6 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 }
 
 export interface TypeChecker {
-    
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
     getTypeOfSymbol(symbol: Symbol): Type;
     getDeclaredTypeOfSymbol(symbol: Symbol): Type;
