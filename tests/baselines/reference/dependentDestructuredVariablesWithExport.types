@@ -30,7 +30,7 @@ declare function mutuallyEnabledPair(): {
   }
   
   
-  export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+export const { discriminator, value: value59652 } = mutuallyEnabledPair()
 >discriminator : boolean
 >              : ^^^^^^^
 >value : any
@@ -41,12 +41,12 @@ declare function mutuallyEnabledPair(): {
 >                      : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                ^^^
 >mutuallyEnabledPair : () => { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
 >                    : ^^^^^^                                                                                            
-  
-  if (discriminator) {
+
+if (discriminator) {
 >discriminator : boolean
 >              : ^^^^^^^
 
-    value59652;
+   value59652;
 >value59652 : string
 >           : ^^^^^^
-  }
+}

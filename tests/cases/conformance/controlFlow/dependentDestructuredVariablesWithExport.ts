@@ -9,8 +9,8 @@ declare function mutuallyEnabledPair(): {
   }
   
   
-  export const { discriminator, value: value59652 } = mutuallyEnabledPair()
-  
-  if (discriminator) {
-    value59652;
-  }
+export const { discriminator, value: value59652 } = mutuallyEnabledPair()
+
+if (discriminator) {
+   value59652;
+}
