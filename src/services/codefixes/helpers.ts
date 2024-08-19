@@ -637,7 +637,7 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
 
 /** @internal */
 export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    let typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
     if (!typeNode) {
         return undefined;
     }
@@ -646,8 +646,8 @@ export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, c
         if (genericType.typeArguments) {
             const cutoff = endOfRequiredTypeParameters(checker, genericType);
             if (cutoff !== undefined && typeNode.typeArguments) {
-                // Cast to any to mutate the newly created TypeNode
-                (typeNode as any).typeArguments = typeNode.typeArguments.slice(0, cutoff);
+                const newTypeArguments = factory.createNodeArray(typeNode.typeArguments.slice(0, cutoff));
+                typeNode = factory.updateTypeReferenceNode(typeNode, typeNode.typeName, newTypeArguments);
             }
         }
     }
