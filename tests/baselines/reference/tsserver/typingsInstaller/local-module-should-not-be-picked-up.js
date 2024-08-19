@@ -405,6 +405,7 @@ Projects::
 /a/jsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Before running PendingInstalls callback:: count: 0
 

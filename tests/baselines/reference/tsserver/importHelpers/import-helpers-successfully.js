@@ -480,6 +480,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 /tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -718,9 +719,11 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -898,9 +901,11 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /a/type.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1

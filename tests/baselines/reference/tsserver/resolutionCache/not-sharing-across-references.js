@@ -344,6 +344,7 @@ Projects::
 /users/username/projects/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /users/username/projects/app/appA.ts *new*

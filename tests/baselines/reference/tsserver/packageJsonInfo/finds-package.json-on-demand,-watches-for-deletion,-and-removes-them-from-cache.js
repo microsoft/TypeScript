@@ -390,6 +390,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 /tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1

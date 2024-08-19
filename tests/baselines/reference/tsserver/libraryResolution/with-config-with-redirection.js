@@ -513,6 +513,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
@@ -579,6 +580,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
@@ -834,6 +836,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *new*

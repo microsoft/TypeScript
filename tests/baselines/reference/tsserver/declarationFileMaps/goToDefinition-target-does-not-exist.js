@@ -270,6 +270,7 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts (Open) *new*
@@ -339,6 +340,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts *changed*
@@ -573,9 +575,11 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts *deleted*
@@ -649,6 +653,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /b/b.ts *changed*
@@ -675,6 +680,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     noOpenRef: true
+    autoImportProviderHost: false
 
 ScriptInfos::
 /b/b.ts *changed*
@@ -776,9 +782,11 @@ Projects::
     dirty: true
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts *new*
@@ -858,6 +866,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts
@@ -929,6 +938,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts
@@ -1039,9 +1049,11 @@ Projects::
     isOrphan: true
     documentPositionMappers: 0 *changed*
         /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts *deleted*

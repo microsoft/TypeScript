@@ -291,6 +291,7 @@ Projects::
 /user/username/projects/myproject/packages/consumer/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
