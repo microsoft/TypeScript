@@ -49,8 +49,24 @@ const result2 = call((a: number, b: number) => {}, 1); // error
 >1 : 1
 >  : ^
 
-const result3 = call((a, b) => {}, 1, '');; // test contextual parameters
+const result3 = call((a) => {}, 1, ''); // test contextual parameters
 >result3 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a) => {}, 1, '') : [number, string]
+>                       : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a) => {} : (a: number) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result4 = call((a, b) => {}, 1, ''); // test contextual parameters
+>result4 : [number, string]
 >        : ^^^^^^^^^^^^^^^^
 >call((a, b) => {}, 1, '') : [number, string]
 >                          : ^^^^^^^^^^^^^^^^
@@ -62,6 +78,40 @@ const result3 = call((a, b) => {}, 1, '');; // test contextual parameters
 >  : ^^^^^^
 >b : string
 >  : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result5 = call((...args) => {}, 1, ''); // test contextual parameters
+>result5 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((...args) => {}, 1, '') : [number, string]
+>                             : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(...args) => {} : (args_0: number, args_1: string) => void
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : [number, string]
+>     : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
+
+const result6 = call((a, ...rest) => {}, 1, ''); // test contextual parameters
+>result6 : [number, string]
+>        : ^^^^^^^^^^^^^^^^
+>call((a, ...rest) => {}, 1, '') : [number, string]
+>                                : ^^^^^^^^^^^^^^^^
+>call : <A extends readonly unknown[]>(arg: (...args: NoInfer<A>) => void, ...args: A) => A
+>     : ^ ^^^^^^^^^                  ^^   ^^                             ^^^^^    ^^ ^^^^^ 
+>(a, ...rest) => {} : (a: number, rest_0: string) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>rest : [string]
+>     : ^^^^^^^^
 >1 : 1
 >  : ^
 >'' : ""
@@ -87,8 +137,8 @@ declare const singleStr: [string];
 >singleStr : [string]
 >          : ^^^^^^^^
 
-const result4 = fn1((arg) => {
->result4 : [string]
+const result7 = fn1((arg) => {
+>result7 : [string]
 >        : ^^^^^^^^
 >fn1((arg) => {  arg.length;}, singleStr) : [string]
 >                                         : ^^^^^^^^
@@ -115,8 +165,8 @@ declare const tupleUnion: [string] | [number, boolean];
 >tupleUnion : [string] | [number, boolean]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-const result5 = fn1((arg) => {
->result5 : [string] | [number, boolean]
+const result8 = fn1((arg) => {
+>result8 : [string] | [number, boolean]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1((arg) => {  arg.length;}, tupleUnion) : [string] | [number, boolean]
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
