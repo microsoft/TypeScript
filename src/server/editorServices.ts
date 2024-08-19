@@ -4456,7 +4456,7 @@ export class ProjectService {
         toRetainConfiguredProjects: Set<ConfiguredProject> | undefined,
         openFilesWithRetainedConfiguredProject: Set<Path> | undefined,
         externalProjectsRetainingConfiguredProjects: Set<string> | undefined,
-    ) {
+    ): Set<ConfiguredProject> {
         const toRemoveConfiguredProjects = new Set(this.configuredProjects.values());
         const markOriginalProjectsAsUsed = (project: Project) => {
             if (project.originalConfiguredProjects && (isConfiguredProject(project) || !project.isOrphan())) {
@@ -4469,6 +4469,8 @@ export class ProjectService {
             }
         };
         toRetainConfiguredProjects?.forEach(retainConfiguredProject);
+        // Everything needs to be retained, fast path to skip all the work
+        if (!toRemoveConfiguredProjects.size) return toRemoveConfiguredProjects;
 
         // Do not remove configured projects that are used as original projects of other
         this.inferredProjects.forEach(markOriginalProjectsAsUsed);
@@ -4479,7 +4481,10 @@ export class ProjectService {
                 projects.forEach(retainConfiguredProject);
             }
         });
-        this.openFiles.forEach((_projectRootPath, path) => {
+        // Everything needs to be retained, fast path to skip all the work
+        if (!toRemoveConfiguredProjects.size) return toRemoveConfiguredProjects;
+
+        forEachEntry(this.openFiles, (_projectRootPath, path) => {
             if (openFilesWithRetainedConfiguredProject?.has(path)) return;
             const info = this.getScriptInfoForPath(path)!;
             // Part of external project
@@ -4491,15 +4496,21 @@ export class ProjectService {
             );
             if (result?.defaultProject) {
                 result?.seenProjects.forEach(retainConfiguredProject);
+                // Everything needs to be retained, fast path to skip all the work
+                if (!toRemoveConfiguredProjects.size) return toRemoveConfiguredProjects;
             }
         });
 
+        // Everything needs to be retained, fast path to skip all the work
+        if (!toRemoveConfiguredProjects.size) return toRemoveConfiguredProjects;
+
         // Retain all the configured projects that have pending updates
         // or the ones that is referencing retained project (or to be retained)
-        this.configuredProjects.forEach(project => {
+        forEachEntry(this.configuredProjects, project => {
             if (toRemoveConfiguredProjects.has(project)) {
                 if (isPendingUpdate(project) || forEachReferencedProject(project, isRetained)) {
                     retainConfiguredProject(project);
+                    if (!toRemoveConfiguredProjects.size) return toRemoveConfiguredProjects;
                 }
             }
         });
