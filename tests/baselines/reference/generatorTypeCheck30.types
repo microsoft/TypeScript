@@ -8,16 +8,14 @@ function* g2(): Iterator<Iterable<(x: string) => number>> {
 >  : ^^^^^^
 
     yield function* () {
->yield function* () {        yield x => x.length;    } () : undefined
->                                                         : ^^^^^^^^^
->function* () {        yield x => x.length;    } () : Generator<(x: string) => number, void, undefined>
->                                                   : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function* () {        yield x => x.length;    } : () => Generator<(x: string) => number, void, undefined>
->                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield function* () {        yield x => x.length;    } () : any
+>function* () {        yield x => x.length;    } () : Generator<(x: string) => number, void, any>
+>                                                   : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {        yield x => x.length;    } : () => Generator<(x: string) => number, void, any>
+>                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield x => x.length;
->yield x => x.length : undefined
->                    : ^^^^^^^^^
+>yield x => x.length : any
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string

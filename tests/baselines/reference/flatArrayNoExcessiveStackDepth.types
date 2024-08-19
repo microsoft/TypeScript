@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
-Instantiation count: 2,500
+Type Count: 2,500
+Instantiation count: 5,000
 
 === flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493

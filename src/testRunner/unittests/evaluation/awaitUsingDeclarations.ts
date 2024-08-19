@@ -1874,4 +1874,140 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "catch",
         ]);
     });
+
+    it("deterministic collapse of Await", async () => {
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
+        export const output: any[] = [];
+
+        let asyncId = 0;
+        function increment() { asyncId++; }
+
+        export async function main() {
+            // increment asyncId at the top of each turn of the microtask queue
+            let pending = Promise.resolve();
+            for (let i = 0; i < 10; i++) {
+                pending = pending.then(increment);
+            }
+
+            {
+                using sync1 = { [Symbol.dispose]() { output.push(asyncId); } }; // asyncId: 2
+                await using async1 = null, async2 = null;
+                using sync2 = { [Symbol.dispose]() { output.push(asyncId); } }; // asyncId: 1
+                await using async3 = null, async4 = null;
+                output.push(asyncId); // asyncId: 0
+            }
+
+            output.push(asyncId); // asyncId: Ideally, 2, but ends up being 4 due to delays imposed by 'await'
+
+            await pending; // wait for the remaining 'increment' frames to complete.
+        }
+
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
+
+        await main();
+
+        assert.deepEqual(output, [
+            0,
+            1,
+            2,
+
+            // This really should be 2, but our transpile introduces an extra `await` by necessity to observe the
+            // result of __disposeResources. The process of adopting the result ends up taking two turns of the
+            // microtask queue.
+            4,
+        ]);
+    });
+
+    it("'await using' with downlevel generators", async () => {
+        abstract class Iterator {
+            return?(): void;
+            [evaluator.FakeSymbol.iterator]() {
+                return this;
+            }
+            [evaluator.FakeSymbol.dispose]() {
+                this.return?.();
+            }
+        }
+
+        const { main } = evaluator.evaluateTypeScript(
+            `
+            let exited = false;
+
+            function * f() {
+                try {
+                    yield;
+                }
+                finally {
+                    exited = true;
+                }
+            }
+
+            export async function main() {
+                {
+                    await using g = f();
+                    g.next();
+                }
+
+                return exited;
+            }
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                Iterator,
+            },
+        );
+
+        const exited = await main();
+        assert.isTrue(exited, "Expected 'await using' to dispose generator");
+    });
+
+    it("'await using' with downlevel async generators", async () => {
+        abstract class AsyncIterator {
+            return?(): PromiseLike<void>;
+            [evaluator.FakeSymbol.asyncIterator]() {
+                return this;
+            }
+            async [evaluator.FakeSymbol.asyncDispose]() {
+                await this.return?.();
+            }
+        }
+
+        const { main } = evaluator.evaluateTypeScript(
+            `
+            let exited = false;
+
+            async function * f() {
+                try {
+                    yield;
+                }
+                finally {
+                    exited = true;
+                }
+            }
+
+            export async function main() {
+                {
+                    await using g = f();
+                    await g.next();
+                }
+
+                return exited;
+            }
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                AsyncIterator,
+            },
+        );
+
+        const exited = await main();
+        assert.isTrue(exited, "Expected 'await using' to dispose async generator");
+    });
 });

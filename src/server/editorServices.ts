@@ -31,8 +31,9 @@ import {
     DocumentRegistry,
     DocumentRegistryBucketKeyWithMode,
     emptyOptions,
-    endsWith,
     ensureTrailingDirectorySeparator,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
     fileExtensionIs,
@@ -78,6 +79,7 @@ import {
     length,
     map,
     mapDefinedIterator,
+    memoize,
     missingFileModifiedTime,
     MultiMap,
     noop,
@@ -642,37 +644,10 @@ export interface ProjectServiceOptions {
  */
 export type ConfigFileName = NormalizedPath | false;
 
-/**
- * Stores cached config file name for info as well as ancestor so is a map
- * Key is false for Open ScriptInfo
- * Key is NormalizedPath for Config file name
- * @internal
- */
-export type ConfigFileMapForOpenFile = Map<ConfigFileName, ConfigFileName>;
-
-/**
- * The cache for open script info will have
- * ConfigFileName or false if ancestors are not looked up
- * Map if ancestors are looked up
- * @internal
- */
-export type ConfigFileForOpenFile = ConfigFileName | ConfigFileMapForOpenFile;
-
 /** Gets cached value of config file name based on open script info or ancestor script info */
-function getConfigFileNameFromCache(info: OpenScriptInfoOrClosedOrConfigFileInfo, cache: Map<Path, ConfigFileForOpenFile> | undefined): ConfigFileName | undefined {
-    if (!cache) return undefined;
-    const configFileForOpenFile = cache.get(info.path);
-    if (configFileForOpenFile === undefined) return undefined;
-    if (!isAncestorConfigFileInfo(info)) {
-        return isString(configFileForOpenFile) || !configFileForOpenFile ?
-            configFileForOpenFile : // direct result
-            configFileForOpenFile.get(/*key*/ false); // Its a map, use false as the key for the info's config file name
-    }
-    else {
-        return configFileForOpenFile && !isString(configFileForOpenFile) ? // Map with fileName as key
-            configFileForOpenFile.get(info.fileName) :
-            undefined; // No result for the config file name
-    }
+function getConfigFileNameFromCache(info: OpenScriptInfoOrClosedOrConfigFileInfo, cache: Map<Path, ConfigFileName> | undefined): ConfigFileName | undefined {
+    if (!cache || isAncestorConfigFileInfo(info)) return undefined;
+    return cache.get(info.path);
 }
 
 /** @internal */
@@ -687,7 +662,6 @@ export interface AncestorConfigFileInfo {
     /** path of open file so we can look at correct root */
     path: Path;
     configFileInfo: true;
-    isForDefaultProject: boolean;
 }
 /** @internal */
 export type OpenScriptInfoOrClosedFileInfo = ScriptInfo | OriginalFileInfo;
@@ -736,8 +710,6 @@ function forEachAncestorProject<T>(
     allowDeferredClosed: boolean | undefined,
     /** Used with ConfiguredProjectLoadKind.Reload to check if this project was already reloaded */
     reloadedProjects: Set<ConfiguredProject> | undefined,
-    /** true means we are looking for solution, so we can stop if found project is not composite to go into parent solution */
-    searchOnlyPotentialSolution: boolean,
     /** Used with ConfiguredProjectLoadKind.Reload to specify delay reload, and also a set of configured projects already marked for delay load */
     delayReloadedConfiguredProjects?: Set<ConfiguredProject>,
 ): T | undefined {
@@ -747,10 +719,7 @@ function forEachAncestorProject<T>(
         if (
             !project.isInitialLoadPending() &&
             (
-                (searchOnlyPotentialSolution && !project.getCompilerOptions().composite) ||
-                // Currently disableSolutionSearching is shared for finding solution/project when
-                // - loading solution for find all references
-                // - trying to find default project
+                !project.getCompilerOptions().composite ||
                 project.getCompilerOptions().disableSolutionSearching
             )
         ) return;
@@ -760,7 +729,6 @@ function forEachAncestorProject<T>(
             fileName: project.getConfigFilePath(),
             path: info.path,
             configFileInfo: true,
-            isForDefaultProject: !searchOnlyPotentialSolution,
         }, kind === ConfiguredProjectLoadKind.Find);
         if (!configFileName) return;
 
@@ -770,9 +738,9 @@ function forEachAncestorProject<T>(
             kind,
             reason,
             allowDeferredClosed,
-            !searchOnlyPotentialSolution ? info.fileName : undefined, // Config Diag event for project if its for default project
+            /*triggerFile*/ undefined,
             reloadedProjects,
-            searchOnlyPotentialSolution, // Delay load if we are searching for solution
+            /*delayLoad*/ true,
             delayReloadedConfiguredProjects,
         );
         if (!ancestor) return;
@@ -1060,7 +1028,7 @@ export interface ParsedConfig {
      */
     projects: Map<NormalizedPath, boolean>;
     parsedCommandLine?: ParsedCommandLine;
-    watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
+    watchedDirectories?: Map<string, WildcardDirectoryWatcher<WildcardWatcher>>;
     /**
      * true if watchedDirectories need to be updated as per parsedCommandLine's updated watched directories
      */
@@ -1238,7 +1206,7 @@ export class ProjectService {
      */
     readonly openFiles: Map<Path, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** Config files looked up and cached config files for open script info */
-    private readonly configFileForOpenFiles = new Map<Path, ConfigFileForOpenFile>();
+    private readonly configFileForOpenFiles = new Map<Path, ConfigFileName>();
     /** Set of open script infos that are root of inferred project */
     private rootOfInferredProjects = new Set<ScriptInfo>();
     /**
@@ -1277,7 +1245,7 @@ export class ProjectService {
      * All the open script info that needs recalculation of the default project,
      * this also caches config file info before config file change was detected to use it in case projects are not updated yet
      */
-    private pendingOpenFileProjectUpdates?: Map<Path, ConfigFileForOpenFile>;
+    private pendingOpenFileProjectUpdates?: Map<Path, ConfigFileName>;
     /** @internal */
     pendingEnsureProjectForOpenFiles = false;
 
@@ -1852,80 +1820,22 @@ export class ProjectService {
     /**
      * This is to watch whenever files are added or removed to the wildcard directories
      */
-    private watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
+    private watchWildcardDirectory(
+        directory: string,
+        flags: WatchDirectoryFlags,
+        configFileName: NormalizedPath,
+        config: ParsedConfig,
+    ) {
         let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
             directory,
-            fileOrDirectory => {
-                const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                if (
-                    getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
-                ) {
-                    const file = this.getNormalizedAbsolutePath(fileOrDirectory);
-                    this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
-                    this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
-                    this.watchPackageJsonFile(file, fileOrDirectoryPath, result);
-                }
-
-                const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
-                if (
-                    isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: this.toPath(directory),
-                        fileOrDirectory,
-                        fileOrDirectoryPath,
-                        configFileName,
-                        extraFileExtensions: this.hostConfiguration.extraFileExtensions,
-                        currentDirectory: this.currentDirectory,
-                        options: config.parsedCommandLine!.options,
-                        program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
-                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
-                        writeLog: s => this.logger.info(s),
-                        toPath: s => this.toPath(s),
-                        getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
-                    })
-                ) return;
-
-                // Reload is pending, do the reload
-                if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
-                config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
-                    if (!watchWildcardDirectories) return;
-                    const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
-                    if (!project) return;
-
-                    if (
-                        configuredProjectForConfig !== project &&
-                        this.getHostPreferences().includeCompletionsForModuleExports
-                    ) {
-                        const path = this.toPath(configFileName);
-                        if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
-                            project.markAutoImportProviderAsDirty();
-                        }
-                    }
-
-                    // Load root file names for configured project with the config file name
-                    // But only schedule update if project references this config file
-                    const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
-                    if (project.pendingUpdateLevel > updateLevel) return;
-
-                    // don't trigger callback on open, existing files
-                    if (this.openFiles.has(fileOrDirectoryPath)) {
-                        const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
-                        if (info.isAttached(project)) {
-                            const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
-                            project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
-                        }
-                        else {
-                            project.pendingUpdateLevel = updateLevel;
-                            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
-                        }
-                    }
-                    else {
-                        project.pendingUpdateLevel = updateLevel;
-                        this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
-                    }
-                });
-            },
+            fileOrDirectory =>
+                this.onWildCardDirectoryWatcherInvoke(
+                    directory,
+                    configFileName,
+                    config,
+                    result,
+                    fileOrDirectory,
+                ),
             flags,
             this.getWatchOptionsFromProjectWatchOptions(config.parsedCommandLine!.watchOptions, getDirectoryPath(configFileName)),
             WatchType.WildcardDirectory,
@@ -1947,6 +1857,89 @@ export class ProjectService {
             },
         };
         return result;
+    }
+
+    private onWildCardDirectoryWatcherInvoke(
+        directory: string,
+        configFileName: NormalizedPath,
+        config: ParsedConfig,
+        wildCardWatcher: WildcardWatcher,
+        fileOrDirectory: string,
+    ) {
+        const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+        const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+        if (
+            getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+            (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
+        ) {
+            const file = this.getNormalizedAbsolutePath(fileOrDirectory);
+            this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
+            this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
+            this.watchPackageJsonFile(file, fileOrDirectoryPath, wildCardWatcher);
+        }
+
+        if (!fsResult?.fileExists) {
+            // Ensure we send sourceFileChange
+            this.sendSourceFileChange(fileOrDirectoryPath);
+        }
+
+        const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
+        if (
+            isIgnoredFileFromWildCardWatching({
+                watchedDirPath: this.toPath(directory),
+                fileOrDirectory,
+                fileOrDirectoryPath,
+                configFileName,
+                extraFileExtensions: this.hostConfiguration.extraFileExtensions,
+                currentDirectory: this.currentDirectory,
+                options: config.parsedCommandLine!.options,
+                program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
+                useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
+                writeLog: s => this.logger.info(s),
+                toPath: s => this.toPath(s),
+                getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
+            })
+        ) return;
+
+        // Reload is pending, do the reload
+        if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
+        config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
+            if (!watchWildcardDirectories) return;
+            const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
+            if (!project) return;
+
+            if (
+                configuredProjectForConfig !== project &&
+                this.getHostPreferences().includeCompletionsForModuleExports
+            ) {
+                const path = this.toPath(configFileName);
+                if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                    project.markAutoImportProviderAsDirty();
+                }
+            }
+
+            // Load root file names for configured project with the config file name
+            // But only schedule update if project references this config file
+            const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
+            if (project.pendingUpdateLevel > updateLevel) return;
+
+            // don't trigger callback on open, existing files
+            if (this.openFiles.has(fileOrDirectoryPath)) {
+                const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                if (info.isAttached(project)) {
+                    const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
+                    project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
+                }
+                else {
+                    project.pendingUpdateLevel = updateLevel;
+                    this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                }
+            }
+            else {
+                project.pendingUpdateLevel = updateLevel;
+                this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+            }
+        });
     }
 
     private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
@@ -2262,7 +2255,7 @@ export class ProjectService {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
 
         let openFilesImpactedByConfigFile: Set<Path> | undefined;
-        if (this.openFiles.has(info.path) && (!isAncestorConfigFileInfo(info) || info.isForDefaultProject)) {
+        if (this.openFiles.has(info.path) && !isAncestorConfigFileInfo(info)) {
             // By default the info would get impacted by presence of config file since its in the detection path
             // Only adding the info as a root to inferred project will need the existence to be watched by file watcher
             if (configFileExistenceInfo) (configFileExistenceInfo.openFilesImpactedByConfigFile ??= new Set()).add(info.path);
@@ -2455,39 +2448,31 @@ export class ProjectService {
 
         // If projectRootPath doesn't contain info.path, then do normal search for config file
         const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
-
-        let searchTsconfig = true;
-        let searchJsconfig = true;
-        if (isAncestorConfigFileInfo(info)) {
-            // For ancestor of config file always ignore itself
-            if (endsWith(info.fileName, "tsconfig.json")) searchTsconfig = false;
-            else searchTsconfig = searchJsconfig = false;
-        }
+        // For ancestor of config file always ignore its own directory since its going to result in itself
+        let searchInDirectory = !isAncestorConfigFileInfo(info);
         do {
-            const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
-            if (searchTsconfig) {
+            if (searchInDirectory) {
+                const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                const result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
+                let result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
                 if (result) return tsconfigFileName;
-            }
 
-            if (searchJsconfig) {
                 const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                const result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
+                result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
                 if (result) return jsconfigFileName;
-            }
 
-            // If we started within node_modules, don't look outside node_modules.
-            // Otherwise, we might pick up a very large project and pull in the world,
-            // causing an editor delay.
-            if (isNodeModulesDirectory(canonicalSearchPath)) {
-                break;
+                // If we started within node_modules, don't look outside node_modules.
+                // Otherwise, we might pick up a very large project and pull in the world,
+                // causing an editor delay.
+                if (isNodeModulesDirectory(canonicalSearchPath)) {
+                    break;
+                }
             }
 
             const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
             if (parentPath === searchPath) break;
             searchPath = parentPath;
-            searchTsconfig = searchJsconfig = true;
+            searchInDirectory = true;
         }
         while (anySearchPathOk || isSearchPathInProjectRoot());
 
@@ -2522,24 +2507,8 @@ export class ProjectService {
         configFileName: NormalizedPath | undefined,
     ) {
         if (!this.openFiles.has(info.path)) return; // Dont cache for closed script infos
-        const config = configFileName || false;
-        if (!isAncestorConfigFileInfo(info)) {
-            // Set value for open script info
-            this.configFileForOpenFiles.set(info.path, config);
-        }
-        else {
-            // Need to set value for ancestor in ConfigFileMapForOpenFile
-            let configFileForOpenFile = this.configFileForOpenFiles.get(info.path)!;
-            if (!configFileForOpenFile || isString(configFileForOpenFile)) {
-                // We have value for open script info in cache, make a map with that as false key and set new vlaue
-                this.configFileForOpenFiles.set(
-                    info.path,
-                    configFileForOpenFile = new Map().set(false, configFileForOpenFile),
-                );
-            }
-            // Set value of for ancestor in the map
-            configFileForOpenFile.set(info.fileName, config);
-        }
+        if (isAncestorConfigFileInfo(info)) return; // Dont cache for ancestors
+        this.configFileForOpenFiles.set(info.path, configFileName || false);
     }
 
     /**
@@ -3816,6 +3785,34 @@ export class ProjectService {
         this.logger.close();
     }
 
+    private sendSourceFileChange(inPath: Path | undefined) {
+        this.filenameToScriptInfo.forEach(info => {
+            if (this.openFiles.has(info.path)) return; // Skip open files
+            if (!info.fileWatcher) return; // not watched file
+            const eventKind = memoize(() =>
+                this.host.fileExists(info.fileName) ?
+                    info.deferredDelete ?
+                        FileWatcherEventKind.Created :
+                        FileWatcherEventKind.Changed :
+                    FileWatcherEventKind.Deleted
+            );
+            if (inPath) {
+                // Skip node modules and files that are not in path
+                if (isScriptInfoWatchedFromNodeModules(info) || !info.path.startsWith(inPath)) return;
+                // If we are sending delete event and its already deleted, ignore
+                if (eventKind() === FileWatcherEventKind.Deleted && info.deferredDelete) return;
+                // In change cases, its hard to know if this is marked correctly across files and projects, so just send the event
+                this.logger.info(`Invoking sourceFileChange on ${info.fileName}:: ${eventKind()}`);
+            }
+
+            // Handle as if file is changed or deleted
+            this.onSourceFileChanged(
+                info,
+                eventKind(),
+            );
+        });
+    }
+
     /**
      * This function rebuilds the project for every file opened by the client
      * This does not reload contents of open files from disk. But we could do that if needed
@@ -3828,19 +3825,7 @@ export class ProjectService {
         // as there is no need to load contents of the files from the disk
 
         // Reload script infos
-        this.filenameToScriptInfo.forEach(info => {
-            if (this.openFiles.has(info.path)) return; // Skip open files
-            if (!info.fileWatcher) return; // not watched file
-            // Handle as if file is changed or deleted
-            this.onSourceFileChanged(
-                info,
-                this.host.fileExists(info.fileName) ?
-                    info.deferredDelete ?
-                        FileWatcherEventKind.Created :
-                        FileWatcherEventKind.Changed :
-                    FileWatcherEventKind.Deleted,
-            );
-        });
+        this.sendSourceFileChange(/*inPath*/ undefined);
         // Cancel all project updates since we will be updating them now
         this.pendingProjectUpdates.forEach((_project, projectName) => {
             this.throttledOperations.cancel(projectName);
@@ -4249,8 +4234,7 @@ export class ProjectService {
         function tryFindDefaultConfiguredProject(project: ConfiguredProject): ConfiguredProject | undefined {
             return isDefaultProject(project) ?
                 defaultProject :
-                (tryFindDefaultConfiguredProjectFromReferences(project) ??
-                    tryFindDefaultConfiguredProjectFromAncestor(project));
+                tryFindDefaultConfiguredProjectFromReferences(project);
         }
 
         function isDefaultProject(project: ConfiguredProject): ConfiguredProject | undefined {
@@ -4278,19 +4262,6 @@ export class ProjectService {
                 allowDeferredClosed,
                 info.fileName,
                 reloadedProjects,
-            );
-        }
-
-        function tryFindDefaultConfiguredProjectFromAncestor(project: ConfiguredProject) {
-            return forEachAncestorProject( // If not in referenced projects, try ancestors and its references
-                info,
-                project,
-                tryFindDefaultConfiguredProject,
-                kind,
-                `Creating possible configured project for ${info.fileName} to open`,
-                allowDeferredClosed,
-                reloadedProjects,
-                /*searchOnlyPotentialSolution*/ false,
             );
         }
     }
@@ -4337,7 +4308,6 @@ export class ProjectService {
                 `Creating project possibly referencing default composite project ${defaultProject.getProjectName()} of open file ${info.fileName}`,
                 allowDeferredClosed,
                 reloadedProjects,
-                /*searchOnlyPotentialSolution*/ true,
                 delayReloadedConfiguredProjects,
             );
         }
@@ -4434,8 +4404,42 @@ export class ProjectService {
         this.removeOrphanScriptInfos();
     }
 
+    private tryInvokeWildCardDirectories(info: ScriptInfo) {
+        // This might not have reflected in projects,
+        this.configFileExistenceInfoCache.forEach((configFileExistenceInfo, config) => {
+            if (
+                !configFileExistenceInfo.config?.parsedCommandLine ||
+                contains(
+                    configFileExistenceInfo.config.parsedCommandLine.fileNames,
+                    info.fileName,
+                    !this.host.useCaseSensitiveFileNames ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+                )
+            ) {
+                return;
+            }
+            configFileExistenceInfo.config.watchedDirectories?.forEach((watcher, directory) => {
+                if (containsPath(directory, info.fileName, !this.host.useCaseSensitiveFileNames)) {
+                    this.logger.info(`Invoking ${config}:: wildcard for open scriptInfo:: ${info.fileName}`);
+                    this.onWildCardDirectoryWatcherInvoke(
+                        directory,
+                        config,
+                        configFileExistenceInfo.config!,
+                        watcher.watcher,
+                        info.fileName,
+                    );
+                }
+            });
+        });
+    }
+
     openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
+        const existing = this.getScriptInfoForPath(normalizedPathToPath(
+            fileName,
+            projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory,
+            this.toCanonicalFileName,
+        ));
         const info = this.getOrCreateOpenScriptInfo(fileName, fileContent, scriptKind, hasMixedContent, projectRootPath);
+        if (!existing && info && !info.isDynamic) this.tryInvokeWildCardDirectories(info);
         const { retainProjects, ...result } = this.assignProjectToOpenedScriptInfo(info);
         this.cleanupProjectsAndScriptInfos(
             retainProjects,
@@ -4636,10 +4640,16 @@ export class ProjectService {
 
     /** @internal */
     applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
+        let existingOpenScriptInfos: (ScriptInfo | undefined)[] | undefined;
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
             for (const file of openFiles) {
+                (existingOpenScriptInfos ??= []).push(this.getScriptInfoForPath(normalizedPathToPath(
+                    toNormalizedPath(file.fileName),
+                    file.projectRootPath ? this.getNormalizedAbsolutePath(file.projectRootPath) : this.currentDirectory,
+                    this.toCanonicalFileName,
+                )));
                 // Create script infos so we have the new content for all the open files before we do any updates to projects
                 const info = this.getOrCreateOpenScriptInfo(
                     toNormalizedPath(file.fileName),
@@ -4670,6 +4680,13 @@ export class ProjectService {
 
         // All the script infos now exist, so ok to go update projects for open files
         let retainProjects: Set<ConfiguredProject> | undefined;
+        forEach(
+            existingOpenScriptInfos,
+            (existing, index) =>
+                !existing && openScriptInfos![index] && !openScriptInfos![index].isDynamic ?
+                    this.tryInvokeWildCardDirectories(openScriptInfos![index]) :
+                    undefined,
+        );
         openScriptInfos?.forEach(info => this.assignProjectToOpenedScriptInfo(info).retainProjects?.forEach(p => (retainProjects ??= new Set()).add(p)));
 
         // While closing files there could be open files that needed assigning new inferred projects, do it now
@@ -4972,7 +4989,7 @@ export class ProjectService {
         if (
             !pluginConfigEntry.name ||
             isExternalModuleNameRelative(pluginConfigEntry.name) ||
-            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+            /[\\/]\.\.?(?:$|[\\/])/.test(pluginConfigEntry.name)
         ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;

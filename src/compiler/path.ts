@@ -98,7 +98,7 @@ export function pathIsAbsolute(path: string): boolean {
  * @internal
  */
 export function pathIsRelative(path: string): boolean {
-    return /^\.\.?($|[\\/])/.test(path);
+    return /^\.\.?(?:$|[\\/])/.test(path);
 }
 
 /**
@@ -779,7 +779,7 @@ export function changeFullExtension(path: string, newExtension: string) {
 //// Path Comparisons
 
 // check path for these segments: '', '.'. '..'
-const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
+const relativePathSegmentRegExp = /\/\/|(?:^|\/)\.\.?(?:$|\/)/;
 
 function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
     if (a === b) return Comparison.EqualTo;

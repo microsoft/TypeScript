@@ -865,8 +865,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/common-dependency/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "CommonDependency",
@@ -880,8 +880,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/package-dependency/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "PackageDependency",
@@ -890,6 +890,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
