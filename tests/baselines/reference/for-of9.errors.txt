@@ -1,0 +1,9 @@
+for-of9.ts(3,11): error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== for-of9.ts (1 errors) ====
+    var v: string;
+    for (v of ["hello"]) { }
+    for (v of "hello") { }
+              ~~~~~~~
+!!! error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.

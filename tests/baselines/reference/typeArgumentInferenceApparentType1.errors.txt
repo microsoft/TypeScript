@@ -1,0 +1,11 @@
+typeArgumentInferenceApparentType1.ts(5,26): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Iterable<string>'.
+
+
+==== typeArgumentInferenceApparentType1.ts (1 errors) ====
+    function method<T>(iterable: Iterable<T>): T {
+        return;
+    }
+    
+    var res: string = method("test");
+                             ~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Iterable<string>'.

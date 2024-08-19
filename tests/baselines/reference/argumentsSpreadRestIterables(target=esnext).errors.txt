@@ -1,0 +1,34 @@
+argumentsSpreadRestIterables.tsx(8,21): error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+argumentsSpreadRestIterables.tsx(10,27): error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+argumentsSpreadRestIterables.tsx(15,19): error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+argumentsSpreadRestIterables.tsx(17,25): error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== argumentsSpreadRestIterables.tsx (4 errors) ====
+    declare const itNum: Iterable<number>
+    
+    ;(function(...rest) {})(...itNum)
+    ;(function(a, ...rest) {})('', ...itNum)
+    ;(function(a, ...rest) {})('', true, ...itNum)
+    
+    declare function fn1<const T extends readonly unknown[]>(...args: T): T;
+    const res1 = fn1(..."hello");
+                        ~~~~~~~
+!!! error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+    const res2 = fn1(...itNum);
+    const res3 = fn1(true, ..."hello");
+                              ~~~~~~~
+!!! error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+    const res4 = fn1(true, ...itNum);
+    
+    // repro from #52781
+    declare function foo<T extends unknown[]>(...args: T): T;
+    const p1 = foo(..."hello");
+                      ~~~~~~~
+!!! error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+    const p2 = foo(...itNum);
+    const p3 = foo(true, ..."hello");
+                            ~~~~~~~
+!!! error TS2488: Type '"hello"' must have a '[Symbol.iterator]()' method that returns an iterator.
+    const p4 = foo(true, ...itNum);
+    

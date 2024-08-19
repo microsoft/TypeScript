@@ -42,10 +42,10 @@ const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >        : ^^^^^^^
 
 const chars = Object.groupBy('a string', c => c);
->chars : Partial<Record<string, string[]>>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Object.groupBy('a string', c => c) : Partial<Record<string, string[]>>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>chars : Partial<Record<PropertyKey, unknown[]>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.groupBy('a string', c => c) : Partial<Record<PropertyKey, unknown[]>>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.groupBy : <K extends PropertyKey, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Partial<Record<K, T[]>>
 >               : ^ ^^^^^^^^^           ^^ ^^     ^^           ^^           ^^                             ^^^^^                       
 >Object : ObjectConstructor
@@ -54,12 +54,12 @@ const chars = Object.groupBy('a string', c => c);
 >        : ^ ^^^^^^^^^           ^^ ^^     ^^           ^^           ^^                             ^^^^^                       
 >'a string' : "a string"
 >           : ^^^^^^^^^^
->c => c : (c: string) => string
->       : ^ ^^^^^^^^^^^^^^^^^^^
->c : string
->  : ^^^^^^
->c : string
->  : ^^^^^^
+>c => c : (c: unknown) => unknown
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
+>c : unknown
+>  : ^^^^^^^
+>c : unknown
+>  : ^^^^^^^
 
 type Employee = { name: string, role: 'ic' | 'manager' }
 >Employee : Employee

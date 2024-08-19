@@ -73,8 +73,8 @@ var a: Bar, b: string;
 >          : ^^^^^^^^^^^^^^^^^^
 >a : Bar
 >  : ^^^
->...b : string
->     : ^^^^^^
+>...b : any
+>     : ^^^
 >b : string
 >  : ^^^^^^
 >new FooIterator : FooIterator

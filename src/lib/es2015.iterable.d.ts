@@ -249,7 +249,7 @@ interface StringIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unk
 
 interface String {
     /** Iterator */
-    [Symbol.iterator](): StringIterator<string>;
+    // [Symbol.iterator](): StringIterator<string>;
 }
 
 interface Int8Array {

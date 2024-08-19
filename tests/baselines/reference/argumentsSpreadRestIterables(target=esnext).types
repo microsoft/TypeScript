@@ -64,14 +64,14 @@ declare function fn1<const T extends readonly unknown[]>(...args: T): T;
 >     : ^
 
 const res1 = fn1(..."hello");
->res1 : readonly string[]
->     : ^^^^^^^^^^^^^^^^^
->fn1(..."hello") : readonly string[]
->                : ^^^^^^^^^^^^^^^^^
+>res1 : readonly any[]
+>     : ^^^^^^^^^^^^^^
+>fn1(..."hello") : readonly any[]
+>                : ^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
 >    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
->..."hello" : string
->           : ^^^^^^
+>..."hello" : any
+>           : ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -88,16 +88,16 @@ const res2 = fn1(...itNum);
 >      : ^^^^^^^^^^^^^^^^
 
 const res3 = fn1(true, ..."hello");
->res3 : readonly [true, ...string[]]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fn1(true, ..."hello") : readonly [true, ...string[]]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>res3 : readonly [true, ...any[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1(true, ..."hello") : readonly [true, ...any[]]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
 >    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >true : true
 >     : ^^^^
->..."hello" : string
->           : ^^^^^^
+>..."hello" : any
+>           : ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -123,14 +123,14 @@ declare function foo<T extends unknown[]>(...args: T): T;
 >     : ^
 
 const p1 = foo(..."hello");
->p1 : string[]
->   : ^^^^^^^^
->foo(..."hello") : string[]
->                : ^^^^^^^^
+>p1 : any[]
+>   : ^^^^^
+>foo(..."hello") : any[]
+>                : ^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->..."hello" : string
->           : ^^^^^^
+>..."hello" : any
+>           : ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -147,16 +147,16 @@ const p2 = foo(...itNum);
 >      : ^^^^^^^^^^^^^^^^
 
 const p3 = foo(true, ..."hello");
->p3 : [boolean, ...string[]]
->   : ^^^^^^^^^^^^^^^^^^^^^^
->foo(true, ..."hello") : [boolean, ...string[]]
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>p3 : [boolean, ...any[]]
+>   : ^^^^^^^^^^^^^^^^^^^
+>foo(true, ..."hello") : [boolean, ...any[]]
+>                      : ^^^^^^^^^^^^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >true : true
 >     : ^^^^
->..."hello" : string
->           : ^^^^^^
+>..."hello" : any
+>           : ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 

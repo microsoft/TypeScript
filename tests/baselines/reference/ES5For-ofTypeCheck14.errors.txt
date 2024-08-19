@@ -1,8 +1,8 @@
-ES5For-ofTypeCheck14.ts(2,17): error TS2802: Type 'Set<number>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+ES5For-ofTypeCheck14.ts(2,17): error TS2461: Type 'Set<number>' is not an array type.
 
 
 ==== ES5For-ofTypeCheck14.ts (1 errors) ====
     var union: string | Set<number>
     for (const e of union) { }
                     ~~~~~
-!!! error TS2802: Type 'Set<number>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+!!! error TS2461: Type 'Set<number>' is not an array type.

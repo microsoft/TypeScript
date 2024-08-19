@@ -42,10 +42,10 @@ const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >        : ^^^^^^^
 
 const chars = Map.groupBy('a string', c => c);
->chars : Map<string, string[]>
->      : ^^^^^^^^^^^^^^^^^^^^^
->Map.groupBy('a string', c => c) : Map<string, string[]>
->                                : ^^^^^^^^^^^^^^^^^^^^^
+>chars : Map<unknown, unknown[]>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy('a string', c => c) : Map<unknown, unknown[]>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
 >Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
 >            : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
 >Map : MapConstructor
@@ -54,12 +54,12 @@ const chars = Map.groupBy('a string', c => c);
 >        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
 >'a string' : "a string"
 >           : ^^^^^^^^^^
->c => c : (c: string) => string
->       : ^ ^^^^^^^^^^^^^^^^^^^
->c : string
->  : ^^^^^^
->c : string
->  : ^^^^^^
+>c => c : (c: unknown) => unknown
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
+>c : unknown
+>  : ^^^^^^^
+>c : unknown
+>  : ^^^^^^^
 
 type Employee = { name: string, role: 'ic' | 'manager' }
 >Employee : Employee

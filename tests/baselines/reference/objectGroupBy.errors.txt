@@ -1,10 +1,13 @@
+objectGroupBy.ts(3,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Iterable<unknown>'.
 objectGroupBy.ts(9,49): error TS2322: Type 'Employee' is not assignable to type 'PropertyKey'.
 
 
-==== objectGroupBy.ts (1 errors) ====
+==== objectGroupBy.ts (2 errors) ====
     const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
     
     const chars = Object.groupBy('a string', c => c);
+                                 ~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Iterable<unknown>'.
     
     type Employee = { name: string, role: 'ic' | 'manager' }
     const employees: Set<Employee> = new Set();
