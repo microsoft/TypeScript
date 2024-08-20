@@ -76,7 +76,6 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
-    forEach,
     forEachAncestorDirectory,
     forEachChild,
     forEachLeadingCommentRange,
