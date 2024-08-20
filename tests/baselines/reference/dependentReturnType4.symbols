@@ -16,7 +16,7 @@ declare function takesString(x: string): void;
 >takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 29))
 >x : Symbol(x, Decl(dependentReturnType4.ts, 3, 29))
 
-function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : never {
 >hasOwnP : Symbol(hasOwnP, Decl(dependentReturnType4.ts, 3, 46))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
 >Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
@@ -49,7 +49,7 @@ function foo<T extends string | undefined>(opts: { x?: T }):
 >x : Symbol(x, Decl(dependentReturnType4.ts, 12, 50))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
 
-    T extends undefined ? 0 : T extends string ? 1 : 0 | 1 {
+    T extends undefined ? 0 : T extends string ? 1 : never {
 >T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
 
@@ -71,7 +71,7 @@ function bar<T extends string | Missing>(x?: T ):
 >x : Symbol(x, Decl(dependentReturnType4.ts, 20, 41))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
 
-    T extends Missing ? 0 : T extends string ? 1 : 0 | 1 {
+    T extends Missing ? 0 : T extends string ? 1 : never {
 >T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
 >Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
@@ -86,7 +86,7 @@ function bar<T extends string | Missing>(x?: T ):
 }
 
 // Aliased narrowing
-function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
 >inlined : Symbol(inlined, Decl(dependentReturnType4.ts, 26, 1))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 29, 17))
 >x : Symbol(x, Decl(dependentReturnType4.ts, 29, 44))
@@ -111,7 +111,7 @@ function inlined<T extends number | string>(x: T): T extends number ? string : T
 }
 
 // Don't narrow more than 5 levels of aliasing
-function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
 >inlined6 : Symbol(inlined6, Decl(dependentReturnType4.ts, 36, 1))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 39, 18))
 >x : Symbol(x, Decl(dependentReturnType4.ts, 39, 45))
@@ -170,7 +170,7 @@ type AOrB = A | B;
 >A : Symbol(A, Decl(dependentReturnType4.ts, 51, 1))
 >B : Symbol(B, Decl(dependentReturnType4.ts, 53, 34))
 
-function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : number | string {
+function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : never {
 >subexpression : Symbol(subexpression, Decl(dependentReturnType4.ts, 55, 18))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 57, 23))
 >AOrB : Symbol(AOrB, Decl(dependentReturnType4.ts, 54, 34))
@@ -191,7 +191,7 @@ function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B
     return 0;
 }
 
-function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
+function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : never {
 >switchTrue : Symbol(switchTrue, Decl(dependentReturnType4.ts, 62, 1))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 64, 20))
 >x : Symbol(x, Decl(dependentReturnType4.ts, 64, 39))
@@ -209,7 +209,7 @@ function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends fal
 }
 
 // Don't raise errors when getting the narrowed type of synthesized nodes
-type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : 1 | 2;
+type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : never;
 >Ret : Symbol(Ret, Decl(dependentReturnType4.ts, 70, 1))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 73, 9))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 73, 9))

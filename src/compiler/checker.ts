@@ -20633,8 +20633,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getNarrowConditionalType(type, narrowMapper, mapper);
     }
 
-    function isNarrowableReturnType(type: Type) {
-        return type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional) && couldContainTypeVariables(type);
+    function isGenericIndexedOrConditionalReturnType(type: Type): type is IndexedAccessType | ConditionalType {
+        return !!(type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional) && couldContainTypeVariables(type));
     }
 
     function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
@@ -45418,20 +45418,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : exprType;
 
         const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
-        if (!isNarrowableReturnType(unwrappedReturnType)) {
+        if (!isGenericIndexedOrConditionalReturnType(unwrappedReturnType)) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
             return;
         }
-
         // Check if type of return expression is assignable to original return type;
         // If so, we don't need to narrow.
         if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
             return;
         }
         const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
-        const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-        const narrowableTypeParameters = typeParameters
-            && filterNarrowableTypeParameters(container, typeParameters);
+        const allTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
+        const unionTypeParameters = allTypeParameters?.filter(tp => {
+            const constraint = getConstraintOfTypeParameter(tp);
+            return !!((constraint?.flags ?? 0) & TypeFlags.Union);
+        });
+        const narrowableTypeParameters = unionTypeParameters
+            && filterNarrowableTypeParameters(container, unionTypeParameters);
+
+        if (
+            !narrowableTypeParameters ||
+            !isNarrowableReturnType(narrowableTypeParameters.map(trio => trio[0]), unwrappedReturnType)
+        ) {
+            checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
+            return;
+        }
+
         // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
         // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
         // `function foo(...) {
@@ -45451,7 +45463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
             narrowPosition = expr;
         }
-        let narrowedReturnType = unwrappedReturnType;
+        let narrowedReturnType: Type = unwrappedReturnType;
         if (narrowableTypeParameters && narrowFlowNode) {
             const narrowed: [TypeParameter, Type][] = mapDefined(narrowableTypeParameters, ([tp, symbol, reference]) => {
                 const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
@@ -45511,6 +45523,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
     }
 
+    // Narrowable type parameters are type parameters that are the type of a single reference in the function scope
+    // whose type could possibly narrowed.
+    // For instance, `T` is a narrowable type parameter in the function below because it is the type of reference `x`,
+    // reference `x` appears in the control flow graph for the function, and therefore `x`'s type could be narrowed,
+    // and `T` is not the type of any other such references in the scope of the function.
+    // `
+    // function f<T, U>(x: T, y: U): ... {
+    //     if (typeof x === ...) { return ...; }
+    // }
+    // `
     function filterNarrowableTypeParameters(container: SignatureDeclaration, typeParameters: TypeParameter[]): [TypeParameter, Symbol, TypeParameterReference][] | undefined {
         const narrowableTypeParameterReferences = collectTypeParameterReferences(container);
         const queryParameters: [TypeParameter, Symbol, TypeParameterReference][] = [];
@@ -45760,6 +45782,75 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !!symbol.links.target.links.tupleLabelDeclaration?.questionToken;
         }
         return false;
+    }
+
+    // A valid conditional type will have the following shape:
+    // `T extends A ? TrueBranch<T> : FalseBranch<T>`, such that:
+    // (0) The conditional type's check type is a narrowable type parameter;
+    // (1) `A` is a type belonging to the constraint of the type parameter,
+    //  or a union of types belonging to the constraint of the type parameter;
+    // (2) There are no `infer` type parameters in the conditional type;
+    // (3) `TrueBranch<T>` and `FalseBranch<T>` must be valid, recursively;
+    // >> TODO:
+    // - consider multiple type parameters at once
+    // - can/should we check exhaustiveness?
+    // - Problem: cond type nested in true branch with same type parameter is not considered distributive,
+    // because the type parameter is actually a substitution type...
+    function isNarrowableReturnType(
+        typeParameters: TypeParameter[],
+        returnType: IndexedAccessType | ConditionalType,
+    ): boolean {
+        return !isConditionalType(returnType) || isNarrowable(returnType, /*branch*/ undefined);
+        // `branch` can be `true` if `type` is the true type of a conditional, `false` if it's the false type of a conditional,
+        // and `undefined` if neither.
+        function isNarrowable(type: Type, branch: boolean | undefined): boolean {
+            if (!isConditionalType(type)) {
+                // This is type `R` in `T extends A ? R : ...`
+                if (branch === true) {
+                    return true;
+                }
+                // This is type `never` in `T extends A ? R : never`
+                if (branch === false) {
+                    return type === neverType;
+                }
+                return false;
+            }
+            // (0)
+            if (!(type.checkType.flags & TypeFlags.TypeParameter)) {
+                return false;
+            }
+            const typeParameter = typeParameters.find(tp => tp === type.checkType);
+            if (!typeParameter) {
+                return false;
+            }
+            const constraintType = getConstraintOfTypeParameter(typeParameter) as UnionType;
+            // (0)
+            if (!type.root.isDistributive) { // >> TODO: do we need this? depends on how narrowing instantiation is implemented
+                return false;
+            }
+            // (2)
+            if (type.root.inferTypeParameters?.length) {
+                return false;
+            }
+            // (1)
+            // >> TODO: should this be some sort of type comparison check instead of identity?
+            if (
+                !everyType(type.extendsType, extendsType =>
+                    some(
+                        constraintType.types,
+                        constraintType => isTypeIdenticalTo(constraintType, extendsType),
+                    ))
+            ) {
+                return false;
+            }
+
+            return isNarrowable(getTrueTypeFromConditionalType(type), /*branch*/ true) &&
+                isNarrowable(getFalseTypeFromConditionalType(type), /*branch*/ false);
+        }
+    }
+
+    function isConditionalType(type: Type): type is ConditionalType {
+        return !!(type.flags & TypeFlags.Conditional);
     }
 
     function checkWithStatement(node: WithStatement) {

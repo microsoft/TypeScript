@@ -67,25 +67,21 @@ interface Four {
     f: "f";
     g: "g";
 }
-
-function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four { // Badly written conditional
+// Badly written conditional return type, will not trigger narrowing
+function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four {
     if (x === 1 || x === 2) {
-        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
-        return { a: "a" }; // Error
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Error
     }
-    // Excess property becomes a problem with the change,
-    // because we now check assignability to a narrower type...
     return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
 }
-
-function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four { // Well written conditional
+// Well written conditional
+function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : never {
     if (x === 1 || x === 2) {
         return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
-        return { a: "a" }; // Error
     }
     // Excess property becomes a problem with the change,
     // because we now check assignability to a narrower type...
-    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
+    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // EPC Error
 }
 
 // Asymmetry
@@ -94,7 +90,7 @@ function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends 
     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
     produceLeftOut: (arg: LeftIn) => LeftOut,
     produceRightOut: (arg: RightIn) => RightOut):
-    Arg extends LeftIn ? LeftOut : RightOut
+    Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
 {
     type OK = Arg extends LeftIn ? LeftOut : RightOut;
     if (cond(arg)) {
@@ -112,12 +108,12 @@ interface Dog extends Animal {
     bark: () => string;
 }
 
-// This is unsafe
+// This would be unsafe to narrow.
 declare function isDog(x: Animal): x is Dog;
 declare function doggy(x: Dog): number;
 function f12<T extends Animal>(x: T): T extends Dog ? number : string {
     if (isDog(x)) { // `x` has type `T & Dog` here
-        return doggy(x); // The narrowed conditional return type has deferred resolution, so this doesn't work.
+        return doggy(x);
     }
     return ""; // Error: Should not work because we can't express "not a Dog" in the type system
 }
@@ -151,20 +147,16 @@ export function bbb<AB extends "a" | "b">(value: AB): "a" {
 
 class Unnamed {
     root!: { name: string };
-    // Error because parameter is optional
-    name<T extends string>(name?: T): T extends string ? this : string {
+    // Error: No narrowing because parameter is optional but `T` doesn't allow for undefined
+    name<T extends string>(name?: T): T extends string ? this : T extends undefined ? string : never {
         if (typeof name === 'undefined') {
             return this.root.name;
         }
         return this;
     }
-    // Error because parameter is optional?
-    nameWithError<T extends string>(name?: T): T extends string ? this : string {
-        return this; // Error: Investigate error message
-    }
 
     // Good conditional
-    name2<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+    name2<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : never {
         if (typeof name === 'undefined') {
             return this.root.name; // Ok
         }
@@ -173,7 +165,7 @@ class Unnamed {
     }
 
     // Good conditional, wrong return expressions
-    name3<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+    name3<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : never {
         if (typeof name === 'undefined') {
             return this; // Error
         }
@@ -182,36 +174,40 @@ class Unnamed {
     }
 }
 
+// Conditional expressions
 interface Aa {
     1: number;
     2: string;
-    3: string;
+    3: boolean;
 }
 
 function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
     if (x !== 1) {
-        return x === 2 ? "" : `${x}`;
+        return x === 2 ? "" : true;
     }
     else {
         return 0;
     }
 }
 
-// Conditional expressions
 function conditional<T extends boolean>(x: T):
- T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+ T extends true ? 1 : T extends false ? 2 : never {
     return x ? 1 : 2; // Ok
 }
 
-function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : T extends "b" ? number : "a" | number {
+function contextualConditional<T extends "a" | "b">(
+    x: T
+): T extends "a" ? "a" : T extends "b" ? number : never {
     return x === "a" ? x : parseInt(x); // Ok
 }
 
-function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number : T extends "b" ? string : number | string {
+function conditionalWithError<T extends "a" | "b">(
+    x: T
+): T extends "a" ? number : T extends "b" ? string : never {
     return x === "a" ? x : parseInt(x); // Error
 }
 
-// Multiple reductions
+// Multiple indexed type reductions
 interface BB {
     "a": number;
     [y: number]: string;
@@ -232,36 +228,44 @@ function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U
     return undefined as never;
 }
 
-// Substitution types are not narrowed?
-function subsCond<T extends 1 | 2 | 3>(x: T): T extends 1 | 2 ? (T extends 1 ? string : boolean) : number {
+// Substitution types are not narrowed
+function subsCond<T extends 1 | 2 | 3>(
+    x: T,
+): T extends 1 | 2
+    ? T extends 1
+        ? string
+        : T extends 2
+          ? boolean
+          : never
+    : T extends 3
+      ? number
+      : never {
     if (x === 1) {
         return "";
+    } else if (x == 2) {
+        return true;
     }
+    return 3;
 }
 
-// Unsafe: supertype problem
+
+// Unsafe: check types overlap
 declare function q(x: object): x is { b: number };
-function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
+function foo<T extends { a: string } | { b: number }>(
+    x: T,
+): T extends { a: string } ? number : T extends { b: number } ? string : never {
     if (q(x)) {
         x.b;
         return "";
     }
+    x.a;
+    return 1;
 }
 
 let y = { a: "", b: 1 }
-const r = foo<{ a: string }>(y); // number
+const r = foo<{ a: string }>(y); // type says number but actually string
 
-function lessBadFoo<T extends { a: string } | { b: number }>(x: T): T extends { b: number } ? string : T extends { a: string } ? number : (string | number) {
-    if (q(x)) {
-        x.b;
-        return "";
-    }
-    return 2;
-}
-
-const r2 = lessBadFoo<{ a: string }>(y); // number, bad
-
-type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : R1 | R2;
+type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : never;
 
 // We don't narrow the return type because the conditionals are not distributive
 function foo2<U extends string | number, V extends boolean>(x: U, y: V):
@@ -280,7 +284,9 @@ function foo2<U extends string | number, V extends boolean>(x: U, y: V):
 // From https://github.com/microsoft/TypeScript/issues/24929#issue-332087943
 declare function isString(s: unknown): s is string;
 // capitalize a string or each element of an array of strings
-function capitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+function capitalize<T extends string | string[]>(
+    input: T
+): T extends string[] ? string[] : T extends string ? string : never {
     if (isString(input)) {
         return input[0].toUpperCase() + input.slice(1); // Ok
     } else {
@@ -288,59 +294,74 @@ function capitalize<T extends string | string[]>(input: T): T extends string[] ?
     }
 }
 
-function badCapitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+function badCapitalize<T extends string | string[]>(
+    input: T
+): T extends string[] ? string[] : T extends string ? string : never {
     if (isString(input)) {
         return input[0].toUpperCase() + input.slice(1); // Ok
     } else {
-        return input[0].toUpperCase() + input.slice(1); // Bad
+        return input[0].toUpperCase() + input.slice(1); // Bad, error
     }
 }
 
-// >> TODO: test non-tail recursive conditionals
-
-function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : T extends undefined ? number : void | number {
+// No narrowing because conditional's extends type is different from type parameter constraint types
+function voidRet<T extends { a: string } | undefined>(
+    x: T
+): T extends {} ? void : T extends undefined ? number : never {
     if (x) {
-        return; // Ok
+        return;
     }
-    return 1; // Ok
+    return 1;
 }
 
-function woo<T extends string | number, U extends string | number>(x: T, y: U):
-T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4 {
+// Multiple type parameters at once
+function woo<T extends string | number, U extends string | number>(
+    x: T,
+    y: U,
+): T extends string
+    ? U extends string
+        ? 1
+        : U extends number
+          ? 2
+          : never
+    : T extends number
+      ? U extends number
+          ? 3
+          : U extends string
+            ? 4
+            : never
+      : never {
     if (typeof x === "number" && typeof y === "string") {
-        return 1; // Error
+        return 1; // Good error
     }
     return undefined as any;
 }
 
-function ttt<T extends string | number, U extends string | number>(x: T, y: U):
-T extends string
-? number extends string
-  ? 6
-  : U extends string
-    ? 1
-    : 2
-: U extends number
-  ? 3
-  : 4 {
-    if (typeof x === "string" && typeof y === "string") {
-        return 1; // Ok
+function ttt<T extends string | number, U extends string | number>(
+    x: T,
+    y: U,
+): T extends string
+    ? U extends string
+        ? 1
+        : U extends number
+          ? 2
+          : never
+    : T extends number
+      ? U extends number
+          ? 3
+          : U extends string
+            ? 4
+            : never
+      : never {
+    if (typeof x === "number" && typeof y === "string") {
+        return 4; // Ok
     }
     
     return undefined as any;
 }
 
-// We won't narrow `T` because it refers to the type of an optional parameter but doesn't allow for narrowing with `undefined`
-function opt<T extends string>(x?: T): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
-    if (typeof x === "undefined") {
-        x;
-        return 2;
-    }
-    return 1;
-}
-
 // Shadowing of the narrowed reference
-function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+function shadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
     if (true) {
         let x: number = Math.random() ? 1 : 2;
         if (x === 1) {
@@ -350,9 +371,18 @@ function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
     }
 }
 
+function noShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
+    if (true) {
+        if (x === 1) {
+            return 1; // Ok
+        }
+        return ""; // Ok
+    }
+}
+
 // If the narrowing reference is out of scope, we simply won't narrow its type
 declare let someX: boolean;
-function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : never {
     if ((true)) {
         const someX = opts.a;
         if (someX) { // We narrow `someX` and the return type here
@@ -362,9 +392,11 @@ function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T exten
     if (!someX) { // This is a different `someX`, so we don't narrow here
         return 2;
     }
+
+    return undefined as any;
 }
 
-function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+function moreShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
     if (x === 2) {
         let x: number = Math.random() ? 1 : 2;
         if (x === 1) {
@@ -375,7 +407,8 @@ function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
     return 0; // Ok
 }
 
-function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : string | boolean {
+// This would be unsafe to narrow due to `infer` type.
+function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : never {
     if (typeof x === "number") {
         return true;
     }
@@ -385,7 +418,7 @@ function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R :
 const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.
 
 // Ok
-async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : 1 | 2> {
+async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : never> {
     if (x) {
         return 1;
     }
@@ -393,7 +426,7 @@ async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 :
 }
 
 // Ok
-function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : 1 | 2, unknown> {
+function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : never, unknown> {
     yield 3;
     if (x) {
         return 1;
@@ -402,7 +435,7 @@ function* bbool<T extends true | false>(x: T): Generator<number, T extends true 
 }
 
 // We don't do the same type of narrowing for `yield` statements
-function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : 1 | 2, number, unknown> {
+function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : never, number, unknown> {
     if (x) {
         yield 1;
     }
@@ -416,13 +449,17 @@ abstract class Operation<T, R> {
 }
 
 type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
-    EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : T | R;
+    EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : never;
 
-class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
+class ConditionalOperation<
+    T,
+    R,
+    EOp extends Operation<T, R> | undefined,
+> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
     constructor(
         private predicate: (value: T) => boolean,
         private thenOp: Operation<T, R>,
-        private elseOp?: EOp
+        private elseOp?: EOp,
     ) {
         super();
     }
@@ -430,7 +467,7 @@ class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extend
     perform(t: T): ConditionalReturnType<T, R, EOp> {
         if (this.predicate(t)) {
             return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
-        } else if (typeof this.elseOp !== 'undefined') {
+        } else if (typeof this.elseOp !== "undefined") {
             return this.elseOp.perform(t); // Ok
         } else {
             return t; // Ok
@@ -440,7 +477,7 @@ class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extend
 
 // Optional tuple element
 function tupl<T extends true | false | undefined>(x: [string, some?: T]):
-    T extends true ? 1 : T extends false | undefined ? 2 : 1 | 2 {
+    T extends true ? 1 : T extends false | undefined ? 2 : never {
     if (x[1]) {
         return 1;
     }
@@ -448,17 +485,22 @@ function tupl<T extends true | false | undefined>(x: [string, some?: T]):
 }
 
 // Return conditional expressions with parentheses
-function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : never {
     return (opts.x ? (1) : 2);
 }
 
 function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
-    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : "one" | "two" | 0 {
+    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
     return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
 }
 
-// If the return type is written wrong, it still type checks
-function returnStuff3<T extends 1 | 2 | "a">(opts: { x: T }):
-    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : 1 | 2 | "zero" {
-    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+// If the conditional type's input is `never`, then it resolves to `never`:
+function neverOk<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 2 : never {
+    if (x === true) {
+        return 1;
+    }
+    if (x === false) {
+        return 2;
+    }
+    return 1;
 }

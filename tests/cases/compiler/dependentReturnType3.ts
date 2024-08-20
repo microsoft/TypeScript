@@ -9,7 +9,7 @@ type HelperCond<T, A, R1, B, R2> =
         ? R1
         : T extends B
             ? R2
-            : (R1 | R2);
+            : never;
 
 
 // File: Rocket.Chat/apps/meteor/app/katex/client/index.ts
@@ -28,7 +28,7 @@ class NewKatex {
         ? string
         : T extends IMessage
           ? IMessage
-          : (string | IMessage) {
+          : never {
         if (typeof message === 'string') {
             return this.render(message); // Ok
         }
@@ -52,7 +52,11 @@ export function createKatexMessageRendering<T extends true | false>(
         parenthesisSyntax: boolean;
     },
     _isMessage: T,
-): T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : (((message: string) => string) | ((message: IMessage) => IMessage)) {
+): T extends true
+    ? (message: IMessage) => IMessage
+    : T extends false
+      ? (message: string) => string
+      : never {
     const instance = new NewKatex();
     if (_isMessage) {
         return (message: IMessage): IMessage => instance.renderMessage(message); // Ok
@@ -210,6 +214,3 @@ function transform1<T extends string | null | undefined>(value: T): HelperCond<T
     }
     return value.toLowerCase(); // Ok
 }
-
-
-

@@ -24,8 +24,8 @@ declare function takesString(x: string): void;
 >x : string
 >  : ^^^^^^
 
-function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
->hasOwnP : <T extends string | Missing>(obj: { a?: T; }) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
+function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : never {
+>hasOwnP : <T extends string | Missing>(obj: { a?: T; }) => T extends string ? 1 : T extends undefined ? 2 : never
 >        : ^ ^^^^^^^^^                ^^   ^^          ^^^^^                                                      
 >obj : { a?: T; }
 >    : ^^^^^^ ^^^
@@ -66,14 +66,14 @@ function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ?
 }
 
 function foo<T extends string | undefined>(opts: { x?: T }):
->foo : <T extends string | undefined>(opts: { x?: T; }) => T extends undefined ? 0 : T extends string ? 1 : 0 | 1
+>foo : <T extends string | undefined>(opts: { x?: T; }) => T extends undefined ? 0 : T extends string ? 1 : never
 >    : ^ ^^^^^^^^^                  ^^    ^^          ^^^^^                                                      
 >opts : { x?: T; }
 >     : ^^^^^^ ^^^
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
-    T extends undefined ? 0 : T extends string ? 1 : 0 | 1 {
+    T extends undefined ? 0 : T extends string ? 1 : never {
     if (opts.x === undefined) {
 >opts.x === undefined : boolean
 >                     : ^^^^^^^
@@ -96,12 +96,12 @@ function foo<T extends string | undefined>(opts: { x?: T }):
 }
 
 function bar<T extends string | Missing>(x?: T ):
->bar : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : 0 | 1
+>bar : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : never
 >    : ^ ^^^^^^^^^                ^^ ^^^ ^^^^^                                                    
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
-    T extends Missing ? 0 : T extends string ? 1 : 0 | 1 {
+    T extends Missing ? 0 : T extends string ? 1 : never {
     if (x === undefined) {
 >x === undefined : boolean
 >                : ^^^^^^^
@@ -120,9 +120,9 @@ function bar<T extends string | Missing>(x?: T ):
 }
 
 // Aliased narrowing
-function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
->inlined : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : string | number
->        : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                                       
+function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
+>inlined : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : never
+>        : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                             
 >x : T
 >  : ^
 
@@ -158,9 +158,9 @@ function inlined<T extends number | string>(x: T): T extends number ? string : T
 }
 
 // Don't narrow more than 5 levels of aliasing
-function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
->inlined6 : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : string | number
->         : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                                       
+function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
+>inlined6 : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : never
+>         : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                             
 >x : T
 >  : ^
 
@@ -245,9 +245,9 @@ type AOrB = A | B;
 >AOrB : AOrB
 >     : ^^^^
 
-function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : number | string {
->subexpression : <T extends AOrB>(x: T) => T extends A ? number : T extends B ? string : number | string
->              : ^ ^^^^^^^^^    ^^ ^^ ^^^^^                                                             
+function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : never {
+>subexpression : <T extends AOrB>(x: T) => T extends A ? number : T extends B ? string : never
+>              : ^ ^^^^^^^^^    ^^ ^^ ^^^^^                                                   
 >x : T
 >  : ^
 
@@ -272,8 +272,8 @@ function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B
 >  : ^
 }
 
-function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
->switchTrue : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 0 : 0 | 1
+function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : never {
+>switchTrue : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 0 : never
 >           : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
 >x : T
 >  : ^
@@ -300,7 +300,7 @@ function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends fal
 }
 
 // Don't raise errors when getting the narrowed type of synthesized nodes
-type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : 1 | 2;
+type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : never;
 >Ret : Ret<T>
 >    : ^^^^^^
 

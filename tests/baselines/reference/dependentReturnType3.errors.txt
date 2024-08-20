@@ -1,6 +1,6 @@
-dependentReturnType3.ts(110,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
-dependentReturnType3.ts(126,16): error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
-dependentReturnType3.ts(137,9): error TS2322: Type 'Record<string, object[]>' is not assignable to type 'HelperCond<T, string, object[], undefined, Record<string, object[]>>'.
+dependentReturnType3.ts(114,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
+dependentReturnType3.ts(130,16): error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
+dependentReturnType3.ts(141,9): error TS2322: Type 'Record<string, object[]>' is not assignable to type 'HelperCond<T, string, object[], undefined, Record<string, object[]>>'.
 
 
 ==== dependentReturnType3.ts (3 errors) ====
@@ -11,7 +11,7 @@ dependentReturnType3.ts(137,9): error TS2322: Type 'Record<string, object[]>' is
             ? R1
             : T extends B
                 ? R2
-                : (R1 | R2);
+                : never;
     
     
     // File: Rocket.Chat/apps/meteor/app/katex/client/index.ts
@@ -30,7 +30,7 @@ dependentReturnType3.ts(137,9): error TS2322: Type 'Record<string, object[]>' is
             ? string
             : T extends IMessage
               ? IMessage
-              : (string | IMessage) {
+              : never {
             if (typeof message === 'string') {
                 return this.render(message); // Ok
             }
@@ -54,7 +54,11 @@ dependentReturnType3.ts(137,9): error TS2322: Type 'Record<string, object[]>' is
             parenthesisSyntax: boolean;
         },
         _isMessage: T,
-    ): T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : (((message: string) => string) | ((message: IMessage) => IMessage)) {
+    ): T extends true
+        ? (message: IMessage) => IMessage
+        : T extends false
+          ? (message: string) => string
+          : never {
         const instance = new NewKatex();
         if (_isMessage) {
             return (message: IMessage): IMessage => instance.renderMessage(message); // Ok
@@ -218,7 +222,3 @@ dependentReturnType3.ts(137,9): error TS2322: Type 'Record<string, object[]>' is
         }
         return value.toLowerCase(); // Ok
     }
-    
-    
-    
-    

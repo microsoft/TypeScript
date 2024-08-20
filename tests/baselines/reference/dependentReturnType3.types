@@ -11,7 +11,7 @@ type HelperCond<T, A, R1, B, R2> =
         ? R1
         : T extends B
             ? R2
-            : (R1 | R2);
+            : never;
 
 
 // File: Rocket.Chat/apps/meteor/app/katex/client/index.ts
@@ -41,8 +41,8 @@ class NewKatex {
     }
 
     renderMessage<T extends string | IMessage>(message: T):
->renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : (string | IMessage)
->              : ^ ^^^^^^^^^                 ^^       ^^ ^^^^^                                                                               
+>renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : never
+>              : ^ ^^^^^^^^^                 ^^       ^^ ^^^^^                                                                 
 >message : T
 >        : ^
 
@@ -50,7 +50,7 @@ class NewKatex {
         ? string
         : T extends IMessage
           ? IMessage
-          : (string | IMessage) {
+          : never {
         if (typeof message === 'string') {
 >typeof message === 'string' : boolean
 >                            : ^^^^^^^
@@ -149,8 +149,8 @@ class NewKatex {
 }
 
 export function createKatexMessageRendering<T extends true | false>(
->createKatexMessageRendering : <T extends true | false>(options: { dollarSyntax: boolean; parenthesisSyntax: boolean; }, _isMessage: T) => T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : (((message: string) => string) | ((message: IMessage) => IMessage))
->                            : ^ ^^^^^^^^^            ^^       ^^                                                      ^^          ^^ ^^^^^                                                                                                                                                                      
+>createKatexMessageRendering : <T extends true | false>(options: { dollarSyntax: boolean; parenthesisSyntax: boolean; }, _isMessage: T) => T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never
+>                            : ^ ^^^^^^^^^            ^^       ^^                                                      ^^          ^^ ^^^^^                                                                                                        
 >true : true
 >     : ^^^^
 >false : false
@@ -173,20 +173,23 @@ export function createKatexMessageRendering<T extends true | false>(
 >_isMessage : T
 >           : ^
 
-): T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : (((message: string) => string) | ((message: IMessage) => IMessage)) {
+): T extends true
 >true : true
 >     : ^^^^
->message : IMessage
->        : ^^^^^^^^
->false : false
->      : ^^^^^
->message : string
->        : ^^^^^^
->message : string
->        : ^^^^^^
+
+    ? (message: IMessage) => IMessage
 >message : IMessage
 >        : ^^^^^^^^
 
+    : T extends false
+>false : false
+>      : ^^^^^
+
+      ? (message: string) => string
+>message : string
+>        : ^^^^^^
+
+      : never {
     const instance = new NewKatex();
 >instance : NewKatex
 >         : ^^^^^^^^
@@ -206,12 +209,12 @@ export function createKatexMessageRendering<T extends true | false>(
 >        : ^^^^^^^^
 >instance.renderMessage(message) : IMessage
 >                                : ^^^^^^^^
->instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : (string | IMessage)
->                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                                   
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
 >instance : NewKatex
 >         : ^^^^^^^^
->renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : (string | IMessage)
->              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                                   
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
 >message : IMessage
 >        : ^^^^^^^^
     }
@@ -222,12 +225,12 @@ export function createKatexMessageRendering<T extends true | false>(
 >        : ^^^^^^
 >instance.renderMessage(message) : string
 >                                : ^^^^^^
->instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : (string | IMessage)
->                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                                   
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
 >instance : NewKatex
 >         : ^^^^^^^^
->renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : (string | IMessage)
->              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                                   
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
 >message : string
 >        : ^^^^^^
 }
@@ -995,7 +998,3 @@ function transform1<T extends string | null | undefined>(value: T): HelperCond<T
 >toLowerCase : () => string
 >            : ^^^^^^      
 }
-
-
-
-
