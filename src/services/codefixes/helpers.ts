@@ -643,9 +643,9 @@ export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, c
     }
     if (isTypeReferenceNode(typeNode)) {
         const genericType = type as GenericType;
-        if (genericType.typeArguments) {
+        if (genericType.typeArguments && typeNode.typeArguments) {
             const cutoff = endOfRequiredTypeParameters(checker, genericType);
-            if (cutoff !== undefined && typeNode.typeArguments) {
+            if (cutoff < typeNode.typeArguments.length) {
                 const newTypeArguments = factory.createNodeArray(typeNode.typeArguments.slice(0, cutoff));
                 typeNode = factory.updateTypeReferenceNode(typeNode, typeNode.typeName, newTypeArguments);
             }

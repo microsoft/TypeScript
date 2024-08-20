@@ -2,16 +2,14 @@
 
 // @isolatedDeclarations: true
 // @declaration: true
-// @file lib.d.ts
-////interface MyIterator<T, TReturn = any, TNext = undefined> {}
-////let x: MyIterator<number>;
+// @lib: es2015
+////let x: Iterator<number>;
 ////export const y = x;
 
 verify.codeFix({
-    description: "Add annotation of type 'MyIterator<number>'",
+    description: "Add annotation of type 'Iterator<number>'",
     index: 0,
     newFileContent:
-`interface MyIterator<T, TReturn = any, TNext = undefined> {}
-let x: MyIterator<number>;
-export const y: MyIterator<number> = x;`,
+`let x: Iterator<number>;
+export const y: Iterator<number> = x;`,
 });
