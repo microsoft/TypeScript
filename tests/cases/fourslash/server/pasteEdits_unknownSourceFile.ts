@@ -14,7 +14,6 @@
 // @Filename: /tsconfig.json
 ////{ "files": ["file1.ts", "file2.ts"] }
 
-const range = test.ranges();
 verify.pasteEdits({
     args: {
         pastedText: [ `interface Testing {
@@ -23,7 +22,7 @@ verify.pasteEdits({
             test3: Test3;
             test4: Test4;
         }`],
-    pasteLocations: [range[0]],
+    pasteLocations: test.ranges(),
     },
     newFileContents: {
         "/file2.ts":
