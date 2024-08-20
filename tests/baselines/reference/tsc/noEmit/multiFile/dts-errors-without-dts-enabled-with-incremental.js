@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -24,7 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -101,10 +100,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -131,12 +129,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -213,10 +210,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -243,17 +239,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-
-
-//// [/home/src/projects/project/a.js]
-var a = "hello";
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -296,6 +287,10 @@ var a = "hello";
   "size": 714
 }
 
+//// [/home/src/projects/project/a.js]
+var a = "hello";
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -316,10 +311,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -346,12 +340,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -428,22 +421,12 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-
-
-//// [/home/src/projects/project/a.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -486,6 +469,15 @@ var a = /** @class */ (function () {
   "size": 861
 }
 
+//// [/home/src/projects/project/a.js]
+var a = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -506,10 +498,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::

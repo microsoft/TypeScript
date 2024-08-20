@@ -1,51 +1,7 @@
 currentDirectory:: /src/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/projects/project/node_modules/a] symlink(/src/projects/project/packages/a)
 //// [/src/projects/project/packages/a/index.js]
 export const a = 'a';
-
-//// [/src/projects/project/packages/a/package.json]
-{
-  "name": "a",
-  "version": "0.0.0",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "default": "./index.js"
-    }
-  }
-}
 
 //// [/src/projects/project/packages/a/test/index.js]
 import 'a';
@@ -62,15 +18,21 @@ import 'a';
   }
 }
 
+//// [/src/projects/project/packages/a/package.json]
+{
+  "name": "a",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    }
+  }
+}
+
 //// [/src/projects/project/packages/b/index.js]
 export { a } from 'a';
-
-//// [/src/projects/project/packages/b/package.json]
-{
-  "name": "b",
-  "version": "0.0.0",
-  "type": "module"
-}
 
 //// [/src/projects/project/packages/b/tsconfig.json]
 {
@@ -87,6 +49,29 @@ export { a } from 'a';
   }
 }
 
+//// [/src/projects/project/packages/b/package.json]
+{
+  "name": "b",
+  "version": "0.0.0",
+  "type": "module"
+}
+
+//// [/src/projects/project/node_modules/a] symlink(/src/projects/project/packages/a)
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b packages/a --verbose --traceResolution --explainFiles
@@ -134,6 +119,8 @@ packages/a/test/index.js
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'packages/a/package.json' has field "type" with value "module"
 
+
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/src/projects/project/packages/a/types/index.d.ts]
 export const a: "a";
@@ -222,10 +209,9 @@ export {};
 
 exitCode:: ExitStatus.Success
 
-
 Change:: build b
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b packages/b --verbose --traceResolution --explainFiles
 Output::

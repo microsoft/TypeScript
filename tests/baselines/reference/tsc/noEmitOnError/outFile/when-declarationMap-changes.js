@@ -1,5 +1,21 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "declaration": true,
+    "composite": true,
+    "outFile": "../outFile.js"
+  }
+}
+
+//// [/src/project/a.ts]
+const x = 10;
+
+//// [/src/project/b.ts]
+const y = 10;
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,36 +31,19 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/a.ts]
-const x = 10;
-
-//// [/src/project/b.ts]
-const y = 10;
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "noEmitOnError": true,
-    "declaration": true,
-    "composite": true,
-    "outFile": "../outFile.js"
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
 
 
-//// [/src/outFile.d.ts]
-declare const x = 10;
-declare const y = 10;
-
-
 //// [/src/outFile.js]
 var x = 10;
 var y = 10;
+
+
+//// [/src/outFile.d.ts]
+declare const x = 10;
+declare const y = 10;
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -87,12 +86,11 @@ var y = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: error and enable declarationMap
+
 Input::
 //// [/src/project/a.ts]
 const x: 20 = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --declarationMap
@@ -168,27 +166,23 @@ Found 1 error in src/project/a.ts[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: fix error declarationMap
+
 Input::
 //// [/src/project/a.ts]
 const x = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --declarationMap
 Output::
 
 
+//// [/src/outFile.js] file written with same contents
 //// [/src/outFile.d.ts]
 declare const x = 10;
 declare const y = 10;
 //# sourceMappingURL=outFile.d.ts.map
 
-//// [/src/outFile.d.ts.map]
-{"version":3,"file":"outFile.d.ts","sourceRoot":"","sources":["project/a.ts","project/b.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC;ACAb,QAAA,MAAM,CAAC,KAAK,CAAC"}
-
-//// [/src/outFile.js] file written with same contents
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","2026006654-const y = 10;"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"-2781996726-declare const x = 10;\ndeclare const y = 10;\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
@@ -226,6 +220,9 @@ declare const y = 10;
   "version": "FakeTSVersion",
   "size": 866
 }
+
+//// [/src/outFile.d.ts.map]
+{"version":3,"file":"outFile.d.ts","sourceRoot":"","sources":["project/a.ts","project/b.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC;ACAb,QAAA,MAAM,CAAC,KAAK,CAAC"}
 
 
 exitCode:: ExitStatus.Success

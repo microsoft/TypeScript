@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -24,13 +24,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -72,17 +71,16 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'a.js' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -114,20 +112,19 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -158,18 +155,17 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (used version)
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'a.js' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -201,28 +197,27 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'a.js' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
 
 
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
 var a = "hello";
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -246,37 +241,35 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/a.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output 'a.js'
 
 
 
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -308,22 +301,23 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/a.js' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'a.js' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
 
 
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
 var a = /** @class */ (function () {
     function class_1() {
@@ -333,8 +327,6 @@ var a = /** @class */ (function () {
 }());
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -358,17 +350,16 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/a.js'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output 'a.js'
 
 
 

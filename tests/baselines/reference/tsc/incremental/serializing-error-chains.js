@@ -1,20 +1,14 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-interface ReadonlyArray<T> { readonly length: number }
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true,
+    "jsx": "react",
+    "module": "esnext"
+  }
+}
 
 //// [/src/project/index.tsx]
 declare namespace JSX {
@@ -31,16 +25,21 @@ declare function Component(props: { children?: number }): any;
     <div />
 </Component>)
 
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true,
-    "strict": true,
-    "jsx": "react",
-    "module": "esnext"
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+interface ReadonlyArray<T> { readonly length: number }
 
 
 /home/src/tslibs/ts/lib/tsc.js -p src/project
@@ -167,10 +166,9 @@ Found 3 errors in the same file, starting at: src/project/index.tsx[90m:10[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::

@@ -1,19 +1,14 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../dev-build.js",
+    "module": "amd",
+    "declaration": true,
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
@@ -31,16 +26,20 @@ console.log("hi");
 export { }
 
 
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-  "compilerOptions": {
-    "outFile": "../dev-build.js",
-    "module": "amd",
-    "declaration": true,
-    "noEmitOnError": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js 
@@ -81,11 +80,10 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
@@ -126,8 +124,8 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -135,27 +133,8 @@ export const a = class { p = 10; };
 
 
 
-
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
-
-
-//// [/user/username/projects/dev-build.d.ts]
-declare module "shared/types/db" {
-    export interface A {
-        name: string;
-    }
-}
-declare module "src/main" {
-    export const a: {
-        new (): {
-            p: number;
-        };
-    };
-}
-declare module "src/other" {
-    export {};
-}
 
 
 //// [/user/username/projects/dev-build.js]
@@ -181,6 +160,24 @@ define("src/other", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/user/username/projects/dev-build.d.ts]
+declare module "shared/types/db" {
+    export interface A {
+        name: string;
+    }
+}
+declare module "src/main" {
+    export const a: {
+        new (): {
+            p: number;
+        };
+    };
+}
+declare module "src/other" {
+    export {};
+}
+
+
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -203,17 +200,16 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/user/username/projects/dev-build.d.ts] file written with same contents
 //// [/user/username/projects/dev-build.js] file written with same contents
+//// [/user/username/projects/dev-build.d.ts] file written with same contents
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",

@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
     TscWatchCompileChange,

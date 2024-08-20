@@ -1,48 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/project/ky.d.ts]
-type KyInstance = {
-    extend(options: Record<string,unknown>): KyInstance;
-}
-declare const ky: KyInstance;
-export default ky;
-
-
-//// [/src/project/src/index.ts]
-import ky from 'ky';
-export const api = ky.extend({});
-
-
 //// [/src/project/tsconfig.json]
 {
   "compilerOptions": {
@@ -58,6 +15,33 @@ export const api = ky.extend({});
   ]
 }
 
+//// [/src/project/src/index.ts]
+import ky from 'ky';
+export const api = ky.extend({});
+
+
+//// [/src/project/ky.d.ts]
+type KyInstance = {
+    extend(options: Record<string,unknown>): KyInstance;
+}
+declare const ky: KyInstance;
+export default ky;
+
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
@@ -145,10 +129,9 @@ define("index", ["require", "exports", "ky"], function (require, exports, ky_1) 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::

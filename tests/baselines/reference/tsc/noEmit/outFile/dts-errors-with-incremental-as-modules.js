@@ -1,10 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { private p = 10; };
-
-//// [/home/src/projects/project/b.ts]
-export const b = 10;
 
 //// [/home/src/projects/project/tsconfig.json]
 {
@@ -31,22 +28,24 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/projects/project/b.ts]
+export const b = 10;
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -140,25 +139,24 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -188,12 +186,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -267,10 +264,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -302,37 +298,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-
-
-//// [/home/src/projects/outFile.d.ts]
-declare module "a" {
-    export const a = "hello";
-}
-declare module "b" {
-    export const b = 10;
-}
-
-
-//// [/home/src/projects/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = void 0;
-    exports.a = "hello";
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-});
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -369,6 +340,30 @@ define("b", ["require", "exports"], function (require, exports) {
   "size": 717
 }
 
+//// [/home/src/projects/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = "hello";
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+});
+
+
+//// [/home/src/projects/outFile.d.ts]
+declare module "a" {
+    export const a = "hello";
+}
+declare module "b" {
+    export const b = 10;
+}
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts",
@@ -394,10 +389,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -429,28 +423,27 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { private p = 10; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -544,46 +537,25 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-
-
-//// [/home/src/projects/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
-            this.p = 10;
-        }
-        return class_1;
-    }());
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-});
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -643,6 +615,26 @@ define("b", ["require", "exports"], function (require, exports) {
   "size": 1038
 }
 
+//// [/home/src/projects/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = /** @class */ (function () {
+        function class_1() {
+            this.p = 10;
+        }
+        return class_1;
+    }());
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+});
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts",
@@ -668,25 +660,24 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 

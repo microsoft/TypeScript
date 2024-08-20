@@ -1,35 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.es2015.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.d.ts]
 declare const a = "hello";
 
@@ -47,18 +17,34 @@ const b = 10;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/src/b.d.ts]
-declare const b = 10;
-
+//// [/home/src/tslibs/ts/lib/lib.es2015.d.ts] *Lib*
 
 //// [/src/b.js]
 var b = 10;
+
+
+//// [/src/b.d.ts]
+declare const b = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -150,10 +136,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noLib
 Output::
@@ -183,8 +168,8 @@ Found 9 errors in the same file, starting at: src/tsconfig.json[90m:5[0m
 
 
 
-//// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["./a.d.ts","./b.ts"],"fileInfos":[{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true}],"root":[1,2],"options":{"declaration":true},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 

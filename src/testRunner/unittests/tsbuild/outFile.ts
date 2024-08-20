@@ -1,31 +1,20 @@
-import * as fakes from "../../_namespaces/fakes.js";
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
-import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
+import {
+    createSolutionBuilderHostForBaseline,
+    solutionBuildWithBaseline,
+    verifySolutionBuilderWithDifferentTsVersion,
+} from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
-    TscCompileSystem,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
-import { tscTypeScriptTestLocation } from "../helpers/virtualFileSystemWithWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: outFile::", () => {
-    let outFileFs: vfs.FileSystem;
-    let outFileWithBuildFs: vfs.FileSystem;
-    after(() => {
-        outFileFs = undefined!;
-        outFileWithBuildFs = undefined!;
-    });
-
-    function getOutFileFs() {
-        return outFileFs ??= loadProjectFromFiles({
+    function getOutFileSys() {
+        return loadProjectFromFiles({
             "/src/first/first_PART1.ts": dedent`
                 interface TheFirst {
                     none: any;
@@ -126,21 +115,16 @@ describe("unittests:: tsbuild:: outFile::", () => {
         });
     }
 
-    function getOutFileFsAfterBuild() {
-        if (outFileWithBuildFs) return outFileWithBuildFs;
-        const fs = getOutFileFs().shadow();
-        const sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation });
-        const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
-        const builder = ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
-        builder.build();
-        fs.makeReadonly();
-        return outFileWithBuildFs = fs;
+    function getOutFileSysAfterBuild() {
+        const sys = getOutFileSys();
+        solutionBuildWithBaseline(sys, ["/src/third"], { dry: false, force: false, verbose: true });
+        return sys;
     }
 
     // Verify initial + incremental edits
     verifyTsc({
         subScenario: "baseline sectioned sourcemaps",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         scenario: "outFile",
         commandLineArgs: ["--b", "/src/third", "--verbose", "--explainFiles"],
         baselineSourceMap: true,
@@ -148,11 +132,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
         edits: [
             {
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
+                edit: sys => sys.replaceFileText("/src/first/first_PART1.ts", "Hello", "Hola"),
             },
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
             },
         ],
     });
@@ -160,37 +144,36 @@ describe("unittests:: tsbuild:: outFile::", () => {
     // Verify baseline with build info + dts unChanged
     verifyTsc({
         subScenario: "when final project is not composite but uses project references",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         scenario: "outFile",
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         baselineSourceMap: true,
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
         edits: [{
             caption: "incremental-declaration-doesnt-change",
-            edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+            edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
         }],
     });
 
     // Verify baseline with build info
     verifyTsc({
         subScenario: "when final project is not composite but incremental",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         scenario: "outFile",
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         baselineSourceMap: true,
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
+        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
     });
 
     // Verify baseline with build info
     verifyTsc({
         subScenario: "when final project specifies tsBuildInfoFile",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         scenario: "outFile",
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         baselineSourceMap: true,
-        modifyFs: fs =>
-            replaceText(
-                fs,
+        modifySystem: sys =>
+            sys.replaceFileText(
                 "/src/third/tsconfig.json",
                 `"composite": true,`,
                 `"composite": true,
@@ -201,7 +184,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "clean projects",
-        fs: getOutFileFsAfterBuild,
+        sys: getOutFileSysAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--clean"],
         edits: noChangeOnlyRuns,
     });
@@ -209,45 +192,38 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "verify buildInfo absence results in new build",
-        fs: getOutFileFsAfterBuild,
+        sys: getOutFileSysAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifyFs: fs => fs.unlinkSync("/src/first/bin/first-output.tsbuildinfo"),
+        modifySystem: sys => sys.deleteFile("/src/first/bin/first-output.tsbuildinfo"),
     });
 
     verifyTsc({
         scenario: "outFile",
         subScenario: "tsbuildinfo is not generated when incremental is set to false",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
     });
 
-    verifyTsc({
+    verifySolutionBuilderWithDifferentTsVersion({
         scenario: "outFile",
         subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
-        fs: getOutFileFsAfterBuild,
+        sys: getOutFileSysAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
-        compile: sys => {
-            // Buildinfo will have version which does not match with current ts version
-            const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-            const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
-            sys.exit(builder.build());
-            return buildHost.getPrograms;
-        },
-    });
+    }, ["/src/third"]);
 
     verifyTsc({
         scenario: "outFile",
         subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         // Make non composite third project
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
         // Build with command line incremental
         commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
         edits: [
             {
                 caption: "Make non incremental build with change in file that doesnt affect dts",
-                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
                 discrepancyExplanation: () => [
                     "Clean build is non incremental so it will have non incremental tsbuildInfo for third project",
@@ -256,7 +232,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             },
             {
                 caption: "Make incremental build with change in file that doesnt affect dts",
-                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
             },
         ],
@@ -265,15 +241,12 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "when input file text does not change but its modified time changes",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         edits: [
             {
                 caption: "upstream project changes without changing file text",
-                edit: fs => {
-                    const time = new Date(fs.time());
-                    fs.utimesSync("/src/first/first_PART1.ts", time, time);
-                },
+                edit: sys => sys.setModifiedTime("/src/first/first_PART1.ts", sys.now()),
             },
         ],
     });
@@ -281,7 +254,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "builds till project specified",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         commandLineArgs: ["--build", "/src/second/tsconfig.json"],
         compile: sys => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
@@ -294,7 +267,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "cleans till project specified",
-        fs: getOutFileFsAfterBuild,
+        sys: getOutFileSysAfterBuild,
         commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
         compile: sys => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
@@ -307,18 +280,18 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyTsc({
         scenario: "outFile",
         subScenario: "non module projects without prepend",
-        fs: getOutFileFs,
+        sys: getOutFileSys,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifyFs: fs => {
+        modifySystem: sys => {
             // Non Modules
-            replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, "/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
 
             // Own file emit
-            replaceText(fs, "/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
-            replaceText(fs, "/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
-            replaceText(fs, "/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
+            sys.replaceFileText("/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
+            sys.replaceFileText("/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
+            sys.replaceFileText("/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
         },
     });
 });

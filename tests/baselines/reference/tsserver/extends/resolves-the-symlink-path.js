@@ -1,4 +1,4 @@
-currentDirectory:: /users/user/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json]

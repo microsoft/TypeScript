@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export const a = class { private p = 10; };
 
@@ -30,6 +15,20 @@ export const b = 10;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -90,10 +89,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -134,16 +132,30 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
+
+
+//// [/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = "hello";
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+});
 
 
 //// [/outFile.d.ts]
@@ -155,21 +167,6 @@ declare module "b" {
 }
 
 
-//// [/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = void 0;
-    exports.a = "hello";
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-});
-
-
 
 Program root files: [
   "/src/a.ts",
@@ -191,17 +188,16 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -223,17 +219,16 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -254,17 +249,16 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -284,18 +278,17 @@ Program files::
 /src/b.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -316,13 +309,12 @@ Program files::
 /src/b.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -383,10 +375,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -427,10 +418,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -470,19 +460,17 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -498,6 +486,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -519,17 +508,16 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -550,12 +538,11 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
@@ -568,6 +555,27 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
+
+
+//// [/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = "hello";
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+});
+define("c", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = "hello";
+});
 
 
 //// [/outFile.d.ts]
@@ -582,27 +590,6 @@ declare module "c" {
 }
 
 
-//// [/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = void 0;
-    exports.a = "hello";
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-});
-define("c", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = "hello";
-});
-
-
 
 Program root files: [
   "/src/a.ts",
@@ -625,12 +612,11 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -699,19 +685,17 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -733,6 +717,7 @@ define("c", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -756,10 +741,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -773,8 +757,8 @@ Found 1 error in src/c.ts[90m:1[0m
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -797,17 +781,16 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -831,10 +814,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -848,8 +830,8 @@ Found 1 error in src/c.ts[90m:1[0m
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",

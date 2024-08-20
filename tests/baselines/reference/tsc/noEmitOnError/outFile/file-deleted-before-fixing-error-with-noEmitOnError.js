@@ -1,5 +1,20 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js",
+    "module": "amd",
+    "noEmitOnError": true
+  }
+}
+
+//// [/src/project/file1.ts]
+export const x: 30 = "hello";
+
+//// [/src/project/file2.ts]
+export class D { }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,22 +29,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/file1.ts]
-export const x: 30 = "hello";
-
-//// [/src/project/file2.ts]
-export class D { }
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "outFile": "../outFile.js",
-    "module": "amd",
-    "noEmitOnError": true
-  }
-}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project -i
@@ -124,11 +123,10 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: delete file without error
-Input::
-//// [/src/project/file2.ts] unlink
 
+Input::
+//// [/src/project/file2.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project -i
 Output::

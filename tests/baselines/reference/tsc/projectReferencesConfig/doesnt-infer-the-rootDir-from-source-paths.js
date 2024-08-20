@@ -1,8 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/alpha/src/a.ts]
-export const m: number = 3;
-
 //// [/alpha/tsconfig.json]
 {
   "compilerOptions": {
@@ -11,6 +8,9 @@ export const m: number = 3;
   },
   "references": []
 }
+
+//// [/alpha/src/a.ts]
+export const m: number = 3;
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,13 +28,8 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --p /alpha/tsconfig.json
 Output::
-
-
-//// [/alpha/bin/src/a.d.ts]
-export declare const m: number;
 
 
 //// [/alpha/bin/src/a.js]
@@ -42,6 +37,10 @@ export declare const m: number;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 exports.m = 3;
+
+
+//// [/alpha/bin/src/a.d.ts]
+export declare const m: number;
 
 
 //// [/alpha/bin/tsconfig.tsbuildinfo]

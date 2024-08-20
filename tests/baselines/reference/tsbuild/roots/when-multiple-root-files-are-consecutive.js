@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/file1.ts]
 export const x = "hello";
 
@@ -37,6 +22,20 @@ export const y = "world";
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
@@ -50,10 +49,6 @@ Output::
 
 
 
-//// [/src/file1.d.ts]
-export declare const x = "hello";
-
-
 //// [/src/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -61,8 +56,8 @@ exports.x = void 0;
 exports.x = "hello";
 
 
-//// [/src/file2.d.ts]
-export declare const y = "world";
+//// [/src/file1.d.ts]
+export declare const x = "hello";
 
 
 //// [/src/file2.js]
@@ -72,7 +67,7 @@ exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/file3.d.ts]
+//// [/src/file2.d.ts]
 export declare const y = "world";
 
 
@@ -83,7 +78,7 @@ exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/file4.d.ts]
+//// [/src/file3.d.ts]
 export declare const y = "world";
 
 
@@ -92,6 +87,10 @@ export declare const y = "world";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = "world";
+
+
+//// [/src/file4.d.ts]
+export declare const y = "world";
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -174,13 +173,12 @@ exports.y = "world";
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete file1
-Input::
-//// [/src/file1.d.ts] unlink
-//// [/src/file1.js] unlink
-//// [/src/file1.ts] unlink
 
+Input::
+//// [/src/file1.ts] deleted
+//// [/src/file1.js] deleted
+//// [/src/file1.d.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::

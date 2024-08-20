@@ -1,4 +1,4 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { symbolLibContent } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
@@ -8,16 +8,16 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects and emits them correctly`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
-                "/src/common/nominal.js": Utils.dedent`
+                "/src/common/nominal.js": dedent`
                     /**
                      * @template T, Name
                      * @typedef {T & {[Symbol.species]: Name}} Nominal
                      */
                     module.exports = {};
                     `,
-                "/src/common/tsconfig.json": Utils.dedent`
+                "/src/common/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -25,14 +25,14 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         },
                         "include": ["nominal.js"]
                     }`,
-                "/src/sub-project/index.js": Utils.dedent`
+                "/src/sub-project/index.js": dedent`
                     import { Nominal } from '../common/nominal';
 
                     /**
                      * @typedef {Nominal<string, 'MyNominal'>} MyNominal
                      */
                     `,
-                "/src/sub-project/tsconfig.json": Utils.dedent`
+                "/src/sub-project/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -43,7 +43,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": ["./index.js"]
                     }`,
-                "/src/sub-project-2/index.js": Utils.dedent`
+                "/src/sub-project-2/index.js": dedent`
                     import { MyNominal } from '../sub-project/index';
 
                     const variable = {
@@ -57,7 +57,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         return 'key';
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": Utils.dedent`
+                "/src/sub-project-2/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -68,7 +68,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": ["./index.js"]
                     }`,
-                "/src/tsconfig.json": Utils.dedent`
+                "/src/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "composite": true
@@ -79,7 +79,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": []
                     }`,
-                "/src/tsconfig.base.json": Utils.dedent`
+                "/src/tsconfig.base.json": dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
@@ -98,17 +98,17 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
-                "/src/common/obj.json": Utils.dedent`
+                "/src/common/obj.json": dedent`
                     {
                         "val": 42
                     }`,
-                "/src/common/index.ts": Utils.dedent`
+                "/src/common/index.ts": dedent`
                     import x = require("./obj.json");
                     export = x;
                     `,
-                "/src/common/tsconfig.json": Utils.dedent`
+                "/src/common/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -117,12 +117,12 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         },
                         "include": ["index.ts", "obj.json"]
                     }`,
-                "/src/sub-project/index.js": Utils.dedent`
+                "/src/sub-project/index.js": dedent`
                     import mod from '../common';
 
                     export const m = mod;
                     `,
-                "/src/sub-project/tsconfig.json": Utils.dedent`
+                "/src/sub-project/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -133,7 +133,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": ["./index.js"]
                     }`,
-                "/src/sub-project-2/index.js": Utils.dedent`
+                "/src/sub-project-2/index.js": dedent`
                     import { m } from '../sub-project/index';
 
                     const variable = {
@@ -144,7 +144,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         return variable;
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": Utils.dedent`
+                "/src/sub-project-2/tsconfig.json": dedent`
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
@@ -155,7 +155,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": ["./index.js"]
                     }`,
-                "/src/tsconfig.json": Utils.dedent`
+                "/src/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "composite": true
@@ -166,7 +166,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         ],
                         "include": []
                     }`,
-                "/src/tsconfig.base.json": Utils.dedent`
+                "/src/tsconfig.base.json": dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,

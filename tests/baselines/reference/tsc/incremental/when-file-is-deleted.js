@@ -1,5 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "outDir"
+  }
+}
+
+//// [/src/project/file1.ts]
+export class  C { }
+
+//// [/src/project/file2.ts]
+export class D { }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,29 +29,9 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/file1.ts]
-export class  C { }
-
-//// [/src/project/file2.ts]
-export class D { }
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "outDir"
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-
-
-//// [/src/project/outDir/file1.d.ts]
-export declare class C {
-}
 
 
 //// [/src/project/outDir/file1.js]
@@ -52,8 +46,8 @@ var C = /** @class */ (function () {
 exports.C = C;
 
 
-//// [/src/project/outDir/file2.d.ts]
-export declare class D {
+//// [/src/project/outDir/file1.d.ts]
+export declare class C {
 }
 
 
@@ -67,6 +61,11 @@ var D = /** @class */ (function () {
     return D;
 }());
 exports.D = D;
+
+
+//// [/src/project/outDir/file2.d.ts]
+export declare class D {
+}
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
@@ -128,11 +127,10 @@ exports.D = D;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete file with imports
-Input::
-//// [/src/project/file2.ts] unlink
 
+Input::
+//// [/src/project/file2.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::

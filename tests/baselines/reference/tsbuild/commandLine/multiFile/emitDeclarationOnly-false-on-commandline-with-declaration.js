@@ -1,19 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project1/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
 
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;
@@ -26,23 +19,6 @@ import { a } from "./a";export const c = a;
 
 //// [/src/project1/src/d.ts]
 import { b } from "./b";export const d = b;
-
-//// [/src/project1/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true,
-    "emitDeclarationOnly": true
-  }
-}
-
-//// [/src/project2/src/e.ts]
-export const e = 10;
-
-//// [/src/project2/src/f.ts]
-import { a } from "../../project1/src/a"; export const f = a;
-
-//// [/src/project2/src/g.ts]
-import { b } from "../../project1/src/b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
 {
@@ -57,6 +33,29 @@ import { b } from "../../project1/src/b"; export const g = b;
   ]
 }
 
+//// [/src/project2/src/e.ts]
+export const e = 10;
+
+//// [/src/project2/src/f.ts]
+import { a } from "../../project1/src/a"; export const f = a;
+
+//// [/src/project2/src/g.ts]
+import { b } from "../../project1/src/b"; export const g = b;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -212,10 +211,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
@@ -281,12 +279,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -395,10 +392,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: emit js files
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
 Output::
@@ -429,6 +425,16 @@ Found 1 error.
 
 
 //// [/src/project1/src/a.d.ts] file written with same contents
+//// [/src/project1/src/b.d.ts] file written with same contents
+//// [/src/project1/src/c.d.ts] file written with same contents
+//// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/e.d.ts] file written with same contents
+//// [/src/project2/src/f.d.ts] file written with same contents
+//// [/src/project2/src/g.d.ts] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/src/project1/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -438,7 +444,6 @@ var aLocal = 10;
 var aa = 10;
 
 
-//// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -447,7 +452,6 @@ exports.b = 10;
 var bLocal = 10;
 
 
-//// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -456,7 +460,6 @@ var a_1 = require("./a");
 exports.c = a_1.a;
 
 
-//// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -465,9 +468,6 @@ var b_1 = require("./b");
 exports.d = b_1.b;
 
 
-//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/project2/src/e.d.ts] file written with same contents
 //// [/src/project2/src/e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -475,7 +475,6 @@ exports.e = void 0;
 exports.e = 10;
 
 
-//// [/src/project2/src/f.d.ts] file written with same contents
 //// [/src/project2/src/f.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -484,7 +483,6 @@ var a_1 = require("../../project1/src/a");
 exports.f = a_1.a;
 
 
-//// [/src/project2/src/g.d.ts] file written with same contents
 //// [/src/project2/src/g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -493,8 +491,6 @@ var b_1 = require("../../project1/src/b");
 exports.g = b_1.b;
 
 
-//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -562,10 +558,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
@@ -631,10 +626,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no change run with js emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
 Output::
@@ -663,13 +657,13 @@ Found 1 error.
 
 
 //// [/src/project2/src/e.d.ts] file written with same contents
-//// [/src/project2/src/e.js] file written with same contents
 //// [/src/project2/src/f.d.ts] file written with same contents
-//// [/src/project2/src/f.js] file written with same contents
 //// [/src/project2/src/g.d.ts] file written with same contents
-//// [/src/project2/src/g.js] file written with same contents
 //// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/e.js] file written with same contents
+//// [/src/project2/src/f.js] file written with same contents
+//// [/src/project2/src/g.js] file written with same contents
 
 Program root files: [
   "/src/project2/src/e.ts",
@@ -703,12 +697,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: js emit with change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const blocal = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
@@ -740,8 +733,17 @@ Found 1 error.
 
 
 //// [/src/project1/src/a.d.ts] file written with same contents
-//// [/src/project1/src/a.js] file written with same contents
 //// [/src/project1/src/b.d.ts] file written with same contents
+//// [/src/project1/src/c.d.ts] file written with same contents
+//// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/e.d.ts] file written with same contents
+//// [/src/project2/src/f.d.ts] file written with same contents
+//// [/src/project2/src/g.d.ts] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project1/src/a.js] file written with same contents
 //// [/src/project1/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -751,20 +753,11 @@ var bLocal = 10;
 var blocal = 10;
 
 
-//// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/c.js] file written with same contents
-//// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/d.js] file written with same contents
-//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/project2/src/e.d.ts] file written with same contents
 //// [/src/project2/src/e.js] file written with same contents
-//// [/src/project2/src/f.d.ts] file written with same contents
 //// [/src/project2/src/f.js] file written with same contents
-//// [/src/project2/src/g.d.ts] file written with same contents
 //// [/src/project2/src/g.js] file written with same contents
-//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",

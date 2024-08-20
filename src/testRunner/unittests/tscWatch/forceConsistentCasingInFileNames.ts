@@ -1,6 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { getFsContentsForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
+import { getSysForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
@@ -403,11 +403,7 @@ a;b;
         scenario: "forceConsistentCasingInFileNames",
         subScenario: "when file is included from multiple places with different casing",
         commandLineArgs: ["-w", "--explainFiles"],
-        sys: () =>
-            createWatchedSystem(
-                getFsContentsForMultipleErrorsForceConsistentCasingInFileNames(),
-                { currentDirectory: "/home/src/projects/project" },
-            ),
+        sys: getSysForMultipleErrorsForceConsistentCasingInFileNames,
         edits: [
             {
                 caption: "change to reuse imports",

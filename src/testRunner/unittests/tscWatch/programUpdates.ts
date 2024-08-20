@@ -1,10 +1,12 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { commandLineCallbacks } from "../helpers/baseline.js";
+import {
+    commandLineCallbacks,
+    createBaseline,
+} from "../helpers/baseline.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     noopChange,
     runWatchBaseline,
@@ -729,7 +731,7 @@ export class A {
 
         baseline.push(`First program is not updated:: ${getPrograms() === ts.emptyArray}`);
         baseline.push(`Second program is not updated:: ${getPrograms2() === ts.emptyArray}`);
-        Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
+        Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
     });
 
     verifyTscWatch({

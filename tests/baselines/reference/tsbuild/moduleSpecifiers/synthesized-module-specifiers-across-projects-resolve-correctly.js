@@ -1,34 +1,25 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/src-types/index.ts]
+export * from './dogconfig.js';
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/src-types/dogconfig.ts]
+export interface DogConfig {
+    name: string;
+}
+
+//// [/src/src-dogs/index.ts]
+export * from 'src-types';
+export * from './lassie/lassiedog.js';
+
+
+//// [/src/src-dogs/dogconfig.ts]
+import { DogConfig } from 'src-types';
+
+export const DOG_CONFIG: DogConfig = {
+    name: 'Default dog',
+};
+
 
 //// [/src/src-dogs/dog.ts]
 import { DogConfig } from 'src-types';
@@ -42,25 +33,6 @@ export abstract class Dog {
 }
 
 
-//// [/src/src-dogs/dogconfig.ts]
-import { DogConfig } from 'src-types';
-
-export const DOG_CONFIG: DogConfig = {
-    name: 'Default dog',
-};
-
-
-//// [/src/src-dogs/index.ts]
-export * from 'src-types';
-export * from './lassie/lassiedog.js';
-
-
-//// [/src/src-dogs/lassie/lassieconfig.ts]
-import { DogConfig } from 'src-types';
-
-export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
-
-
 //// [/src/src-dogs/lassie/lassiedog.ts]
 import { Dog } from '../dog.js';
 import { LASSIE_CONFIG } from './lassieconfig.js';
@@ -70,37 +42,27 @@ export class LassieDog extends Dog {
 }
 
 
-//// [/src/src-dogs/node_modules] symlink(/src)
-//// [/src/src-dogs/package.json]
+//// [/src/src-dogs/lassie/lassieconfig.ts]
+import { DogConfig } from 'src-types';
+
+export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
+
+
+//// [/src/tsconfig-base.json]
+{
+    "compilerOptions": {
+        "declaration": true,
+        "module": "node16"
+    }
+}
+
+//// [/src/src-types/package.json]
 {
     "type": "module",
     "exports": "./index.js"
 }
 
-//// [/src/src-dogs/tsconfig.json]
-{
-    "extends": "../tsconfig-base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../src-types" }
-    ],
-    "include": [
-        "**/*"
-    ]
-}
-
-//// [/src/src-types/dogconfig.ts]
-export interface DogConfig {
-    name: string;
-}
-
-//// [/src/src-types/index.ts]
-export * from './dogconfig.js';
-
-//// [/src/src-types/node_modules] symlink(/src)
-//// [/src/src-types/package.json]
+//// [/src/src-dogs/package.json]
 {
     "type": "module",
     "exports": "./index.js"
@@ -117,14 +79,38 @@ export * from './dogconfig.js';
     ]
 }
 
-//// [/src/tsconfig-base.json]
+//// [/src/src-dogs/tsconfig.json]
 {
+    "extends": "../tsconfig-base.json",
     "compilerOptions": {
-        "declaration": true,
-        "module": "node16"
-    }
+        "composite": true
+    },
+    "references": [
+        { "path": "../src-types" }
+    ],
+    "include": [
+        "**/*"
+    ]
 }
 
+//// [/src/src-types/node_modules] symlink(/src)
+
+//// [/src/src-dogs/node_modules] symlink(/src)
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b src/src-types src/src-dogs --verbose
@@ -143,11 +129,108 @@ Output::
 
 
 
-//// [/src/src-dogs/dog.d.ts]
-import { DogConfig } from 'src-types';
-export declare abstract class Dog {
-    static getCapabilities(): DogConfig;
+//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+
+//// [/src/src-types/dogconfig.js]
+export {};
+
+
+//// [/src/src-types/dogconfig.d.ts]
+export interface DogConfig {
+    name: string;
 }
+
+
+//// [/src/src-types/index.js]
+export * from './dogconfig.js';
+
+
+//// [/src/src-types/index.d.ts]
+export * from './dogconfig.js';
+
+
+//// [/src/src-types/tsconfig.tsbuildinfo]
+{"fileNames":["../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","./dogconfig.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5575793279-export interface DogConfig {\n    name: string;\n}","signature":"-3612551765-export interface DogConfig {\n    name: string;\n}\n","impliedFormat":99},{"version":"-6189272282-export * from './dogconfig.js';","signature":"-6677489680-export * from './dogconfig.js';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+
+//// [/src/src-types/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts",
+    "./dogconfig.ts",
+    "./index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./dogconfig.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./dogconfig.ts": {
+      "original": {
+        "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
+        "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
+        "impliedFormat": 99
+      },
+      "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
+      "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
+      "impliedFormat": "esnext"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "-6189272282-export * from './dogconfig.js';",
+        "signature": "-6677489680-export * from './dogconfig.js';\n",
+        "impliedFormat": 99
+      },
+      "version": "-6189272282-export * from './dogconfig.js';",
+      "signature": "-6677489680-export * from './dogconfig.js';\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./dogconfig.ts"
+    ],
+    [
+      3,
+      "./index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "module": 100
+  },
+  "referencedMap": {
+    "./index.ts": [
+      "./dogconfig.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./index.d.ts",
+  "version": "FakeTSVersion",
+  "size": 1102
+}
+
+//// [/src/src-dogs/dogconfig.js]
+export const DOG_CONFIG = {
+    name: 'Default dog',
+};
+
+
+//// [/src/src-dogs/dogconfig.d.ts]
+import { DogConfig } from 'src-types';
+export declare const DOG_CONFIG: DogConfig;
 
 
 //// [/src/src-dogs/dog.js]
@@ -159,25 +242,15 @@ export class Dog {
 }
 
 
-//// [/src/src-dogs/dogconfig.d.ts]
+//// [/src/src-dogs/dog.d.ts]
 import { DogConfig } from 'src-types';
-export declare const DOG_CONFIG: DogConfig;
+export declare abstract class Dog {
+    static getCapabilities(): DogConfig;
+}
 
 
-//// [/src/src-dogs/dogconfig.js]
-export const DOG_CONFIG = {
-    name: 'Default dog',
-};
-
-
-//// [/src/src-dogs/index.d.ts]
-export * from 'src-types';
-export * from './lassie/lassiedog.js';
-
-
-//// [/src/src-dogs/index.js]
-export * from 'src-types';
-export * from './lassie/lassiedog.js';
+//// [/src/src-dogs/lassie/lassieconfig.js]
+export const LASSIE_CONFIG = { name: 'Lassie' };
 
 
 //// [/src/src-dogs/lassie/lassieconfig.d.ts]
@@ -185,8 +258,12 @@ import { DogConfig } from 'src-types';
 export declare const LASSIE_CONFIG: DogConfig;
 
 
-//// [/src/src-dogs/lassie/lassieconfig.js]
-export const LASSIE_CONFIG = { name: 'Lassie' };
+//// [/src/src-dogs/lassie/lassiedog.js]
+import { Dog } from '../dog.js';
+import { LASSIE_CONFIG } from './lassieconfig.js';
+export class LassieDog extends Dog {
+    static getDogConfig = () => LASSIE_CONFIG;
+}
 
 
 //// [/src/src-dogs/lassie/lassiedog.d.ts]
@@ -196,12 +273,14 @@ export declare class LassieDog extends Dog {
 }
 
 
-//// [/src/src-dogs/lassie/lassiedog.js]
-import { Dog } from '../dog.js';
-import { LASSIE_CONFIG } from './lassieconfig.js';
-export class LassieDog extends Dog {
-    static getDogConfig = () => LASSIE_CONFIG;
-}
+//// [/src/src-dogs/index.js]
+export * from 'src-types';
+export * from './lassie/lassiedog.js';
+
+
+//// [/src/src-dogs/index.d.ts]
+export * from 'src-types';
+export * from './lassie/lassiedog.js';
 
 
 //// [/src/src-dogs/tsconfig.tsbuildinfo]
@@ -365,97 +444,6 @@ export class LassieDog extends Dog {
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
   "size": 2607
-}
-
-//// [/src/src-types/dogconfig.d.ts]
-export interface DogConfig {
-    name: string;
-}
-
-
-//// [/src/src-types/dogconfig.js]
-export {};
-
-
-//// [/src/src-types/index.d.ts]
-export * from './dogconfig.js';
-
-
-//// [/src/src-types/index.js]
-export * from './dogconfig.js';
-
-
-//// [/src/src-types/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","./dogconfig.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5575793279-export interface DogConfig {\n    name: string;\n}","signature":"-3612551765-export interface DogConfig {\n    name: string;\n}\n","impliedFormat":99},{"version":"-6189272282-export * from './dogconfig.js';","signature":"-6677489680-export * from './dogconfig.js';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
-
-//// [/src/src-types/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts",
-    "./dogconfig.ts",
-    "./index.ts"
-  ],
-  "fileIdsList": [
-    [
-      "./dogconfig.ts"
-    ]
-  ],
-  "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
-    },
-    "./dogconfig.ts": {
-      "original": {
-        "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
-        "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
-        "impliedFormat": 99
-      },
-      "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
-      "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
-      "impliedFormat": "esnext"
-    },
-    "./index.ts": {
-      "original": {
-        "version": "-6189272282-export * from './dogconfig.js';",
-        "signature": "-6677489680-export * from './dogconfig.js';\n",
-        "impliedFormat": 99
-      },
-      "version": "-6189272282-export * from './dogconfig.js';",
-      "signature": "-6677489680-export * from './dogconfig.js';\n",
-      "impliedFormat": "esnext"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./dogconfig.ts"
-    ],
-    [
-      3,
-      "./index.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "declaration": true,
-    "module": 100
-  },
-  "referencedMap": {
-    "./index.ts": [
-      "./dogconfig.ts"
-    ]
-  },
-  "latestChangedDtsFile": "./index.d.ts",
-  "version": "FakeTSVersion",
-  "size": 1102
 }
 
 

@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -22,9 +7,6 @@ declare const console: { log(msg: any): void; };
   },
   "references": []
 }
-
-//// [/src/project2/src/b.ts]
-export const b = 10;
 
 //// [/src/project2/tsconfig.json]
 {
@@ -34,8 +16,8 @@ export const b = 10;
   "references": []
 }
 
-//// [/src/project3/src/c.ts]
-export const c = 10;
+//// [/src/project2/src/b.ts]
+export const b = 10;
 
 //// [/src/project3/tsconfig.json]
 {
@@ -52,8 +34,8 @@ export const c = 10;
   ]
 }
 
-//// [/src/project4/src/d.ts]
-export const d = 10;
+//// [/src/project3/src/c.ts]
+export const c = 10;
 
 //// [/src/project4/tsconfig.json]
 {
@@ -67,6 +49,23 @@ export const d = 10;
   ]
 }
 
+//// [/src/project4/src/d.ts]
+export const d = 10;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project4 --verbose --explainFiles
@@ -103,15 +102,15 @@ src/project4/src/d.ts
   Matched by default include pattern '**/*'
 
 
-//// [/src/project2/src/b.d.ts]
-export declare const b = 10;
-
-
 //// [/src/project2/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
+
+
+//// [/src/project2/src/b.d.ts]
+export declare const b = 10;
 
 
 //// [/src/project2/tsconfig.tsbuildinfo]
@@ -156,15 +155,15 @@ exports.b = 10;
   "size": 770
 }
 
-//// [/src/project3/src/c.d.ts]
-export declare const c = 10;
-
-
 //// [/src/project3/src/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 10;
+
+
+//// [/src/project3/src/c.d.ts]
+export declare const c = 10;
 
 
 //// [/src/project3/tsconfig.tsbuildinfo]
@@ -209,15 +208,15 @@ exports.c = 10;
   "size": 770
 }
 
-//// [/src/project4/src/d.d.ts]
-export declare const d = 10;
-
-
 //// [/src/project4/src/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 exports.d = 10;
+
+
+//// [/src/project4/src/d.d.ts]
+export declare const d = 10;
 
 
 //// [/src/project4/tsconfig.tsbuildinfo]
@@ -265,12 +264,11 @@ exports.d = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: modify project3 file
+
 Input::
 //// [/src/project3/src/c.ts]
 export const cc = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project4 --verbose --explainFiles
@@ -303,15 +301,15 @@ src/project4/src/d.ts
 
 
 
-//// [/src/project3/src/c.d.ts]
-export declare const cc = 10;
-
-
 //// [/src/project3/src/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cc = void 0;
 exports.cc = 10;
+
+
+//// [/src/project3/src/c.d.ts]
+export declare const cc = 10;
 
 
 //// [/src/project3/tsconfig.tsbuildinfo]

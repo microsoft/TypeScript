@@ -1,5 +1,26 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
+  }
+}
+
+//// [/src/project/a.ts]
+export const a = 10;const aLocal = 10;
+
+//// [/src/project/b.ts]
+export const b = 10;const bLocal = 10;
+
+//// [/src/project/c.ts]
+import { a } from "./a";export const c = a;
+
+//// [/src/project/d.ts]
+import { b } from "./b";export const d = b;
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,46 +36,9 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/a.ts]
-export const a = 10;const aLocal = 10;
-
-//// [/src/project/b.ts]
-export const b = 10;const bLocal = 10;
-
-//// [/src/project/c.ts]
-import { a } from "./a";export const c = a;
-
-//// [/src/project/d.ts]
-import { b } from "./b";export const d = b;
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outFile": "../outFile.js",
-    "module": "amd"
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-
-
-//// [/src/outFile.d.ts]
-declare module "a" {
-    export const a = 10;
-}
-declare module "b" {
-    export const b = 10;
-}
-declare module "c" {
-    export const c = 10;
-}
-declare module "d" {
-    export const d = 10;
-}
 
 
 //// [/src/outFile.js]
@@ -84,6 +68,21 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     exports.d = void 0;
     exports.d = b_1.b;
 });
+
+
+//// [/src/outFile.d.ts]
+declare module "a" {
+    export const a = 10;
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c = 10;
+}
+declare module "d" {
+    export const d = 10;
+}
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -163,10 +162,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with sourceMap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --sourceMap
 Output::
@@ -200,9 +198,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     exports.d = b_1.b;
 });
 //# sourceMappingURL=outFile.js.map
-
-//// [/src/outFile.js.map]
-{"version":3,"file":"outFile.js","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAzB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAD,QAAA,CAAC,GAAG,KAAC,CAAC;;;;;;ICAN,QAAA,CAAC,GAAG,KAAC,CAAC"}
 
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"composite":true,"module":2,"outFile":"./outFile.js","sourceMap":true},"outSignature":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
@@ -249,6 +244,9 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1208
 }
 
+//// [/src/outFile.js.map]
+{"version":3,"file":"outFile.js","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAzB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAD,QAAA,CAAC,GAAG,KAAC,CAAC;;;;;;ICAN,QAAA,CAAC,GAAG,KAAC,CAAC"}
+
 
 Program root files: [
   "/src/project/a.ts",
@@ -278,10 +276,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: should re-emit only js so they dont contain sourcemap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
@@ -388,10 +385,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with declaration should not emit anything
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration
 Output::
@@ -426,10 +422,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
@@ -463,10 +458,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with declaration and declarationMap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration --declarationMap
 Output::
@@ -486,9 +480,6 @@ declare module "d" {
     export const d = 10;
 }
 //# sourceMappingURL=outFile.d.ts.map
-
-//// [/src/outFile.d.ts.map]
-{"version":3,"file":"outFile.d.ts","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICAI,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC;;;ICAnB,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC"}
 
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
@@ -536,6 +527,9 @@ declare module "d" {
   "size": 1232
 }
 
+//// [/src/outFile.d.ts.map]
+{"version":3,"file":"outFile.d.ts","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICAI,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC;;;ICAnB,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC"}
+
 
 Program root files: [
   "/src/project/a.ts",
@@ -566,10 +560,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: should re-emit only dts so they dont contain sourcemap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
@@ -662,10 +655,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with emitDeclarationOnly should not emit anything
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --emitDeclarationOnly
 Output::
@@ -700,10 +692,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
@@ -737,12 +728,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: local change
+
 Input::
 //// [/src/project/a.ts]
 export const a = 10;const aLocal = 100;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
@@ -855,10 +845,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with declaration should not emit anything
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration
 Output::
@@ -893,10 +882,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with inlineSourceMap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --inlineSourceMap
 Output::
@@ -1005,10 +993,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with sourceMap
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --sourceMap
 Output::
@@ -1042,9 +1029,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     exports.d = b_1.b;
 });
 //# sourceMappingURL=outFile.js.map
-
-//// [/src/outFile.js.map]
-{"version":3,"file":"outFile.js","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,GAAG,CAAC;;;;;;ICA1B,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAD,QAAA,CAAC,GAAG,KAAC,CAAC;;;;;;ICAN,QAAA,CAAC,GAAG,KAAC,CAAC"}
 
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"composite":true,"module":2,"outFile":"./outFile.js","sourceMap":true},"outSignature":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
@@ -1091,6 +1075,9 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1209
 }
 
+//// [/src/outFile.js.map]
+{"version":3,"file":"outFile.js","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,GAAG,CAAC;;;;;;ICA1B,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;;ICAD,QAAA,CAAC,GAAG,KAAC,CAAC;;;;;;ICAN,QAAA,CAAC,GAAG,KAAC,CAAC"}
+
 
 Program root files: [
   "/src/project/a.ts",
@@ -1120,8 +1107,8 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: declarationMap enabling
+
 Input::
 //// [/src/project/tsconfig.json]
 {
@@ -1134,27 +1121,10 @@ Input::
 }
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
 
 
-//// [/src/outFile.d.ts]
-declare module "a" {
-    export const a = 10;
-}
-declare module "b" {
-    export const b = 10;
-}
-declare module "c" {
-    export const c = 10;
-}
-declare module "d" {
-    export const d = 10;
-}
-//# sourceMappingURL=outFile.d.ts.map
-
-//// [/src/outFile.d.ts.map] file written with same contents
 //// [/src/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1183,6 +1153,21 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     exports.d = b_1.b;
 });
 
+
+//// [/src/outFile.d.ts]
+declare module "a" {
+    export const a = 10;
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c = 10;
+}
+declare module "d" {
+    export const d = 10;
+}
+//# sourceMappingURL=outFile.d.ts.map
 
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
@@ -1229,6 +1214,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1214
 }
 
+//// [/src/outFile.d.ts.map] file written with same contents
 
 Program root files: [
   "/src/project/a.ts",
@@ -1258,10 +1244,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: with sourceMap should not emit d.ts
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p /src/project --sourceMap
 Output::
@@ -1296,7 +1281,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 });
 //# sourceMappingURL=outFile.js.map
 
-//// [/src/outFile.js.map] file written with same contents
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17390360476-export const a = 10;const aLocal = 100;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./outFile.js","sourceMap":true},"outSignature":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
@@ -1343,6 +1327,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1231
 }
 
+//// [/src/outFile.js.map] file written with same contents
 
 Program root files: [
   "/src/project/a.ts",

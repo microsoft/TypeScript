@@ -1,14 +1,10 @@
 import { CompilerOptions } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
-import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import { loadProjectFromFiles } from "./vfs.js";
-import {
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
+function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
     return loadProjectFromFiles({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -39,11 +35,10 @@ export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incr
             type: "module",
             main: "./distribution/index.js",
         }),
-        [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
     });
 }
 
-export function getFsForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
+function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
     return loadProjectFromFiles({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -67,14 +62,13 @@ export function getFsForDeclarationEmitWithErrorsWithOutFile(options: CompilerOp
             declare const ky: KyInstance;
             export default ky;
         `,
-        [getTypeScriptLibTestLocation("esnext")]: libFile.content,
     });
 }
 
 export function forEachDeclarationEmitWithErrorsScenario(
     action: (
         scenarioName: (scenario: string) => string,
-        fs: () => FileSystem,
+        sys: () => TestServerHost,
     ) => void,
     withComposite: boolean,
 ) {
@@ -83,8 +77,8 @@ export function forEachDeclarationEmitWithErrorsScenario(
             action(
                 scenario => `${outFile ? "outFile" : "multiFile"}/${scenario}${incremental ? " with incremental" : ""}`,
                 () =>
-                    (outFile ? getFsForDeclarationEmitWithErrorsWithOutFile :
-                        getFsForDeclarationEmitWithErrors)(
+                    (outFile ? getSysForDeclarationEmitWithErrorsWithOutFile :
+                        getSysForDeclarationEmitWithErrors)(
                             withComposite && incremental ?
                                 { composite: true } :
                                 { declaration: true },

@@ -1,19 +1,14 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "declaration": true,
+    "incremental": true,
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
@@ -31,16 +26,20 @@ console.log("hi");
 export { }
 
 
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "./dev-build",
-    "declaration": true,
-    "incremental": true,
-    "noEmitOnError": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js 
@@ -206,10 +205,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
@@ -254,8 +252,8 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -263,50 +261,8 @@ export const a = class { p = 10; };
 
 
 
-
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
-export interface A {
-    name: string;
-}
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
-export {};
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-console.log("hi");
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
@@ -383,6 +339,47 @@ console.log("hi");
   "size": 1131
 }
 
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
+export interface A {
+    name: string;
+}
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
+export declare const a: {
+    new (): {
+        p: number;
+    };
+};
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+console.log("hi");
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
+export {};
+
+
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -411,10 +408,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::

@@ -1,17 +1,12 @@
 import { dedent } from "../../_namespaces/Utils.js";
-import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
-    let projFs: vfs.FileSystem;
-    before(() => {
-        projFs = loadProjectFromFiles({
+    function getInferredTypeFromTransitiveModuleSys() {
+        return loadProjectFromFiles({
             "/src/bar.ts": dedent`
                 interface RawAction {
                     (...args: any[]): Promise<any> | void;
@@ -63,15 +58,12 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                 },
             }),
         });
-    });
-    after(() => {
-        projFs = undefined!;
-    });
+    }
 
     verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "inferred type from transitive module",
-        fs: () => projFs,
+        sys: getInferredTypeFromTransitiveModuleSys,
         commandLineArgs: ["--b", "/src", "--verbose"],
         edits: [
             {
@@ -87,10 +79,10 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
 
     verifyTsc({
         subScenario: "inferred type from transitive module with isolatedModules",
-        fs: () => projFs,
+        sys: getInferredTypeFromTransitiveModuleSys,
         scenario: "inferredTypeFromTransitiveModule",
         commandLineArgs: ["--b", "/src", "--verbose"],
-        modifyFs: changeToIsolatedModules,
+        modifySystem: changeToIsolatedModules,
         edits: [
             {
                 caption: "incremental-declaration-changes",
@@ -106,12 +98,11 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "reports errors in files affected by change in signature with isolatedModules",
-        fs: () => projFs,
+        sys: getInferredTypeFromTransitiveModuleSys,
         commandLineArgs: ["--b", "/src", "--verbose"],
-        modifyFs: fs => {
-            changeToIsolatedModules(fs);
-            appendText(
-                fs,
+        modifySystem: sys => {
+            changeToIsolatedModules(sys);
+            sys.appendFile(
                 "/src/lazyIndex.ts",
                 `
 import { default as bar } from './bar';
@@ -133,20 +124,20 @@ bar("hello");`,
             },
             {
                 caption: "Fix Error",
-                edit: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()"),
+                edit: sys => sys.replaceFileText("/src/lazyIndex.ts", `bar("hello")`, "bar()"),
             },
         ],
     });
 });
 
-function changeToIsolatedModules(fs: vfs.FileSystem) {
-    replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
+function changeToIsolatedModules(sys: TestServerHost) {
+    sys.replaceFileText("/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
 }
 
-function changeBarParam(fs: vfs.FileSystem) {
-    replaceText(fs, "/src/bar.ts", "param: string", "");
+function changeBarParam(sys: TestServerHost) {
+    sys.replaceFileText("/src/bar.ts", "param: string", "");
 }
 
-function changeBarParamBack(fs: vfs.FileSystem) {
-    replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
+function changeBarParamBack(sys: TestServerHost) {
+    sys.replaceFileText("/src/bar.ts", "foobar()", "foobar(param: string)");
 }

@@ -1,52 +1,5 @@
 currentDirectory:: /src/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/projects/project/package.json]
-{
-  "name": "app",
-  "version": "1.0.0"
-}
-
-//// [/src/projects/project/src/fileA.ts]
-import { foo } from "./fileB.mjs";
-foo();
-
-
-//// [/src/projects/project/src/fileB.mts]
-export function foo() {}
-
-//// [/src/projects/project/src/main.ts]
-export const x = 10;
-
 //// [/src/projects/project/src/tsconfig.json]
 {
   "compilerOptions": {
@@ -62,6 +15,37 @@ export const x = 10;
   ]
 }
 
+//// [/src/projects/project/src/main.ts]
+export const x = 10;
+
+//// [/src/projects/project/src/fileA.ts]
+import { foo } from "./fileB.mjs";
+foo();
+
+
+//// [/src/projects/project/src/fileB.mts]
+export function foo() {}
+
+//// [/src/projects/project/package.json]
+{
+  "name": "app",
+  "version": "1.0.0"
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
@@ -105,8 +89,25 @@ Found 1 error in src/fileA.ts[90m:1[0m
 
 
 
-//// [/src/projects/project/src/fileA.d.ts]
-export {};
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+
+//// [/src/projects/project/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/projects/project/src/main.d.ts]
+export declare const x = 10;
+
+
+//// [/src/projects/project/src/fileB.mjs]
+export function foo() { }
+
+
+//// [/src/projects/project/src/fileB.d.mts]
+export declare function foo(): void;
 
 
 //// [/src/projects/project/src/fileA.js]
@@ -116,23 +117,8 @@ const fileB_mjs_1 = require("./fileB.mjs");
 (0, fileB_mjs_1.foo)();
 
 
-//// [/src/projects/project/src/fileB.d.mts]
-export declare function foo(): void;
-
-
-//// [/src/projects/project/src/fileB.mjs]
-export function foo() { }
-
-
-//// [/src/projects/project/src/main.d.ts]
-export declare const x = 10;
-
-
-//// [/src/projects/project/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+//// [/src/projects/project/src/fileA.d.ts]
+export {};
 
 
 //// [/src/projects/project/src/tsconfig.tsbuildinfo]
@@ -248,11 +234,10 @@ exports.x = 10;
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Delete package.json
-Input::
-//// [/src/projects/project/package.json] unlink
 
+Input::
+//// [/src/projects/project/package.json] deleted
 
 /home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
 Output::

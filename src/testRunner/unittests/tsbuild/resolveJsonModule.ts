@@ -6,10 +6,7 @@ import {
     verifyTsc,
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
-import {
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     function getProjFs(tsconfigFiles: object, additionalCompilerOptions?: CompilerOptions) {
@@ -39,20 +36,20 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
     }
 
     function verfiyJson(
-        input: Pick<VerifyTscWithEditsInput, "subScenario" | "modifyFs" | "edits"> | string,
+        input: Pick<VerifyTscWithEditsInput, "subScenario" | "modifySystem" | "edits"> | string,
         tsconfigFiles: object,
         additionalCompilerOptions?: CompilerOptions,
     ) {
         if (typeof input === "string") input = { subScenario: input };
         verifyTsc({
             scenario: "resolveJsonModule",
-            fs: () => getProjFs(tsconfigFiles, additionalCompilerOptions),
+            sys: () => getProjFs(tsconfigFiles, additionalCompilerOptions),
             commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
             ...input,
         });
         verifyTsc({
             scenario: "resolveJsonModule",
-            fs: () => getProjFs(tsconfigFiles, { composite: undefined, ...additionalCompilerOptions }),
+            sys: () => getProjFs(tsconfigFiles, { composite: undefined, ...additionalCompilerOptions }),
             commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
             ...input,
             subScenario: `${input.subScenario} non-composite`,
@@ -73,9 +70,9 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
 
     verfiyJson({
         subScenario: "include only with json not in rootDir",
-        modifyFs: fs => {
-            fs.renameSync("/src/src/hello.json", "/src/hello.json");
-            replaceText(fs, "/src/src/index.ts", "./hello.json", "../hello.json");
+        modifySystem: sys => {
+            sys.renameFile("/src/src/hello.json", "/src/hello.json");
+            sys.replaceFileText("/src/src/index.ts", "./hello.json", "../hello.json");
         },
     }, {
         include: [
@@ -85,9 +82,9 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
 
     verfiyJson({
         subScenario: "include only with json without rootDir but outside configDirectory",
-        modifyFs: fs => {
-            fs.renameSync("/src/src/hello.json", "/hello.json");
-            replaceText(fs, "/src/src/index.ts", "./hello.json", "../../hello.json");
+        modifySystem: sys => {
+            sys.renameFile("/src/src/hello.json", "/hello.json");
+            sys.replaceFileText("/src/src/index.ts", "./hello.json", "../../hello.json");
         },
     }, {
         include: [
@@ -104,9 +101,9 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
 
     verfiyJson({
         subScenario: "include of json along with other include and file name matches ts file",
-        modifyFs: fs => {
-            fs.renameSync("/src/src/hello.json", "/src/src/index.json");
-            replaceText(fs, "/src/src/index.ts", "hello.json", "index.json");
+        modifySystem: sys => {
+            sys.renameFile("/src/src/hello.json", "/src/src/index.json");
+            sys.replaceFileText("/src/src/index.ts", "hello.json", "index.json");
         },
     }, {
         include: [
@@ -156,7 +153,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
     verifyTsc({
         scenario: "resolveJsonModule",
         subScenario: "importing json module from project reference",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/strings/foo.json": jsonToReadableText({
                     foo: "bar baz",

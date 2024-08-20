@@ -1,15 +1,37 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/app/src/index.ts]
+//// [/node_modules/ambiguous-package/package.json]
+{ "name": "ambiguous-package" }
 
-                    import local from "./local"; // Error
-                    import esm from "esm-package"; // Error
-                    import referencedSource from "../../lib/src/a"; // Error
-                    import referencedDeclaration from "../../lib/dist/a"; // Error
-                    import ambiguous from "ambiguous-package"; // Ok
+//// [/node_modules/ambiguous-package/index.d.ts]
+export declare const ambiguous: number;
 
-//// [/app/src/local.ts]
-export const local = 0;
+//// [/node_modules/esm-package/package.json]
+{ "name": "esm-package", "type": "module" }
+
+//// [/node_modules/esm-package/index.d.ts]
+export declare const esm: number;
+
+//// [/lib/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "src"
+  ]
+}
+
+//// [/lib/src/a.ts]
+export const a = 0;
+
+//// [/lib/dist/a.d.ts]
+export declare const a = 0;
 
 //// [/app/tsconfig.json]
 {
@@ -29,6 +51,17 @@ export const local = 0;
   ]
 }
 
+//// [/app/src/local.ts]
+export const local = 0;
+
+//// [/app/src/index.ts]
+
+                    import local from "./local"; // Error
+                    import esm from "esm-package"; // Error
+                    import referencedSource from "../../lib/src/a"; // Error
+                    import referencedDeclaration from "../../lib/dist/a"; // Error
+                    import ambiguous from "ambiguous-package"; // Ok
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -44,40 +77,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/lib/dist/a.d.ts]
-export declare const a = 0;
-
-//// [/lib/src/a.ts]
-export const a = 0;
-
-//// [/lib/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    "module": "esnext",
-    "moduleResolution": "bundler"
-  },
-  "include": [
-    "src"
-  ]
-}
-
-//// [/node_modules/ambiguous-package/index.d.ts]
-export declare const ambiguous: number;
-
-//// [/node_modules/ambiguous-package/package.json]
-{ "name": "ambiguous-package" }
-
-//// [/node_modules/esm-package/index.d.ts]
-export declare const esm: number;
-
-//// [/node_modules/esm-package/package.json]
-{ "name": "esm-package", "type": "module" }
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --p app --pretty false
 Output::
@@ -85,12 +84,12 @@ app/src/index.ts(2,28): error TS2613: Module '"/app/src/local"' has no default e
 app/src/index.ts(3,28): error TS2613: Module '"/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/node_modules/esm-package/index"' instead?
 
 
-//// [/app/dist/index.js]
-export {};
-
-
 //// [/app/dist/local.js]
 export var local = 0;
+
+
+//// [/app/dist/index.js]
+export {};
 
 
 

@@ -1,39 +1,34 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
+    forEachLibResolutionScenario,
     getCommandLineArgsForLibResolution,
-    getFsForLibResolution,
-    getFsForLibResolutionUnknown,
+    getSysForLibResolutionUnknown,
 } from "../helpers/libraryResolution.js";
 import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import {
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
-    function verify(libRedirection?: true, withoutConfig?: true) {
-        verifyTsc({
-            scenario: "libraryResolution",
-            subScenario: `${withoutConfig ? "without" : "with"} config${libRedirection ? " with redirection" : ""}`,
-            fs: () => getFsForLibResolution(libRedirection),
-            commandLineArgs: getCommandLineArgsForLibResolution(withoutConfig),
-            baselinePrograms: true,
-        });
+    function verify(withoutConfig?: true) {
+        forEachLibResolutionScenario(/*forTsserver*/ false, withoutConfig, (subScenario, sys) =>
+            verifyTsc({
+                scenario: "libraryResolution",
+                subScenario,
+                sys,
+                commandLineArgs: getCommandLineArgsForLibResolution(withoutConfig),
+                baselinePrograms: true,
+            }));
     }
     verify();
-    verify(/*libRedirection*/ true);
-    verify(/*libRedirection*/ undefined, /*withoutConfig*/ true);
-    verify(/*libRedirection*/ true, /*withoutConfig*/ true);
+    verify(/*withoutConfig*/ true);
 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "unknown lib",
-        fs: () => getFsForLibResolutionUnknown(),
+        sys: getSysForLibResolutionUnknown,
         commandLineArgs: getCommandLineArgsForLibResolution(/*withoutConfig*/ undefined),
         baselinePrograms: true,
     });
@@ -41,7 +36,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "when noLib toggles",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/a.d.ts": `declare const a = "hello";`,
                 "/src/b.ts": `const b = 10;`,
@@ -52,7 +47,6 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6"],
                     },
                 }),
-                [getTypeScriptLibTestLocation("es2015")]: libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json"],
         edits: [
@@ -67,7 +61,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "when one of the file skips default lib inclusion",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/a.d.ts": dedent`
                     /// <reference no-default-lib="true"/>
@@ -80,7 +74,6 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6", "dom"],
                     },
                 }),
-                [getTypeScriptLibTestLocation("es2015")]: libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
         baselinePrograms: true,

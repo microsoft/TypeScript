@@ -1,5 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
-import { getFsContentsForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
+import { getSysForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
 
@@ -8,7 +8,7 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         scenario: "forceConsistentCasingInFileNames",
         subScenario: "with relative and non relative file resolutions",
         commandLineArgs: ["/src/project/src/struct.d.ts", "--forceConsistentCasingInFileNames", "--explainFiles"],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/struct.d.ts": dedent`
                     import * as xs1 from "fp-ts/lib/Struct";
@@ -24,14 +24,14 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         scenario: "forceConsistentCasingInFileNames",
         subScenario: "when file is included from multiple places with different casing",
         commandLineArgs: ["-p", "/home/src/projects/project/tsconfig.json", "--explainFiles"],
-        fs: () => loadProjectFromFiles(getFsContentsForMultipleErrorsForceConsistentCasingInFileNames()),
+        sys: getSysForMultipleErrorsForceConsistentCasingInFileNames,
     });
 
     verifyTsc({
         scenario: "forceConsistentCasingInFileNames",
         subScenario: "with type ref from file",
         commandLineArgs: ["-p", "/src/project/src", "--explainFiles", "--traceResolution"],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/fileOne.d.ts": `declare class c { }`,
                 "/src/project/src/file2.d.ts": dedent`

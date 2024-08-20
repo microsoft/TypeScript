@@ -1,10 +1,9 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "../helpers/contents.js";
+import { createBaseline } from "../helpers/baseline.js";
 import { getFsContentsForDemoProjectReferences } from "../helpers/demoProjectReferences.js";
 import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
 } from "../helpers/tscWatch.js";
@@ -12,12 +11,13 @@ import {
     createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
+    FileOrFolderOrSymLinkMap,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirect::", () => {
     interface VerifyWatchInput {
-        files: FsContents | readonly FileOrFolderOrSymLink[];
+        files: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[];
         config: string;
         subScenario: string;
     }
@@ -26,7 +26,7 @@ describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirec
         const { sys, baseline, cb, getPrograms } = createBaseline(
             createWatchedSystem(files, { currentDirectory: ts.getDirectoryPath(ts.getDirectoryPath(config)) }),
             alreadyBuilt ? (sys, originalRead) => {
-                solutionBuildWithBaseline(sys, [config], originalRead);
+                solutionBuildWithBaseline(sys, [config], /*buildOptions*/ undefined, /*versionToWrite*/ undefined, originalRead);
                 sys.clearOutput();
             } : undefined,
         );

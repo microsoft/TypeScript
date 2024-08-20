@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -27,21 +27,20 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -62,26 +61,25 @@ Program files::
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -103,14 +101,13 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
 
@@ -132,11 +129,10 @@ Program files::
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -160,23 +156,22 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-
-
-//// [/home/src/projects/outFile.d.ts]
-declare const a = "hello";
 
 
 //// [/home/src/projects/outFile.js]
 var a = "hello";
 
 
+//// [/home/src/projects/outFile.d.ts]
+declare const a = "hello";
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -194,10 +189,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -221,28 +215,27 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -264,25 +257,24 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -312,25 +304,24 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 

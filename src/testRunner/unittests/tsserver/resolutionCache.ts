@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
@@ -630,7 +630,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 }),
             }),
             "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleB.ts": dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
@@ -641,11 +641,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 }),
                 references: [{ path: "../common" }],
             }),
-            "/users/username/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/users/username/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,
@@ -662,7 +662,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 compilerOptions: { composite: true, traceResolution: true },
             }),
             "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleB.ts": dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
@@ -674,11 +674,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 },
                 references: [{ path: "../common" }],
             }),
-            "/users/username/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/users/username/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,

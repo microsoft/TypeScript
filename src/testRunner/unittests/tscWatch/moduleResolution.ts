@@ -5,12 +5,7 @@ import {
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    getFsConentsForAlternateResultAtTypesPackageJson,
-    getFsContentsForAlternateResult,
-    getFsContentsForAlternateResultDts,
-    getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult.js";
+import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
@@ -536,114 +531,17 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         ],
     });
 
-    verifyTscWatch({
-        scenario: "moduleResolution",
-        subScenario: "alternateResult",
-        sys: () =>
-            createWatchedSystem(
-                getFsContentsForAlternateResult(),
-                { currentDirectory: "/home/src/projects/project" },
-            ),
-        commandLineArgs: ["-w", "--extendedDiagnostics"],
-        edits: [
-            {
-                caption: "delete the alternateResult in @types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the alternateResult in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json from @types so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json from @types so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "delete the alternateResult in @types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-        ],
-    });
+    verifyAlternateResultScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits) =>
+            verifyTscWatch({
+                scenario: "moduleResolution",
+                subScenario,
+                sys,
+                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                edits: edits(),
+            }),
+    );
 
     verifyTscWatch({
         scenario: "moduleResolution",

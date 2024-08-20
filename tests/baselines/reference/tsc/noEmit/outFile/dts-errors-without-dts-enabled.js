@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -26,7 +26,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
 
@@ -47,11 +46,10 @@ Program files::
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -74,14 +72,13 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
 
@@ -102,11 +99,10 @@ Program files::
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -129,10 +125,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
@@ -158,10 +153,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -184,14 +178,13 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
 
@@ -213,10 +206,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
@@ -247,10 +239,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::

@@ -1,5 +1,38 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/projects/project1/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
+
+//// [/src/projects/project1/class1.ts]
+class class1 {}
+
+//// [/src/projects/project1/class1.d.ts]
+declare class class1 {}
+
+//// [/src/projects/project2/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
+
+//// [/src/projects/project2/class2.ts]
+class class2 {}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,48 +48,9 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/projects/project1/class1.d.ts]
-declare class class1 {}
-
-//// [/src/projects/project1/class1.ts]
-class class1 {}
-
-//// [/src/projects/project1/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "none",
-    "composite": true
-  },
-  "exclude": [
-    "temp"
-  ]
-}
-
-//// [/src/projects/project2/class2.ts]
-class class2 {}
-
-//// [/src/projects/project2/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "none",
-    "composite": true
-  },
-  "references": [
-    {
-      "path": "../project1"
-    }
-  ]
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-
-
-//// [/src/projects/project2/class2.d.ts]
-declare class class2 {
-}
 
 
 //// [/src/projects/project2/class2.js]
@@ -65,6 +59,11 @@ var class2 = /** @class */ (function () {
     }
     return class2;
 }());
+
+
+//// [/src/projects/project2/class2.d.ts]
+declare class class2 {
+}
 
 
 //// [/src/projects/project2/tsconfig.tsbuildinfo]
@@ -125,12 +124,11 @@ var class2 = /** @class */ (function () {
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add class3 to project1 and build it
+
 Input::
 //// [/src/projects/project1/class3.ts]
 class class3 {}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
@@ -212,12 +210,11 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Add output of class3
+
 Input::
 //// [/src/projects/project1/class3.d.ts]
 declare class class3 {}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
@@ -293,12 +290,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add excluded file to project1
+
 Input::
 //// [/src/projects/project1/temp/file.d.ts]
 declare class file {}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
@@ -308,11 +304,10 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Delete output for class3
-Input::
-//// [/src/projects/project1/class3.d.ts] unlink
 
+Input::
+//// [/src/projects/project1/class3.d.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
@@ -403,12 +398,11 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Create output for class3
+
 Input::
 //// [/src/projects/project1/class3.d.ts]
 declare class class3 {}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2

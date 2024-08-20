@@ -1,19 +1,13 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../dev-build.js",
+    "module": "amd",
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
@@ -30,15 +24,20 @@ console.log("hi");
 export { }
 
 
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-  "compilerOptions": {
-    "outFile": "../dev-build.js",
-    "module": "amd",
-    "noEmitOnError": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
@@ -105,10 +104,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
@@ -161,13 +159,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
@@ -180,6 +177,20 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
+
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"root":["./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 134
+}
 
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
@@ -197,20 +208,6 @@ define("src/other", ["require", "exports"], function (require, exports) {
     console.log("hi");
 });
 
-
-//// [/user/username/projects/dev-build.tsbuildinfo]
-{"root":["./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"version":"FakeTSVersion"}
-
-//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./noemitonerror/shared/types/db.ts",
-    "./noemitonerror/src/main.ts",
-    "./noemitonerror/src/other.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 134
-}
 
 
 Program root files: [
@@ -242,10 +239,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::

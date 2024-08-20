@@ -16,7 +16,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -b bogus.json
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/bogus.json'.

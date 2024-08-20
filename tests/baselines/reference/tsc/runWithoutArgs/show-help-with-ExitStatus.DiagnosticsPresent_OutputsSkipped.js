@@ -16,7 +16,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
 Version FakeTSVersion

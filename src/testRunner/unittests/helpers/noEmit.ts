@@ -6,21 +6,18 @@ import {
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    compilerOptionsToConfigJson,
-    FsContents,
-} from "./contents.js";
+import { compilerOptionsToConfigJson } from "./contents.js";
 import {
     noChangeRun,
     TestTscEdit,
     verifyTsc,
 } from "./tsc.js";
 import { verifyTscWatch } from "./tscWatch.js";
+import { loadProjectFromFiles } from "./vfs.js";
 import {
-    loadProjectFromFiles,
-    replaceText,
-} from "./vfs.js";
-import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
+    createWatchedSystem,
+    TestServerHost,
+} from "./virtualFileSystemWithWatch.js";
 
 function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: CompilerOptions) {
     const discrepancyExplanation = () => [
@@ -54,21 +51,21 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
         scenario: "noEmit",
         subScenario: scenarioName("changes"),
         commandLineArgs: [...commandType, "src/project"],
-        fs,
+        sys,
         edits: [
             noChangeRunWithNoEmit,
             noChangeRunWithNoEmit,
             {
                 caption: "Introduce error but still noEmit",
                 commandLineArgs: [...commandType, "src/project", "--noEmit"],
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop", "prop1"),
                 discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
                     undefined,
             },
             {
                 caption: "Fix error and emit",
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop1", "prop"),
             },
             noChangeRunWithEmit,
             noChangeRunWithNoEmit,
@@ -76,7 +73,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
             noChangeRunWithEmit,
             {
                 caption: "Introduce error and emit",
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop", "prop1"),
             },
             noChangeRunWithEmit,
             noChangeRunWithNoEmit,
@@ -85,7 +82,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
             {
                 caption: "Fix error and no emit",
                 commandLineArgs: [...commandType, "src/project", "--noEmit"],
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop1", "prop"),
                 discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
                     undefined,
@@ -101,17 +98,17 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
         scenario: "noEmit",
         subScenario: scenarioName("changes with initial noEmit"),
         commandLineArgs: [...commandType, "src/project", "--noEmit"],
-        fs,
+        sys,
         edits: [
             noChangeRunWithEmit,
             {
                 caption: "Introduce error with emit",
                 commandLineArgs: [...commandType, "src/project"],
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop", "prop1"),
             },
             {
                 caption: "Fix error and no emit",
-                edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                edit: sys => sys.replaceFileText("/src/project/src/class.ts", "prop1", "prop"),
                 discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
                     undefined,
@@ -120,7 +117,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
         ],
     });
 
-    function fs() {
+    function sys() {
         return loadProjectFromFiles({
             "/src/project/src/class.ts": dedent`
                 export class classC {
@@ -193,7 +190,7 @@ function editsForDtsChanges(
         },
         {
             caption: "Fix the error",
-            edit: fs => fs.writeFileSync("/home/src/projects/project/a.ts", aContent.replace("private", "public")),
+            edit: sys => sys.writeFile("/home/src/projects/project/a.ts", aContent.replace("private", "public")),
         },
         {
             caption: "With declaration enabled noEmit",
@@ -225,15 +222,15 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         scenario: "noEmit",
                         subScenario: `${options.outFile ? "outFile" : "multiFile"}/dts errors with declaration enable changes${incremental ? " with incremental" : ""}${asModules ? " as modules" : ""}`,
                         commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit"],
-                        fs: () =>
+                        sys: () =>
                             loadProjectFromFiles({
                                 "/home/src/projects/project/a.ts": aContent,
                                 "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                                     compilerOptions: { ...options, incremental },
                                 }),
                             }),
-                        modifyFs: asModules ?
-                            fs => fs.writeFileSync("/home/src/projects/project/b.ts", `export const b = 10;`) :
+                        modifySystem: asModules ?
+                            sys => sys.writeFile("/home/src/projects/project/b.ts", `export const b = 10;`) :
                             undefined,
                         edits: editsForDtsChanges(commandType, aContent, incremental, /*multiFile*/ false),
                         baselinePrograms: true,
@@ -250,7 +247,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                 scenario: "noEmit",
                 subScenario: `${options.outFile ? "outFile" : "multiFile"}/dts errors with declaration enable changes with multiple files`,
                 commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit"],
-                fs: () =>
+                sys: () =>
                     loadProjectFromFiles({
                         "/home/src/projects/project/a.ts": aContent,
                         "/home/src/projects/project/b.ts": `export const b = 10;`,
@@ -264,7 +261,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                     ...editsForDtsChanges(commandType, aContent, /*incremental*/ true, /*multiFile*/ true),
                     {
                         caption: "Fix the another ",
-                        edit: fs => fs.writeFileSync("/home/src/projects/project/c.ts", aContent.replace("a", "c").replace("private", "public")),
+                        edit: sys => sys.writeFile("/home/src/projects/project/c.ts", aContent.replace("a", "c").replace("private", "public")),
                         commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit", "--declaration", "--declarationMap"],
                     },
                 ],
@@ -280,7 +277,7 @@ function forEachNoEmitAndErrorsWorker(
     additionalOptions: CompilerOptions | undefined,
     action: (
         subScenario: string,
-        fsContents: FsContents,
+        sys: () => TestServerHost,
         aTsContent: string,
         fixedATsContent: string,
         compilerOptions: CompilerOptions,
@@ -296,16 +293,18 @@ function forEachNoEmitAndErrorsWorker(
                     incremental,
                     ...additionalOptions,
                 };
-                const fsContents: FsContents = {
-                    "/home/src/projects/project/a.ts": aContent,
-                    "/home/src/projects/project/tsconfig.json": jsonToReadableText({
-                        compilerOptions: compilerOptionsToConfigJson(compilerOptions),
-                    }),
-                };
-                if (asModules) fsContents["/home/src/projects/project/b.ts"] = `export const b = 10;`;
                 action(
                     `${options.outFile ? "outFile" : "multiFile"}/${subScenario}${incremental ? " with incremental" : ""}${asModules ? " as modules" : ""}`,
-                    fsContents,
+                    () => {
+                        const sys = createWatchedSystem({
+                            "/home/src/projects/project/a.ts": aContent,
+                            "/home/src/projects/project/tsconfig.json": jsonToReadableText({
+                                compilerOptions: compilerOptionsToConfigJson(compilerOptions),
+                            }),
+                        }, { currentDirectory: "/home/src/projects/project" });
+                        if (asModules) sys.writeFile("/home/src/projects/project/b.ts", `export const b = 10;`);
+                        return sys;
+                    },
                     aContent,
                     `${asModules ? "export " : ""}const a = "hello";`,
                     compilerOptions,
@@ -318,7 +317,7 @@ function forEachNoEmitAndErrorsWorker(
 function forEachNoEmitAndErrors(
     action: (
         subScenario: string,
-        fsContents: FsContents,
+        sys: () => TestServerHost,
         aTsContent: string,
         fixedATsContent: string,
         compilerOptions: CompilerOptions,
@@ -347,17 +346,17 @@ function forEachNoEmitAndErrors(
 }
 
 export function forEachNoEmitTsc(commandType: string[]) {
-    forEachNoEmitAndErrors((subScenario, fsContents, aTsContent, fixedATsContent, compilerOptions) =>
+    forEachNoEmitAndErrors((subScenario, sys, aTsContent, fixedATsContent, compilerOptions) =>
         verifyTsc({
             scenario: "noEmit",
             subScenario,
             commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit"],
-            fs: () => loadProjectFromFiles(fsContents),
+            sys,
             edits: [
                 noChangeRun,
                 {
                     caption: "Fix error",
-                    edit: fs => fs.writeFileSync("/home/src/projects/project/a.ts", fixedATsContent),
+                    edit: sys => sys.writeFile("/home/src/projects/project/a.ts", fixedATsContent),
                 },
                 noChangeRun,
                 {
@@ -368,7 +367,7 @@ export function forEachNoEmitTsc(commandType: string[]) {
                 noChangeRun,
                 {
                     caption: "Introduce error",
-                    edit: fs => fs.writeFileSync("/home/src/projects/project/a.ts", aTsContent),
+                    edit: sys => sys.writeFile("/home/src/projects/project/a.ts", aTsContent),
                     discrepancyExplanation: compilerOptions.incremental && subScenario.indexOf("multiFile/syntax") !== -1 ? () => [
                         "DtsSignature of ts files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version",
                     ] : undefined,
@@ -391,19 +390,23 @@ export function forEachNoEmitTsc(commandType: string[]) {
 }
 
 export function forEachNoEmitTscWatch(commandType: string[]) {
-    forEachNoEmitAndErrors((subScenario, fsContents, aTsContent, fixedATsContent, compilerOptions) =>
+    forEachNoEmitAndErrors((subScenario, sys, aTsContent, fixedATsContent, compilerOptions) =>
         verifyTscWatch({
             scenario: "noEmit",
             subScenario,
             commandLineArgs: [...commandType, "-w"],
             sys: () => {
-                fsContents["/home/src/projects/project/tsconfig.json"] = jsonToReadableText({
-                    compilerOptions: compilerOptionsToConfigJson({
-                        ...compilerOptions,
-                        noEmit: true,
+                const result = sys();
+                result.writeFile(
+                    "/home/src/projects/project/tsconfig.json",
+                    jsonToReadableText({
+                        compilerOptions: compilerOptionsToConfigJson({
+                            ...compilerOptions,
+                            noEmit: true,
+                        }),
                     }),
-                });
-                return createWatchedSystem(fsContents, { currentDirectory: "/home/src/projects/project" });
+                );
+                return result;
             },
             edits: [
                 {

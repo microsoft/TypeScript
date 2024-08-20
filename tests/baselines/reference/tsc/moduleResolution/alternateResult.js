@@ -1,15 +1,5 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/projects/project/index.mts]
-import { foo } from "foo";
-import { bar } from "bar";
-import { foo2 } from "foo2";
-import { bar2 } from "bar2";
-
-
-//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
-export declare const bar: number;
-
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
   "name": "@types/bar",
@@ -22,8 +12,50 @@ export declare const bar: number;
   }
 }
 
-//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
-export declare const bar2: number;
+//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
+export declare const bar: number;
+
+//// [/home/src/projects/project/node_modules/bar/package.json]
+{
+  "name": "bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
+
+//// [/home/src/projects/project/node_modules/bar/index.js]
+module.exports = { bar: 1 };
+
+//// [/home/src/projects/project/node_modules/bar/index.mjs]
+export const bar = 1;
+
+//// [/home/src/projects/project/node_modules/foo/package.json]
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
+
+//// [/home/src/projects/project/node_modules/foo/index.js]
+module.exports = { foo: 1 };
+
+//// [/home/src/projects/project/node_modules/foo/index.mjs]
+export const foo = 1;
+
+//// [/home/src/projects/project/node_modules/foo/index.d.ts]
+export declare const foo: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
@@ -38,15 +70,12 @@ export declare const bar2: number;
   }
 }
 
-//// [/home/src/projects/project/node_modules/bar/index.js]
-module.exports = { bar: 1 };
+//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
+export declare const bar2: number;
 
-//// [/home/src/projects/project/node_modules/bar/index.mjs]
-export const bar = 1;
-
-//// [/home/src/projects/project/node_modules/bar/package.json]
+//// [/home/src/projects/project/node_modules/bar2/package.json]
 {
-  "name": "bar",
+  "name": "bar2",
   "version": "1.0.0",
   "main": "index.js",
   "exports": {
@@ -63,51 +92,6 @@ module.exports = { bar2: 1 };
 //// [/home/src/projects/project/node_modules/bar2/index.mjs]
 export const bar2 = 1;
 
-//// [/home/src/projects/project/node_modules/bar2/package.json]
-{
-  "name": "bar2",
-  "version": "1.0.0",
-  "main": "index.js",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  }
-}
-
-//// [/home/src/projects/project/node_modules/foo/index.d.ts]
-export declare const foo: number;
-
-//// [/home/src/projects/project/node_modules/foo/index.js]
-module.exports = { foo: 1 };
-
-//// [/home/src/projects/project/node_modules/foo/index.mjs]
-export const foo = 1;
-
-//// [/home/src/projects/project/node_modules/foo/package.json]
-{
-  "name": "foo",
-  "version": "1.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  }
-}
-
-//// [/home/src/projects/project/node_modules/foo2/index.d.ts]
-export declare const foo2: number;
-
-//// [/home/src/projects/project/node_modules/foo2/index.js]
-module.exports = { foo2: 1 };
-
-//// [/home/src/projects/project/node_modules/foo2/index.mjs]
-export const foo2 = 1;
-
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
   "name": "foo2",
@@ -122,6 +106,22 @@ export const foo2 = 1;
     }
   }
 }
+
+//// [/home/src/projects/project/node_modules/foo2/index.js]
+module.exports = { foo2: 1 };
+
+//// [/home/src/projects/project/node_modules/foo2/index.mjs]
+export const foo2 = 1;
+
+//// [/home/src/projects/project/node_modules/foo2/index.d.ts]
+export declare const foo2: number;
+
+//// [/home/src/projects/project/index.mts]
+import { foo } from "foo";
+import { bar } from "bar";
+import { foo2 } from "foo2";
+import { bar2 } from "bar2";
+
 
 //// [/home/src/projects/project/tsconfig.json]
 {
@@ -153,8 +153,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -335,13 +334,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -454,7 +453,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -474,13 +472,12 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: delete the alternateResult in @types
+
 Input::
-//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -673,13 +670,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -693,7 +690,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -709,13 +705,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: delete the ndoe10Result in package/types
+
 Input::
-//// [/home/src/projects/project/node_modules/foo/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -921,13 +916,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -941,7 +936,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -957,15 +951,14 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: add the alternateResult in @types
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
 export declare const bar: number;
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1159,13 +1152,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -1179,7 +1172,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -1195,15 +1187,14 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+Change:: add the alternateResult in package/types
 
-Change:: add the ndoe10Result in package/types
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
 export declare const foo: number;
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1384,13 +1375,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -1404,7 +1395,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -1420,8 +1410,8 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: update package.json from @types so error is fixed
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
@@ -1437,8 +1427,7 @@ Input::
 }
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1578,13 +1567,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -1710,7 +1699,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -1729,8 +1717,8 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: update package.json so error is fixed
+
 Input::
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
@@ -1748,8 +1736,7 @@ Input::
 }
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1861,13 +1848,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -2009,7 +1996,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -2029,8 +2015,8 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: update package.json from @types so error is introduced
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
@@ -2045,8 +2031,7 @@ Input::
 }
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2199,13 +2184,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -2331,7 +2316,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -2349,8 +2333,8 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: update package.json so error is introduced
+
 Input::
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
@@ -2367,8 +2351,7 @@ Input::
 }
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2549,13 +2532,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -2665,7 +2648,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -2682,13 +2664,12 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: delete the alternateResult in @types
+
 Input::
-//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2881,13 +2862,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -2901,7 +2882,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -2917,13 +2897,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: delete the ndoe10Result in package/types
+
 Input::
-//// [/home/src/projects/project/node_modules/foo2/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3129,13 +3108,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -3149,7 +3128,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -3165,15 +3143,14 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: add the alternateResult in @types
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
 export declare const bar2: number;
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3367,13 +3344,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -3387,7 +3364,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -3403,15 +3379,14 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: add the ndoe10Result in package/types
+
 Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts]
 export declare const foo2: number;
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3592,13 +3567,13 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
 
 
@@ -3612,7 +3587,6 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not

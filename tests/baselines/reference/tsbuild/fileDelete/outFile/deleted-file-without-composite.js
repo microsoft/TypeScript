@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/child/child.ts]
 import { child2 } from "../child/child2";
 export function child() {
@@ -35,6 +20,20 @@ export function child2() {
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
@@ -93,11 +92,10 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete child2 file
-Input::
-//// [/src/child/child2.ts] unlink
 
+Input::
+//// [/src/child/child2.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 Output::

@@ -1,5 +1,18 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/a.ts]
+export const a = "hello
+
+//// [/src/b.ts]
+export const b = 10;
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,20 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/a.ts]
-export const a = "hello
-
-//// [/src/b.ts]
-export const b = 10;
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true
-  }
-}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -49,10 +48,6 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts]
-export declare const a = "hello";
-
-
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -60,8 +55,8 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts]
-export declare const b = 10;
+//// [/src/a.d.ts]
+export declare const a = "hello";
 
 
 //// [/src/b.js]
@@ -69,6 +64,10 @@ export declare const b = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
+
+
+//// [/src/b.d.ts]
+export declare const b = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -112,10 +111,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -129,12 +127,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -148,7 +145,6 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -156,8 +152,9 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -198,10 +195,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -215,10 +211,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -231,10 +226,10 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"version":"FakeTSVersion"}
 
@@ -276,10 +271,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -293,10 +287,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -310,12 +303,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -337,7 +329,6 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -345,8 +336,9 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
 
@@ -388,10 +380,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -405,10 +396,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -429,10 +419,10 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -472,12 +462,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -491,7 +480,6 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -499,8 +487,9 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -541,10 +530,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -557,10 +545,10 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts"],"version":"FakeTSVersion"}
 
@@ -602,12 +590,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
@@ -629,21 +616,10 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts]
-export declare const c: number;
-
-
-//// [/src/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = "hello";
-
-
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts","./c.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -658,6 +634,17 @@ exports.c = "hello";
   "version": "FakeTSVersion",
   "size": 77
 }
+
+//// [/src/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+exports.c = "hello";
+
+
+//// [/src/c.d.ts]
+export declare const c: number;
+
 
 
 Program root files: [
@@ -691,12 +678,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -718,7 +704,6 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -726,10 +711,9 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts","./c.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
 
@@ -746,6 +730,8 @@ exports.a = "hello;
   "size": 97
 }
 
+//// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -775,12 +761,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -794,7 +779,6 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -802,10 +786,9 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts","./c.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -821,6 +804,8 @@ exports.a = "hello";
   "size": 83
 }
 
+//// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -850,10 +835,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -874,12 +858,10 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./a.ts","./b.ts","./c.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -895,6 +877,8 @@ Found 1 error.
   "size": 77
 }
 
+//// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -927,10 +911,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -944,10 +927,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -968,14 +950,14 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/tsconfig.tsbuildinfo] file written with same contents
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",

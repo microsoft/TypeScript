@@ -1,4 +1,4 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import {
     baselineTsserverLogs,
     logDiagnostics,
@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: languageService::", () => {
         const files = [
             {
                 path: "/home/src/projects/project/shared.ts",
-                content: Utils.dedent`
+                content: dedent`
                     import {foo_a} from "foo";
                     `,
             },
@@ -39,7 +39,7 @@ describe("unittests:: tsserver:: languageService::", () => {
             },
             {
                 path: `/home/src/projects/project/a/foo.d.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     export const foo_a = 1;
                     `,
             },
@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: languageService::", () => {
             },
             {
                 path: `/home/src/projects/project/b/foo.d.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     export const foo_b = 1;
                     `,
             },

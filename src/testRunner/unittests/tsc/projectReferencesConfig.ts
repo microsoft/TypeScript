@@ -40,7 +40,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references meta ch
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "default setup was created correctly",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig(),
                 "/primary/a.ts": emptyModule(),
@@ -60,7 +60,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when declaration = false",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig({
                     options: {
@@ -75,7 +75,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when the referenced project doesnt have composite",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig({
                     options: {
@@ -97,7 +97,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "does not error when the referenced project doesnt have composite if its a container project",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig({
                     options: {
@@ -119,7 +119,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when the file list is not exhaustive",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig({
                     config: {
@@ -135,7 +135,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when the referenced project doesnt exist",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/primary/tsconfig.json": getConfig({
                     references: ["../foo"],
@@ -153,7 +153,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references path ma
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "redirects to the output dts file",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/alpha/tsconfig.json": getConfig(),
                 "/alpha/a.ts": "export const m: number = 3;",
@@ -171,7 +171,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "issues a nice error when the input file is missing",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/alpha/tsconfig.json": getConfig(),
                 "/alpha/a.ts": "export const m: number = 3;",
@@ -186,7 +186,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "issues a nice error when the input file is missing when module reference is not relative",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/alpha/tsconfig.json": getConfig(),
                 "/alpha/a.ts": "export const m: number = 3;",
@@ -212,7 +212,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references behavio
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "doesnt infer the rootDir from source paths",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/alpha/tsconfig.json": getConfig(),
                 "/alpha/src/a.ts": "export const m: number = 3;",
@@ -225,7 +225,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references errors 
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when a file is outside the rootdir",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/alpha/tsconfig.json": getConfig(),
                 "/alpha/src/a.ts": "import * as b from '../../beta/b'",

@@ -1,5 +1,33 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/primary/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
+}
+
+//// [/primary/a.ts]
+export { };
+
+//// [/secondary/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../primary"
+    }
+  ]
+}
+
+//// [/secondary/b.ts]
+import * as mod_0 from "../primary/a"
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,47 +43,18 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/primary/a.ts]
-export { };
-
-//// [/primary/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "bin"
-  },
-  "references": []
-}
-
-//// [/secondary/b.ts]
-import * as mod_0 from "../primary/a"
-
-//// [/secondary/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "bin"
-  },
-  "references": [
-    {
-      "path": "../primary"
-    }
-  ]
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
 Output::
 
 
-//// [/primary/bin/a.d.ts]
-export {};
-
-
 //// [/primary/bin/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/primary/bin/a.d.ts]
+export {};
 
 
 //// [/primary/bin/tsconfig.tsbuildinfo]

@@ -8,22 +8,14 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    prependText,
-    replaceText,
-} from "../helpers/vfs.js";
-import {
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "when passing filename for buildinfo on commandline",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": dedent`
@@ -44,7 +36,7 @@ describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "when passing rootDir from commandline",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": dedent`
@@ -62,7 +54,7 @@ describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "with only dts files",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.d.ts": "export const x = 10;",
                 "/src/project/src/another.d.ts": "export const y = 10;",
@@ -73,7 +65,7 @@ describe("unittests:: tsc:: incremental::", () => {
             noChangeRun,
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;"),
+                edit: sys => sys.appendFile("/src/project/src/main.d.ts", "export const xy = 100;"),
             },
         ],
     });
@@ -81,7 +73,7 @@ describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "when passing rootDir is in the tsconfig",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": dedent`
@@ -100,7 +92,7 @@ describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": "{}",
@@ -109,14 +101,14 @@ describe("unittests:: tsc:: incremental::", () => {
         commandLineArgs: ["--p", "src/project", "-i"],
         edits: [{
             caption: "tsbuildinfo written has error",
-            edit: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+            edit: sys => sys.prependFile("/src/project/tsconfig.tsbuildinfo", "Some random string"),
         }],
     });
 
     verifyTsc({
         scenario: "incremental",
         subScenario: `when global file is added, the signatures are updated`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
@@ -139,32 +131,31 @@ describe("unittests:: tsc:: incremental::", () => {
             noChangeRun,
             {
                 caption: "Modify main file",
-                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
             },
             {
                 caption: "Modify main file again",
-                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
             },
             {
                 caption: "Add new file and update main file",
-                edit: fs => {
-                    fs.writeFileSync(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
-                    prependText(
-                        fs,
+                edit: sys => {
+                    sys.writeFile(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
+                    sys.prependFile(
                         `/src/project/src/main.ts`,
                         `/// <reference path="./newFile.ts"/>
 `,
                     );
-                    appendText(fs, `/src/project/src/main.ts`, `foo();`);
+                    sys.appendFile(`/src/project/src/main.ts`, `foo();`);
                 },
             },
             {
                 caption: "Write file that could not be resolved",
-                edit: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
+                edit: sys => sys.writeFile(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
             },
             {
                 caption: "Modify main file",
-                edit: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
             },
         ],
         baselinePrograms: true,
@@ -189,7 +180,7 @@ declare global {
         verifyTsc({
             scenario: "incremental",
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash",
-            fs: () =>
+            sys: () =>
                 loadProjectFromFiles({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
@@ -202,7 +193,7 @@ declare global {
         verifyTsc({
             scenario: "incremental",
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash under --strict",
-            fs: () =>
+            sys: () =>
                 loadProjectFromFiles({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
@@ -217,7 +208,7 @@ declare global {
         scenario: "incremental",
         subScenario: "when new file is added to the referenced project",
         commandLineArgs: ["-i", "-p", `src/projects/project2`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/projects/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -242,7 +233,7 @@ declare global {
         edits: [
             {
                 caption: "Add class3 to project1 and build it",
-                edit: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
+                edit: sys => sys.writeFile("/src/projects/project1/class3.ts", `class class3 {}`),
                 discrepancyExplanation: () => [
                     "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
                     "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
@@ -250,22 +241,22 @@ declare global {
             },
             {
                 caption: "Add output of class3",
-                edit: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
+                edit: sys => sys.writeFile("/src/projects/project1/class3.d.ts", `declare class class3 {}`),
             },
             {
                 caption: "Add excluded file to project1",
-                edit: fs => {
-                    fs.mkdirSync("/src/projects/project1/temp");
-                    fs.writeFileSync("/src/projects/project1/temp/file.d.ts", `declare class file {}`, "utf-8");
+                edit: sys => {
+                    sys.ensureFileOrFolder({ path: "/src/projects/project1/temp" });
+                    sys.writeFile("/src/projects/project1/temp/file.d.ts", `declare class file {}`);
                 },
             },
             {
                 caption: "Delete output for class3",
-                edit: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
+                edit: sys => sys.deleteFile("/src/projects/project1/class3.d.ts"),
             },
             {
                 caption: "Create output for class3",
-                edit: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
+                edit: sys => sys.writeFile("/src/projects/project1/class3.d.ts", `declare class class3 {}`),
             },
         ],
     });
@@ -274,7 +265,7 @@ declare global {
         scenario: "incremental",
         subScenario: "serializing error chains",
         commandLineArgs: ["-p", `src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -306,7 +297,7 @@ declare global {
     verifyTsc({
         scenario: "incremental",
         subScenario: "ts file with no-default-lib that augments the global scope",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": dedent`
                     /// <reference no-default-lib="true"/>
@@ -330,16 +321,13 @@ declare global {
                     }`,
             }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-        modifyFs: fs => {
-            fs.writeFileSync(getTypeScriptLibTestLocation("esnext"), libFile.content);
-        },
     });
 
     verifyTsc({
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file",
         commandLineArgs: ["-p", `src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
@@ -349,7 +337,7 @@ console.log(a);`,
             }),
         edits: [{
             caption: "Modify imports used in global file",
-            edit: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
         }],
     });
 
@@ -357,7 +345,7 @@ console.log(a);`,
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file through indirect import",
         commandLineArgs: ["-p", `src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
@@ -368,7 +356,7 @@ console.log(a);`,
             }),
         edits: [{
             caption: "Modify imports used in global file",
-            edit: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
         }],
     });
 
@@ -377,7 +365,7 @@ console.log(a);`,
             scenario: "incremental",
             subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
             commandLineArgs: ["-p", "src/project", "--incremental"],
-            fs: () =>
+            sys: () =>
                 loadProjectFromFiles({
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
                     "/src/project/main.ts": dedent`
@@ -395,9 +383,8 @@ console.log(a);`,
                         type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
                         export default MessageablePerson;`,
                 }),
-            modifyFs: fs =>
-                appendText(
-                    fs,
+            modifySystem: sys =>
+                sys.appendFile(
                     libFile.path,
                     dedent`
                     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
@@ -407,12 +394,12 @@ console.log(a);`,
                 noChangeRun,
                 {
                     caption: "modify public to protected",
-                    edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
+                    edit: sys => sys.replaceFileText("/src/project/MessageablePerson.ts", "public", "protected"),
                 },
                 noChangeRun,
                 {
                     caption: "modify protected to public",
-                    edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
+                    edit: sys => sys.replaceFileText("/src/project/MessageablePerson.ts", "protected", "public"),
                 },
                 noChangeRun,
             ],
@@ -453,10 +440,10 @@ console.log(a);`,
         function localChange(): TestTscEdit {
             return {
                 caption: "local change",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "Local = 1", "Local = 10"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "Local = 1", "Local = 10"),
             };
         }
-        function fs(options: ts.CompilerOptions) {
+        function sys(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
@@ -468,10 +455,10 @@ console.log(a);`,
         function enableDeclarationMap(): TestTscEdit {
             return {
                 caption: "declarationMap enabling",
-                edit: fs => {
-                    const config = JSON.parse(fs.readFileSync("/src/project/tsconfig.json", "utf-8"));
+                edit: sys => {
+                    const config = JSON.parse(sys.readFile("/src/project/tsconfig.json")!);
                     config.compilerOptions.declarationMap = true;
-                    fs.writeFileSync("/src/project/tsconfig.json", jsonToReadableText(config));
+                    sys.writeFile("/src/project/tsconfig.json", jsonToReadableText(config));
                 },
             };
         }
@@ -482,7 +469,7 @@ console.log(a);`,
             verifyTsc({
                 scenario: "incremental",
                 subScenario: scenarioName("different options"),
-                fs: () => fs({ composite: true, ...options }),
+                sys: () => sys({ composite: true, ...options }),
                 commandLineArgs: ["--p", "/src/project"],
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
@@ -505,7 +492,7 @@ console.log(a);`,
             verifyTsc({
                 scenario: "incremental",
                 subScenario: scenarioName("different options with incremental"),
-                fs: () => fs({ incremental: true, ...options }),
+                sys: () => sys({ incremental: true, ...options }),
                 commandLineArgs: ["--p", "/src/project"],
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
@@ -534,7 +521,7 @@ console.log(a);`,
         scenario: "incremental",
         subScenario: "when file is deleted",
         commandLineArgs: ["-p", `/src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -548,7 +535,7 @@ console.log(a);`,
         edits: [
             {
                 caption: "delete file with imports",
-                edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+                edit: sys => sys.deleteFile("/src/project/file2.ts"),
             },
         ],
     });
@@ -557,7 +544,7 @@ console.log(a);`,
         scenario: "incremental",
         subScenario: "generates typerefs correctly",
         commandLineArgs: ["-p", `/src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -600,7 +587,7 @@ console.log(a);`,
             }),
         edits: [{
             caption: "modify js file",
-            edit: fs => appendText(fs, "/src/project/src/bug.js", `export const something = 1;`),
+            edit: sys => sys.appendFile("/src/project/src/bug.js", `export const something = 1;`),
         }],
     });
 
@@ -618,7 +605,7 @@ console.log(a);`,
                 scenario: "incremental",
                 subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
                 commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
-                fs: () =>
+                sys: () =>
                     loadProjectFromFiles({
                         "/src/project/a.ts": dedent`
                             import {A} from "./c"
@@ -654,19 +641,19 @@ console.log(a);`,
                 edits: [
                     {
                         caption: "change enum value",
-                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "1", "2"),
+                        edit: sys => sys.replaceFileText(fileWithEnum(withAlias), "1", "2"),
                     },
                     {
                         caption: "change enum value again",
-                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "2", "3"),
+                        edit: sys => sys.replaceFileText(fileWithEnum(withAlias), "2", "3"),
                     },
                     {
                         caption: "something else changes in b.d.ts",
-                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing = 10;"),
+                        edit: sys => sys.appendFile("/src/project/b.d.ts", "export const randomThing = 10;"),
                     },
                     {
                         caption: "something else changes in b.d.ts again",
-                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing2 = 10;"),
+                        edit: sys => sys.appendFile("/src/project/b.d.ts", "export const randomThing2 = 10;"),
                     },
                 ],
             });

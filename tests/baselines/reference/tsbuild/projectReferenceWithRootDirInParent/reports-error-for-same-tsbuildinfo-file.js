@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/src/main/a.ts]
 import { b } from './b';
 const a = b;
@@ -63,6 +48,20 @@ export const Other = 0;
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/src/main --verbose
@@ -95,37 +94,15 @@ Found 1 error.
 
 
 
-//// [/src/dist/a.d.ts]
-export {};
-
-
-//// [/src/dist/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var a = b_1.b;
-
-
-//// [/src/dist/b.d.ts]
-export declare const b = 0;
-
-
-//// [/src/dist/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 0;
-
-
-//// [/src/dist/other.d.ts]
-export declare const Other = 0;
-
-
 //// [/src/dist/other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Other = void 0;
 exports.Other = 0;
+
+
+//// [/src/dist/other.d.ts]
+export declare const Other = 0;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
@@ -171,13 +148,34 @@ exports.Other = 0;
   "size": 803
 }
 
+//// [/src/dist/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 0;
+
+
+//// [/src/dist/b.d.ts]
+export declare const b = 0;
+
+
+//// [/src/dist/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var a = b_1.b;
+
+
+//// [/src/dist/a.d.ts]
+export {};
+
+
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/src/main --verbose
 Output::
@@ -207,10 +205,10 @@ Found 1 error.
 
 
 
-//// [/src/dist/a.d.ts] file written with same contents
-//// [/src/dist/a.js] file written with same contents
-//// [/src/dist/b.d.ts] file written with same contents
-//// [/src/dist/b.js] file written with same contents
 //// [/src/dist/tsconfig.tsbuildinfo] file changed its modified time
+//// [/src/dist/b.js] file written with same contents
+//// [/src/dist/b.d.ts] file written with same contents
+//// [/src/dist/a.js] file written with same contents
+//// [/src/dist/a.d.ts] file written with same contents
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

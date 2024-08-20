@@ -1,6 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "./contents.js";
 import {
     noChangeRun,
     verifyTsc,
@@ -9,15 +8,17 @@ import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "./tscWatch.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
+import {
+    createWatchedSystem,
+    FileOrFolderOrSymLinkMap,
+} from "./virtualFileSystemWithWatch.js";
 
 function getFsContentsForNoEmitOnError(
     mainErrorContent: string,
     outFile: boolean,
     declaration: true | undefined,
     incremental: true | undefined,
-): FsContents {
+): FileOrFolderOrSymLinkMap {
     return {
         "/user/username/projects/noEmitOnError/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -44,7 +45,7 @@ function forEachNoEmitOnErrorScenario(
     subScenario: string,
     action: (
         subScenario: string,
-        fsContents: (mainErrorContent: string) => FsContents,
+        fsContents: (mainErrorContent: string) => FileOrFolderOrSymLinkMap,
     ) => void,
 ) {
     for (const outFile of [false, true]) {
@@ -113,8 +114,8 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
                     verifyTsc({
                         scenario: "noEmitOnError",
                         subScenario,
-                        fs: () =>
-                            loadProjectFromFiles(
+                        sys: () =>
+                            createWatchedSystem(
                                 fsContents(mainErrorContent),
                                 { currentDirectory: "/user/username/projects/noEmitOnError" },
                             ),
@@ -123,7 +124,7 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
                             noChangeRun,
                             {
                                 caption: "Fix error",
-                                edit: fs => fs.writeFileSync("src/main.ts", fixedErrorContent, "utf-8"),
+                                edit: sys => sys.writeFile("src/main.ts", fixedErrorContent),
                             },
                             noChangeRun,
                         ],

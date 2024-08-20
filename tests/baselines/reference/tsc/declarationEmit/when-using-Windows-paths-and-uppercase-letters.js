@@ -180,41 +180,4 @@ export {};
 
 
 
-Program root files: [
-  "D:/Work/pkg1/src/main.ts",
-  "D:/Work/pkg1/src/utils/index.ts",
-  "D:/Work/pkg1/src/utils/type-helpers.ts"
-]
-Program options: {
-  "module": 1,
-  "declaration": true,
-  "removeComments": true,
-  "emitDecoratorMetadata": true,
-  "experimentalDecorators": true,
-  "strictPropertyInitialization": false,
-  "allowSyntheticDefaultImports": true,
-  "target": 4,
-  "sourceMap": true,
-  "esModuleInterop": true,
-  "outDir": "D:/Work/pkg1/dist",
-  "baseUrl": "D:/Work/pkg1",
-  "skipLibCheck": true,
-  "strictNullChecks": false,
-  "noImplicitAny": false,
-  "strictBindCallApply": false,
-  "forceConsistentCasingInFileNames": false,
-  "noFallthroughCasesInSwitch": false,
-  "moduleResolution": 2,
-  "resolveJsonModule": true,
-  "project": "D:/Work/pkg1",
-  "explainFiles": true,
-  "configFilePath": "D:/Work/pkg1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-D:/home/src/tslibs/ts/lib/lib.es2017.full.d.ts
-D:/Work/pkg1/src/utils/type-helpers.ts
-D:/Work/pkg1/src/utils/index.ts
-D:/Work/pkg1/src/main.ts
-
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

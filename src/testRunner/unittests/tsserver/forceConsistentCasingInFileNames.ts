@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { getFsContentsForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
+import { getSysForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -323,7 +323,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
     });
 
     it("when file is included from multiple places with different casing", () => {
-        const host = createServerHost(getFsContentsForMultipleErrorsForceConsistentCasingInFileNames());
+        const host = getSysForMultipleErrorsForceConsistentCasingInFileNames(/*forTsserver*/ true);
         const session = new TestSession(host);
         const file = "/home/src/projects/project/src/struct.d.ts";
         let fileText = host.readFile(file)!;

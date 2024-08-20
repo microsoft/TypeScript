@@ -1,39 +1,25 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
+  }
+}
 
 //// [/src/project/index.ts]
 import ky from 'ky';
 export const api = ky.extend({});
 
+
+//// [/src/project/package.json]
+{
+  "type": "module"
+}
 
 //// [/src/project/node_modules/ky/distribution/index.d.ts]
 type KyInstance = {
@@ -50,22 +36,20 @@ export default ky;
   "main": "./distribution/index.js"
 }
 
-//// [/src/project/package.json]
-{
-  "type": "module"
-}
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "declaration": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
@@ -99,6 +83,8 @@ Found 1 error.
 
 
 
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
+
 //// [/src/project/index.js]
 import ky from 'ky';
 export const api = ky.extend({});
@@ -120,10 +106,9 @@ export const api = ky.extend({});
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::

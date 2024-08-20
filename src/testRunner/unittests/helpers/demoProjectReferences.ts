@@ -1,8 +1,9 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
+import {
+    createWatchedSystem,
+    FileOrFolderOrSymLinkMap,
+} from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
     return jsonToReadableText({
@@ -14,7 +15,7 @@ export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: obj
         ...additional,
     });
 }
-export function getFsContentsForDemoProjectReferences(): FsContents {
+export function getFsContentsForDemoProjectReferences(): FileOrFolderOrSymLinkMap {
     return {
         "/user/username/projects/demo/animals/animal.ts": dedent`
             export type Size = "small" | "medium" | "large";
@@ -119,13 +120,6 @@ export function getFsContentsForDemoProjectReferences(): FsContents {
             ],
         }),
     };
-}
-
-export function getFsForDemoProjectReferences() {
-    return loadProjectFromFiles(
-        getFsContentsForDemoProjectReferences(),
-        { currentDirectory: "/user/username/projects/demo" },
-    );
 }
 
 export function getSysForDemoProjectReferences() {

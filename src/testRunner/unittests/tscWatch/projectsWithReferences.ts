@@ -1,16 +1,19 @@
 import { noop } from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { getProjectConfigWithNodeNext } from "../helpers/contents.js";
-import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
+import {
+    getSysForSampleProjectReferences,
+    getSysForSampleProjectReferencesBuilt,
+} from "../helpers/sampleProjectReferences.js";
 import {
     createSolutionBuilder,
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder.js";
 import {
-    getFsContentsForTransitiveReferences,
     getFsContentsForTransitiveReferencesAConfig,
     getFsContentsForTransitiveReferencesBConfig,
     getFsContentsForTransitiveReferencesRefsAdts,
+    getSysForTransitiveReferences,
 } from "../helpers/transitiveReferences.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
@@ -23,11 +26,7 @@ describe("unittests:: tscWatch:: projectsWithReferences:: invoking when referenc
         verifyTscWatch({
             scenario: "projectsWithReferences",
             subScenario: `on sample project${withNodeNext ? " with nodenext" : ""}`,
-            sys: () =>
-                solutionBuildWithBaseline(
-                    getSysForSampleProjectReferences(withNodeNext),
-                    ["tests"],
-                ),
+            sys: () => getSysForSampleProjectReferencesBuilt(withNodeNext),
             commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
             edits: [
                 {
@@ -89,10 +88,7 @@ describe("unittests:: tscWatch:: projectsWithReferences:: invoking when referenc
             subScenario: `on transitive references${withNodeNext ? " with nodenext" : ""}`,
             sys: () =>
                 solutionBuildWithBaseline(
-                    createWatchedSystem(
-                        getFsContentsForTransitiveReferences(withNodeNext),
-                        { currentDirectory: `/user/username/projects/transitiveReferences` },
-                    ),
+                    getSysForTransitiveReferences(withNodeNext),
                     ["tsconfig.c.json"],
                 ),
             commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
@@ -162,22 +158,19 @@ describe("unittests:: tscWatch:: projectsWithReferences:: invoking when referenc
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "when referenced project uses different module resolution",
-        sys: () =>
-            solutionBuildWithBaseline(
-                createWatchedSystem(
-                    {
-                        ...getFsContentsForTransitiveReferences(),
-                        "/user/username/projects/transitiveReferences/tsconfig.b.json": jsonToReadableText({
-                            compilerOptions: { composite: true, moduleResolution: "classic" },
-                            files: ["b.ts"],
-                            references: [{ path: "tsconfig.a.json" }],
-                        }),
-                        "/user/username/projects/transitiveReferences/b.ts": `import {A} from "a";export const b = new A();`,
-                    },
-                    { currentDirectory: `/user/username/projects/transitiveReferences` },
-                ),
-                ["tsconfig.c.json"],
-            ),
+        sys: () => {
+            const sys = getSysForTransitiveReferences();
+            sys.writeFile(
+                "/user/username/projects/transitiveReferences/tsconfig.b.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, moduleResolution: "classic" },
+                    files: ["b.ts"],
+                    references: [{ path: "tsconfig.a.json" }],
+                }),
+            );
+            sys.writeFile("/user/username/projects/transitiveReferences/b.ts", `import {A} from "a";export const b = new A();`);
+            return solutionBuildWithBaseline(sys, ["tsconfig.c.json"]);
+        },
         commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
         baselineDependencies: true,
     });

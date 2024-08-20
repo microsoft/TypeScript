@@ -22,11 +22,11 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
         };
         const noCheckFixError: TestTscEdit = {
             caption: "Fix `a` error with noCheck",
-            edit: fs => fs.writeFileSync("/src/a.ts", `export const a = "hello";`),
+            edit: sys => sys.writeFile("/src/a.ts", `export const a = "hello";`),
         };
         const noCheckError: TestTscEdit = {
             caption: "Introduce error with noCheck",
-            edit: fs => fs.writeFileSync("/src/a.ts", aText),
+            edit: sys => sys.writeFile("/src/a.ts", aText),
         };
         const noChangeRunWithCheckPendingDiscrepancy: TestTscEdit = {
             ...noChangeRun,
@@ -41,7 +41,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                 verifyTsc({
                     scenario: "noCheck",
                     subScenario: `${options.outFile ? "outFile" : "multiFile"}/${subScenario}${incremental ? " with incremental" : ""}`,
-                    fs: () =>
+                    sys: () =>
                         loadProjectFromFiles({
                             "/src/a.ts": aText,
                             "/src/b.ts": `export const b = 10;`,
@@ -70,7 +70,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                         checkNoChangeRun, // Should check errors and update buildInfo
                         {
                             caption: "Add file with error",
-                            edit: fs => fs.writeFileSync("/src/c.ts", `export const c: number = "hello";`),
+                            edit: sys => sys.writeFile("/src/c.ts", `export const c: number = "hello";`),
                             commandLineArgs,
                         },
                         noCheckError,

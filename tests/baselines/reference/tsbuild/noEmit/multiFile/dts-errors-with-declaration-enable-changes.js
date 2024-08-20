@@ -24,7 +24,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -72,10 +71,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
@@ -114,10 +112,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
@@ -181,10 +178,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: With declaration and declarationMap noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
@@ -238,10 +234,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
@@ -290,10 +285,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Dts Emit with error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --declaration
 Output::
@@ -321,15 +315,6 @@ Found 1 error.
 
 
 
-//// [/home/src/projects/project/a.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
-
-
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
 {"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -342,6 +327,15 @@ var a = /** @class */ (function () {
   "version": "FakeTSVersion",
   "size": 59
 }
+
+//// [/home/src/projects/project/a.js]
+var a = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
 
 
 Program root files: [
@@ -367,12 +361,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix the error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { public p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
@@ -422,10 +415,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
@@ -465,10 +457,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration and declarationMap noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::

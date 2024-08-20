@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
@@ -95,7 +95,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -w sample1/tests
+/home/src/tslibs/ts/lib/tsc.js -b -w tests
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

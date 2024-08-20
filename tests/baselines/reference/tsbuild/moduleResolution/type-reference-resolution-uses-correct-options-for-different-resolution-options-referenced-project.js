@@ -1,19 +1,7 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/packages/pkg1_index.ts]
+export const theNum: TheNum = "type1";
 
 //// [/src/packages/pkg1.tsconfig.json]
 {
@@ -28,8 +16,11 @@ declare const console: { log(msg: any): void; };
   ]
 }
 
-//// [/src/packages/pkg1_index.ts]
-export const theNum: TheNum = "type1";
+//// [/src/packages/typeroot1/sometype/index.d.ts]
+declare type TheNum = "type1";
+
+//// [/src/packages/pkg2_index.ts]
+export const theNum: TheNum2 = "type2";
 
 //// [/src/packages/pkg2.tsconfig.json]
 {
@@ -44,15 +35,23 @@ export const theNum: TheNum = "type1";
   ]
 }
 
-//// [/src/packages/pkg2_index.ts]
-export const theNum: TheNum2 = "type2";
-
-//// [/src/packages/typeroot1/sometype/index.d.ts]
-declare type TheNum = "type1";
-
 //// [/src/packages/typeroot2/sometype/index.d.ts]
 declare type TheNum2 = "type2";
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/packages/pkg1.tsconfig.json /src/packages/pkg2.tsconfig.json --verbose --traceResolution
@@ -83,6 +82,17 @@ File '/src/packages/typeroot2/sometype/package.json' does not exist.
 File '/src/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/src/packages/typeroot2/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot2/sometype/index.d.ts', primary: true. ========
+
+
+//// [/src/packages/pkg1_index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = "type1";
+
+
+//// [/src/packages/pkg1_index.d.ts]
+export declare const theNum: TheNum;
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
@@ -137,15 +147,15 @@ Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/
   "size": 927
 }
 
-//// [/src/packages/pkg1_index.d.ts]
-export declare const theNum: TheNum;
-
-
-//// [/src/packages/pkg1_index.js]
+//// [/src/packages/pkg2_index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
-exports.theNum = "type1";
+exports.theNum = "type2";
+
+
+//// [/src/packages/pkg2_index.d.ts]
+export declare const theNum: TheNum2;
 
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo]
@@ -199,17 +209,6 @@ exports.theNum = "type1";
   "version": "FakeTSVersion",
   "size": 930
 }
-
-//// [/src/packages/pkg2_index.d.ts]
-export declare const theNum: TheNum2;
-
-
-//// [/src/packages/pkg2_index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = "type2";
-
 
 
 exitCode:: ExitStatus.Success

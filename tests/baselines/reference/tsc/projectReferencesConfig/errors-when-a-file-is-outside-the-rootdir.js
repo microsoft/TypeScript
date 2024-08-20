@@ -1,8 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/alpha/src/a.ts]
-import * as b from '../../beta/b'
-
 //// [/alpha/tsconfig.json]
 {
   "compilerOptions": {
@@ -11,6 +8,9 @@ import * as b from '../../beta/b'
   },
   "references": []
 }
+
+//// [/alpha/src/a.ts]
+import * as b from '../../beta/b'
 
 //// [/beta/b.ts]
 export { }
@@ -31,7 +31,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --p /alpha/tsconfig.json
 Output::
 [96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/beta/b.ts' is not under 'rootDir' '/alpha'. 'rootDir' is expected to contain all source files.
@@ -49,13 +48,22 @@ Found 2 errors in the same file, starting at: alpha/src/a.ts[90m:1[0m
 
 
 
-//// [/alpha/bin/src/a.d.ts]
+//// [/beta/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/beta/b.d.ts]
 export {};
 
 
 //// [/alpha/bin/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/alpha/bin/src/a.d.ts]
+export {};
 
 
 //// [/alpha/bin/tsconfig.tsbuildinfo]
@@ -120,15 +128,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "version": "FakeTSVersion",
   "size": 931
 }
-
-//// [/beta/b.d.ts]
-export {};
-
-
-//// [/beta/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

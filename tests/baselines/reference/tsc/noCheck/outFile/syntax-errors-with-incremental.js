@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export const a = "hello
 
@@ -31,6 +16,20 @@ export const b = 10;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -43,15 +42,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export const a = "hello";
-}
-declare module "b" {
-    export const b = 10;
-}
 
 
 //// [/outFile.js]
@@ -67,6 +57,15 @@ define("b", ["require", "exports"], function (require, exports) {
     exports.b = void 0;
     exports.b = 10;
 });
+
+
+//// [/outFile.d.ts]
+declare module "a" {
+    export const a = "hello";
+}
+declare module "b" {
+    export const b = 10;
+}
 
 
 //// [/outFile.tsbuildinfo]
@@ -144,10 +143,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -187,19 +185,17 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -215,6 +211,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 //// [/outFile.tsbuildinfo]
 {"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -290,10 +287,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -325,10 +321,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -396,10 +391,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -430,10 +424,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -465,12 +458,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -485,7 +477,6 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -501,6 +492,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 //// [/outFile.tsbuildinfo]
 {"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -576,10 +568,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -619,10 +610,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -709,19 +699,17 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -737,6 +725,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 //// [/outFile.tsbuildinfo]
 {"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -812,10 +801,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -883,12 +871,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
@@ -901,18 +888,6 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export const a = "hello";
-}
-declare module "b" {
-    export const b = 10;
-}
-declare module "c" {
-    export const c: number;
-}
 
 
 //// [/outFile.js]
@@ -934,6 +909,18 @@ define("c", ["require", "exports"], function (require, exports) {
     exports.c = void 0;
     exports.c = "hello";
 });
+
+
+//// [/outFile.d.ts]
+declare module "a" {
+    export const a = "hello";
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c: number;
+}
 
 
 //// [/outFile.tsbuildinfo]
@@ -1020,12 +1007,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -1040,7 +1026,6 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1062,6 +1047,7 @@ define("c", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 //// [/outFile.tsbuildinfo]
 {"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -1148,19 +1134,17 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1182,6 +1166,7 @@ define("c", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/outFile.d.ts] file written with same contents
 //// [/outFile.tsbuildinfo]
 {"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -1268,10 +1253,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -1369,10 +1353,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -1406,10 +1389,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::

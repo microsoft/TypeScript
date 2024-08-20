@@ -1,5 +1,18 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/a.ts]
+export const a = "hello
+
+//// [/src/b.ts]
+export const b = 10;
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,20 +28,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/a.ts]
-export const a = "hello
-
-//// [/src/b.ts]
-export const b = 10;
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -42,10 +41,6 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts]
-export declare const a = "hello";
-
-
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -53,8 +48,8 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts]
-export declare const b = 10;
+//// [/src/a.d.ts]
+export declare const a = "hello";
 
 
 //// [/src/b.js]
@@ -64,6 +59,10 @@ exports.b = void 0;
 exports.b = 10;
 
 
+//// [/src/b.d.ts]
+export declare const b = 10;
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -83,10 +82,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -100,10 +98,10 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -123,19 +121,17 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -143,8 +139,9 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -164,19 +161,18 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -196,19 +192,18 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -227,19 +222,18 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -257,20 +251,19 @@ Program files::
 /src/b.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -289,13 +282,12 @@ Program files::
 /src/b.ts
 
 exitCode:: ExitStatus.Success
-
 
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -310,7 +302,6 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -318,8 +309,9 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -339,10 +331,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
@@ -356,10 +347,10 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -379,10 +370,9 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -396,10 +386,10 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -418,19 +408,17 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -438,8 +426,9 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -459,19 +448,18 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -490,12 +478,11 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
@@ -510,14 +497,10 @@ Found 1 error in src/c.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts]
-export declare const c: number;
-
-
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -525,6 +508,10 @@ exports.c = void 0;
 exports.c = "hello";
 
 
+//// [/src/c.d.ts]
+export declare const c: number;
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -545,12 +532,11 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
@@ -565,7 +551,6 @@ Found 1 error in src/a.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -573,10 +558,11 @@ exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -598,19 +584,17 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -618,10 +602,11 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -643,10 +628,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -660,12 +644,12 @@ Found 1 error in src/c.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -686,21 +670,20 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -722,10 +705,9 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
@@ -739,12 +721,12 @@ Found 1 error in src/c.ts[90m:1[0m
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/src/a.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/src/b.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",

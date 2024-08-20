@@ -1,5 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/src/index.ts]
+export const x = 10;
+
+//// [/src/types/type.ts]
+export type t = string;
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,21 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/src/index.ts]
-export const x = 10;
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
-  }
-}
-
-//// [/src/types/type.ts]
-export type t = string;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
@@ -56,6 +55,11 @@ exports.x = void 0;
 exports.x = 10;
 
 
+//// [/src/types/type.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 //// [/src/tsconfig.tsbuildinfo]
 {"root":["./src/index.ts","./types/type.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -70,18 +74,12 @@ exports.x = 10;
   "size": 85
 }
 
-//// [/src/types/type.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
@@ -102,16 +100,15 @@ Found 1 error.
 
 
 //// [/src/dist/index.js] file written with same contents
+//// [/src/types/type.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo] file written with same contents
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/types/type.js] file written with same contents
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::

@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export function foo() { }
 
@@ -32,6 +17,20 @@ export function bar() { }
     ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
@@ -46,10 +45,6 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts]
-export declare function foo(): void;
-
-
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -57,8 +52,8 @@ exports.foo = foo;
 function foo() { }
 
 
-//// [/src/b.d.ts]
-export declare function bar(): void;
+//// [/src/a.d.ts]
+export declare function foo(): void;
 
 
 //// [/src/b.js]
@@ -66,6 +61,10 @@ export declare function bar(): void;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = bar;
 function bar() { }
+
+
+//// [/src/b.d.ts]
+export declare function bar(): void;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -127,8 +126,8 @@ function bar() { }
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: reports syntax errors after change to config file
+
 Input::
 //// [/src/tsconfig.json]
 {
@@ -141,7 +140,6 @@ Input::
         "b.ts"
     ]
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
@@ -159,12 +157,11 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: reports syntax errors after change to ts file
+
 Input::
 //// [/src/a.ts]
 export function foo() { }export function fooBar() { }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
@@ -179,11 +176,6 @@ Found 1 error.
 
 
 
-//// [/src/a.d.ts]
-export declare function foo(): void;
-export declare function fooBar(): void;
-
-
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -191,6 +183,11 @@ exports.foo = foo;
 exports.fooBar = fooBar;
 function foo() { }
 function fooBar() { }
+
+
+//// [/src/a.d.ts]
+export declare function foo(): void;
+export declare function fooBar(): void;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -253,10 +250,9 @@ function fooBar() { }
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
 Output::
@@ -273,8 +269,8 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: builds after fixing config file errors
+
 Input::
 //// [/src/tsconfig.json]
 {
@@ -287,7 +283,6 @@ Input::
     "b.ts"
   ]
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json

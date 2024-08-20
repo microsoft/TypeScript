@@ -17,7 +17,7 @@ describe("unittests:: tsc:: noEmit::", () => {
         scenario: "noEmit",
         subScenario: "when project has strict true",
         commandLineArgs: ["-noEmit", "-p", `src/project`],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {

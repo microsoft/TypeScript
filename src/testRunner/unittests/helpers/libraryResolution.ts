@@ -1,15 +1,18 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
+import { TscWatchSystem } from "./baseline.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
 import {
-    createServerHost,
     createWatchedSystem,
+    FileOrFolderOrSymLinkMap,
+    getCreateWatchedSystem,
     getTypeScriptLibTestLocation,
     libFile,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
+function getFsContentsForLibResolution(libRedirection?: boolean): FileOrFolderOrSymLinkMap {
     return {
         "/home/src/workspace/projects/project1/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project1/file.ts": `export const file = 10;`,
@@ -39,8 +42,6 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
         "/home/src/workspace/projects/project4/tsconfig.json": jsonToReadableText({
             compilerOptions: { composite: true, lib: ["esnext", "dom", "webworker"], traceResolution: true },
         }),
-        [getTypeScriptLibTestLocation("es5")]: libFile.content,
-        [getTypeScriptLibTestLocation("esnext")]: libFile.content,
         [getTypeScriptLibTestLocation("dom")]: "interface DOMInterface { }",
         [getTypeScriptLibTestLocation("webworker")]: "interface WebWorkerInterface { }",
         [getTypeScriptLibTestLocation("scripthost")]: "interface ScriptHostInterface { }",
@@ -49,30 +50,178 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             "/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts": libFile.content,
             "/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts": libFile.content,
             "/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts": "interface DOMInterface { }",
-            "/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebworkerInterface { }",
+            "/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebWorkerInterface { }",
             "/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts": "interface ScriptHostInterface { }",
         } : undefined,
     };
 }
 
-export function getFsForLibResolution(libRedirection: true | undefined) {
-    return loadProjectFromFiles(
+function getSysForLibResolution(libRedirection?: boolean, forTsserver?: boolean) {
+    return getCreateWatchedSystem(forTsserver)(
         getFsContentsForLibResolution(libRedirection),
         { currentDirectory: "/home/src/workspace/projects" },
     );
 }
 
-export function getSysForLibResolution(libRedirection?: true) {
-    return createWatchedSystem(
-        getFsContentsForLibResolution(libRedirection),
-        { currentDirectory: "/home/src/workspace/projects" },
-    );
+function getLibResolutionEditOptions(
+    withoutConfig: true | undefined,
+    changeLib: (sys: TscWatchSystem) => void,
+): readonly TscWatchCompileChange[] {
+    return withoutConfig ?
+        emptyArray :
+        [
+            {
+                caption: "change program options to update module resolution",
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/workspace/projects/project1/tsconfig.json",
+                        jsonToReadableText({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1", "./typeroot2"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "change program options to update module resolution and also update lib file",
+                edit: sys => {
+                    sys.writeFile(
+                        "/home/src/workspace/projects/project1/tsconfig.json",
+                        jsonToReadableText({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    );
+                    changeLib(sys);
+                },
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+        ];
 }
 
-export function getServerHostForLibResolution(libRedirection?: true) {
-    return createServerHost(
-        getFsContentsForLibResolution(libRedirection),
-    );
+function getLibResolutionWithoutRedirection(withoutConfig: true | undefined): readonly TscWatchCompileChange[] {
+    return [
+        {
+            caption: "write redirect file dom",
+            edit: sys => sys.ensureFileOrFolder({ path: "/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+            timeouts: sys => {
+                sys.runQueuedTimeoutCallbacks();
+                sys.runQueuedTimeoutCallbacks();
+            },
+        },
+        {
+            caption: "edit file",
+            edit: sys => sys.appendFile("/home/src/workspace/projects/project1/file.ts", "export const xyz = 10;"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "delete core",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/project1/core.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "delete redirect file dom",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        ...getLibResolutionEditOptions(
+            withoutConfig,
+            sys =>
+                sys.ensureFileOrFolder({
+                    path: "/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                    content: "interface DOMInterface { }",
+                }),
+        ),
+        {
+            caption: "write redirect file webworker",
+            edit: sys => sys.ensureFileOrFolder({ path: "/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" }),
+            timeouts: sys => {
+                sys.runQueuedTimeoutCallbacks();
+                sys.runQueuedTimeoutCallbacks();
+            },
+        },
+        {
+            caption: "delete redirect file webworker",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+    ];
+}
+
+function getLibResolutionWithRedirection(withoutConfig: true | undefined): readonly TscWatchCompileChange[] {
+    return [
+        {
+            caption: "delete redirect file dom",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "edit file",
+            edit: sys => sys.appendFile("/home/src/workspace/projects/project1/file.ts", "export const xyz = 10;"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "delete core",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/project1/core.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "write redirect file dom",
+            edit: sys => sys.ensureFileOrFolder({ path: "/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+            timeouts: sys => {
+                sys.runQueuedTimeoutCallbacks();
+                sys.runQueuedTimeoutCallbacks();
+            },
+        },
+        ...getLibResolutionEditOptions(
+            withoutConfig,
+            sys => sys.deleteFile("/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts"),
+        ),
+        {
+            caption: "delete redirect file webworker",
+            edit: sys => sys.deleteFile("/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts"),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        },
+        {
+            caption: "write redirect file webworker",
+            edit: sys => sys.ensureFileOrFolder({ path: "/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" }),
+            timeouts: sys => {
+                sys.runQueuedTimeoutCallbacks();
+                sys.runQueuedTimeoutCallbacks();
+            },
+        },
+    ];
+}
+
+export function forEachLibResolutionScenario(
+    forTsserver: boolean,
+    withoutConfig: true | undefined,
+    action: (scenario: string, sys: () => TestServerHost, edits: () => readonly TscWatchCompileChange[]) => void,
+) {
+    [undefined, true].forEach(libRedirection => {
+        action(
+            `${withoutConfig ? "without" : "with"} config${libRedirection ? " with redirection" : ""}`,
+            () => getSysForLibResolution(libRedirection, forTsserver),
+            () =>
+                libRedirection ?
+                    getLibResolutionWithRedirection(withoutConfig) :
+                    getLibResolutionWithoutRedirection(withoutConfig),
+        );
+    });
 }
 
 export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined) {
@@ -81,7 +230,7 @@ export function getCommandLineArgsForLibResolution(withoutConfig: true | undefin
         ["-p", "project1", "--explainFiles"];
 }
 
-function getFsContentsForLibResolutionUnknown(): FsContents {
+function getFsContentsForLibResolutionUnknown(): FileOrFolderOrSymLinkMap {
     return {
         "/home/src/workspace/projects/project1/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project1/file.ts": `export const file = 10;`,
@@ -102,14 +251,6 @@ function getFsContentsForLibResolutionUnknown(): FsContents {
         [getTypeScriptLibTestLocation("scripthost")]: "interface ScriptHostInterface { }",
     };
 }
-
-export function getFsForLibResolutionUnknown() {
-    return loadProjectFromFiles(
-        getFsContentsForLibResolutionUnknown(),
-        { currentDirectory: "/home/src/workspace/projects" },
-    );
-}
-
 export function getSysForLibResolutionUnknown() {
     return createWatchedSystem(
         getFsContentsForLibResolutionUnknown(),

@@ -1,16 +1,12 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
     verifyTsc({
         subScenario: "interface is merged and contains late bound member",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/globals.d.ts": dedent`
                 interface SymbolConstructor {
@@ -44,11 +40,11 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
         edits: [
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
+                edit: sys => sys.replaceFileText("/src/src/main.ts", "const x = 10;", ""),
             },
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => appendText(fs, "/src/src/main.ts", "const x = 10;"),
+                edit: sys => sys.appendFile("/src/src/main.ts", "const x = 10;"),
             },
         ],
     });

@@ -1,15 +1,10 @@
 import { dedent } from "../../_namespaces/Utils.js";
-import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
-    function outFileFs(prepend?: boolean) {
+    function outFileSys(prepend?: boolean) {
         return loadProjectFromFiles({
             "/src/app/file3.ts": dedent`
                 export const z = 30;
@@ -53,41 +48,39 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     verifyTsc({
         scenario: "amdModulesWithOut",
         subScenario: "modules and globals mixed in amd",
-        fs: outFileFs,
+        sys: outFileSys,
         commandLineArgs: ["--b", "/src/app", "--verbose"],
         baselineSourceMap: true,
         edits: [{
             caption: "incremental-declaration-doesnt-change",
-            edit: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);"),
+            edit: sys => sys.appendFile("/src/lib/file1.ts", "console.log(x);"),
         }],
     });
 
     verifyTsc({
         scenario: "amdModulesWithOut",
         subScenario: "prepend reports deprecation error",
-        fs: () => outFileFs(/*prepend*/ true),
+        sys: () => outFileSys(/*prepend*/ true),
         commandLineArgs: ["--b", "/src/app", "--verbose"],
         baselineSourceMap: true,
         edits: [{
             caption: "incremental-declaration-doesnt-change",
-            edit: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);"),
+            edit: sys => sys.appendFile("/src/lib/file1.ts", "console.log(x);"),
         }],
     });
 
     describe("when the module resolution finds original source file", () => {
-        function modifyFs(fs: vfs.FileSystem) {
-            // Make lib to output to parent dir
-            replaceText(fs, "/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
-            // Change reference to file1 module to resolve to lib/file1
-            replaceText(fs, "/src/app/file3.ts", "file1", "lib/file1");
-        }
-
         verifyTsc({
             scenario: "amdModulesWithOut",
             subScenario: "when the module resolution finds original source file",
-            fs: outFileFs,
+            sys: outFileSys,
             commandLineArgs: ["-b", "/src/app", "--verbose"],
-            modifyFs,
+            modifySystem: sys => {
+                // Make lib to output to parent dir
+                sys.replaceFileText("/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+                // Change reference to file1 module to resolve to lib/file1
+                sys.replaceFileText("/src/app/file3.ts", "file1", "lib/file1");
+            },
             baselineSourceMap: true,
         });
     });

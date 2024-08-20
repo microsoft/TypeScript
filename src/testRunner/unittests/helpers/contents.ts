@@ -15,10 +15,6 @@ interface Symbol {
 }
 `;
 
-export interface FsContents {
-    [path: string]: string;
-}
-
 export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined) {
     return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
 }

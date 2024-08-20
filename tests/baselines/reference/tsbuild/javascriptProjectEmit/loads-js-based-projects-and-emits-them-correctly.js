@@ -1,29 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-interface SymbolConstructor {
-    readonly species: symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-
-
 //// [/src/common/nominal.js]
 /**
  * @template T, Name
@@ -88,6 +64,18 @@ export function getVar() {
     "include": ["./index.js"]
 }
 
+//// [/src/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "./sub-project" },
+        { "path": "./sub-project-2" }
+    ],
+    "include": []
+}
+
 //// [/src/tsconfig.base.json]
 {
     "compilerOptions": {
@@ -100,16 +88,27 @@ export function getVar() {
     }
 }
 
-//// [/src/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "./sub-project" },
-        { "path": "./sub-project-2" }
-    ],
-    "include": []
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
 }
 
 
@@ -131,18 +130,18 @@ Found 2 errors.
 
 
 
-//// [/lib/common/nominal.d.ts]
-export type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-
 //// [/lib/common/nominal.js]
 /**
  * @template T, Name
  * @typedef {T & {[Symbol.species]: Name}} Nominal
  */
 module.exports = {};
+
+
+//// [/lib/common/nominal.d.ts]
+export type Nominal<T, Name> = T & {
+    [Symbol.species]: Name;
+};
 
 
 //// [/lib/common/tsconfig.tsbuildinfo]
@@ -193,11 +192,6 @@ module.exports = {};
   "size": 1232
 }
 
-//// [/lib/sub-project/index.d.ts]
-export type MyNominal = Nominal<string, "MyNominal">;
-import { Nominal } from '../common/nominal';
-
-
 //// [/lib/sub-project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -205,6 +199,11 @@ var nominal_1 = require("../common/nominal");
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
+
+
+//// [/lib/sub-project/index.d.ts]
+export type MyNominal = Nominal<string, "MyNominal">;
+import { Nominal } from '../common/nominal';
 
 
 //// [/lib/sub-project/tsconfig.tsbuildinfo]
@@ -284,18 +283,6 @@ var nominal_1 = require("../common/nominal");
   "size": 1666
 }
 
-//// [/lib/sub-project-2/index.d.ts]
-/**
- * @return {keyof typeof variable}
- */
-export function getVar(): keyof typeof variable;
-declare namespace variable {
-    let key: MyNominal;
-}
-import { MyNominal } from '../sub-project/index';
-export {};
-
-
 //// [/lib/sub-project-2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -310,6 +297,18 @@ var variable = {
 function getVar() {
     return 'key';
 }
+
+
+//// [/lib/sub-project-2/index.d.ts]
+/**
+ * @return {keyof typeof variable}
+ */
+export function getVar(): keyof typeof variable;
+declare namespace variable {
+    let key: MyNominal;
+}
+import { MyNominal } from '../sub-project/index';
+export {};
 
 
 //// [/lib/sub-project-2/tsconfig.tsbuildinfo]

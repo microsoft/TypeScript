@@ -1,35 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/projects/a/src/index.ts]
 
 
@@ -38,12 +8,6 @@ declare const console: { log(msg: any): void; };
   "compilerOptions": {
     "strict": true
   }
-}
-
-//// [/src/projects/b/package.json]
-{
-  "name": "b",
-  "type": "module"
 }
 
 //// [/src/projects/b/src/index.ts]
@@ -59,6 +23,12 @@ pg.foo();
   }
 }
 
+//// [/src/projects/b/package.json]
+{
+  "name": "b",
+  "type": "module"
+}
+
 //// [/src/projects/node_modules/@types/pg/index.d.ts]
 export function foo(): void;
 
@@ -68,6 +38,20 @@ export function foo(): void;
   "types": "index.d.ts"
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
@@ -145,6 +129,8 @@ src/projects/b/src/index.ts
   File is ECMAScript module because 'src/projects/b/package.json' has field "type" with value "module"
 
 
+//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+
 //// [/src/projects/a/src/index.js]
 "use strict";
 
@@ -181,10 +167,9 @@ pg.foo();
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
 Output::

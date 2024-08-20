@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project/a.ts]
 import {A} from "./c"
 let a = A.ONE
@@ -39,10 +24,30 @@ export const enum AWorker {
 }
 
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo
 Output::
+
+
+//// [/src/project/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b = 1 /* A.ONE */;
 
 
 //// [/src/project/a.js]
@@ -114,17 +119,11 @@ var a = 1 /* A.ONE */;
   "size": 925
 }
 
-//// [/src/project/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b = 1 /* A.ONE */;
-
-
 
 exitCode:: ExitStatus.Success
 
-
 Change:: change enum value
+
 Input::
 //// [/src/project/b.d.ts]
 declare const enum AWorker {
@@ -134,9 +133,14 @@ export { AWorker as A };
 
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo
 Output::
+
+
+//// [/src/project/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b = 2 /* A.ONE */;
 
 
 //// [/src/project/a.js]
@@ -216,17 +220,11 @@ var a = 2 /* A.ONE */;
   "size": 1058
 }
 
-//// [/src/project/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b = 2 /* A.ONE */;
-
-
 
 exitCode:: ExitStatus.Success
 
-
 Change:: change enum value again
+
 Input::
 //// [/src/project/b.d.ts]
 declare const enum AWorker {
@@ -236,9 +234,14 @@ export { AWorker as A };
 
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo
 Output::
+
+
+//// [/src/project/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b = 3 /* A.ONE */;
 
 
 //// [/src/project/a.js]
@@ -314,17 +317,11 @@ var a = 3 /* A.ONE */;
   "size": 1007
 }
 
-//// [/src/project/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b = 3 /* A.ONE */;
-
-
 
 exitCode:: ExitStatus.Success
 
-
 Change:: something else changes in b.d.ts
+
 Input::
 //// [/src/project/b.d.ts]
 declare const enum AWorker {
@@ -334,11 +331,11 @@ export { AWorker as A };
 export const randomThing = 10;
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo
 Output::
 
 
+//// [/src/project/c.js] file written with same contents
 //// [/src/project/a.js] file written with same contents
 //// [/src/project/a.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[4],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
@@ -407,12 +404,11 @@ Output::
   "size": 1037
 }
 
-//// [/src/project/c.js] file written with same contents
 
 exitCode:: ExitStatus.Success
 
-
 Change:: something else changes in b.d.ts again
+
 Input::
 //// [/src/project/b.d.ts]
 declare const enum AWorker {
@@ -422,11 +418,11 @@ export { AWorker as A };
 export const randomThing = 10;export const randomThing2 = 10;
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo
 Output::
 
 
+//// [/src/project/c.js] file written with same contents
 //// [/src/project/a.js] file written with same contents
 //// [/src/project/a.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[4],"options":{"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
@@ -495,6 +491,5 @@ Output::
   "size": 1068
 }
 
-//// [/src/project/c.js] file written with same contents
 
 exitCode:: ExitStatus.Success

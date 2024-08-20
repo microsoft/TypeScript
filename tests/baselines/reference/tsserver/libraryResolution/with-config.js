@@ -92,36 +92,6 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
 interface DOMInterface { }
 
@@ -469,6 +439,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/workspace/node_modules: *new*
@@ -554,6 +526,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
+write redirect file dom
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -794,6 +767,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
+edit file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspace/projects/project1/file.ts 1:: WatchInfo: /home/src/workspace/projects/project1/file.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -973,6 +947,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
+delete core
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspace/projects/project1/core.d.ts 2:: WatchInfo: /home/src/workspace/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -1131,6 +1106,7 @@ Projects::
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
 
+delete redirect file dom
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1428,6 +1404,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
+change program options to update module resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspace/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/project1/tsconfig.json
@@ -1620,6 +1597,11 @@ Projects::
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
 
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+change program options to update module resolution and also update lib file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspace/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/project1/tsconfig.json
@@ -1988,6 +1970,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+write redirect file webworker
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -2243,6 +2226,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspace/projects/project1/tsconfig.json
 
+delete redirect file webworker
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspace/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Failed Lookup Locations

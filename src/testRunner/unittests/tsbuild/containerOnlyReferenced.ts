@@ -3,16 +3,13 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "verify that subsequent builds after initial build doesnt build anything",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/folder/index.ts": `export const x = 10;`,
                 "/src/src/folder/tsconfig.json": jsonToReadableText({
@@ -66,7 +63,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
     verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "when solution is referenced indirectly",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
@@ -91,7 +88,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         commandLineArgs: ["--b", "/src/project4", "--verbose", "--explainFiles"],
         edits: [{
             caption: "modify project3 file",
-            edit: fs => replaceText(fs, "/src/project3/src/c.ts", "c = ", "cc = "),
+            edit: sys => sys.replaceFileText("/src/project3/src/c.ts", "c = ", "cc = "),
         }],
     });
 });

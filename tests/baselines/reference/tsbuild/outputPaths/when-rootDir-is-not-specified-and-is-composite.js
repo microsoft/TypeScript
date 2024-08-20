@@ -1,5 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/src/index.ts]
+export const x = 10;
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "composite": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,18 +26,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/src/index.ts]
-export const x = 10;
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "dist",
-    "composite": true
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
@@ -39,15 +38,15 @@ Output::
 
 
 
-//// [/src/dist/src/index.d.ts]
-export declare const x = 10;
-
-
 //// [/src/dist/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
+
+
+//// [/src/dist/src/index.d.ts]
+export declare const x = 10;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
@@ -96,10 +95,9 @@ exports.x = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
@@ -113,10 +111,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::

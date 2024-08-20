@@ -11,9 +11,6 @@ export const a: number = "hello"
   }
 }
 
-//// [/home/src/projects/project/b.ts]
-export const b = 10;
-
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -28,6 +25,9 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
+
+//// [/home/src/projects/project/b.ts]
+export const b = 10;
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -verbose -w

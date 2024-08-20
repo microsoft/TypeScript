@@ -1,4 +1,4 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { LanguageService } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
@@ -32,7 +32,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                                 response: testProtocolCommandResponse,
                             };
                         });
-                        return Harness.LanguageService.makeDefaultProxy(info);
+                        return LanguageService.makeDefaultProxy(info);
                     },
                 }),
                 error: undefined,
@@ -183,7 +183,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 module: (): ts.server.PluginModule => {
                     session.logger.log(`PluginFactory Invoke`);
                     return {
-                        create: Harness.LanguageService.makeDefaultProxy,
+                        create: LanguageService.makeDefaultProxy,
                         getExternalFiles: () => externalFiles[moduleName],
                     };
                 },
@@ -234,7 +234,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         proxy.getSupportedCodeFixes = fileName => {
                             switch (fileName) {
                                 case "/home/src/projects/project/a.ts":
@@ -334,7 +334,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
                             ts.fileExtensionIs(fileName, ".vue") ?
@@ -386,7 +386,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
                             fileName === bVue.path ?

@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
     verifyTscWatch,
@@ -623,12 +623,12 @@ declare namespace NodeJS {
                         outDir: "outDir",
                     },
                 }),
-                "/users/username/projects/project/fileWithImports.ts": Utils.dedent`
+                "/users/username/projects/project/fileWithImports.ts": dedent`
                 import type { Import0 } from "pkg0";
                 import type { Import1 } from "pkg1";
             `,
                 "/users/username/projects/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
-                "/users/username/projects/project/fileWithTypeRefs.ts": Utils.dedent`
+                "/users/username/projects/project/fileWithTypeRefs.ts": dedent`
                 /// <reference types="pkg2"/>
                 /// <reference types="pkg3"/>
                 interface LocalInterface extends Import2, Import3 {}
@@ -663,7 +663,7 @@ declare namespace NodeJS {
         commandLineArgs: ["--w", "-p", `.`, "--traceResolution", "--extendedDiagnostics"],
         sys: () =>
             createWatchedSystem({
-                "/user/username/projects/myproject/lib/app.ts": Utils.dedent`
+                "/user/username/projects/myproject/lib/app.ts": dedent`
                 import { myapp } from "@myapp/ts-types";
                 const x: 10 = myapp;
             `,

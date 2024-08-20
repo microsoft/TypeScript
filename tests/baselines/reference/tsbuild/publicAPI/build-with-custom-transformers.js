@@ -1,4 +1,51 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
+
+//// [/src/shared/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
+
+//// [/src/shared/index.ts]
+export function f1() { }
+export class c { }
+export enum e { }
+// leading
+export function f2() { } // trailing
+
+//// [/src/webpack/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
+
+//// [/src/webpack/index.ts]
+export function f2() { }
+export class c2 { }
+export enum e2 { }
+// leading
+export function f22() { } // trailing
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,120 +61,22 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/shared/index.ts]
-export function f1() { }
-export class c { }
-export enum e { }
-// leading
-export function f2() { } // trailing
 
-//// [/src/shared/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  }
-}
-
-//// [/src/tsconfig.json]
-{
-  "references": [
-    {
-      "path": "./shared/tsconfig.json"
-    },
-    {
-      "path": "./webpack/tsconfig.json"
-    }
-  ],
-  "files": []
-}
-
-//// [/src/webpack/index.ts]
-export function f2() { }
-export class c2 { }
-export enum e2 { }
-// leading
-export function f22() { } // trailing
-
-//// [/src/webpack/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  },
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
-  ]
-}
-
-
-
-Output::
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
-[[90m12:00:17 AM[0m] Projects in this build: 
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/shared/tsconfig.json
     * src/webpack/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:18 AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/shared/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/shared/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:19 AM[0m] Building project '/src/shared/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/shared/tsconfig.json'...
 
-[[90m12:00:25 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:26 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/webpack/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/shared/index.ts"
-]
-Program options: {
-  "composite": true,
-  "tscBuild": true,
-  "configFilePath": "/src/shared/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/shared/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/shared/index.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/shared/index.ts (used version)
-
-Program root files: [
-  "/src/webpack/index.ts"
-]
-Program options: {
-  "composite": true,
-  "tscBuild": true,
-  "configFilePath": "/src/webpack/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/webpack/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/webpack/index.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/webpack/index.ts (used version)
-
-
-//// [/src/shared/index.d.ts]
-export declare function f1(): void;
-export declare class c {
-}
-export declare enum e {
-}
-export declare function f2(): void;
 
 
 //// [/src/shared/index.js]
@@ -152,6 +101,15 @@ var e;
 // leading
 /*@before/src/shared/tsconfig.json*/
 function f2() { } // trailing
+
+
+//// [/src/shared/index.d.ts]
+export declare function f1(): void;
+export declare class c {
+}
+export declare enum e {
+}
+export declare function f2(): void;
 
 
 //// [/src/shared/tsconfig.tsbuildinfo]
@@ -198,15 +156,6 @@ function f2() { } // trailing
   "size": 961
 }
 
-//// [/src/webpack/index.d.ts]
-export declare function f2(): void;
-export declare class c2 {
-}
-export declare enum e2 {
-}
-export declare function f22(): void;
-
-
 //// [/src/webpack/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -229,6 +178,15 @@ var e2;
 // leading
 /*@before/src/webpack/tsconfig.json*/
 function f22() { } // trailing
+
+
+//// [/src/webpack/index.d.ts]
+export declare function f2(): void;
+export declare class c2 {
+}
+export declare enum e2 {
+}
+export declare function f22(): void;
 
 
 //// [/src/webpack/tsconfig.tsbuildinfo]
@@ -275,3 +233,47 @@ function f22() { } // trailing
   "size": 968
 }
 
+
+Program root files: [
+  "/src/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "tscBuild": true,
+  "configFilePath": "/src/shared/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/shared/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/shared/index.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/shared/index.ts (used version)
+
+Program root files: [
+  "/src/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "tscBuild": true,
+  "configFilePath": "/src/webpack/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/webpack/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/webpack/index.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/webpack/index.ts (used version)
+
+exitCode:: ExitStatus.Success

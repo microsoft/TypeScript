@@ -1,19 +1,9 @@
 currentDirectory:: /user/username/projects/transitiveReferences useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/transitiveReferences/refs/a.d.ts]
+export class X {}
+export class A {}
+
 
 //// [/user/username/projects/transitiveReferences/a.ts]
 export class A {}
@@ -28,11 +18,6 @@ import {b} from './b';
 import {X} from "@ref/a";
 b;
 X;
-
-
-//// [/user/username/projects/transitiveReferences/refs/a.d.ts]
-export class X {}
-export class A {}
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.json]
@@ -81,6 +66,20 @@ export class A {}
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b tsconfig.c.json --listFiles
@@ -103,11 +102,6 @@ Found 1 error.
 
 
 
-//// [/user/username/projects/transitiveReferences/a.d.ts]
-export declare class A {
-}
-
-
 //// [/user/username/projects/transitiveReferences/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -120,25 +114,9 @@ var A = /** @class */ (function () {
 exports.A = A;
 
 
-//// [/user/username/projects/transitiveReferences/b.d.ts]
-export declare const b: any;
-
-
-//// [/user/username/projects/transitiveReferences/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-var a_1 = require("a");
-exports.b = new a_1.A();
-
-
-//// [/user/username/projects/transitiveReferences/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var a_1 = require("@ref/a");
-b_1.b;
-a_1.X;
+//// [/user/username/projects/transitiveReferences/a.d.ts]
+export declare class A {
+}
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
@@ -182,6 +160,18 @@ a_1.X;
   "version": "FakeTSVersion",
   "size": 765
 }
+
+//// [/user/username/projects/transitiveReferences/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+var a_1 = require("a");
+exports.b = new a_1.A();
+
+
+//// [/user/username/projects/transitiveReferences/b.d.ts]
+export declare const b: any;
+
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
 {"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-5666291609-export declare const b: any;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":16,"length":3,"messageText":"Cannot find module 'a' or its corresponding type declarations.","category":1,"code":2307}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
@@ -238,6 +228,15 @@ a_1.X;
   "version": "FakeTSVersion",
   "size": 960
 }
+
+//// [/user/username/projects/transitiveReferences/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var a_1 = require("@ref/a");
+b_1.b;
+a_1.X;
+
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo]
 {"root":["./c.ts"],"version":"FakeTSVersion"}

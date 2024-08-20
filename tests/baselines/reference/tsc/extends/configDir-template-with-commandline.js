@@ -40,22 +40,6 @@ Input::
   }
 }
 
-//// [/home/src/projects/myproject/main.ts]
-// some comment
-export const y = 10;
-import { x } from "@myscope/sometype";
-
-
-//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts]
-export const k = 10;
-
-
-//// [/home/src/projects/myproject/src/secondary.ts]
-// some comment
-export const z = 10;
-import { k } from "other/sometype2";
-
-
 //// [/home/src/projects/myproject/tsconfig.json]
 {
   "extends": "../configs/first/tsconfig.json",
@@ -66,8 +50,24 @@ import { k } from "other/sometype2";
   }
 }
 
+//// [/home/src/projects/myproject/main.ts]
+// some comment
+export const y = 10;
+import { x } from "@myscope/sometype";
+
+
+//// [/home/src/projects/myproject/src/secondary.ts]
+// some comment
+export const z = 10;
+import { k } from "other/sometype2";
+
+
 //// [/home/src/projects/myproject/types/sometype.ts]
 export const x = 10;
+
+
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts]
+export const k = 10;
 
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -86,8 +86,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/myproject --explainFiles --outDir ${configDir}/outDir
+/home/src/tslibs/ts/lib/tsc.js --explainFiles --outDir ${configDir}/outDir
 Output::
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -131,12 +130,27 @@ src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
 
 
+//// [/home/src/projects/myproject/${configDir}/outDir/types/sometype.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/home/src/projects/myproject/decls/types/sometype.d.ts]
+export declare const x = 10;
+
+
 //// [/home/src/projects/myproject/${configDir}/outDir/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 // some comment
 exports.y = 10;
+
+
+//// [/home/src/projects/myproject/decls/main.d.ts]
+export declare const y = 10;
 
 
 //// [/home/src/projects/myproject/${configDir}/outDir/src/secondary.js]
@@ -147,23 +161,8 @@ exports.z = void 0;
 exports.z = 10;
 
 
-//// [/home/src/projects/myproject/${configDir}/outDir/types/sometype.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/home/src/projects/myproject/decls/main.d.ts]
-export declare const y = 10;
-
-
 //// [/home/src/projects/myproject/decls/src/secondary.d.ts]
 export declare const z = 10;
-
-
-//// [/home/src/projects/myproject/decls/types/sometype.d.ts]
-export declare const x = 10;
 
 
 

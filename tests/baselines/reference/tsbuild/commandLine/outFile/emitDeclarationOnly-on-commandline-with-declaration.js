@@ -1,19 +1,13 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project1/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
+  }
+}
 
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;
@@ -26,24 +20,6 @@ import { a } from "./a";export const c = a;
 
 //// [/src/project1/src/d.ts]
 import { b } from "./b";export const d = b;
-
-//// [/src/project1/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true,
-    "outFile": "../outFile.js",
-    "module": "amd"
-  }
-}
-
-//// [/src/project2/src/e.ts]
-export const e = 10;
-
-//// [/src/project2/src/f.ts]
-import { a } from "a"; export const f = a;
-
-//// [/src/project2/src/g.ts]
-import { b } from "b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
 {
@@ -59,6 +35,29 @@ import { b } from "b"; export const g = b;
   ]
 }
 
+//// [/src/project2/src/e.ts]
+export const e = 10;
+
+//// [/src/project2/src/f.ts]
+import { a } from "a"; export const f = a;
+
+//// [/src/project2/src/g.ts]
+import { b } from "b"; export const g = b;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -205,10 +204,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -267,12 +265,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -368,12 +365,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -484,10 +480,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: emit js files
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
@@ -518,6 +513,11 @@ Found 1 error.
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/outFile.d.ts] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/src/project1/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -549,9 +549,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 });
 
 
-//// [/src/project1/outFile.tsbuildinfo] file written with same contents
-//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/project2/outFile.d.ts] file written with same contents
 //// [/src/project2/outFile.js]
 define("e", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -573,8 +570,6 @@ define("g", ["require", "exports", "b"], function (require, exports, b_1) {
 });
 
 
-//// [/src/project2/outFile.tsbuildinfo] file written with same contents
-//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -632,10 +627,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -694,12 +688,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -731,6 +724,11 @@ Found 1 error.
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/outFile.d.ts] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/src/project1/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -763,12 +761,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 });
 
 
-//// [/src/project1/outFile.tsbuildinfo] file written with same contents
-//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/project2/outFile.d.ts] file written with same contents
 //// [/src/project2/outFile.js] file written with same contents
-//// [/src/project2/outFile.tsbuildinfo] file written with same contents
-//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -826,12 +819,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -927,12 +919,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -1044,12 +1035,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -1098,6 +1088,11 @@ declare module "d" {
 }
 
 
+//// [/src/project1/outFile.tsbuildinfo] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/outFile.d.ts] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo] file written with same contents
+//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/src/project1/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1133,12 +1128,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 });
 
 
-//// [/src/project1/outFile.tsbuildinfo] file written with same contents
-//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/project2/outFile.d.ts] file written with same contents
 //// [/src/project2/outFile.js] file written with same contents
-//// [/src/project2/outFile.tsbuildinfo] file written with same contents
-//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",

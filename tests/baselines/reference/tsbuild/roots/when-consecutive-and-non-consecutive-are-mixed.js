@@ -1,5 +1,54 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/file1.ts]
+export const x = "hello";
+
+//// [/src/file2.ts]
+export const y = "world";
+
+//// [/src/random.d.ts]
+export const random = "hello";
+
+//// [/src/nonconsecutive.ts]
+import { random } from "./random";
+export const nonConsecutive = "hello";
+
+
+//// [/src/random1.d.ts]
+export const random = "hello";
+
+//// [/src/asArray1.ts]
+import { random } from "./random1";
+export const x = "hello";
+
+
+//// [/src/asArray2.ts]
+export const x = "hello";
+
+//// [/src/asArray3.ts]
+export const x = "hello";
+
+//// [/src/random2.d.ts]
+export const random = "hello";
+
+//// [/src/anotherNonConsecutive.ts]
+import { random } from "./random2";
+export const nonConsecutive = "hello";
+
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "file*.ts",
+    "nonconsecutive*.ts",
+    "asArray*.ts",
+    "anotherNonConsecutive.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,56 +64,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/anotherNonConsecutive.ts]
-import { random } from "./random2";
-export const nonConsecutive = "hello";
-
-
-//// [/src/asArray1.ts]
-import { random } from "./random1";
-export const x = "hello";
-
-
-//// [/src/asArray2.ts]
-export const x = "hello";
-
-//// [/src/asArray3.ts]
-export const x = "hello";
-
-//// [/src/file1.ts]
-export const x = "hello";
-
-//// [/src/file2.ts]
-export const y = "world";
-
-//// [/src/nonconsecutive.ts]
-import { random } from "./random";
-export const nonConsecutive = "hello";
-
-
-//// [/src/random.d.ts]
-export const random = "hello";
-
-//// [/src/random1.d.ts]
-export const random = "hello";
-
-//// [/src/random2.d.ts]
-export const random = "hello";
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  },
-  "include": [
-    "file*.ts",
-    "nonconsecutive*.ts",
-    "asArray*.ts",
-    "anotherNonConsecutive.ts"
-  ]
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
@@ -77,44 +76,7 @@ Output::
 
 
 
-//// [/src/anotherNonConsecutive.d.ts]
-export declare const nonConsecutive = "hello";
-
-
-//// [/src/anotherNonConsecutive.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.nonConsecutive = void 0;
-exports.nonConsecutive = "hello";
-
-
-//// [/src/asArray1.d.ts]
-export declare const x = "hello";
-
-
-//// [/src/asArray1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
-
-
-//// [/src/asArray2.d.ts]
-export declare const x = "hello";
-
-
-//// [/src/asArray2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
-
-
-//// [/src/asArray3.d.ts]
-export declare const x = "hello";
-
-
-//// [/src/asArray3.js]
+//// [/src/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -125,17 +87,6 @@ exports.x = "hello";
 export declare const x = "hello";
 
 
-//// [/src/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
-
-
-//// [/src/file2.d.ts]
-export declare const y = "world";
-
-
 //// [/src/file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -143,8 +94,8 @@ exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/nonconsecutive.d.ts]
-export declare const nonConsecutive = "hello";
+//// [/src/file2.d.ts]
+export declare const y = "world";
 
 
 //// [/src/nonconsecutive.js]
@@ -152,6 +103,54 @@ export declare const nonConsecutive = "hello";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nonConsecutive = void 0;
 exports.nonConsecutive = "hello";
+
+
+//// [/src/nonconsecutive.d.ts]
+export declare const nonConsecutive = "hello";
+
+
+//// [/src/asArray1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "hello";
+
+
+//// [/src/asArray1.d.ts]
+export declare const x = "hello";
+
+
+//// [/src/asArray2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "hello";
+
+
+//// [/src/asArray2.d.ts]
+export declare const x = "hello";
+
+
+//// [/src/asArray3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "hello";
+
+
+//// [/src/asArray3.d.ts]
+export declare const x = "hello";
+
+
+//// [/src/anotherNonConsecutive.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nonConsecutive = void 0;
+exports.nonConsecutive = "hello";
+
+
+//// [/src/anotherNonConsecutive.d.ts]
+export declare const nonConsecutive = "hello";
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -313,13 +312,12 @@ exports.nonConsecutive = "hello";
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete file1
-Input::
-//// [/src/file1.d.ts] unlink
-//// [/src/file1.js] unlink
-//// [/src/file1.ts] unlink
 
+Input::
+//// [/src/file1.ts] deleted
+//// [/src/file1.js] deleted
+//// [/src/file1.d.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::

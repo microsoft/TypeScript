@@ -1,5 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/src/fileOne.d.ts]
+declare class c { }
+
+//// [/src/project/src/file2.d.ts]
+/// <reference types="./fileOne.d.ts"/>
+declare const y: c;
+
+
+//// [/src/project/src/tsconfig.json]
+{ }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,18 +25,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/src/file2.d.ts]
-/// <reference types="./fileOne.d.ts"/>
-declare const y: c;
-
-
-//// [/src/project/src/fileOne.d.ts]
-declare class c { }
-
-//// [/src/project/src/tsconfig.json]
-{ }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project/src --explainFiles --traceResolution

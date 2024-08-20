@@ -1,10 +1,7 @@
 import { jsonToReadableText } from "../helpers.js";
 import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import {
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: noEmitOnError::", () => {
     forEachNoEmitOnErrorScenarioTsc([]);
@@ -12,7 +9,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: `multiFile/when declarationMap changes`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -28,7 +25,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         edits: [
             {
                 caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
@@ -38,7 +35,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
             },
             {
                 caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
         ],
@@ -47,7 +44,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: `outFile/when declarationMap changes`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -64,7 +61,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         edits: [
             {
                 caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will not have outSignature`,
@@ -73,7 +70,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
             },
             {
                 caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
         ],
@@ -82,7 +79,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -96,7 +93,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         commandLineArgs: ["--p", "/src/project", "-i"],
         edits: [{
             caption: "delete file without error",
-            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+            edit: sys => sys.deleteFile("/src/project/file2.ts"),
         }],
         baselinePrograms: true,
     });
@@ -104,7 +101,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: "outFile/file deleted before fixing error with noEmitOnError",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -119,7 +116,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         commandLineArgs: ["--p", "/src/project", "-i"],
         edits: [{
             caption: "delete file without error",
-            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+            edit: sys => sys.deleteFile("/src/project/file2.ts"),
         }],
         baselinePrograms: true,
     });

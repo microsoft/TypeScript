@@ -1,5 +1,15 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/src/struct.d.ts]
+import * as xs1 from "fp-ts/lib/Struct";
+import * as xs2 from "fp-ts/lib/struct";
+import * as xs3 from "./Struct";
+import * as xs4 from "./struct";
+
+
+//// [/src/project/node_modules/fp-ts/lib/struct.d.ts]
+export function foo(): void
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,17 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/node_modules/fp-ts/lib/struct.d.ts]
-export function foo(): void
-
-//// [/src/project/src/struct.d.ts]
-import * as xs1 from "fp-ts/lib/Struct";
-import * as xs2 from "fp-ts/lib/struct";
-import * as xs3 from "./Struct";
-import * as xs4 from "./struct";
-
-
 
 
 /home/src/tslibs/ts/lib/tsc.js /src/project/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles

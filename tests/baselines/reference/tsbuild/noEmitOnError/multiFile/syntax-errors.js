@@ -1,19 +1,12 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
@@ -33,14 +26,20 @@ console.log("hi");
 export { }
 
 
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "./dev-build",
-    "noEmitOnError": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
@@ -110,10 +109,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
@@ -169,15 +167,14 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
@@ -190,6 +187,20 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
@@ -209,20 +220,6 @@ var a = {
 Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "../shared/types/db.ts",
-    "../src/main.ts",
-    "../src/other.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 95
-}
 
 
 Program root files: [
@@ -257,10 +254,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::

@@ -1,8 +1,13 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "./contents.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
+import {
+    FileOrFolderOrSymLinkMap,
+    getCreateWatchedSystem,
+    TestServerHost,
+} from "./virtualFileSystemWithWatch.js";
 
-export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
+function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
     return jsonToReadableText({
         name: `@types/${packageName}`,
         version: "1.0.0",
@@ -16,7 +21,7 @@ export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: st
     });
 }
 
-export function getFsContentsForAlternateResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
+function getFsContentsForAlternateResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
     return jsonToReadableText({
         name: packageName,
         version: "1.0.0",
@@ -32,7 +37,7 @@ export function getFsContentsForAlternateResultPackageJson(packageName: string, 
     });
 }
 
-export function getFsContentsForAlternateResultDts(packageName: string) {
+function getFsContentsForAlternateResultDts(packageName: string) {
     return `export declare const ${packageName}: number;`;
 }
 
@@ -44,7 +49,7 @@ function mjs(packageName: string) {
     return `export const ${packageName} = 1;`;
 }
 
-export function getFsContentsForAlternateResult(): FsContents {
+function getFsContentsForAlternateResult(): FileOrFolderOrSymLinkMap {
     return {
         "/home/src/projects/project/node_modules/@types/bar/package.json": getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ false),
         "/home/src/projects/project/node_modules/@types/bar/index.d.ts": getFsContentsForAlternateResultDts("bar"),
@@ -81,4 +86,120 @@ export function getFsContentsForAlternateResult(): FsContents {
             files: ["index.mts"],
         }),
     };
+}
+
+export function verifyAlternateResultScenario(
+    forTsserver: boolean,
+    action: (
+        scenario: string,
+        sys: () => TestServerHost,
+        edits: () => readonly TscWatchCompileChange[],
+    ) => void,
+) {
+    action(
+        "alternateResult",
+        () =>
+            getCreateWatchedSystem(forTsserver)(
+                getFsContentsForAlternateResult(),
+                { currentDirectory: "/home/src/projects/project" },
+            ),
+        () => [
+            {
+                caption: "delete the alternateResult in @types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the ndoe10Result in package/types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the alternateResult in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the alternateResult in package/types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json from @types so error is fixed",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json so error is fixed",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json from @types so error is introduced",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json so error is introduced",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the alternateResult in @types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the ndoe10Result in package/types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the alternateResult in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the ndoe10Result in package/types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+        ],
+    );
 }

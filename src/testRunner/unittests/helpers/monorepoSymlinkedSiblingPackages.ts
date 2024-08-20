@@ -4,14 +4,11 @@ import {
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { TscWatchSystem } from "./baseline.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
 import {
-    TscWatchCompileChange,
-    TscWatchSystem,
-} from "./tscWatch.js";
-import {
-    createServerHost,
-    createWatchedSystem,
+    getCreateWatchedSystem,
     osFlavorToString,
     TestServerHost,
     TestServerHostOsFlavor,
@@ -36,7 +33,7 @@ function getMonorepoSymlinkedSiblingPackagesSys(forTsserver: boolean, built: boo
             "dist/**/*",
         ],
     });
-    const sys = (!forTsserver ? createWatchedSystem : createServerHost)({
+    const sys = getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/project/packages/package1/package.json": getPackageJson("package1"),
         "/home/src/projects/project/packages/package1/tsconfig.json": configText,
         "/home/src/projects/project/packages/package1/src/index.ts": dedent`
@@ -65,7 +62,7 @@ function getPackageJson(packageName: string) {
 }
 
 function buildMonorepoSymlinkedSiblingPackage1(host: TestServerHost) {
-    solutionBuildWithBaseline(host, ["packages/package1"]);
+    solutionBuildWithBaseline(host, ["/home/src/projects/project/packages/package1"]);
 }
 
 function cleanMonorepoSymlinkedSiblingPackage1(host: TestServerHost) {
@@ -79,6 +76,7 @@ function forEachMonorepoSymlinkedSiblingPackagesSys(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
         project: string,
+        currentDirectory: string,
     ) => void,
 ) {
     for (const built of [false, true]) {
@@ -95,6 +93,7 @@ function forEachMonorepoSymlinkedSiblingPackagesSys(
                         cleanMonorepoSymlinkedSiblingPackage1,
                     ),
                 "packages/package2",
+                "/home/src/projects/project",
             );
         }
     }
@@ -146,7 +145,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
     built: boolean,
     osFlavor: TestServerHostOsFlavor,
 ): TestServerHost {
-    const sys = (!forTsserver ? createWatchedSystem : createServerHost)({
+    const sys = getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/c/3/c-impl/c/src/c.ts": `export const c: string = 'test';`,
         "/home/src/projects/c/3/c-impl/c/src/index.ts": `export * from './c';`,
         "/home/src/projects/c/3/c-impl/c/tsconfig.json": jsonToReadableText({
@@ -195,7 +194,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
 }
 
 function buildDependenciesOfMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(host: TestServerHost) {
-    solutionBuildWithBaseline(host, ["../../../../c/3/c-impl/c", "../../../../a/1/a-impl/a"]);
+    solutionBuildWithBaseline(host, ["/home/src/projects/c/3/c-impl/c", "/home/src/projects/a/1/a-impl/a"]);
 }
 
 function cleanDependenciesOfMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(host: TestServerHost) {
@@ -210,6 +209,7 @@ function forEachMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
         indexFile: string,
+        currentDirectory: string,
     ) => void,
 ) {
     for (const built of [false, true]) {
@@ -262,6 +262,7 @@ function forEachMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
                         ],
                     ),
                 ".",
+                "/home/src/projects/b/2/b-impl/b",
             );
         }
     }
@@ -274,6 +275,7 @@ export function forEachMonorepoSymlinkScenario(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
         indexFile: string,
+        currentDirectory: string,
     ) => void,
 ) {
     describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {

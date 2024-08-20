@@ -1,16 +1,18 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { commandLineCallbacks } from "../helpers/baseline.js";
-import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     applyEdit,
+    commandLineCallbacks,
     createBaseline,
+    TscWatchSystem,
+} from "../helpers/baseline.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import {
     createWatchCompilerHostOfConfigFileForBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
-    TscWatchSystem,
     watchBaseline,
 } from "../helpers/tscWatch.js";
 import {
@@ -413,10 +415,10 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost uses createSemanticDi
                 emitBaseline = undefined!;
             });
             it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-                Harness.Baseline.runBaseline(baselineName("noEmit-with-composite-with-semantic-builder"), baseline.join("\r\n"));
+                Baseline.runBaseline(baselineName("noEmit-with-composite-with-semantic-builder"), baseline.join("\r\n"));
             });
             it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-                Harness.Baseline.runBaseline(baselineName("noEmit-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
+                Baseline.runBaseline(baselineName("noEmit-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
             });
         });
 
@@ -449,10 +451,10 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost uses createSemanticDi
             });
 
             it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-                Harness.Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-semantic-builder"), baseline.join("\r\n"));
+                Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-semantic-builder"), baseline.join("\r\n"));
             });
             it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-                Harness.Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
+                Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
             });
         });
 
@@ -494,7 +496,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost uses createSemanticDi
                 oldPrograms: ts.emptyArray,
                 sys,
             });
-            Harness.Baseline.runBaseline(baselineName("semantic-builder-emitOnlyDts"), baseline.join("\r\n"));
+            Baseline.runBaseline(baselineName("semantic-builder-emitOnlyDts"), baseline.join("\r\n"));
         });
     }
     verify(/*outFileOptions*/ undefined);

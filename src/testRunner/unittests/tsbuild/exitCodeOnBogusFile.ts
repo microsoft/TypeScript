@@ -6,7 +6,7 @@ describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
     verifyTsc({
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
-        fs: () => loadProjectFromFiles({}),
+        sys: () => loadProjectFromFiles({}),
         commandLineArgs: ["-b", "bogus.json"],
     });
 });

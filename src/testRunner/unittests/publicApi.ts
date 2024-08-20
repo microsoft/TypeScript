@@ -5,11 +5,6 @@ import * as ts from "../_namespaces/ts.js";
 import * as vfs from "../_namespaces/vfs.js";
 import { jsonToReadableText } from "./helpers.js";
 import { loadProjectFromFiles } from "./helpers/vfs.js";
-import {
-    getTypeScriptLibTestLocation,
-    libFile,
-    tscTypeScriptTestLocation,
-} from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -268,7 +263,7 @@ class C {
 
 describe("unittests:: Public APIs:: createProgram", () => {
     function verifyAPI(useJsonParsingApi: boolean) {
-        const fs = loadProjectFromFiles({
+        const sys = loadProjectFromFiles({
             "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
             "/src/projects/project/packages/a/test/index.js": `import 'a';`,
             "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
@@ -292,9 +287,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     },
                 },
             }),
-            [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
         }, { currentDirectory: "/src/projects/project" });
-        const sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation });
         const commandLine = ts.getParsedCommandLineOfConfigFile(
             "/src/projects/project/packages/a/tsconfig.json",
             /*optionsToExtend*/ undefined,
@@ -310,7 +303,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                 realpath: sys.realpath.bind(sys),
             },
         )!;
-        const config = !useJsonParsingApi ? JSON.parse(fs.readFileSync("/src/projects/project/packages/a/tsconfig.json", "utf-8")) : undefined;
+        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/src/projects/project/packages/a/tsconfig.json")!) : undefined;
         // This is really createCompilerHost but we want to use our own sys so simple usage
         const host = ts.createCompilerHostWorker(
             useJsonParsingApi ? commandLine.options : config.compilerOptions,

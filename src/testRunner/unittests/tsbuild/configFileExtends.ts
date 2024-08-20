@@ -3,7 +3,7 @@ import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
-    function getConfigExtendsWithIncludeFs() {
+    function getConfigExtendsWithIncludeSys() {
         return loadProjectFromFiles({
             "/src/tsconfig.json": jsonToReadableText({
                 references: [
@@ -42,13 +42,13 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
     verifyTsc({
         scenario: "configFileExtends",
         subScenario: "when building solution with projects extends config with include",
-        fs: getConfigExtendsWithIncludeFs,
+        sys: getConfigExtendsWithIncludeSys,
         commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--listFiles"],
     });
     verifyTsc({
         scenario: "configFileExtends",
         subScenario: "when building project uses reference and both extend config with include",
-        fs: getConfigExtendsWithIncludeFs,
+        sys: getConfigExtendsWithIncludeSys,
         commandLineArgs: ["--b", "/src/webpack/tsconfig.json", "--v", "--listFiles"],
     });
 });

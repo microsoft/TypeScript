@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export const a = class { private p = 10; };
 
@@ -29,6 +14,20 @@ export const b = 10;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -67,15 +66,15 @@ exports.a = /** @class */ (function () {
 }());
 
 
-//// [/src/b.d.ts]
-export declare const b = 10;
-
-
 //// [/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
+
+
+//// [/src/b.d.ts]
+export declare const b = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -193,10 +192,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -210,12 +208,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -227,10 +224,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-
-
-//// [/src/a.d.ts]
-export declare const a = "hello";
 
 
 //// [/src/a.js]
@@ -309,6 +302,10 @@ exports.a = "hello";
   "size": 914
 }
 
+//// [/src/a.d.ts]
+export declare const a = "hello";
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -334,10 +331,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -351,10 +347,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -447,10 +442,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -464,10 +458,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -481,12 +474,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -635,10 +627,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -652,10 +643,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -782,12 +772,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -801,7 +790,6 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -870,6 +858,7 @@ exports.a = "hello";
   "size": 910
 }
 
+//// [/src/a.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -896,10 +885,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -990,12 +978,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
@@ -1015,17 +1002,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/c.d.ts]
-export declare const c: number;
-
-
-//// [/src/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = "hello";
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -1108,6 +1084,17 @@ exports.c = "hello";
   "size": 1141
 }
 
+//// [/src/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+exports.c = "hello";
+
+
+//// [/src/c.d.ts]
+export declare const c: number;
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -1135,12 +1122,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1315,12 +1301,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1334,7 +1319,6 @@ Output::
 
 
 
-//// [/src/a.d.ts] file written with same contents
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1427,6 +1411,7 @@ exports.a = "hello";
   "size": 1163
 }
 
+//// [/src/a.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -1455,10 +1440,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -1585,10 +1569,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -1602,10 +1585,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::

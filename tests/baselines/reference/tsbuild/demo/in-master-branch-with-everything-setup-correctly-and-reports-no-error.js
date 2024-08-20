@@ -1,20 +1,5 @@
 currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/projects/demo/animals/animal.ts]
 export type Size = "small" | "medium" | "large";
 export default interface Animal {
@@ -64,15 +49,6 @@ export { createDog, Dog };
   ]
 }
 
-//// [/user/username/projects/demo/core/tsconfig.json]
-{
-  "extends": "../tsconfig-base.json",
-  "compilerOptions": {
-    "outDir": "../lib/core",
-    "rootDir": "."
-  }
-}
-
 //// [/user/username/projects/demo/core/utilities.ts]
 export function makeRandomName() {
     return "Bob!?! ";
@@ -83,6 +59,39 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
     return arr[arr.length - 1];
 }
 
+
+//// [/user/username/projects/demo/core/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/core",
+    "rootDir": "."
+  }
+}
+
+//// [/user/username/projects/demo/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
+}
+
+
+//// [/user/username/projects/demo/zoo/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/zoo",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../animals"
+    }
+  ]
+}
 
 //// [/user/username/projects/demo/tsconfig-base.json]
 {
@@ -115,30 +124,20 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
   ]
 }
 
-//// [/user/username/projects/demo/zoo/tsconfig.json]
-{
-  "extends": "../tsconfig-base.json",
-  "compilerOptions": {
-    "outDir": "../lib/zoo",
-    "rootDir": "."
-  },
-  "references": [
-    {
-      "path": "../animals"
-    }
-  ]
-}
-
-//// [/user/username/projects/demo/zoo/zoo.ts]
-import { Dog, createDog } from '../animals/index';
-
-export function createZoo(): Array<Dog> {
-    return [
-        createDog()
-    ];
-}
-
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b --verbose
@@ -163,6 +162,83 @@ Output::
 
 
 
+//// [/user/username/projects/demo/lib/core/utilities.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.makeRandomName = makeRandomName;
+exports.lastElementOf = lastElementOf;
+function makeRandomName() {
+    return "Bob!?! ";
+}
+function lastElementOf(arr) {
+    if (arr.length === 0)
+        return undefined;
+    return arr[arr.length - 1];
+}
+
+
+//// [/user/username/projects/demo/lib/core/utilities.d.ts]
+export declare function makeRandomName(): string;
+export declare function lastElementOf<T>(arr: T[]): T | undefined;
+
+
+//// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"}],"root":[2],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"latestChangedDtsFile":"./utilities.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../core/utilities.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../../core/utilities.ts": {
+      "original": {
+        "version": "-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n",
+        "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
+      },
+      "version": "-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n",
+      "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
+    }
+  },
+  "root": [
+    [
+      2,
+      "../../core/utilities.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "module": 1,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "./",
+    "rootDir": "../../core",
+    "strict": true,
+    "target": 1
+  },
+  "latestChangedDtsFile": "./utilities.d.ts",
+  "version": "FakeTSVersion",
+  "size": 1275
+}
+
+//// [/user/username/projects/demo/lib/animals/animal.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 //// [/user/username/projects/demo/lib/animals/animal.d.ts]
 export type Size = "small" | "medium" | "large";
 export default interface Animal {
@@ -170,18 +246,19 @@ export default interface Animal {
 }
 
 
-//// [/user/username/projects/demo/lib/animals/animal.js]
+//// [/user/username/projects/demo/lib/animals/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
+var dog_1 = require("./dog");
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
-//// [/user/username/projects/demo/lib/animals/dog.d.ts]
-import Animal from '.';
-export interface Dog extends Animal {
-    woof(): void;
-    name: string;
-}
-export declare function createDog(): Dog;
+//// [/user/username/projects/demo/lib/animals/index.d.ts]
+import Animal from './animal';
+export default Animal;
+import { createDog, Dog } from './dog';
+export { createDog, Dog };
 
 
 //// [/user/username/projects/demo/lib/animals/dog.js]
@@ -200,19 +277,13 @@ function createDog() {
 }
 
 
-//// [/user/username/projects/demo/lib/animals/index.d.ts]
-import Animal from './animal';
-export default Animal;
-import { createDog, Dog } from './dog';
-export { createDog, Dog };
-
-
-//// [/user/username/projects/demo/lib/animals/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
-var dog_1 = require("./dog");
-Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
+//// [/user/username/projects/demo/lib/animals/dog.d.ts]
+import Animal from '.';
+export interface Dog extends Animal {
+    woof(): void;
+    name: string;
+}
+export declare function createDog(): Dog;
 
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
@@ -314,76 +385,21 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
   "size": 2185
 }
 
-//// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"}],"root":[2],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"latestChangedDtsFile":"./utilities.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
-    "../../core/utilities.ts"
-  ],
-  "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../../core/utilities.ts": {
-      "original": {
-        "version": "-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n",
-        "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
-      },
-      "version": "-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n",
-      "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "../../core/utilities.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "declaration": true,
-    "module": 1,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "./",
-    "rootDir": "../../core",
-    "strict": true,
-    "target": 1
-  },
-  "latestChangedDtsFile": "./utilities.d.ts",
-  "version": "FakeTSVersion",
-  "size": 1275
-}
-
-//// [/user/username/projects/demo/lib/core/utilities.d.ts]
-export declare function makeRandomName(): string;
-export declare function lastElementOf<T>(arr: T[]): T | undefined;
-
-
-//// [/user/username/projects/demo/lib/core/utilities.js]
+//// [/user/username/projects/demo/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeRandomName = makeRandomName;
-exports.lastElementOf = lastElementOf;
-function makeRandomName() {
-    return "Bob!?! ";
+exports.createZoo = createZoo;
+var index_1 = require("../animals/index");
+function createZoo() {
+    return [
+        (0, index_1.createDog)()
+    ];
 }
-function lastElementOf(arr) {
-    if (arr.length === 0)
-        return undefined;
-    return arr[arr.length - 1];
-}
+
+
+//// [/user/username/projects/demo/lib/zoo/zoo.d.ts]
+import { Dog } from '../animals/index';
+export declare function createZoo(): Array<Dog>;
 
 
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo]
@@ -473,23 +489,6 @@ function lastElementOf(arr) {
   "version": "FakeTSVersion",
   "size": 1727
 }
-
-//// [/user/username/projects/demo/lib/zoo/zoo.d.ts]
-import { Dog } from '../animals/index';
-export declare function createZoo(): Array<Dog>;
-
-
-//// [/user/username/projects/demo/lib/zoo/zoo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createZoo = createZoo;
-var index_1 = require("../animals/index");
-function createZoo() {
-    return [
-        (0, index_1.createDog)()
-    ];
-}
-
 
 
 exitCode:: ExitStatus.Success

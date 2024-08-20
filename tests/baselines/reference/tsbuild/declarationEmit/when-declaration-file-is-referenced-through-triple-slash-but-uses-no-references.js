@@ -1,101 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/solution/src/common/nominal.ts]
-/// <reference path="./types.d.ts" preserve="true" />
-export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
-
-//// [/src/solution/src/common/tsconfig.json]
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true
-  },
-  "include": [
-    "./nominal.ts"
-  ]
-}
-
-//// [/src/solution/src/common/types.d.ts]
-declare type MyNominal<T, Name extends string> = T & {
-    specialKey: Name;
-};
-
-//// [/src/solution/src/subProject/index.ts]
-import { Nominal } from '../common/nominal';
-export type MyNominal = Nominal<string, 'MyNominal'>;
-
-//// [/src/solution/src/subProject/tsconfig.json]
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true
-  },
-  "references": [
-    {
-      "path": "../common"
-    }
-  ],
-  "include": [
-    "./index.ts"
-  ]
-}
-
-//// [/src/solution/src/subProject2/index.ts]
-import { MyNominal } from '../subProject/index';
-const variable = {
-    key: 'value' as MyNominal,
-};
-export function getVar(): keyof typeof variable {
-    return 'key';
-}
-
-//// [/src/solution/src/subProject2/tsconfig.json]
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true
-  },
-  "references": [
-    {
-      "path": "../subProject"
-    }
-  ],
-  "include": [
-    "./index.ts"
-  ]
-}
-
-//// [/src/solution/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  },
-  "references": [
-    {
-      "path": "./subProject"
-    },
-    {
-      "path": "./subProject2"
-    }
-  ],
-  "include": []
-}
-
 //// [/src/solution/tsconfig.base.json]
 {
   "compilerOptions": {
@@ -115,6 +19,101 @@ export function getVar(): keyof typeof variable {
   ]
 }
 
+//// [/src/solution/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./subProject"
+    },
+    {
+      "path": "./subProject2"
+    }
+  ],
+  "include": []
+}
+
+//// [/src/solution/src/subProject/tsconfig.json]
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
+}
+
+//// [/src/solution/src/subProject/index.ts]
+import { Nominal } from '../common/nominal';
+export type MyNominal = Nominal<string, 'MyNominal'>;
+
+//// [/src/solution/src/subProject2/tsconfig.json]
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../subProject"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
+}
+
+//// [/src/solution/src/subProject2/index.ts]
+import { MyNominal } from '../subProject/index';
+const variable = {
+    key: 'value' as MyNominal,
+};
+export function getVar(): keyof typeof variable {
+    return 'key';
+}
+
+//// [/src/solution/src/common/tsconfig.json]
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./nominal.ts"
+  ]
+}
+
+//// [/src/solution/src/common/nominal.ts]
+/// <reference path="./types.d.ts" preserve="true" />
+export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
+
+//// [/src/solution/src/common/types.d.ts]
+declare type MyNominal<T, Name extends string> = T & {
+    specialKey: Name;
+};
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/solution/tsconfig.json --verbose
@@ -128,20 +127,15 @@ Output::
 
 
 
-//// [/src/solution/lib/src/common/nominal.d.ts]
-/// <reference path="../../../src/common/types.d.ts" preserve="true" />
-export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
-
-
 //// [/src/solution/lib/src/common/nominal.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./types.d.ts" preserve="true" />
 
 
-//// [/src/solution/lib/src/subProject/index.d.ts]
-import { Nominal } from '../common/nominal';
-export type MyNominal = Nominal<string, 'MyNominal'>;
+//// [/src/solution/lib/src/common/nominal.d.ts]
+/// <reference path="../../../src/common/types.d.ts" preserve="true" />
+export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
 
 
 //// [/src/solution/lib/src/subProject/index.js]
@@ -149,13 +143,9 @@ export type MyNominal = Nominal<string, 'MyNominal'>;
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/src/solution/lib/src/subProject2/index.d.ts]
-import { MyNominal } from '../subProject/index';
-declare const variable: {
-    key: MyNominal;
-};
-export declare function getVar(): keyof typeof variable;
-export {};
+//// [/src/solution/lib/src/subProject/index.d.ts]
+import { Nominal } from '../common/nominal';
+export type MyNominal = Nominal<string, 'MyNominal'>;
 
 
 //// [/src/solution/lib/src/subProject2/index.js]
@@ -168,6 +158,15 @@ var variable = {
 function getVar() {
     return 'key';
 }
+
+
+//// [/src/solution/lib/src/subProject2/index.d.ts]
+import { MyNominal } from '../subProject/index';
+declare const variable: {
+    key: MyNominal;
+};
+export declare function getVar(): keyof typeof variable;
+export {};
 
 
 //// [/src/solution/lib/tsconfig.tsbuildinfo]

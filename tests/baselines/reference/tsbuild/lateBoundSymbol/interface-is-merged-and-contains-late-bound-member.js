@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/src/globals.d.ts]
 interface SymbolConstructor {
     (description?: string | number): symbol;
@@ -47,6 +32,20 @@ type A = HKT<number>[typeof sym];
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
@@ -146,8 +145,8 @@ var x = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: incremental-declaration-doesnt-change
+
 Input::
 //// [/src/src/main.ts]
 import { HKT } from "./hkt";
@@ -161,7 +160,6 @@ declare module "./hkt" {
 }
 
 type A = HKT<number>[typeof sym];
-
 
 
 
@@ -260,8 +258,8 @@ var sym = Symbol();
 
 exitCode:: ExitStatus.Success
 
-
 Change:: incremental-declaration-doesnt-change
+
 Input::
 //// [/src/src/main.ts]
 import { HKT } from "./hkt";
@@ -276,7 +274,6 @@ declare module "./hkt" {
 
 type A = HKT<number>[typeof sym];
 const x = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose

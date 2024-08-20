@@ -4,17 +4,13 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/tsconfig.first.json": jsonToReadableText({
                     extends: "./foobar.json",
@@ -47,7 +43,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         verifyTsc({
             scenario: "configFileErrors",
             subScenario: `${outFile ? "outFile" : "multiFile"}/reports syntax errors in config file`,
-            fs: () =>
+            sys: () =>
                 loadProjectFromFiles({
                     "/src/a.ts": "export function foo() { }",
                     "/src/b.ts": "export function bar() { }",
@@ -65,9 +61,8 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
             commandLineArgs: ["--b", "/src/tsconfig.json"],
             edits: [
                 {
-                    edit: fs =>
-                        replaceText(
-                            fs,
+                    edit: sys =>
+                        sys.replaceFileText(
                             "/src/tsconfig.json",
                             ",",
                             `,
@@ -80,13 +75,13 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
                     ],
                 },
                 {
-                    edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                    edit: sys => sys.appendFile("/src/a.ts", "export function fooBar() { }"),
                     caption: "reports syntax errors after change to ts file",
                 },
                 noChangeRun,
                 {
-                    edit: fs =>
-                        fs.writeFileSync(
+                    edit: sys =>
+                        sys.writeFile(
                             "/src/tsconfig.json",
                             jsonToReadableText({
                                 compilerOptions: { composite: true, declaration: true, ...outFile },

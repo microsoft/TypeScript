@@ -11,7 +11,7 @@ describe("unittests:: tsbuild - clean::", () => {
         scenario: "clean",
         subScenario: `file name and output name clashing`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-clean"],
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/index.js": "",
                 "/src/bar.ts": "",
@@ -24,7 +24,7 @@ describe("unittests:: tsbuild - clean::", () => {
     verifyTsc({
         scenario: "clean",
         subScenario: "tsx with dts emit",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.tsx": "export const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({

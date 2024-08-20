@@ -1,29 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-interface SymbolConstructor {
-    readonly species: symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-
-
 //// [/src/solution/common/nominal.ts]
 export declare type Nominal<T, Name extends string> = T & {
     [Symbol.species]: Name;
@@ -113,6 +89,29 @@ export function getVar(): keyof typeof variable {
                     "include": []
                 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src --verbose
@@ -138,15 +137,15 @@ Output::
 
 
 
+//// [/src/lib/solution/common/nominal.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 //// [/src/lib/solution/common/nominal.d.ts]
 export declare type Nominal<T, Name extends string> = T & {
     [Symbol.species]: Name;
 };
-
-
-//// [/src/lib/solution/common/nominal.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/lib/solution/common/tsconfig.tsbuildinfo]
@@ -190,14 +189,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 1077
 }
 
-//// [/src/lib/solution/sub-project/index.d.ts]
-import { Nominal } from '../common/nominal';
-export type MyNominal = Nominal<string, 'MyNominal'>;
-
-
 //// [/src/lib/solution/sub-project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/lib/solution/sub-project/index.d.ts]
+import { Nominal } from '../common/nominal';
+export type MyNominal = Nominal<string, 'MyNominal'>;
 
 
 //// [/src/lib/solution/sub-project/tsconfig.tsbuildinfo]
@@ -260,15 +259,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 1407
 }
 
-//// [/src/lib/solution/sub-project-2/index.d.ts]
-import { MyNominal } from '../sub-project/index';
-declare const variable: {
-    key: MyNominal;
-};
-export declare function getVar(): keyof typeof variable;
-export {};
-
-
 //// [/src/lib/solution/sub-project-2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -279,6 +269,15 @@ var variable = {
 function getVar() {
     return 'key';
 }
+
+
+//// [/src/lib/solution/sub-project-2/index.d.ts]
+import { MyNominal } from '../sub-project/index';
+declare const variable: {
+    key: MyNominal;
+};
+export declare function getVar(): keyof typeof variable;
+export {};
 
 
 //// [/src/lib/solution/sub-project-2/tsconfig.tsbuildinfo]

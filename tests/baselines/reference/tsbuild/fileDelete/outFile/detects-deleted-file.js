@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/child/child.ts]
 import { child2 } from "../child/child2";
 export function child() {
@@ -57,6 +42,20 @@ export function main() {
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
@@ -114,15 +113,6 @@ src/main/main.ts
   Matched by default include pattern '**/*'
 
 
-//// [/src/childResult.d.ts]
-declare module "child2" {
-    export function child2(): void;
-}
-declare module "child" {
-    export function child(): void;
-}
-
-
 //// [/src/childResult.js]
 define("child2", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -139,6 +129,15 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
         (0, child2_1.child2)();
     }
 });
+
+
+//// [/src/childResult.d.ts]
+declare module "child2" {
+    export function child2(): void;
+}
+declare module "child" {
+    export function child(): void;
+}
 
 
 //// [/src/childResult.tsbuildinfo]
@@ -177,12 +176,6 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
   "size": 1014
 }
 
-//// [/src/mainResult.d.ts]
-declare module "main" {
-    export function main(): void;
-}
-
-
 //// [/src/mainResult.js]
 define("main", ["require", "exports", "child"], function (require, exports, child_1) {
     "use strict";
@@ -192,6 +185,12 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
         (0, child_1.child)();
     }
 });
+
+
+//// [/src/mainResult.d.ts]
+declare module "main" {
+    export function main(): void;
+}
 
 
 //// [/src/mainResult.tsbuildinfo]
@@ -229,11 +228,10 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete child2 file
-Input::
-//// [/src/child/child2.ts] unlink
 
+Input::
+//// [/src/child/child2.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::
@@ -299,12 +297,6 @@ Found 1 error.
 
 
 
-//// [/src/childResult.d.ts]
-declare module "child" {
-    export function child(): void;
-}
-
-
 //// [/src/childResult.js]
 define("child", ["require", "exports", "../child/child2"], function (require, exports, child2_1) {
     "use strict";
@@ -314,6 +306,12 @@ define("child", ["require", "exports", "../child/child2"], function (require, ex
         (0, child2_1.child2)();
     }
 });
+
+
+//// [/src/childResult.d.ts]
+declare module "child" {
+    export function child(): void;
+}
 
 
 //// [/src/childResult.tsbuildinfo]

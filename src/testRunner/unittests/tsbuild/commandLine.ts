@@ -6,11 +6,7 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     function scenarioName(text: string, options: ts.CompilerOptions) {
@@ -48,10 +44,10 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         function localChange(): TestTscEdit {
             return {
                 caption: "local change",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "Local = 1", "Local = 10"),
+                edit: sys => sys.replaceFileText("/src/project/a.ts", "Local = 1", "Local = 10"),
             };
         }
-        function fs(options: ts.CompilerOptions) {
+        function sys(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
@@ -64,7 +60,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: scenarioName("different options", options),
-                fs: () => fs({ composite: true, ...options }),
+                sys: () => sys({ composite: true, ...options }),
                 commandLineArgs: ["--b", "/src/project", "--verbose"],
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
@@ -85,7 +81,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: scenarioName("different options with incremental", options),
-                fs: () => fs({ incremental: true, ...options }),
+                sys: () => sys({ incremental: true, ...options }),
                 commandLineArgs: ["--b", "/src/project", "--verbose"],
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
@@ -109,7 +105,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         verify({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
     });
     describe("emitDeclarationOnly::", () => {
-        function fs(options: ts.CompilerOptions) {
+        function sys(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
                 "/src/project1/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(options),
@@ -131,17 +127,17 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: subScenario("emitDeclarationOnly on commandline"),
-                fs: () => fs(options),
+                sys: () => sys(options),
                 commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly"],
                 edits: [
                     noChangeRun,
                     {
                         caption: "local change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "const aa = 10;"),
                     },
                     {
                         caption: "non local change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "export const aaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "export const aaa = 10;"),
                     },
                     {
                         caption: "emit js files",
@@ -157,12 +153,12 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     },
                     {
                         caption: "js emit with change without emitDeclarationOnly",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const alocal = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const alocal = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                     },
                     {
                         caption: "local change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const aaaa = 10;"),
                         discrepancyExplanation: () => [
                             `Clean build tsbuildinfo for project2 will have compilerOptions with composite and emitDeclarationOnly`,
                             `Incremental build will detect that it doesnt need to rebuild project2 so tsbuildinfo for it is from before which has option composite only`,
@@ -170,11 +166,11 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     },
                     {
                         caption: "non local change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const aaaaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "export const aaaaa = 10;"),
                     },
                     {
                         caption: "js emit with change without emitDeclarationOnly",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const a2 = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "export const a2 = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                     },
                 ],
@@ -183,13 +179,13 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: subScenario("emitDeclarationOnly false on commandline"),
-                fs: () => fs({ ...options, emitDeclarationOnly: true }),
+                sys: () => sys({ ...options, emitDeclarationOnly: true }),
                 commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                 edits: [
                     noChangeRun,
                     {
                         caption: "change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "const aa = 10;"),
                     },
                     {
                         caption: "emit js files",
@@ -210,7 +206,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     },
                     {
                         caption: "js emit with change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const blocal = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const blocal = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
                     },
                 ],
@@ -229,17 +225,17 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: scenarioName("emitDeclarationOnly on commandline with declaration", options),
-                fs: () => fs({ declaration: true, ...options }),
+                sys: () => sys({ declaration: true, ...options }),
                 commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly"],
                 edits: [
                     noChangeRun,
                     {
                         caption: "local change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "const aa = 10;"),
                     },
                     {
                         caption: "non local change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "export const aaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "export const aaa = 10;"),
                     },
                     {
                         caption: "emit js files",
@@ -249,20 +245,20 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     noChangeRun,
                     {
                         caption: "js emit with change without emitDeclarationOnly",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const alocal = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const alocal = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                     },
                     {
                         caption: "local change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const aaaa = 10;"),
                     },
                     {
                         caption: "non local change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const aaaaa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "export const aaaaa = 10;"),
                     },
                     {
                         caption: "js emit with change without emitDeclarationOnly",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const a2 = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "export const a2 = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                     },
                 ],
@@ -272,13 +268,13 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             verifyTsc({
                 scenario: "commandLine",
                 subScenario: scenarioName("emitDeclarationOnly false on commandline with declaration", options),
-                fs: () => fs({ declaration: true, emitDeclarationOnly: true, ...options }),
+                sys: () => sys({ declaration: true, emitDeclarationOnly: true, ...options }),
                 commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
                 edits: [
                     noChangeRun,
                     {
                         caption: "change",
-                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/a.ts", "const aa = 10;"),
                     },
                     {
                         caption: "emit js files",
@@ -293,7 +289,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     },
                     {
                         caption: "js emit with change",
-                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const blocal = 10;"),
+                        edit: sys => sys.appendFile("/src/project1/src/b.ts", "const blocal = 10;"),
                         commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
                     },
                 ],

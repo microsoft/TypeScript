@@ -1,5 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true
+  }
+}
+
+//// [/src/project/class1.ts]
+export class class1 {}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,18 +25,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/class1.ts]
-export class class1 {}
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true,
-    "strict": true
-  }
-}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
@@ -101,10 +100,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
 Output::

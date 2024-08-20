@@ -1,22 +1,12 @@
 currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/sample1/core/anotherModule.ts]
-export const World = "hello";
+//// [/user/username/projects/sample1/core/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "skipDefaultLibCheck": true
+  }
+}
 
 //// [/user/username/projects/sample1/core/index.ts]
 export const someString: string = "HELLO WORLD";
@@ -27,22 +17,8 @@ export function multiply(a: number, b: number) { return a * b; }
 //// [/user/username/projects/sample1/core/some_decl.d.ts]
 declare const dts: any;
 
-//// [/user/username/projects/sample1/core/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true,
-    "skipDefaultLibCheck": true
-  }
-}
-
-//// [/user/username/projects/sample1/logic/index.ts]
-import * as c from '../core/index';
-export function getSecondsInDay() {
-    return c.multiply(10, 15);
-}
-import * as mod from '../core/anotherModule';
-export const m = mod;
-
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
 {
@@ -60,13 +36,11 @@ export const m = mod;
   ]
 }
 
-//// [/user/username/projects/sample1/tests/index.ts]
+//// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
-import * as logic from '../logic/index';
-
-c.leftPad("", 10);
-logic.getSecondsInDay();
-
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
 import * as mod from '../core/anotherModule';
 export const m = mod;
 
@@ -92,6 +66,31 @@ export const m = mod;
   }
 }
 
+//// [/user/username/projects/sample1/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b core --verbose
@@ -185,8 +184,8 @@ function multiply(a, b) { return a * b; }
 
 exitCode:: ExitStatus.Success
 
-
 Change:: incremental-declaration-changes
+
 Input::
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
@@ -195,7 +194,6 @@ Input::
     "skipDefaultLibCheck": true
   }
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b core --verbose
@@ -207,16 +205,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-
-
-//// [/user/username/projects/sample1/core/anotherModule.d.ts]
-export declare const World = "hello";
-
-
-//// [/user/username/projects/sample1/core/index.d.ts]
-export declare const someString: string;
-export declare function leftPad(s: string, n: number): string;
-export declare function multiply(a: number, b: number): number;
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
@@ -286,6 +274,16 @@ export declare function multiply(a: number, b: number): number;
   "version": "FakeTSVersion",
   "size": 1320
 }
+
+//// [/user/username/projects/sample1/core/anotherModule.d.ts]
+export declare const World = "hello";
+
+
+//// [/user/username/projects/sample1/core/index.d.ts]
+export declare const someString: string;
+export declare function leftPad(s: string, n: number): string;
+export declare function multiply(a: number, b: number): number;
+
 
 
 exitCode:: ExitStatus.Success

@@ -1,5 +1,30 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/src/main.ts]
+/// <reference path="./filePresent.ts"/>
+/// <reference path="./fileNotFound.ts"/>
+function main() { }
+
+
+//// [/src/project/src/anotherFileWithSameReferenes.ts]
+/// <reference path="./filePresent.ts"/>
+/// <reference path="./fileNotFound.ts"/>
+function anotherFileWithSameReferenes() { }
+
+
+//// [/src/project/src/filePresent.ts]
+function something() { return 10; }
+
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,32 +39,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/src/anotherFileWithSameReferenes.ts]
-/// <reference path="./filePresent.ts"/>
-/// <reference path="./fileNotFound.ts"/>
-function anotherFileWithSameReferenes() { }
-
-
-//// [/src/project/src/filePresent.ts]
-function something() { return 10; }
-
-//// [/src/project/src/main.ts]
-/// <reference path="./filePresent.ts"/>
-/// <reference path="./fileNotFound.ts"/>
-function main() { }
-
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  },
-  "include": [
-    "src/**/*.ts"
-  ]
-}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
@@ -62,8 +61,12 @@ Errors  Files
      1  src/project/src/main.ts[90m:2[0m
 
 
-//// [/src/project/src/anotherFileWithSameReferenes.d.ts]
-declare function anotherFileWithSameReferenes(): void;
+//// [/src/project/src/filePresent.js]
+function something() { return 10; }
+
+
+//// [/src/project/src/filePresent.d.ts]
+declare function something(): number;
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.js]
@@ -72,22 +75,18 @@ declare function anotherFileWithSameReferenes(): void;
 function anotherFileWithSameReferenes() { }
 
 
-//// [/src/project/src/filePresent.d.ts]
-declare function something(): number;
-
-
-//// [/src/project/src/filePresent.js]
-function something() { return 10; }
-
-
-//// [/src/project/src/main.d.ts]
-declare function main(): void;
+//// [/src/project/src/anotherFileWithSameReferenes.d.ts]
+declare function anotherFileWithSameReferenes(): void;
 
 
 //// [/src/project/src/main.js]
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
+
+
+//// [/src/project/src/main.d.ts]
+declare function main(): void;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -213,10 +212,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
@@ -262,15 +260,14 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Modify main file
+
 Input::
 //// [/src/project/src/main.ts]
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
 something();
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
@@ -417,15 +414,14 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Modify main file again
+
 Input::
 //// [/src/project/src/main.ts]
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
 something();something();
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
@@ -573,8 +569,8 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Add new file and update main file
+
 Input::
 //// [/src/project/src/main.ts]
 /// <reference path="./newFile.ts"/>
@@ -585,7 +581,6 @@ something();something();foo();
 
 //// [/src/project/src/newFile.ts]
 function foo() { return 20; }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
@@ -608,8 +603,8 @@ Errors  Files
      1  src/project/src/main.ts[90m:3[0m
 
 
-//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/src/project/src/filePresent.js] file written with same contents
+//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/src/project/src/main.js]
 /// <reference path="./newFile.ts"/>
 /// <reference path="./filePresent.ts"/>
@@ -618,14 +613,6 @@ function main() { }
 something();
 something();
 foo();
-
-
-//// [/src/project/src/newFile.d.ts]
-declare function foo(): number;
-
-
-//// [/src/project/src/newFile.js]
-function foo() { return 20; }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -737,6 +724,14 @@ function foo() { return 20; }
   "size": 1716
 }
 
+//// [/src/project/src/newFile.js]
+function foo() { return 20; }
+
+
+//// [/src/project/src/newFile.d.ts]
+declare function foo(): number;
+
+
 
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
@@ -772,30 +767,20 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Write file that could not be resolved
+
 Input::
 //// [/src/project/src/fileNotFound.ts]
 function something2() { return 20; }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
 
 
-//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
-//// [/src/project/src/fileNotFound.d.ts]
-declare function something2(): number;
-
-
-//// [/src/project/src/fileNotFound.js]
-function something2() { return 20; }
-
-
 //// [/src/project/src/filePresent.js] file written with same contents
+//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/src/project/src/main.js] file written with same contents
-//// [/src/project/src/newFile.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileIdsList":[[2,3],[2,3,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-11249446897-declare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"-1399491038-declare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"referencedMap":[[4,1],[6,2]],"latestChangedDtsFile":"./src/fileNotFound.d.ts","version":"FakeTSVersion"}
 
@@ -915,6 +900,15 @@ function something2() { return 20; }
   "size": 1864
 }
 
+//// [/src/project/src/newFile.js] file written with same contents
+//// [/src/project/src/fileNotFound.js]
+function something2() { return 20; }
+
+
+//// [/src/project/src/fileNotFound.d.ts]
+declare function something2(): number;
+
+
 
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
@@ -954,8 +948,8 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Modify main file
+
 Input::
 //// [/src/project/src/main.ts]
 /// <reference path="./newFile.ts"/>
@@ -963,7 +957,6 @@ Input::
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
 something();something();foo();something();
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project

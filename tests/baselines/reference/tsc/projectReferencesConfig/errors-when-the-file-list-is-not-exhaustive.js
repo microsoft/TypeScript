@@ -1,5 +1,23 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/primary/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [],
+  "files": [
+    "a.ts"
+  ]
+}
+
+//// [/primary/a.ts]
+import * as b from './b'
+
+//// [/primary/b.ts]
+export {}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,25 +33,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/primary/a.ts]
-import * as b from './b'
-
-//// [/primary/b.ts]
-export {}
-
-//// [/primary/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "bin"
-  },
-  "references": [],
-  "files": [
-    "a.ts"
-  ]
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
 Output::
@@ -47,11 +46,7 @@ Found 1 error in primary/a.ts[90m:1[0m
 
 
 
-//// [/primary/bin/a.d.ts]
-export {};
-
-
-//// [/primary/bin/a.js]
+//// [/primary/bin/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -60,9 +55,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export {};
 
 
-//// [/primary/bin/b.js]
+//// [/primary/bin/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/primary/bin/a.d.ts]
+export {};
 
 
 //// [/primary/bin/tsconfig.tsbuildinfo]

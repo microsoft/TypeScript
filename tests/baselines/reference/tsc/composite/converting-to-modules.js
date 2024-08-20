@@ -1,5 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/src/main.ts]
+const x = 10;
+
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,29 +26,17 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/src/main.ts]
-const x = 10;
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "none",
-    "composite": true
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
 
 
-//// [/src/project/src/main.d.ts]
-declare const x = 10;
-
-
 //// [/src/project/src/main.js]
 var x = 10;
+
+
+//// [/src/project/src/main.d.ts]
+declare const x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -88,8 +87,8 @@ var x = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: convert to modules
+
 Input::
 //// [/src/project/tsconfig.json]
 {
@@ -98,7 +97,6 @@ Input::
     "composite": true
   }
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project

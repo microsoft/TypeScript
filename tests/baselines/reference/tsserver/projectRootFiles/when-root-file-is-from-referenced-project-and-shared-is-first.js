@@ -347,6 +347,8 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspaces/projects/server/tsconfig.json
 
+No change
+edit logging file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspaces/projects/shared/src/logging.ts 1:: WatchInfo: /home/src/workspaces/projects/shared/src/logging.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspaces/projects/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -484,6 +486,12 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspaces/projects/server/tsconfig.json
 
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+No change
+delete random file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/workspaces/projects/shared/src/random.ts 2:: WatchInfo: /home/src/workspaces/projects/shared/src/random.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/workspaces/projects/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -609,3 +617,9 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+No change

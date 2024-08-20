@@ -1,5 +1,4 @@
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "../helpers/contents.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
@@ -7,6 +6,7 @@ import {
 import {
     createWatchedSystem,
     File,
+    FileOrFolderOrSymLinkMap,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
@@ -16,7 +16,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
     };
     interface VerifyEmitAndErrorUpdates {
         subScenario: string;
-        files: () => FsContents | readonly File[];
+        files: () => FileOrFolderOrSymLinkMap | readonly File[];
         changes: TscWatchCompileChange[];
     }
     function verifyEmitAndErrorUpdates({

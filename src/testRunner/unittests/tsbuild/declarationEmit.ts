@@ -1,5 +1,4 @@
 import { dedent } from "../../_namespaces/Utils.js";
-import { FileSet } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import { forEachDeclarationEmitWithErrorsScenario } from "../helpers/declarationEmit.js";
 import {
@@ -7,9 +6,10 @@ import {
     verifyTsc,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { FileOrFolderOrSymLinkMap } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
-    function getFiles(): FileSet {
+    function getFiles(): FileOrFolderOrSymLinkMap {
         return {
             "/src/solution/tsconfig.base.json": jsonToReadableText({
                 compilerOptions: {
@@ -67,14 +67,14 @@ declare type MyNominal<T, Name extends string> = T & {
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash",
-        fs: () => loadProjectFromFiles(getFiles()),
+        sys: () => loadProjectFromFiles(getFiles()),
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"],
     });
 
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash but uses no references",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 ...getFiles(),
                 "/src/solution/tsconfig.json": jsonToReadableText({
@@ -89,7 +89,7 @@ declare type MyNominal<T, Name extends string> = T & {
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file used inferred type from referenced project",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -127,12 +127,12 @@ export function fn4() {
     });
 
     forEachDeclarationEmitWithErrorsScenario(
-        (scenario, fs) => {
+        (scenario, sys) => {
             verifyTsc({
                 scenario: "declarationEmit",
                 subScenario: scenario("reports dts generation errors"),
                 commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
-                fs,
+                sys,
                 edits: noChangeOnlyRuns,
             });
         },

@@ -1,34 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
-//// [/src/project/src/directUse.ts]
-import { indirectClass } from './indirectClass';
-new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectClass.ts]
 import { classC } from './class';
 export class indirectClass {
     classC = new classC();
 }
+
+//// [/src/project/src/directUse.ts]
+import { indirectClass } from './indirectClass';
+new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectUse.ts]
 import { indirectClass } from './indirectClass';
@@ -52,6 +37,20 @@ function someFunc(arguments: boolean, ...rest: any[]) {
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -71,26 +70,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.js]
@@ -141,6 +120,26 @@ function someFunc(arguments) {
         rest[_i - 1] = arguments[_i];
     }
 }
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -209,10 +208,9 @@ function someFunc(arguments) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -228,10 +226,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -246,15 +243,14 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: Introduce error but still noEmit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -405,14 +401,13 @@ Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error and emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -434,8 +429,8 @@ Found 1 error.
 
 
 
-//// [/src/outFile.d.ts] file written with same contents
 //// [/src/outFile.js] file written with same contents
+//// [/src/outFile.d.ts] file written with same contents
 //// [/src/outFile.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","545032748-export class classC {\n    prop = 1;\n}","6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}","-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}"],"root":[[2,7]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
 
@@ -502,10 +497,9 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -529,10 +523,9 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -548,10 +541,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -566,11 +558,10 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -593,15 +584,14 @@ Found 1 error.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: Introduce error and emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -641,26 +631,6 @@ Output::
 
 Found 3 errors.
 
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop1: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.js]
@@ -711,6 +681,26 @@ function someFunc(arguments) {
         rest[_i - 1] = arguments[_i];
     }
 }
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop1: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -823,10 +813,9 @@ function someFunc(arguments) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -870,10 +859,9 @@ Found 3 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -912,10 +900,9 @@ Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -953,11 +940,10 @@ Found 2 errors.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -1000,15 +986,14 @@ Found 3 errors.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: Fix error and no emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -1092,10 +1077,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -1114,26 +1098,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.js]
@@ -1184,6 +1148,26 @@ function someFunc(arguments) {
         rest[_i - 1] = arguments[_i];
     }
 }
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -1252,10 +1236,9 @@ function someFunc(arguments) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1271,10 +1254,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1289,11 +1271,10 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::

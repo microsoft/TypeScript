@@ -1,5 +1,18 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/index.js]
+
+
+//// [/src/bar.ts]
+
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,24 +28,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/bar.ts]
-
-
-//// [/src/index.js]
-
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "allowJs": true
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -clean
-Output::
-
-
 
 exitCode:: ExitStatus.Success

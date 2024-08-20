@@ -1,10 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a: number = "hello"
-
-//// [/home/src/projects/project/b.ts]
-export const b = 10;
 
 //// [/home/src/projects/project/tsconfig.json]
 {
@@ -28,17 +25,19 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/projects/project/b.ts]
+export const b = 10;
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -138,20 +137,19 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -178,12 +176,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -272,10 +269,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -304,27 +300,12 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Emit after fixing error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-
-
-//// [/home/src/projects/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello";
-
-
-//// [/home/src/projects/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -374,6 +355,20 @@ exports.b = 10;
   "size": 751
 }
 
+//// [/home/src/projects/project/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = "hello";
+
+
+//// [/home/src/projects/project/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 10;
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts",
@@ -396,10 +391,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -428,23 +422,22 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a: number = "hello"
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
@@ -540,24 +533,22 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: Emit when error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/home/src/projects/project/a.js] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
 {"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11417512537-export const a: number = \"hello\"","signature":"-3045186137-export declare const a: number;\n"},"-13368947479-export const b = 10;"],"root":[2,3],"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
 
@@ -619,6 +610,7 @@ Found 1 error in home/src/projects/project/a.ts[90m:1[0m
   "size": 906
 }
 
+//// [/home/src/projects/project/a.js] file written with same contents
 
 Program root files: [
   "/home/src/projects/project/a.ts",
@@ -641,20 +633,19 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 

@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/src/a.ts]
 import { B } from "./b";
 
@@ -64,6 +49,20 @@ export { C } from "./c";
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src --verbose
@@ -77,10 +76,10 @@ Output::
 
 
 
-//// [/src/lib/a.d.ts]
-import { B } from "./b";
-export interface A {
-    b: B;
+//// [/src/lib/c.d.ts]
+import { A } from "./a";
+export interface C {
+    a: A;
 }
 
 
@@ -91,10 +90,10 @@ export interface B {
 }
 
 
-//// [/src/lib/c.d.ts]
-import { A } from "./a";
-export interface C {
-    a: A;
+//// [/src/lib/a.d.ts]
+import { B } from "./b";
+export interface A {
+    b: B;
 }
 
 
@@ -222,8 +221,8 @@ export { C } from "./c";
 
 exitCode:: ExitStatus.Success
 
-
 Change:: incremental-declaration-changes
+
 Input::
 //// [/src/src/a.ts]
 import { B } from "./b";
@@ -231,7 +230,6 @@ import { B } from "./b";
 export interface A {
     b: B; foo: any;
 }
-
 
 
 

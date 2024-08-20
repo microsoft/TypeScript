@@ -743,6 +743,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+delete the alternateResult in @types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -771,35 +772,9 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 3,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 3: /home/src/projects/project/tsconfig.json
 4: *ensureProjectForOpenFiles*
-5: checkOne *new*
-
-Before running Timeout callback:: count: 3
-3: /home/src/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
-5: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -942,6 +917,37 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: false
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+5: checkOne *new*
+
+Before running Timeout callback:: count: 1
+5: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -956,13 +962,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1100,6 +1099,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+delete the ndoe10Result in package/types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -1128,35 +1128,9 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 7: /home/src/projects/project/tsconfig.json
 8: *ensureProjectForOpenFiles*
-9: checkOne *new*
-
-Before running Timeout callback:: count: 3
-7: /home/src/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
-9: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -1279,6 +1253,37 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: false
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+9: checkOne *new*
+
+Before running Timeout callback:: count: 1
+9: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1293,13 +1298,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 5: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 3 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -1437,6 +1435,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+add the alternateResult in @types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -1467,35 +1466,9 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 5,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 11: /home/src/projects/project/tsconfig.json
 12: *ensureProjectForOpenFiles*
-13: checkOne *new*
-
-Before running Timeout callback:: count: 3
-11: /home/src/projects/project/tsconfig.json
-12: *ensureProjectForOpenFiles*
-13: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -1626,6 +1599,37 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 4 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: false
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+13: checkOne *new*
+
+Before running Timeout callback:: count: 1
+13: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1640,13 +1644,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 7: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4
-    projectProgramVersion: 4 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -1784,6 +1781,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+add the alternateResult in package/types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -1814,35 +1812,9 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 6,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 15: /home/src/projects/project/tsconfig.json
 16: *ensureProjectForOpenFiles*
-17: checkOne *new*
-
-Before running Timeout callback:: count: 3
-15: /home/src/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
-17: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -1952,6 +1924,37 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: false
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 6,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+17: checkOne *new*
+
+Before running Timeout callback:: count: 1
+17: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1966,13 +1969,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 9: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5
-    projectProgramVersion: 5 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -2110,6 +2106,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+update package.json from @types so error is fixed
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
@@ -2148,35 +2145,9 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 7,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 19: /home/src/projects/project/tsconfig.json
 20: *ensureProjectForOpenFiles*
-21: checkOne *new*
-
-Before running Timeout callback:: count: 3
-19: /home/src/projects/project/tsconfig.json
-20: *ensureProjectForOpenFiles*
-21: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -2281,20 +2252,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-11: semanticCheck *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
@@ -2324,6 +2282,43 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 7,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+21: checkOne *new*
+
+Before running Timeout callback:: count: 1
+21: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+11: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 11: semanticCheck
@@ -2448,6 +2443,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+update package.json so error is fixed
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
@@ -2487,35 +2483,9 @@ Projects::
     projectProgramVersion: 6
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 8,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 23: /home/src/projects/project/tsconfig.json
 24: *ensureProjectForOpenFiles*
-25: checkOne *new*
-
-Before running Timeout callback:: count: 3
-23: /home/src/projects/project/tsconfig.json
-24: *ensureProjectForOpenFiles*
-25: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -2617,16 +2587,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
 PolledWatches::
@@ -2667,9 +2627,6 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
-Immedidate callback:: count: 1
-13: semanticCheck *new*
-
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 7
@@ -2701,6 +2658,43 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 8,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+25: checkOne *new*
+
+Before running Timeout callback:: count: 1
+25: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+13: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 13: semanticCheck
@@ -2811,6 +2805,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+update package.json from @types so error is introduced
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
@@ -2847,35 +2842,9 @@ Projects::
     projectProgramVersion: 7
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 9,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 27: /home/src/projects/project/tsconfig.json
 28: *ensureProjectForOpenFiles*
-29: checkOne *new*
-
-Before running Timeout callback:: count: 3
-27: /home/src/projects/project/tsconfig.json
-28: *ensureProjectForOpenFiles*
-29: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -3026,16 +2995,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
 PolledWatches::
@@ -3074,9 +3033,6 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
-Immedidate callback:: count: 1
-15: semanticCheck *new*
-
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 8
@@ -3108,6 +3064,43 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 9,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+29: checkOne *new*
+
+Before running Timeout callback:: count: 1
+29: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+15: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 15: semanticCheck
@@ -3232,6 +3225,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+update package.json so error is introduced
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
@@ -3270,35 +3264,9 @@ Projects::
     projectProgramVersion: 8
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 10,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 31: /home/src/projects/project/tsconfig.json
 32: *ensureProjectForOpenFiles*
-33: checkOne *new*
-
-Before running Timeout callback:: count: 3
-31: /home/src/projects/project/tsconfig.json
-32: *ensureProjectForOpenFiles*
-33: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -3419,20 +3387,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-17: semanticCheck *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
@@ -3464,6 +3419,43 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 10,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+33: checkOne *new*
+
+Before running Timeout callback:: count: 1
+33: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+17: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 17: semanticCheck
@@ -3601,6 +3593,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+delete the alternateResult in @types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -3654,35 +3647,9 @@ Projects::
     projectProgramVersion: 9
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 11,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 35: /home/src/projects/project/tsconfig.json
 36: *ensureProjectForOpenFiles*
-37: checkOne *new*
-
-Before running Timeout callback:: count: 3
-35: /home/src/projects/project/tsconfig.json
-36: *ensureProjectForOpenFiles*
-37: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -3825,6 +3792,36 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 10
+    projectProgramVersion: 10 *changed*
+    dirty: false *changed*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 11,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+37: checkOne *new*
+
+Before running Timeout callback:: count: 1
+37: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -3839,12 +3836,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 19: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 10
-    projectProgramVersion: 10 *changed*
-    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 19: semanticCheck
@@ -3982,6 +3973,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+delete the ndoe10Result in package/types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -4037,35 +4029,9 @@ Projects::
     projectProgramVersion: 10
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 12,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 39: /home/src/projects/project/tsconfig.json
 40: *ensureProjectForOpenFiles*
-41: checkOne *new*
-
-Before running Timeout callback:: count: 3
-39: /home/src/projects/project/tsconfig.json
-40: *ensureProjectForOpenFiles*
-41: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -4188,6 +4154,36 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 11
+    projectProgramVersion: 11 *changed*
+    dirty: false *changed*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 12,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+41: checkOne *new*
+
+Before running Timeout callback:: count: 1
+41: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -4202,12 +4198,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 21: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 11
-    projectProgramVersion: 11 *changed*
-    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 21: semanticCheck
@@ -4345,6 +4335,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+add the alternateResult in @types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -4402,35 +4393,9 @@ Projects::
     projectProgramVersion: 11
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 13,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 43: /home/src/projects/project/tsconfig.json
 44: *ensureProjectForOpenFiles*
-45: checkOne *new*
-
-Before running Timeout callback:: count: 3
-43: /home/src/projects/project/tsconfig.json
-44: *ensureProjectForOpenFiles*
-45: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -4561,6 +4526,36 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 12
+    projectProgramVersion: 12 *changed*
+    dirty: false *changed*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 13,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+45: checkOne *new*
+
+Before running Timeout callback:: count: 1
+45: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -4575,12 +4570,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 23: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 12
-    projectProgramVersion: 12 *changed*
-    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 23: semanticCheck
@@ -4718,6 +4707,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+add the ndoe10Result in package/types
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -4774,35 +4764,9 @@ Projects::
     projectProgramVersion: 12
     dirty: true *changed*
 
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 14,
-      "type": "request"
-    }
-After request
-
-Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 47: /home/src/projects/project/tsconfig.json
 48: *ensureProjectForOpenFiles*
-49: checkOne *new*
-
-Before running Timeout callback:: count: 3
-47: /home/src/projects/project/tsconfig.json
-48: *ensureProjectForOpenFiles*
-49: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
@@ -4912,6 +4876,36 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 13
+    projectProgramVersion: 13 *changed*
+    dirty: false *changed*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 14,
+      "type": "request"
+    }
+After request
+
+Timeout callback:: count: 1
+49: checkOne *new*
+
+Before running Timeout callback:: count: 1
+49: checkOne
+
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -4926,12 +4920,6 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 25: semanticCheck *new*
-
-Projects::
-/home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 13
-    projectProgramVersion: 13 *changed*
-    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 25: semanticCheck

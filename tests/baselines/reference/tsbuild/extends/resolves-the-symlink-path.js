@@ -102,27 +102,4 @@ export declare const x = 10;
 }
 
 
-Program root files: [
-  "/users/user/projects/myproject/src/index.ts"
-]
-Program options: {
-  "composite": true,
-  "removeComments": true,
-  "extendedDiagnostics": true,
-  "tscBuild": true,
-  "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/users/user/projects/myproject/src/index.ts (computed .d.ts during emit)
-
 exitCode:: ExitStatus.Success

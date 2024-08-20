@@ -6,7 +6,7 @@ describe("unittests:: tsc:: redirect::", () => {
     verifyTsc({
         scenario: "redirect",
         subScenario: "when redirecting ts file",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {

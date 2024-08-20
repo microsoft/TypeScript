@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/child/child.ts]
 import { child2 } from "../child/child2";
 export function child() {
@@ -32,6 +17,20 @@ export function child2() {
   "compilerOptions": {}
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
@@ -57,6 +56,14 @@ src/child/child.ts
   Matched by default include pattern '**/*'
 
 
+//// [/src/child/child2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.child2 = child2;
+function child2() {
+}
+
+
 //// [/src/child/child.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -64,14 +71,6 @@ exports.child = child;
 var child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
-}
-
-
-//// [/src/child/child2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = child2;
-function child2() {
 }
 
 
@@ -91,12 +90,11 @@ function child2() {
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete child2 file
-Input::
-//// [/src/child/child2.js] unlink
-//// [/src/child/child2.ts] unlink
 
+Input::
+//// [/src/child/child2.ts] deleted
+//// [/src/child/child2.js] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 Output::

@@ -1,22 +1,17 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/shared/index.ts]
-export const a: Unrestricted = 1;
+//// [/src/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/src/shared/tsconfig-base.json]
 {
@@ -24,6 +19,9 @@ export const a: Unrestricted = 1;
     "./typings-base/"
   ]
 }
+
+//// [/src/shared/typings-base/globals.d.ts]
+type Unrestricted = any;
 
 //// [/src/shared/tsconfig.json]
 {
@@ -38,24 +36,8 @@ export const a: Unrestricted = 1;
   ]
 }
 
-//// [/src/shared/typings-base/globals.d.ts]
-type Unrestricted = any;
-
-//// [/src/tsconfig.json]
-{
-  "references": [
-    {
-      "path": "./shared/tsconfig.json"
-    },
-    {
-      "path": "./webpack/tsconfig.json"
-    }
-  ],
-  "files": []
-}
-
-//// [/src/webpack/index.ts]
-export const b: Unrestricted = 1;
+//// [/src/shared/index.ts]
+export const a: Unrestricted = 1;
 
 //// [/src/webpack/tsconfig.json]
 {
@@ -75,6 +57,23 @@ export const b: Unrestricted = 1;
   ]
 }
 
+//// [/src/webpack/index.ts]
+export const b: Unrestricted = 1;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --listFiles
@@ -100,15 +99,15 @@ Output::
 /src/shared/typings-base/globals.d.ts
 
 
-//// [/src/target-tsc-build/shared/index.d.ts]
-export declare const a: Unrestricted;
-
-
 //// [/src/target-tsc-build/shared/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
+
+
+//// [/src/target-tsc-build/shared/index.d.ts]
+export declare const a: Unrestricted;
 
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo]
@@ -169,15 +168,15 @@ exports.a = 1;
   "size": 955
 }
 
-//// [/src/target-tsc-build/webpack/index.d.ts]
-export declare const b: Unrestricted;
-
-
 //// [/src/target-tsc-build/webpack/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 1;
+
+
+//// [/src/target-tsc-build/webpack/index.d.ts]
+export declare const b: Unrestricted;
 
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo]

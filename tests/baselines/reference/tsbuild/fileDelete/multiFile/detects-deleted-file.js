@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/child/child.ts]
 import { child2 } from "../child/child2";
 export function child() {
@@ -53,6 +38,20 @@ export function main() {
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
@@ -95,8 +94,16 @@ src/main/main.ts
   Matched by default include pattern '**/*'
 
 
-//// [/src/child/child.d.ts]
-export declare function child(): void;
+//// [/src/child/child2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.child2 = child2;
+function child2() {
+}
+
+
+//// [/src/child/child2.d.ts]
+export declare function child2(): void;
 
 
 //// [/src/child/child.js]
@@ -109,16 +116,8 @@ function child() {
 }
 
 
-//// [/src/child/child2.d.ts]
-export declare function child2(): void;
-
-
-//// [/src/child/child2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = child2;
-function child2() {
-}
+//// [/src/child/child.d.ts]
+export declare function child(): void;
 
 
 //// [/src/child/tsconfig.tsbuildinfo]
@@ -186,10 +185,6 @@ function child2() {
   "size": 1035
 }
 
-//// [/src/main/main.d.ts]
-export declare function main(): void;
-
-
 //// [/src/main/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -198,6 +193,10 @@ var child_1 = require("../child/child");
 function main() {
     (0, child_1.child)();
 }
+
+
+//// [/src/main/main.d.ts]
+export declare function main(): void;
 
 
 //// [/src/main/tsconfig.tsbuildinfo]
@@ -260,13 +259,12 @@ function main() {
 
 exitCode:: ExitStatus.Success
 
-
 Change:: delete child2 file
-Input::
-//// [/src/child/child2.d.ts] unlink
-//// [/src/child/child2.js] unlink
-//// [/src/child/child2.ts] unlink
 
+Input::
+//// [/src/child/child2.ts] deleted
+//// [/src/child/child2.js] deleted
+//// [/src/child/child2.d.ts] deleted
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::

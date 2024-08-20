@@ -266,11 +266,11 @@ new C();`,
         baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
     });
 
-    forEachMonorepoSymlinkScenario(/*forTsserver*/ true, (scenario, getHost, edits, project) => {
+    forEachMonorepoSymlinkScenario(/*forTsserver*/ true, (scenario, getHost, edits, project, currentDirectory) => {
         [undefined, true].forEach(canUseWatchEvents => {
             it(`${scenario}${canUseWatchEvents ? " canUseWatchEvents" : ""}`, () => {
                 const host = getHost();
-                const indexFile = ts.normalizePath(ts.combinePaths(host.getCurrentDirectory(), project, "src/index.ts"));
+                const indexFile = ts.normalizePath(ts.combinePaths(currentDirectory, project, "src/index.ts"));
                 const session = new TestSession({ host, canUseWatchEvents });
                 openFilesForSession([indexFile], session);
                 verifyGetErrRequest({ session, files: [indexFile] });

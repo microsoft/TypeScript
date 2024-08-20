@@ -1,5 +1,30 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
+//// [/home/src/projects/project/src/main.ts]
+export default 42;
+
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "Node16",
+    "jsx": "react-jsx",
+    "jsxImportSource": "solid-js"
+  }
+}
+
+//// [/home/src/projects/project/node_modules/solid-js/package.json]
+{
+  "name": "solid-js",
+  "type": "module"
+}
+
+//// [/home/src/projects/project/node_modules/solid-js/jsx-runtime.d.ts]
+export namespace JSX {
+    type IntrinsicElements = { div: {}; };
+}
+
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,55 +40,31 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/node_modules/solid-js/jsx-runtime.d.ts]
-export namespace JSX {
-    type IntrinsicElements = { div: {}; };
-}
-
-
-//// [/node_modules/solid-js/package.json]
-{
-  "name": "solid-js",
-  "type": "module"
-}
-
-//// [/src/main.ts]
-export default 42;
-
-//// [/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "module": "Node16",
-    "jsx": "react-jsx",
-    "jsxImportSource": "solid-js"
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/src/main.d.ts]
-declare const _default: 42;
-export default _default;
+//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
 
-
-//// [/src/main.js]
+//// [/home/src/projects/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 42;
 
 
-//// [/tsconfig.tsbuildinfo]
-{"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+//// [/home/src/projects/project/src/main.d.ts]
+declare const _default: 42;
+export default _default;
 
-//// [/tsconfig.tsbuildinfo.readable.baseline.txt]
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2022.full.d.ts",
     "./node_modules/solid-js/jsx-runtime.d.ts",
     "./src/main.ts"
   ],
@@ -73,7 +74,7 @@ exports.default = 42;
     ]
   ],
   "fileInfos": {
-    "./home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2022.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -106,10 +107,6 @@ exports.default = 42;
   },
   "root": [
     [
-      1,
-      "./home/src/tslibs/ts/lib/lib.d.ts"
-    ],
-    [
       3,
       "./src/main.ts"
     ]
@@ -127,7 +124,7 @@ exports.default = 42;
   },
   "latestChangedDtsFile": "./src/main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1086
+  "size": 1091
 }
 
 

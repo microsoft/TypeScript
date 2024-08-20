@@ -1,19 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project1/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true
+  }
+}
 
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;
@@ -26,23 +19,6 @@ import { a } from "./a";export const c = a;
 
 //// [/src/project1/src/d.ts]
 import { b } from "./b";export const d = b;
-
-//// [/src/project1/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true,
-    "declaration": true
-  }
-}
-
-//// [/src/project2/src/e.ts]
-export const e = 10;
-
-//// [/src/project2/src/f.ts]
-import { a } from "../../project1/src/a"; export const f = a;
-
-//// [/src/project2/src/g.ts]
-import { b } from "../../project1/src/b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
 {
@@ -57,6 +33,29 @@ import { b } from "../../project1/src/b"; export const g = b;
   ]
 }
 
+//// [/src/project2/src/e.ts]
+export const e = 10;
+
+//// [/src/project2/src/f.ts]
+import { a } from "../../project1/src/a"; export const f = a;
+
+//// [/src/project2/src/g.ts]
+import { b } from "../../project1/src/b"; export const g = b;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -397,10 +396,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -456,12 +454,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -641,12 +638,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -956,10 +952,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: emit js files
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
@@ -987,40 +982,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/project1/src/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.aaa = exports.a = void 0;
-exports.a = 10;
-var aLocal = 10;
-var aa = 10;
-exports.aaa = 10;
-
-
-//// [/src/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-
-
-//// [/src/project1/src/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-var a_1 = require("./a");
-exports.c = a_1.a;
-
-
-//// [/src/project1/src/d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.d = void 0;
-var b_1 = require("./b");
-exports.d = b_1.b;
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
@@ -1114,29 +1075,6 @@ exports.d = b_1.b;
   "version": "FakeTSVersion",
   "size": 1283
 }
-
-//// [/src/project2/src/e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e = void 0;
-exports.e = 10;
-
-
-//// [/src/project2/src/f.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-var a_1 = require("../../project1/src/a");
-exports.f = a_1.a;
-
-
-//// [/src/project2/src/g.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.g = void 0;
-var b_1 = require("../../project1/src/b");
-exports.g = b_1.b;
-
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
 {"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileIdsList":[[3],[5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4822840506-export declare const e = 10;\n"},"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-5154070489-export declare const f = 10;\n"},"-3829150557-export declare const b = 10;\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-5485300472-export declare const g = 10;\n"}],"root":[2,4,6],"options":{"declaration":true},"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
@@ -1257,6 +1195,63 @@ exports.g = b_1.b;
   "size": 1324
 }
 
+//// [/src/project1/src/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.aaa = exports.a = void 0;
+exports.a = 10;
+var aLocal = 10;
+var aa = 10;
+exports.aaa = 10;
+
+
+//// [/src/project1/src/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 10;
+var bLocal = 10;
+
+
+//// [/src/project1/src/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+var a_1 = require("./a");
+exports.c = a_1.a;
+
+
+//// [/src/project1/src/d.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.d = void 0;
+var b_1 = require("./b");
+exports.d = b_1.b;
+
+
+//// [/src/project2/src/e.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.e = void 0;
+exports.e = 10;
+
+
+//// [/src/project2/src/f.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+var a_1 = require("../../project1/src/a");
+exports.f = a_1.a;
+
+
+//// [/src/project2/src/g.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.g = void 0;
+var b_1 = require("../../project1/src/b");
+exports.g = b_1.b;
+
+
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -1308,10 +1303,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -1367,12 +1361,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -1404,15 +1397,6 @@ Found 1 error.
 
 
 //// [/src/project1/src/b.d.ts] file written with same contents
-//// [/src/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
-
-
 //// [/src/project1/src/tsconfig.tsbuildinfo]
 {"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"referencedMap":[[4,1],[5,2]],"version":"FakeTSVersion"}
 
@@ -1505,6 +1489,15 @@ var alocal = 10;
   "size": 1301
 }
 
+//// [/src/project1/src/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 10;
+var bLocal = 10;
+var alocal = 10;
+
+
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -1558,12 +1551,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -1743,12 +1735,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -2058,12 +2049,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -2094,28 +2084,13 @@ Found 1 error.
 
 
 
-//// [/src/project1/src/a.js] file written with same contents
 //// [/src/project1/src/b.d.ts]
 export declare const b = 10;
 export declare const aaaaa = 10;
 export declare const a2 = 10;
 
 
-//// [/src/project1/src/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a2 = exports.aaaaa = exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
-var aaaa = 10;
-exports.aaaaa = 10;
-exports.a2 = 10;
-
-
-//// [/src/project1/src/c.js] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
-//// [/src/project1/src/d.js] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
 {"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","signature":"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"referencedMap":[[4,1],[5,2]],"version":"FakeTSVersion"}
 
@@ -2208,10 +2183,7 @@ exports.a2 = 10;
   "size": 1428
 }
 
-//// [/src/project2/src/e.js] file written with same contents
-//// [/src/project2/src/f.js] file written with same contents
 //// [/src/project2/src/g.d.ts] file written with same contents
-//// [/src/project2/src/g.js] file written with same contents
 //// [/src/project2/src/tsconfig.tsbuildinfo]
 {"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileIdsList":[[3],[5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4822840506-export declare const e = 10;\n"},"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-5154070489-export declare const f = 10;\n"},"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-5485300472-export declare const g = 10;\n"}],"root":[2,4,6],"options":{"declaration":true},"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
 
@@ -2331,6 +2303,24 @@ exports.a2 = 10;
   "size": 1389
 }
 
+//// [/src/project1/src/a.js] file written with same contents
+//// [/src/project1/src/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a2 = exports.aaaaa = exports.b = void 0;
+exports.b = 10;
+var bLocal = 10;
+var alocal = 10;
+var aaaa = 10;
+exports.aaaaa = 10;
+exports.a2 = 10;
+
+
+//// [/src/project1/src/c.js] file written with same contents
+//// [/src/project1/src/d.js] file written with same contents
+//// [/src/project2/src/e.js] file written with same contents
+//// [/src/project2/src/f.js] file written with same contents
+//// [/src/project2/src/g.js] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",

@@ -1,76 +1,22 @@
 currentDirectory:: /home/src/workspace/projects useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/home/src/workspace/projects/project1/utils.d.ts]
+export const y = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
-interface DOMInterface { }
-
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
-interface ScriptHostInterface { }
-
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
-interface WebWorkerInterface { }
-
-//// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
-export const unrelated = 10;
+//// [/home/src/workspace/projects/project1/file.ts]
+export const file = 10;
 
 //// [/home/src/workspace/projects/project1/core.d.ts]
 export const core = 10;
 
-//// [/home/src/workspace/projects/project1/file.ts]
-export const file = 10;
+//// [/home/src/workspace/projects/project1/index.ts]
+export const x = "type1";
 
 //// [/home/src/workspace/projects/project1/file2.ts]
 /// <reference lib="webworker"/>
 /// <reference lib="scripthost"/>
 /// <reference lib="es5"/>
 
-
-//// [/home/src/workspace/projects/project1/index.ts]
-export const x = "type1";
 
 //// [/home/src/workspace/projects/project1/tsconfig.json]
 {
@@ -90,7 +36,7 @@ export const x = "type1";
 //// [/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
 
-//// [/home/src/workspace/projects/project1/utils.d.ts]
+//// [/home/src/workspace/projects/project2/utils.d.ts]
 export const y = 10;
 
 //// [/home/src/workspace/projects/project2/index.ts]
@@ -108,7 +54,7 @@ export const y = 10
   }
 }
 
-//// [/home/src/workspace/projects/project2/utils.d.ts]
+//// [/home/src/workspace/projects/project3/utils.d.ts]
 export const y = 10;
 
 //// [/home/src/workspace/projects/project3/index.ts]
@@ -126,7 +72,7 @@ export const z = 10
   }
 }
 
-//// [/home/src/workspace/projects/project3/utils.d.ts]
+//// [/home/src/workspace/projects/project4/utils.d.ts]
 export const y = 10;
 
 //// [/home/src/workspace/projects/project4/index.ts]
@@ -145,9 +91,32 @@ export const z = 10
   }
 }
 
-//// [/home/src/workspace/projects/project4/utils.d.ts]
-export const y = 10;
+//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+interface DOMInterface { }
 
+//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+interface WebWorkerInterface { }
+
+//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+interface ScriptHostInterface { }
+
+//// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
+export const unrelated = 10;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b project1 project2 project3 project4 --verbose --explainFiles
@@ -424,9 +393,9 @@ project4/utils.d.ts
   Matched by default include pattern '**/*'
 
 
-//// [/home/src/workspace/projects/project1/file.d.ts]
-export declare const file = 10;
+//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
 
+//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -435,7 +404,8 @@ exports.file = void 0;
 exports.file = 10;
 
 
-//// [/home/src/workspace/projects/project1/file2.d.ts]
+//// [/home/src/workspace/projects/project1/file.d.ts]
+export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
@@ -444,8 +414,7 @@ exports.file = 10;
 /// <reference lib="es5"/>
 
 
-//// [/home/src/workspace/projects/project1/index.d.ts]
-export declare const x = "type1";
+//// [/home/src/workspace/projects/project1/file2.d.ts]
 
 
 //// [/home/src/workspace/projects/project1/index.js]
@@ -453,6 +422,10 @@ export declare const x = "type1";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = "type1";
+
+
+//// [/home/src/workspace/projects/project1/index.d.ts]
+export declare const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo]
@@ -570,15 +543,15 @@ exports.x = "type1";
   "size": 1636
 }
 
-//// [/home/src/workspace/projects/project2/index.d.ts]
-export declare const y = 10;
-
-
 //// [/home/src/workspace/projects/project2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
+
+
+//// [/home/src/workspace/projects/project2/index.d.ts]
+export declare const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo]
@@ -642,15 +615,15 @@ exports.y = 10;
   "size": 937
 }
 
-//// [/home/src/workspace/projects/project3/index.d.ts]
-export declare const z = 10;
-
-
 //// [/home/src/workspace/projects/project3/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = void 0;
 exports.z = 10;
+
+
+//// [/home/src/workspace/projects/project3/index.d.ts]
+export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo]
@@ -714,15 +687,15 @@ exports.z = 10;
   "size": 937
 }
 
-//// [/home/src/workspace/projects/project4/index.d.ts]
-export declare const z = 10;
-
-
 //// [/home/src/workspace/projects/project4/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = void 0;
 exports.z = 10;
+
+
+//// [/home/src/workspace/projects/project4/index.d.ts]
+export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo]

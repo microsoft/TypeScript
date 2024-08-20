@@ -1,4 +1,4 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { LanguageService } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
@@ -72,7 +72,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         proxy.getSemanticDiagnostics = filename => {
                             const prev = info.languageService.getSemanticDiagnostics(filename);
                             const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
@@ -817,7 +817,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        return Harness.LanguageService.makeDefaultProxy(info);
+                        return LanguageService.makeDefaultProxy(info);
                     },
                     getExternalFiles() {
                         return ["/home/src/projects/project/does/not/exist"];

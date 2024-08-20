@@ -1,5 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/a.ts]
+export const a: number = "hello";
+
+//// [/src/b.ts]
+export const b = 10;
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true,
+    "incremental": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,21 +29,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/a.ts]
-export const a: number = "hello";
-
-//// [/src/b.ts]
-export const b = 10;
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true,
-    "incremental": true
-  }
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -42,10 +41,6 @@ Output::
 
 
 
-//// [/src/a.d.ts]
-export declare const a: number;
-
-
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -53,8 +48,8 @@ exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/b.d.ts]
-export declare const b = 10;
+//// [/src/a.d.ts]
+export declare const a: number;
 
 
 //// [/src/b.js]
@@ -62,6 +57,10 @@ export declare const b = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
+
+
+//// [/src/b.d.ts]
+export declare const b = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -160,10 +159,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -177,12 +175,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -196,11 +193,11 @@ Output::
 
 
 
+//// [/src/a.js] file written with same contents
 //// [/src/a.d.ts]
 export declare const a = "hello";
 
 
-//// [/src/a.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"options":{"declaration":true},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -295,10 +292,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -312,10 +308,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -408,10 +403,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -425,10 +419,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -442,12 +435,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -461,11 +453,11 @@ Output::
 
 
 
+//// [/src/a.js] file written with same contents
 //// [/src/a.d.ts]
 export declare const a: number;
 
 
-//// [/src/a.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11705693502-export const a: number = \"hello\";","signature":"-3045186137-export declare const a: number;\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -553,10 +545,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -570,10 +561,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -686,12 +676,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -705,11 +694,11 @@ Output::
 
 
 
+//// [/src/a.js] file written with same contents
 //// [/src/a.d.ts]
 export declare const a = "hello";
 
 
-//// [/src/a.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -797,10 +786,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -891,12 +879,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
@@ -916,17 +903,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/c.d.ts]
-export declare const c: number;
-
-
-//// [/src/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = "hello";
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -1009,6 +985,17 @@ exports.c = "hello";
   "size": 1141
 }
 
+//// [/src/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+exports.c = "hello";
+
+
+//// [/src/c.d.ts]
+export declare const c: number;
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -1036,12 +1023,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1055,11 +1041,11 @@ Output::
 
 
 
+//// [/src/a.js] file written with same contents
 //// [/src/a.d.ts]
 export declare const a: number;
 
 
-//// [/src/a.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11705693502-export const a: number = \"hello\";","signature":"-3045186137-export declare const a: number;\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"-9150421116-export const c: number = \"hello\";","signature":"1429704745-export declare const c: number;\n"}],"root":[[2,4]],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -1173,12 +1159,11 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1192,11 +1177,11 @@ Output::
 
 
 
+//// [/src/a.js] file written with same contents
 //// [/src/a.d.ts]
 export declare const a = "hello";
 
 
-//// [/src/a.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
 {"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts","./c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"-9150421116-export const c: number = \"hello\";","signature":"1429704745-export declare const c: number;\n"}],"root":[[2,4]],"options":{"declaration":true},"semanticDiagnosticsPerFile":[2,[4,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"checkPending":true,"version":"FakeTSVersion"}
 
@@ -1310,10 +1295,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -1440,10 +1424,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -1457,10 +1440,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::

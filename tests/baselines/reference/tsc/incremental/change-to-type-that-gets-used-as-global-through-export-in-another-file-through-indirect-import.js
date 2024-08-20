@@ -1,5 +1,25 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
+
+//// [/src/project/class1.ts]
+const a: MagicNumber = 1;
+console.log(a);
+
+//// [/src/project/constants.ts]
+export default 1;
+
+//// [/src/project/reexport.ts]
+export { default as ConstantNumber } from "./constants"
+
+//// [/src/project/types.d.ts]
+type MagicNumber = typeof import('./reexport').ConstantNumber
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,34 +35,9 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/class1.ts]
-const a: MagicNumber = 1;
-console.log(a);
-
-//// [/src/project/constants.ts]
-export default 1;
-
-//// [/src/project/reexport.ts]
-export { default as ConstantNumber } from "./constants"
-
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true
-  }
-}
-
-//// [/src/project/types.d.ts]
-type MagicNumber = typeof import('./reexport').ConstantNumber
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-
-
-//// [/src/project/class1.d.ts]
-declare const a = 1;
 
 
 //// [/src/project/class1.js]
@@ -50,9 +45,8 @@ var a = 1;
 console.log(a);
 
 
-//// [/src/project/constants.d.ts]
-declare const _default: 1;
-export default _default;
+//// [/src/project/class1.d.ts]
+declare const a = 1;
 
 
 //// [/src/project/constants.js]
@@ -61,8 +55,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 1;
 
 
-//// [/src/project/reexport.d.ts]
-export { default as ConstantNumber } from "./constants";
+//// [/src/project/constants.d.ts]
+declare const _default: 1;
+export default _default;
 
 
 //// [/src/project/reexport.js]
@@ -71,6 +66,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstantNumber = void 0;
 var constants_1 = require("./constants");
 Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: function () { return constants_1.default; } });
+
+
+//// [/src/project/reexport.d.ts]
+export { default as ConstantNumber } from "./constants";
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -172,12 +171,11 @@ Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: functi
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Modify imports used in global file
+
 Input::
 //// [/src/project/constants.ts]
 export default 2;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p src/project
@@ -196,15 +194,15 @@ Found 1 error in src/project/class1.ts[90m:1[0m
 declare const a = 2;
 
 
-//// [/src/project/constants.d.ts]
-declare const _default: 2;
-export default _default;
-
-
 //// [/src/project/constants.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 2;
+
+
+//// [/src/project/constants.d.ts]
+declare const _default: 2;
+export default _default;
 
 
 //// [/src/project/reexport.js] file written with same contents

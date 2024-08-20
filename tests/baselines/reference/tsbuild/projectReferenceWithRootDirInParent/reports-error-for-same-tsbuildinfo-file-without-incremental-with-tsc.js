@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/src/main/a.ts]
 import { b } from './b';
 const a = b;
@@ -62,6 +47,20 @@ export const Other = 0;
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/src/other --verbose
@@ -75,15 +74,15 @@ Output::
 
 
 
-//// [/src/dist/other.d.ts]
-export declare const Other = 0;
-
-
 //// [/src/dist/other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Other = void 0;
 exports.Other = 0;
+
+
+//// [/src/dist/other.d.ts]
+export declare const Other = 0;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
@@ -132,20 +131,12 @@ exports.Other = 0;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Running tsc on main
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/src/main
 Output::
-
-
-//// [/src/dist/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var a = b_1.b;
 
 
 //// [/src/dist/b.js]
@@ -153,6 +144,13 @@ var a = b_1.b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 0;
+
+
+//// [/src/dist/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var a = b_1.b;
 
 
 

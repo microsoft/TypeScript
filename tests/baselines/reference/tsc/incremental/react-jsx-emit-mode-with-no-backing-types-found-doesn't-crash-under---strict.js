@@ -1,19 +1,7 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project/node_modules/react/jsx-runtime.js]
+export {}
 
 //// [/src/project/node_modules/@types/react/index.d.ts]
 
@@ -29,9 +17,6 @@ declare global {
     }
 }
 
-//// [/src/project/node_modules/react/jsx-runtime.js]
-export {}
-
 //// [/src/project/src/index.tsx]
 export const App = () => <div propA={true}></div>;
 
@@ -45,6 +30,20 @@ export const App = () => <div propA={true}></div>;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project --strict

@@ -1,10 +1,12 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { CommandLineProgram } from "../helpers/baseline.js";
 import {
     applyEdit,
+    CommandLineProgram,
     createBaseline,
+} from "../helpers/baseline.js";
+import {
     verifyTscWatch,
     watchBaseline,
 } from "../helpers/tscWatch.js";
@@ -59,7 +61,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
             build();
         }
 
-        Harness.Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
+        Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
         function build() {
             const closer = ts.executeCommandLine(

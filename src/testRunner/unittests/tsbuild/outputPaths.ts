@@ -1,15 +1,12 @@
-import * as fakes from "../../_namespaces/fakes.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeRun,
     TestTscEdit,
-    TscCompileSystem,
     verifyTsc,
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { tscTypeScriptTestLocation } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
@@ -22,7 +19,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         noChangeProject,
     ];
 
-    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
+    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "sys" | "edits">, expectedOuptutNames: readonly string[]) {
         verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
@@ -30,8 +27,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: tscTypeScriptTestLocation }) as TscCompileSystem;
-
+            const sys = input.sys();
             assert.deepEqual(
                 ts.getOutputFileNames(
                     ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
@@ -45,7 +41,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is not specified",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
@@ -59,7 +55,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is not specified and is composite",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
@@ -74,7 +70,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is specified",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
@@ -89,7 +85,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
@@ -105,7 +101,7 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir and is composite",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",

@@ -27,7 +27,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -93,10 +92,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
@@ -110,10 +108,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
@@ -216,10 +213,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: With declaration and declarationMap noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
@@ -324,10 +320,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
@@ -341,10 +336,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Dts Emit with error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --declaration
 Output::
@@ -368,15 +362,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/home/src/projects/outFile.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -429,6 +414,15 @@ var a = /** @class */ (function () {
   "size": 962
 }
 
+//// [/home/src/projects/outFile.js]
+var a = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -451,12 +445,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix the error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { public p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
@@ -524,10 +517,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
@@ -594,10 +586,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration and declarationMap noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::

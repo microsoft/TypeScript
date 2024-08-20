@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export function foo() { }
 
@@ -35,6 +20,20 @@ export function bar() { }
     ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
@@ -47,15 +46,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export function foo(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
 
 
 //// [/outFile.js]
@@ -71,6 +61,15 @@ define("b", ["require", "exports"], function (require, exports) {
     exports.bar = bar;
     function bar() { }
 });
+
+
+//// [/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
 
 
 //// [/outFile.tsbuildinfo]
@@ -113,8 +112,8 @@ define("b", ["require", "exports"], function (require, exports) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: reports syntax errors after change to config file
+
 Input::
 //// [/src/tsconfig.json]
 {
@@ -132,7 +131,6 @@ Input::
 }
 
 
-
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
 Output::
 [96msrc/tsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -148,12 +146,11 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: reports syntax errors after change to ts file
+
 Input::
 //// [/src/a.ts]
 export function foo() { }export function fooBar() { }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
@@ -166,16 +163,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export function foo(): void;
-    export function fooBar(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
 
 
 //// [/outFile.js]
@@ -193,6 +180,16 @@ define("b", ["require", "exports"], function (require, exports) {
     exports.bar = bar;
     function bar() { }
 });
+
+
+//// [/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+    export function fooBar(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
 
 
 //// [/outFile.tsbuildinfo]
@@ -236,10 +233,9 @@ define("b", ["require", "exports"], function (require, exports) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
 Output::
@@ -256,8 +252,8 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: builds after fixing config file errors
+
 Input::
 //// [/src/tsconfig.json]
 {
@@ -272,7 +268,6 @@ Input::
     "b.ts"
   ]
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json

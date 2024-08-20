@@ -1,5 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/project/src/main.ts]
+export const x = 10;
+
+//// [/src/project/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,21 +29,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/src/main.ts]
-export const x = 10;
-
-//// [/src/project/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-    },
-    "include": [
-        "src/**/*.ts"
-    ]
-}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 Output::
@@ -37,6 +36,13 @@ home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
+
+
+//// [/src/project/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
 
 //// [/src/project/.tsbuildinfo]
@@ -78,20 +84,12 @@ src/project/src/main.ts
   "size": 706
 }
 
-//// [/src/project/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 Output::

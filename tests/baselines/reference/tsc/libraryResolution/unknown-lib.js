@@ -1,5 +1,37 @@
 currentDirectory:: /home/src/workspace/projects useCaseSensitiveFileNames: false
 Input::
+//// [/home/src/workspace/projects/project1/utils.d.ts]
+export const y = 10;
+
+//// [/home/src/workspace/projects/project1/file.ts]
+export const file = 10;
+
+//// [/home/src/workspace/projects/project1/core.d.ts]
+export const core = 10;
+
+//// [/home/src/workspace/projects/project1/index.ts]
+export const x = "type1";
+
+//// [/home/src/workspace/projects/project1/file2.ts]
+/// <reference lib="webworker2"/>
+/// <reference lib="unknownlib"/>
+/// <reference lib="scripthost"/>
+
+
+//// [/home/src/workspace/projects/project1/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "traceResolution": true
+  }
+}
+
+//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+interface WebWorkerInterface { }
+
+//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+interface ScriptHostInterface { }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,39 +46,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
-interface ScriptHostInterface { }
-
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
-interface WebWorkerInterface { }
-
-//// [/home/src/workspace/projects/project1/core.d.ts]
-export const core = 10;
-
-//// [/home/src/workspace/projects/project1/file.ts]
-export const file = 10;
-
-//// [/home/src/workspace/projects/project1/file2.ts]
-/// <reference lib="webworker2"/>
-/// <reference lib="unknownlib"/>
-/// <reference lib="scripthost"/>
-
-
-//// [/home/src/workspace/projects/project1/index.ts]
-export const x = "type1";
-
-//// [/home/src/workspace/projects/project1/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "traceResolution": true
-  }
-}
-
-//// [/home/src/workspace/projects/project1/utils.d.ts]
-export const y = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p project1 --explainFiles
@@ -105,10 +104,6 @@ Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
 
 
 
-//// [/home/src/workspace/projects/project1/file.d.ts]
-export declare const file = 10;
-
-
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -116,7 +111,8 @@ exports.file = void 0;
 exports.file = 10;
 
 
-//// [/home/src/workspace/projects/project1/file2.d.ts]
+//// [/home/src/workspace/projects/project1/file.d.ts]
+export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
@@ -125,8 +121,7 @@ exports.file = 10;
 /// <reference lib="scripthost"/>
 
 
-//// [/home/src/workspace/projects/project1/index.d.ts]
-export declare const x = "type1";
+//// [/home/src/workspace/projects/project1/file2.d.ts]
 
 
 //// [/home/src/workspace/projects/project1/index.js]
@@ -134,6 +129,10 @@ export declare const x = "type1";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = "type1";
+
+
+//// [/home/src/workspace/projects/project1/index.d.ts]
+export declare const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo]

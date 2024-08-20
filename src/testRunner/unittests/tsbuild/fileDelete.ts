@@ -6,7 +6,7 @@ import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
-    function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {
+    function sys(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {
         return loadProjectFromFiles({
             "/src/child/child.ts": dedent`
                 import { child2 } from "../child/child2";
@@ -40,13 +40,13 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         scenario: "fileDelete",
         subScenario: `multiFile/detects deleted file`,
         commandLineArgs: ["--b", "/src/main/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
-        fs: () => fs({ composite: true }, { composite: true }),
+        sys: () => sys({ composite: true }, { composite: true }),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => {
-                fs.rimrafSync("/src/child/child2.ts");
-                fs.rimrafSync("/src/child/child2.js");
-                fs.rimrafSync("/src/child/child2.d.ts");
+            edit: sys => {
+                sys.rimrafSync("/src/child/child2.ts");
+                sys.rimrafSync("/src/child/child2.js");
+                sys.rimrafSync("/src/child/child2.d.ts");
             },
         }],
     });
@@ -55,10 +55,10 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         scenario: "fileDelete",
         subScenario: `outFile/detects deleted file`,
         commandLineArgs: ["--b", "/src/main/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
-        fs: () => fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
+        sys: () => sys({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => fs.rimrafSync("/src/child/child2.ts"),
+            edit: sys => sys.rimrafSync("/src/child/child2.ts"),
         }],
     });
 
@@ -66,12 +66,12 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         scenario: "fileDelete",
         subScenario: `multiFile/deleted file without composite`,
         commandLineArgs: ["--b", "/src/child/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
-        fs: () => fs({}),
+        sys: () => sys({}),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => {
-                fs.rimrafSync("/src/child/child2.ts");
-                fs.rimrafSync("/src/child/child2.js");
+            edit: sys => {
+                sys.rimrafSync("/src/child/child2.ts");
+                sys.rimrafSync("/src/child/child2.js");
             },
         }],
     });
@@ -80,10 +80,10 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         scenario: "fileDelete",
         subScenario: `outFile/deleted file without composite`,
         commandLineArgs: ["--b", "/src/child/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
-        fs: () => fs({ outFile: "../childResult.js", module: ts.ModuleKind.AMD }),
+        sys: () => sys({ outFile: "../childResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => fs.rimrafSync("/src/child/child2.ts"),
+            edit: sys => sys.rimrafSync("/src/child/child2.ts"),
         }],
     });
 });

@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/src/folder/index.ts]
 export const x = 10;
 
@@ -91,6 +76,20 @@ export const x = 10;
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src --verbose
@@ -116,15 +115,15 @@ Output::
 
 
 
-//// [/src/src/folder/index.d.ts]
-export declare const x = 10;
-
-
 //// [/src/src/folder/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
+
+
+//// [/src/src/folder/index.d.ts]
+export declare const x = 10;
 
 
 //// [/src/src/folder/tsconfig.tsbuildinfo]
@@ -169,15 +168,15 @@ exports.x = 10;
   "size": 773
 }
 
-//// [/src/src/folder2/index.d.ts]
-export declare const x = 10;
-
-
 //// [/src/src/folder2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
+
+
+//// [/src/src/folder2/index.d.ts]
+export declare const x = 10;
 
 
 //// [/src/src/folder2/tsconfig.tsbuildinfo]
@@ -222,15 +221,15 @@ exports.x = 10;
   "size": 773
 }
 
-//// [/src/tests/index.d.ts]
-export declare const x = 10;
-
-
 //// [/src/tests/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
+
+
+//// [/src/tests/index.d.ts]
+export declare const x = 10;
 
 
 //// [/src/tests/tsconfig.tsbuildinfo]
@@ -278,10 +277,9 @@ exports.x = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::

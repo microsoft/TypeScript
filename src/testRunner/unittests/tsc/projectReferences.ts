@@ -6,7 +6,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "when project contains invalid project reference",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -25,7 +25,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "when project references composite project with noEmit",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/utils/index.ts": "export const x = 10;",
                 "/src/utils/tsconfig.json": jsonToReadableText({
@@ -47,7 +47,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "default import interop uses referenced project settings",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/node_modules/ambiguous-package/package.json": `{ "name": "ambiguous-package" }`,
                 "/node_modules/ambiguous-package/index.d.ts": "export declare const ambiguous: number;",
@@ -92,7 +92,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "referencing ambient const enum from referenced project with preserveConstEnums",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/utils/index.ts": "export const enum E { A = 1 }",
                 "/src/utils/index.d.ts": "export declare const enum E { A = 1 }",
@@ -119,7 +119,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "importing const enum from referenced project with preserveConstEnums and verbatimModuleSyntax",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/preserve/index.ts": "export const enum E { A = 1 }",
                 "/src/preserve/index.d.ts": "export declare const enum E { A = 1 }",

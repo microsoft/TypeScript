@@ -1,19 +1,18 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/strings/foo.json]
+{
+  "foo": "bar baz"
+}
+
+//// [/src/strings/tsconfig.json]
+{
+  "extends": "../tsconfig.json",
+  "include": [
+    "foo.json"
+  ],
+  "references": []
+}
 
 //// [/src/main/index.ts]
 import { foo } from '../strings/foo.json';
@@ -31,20 +30,6 @@ console.log(foo);
       "path": "../strings/tsconfig.json"
     }
   ]
-}
-
-//// [/src/strings/foo.json]
-{
-  "foo": "bar baz"
-}
-
-//// [/src/strings/tsconfig.json]
-{
-  "extends": "../tsconfig.json",
-  "include": [
-    "foo.json"
-  ],
-  "references": []
 }
 
 //// [/src/tsconfig.json]
@@ -69,6 +54,20 @@ console.log(foo);
   "files": []
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b src/tsconfig.json --verbose --explainFiles
@@ -98,15 +97,57 @@ src/main/index.ts
   Matched by include pattern './**/*.ts' in 'src/main/tsconfig.json'
 
 
-//// [/src/main/index.d.ts]
-export {};
+//// [/src/strings/tsconfig.tsbuildinfo]
+{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"version":"FakeTSVersion"}
 
+//// [/src/strings/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "./foo.json"
+  ],
+  "fileInfos": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./foo.json": {
+      "version": "-6280880055-{\n  \"foo\": \"bar baz\"\n}",
+      "signature": "-6280880055-{\n  \"foo\": \"bar baz\"\n}"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./foo.json"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "esModuleInterop": true,
+    "module": 1,
+    "rootDir": "..",
+    "strict": true,
+    "target": 1
+  },
+  "version": "FakeTSVersion",
+  "size": 744
+}
 
 //// [/src/main/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_json_1 = require("../strings/foo.json");
 console.log(foo_json_1.foo);
+
+
+//// [/src/main/index.d.ts]
+export {};
 
 
 //// [/src/main/tsconfig.tsbuildinfo]
@@ -171,55 +212,12 @@ console.log(foo_json_1.foo);
   "size": 977
 }
 
-//// [/src/strings/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"version":"FakeTSVersion"}
-
-//// [/src/strings/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
-    "./foo.json"
-  ],
-  "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./foo.json": {
-      "version": "-6280880055-{\n  \"foo\": \"bar baz\"\n}",
-      "signature": "-6280880055-{\n  \"foo\": \"bar baz\"\n}"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./foo.json"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "esModuleInterop": true,
-    "module": 1,
-    "rootDir": "..",
-    "strict": true,
-    "target": 1
-  },
-  "version": "FakeTSVersion",
-  "size": 744
-}
-
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b src/tsconfig.json --verbose --explainFiles
 Output::

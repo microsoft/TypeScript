@@ -1,34 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
-//// [/src/project/src/directUse.ts]
-import { indirectClass } from './indirectClass';
-new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectClass.ts]
 import { classC } from './class';
 export class indirectClass {
     classC = new classC();
 }
+
+//// [/src/project/src/directUse.ts]
+import { indirectClass } from './indirectClass';
+new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectUse.ts]
 import { indirectClass } from './indirectClass';
@@ -49,6 +34,20 @@ function someFunc(arguments: boolean, ...rest: any[]) {
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -70,12 +69,6 @@ Found 1 error.
 
 
 
-//// [/src/project/src/class.d.ts]
-export declare class classC {
-    prop: number;
-}
-
-
 //// [/src/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -89,21 +82,9 @@ var classC = /** @class */ (function () {
 exports.classC = classC;
 
 
-//// [/src/project/src/directUse.d.ts]
-export {};
-
-
-//// [/src/project/src/directUse.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var indirectClass_1 = require("./indirectClass");
-new indirectClass_1.indirectClass().classC.prop;
-
-
-//// [/src/project/src/indirectClass.d.ts]
-import { classC } from './class';
-export declare class indirectClass {
-    classC: classC;
+//// [/src/project/src/class.d.ts]
+export declare class classC {
+    prop: number;
 }
 
 
@@ -121,7 +102,21 @@ var indirectClass = /** @class */ (function () {
 exports.indirectClass = indirectClass;
 
 
-//// [/src/project/src/indirectUse.d.ts]
+//// [/src/project/src/indirectClass.d.ts]
+import { classC } from './class';
+export declare class indirectClass {
+    classC: classC;
+}
+
+
+//// [/src/project/src/directUse.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var indirectClass_1 = require("./indirectClass");
+new indirectClass_1.indirectClass().classC.prop;
+
+
+//// [/src/project/src/directUse.d.ts]
 export {};
 
 
@@ -132,8 +127,8 @@ var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
-//// [/src/project/src/noChangeFile.d.ts]
-export declare function writeLog(s: string): void;
+//// [/src/project/src/indirectUse.d.ts]
+export {};
 
 
 //// [/src/project/src/noChangeFile.js]
@@ -144,8 +139,8 @@ function writeLog(s) {
 }
 
 
-//// [/src/project/src/noChangeFileWithEmitSpecificError.d.ts]
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
+//// [/src/project/src/noChangeFile.d.ts]
+export declare function writeLog(s: string): void;
 
 
 //// [/src/project/src/noChangeFileWithEmitSpecificError.js]
@@ -155,6 +150,10 @@ function someFunc(arguments) {
         rest[_i - 1] = arguments[_i];
     }
 }
+
+
+//// [/src/project/src/noChangeFileWithEmitSpecificError.d.ts]
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -293,10 +292,9 @@ function someFunc(arguments) {
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -312,10 +310,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -330,15 +327,14 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: Introduce error but still noEmit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -583,14 +579,13 @@ Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error and emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -750,10 +745,9 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -777,10 +771,9 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -796,10 +789,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -814,11 +806,10 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -841,15 +832,14 @@ Found 1 error.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: Introduce error and emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
@@ -891,12 +881,6 @@ Found 3 errors.
 
 
 
-//// [/src/project/src/class.d.ts]
-export declare class classC {
-    prop1: number;
-}
-
-
 //// [/src/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -908,6 +892,12 @@ var classC = /** @class */ (function () {
     return classC;
 }());
 exports.classC = classC;
+
+
+//// [/src/project/src/class.d.ts]
+export declare class classC {
+    prop1: number;
+}
 
 
 //// [/src/project/src/indirectClass.js] file written with same contents
@@ -1091,10 +1081,9 @@ exports.classC = classC;
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -1138,10 +1127,9 @@ Found 3 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1180,10 +1168,9 @@ Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1221,11 +1208,10 @@ Found 2 errors.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -1268,15 +1254,14 @@ Found 3 errors.
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: Fix error and no emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -1462,10 +1447,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -1486,12 +1470,6 @@ Found 1 error.
 
 
 
-//// [/src/project/src/class.d.ts]
-export declare class classC {
-    prop: number;
-}
-
-
 //// [/src/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1503,6 +1481,12 @@ var classC = /** @class */ (function () {
     return classC;
 }());
 exports.classC = classC;
+
+
+//// [/src/project/src/class.d.ts]
+export declare class classC {
+    prop: number;
+}
 
 
 //// [/src/project/src/indirectClass.js] file written with same contents
@@ -1642,10 +1626,9 @@ exports.classC = classC;
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1661,10 +1644,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
@@ -1679,11 +1661,10 @@ Output::
 
 
 exitCode:: ExitStatus.Success
-
 
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::

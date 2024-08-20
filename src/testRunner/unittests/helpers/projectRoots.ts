@@ -1,9 +1,16 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "./contents.js";
+import {
+    noopChange,
+    TscWatchCompileChange,
+} from "./tscWatch.js";
+import {
+    getCreateWatchedSystem,
+    TestServerHost,
+} from "./virtualFileSystemWithWatch.js";
 
-function getFsContentsForRootsFromReferencedProject(serverFirst: boolean): FsContents {
-    return {
+function getSysForRootsFromReferencedProject(forTsserver: boolean, serverFirst: boolean) {
+    return getCreateWatchedSystem(forTsserver)({
         "/home/src/workspaces/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 composite: true,
@@ -52,10 +59,42 @@ function getFsContentsForRootsFromReferencedProject(serverFirst: boolean): FsCon
                 { path: "../shared" },
             ],
         }),
-    };
+    }, { currentDirectory: "/home/src/workspaces" });
 }
 
-export function forEachScenarioForRootsFromReferencedProject(action: (subScenario: string, getFsContents: () => FsContents) => void) {
-    action("when root file is from referenced project", () => getFsContentsForRootsFromReferencedProject(/*serverFirst*/ true));
-    action("when root file is from referenced project and shared is first", () => getFsContentsForRootsFromReferencedProject(/*serverFirst*/ false));
+export function forEachScenarioForRootsFromReferencedProject(
+    forTsserver: boolean,
+    action: (
+        subScenario: string,
+        sys: () => TestServerHost,
+        edits: () => readonly TscWatchCompileChange[],
+    ) => void,
+) {
+    [true, false].forEach(serverFirst =>
+        action(
+            `when root file is from referenced project${!serverFirst ? " and shared is first" : ""}`,
+            () => getSysForRootsFromReferencedProject(forTsserver, serverFirst),
+            () => [
+                noopChange,
+                {
+                    caption: "edit logging file",
+                    edit: sys => sys.appendFile("/home/src/workspaces/projects/shared/src/logging.ts", "export const x = 10;"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // build shared
+                        sys.runQueuedTimeoutCallbacks(); // build server
+                    },
+                },
+                noopChange,
+                {
+                    caption: "delete random file",
+                    edit: sys => sys.deleteFile("/home/src/workspaces/projects/shared/src/random.ts"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // build shared
+                        sys.runQueuedTimeoutCallbacks(); // build server
+                    },
+                },
+                noopChange,
+            ],
+        )
+    );
 }

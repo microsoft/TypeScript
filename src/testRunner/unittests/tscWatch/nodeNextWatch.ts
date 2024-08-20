@@ -1,4 +1,4 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
@@ -36,7 +36,7 @@ describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specif
             };
             const file1: File = {
                 path: "/home/src/projects/project/src/index.ts",
-                content: Utils.dedent`
+                content: dedent`
                         import * as Thing from "thing";
 
                         Thing.fn();`,
@@ -56,7 +56,7 @@ describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specif
                 edit: sys =>
                     sys.modifyFile(
                         "/home/src/projects/project/src/index.ts",
-                        Utils.dedent`
+                        dedent`
                             import * as Thing from "thing";
                             Thing.fn();`,
                         {},

@@ -1,40 +1,5 @@
 currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
-/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />
-
-//// [/user/username/projects/sample1/core/anotherModule.ts]
-export const World = "hello";
-
-//// [/user/username/projects/sample1/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-
-//// [/user/username/projects/sample1/core/some_decl.d.ts]
-declare const dts: any;
-
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
   "compilerOptions": {
@@ -45,14 +10,17 @@ declare const dts: any;
   }
 }
 
-//// [/user/username/projects/sample1/logic/index.ts]
-import * as c from '../core/index';
-export function getSecondsInDay() {
-    return c.multiply(10, 15);
-}
-import * as mod from '../core/anotherModule';
-export const m = mod;
+//// [/user/username/projects/sample1/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
 
+
+//// [/user/username/projects/sample1/core/some_decl.d.ts]
+declare const dts: any;
+
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
 {
@@ -70,13 +38,11 @@ export const m = mod;
   ]
 }
 
-//// [/user/username/projects/sample1/tests/index.ts]
+//// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
-import * as logic from '../logic/index';
-
-c.leftPad("", 10);
-logic.getSecondsInDay();
-
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
 import * as mod from '../core/anotherModule';
 export const m = mod;
 
@@ -102,6 +68,24 @@ export const m = mod;
   }
 }
 
+//// [/user/username/projects/sample1/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />
+
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
+/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />
 
 
 /home/src/tslibs/ts/lib/tsc.js --b core --verbose
@@ -122,6 +106,8 @@ TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
 
+
+//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts] *Lib*
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 export const World = "hello";
@@ -200,8 +186,8 @@ export function multiply(a, b) { return a * b; }
 
 exitCode:: ExitStatus.Success
 
-
 Change:: incremental-declaration-changes
+
 Input::
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
@@ -212,7 +198,6 @@ Input::
     "target": "es5"
   }
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b core --verbose

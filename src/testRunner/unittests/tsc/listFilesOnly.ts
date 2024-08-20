@@ -1,4 +1,4 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import {
     noChangeRun,
     verifyTsc,
@@ -8,21 +8,10 @@ import { loadProjectFromFiles } from "../helpers/vfs.js";
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({
         scenario: "listFilesOnly",
-        subScenario: "combined with watch",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/test.ts": Utils.dedent`
-                        export const x = 1;`,
-            }),
-        commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"],
-    });
-
-    verifyTsc({
-        scenario: "listFilesOnly",
         subScenario: "loose file",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
-                "/src/test.ts": Utils.dedent`
+                "/src/test.ts": dedent`
                         export const x = 1;`,
             }),
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"],
@@ -31,7 +20,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/test.ts": `export const x = 1;`,
                 "/src/tsconfig.json": "{}",

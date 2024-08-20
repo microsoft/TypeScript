@@ -1,19 +1,13 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "declaration": true,
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
@@ -30,15 +24,20 @@ console.log("hi");
 export { }
 
 
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "./dev-build",
-    "declaration": true,
-    "noEmitOnError": true
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js 
@@ -73,11 +72,10 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
@@ -112,17 +110,21 @@ Program files::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error
+
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
-
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
@@ -131,22 +133,13 @@ export interface A {
 }
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
-export {};
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a = "hello";
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
 export {};
 
 
@@ -154,6 +147,10 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
+export {};
 
 
 
@@ -177,21 +174,20 @@ Program files::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] file written with same contents
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] file written with same contents
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts] file written with same contents
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",

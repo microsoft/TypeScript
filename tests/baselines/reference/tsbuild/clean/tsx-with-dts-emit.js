@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project/src/main.tsx]
 export const x = 10;
 
@@ -29,6 +14,20 @@ export const x = 10;
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b src/project -v --explainFiles
@@ -46,15 +45,15 @@ src/project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'src/project/tsconfig.json'
 
 
-//// [/src/project/src/main.d.ts]
-export declare const x = 10;
-
-
 //// [/src/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
+
+
+//// [/src/project/src/main.d.ts]
+export declare const x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -72,10 +71,9 @@ exports.x = 10;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b src/project -v --explainFiles
 Output::
@@ -89,17 +87,13 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: clean build
+
 Input::
 
-
 /home/src/tslibs/ts/lib/tsc.js -b /src/project --clean
-Output::
-
-
-//// [/src/project/tsconfig.tsbuildinfo] unlink
-//// [/src/project/src/main.d.ts] unlink
-//// [/src/project/src/main.js] unlink
+//// [/src/project/src/main.js] deleted
+//// [/src/project/src/main.d.ts] deleted
+//// [/src/project/tsconfig.tsbuildinfo] deleted
 
 exitCode:: ExitStatus.Success

@@ -1,19 +1,14 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project1/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
+  }
+}
 
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;
@@ -26,25 +21,6 @@ import { a } from "./a";export const c = a;
 
 //// [/src/project1/src/d.ts]
 import { b } from "./b";export const d = b;
-
-//// [/src/project1/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true,
-    "declaration": true,
-    "outFile": "../outFile.js",
-    "module": "amd"
-  }
-}
-
-//// [/src/project2/src/e.ts]
-export const e = 10;
-
-//// [/src/project2/src/f.ts]
-import { a } from "a"; export const f = a;
-
-//// [/src/project2/src/g.ts]
-import { b } from "b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
 {
@@ -61,6 +37,29 @@ import { b } from "b"; export const g = b;
   ]
 }
 
+//// [/src/project2/src/e.ts]
+export const e = 10;
+
+//// [/src/project2/src/f.ts]
+import { a } from "a"; export const f = a;
+
+//// [/src/project2/src/g.ts]
+import { b } from "b"; export const g = b;
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -286,10 +285,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -346,12 +344,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -487,12 +484,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/a.ts]
 export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -708,10 +704,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: emit js files
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
@@ -739,37 +734,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/project1/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.aaa = exports.a = void 0;
-    exports.a = 10;
-    var aLocal = 10;
-    var aa = 10;
-    exports.aaa = 10;
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-    var bLocal = 10;
-});
-define("c", ["require", "exports", "a"], function (require, exports, a_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = a_1.a;
-});
-define("d", ["require", "exports", "b"], function (require, exports, b_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.d = void 0;
-    exports.d = b_1.b;
-});
 
 
 //// [/src/project1/outFile.tsbuildinfo]
@@ -813,27 +777,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "version": "FakeTSVersion",
   "size": 932
 }
-
-//// [/src/project2/outFile.js]
-define("e", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.e = void 0;
-    exports.e = 10;
-});
-define("f", ["require", "exports", "a"], function (require, exports, a_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.f = void 0;
-    exports.f = a_1.a;
-});
-define("g", ["require", "exports", "b"], function (require, exports, b_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.g = void 0;
-    exports.g = b_1.b;
-});
-
 
 //// [/src/project2/outFile.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../project1/outfile.d.ts","./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","106974224-declare module \"a\" {\n    export const a = 10;\n    export const aaa = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","-13789510868-export const e = 10;","-4849089835-import { a } from \"a\"; export const f = a;","-18341999015-import { b } from \"b\"; export const g = b;"],"root":[[3,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
@@ -898,6 +841,58 @@ define("g", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1133
 }
 
+//// [/src/project1/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.aaa = exports.a = void 0;
+    exports.a = 10;
+    var aLocal = 10;
+    var aa = 10;
+    exports.aaa = 10;
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+    var bLocal = 10;
+});
+define("c", ["require", "exports", "a"], function (require, exports, a_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = a_1.a;
+});
+define("d", ["require", "exports", "b"], function (require, exports, b_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
+    exports.d = b_1.b;
+});
+
+
+//// [/src/project2/outFile.js]
+define("e", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.e = void 0;
+    exports.e = 10;
+});
+define("f", ["require", "exports", "a"], function (require, exports, a_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.f = void 0;
+    exports.f = a_1.a;
+});
+define("g", ["require", "exports", "b"], function (require, exports, b_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.g = void 0;
+    exports.g = b_1.b;
+});
+
+
 
 Program root files: [
   "/src/project1/src/a.ts",
@@ -952,10 +947,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
@@ -1012,12 +1006,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -1049,38 +1042,6 @@ Found 1 error.
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
-//// [/src/project1/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.aaa = exports.a = void 0;
-    exports.a = 10;
-    var aLocal = 10;
-    var aa = 10;
-    exports.aaa = 10;
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.b = void 0;
-    exports.b = 10;
-    var bLocal = 10;
-    var alocal = 10;
-});
-define("c", ["require", "exports", "a"], function (require, exports, a_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = a_1.a;
-});
-define("d", ["require", "exports", "b"], function (require, exports, b_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.d = void 0;
-    exports.d = b_1.b;
-});
-
-
 //// [/src/project1/outFile.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
@@ -1122,6 +1083,38 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "version": "FakeTSVersion",
   "size": 950
 }
+
+//// [/src/project1/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.aaa = exports.a = void 0;
+    exports.a = 10;
+    var aLocal = 10;
+    var aa = 10;
+    exports.aaa = 10;
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.b = void 0;
+    exports.b = 10;
+    var bLocal = 10;
+    var alocal = 10;
+});
+define("c", ["require", "exports", "a"], function (require, exports, a_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = a_1.a;
+});
+define("d", ["require", "exports", "b"], function (require, exports, b_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
+    exports.d = b_1.b;
+});
+
 
 
 Program root files: [
@@ -1182,12 +1175,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -1323,12 +1315,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: non local change
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
@@ -1545,12 +1536,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: js emit with change without emitDeclarationOnly
+
 Input::
 //// [/src/project1/src/b.ts]
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
@@ -1599,41 +1589,6 @@ declare module "d" {
 }
 
 
-//// [/src/project1/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.aaa = exports.a = void 0;
-    exports.a = 10;
-    var aLocal = 10;
-    var aa = 10;
-    exports.aaa = 10;
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a2 = exports.aaaaa = exports.b = void 0;
-    exports.b = 10;
-    var bLocal = 10;
-    var alocal = 10;
-    var aaaa = 10;
-    exports.aaaaa = 10;
-    exports.a2 = 10;
-});
-define("c", ["require", "exports", "a"], function (require, exports, a_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = a_1.a;
-});
-define("d", ["require", "exports", "b"], function (require, exports, b_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.d = void 0;
-    exports.d = b_1.b;
-});
-
-
 //// [/src/project1/outFile.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
@@ -1677,7 +1632,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 //// [/src/project2/outFile.d.ts] file written with same contents
-//// [/src/project2/outFile.js] file written with same contents
 //// [/src/project2/outFile.tsbuildinfo]
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../project1/outfile.d.ts","./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1646858368-declare module \"a\" {\n    export const a = 10;\n    export const aaa = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n    export const aaaaa = 10;\n    export const a2 = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","-13789510868-export const e = 10;","-4849089835-import { a } from \"a\"; export const f = a;","-18341999015-import { b } from \"b\"; export const g = b;"],"root":[[3,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
@@ -1741,6 +1695,42 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1191
 }
 
+//// [/src/project1/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.aaa = exports.a = void 0;
+    exports.a = 10;
+    var aLocal = 10;
+    var aa = 10;
+    exports.aaa = 10;
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a2 = exports.aaaaa = exports.b = void 0;
+    exports.b = 10;
+    var bLocal = 10;
+    var alocal = 10;
+    var aaaa = 10;
+    exports.aaaaa = 10;
+    exports.a2 = 10;
+});
+define("c", ["require", "exports", "a"], function (require, exports, a_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = a_1.a;
+});
+define("d", ["require", "exports", "b"], function (require, exports, b_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
+    exports.d = b_1.b;
+});
+
+
+//// [/src/project2/outFile.js] file written with same contents
 
 Program root files: [
   "/src/project1/src/a.ts",

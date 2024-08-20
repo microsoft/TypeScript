@@ -81,7 +81,7 @@ declare const console: { log(msg: any): void; };`,
 
 export const tscTypeScriptTestLocation = getPathForTypeScriptTestLocation("tsc.js");
 
-export function getPathForTypeScriptTestLocation(fileName: string) {
+function getPathForTypeScriptTestLocation(fileName: string) {
     return combinePaths(getDirectoryPath(libFile.path), fileName);
 }
 
@@ -121,10 +121,15 @@ export function createServerHost(
     fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
     params?: Omit<TestServerHostCreationParameters, "currentDirectory">,
 ): TestServerHost {
+    if ((params as TestServerHostCreationParameters)?.currentDirectory) (params as TestServerHostCreationParameters).currentDirectory = undefined;
     const host = new TestServerHost(fileOrFolderList, params);
     // Just like sys, patch the host to use writeFile
     patchWriteFileEnsuringDirectory(host);
     return host;
+}
+
+export function getCreateWatchedSystem(forTsserver: boolean | undefined) {
+    return (!forTsserver ? createWatchedSystem : createServerHost);
 }
 
 export interface File {
@@ -201,7 +206,7 @@ function isFsLibFile(s: FSEntry | undefined): s is FsLibFile {
     return !!s && (s as FsLibFile).libFile;
 }
 
-function isFsFile(s: FSEntry | undefined): s is FsFile {
+export function isFsFile(s: FSEntry | undefined): s is FsFile {
     return !!s && isString((s as FsFile).content);
 }
 
@@ -393,6 +398,27 @@ const typeScriptTypingInstallerCacheTest = "/home/src/typinginstaller/globalcach
 
 export function getPathForTypeScriptTypingInstallerCacheTest(fileName: string) {
     return `${typeScriptTypingInstallerCacheTest}/${fileName}`;
+}
+
+export type TestServerHostSnapshot = Map<Path, FSEntry>;
+
+export function cloneFsMap(fs: Map<Path, FSEntry>): TestServerHostSnapshot {
+    const snap = new Map<Path, FSEntry>();
+    const clonedMap = new Map<FSEntry, FSEntry>();
+    const getCloned = (entry: FSEntry) => {
+        const existing = clonedMap.get(entry);
+        if (existing) return existing;
+        const cloned = clone(entry);
+        clonedMap.set(entry, cloned);
+        if (isFsFolder(cloned)) {
+            cloned.entries = cloned.entries.map(clone) as SortedArray<FSEntry>;
+        }
+        return cloned;
+    };
+    fs.forEach((value, key) => {
+        snap.set(key, getCloned(value));
+    });
+    return snap;
 }
 
 export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -618,11 +644,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     modifyFile(filePath: string, content: string, options?: Partial<WatchInvokeOptions>) {
         const path = this.toFullPath(filePath);
         const currentEntry = this.fs.get(path);
-        if (!currentEntry || !isFsFile(currentEntry)) {
+        if (!currentEntry || !isFsFileOrFsLibFile(currentEntry)) {
             throw new Error(`file not present: ${filePath}`);
         }
 
-        if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+        if (isFsLibFile(currentEntry) || options?.invokeFileDeleteCreateAsPartInsteadOfChange) {
             this.removeFileOrFolder(currentEntry, /*isRenaming*/ false, options);
             this.ensureFileOrFolder({ path: filePath, content }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined, /*ignoreParentWatch*/ undefined, options);
         }
@@ -656,9 +682,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
         const newFile = this.toFsFileOrLibFile({ path: newFullPath, content: file.content });
         const newPath = newFile.path;
-        const basePath = getDirectoryPath(path);
+        const basePath = getDirectoryPath(newPath);
         Debug.assert(basePath !== path);
-        Debug.assert(basePath === getDirectoryPath(newPath));
+        this.ensureFileOrFolder({ path: getDirectoryPath(newFullPath) });
         const baseFolder = this.fs.get(basePath) as FsFolder;
         this.addFileOrFolderInFolder(baseFolder, newFile);
     }
@@ -788,6 +814,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
         if (!options?.ignoreDelete && !options?.ignoreWatches) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, fileOrDirectory.fullPath, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
         this.inodes?.delete(fileOrDirectory.path);
+    }
+
+    rimrafSync(fileOrFolderPath: string) {
+        const fileOrFolder = this.getRealFileOrFolder(fileOrFolderPath);
+        if (isFsFileOrFsLibFile(fileOrFolder)) this.removeFileOrFolder(fileOrFolder);
+        else if (isFsFolder(fileOrFolder)) this.deleteFolder(fileOrFolder.fullPath, /*recursive*/ true);
     }
 
     deleteFile(filePath: string) {
@@ -1165,15 +1197,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.clearOutput();
     }
 
+    getSnap() {
+        return cloneFsMap(this.fs);
+    }
+
     private snap() {
-        this.serializedDiff = new Map<Path, FSEntry>();
-        this.fs.forEach((value, key) => {
-            const cloneValue = clone(value);
-            if (isFsFolder(cloneValue)) {
-                cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
-            }
-            this.serializedDiff.set(key, cloneValue);
-        });
+        this.serializedDiff = cloneFsMap(this.fs);
     }
 
     serializeState(baseline: string[], serializeOutput: SerializeOutputOrder) {
@@ -1188,7 +1217,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     writtenFiles?: Map<Path, number>;
-    private serializedDiff = new Map<Path, FSEntry>();
+    private serializedDiff: TestServerHostSnapshot = new Map<Path, FSEntry>();
     diff(baseline: string[]) {
         this.fs.forEach((newFsEntry, path) => {
             diffFsEntry(baseline, this.serializedDiff.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);

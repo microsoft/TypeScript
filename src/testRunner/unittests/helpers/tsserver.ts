@@ -6,9 +6,9 @@ import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger.js";
 import { FileRangesRequestArgs } from "../../../server/protocol.js";
-import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
+import { patchHostForBuildInfoReadWrite } from "./baseline.js";
 import { ensureErrorFreeBuild } from "./solutionBuilder.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
@@ -27,7 +27,7 @@ import {
 } from "./virtualFileSystemWithWatch.js";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {

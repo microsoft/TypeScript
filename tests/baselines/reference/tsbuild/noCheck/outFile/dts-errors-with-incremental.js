@@ -1,20 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/a.ts]
 export const a = class { private p = 10; };
 
@@ -31,6 +16,20 @@ export const b = 10;
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -175,10 +174,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -192,12 +190,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -209,15 +206,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export const a = "hello";
-}
-declare module "b" {
-    export const b = 10;
-}
 
 
 //// [/outFile.js]
@@ -284,6 +272,15 @@ define("b", ["require", "exports"], function (require, exports) {
   "size": 774
 }
 
+//// [/outFile.d.ts]
+declare module "a" {
+    export const a = "hello";
+}
+declare module "b" {
+    export const b = 10;
+}
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -310,10 +307,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -327,10 +323,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -405,10 +400,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -422,10 +416,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -439,12 +432,11 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -589,10 +581,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -606,10 +597,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -720,12 +710,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -739,7 +728,6 @@ Output::
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -804,6 +792,7 @@ define("b", ["require", "exports"], function (require, exports) {
   "size": 774
 }
 
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -830,10 +819,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -908,12 +896,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Add file with error
+
 Input::
 //// [/src/c.ts]
 export const c: number = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
@@ -933,18 +920,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export const a = "hello";
-}
-declare module "b" {
-    export const b = 10;
-}
-declare module "c" {
-    export const c: number;
-}
 
 
 //// [/outFile.js]
@@ -1021,6 +996,18 @@ define("c", ["require", "exports"], function (require, exports) {
   "size": 934
 }
 
+//// [/outFile.d.ts]
+declare module "a" {
+    export const a = "hello";
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c: number;
+}
+
+
 
 Program root files: [
   "/src/a.ts",
@@ -1052,12 +1039,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Introduce error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = class { private p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1219,12 +1205,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix `a` error with noCheck
+
 Input::
 //// [/src/a.ts]
 export const a = "hello";
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
@@ -1238,7 +1223,6 @@ Output::
 
 
 
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1318,6 +1302,7 @@ define("c", ["require", "exports"], function (require, exports) {
   "size": 841
 }
 
+//// [/outFile.d.ts] file written with same contents
 
 Program root files: [
   "/src/a.ts",
@@ -1346,10 +1331,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::
@@ -1454,10 +1438,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v --noCheck
 Output::
@@ -1471,10 +1454,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with checking
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b /src/tsconfig.json -v
 Output::

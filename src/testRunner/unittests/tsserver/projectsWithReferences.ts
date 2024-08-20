@@ -1,5 +1,5 @@
 import { jsonToReadableText } from "../helpers.js";
-import { getFsContentsForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
+import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
@@ -12,7 +12,11 @@ import {
 
 describe("unittests:: tsserver:: projectsWithReferences:: invoking when references are already built", () => {
     it("on sample project", () => {
-        const host = createServerHost(getFsContentsForSampleProjectReferences());
+        const host = getSysForSampleProjectReferences(
+            /*withNodeNext*/ undefined,
+            /*skipReferenceCoreFromTest*/ undefined,
+            /*forTsserver*/ true,
+        );
         const session = new TestSession(host);
         openFilesForSession(["/user/username/projects/sample1/tests/index.ts"], session);
 

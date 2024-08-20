@@ -1,19 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "outDir",
+    "checkJs": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/src/project/src/box.ts]
 export interface Box<T> {
@@ -48,22 +45,29 @@ export type Wrap<C> = {
 }
 
 
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "outDir",
-    "checkJs": true
-  },
-  "include": [
-    "src"
-  ]
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
+
+
+//// [/src/project/outDir/src/box.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/outDir/src/box.d.ts]
@@ -72,17 +76,17 @@ export interface Box<T> {
 }
 
 
-//// [/src/project/outDir/src/box.js]
+//// [/src/project/outDir/src/wrap.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/src/project/outDir/src/bug.d.ts]
-export const bug: W.Wrap<{
-    n: B.Box<number>;
-}>;
-import * as B from "./box.js";
-import * as W from "./wrap.js";
+//// [/src/project/outDir/src/wrap.d.ts]
+export type Wrap<C> = {
+    [K in keyof C]: {
+        wrapped: C[K];
+    };
+};
 
 
 //// [/src/project/outDir/src/bug.js]
@@ -109,17 +113,12 @@ var box = function (n) {
 exports.bug = wrap({ n: box(1) });
 
 
-//// [/src/project/outDir/src/wrap.d.ts]
-export type Wrap<C> = {
-    [K in keyof C]: {
-        wrapped: C[K];
-    };
-};
-
-
-//// [/src/project/outDir/src/wrap.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+//// [/src/project/outDir/src/bug.d.ts]
+export const bug: W.Wrap<{
+    n: B.Box<number>;
+}>;
+import * as B from "./box.js";
+import * as W from "./wrap.js";
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
@@ -206,8 +205,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 exitCode:: ExitStatus.Success
 
-
 Change:: modify js file
+
 Input::
 //// [/src/project/src/bug.js]
 import * as B from "./box.js"
@@ -231,18 +230,8 @@ export const bug = wrap({ n: box(1) });
 export const something = 1;
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-
-
-//// [/src/project/outDir/src/bug.d.ts]
-export const bug: W.Wrap<{
-    n: B.Box<number>;
-}>;
-export const something: 1;
-import * as B from "./box.js";
-import * as W from "./wrap.js";
 
 
 //// [/src/project/outDir/src/bug.js]
@@ -268,6 +257,15 @@ var box = function (n) {
 };
 exports.bug = wrap({ n: box(1) });
 exports.something = 1;
+
+
+//// [/src/project/outDir/src/bug.d.ts]
+export const bug: W.Wrap<{
+    n: B.Box<number>;
+}>;
+export const something: 1;
+import * as B from "./box.js";
+import * as W from "./wrap.js";
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]

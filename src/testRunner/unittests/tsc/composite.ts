@@ -1,19 +1,18 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { emptyArray } from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import {
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -31,10 +30,10 @@ describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite null on command line",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -52,10 +51,10 @@ describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line but has tsbuild info in config",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -74,10 +73,10 @@ describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -96,7 +95,7 @@ describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "converting to modules",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -110,7 +109,7 @@ describe("unittests:: tsc:: composite::", () => {
         edits: [
             {
                 caption: "convert to modules",
-                edit: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
+                edit: sys => sys.replaceFileText("/src/project/tsconfig.json", "none", "es2015"),
             },
         ],
     });
@@ -118,10 +117,10 @@ describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
         scenario: "composite",
         subScenario: "synthetic jsx import of ESM module from CJS module no crash no jsx element",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/main.ts": "export default 42;",
-                "/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            createWatchedSystem({
+                "/home/src/projects/project/src/main.ts": "export default 42;",
+                "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         module: "Node16",
@@ -129,26 +128,26 @@ describe("unittests:: tsc:: composite::", () => {
                         jsxImportSource: "solid-js",
                     },
                 }),
-                "/node_modules/solid-js/package.json": jsonToReadableText({
+                "/home/src/projects/project/node_modules/solid-js/package.json": jsonToReadableText({
                     name: "solid-js",
                     type: "module",
                 }),
-                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                "/home/src/projects/project/node_modules/solid-js/jsx-runtime.d.ts": dedent`
                     export namespace JSX {
                         type IntrinsicElements = { div: {}; };
                     }
                 `,
-            }),
-        commandLineArgs: [],
+            }, { currentDirectory: "/home/src/projects/project" }),
+        commandLineArgs: emptyArray,
     });
 
     verifyTsc({
         scenario: "composite",
         subScenario: "synthetic jsx import of ESM module from CJS module error on jsx element",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/main.tsx": "export default <div/>;",
-                "/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            createWatchedSystem({
+                "/home/src/projects/project/src/main.tsx": "export default <div/>;",
+                "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         module: "Node16",
@@ -156,16 +155,16 @@ describe("unittests:: tsc:: composite::", () => {
                         jsxImportSource: "solid-js",
                     },
                 }),
-                "/node_modules/solid-js/package.json": jsonToReadableText({
+                "/home/src/projects/project/node_modules/solid-js/package.json": jsonToReadableText({
                     name: "solid-js",
                     type: "module",
                 }),
-                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                "/home/src/projects/project/node_modules/solid-js/jsx-runtime.d.ts": dedent`
                     export namespace JSX {
                         type IntrinsicElements = { div: {}; };
                     }
                 `,
-            }),
-        commandLineArgs: [],
+            }, { currentDirectory: "/home/src/projects/project" }),
+        commandLineArgs: emptyArray,
     });
 });

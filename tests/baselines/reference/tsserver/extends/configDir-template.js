@@ -395,6 +395,7 @@ ScriptInfos::
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
 
+edit extended config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/configs/first/tsconfig.json 1:: WatchInfo: /home/src/projects/configs/first/tsconfig.json 2000 {"excludeDirectories":["/home/src/vscode/projects/bin/node_modules"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*

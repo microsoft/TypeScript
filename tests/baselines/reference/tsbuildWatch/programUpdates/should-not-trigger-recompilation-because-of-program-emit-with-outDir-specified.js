@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
@@ -93,15 +93,15 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -w sample1/core -verbose
+/home/src/tslibs/ts/lib/tsc.js -b -w core -verbose
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * sample1/core/tsconfig.json
+    * core/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/outDir/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/outDir/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
@@ -280,7 +280,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output 'sample1/core/outDir/tsconfig.tsbuildinfo' is older than input 'sample1/core/file3.ts'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/outDir/tsconfig.tsbuildinfo' is older than input 'core/file3.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 

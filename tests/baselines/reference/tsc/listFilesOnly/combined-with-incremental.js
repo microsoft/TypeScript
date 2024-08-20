@@ -1,5 +1,11 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/test.ts]
+export const x = 1;
+
+//// [/src/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,13 +21,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/test.ts]
-export const x = 1;
-
-//// [/src/tsconfig.json]
-{}
-
-
 
 /home/src/tslibs/ts/lib/tsc.js -p /src --incremental --listFilesOnly
 Output::
@@ -32,10 +31,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src --incremental
 Output::
@@ -85,10 +83,9 @@ exports.x = 1;
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src --incremental --listFilesOnly
 Output::
@@ -99,10 +96,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /src --incremental
 Output::

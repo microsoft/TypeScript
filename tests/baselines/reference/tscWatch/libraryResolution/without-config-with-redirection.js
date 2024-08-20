@@ -91,36 +91,6 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
 interface DOMInterface { }
 
@@ -167,7 +137,7 @@ declare const console: { log(msg: any): void; };
 interface DOMInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts]
-interface WebworkerInterface { }
+interface WebWorkerInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts]
 interface ScriptHostInterface { }
@@ -712,17 +682,17 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: edit index
+Change:: edit file
 
 Input::
-//// [/home/src/workspace/projects/project1/index.ts]
-export const x = "type1";export const xyz = 10;
+//// [/home/src/workspace/projects/project1/file.ts]
+export const file = 10;export const xyz = 10;
 
 
 Output::
-FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
+FileWatcher:: Triggered with project1/file.ts 1:: WatchInfo: project1/file.ts 250 undefined Source file
 Scheduling update
-Elapsed:: *ms FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
+Elapsed:: *ms FileWatcher:: Triggered with project1/file.ts 1:: WatchInfo: project1/file.ts 250 undefined Source file
 
 
 Timeout callback:: count: 1
@@ -791,11 +761,11 @@ project1/file2.ts
 
 
 
-//// [/home/src/workspace/projects/project1/index.js]
+//// [/home/src/workspace/projects/project1/file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.xyz = exports.x = void 0;
-exports.x = "type1";
+exports.xyz = exports.file = void 0;
+exports.file = 10;
 exports.xyz = 10;
 
 
@@ -831,10 +801,10 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-project1/index.ts
+project1/file.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspace/projects/project1/index.ts (computed .d.ts)
+/home/src/workspace/projects/project1/file.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -1507,7 +1477,7 @@ Change:: write redirect file webworker
 
 Input::
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts]
-interface WebworkerInterface { }
+interface WebWorkerInterface { }
 
 
 Output::

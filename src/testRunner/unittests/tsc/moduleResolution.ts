@@ -1,85 +1,30 @@
 import {
+    emptyArray,
     ModuleKind,
     ScriptTarget,
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    getFsConentsForAlternateResultAtTypesPackageJson,
-    getFsContentsForAlternateResult,
-    getFsContentsForAlternateResultDts,
-    getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult.js";
+import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { verifyTscWatch } from "../helpers/tscWatch.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import {
-    createWatchedSystem,
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
-    verifyTsc({
-        scenario: "moduleResolution",
-        subScenario: "alternateResult",
-        fs: () => loadProjectFromFiles(getFsContentsForAlternateResult()),
-        commandLineArgs: ["-p", "/home/src/projects/project"],
-        baselinePrograms: true,
-        edits: [
-            {
-                caption: "delete the alternateResult in @types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/foo/index.d.ts"),
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
-            },
-            {
-                caption: "update package.json from @types so error is fixed",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
-            },
-            {
-                caption: "update package.json so error is fixed",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
-            },
-            {
-                caption: "update package.json from @types so error is introduced",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
-            },
-            {
-                caption: "update package.json so error is introduced",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
-            },
-            {
-                caption: "delete the alternateResult in @types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/foo2/index.d.ts"),
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
-            },
-        ],
-    });
+    verifyAlternateResultScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits) =>
+            verifyTsc({
+                scenario: "moduleResolution",
+                subScenario,
+                sys,
+                commandLineArgs: emptyArray,
+                baselinePrograms: true,
+                edits: edits(),
+            }),
+    );
 
-    verifyTscWatch({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: "pnpm style layout",
         sys: () =>
@@ -224,8 +169,8 @@ describe("unittests:: tsc:: moduleResolution::", () => {
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: "package json scope",
-        fs: () =>
-            loadProjectFromFiles({
+        sys: () =>
+            createWatchedSystem({
                 "/src/projects/project/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson({
                         target: ScriptTarget.ES2016,
@@ -246,13 +191,12 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 `,
                 "/src/projects/project/src/fileB.mts": "export function foo() {}",
                 "/src/projects/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
-                [getTypeScriptLibTestLocation("es2016.full")]: libFile.content,
             }, { currentDirectory: "/src/projects/project" }),
         commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {
                 caption: "Delete package.json",
-                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                edit: sys => sys.deleteFile(`/src/projects/project/package.json`),
             },
         ],
     });

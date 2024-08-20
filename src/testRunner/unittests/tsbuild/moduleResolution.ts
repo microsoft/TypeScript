@@ -1,25 +1,19 @@
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
-import { Symlink } from "../../_namespaces/vfs.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { verifyTscWatch } from "../helpers/tscWatch.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import {
-    createWatchedSystem,
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {
         return createWatchedSystem([
             {
                 path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`,
             },
@@ -64,14 +58,14 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         ], { currentDirectory: "/user/username/projects/myproject" });
     }
 
-    verifyTscWatch({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly`,
         sys,
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
     });
 
-    verifyTscWatch({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
         sys: () => sys({ preserveSymlinks: true }),
@@ -81,20 +75,20 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
                 "/src/packages/pkg1.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
                     files: ["./pkg1_index.ts"],
                 }),
-                "/src/packages/typeroot1/sometype/index.d.ts": Utils.dedent`declare type TheNum = "type1";`,
+                "/src/packages/typeroot1/sometype/index.d.ts": dedent`declare type TheNum = "type1";`,
                 "/src/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
                 "/src/packages/pkg2.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
                     files: ["./pkg2_index.ts"],
                 }),
-                "/src/packages/typeroot2/sometype/index.d.ts": Utils.dedent`declare type TheNum2 = "type2";`,
+                "/src/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
             }),
         commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
@@ -104,13 +98,13 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: "impliedNodeFormat differs between projects for shared file",
-        fs: () =>
+        sys: () =>
             loadProjectFromFiles({
                 "/src/projects/a/src/index.ts": "",
                 "/src/projects/a/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true },
                 }),
-                "/src/projects/b/src/index.ts": Utils.dedent`
+                "/src/projects/b/src/index.ts": dedent`
                     import pg from "pg";
                     pg.foo();
                 `,
@@ -126,7 +120,6 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
-                [getTypeScriptLibTestLocation("es2022.full")]: libFile.content,
             }),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
@@ -134,7 +127,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
 });
 
 describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
-    function fs() {
+    function sys() {
         return loadProjectFromFiles({
             "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
             "/src/projects/project/packages/a/test/index.js": `import 'a';`,
@@ -174,22 +167,21 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                 version: "0.0.0",
                 type: "module",
             }),
-            "/src/projects/project/node_modules/a": new Symlink("/src/projects/project/packages/a"),
-            [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
+            "/src/projects/project/node_modules/a": { symLink: "/src/projects/project/packages/a" },
         }, { currentDirectory: "/src/projects/project" });
     }
 
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: "shared resolution should not report error",
-        fs,
+        sys,
         commandLineArgs: ["-b", "packages/b", "--verbose", "--traceResolution", "--explainFiles"],
     });
 
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: "when resolution is not shared",
-        fs,
+        sys,
         commandLineArgs: ["-b", "packages/a", "--verbose", "--traceResolution", "--explainFiles"],
         edits: [{
             caption: "build b",

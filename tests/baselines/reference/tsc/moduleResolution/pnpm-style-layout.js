@@ -356,30 +356,4 @@ var button = createButton();
 
 
 
-Program root files: [
-  "/home/src/projects/component-type-checker/packages/app/src/app.tsx"
-]
-Program options: {
-  "target": 1,
-  "module": 99,
-  "lib": [
-    "lib.es5.d.ts"
-  ],
-  "moduleResolution": 2,
-  "baseUrl": "/home/src/projects/component-type-checker/packages/app",
-  "outDir": "/home/src/projects/component-type-checker/packages/app/dist",
-  "traceResolution": true,
-  "explainFiles": true,
-  "configFilePath": "/home/src/projects/component-type-checker/packages/app/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
-/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts
-/home/src/projects/component-type-checker/packages/sdk/src/index.ts
-/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts
-/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts
-/home/src/projects/component-type-checker/packages/app/src/app.tsx
-
 exitCode:: ExitStatus.Success

@@ -1,34 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
-//// [/src/project/src/directUse.ts]
-import { indirectClass } from './indirectClass';
-new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectClass.ts]
 import { classC } from './class';
 export class indirectClass {
     classC = new classC();
 }
+
+//// [/src/project/src/directUse.ts]
+import { indirectClass } from './indirectClass';
+new indirectClass().classC.prop;
 
 //// [/src/project/src/indirectUse.ts]
 import { indirectClass } from './indirectClass';
@@ -52,6 +37,20 @@ function someFunc(arguments: boolean, ...rest: any[]) {
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -135,10 +134,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -157,76 +155,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
-
-
-//// [/src/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.classC = void 0;
-    var classC = /** @class */ (function () {
-        function classC() {
-            this.prop = 1;
-        }
-        return classC;
-    }());
-    exports.classC = classC;
-});
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.indirectClass = void 0;
-    var indirectClass = /** @class */ (function () {
-        function indirectClass() {
-            this.classC = new class_1.classC();
-        }
-        return indirectClass;
-    }());
-    exports.indirectClass = indirectClass;
-});
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    new indirectClass_1.indirectClass().classC.prop;
-});
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    new indirectClass_2.indirectClass().classC.prop;
-});
-define("noChangeFile", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.writeLog = writeLog;
-    function writeLog(s) {
-    }
-});
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
-}
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -292,78 +220,6 @@ function someFunc(arguments) {
   "size": 1515
 }
 
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-Change:: Introduce error with emit
-Input::
-//// [/src/project/src/class.ts]
-export class classC {
-    prop1 = 1;
-}
-
-
-
-/home/src/tslibs/ts/lib/tsc.js -b -v src/project
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
-
-[7m2[0m new indirectClass().classC.prop;
-[7m [0m [91m                           ~~~~[0m
-
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
-    [7m2[0m     prop1 = 1;
-    [7m [0m [96m    ~~~~~[0m
-    'prop1' is declared here.
-
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
-
-[7m2[0m new indirectClass().classC.prop;
-[7m [0m [91m                           ~~~~[0m
-
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
-    [7m2[0m     prop1 = 1;
-    [7m [0m [96m    ~~~~~[0m
-    'prop1' is declared here.
-
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
-
-[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
-
-
-Found 3 errors.
-
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop1: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
-
-
 //// [/src/outFile.js]
 define("class", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -371,7 +227,7 @@ define("class", ["require", "exports"], function (require, exports) {
     exports.classC = void 0;
     var classC = /** @class */ (function () {
         function classC() {
-            this.prop1 = 1;
+            this.prop = 1;
         }
         return classC;
     }());
@@ -412,6 +268,77 @@ function someFunc(arguments) {
         rest[_i - 1] = arguments[_i];
     }
 }
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
+
+
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+Change:: Introduce error with emit
+
+Input::
+//// [/src/project/src/class.ts]
+export class classC {
+    prop1 = 1;
+}
+
+
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
+[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
+
+[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
+
+[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
+
+
+Found 3 errors.
+
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -521,17 +448,86 @@ function someFunc(arguments) {
   "size": 2093
 }
 
+//// [/src/outFile.js]
+define("class", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.classC = void 0;
+    var classC = /** @class */ (function () {
+        function classC() {
+            this.prop1 = 1;
+        }
+        return classC;
+    }());
+    exports.classC = classC;
+});
+define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.indirectClass = void 0;
+    var indirectClass = /** @class */ (function () {
+        function indirectClass() {
+            this.classC = new class_1.classC();
+        }
+        return indirectClass;
+    }());
+    exports.indirectClass = indirectClass;
+});
+define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_1.indirectClass().classC.prop;
+});
+define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_2.indirectClass().classC.prop;
+});
+define("noChangeFile", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.writeLog = writeLog;
+    function writeLog(s) {
+    }
+});
+function someFunc(arguments) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop1: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
+
+
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix error and no emit
+
 Input::
 //// [/src/project/src/class.ts]
 export class classC {
     prop = 1;
 }
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
@@ -615,10 +611,9 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: No Change run with emit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
@@ -637,76 +632,6 @@ Output::
 
 Found 1 error.
 
-
-
-//// [/src/outFile.d.ts]
-declare module "class" {
-    export class classC {
-        prop: number;
-    }
-}
-declare module "indirectClass" {
-    import { classC } from "class";
-    export class indirectClass {
-        classC: classC;
-    }
-}
-declare module "directUse" { }
-declare module "indirectUse" { }
-declare module "noChangeFile" {
-    export function writeLog(s: string): void;
-}
-declare function someFunc(arguments: boolean, ...rest: any[]): void;
-
-
-//// [/src/outFile.js]
-define("class", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.classC = void 0;
-    var classC = /** @class */ (function () {
-        function classC() {
-            this.prop = 1;
-        }
-        return classC;
-    }());
-    exports.classC = classC;
-});
-define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.indirectClass = void 0;
-    var indirectClass = /** @class */ (function () {
-        function indirectClass() {
-            this.classC = new class_1.classC();
-        }
-        return indirectClass;
-    }());
-    exports.indirectClass = indirectClass;
-});
-define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    new indirectClass_1.indirectClass().classC.prop;
-});
-define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    new indirectClass_2.indirectClass().classC.prop;
-});
-define("noChangeFile", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.writeLog = writeLog;
-    function writeLog(s) {
-    }
-});
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
-}
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -771,6 +696,76 @@ function someFunc(arguments) {
   "version": "FakeTSVersion",
   "size": 1515
 }
+
+//// [/src/outFile.js]
+define("class", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.classC = void 0;
+    var classC = /** @class */ (function () {
+        function classC() {
+            this.prop = 1;
+        }
+        return classC;
+    }());
+    exports.classC = classC;
+});
+define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.indirectClass = void 0;
+    var indirectClass = /** @class */ (function () {
+        function indirectClass() {
+            this.classC = new class_1.classC();
+        }
+        return indirectClass;
+    }());
+    exports.indirectClass = indirectClass;
+});
+define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_1.indirectClass().classC.prop;
+});
+define("indirectUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_2.indirectClass().classC.prop;
+});
+define("noChangeFile", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.writeLog = writeLog;
+    function writeLog(s) {
+    }
+});
+function someFunc(arguments) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}
+
+
+//// [/src/outFile.d.ts]
+declare module "class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "indirectClass" {
+    import { classC } from "class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "directUse" { }
+declare module "indirectUse" { }
+declare module "noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
+
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

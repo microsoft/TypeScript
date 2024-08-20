@@ -136,6 +136,7 @@ export * from "./unittests/tscWatch/extends.js";
 export * from "./unittests/tscWatch/forceConsistentCasingInFileNames.js";
 export * from "./unittests/tscWatch/incremental.js";
 export * from "./unittests/tscWatch/libraryResolution.js";
+export * from "./unittests/tscWatch/listFilesOnly.js";
 export * from "./unittests/tscWatch/moduleResolution.js";
 export * from "./unittests/tscWatch/nodeNextWatch.js";
 export * from "./unittests/tscWatch/noEmit.js";

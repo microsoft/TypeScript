@@ -35,7 +35,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
 
@@ -152,10 +151,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -188,10 +186,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
 Output::
@@ -417,10 +414,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: With declaration and declarationMap noEmit - Should report errors
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
@@ -546,10 +542,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: no-change-run
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
@@ -582,10 +577,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Dts Emit with error
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --declaration
 Output::
@@ -626,53 +620,6 @@ Errors  Files
      1  home/src/projects/project/a.ts[90m:1[0m
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-
-
-//// [/home/src/projects/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
-
-
-//// [/home/src/projects/project/b.d.ts]
-export declare const b = 10;
-
-
-//// [/home/src/projects/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
-
-
-//// [/home/src/projects/project/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
-
-
-//// [/home/src/projects/project/d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.d = void 0;
-exports.d = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -804,6 +751,53 @@ exports.d = /** @class */ (function () {
   "size": 1790
 }
 
+//// [/home/src/projects/project/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
+//// [/home/src/projects/project/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 10;
+
+
+//// [/home/src/projects/project/b.d.ts]
+export declare const b = 10;
+
+
+//// [/home/src/projects/project/c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = void 0;
+exports.c = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
+//// [/home/src/projects/project/d.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.d = void 0;
+exports.d = /** @class */ (function () {
+    function class_1() {
+        this.p = 10;
+    }
+    return class_1;
+}());
+
+
 
 Program root files: [
   "/home/src/projects/project/a.ts",
@@ -831,12 +825,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
 Change:: Fix the error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { public p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
@@ -987,10 +980,9 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: With declaration enabled noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
 Output::
@@ -1192,10 +1184,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-
 Change:: With declaration and declarationMap noEmit
-Input::
 
+Input::
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
@@ -1329,12 +1320,11 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
-
 Change:: Fix the another 
+
 Input::
 //// [/home/src/projects/project/c.ts]
 export const c = class { public p = 10; };
-
 
 
 /home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap

@@ -1,5 +1,28 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/src/utils/index.ts]
+export const x = 10;
+
+//// [/src/utils/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true
+  }
+}
+
+//// [/src/project/index.ts]
+import { x } from "../utils";
+
+//// [/src/project/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,30 +37,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/src/project/index.ts]
-import { x } from "../utils";
-
-//// [/src/project/tsconfig.json]
-{
-  "references": [
-    {
-      "path": "../utils"
-    }
-  ]
-}
-
-//// [/src/utils/index.ts]
-export const x = 10;
-
-//// [/src/utils/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "noEmit": true
-  }
-}
-
 
 
 /home/src/tslibs/ts/lib/tsc.js --p src/project

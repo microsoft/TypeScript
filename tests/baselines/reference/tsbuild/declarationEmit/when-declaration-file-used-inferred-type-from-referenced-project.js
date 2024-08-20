@@ -1,19 +1,17 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fluentui/*": [
+        "packages/*/src"
+      ]
+    }
+  }
+}
 
 //// [/src/packages/pkg1/src/index.ts]
 export interface IThing {
@@ -57,19 +55,20 @@ export function fn4() {
   ]
 }
 
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "baseUrl": ".",
-    "paths": {
-      "@fluentui/*": [
-        "packages/*/src"
-      ]
-    }
-  }
-}
-
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js --b /src/packages/pkg2/tsconfig.json --verbose
@@ -88,6 +87,11 @@ Output::
 
 
 
+//// [/src/packages/pkg1/lib/src/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 //// [/src/packages/pkg1/lib/src/index.d.ts]
 export interface IThing {
     a: string;
@@ -95,11 +99,6 @@ export interface IThing {
 export interface IThings {
     thing1: IThing;
 }
-
-
-//// [/src/packages/pkg1/lib/src/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo]
@@ -145,10 +144,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 938
 }
 
-//// [/src/packages/pkg2/lib/src/index.d.ts]
-export declare function fn4(): import("@fluentui/pkg1").IThing;
-
-
 //// [/src/packages/pkg2/lib/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -157,6 +152,10 @@ function fn4() {
     var a = { thing1: { a: 'b' } };
     return a.thing1;
 }
+
+
+//// [/src/packages/pkg2/lib/src/index.d.ts]
+export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo]
