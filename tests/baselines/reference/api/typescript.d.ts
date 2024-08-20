@@ -3595,7 +3595,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.6";
+    const versionMajorMinor = "5.7";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**

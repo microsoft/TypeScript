@@ -153,6 +153,8 @@ import {
     forEachChild,
     forEachChildRecursively,
     ForInOrOfStatement,
+    ForInStatement,
+    ForOfStatement,
     ForStatement,
     FunctionBody,
     FunctionDeclaration,
@@ -7906,6 +7908,9 @@ function accessKind(node: Node): AccessKind {
             return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
         case SyntaxKind.ArrayLiteralExpression:
             return accessKind(parent);
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+            return node === (parent as ForInStatement | ForOfStatement).initializer ? AccessKind.Write : AccessKind.Read;
         default:
             return AccessKind.Read;
     }
