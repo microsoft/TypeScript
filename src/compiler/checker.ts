@@ -20592,7 +20592,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // >> No caching yet
             const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
             const checkTypeVariable = getNarrowableCheckTypeVariable(root, newMapper);
-            const distributionType = checkTypeVariable ? getMappedType(checkTypeVariable, narrowMapper) : undefined;
+            const distributionType = checkTypeVariable ? getReducedType(getMappedType(checkTypeVariable, narrowMapper)) : undefined;
             // Distributive conditional types are distributed over union types. For example, when the
             // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
             // result is (A extends U ? X : Y) | (B extends U ? X : Y).
@@ -20614,7 +20614,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         narrowMapper: TypeMapper,
         mapper: TypeMapper,
     ): Type {
-        distributionType = getReducedType(distributionType);
         if (distributionType.flags & TypeFlags.Never) {
             return distributionType;
         }
@@ -45791,8 +45790,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     //  or a union of types belonging to the constraint of the type parameter;
     // (2) There are no `infer` type parameters in the conditional type;
     // (3) `TrueBranch<T>` and `FalseBranch<T>` must be valid, recursively;
+    // In particular, the false-most branch of the conditional type must be `never`.
     // >> TODO:
-    // - consider multiple type parameters at once
     // - can/should we check exhaustiveness?
     // - Problem: cond type nested in true branch with same type parameter is not considered distributive,
     // because the type parameter is actually a substitution type...
