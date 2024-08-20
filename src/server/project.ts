@@ -1365,23 +1365,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     onAutoImportProviderSettingsChanged() {
-        if (this.autoImportProviderHost === false) {
-            this.autoImportProviderHost = undefined;
-        }
-        else {
-            this.autoImportProviderHost?.markAsDirty();
-        }
+        this.markAutoImportProviderAsDirty();
     }
 
     /** @internal */
     onPackageJsonChange() {
         this.moduleSpecifierCache.clear();
-        if (this.autoImportProviderHost === false) {
-            this.autoImportProviderHost = undefined;
-        }
-        else {
-            this.autoImportProviderHost?.markAsDirty();
-        }
+        this.markAutoImportProviderAsDirty();
     }
 
     /** @internal */
