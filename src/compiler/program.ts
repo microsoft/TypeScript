@@ -75,6 +75,7 @@ import {
     ensureTrailingDirectorySeparator,
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
+    exclusivelyPrefixedNodeCoreModules,
     explainIfFileIsRedirectAndImpliedFormat,
     ExportAssignment,
     ExportDeclaration,
@@ -3500,7 +3501,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, moduleNameExpr);
                     if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
-                        if (startsWith(moduleNameExpr.text, "node:")) {
+                        if (startsWith(moduleNameExpr.text, "node:") && !exclusivelyPrefixedNodeCoreModules.has(moduleNameExpr.text)) {
                             // Presence of `node:` prefix takes precedence over unprefixed node core modules
                             usesUriStyleNodeCoreModules = true;
                         }

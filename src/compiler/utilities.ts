@@ -11792,8 +11792,7 @@ export function isSideEffectImport(node: Node): boolean {
     return !!ancestor && !ancestor.importClause;
 }
 
-/** @internal */
-export const unprefixedNodeCoreModules = new Set([
+const unprefixedNodeCoreModulesList = [
     "assert",
     "assert/strict",
     "async_hooks",
@@ -11849,4 +11848,22 @@ export const unprefixedNodeCoreModules = new Set([
     "wasi",
     "worker_threads",
     "zlib",
+];
+
+/** @internal */
+export const unprefixedNodeCoreModules = new Set(unprefixedNodeCoreModulesList);
+
+/** @internal */
+export const exclusivelyPrefixedNodeCoreModules = new Set([
+    "node:sea",
+    "node:sqlite",
+    "node:test",
+    "node:test/reporters",
+]);
+
+/** @internal */
+export const nodeCoreModules = new Set([
+    ...unprefixedNodeCoreModulesList,
+    ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
+    ...exclusivelyPrefixedNodeCoreModules,
 ]);

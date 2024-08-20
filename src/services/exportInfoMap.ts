@@ -32,13 +32,13 @@ import {
     isKnownSymbol,
     isNonGlobalAmbientModule,
     isPrivateIdentifierSymbol,
-    JsTyping,
     LanguageServiceHost,
     mapDefined,
     ModuleSpecifierCache,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
     moduleSymbolToValidIdentifier,
+    nodeCoreModules,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
@@ -378,7 +378,7 @@ export function isImportable(
         // Ambient module
         let useNodePrefix;
         const moduleName = stripQuotes(toModule.name);
-        if (JsTyping.nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+        if (nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
             return useNodePrefix === startsWith(moduleName, "node:");
         }
         return !packageJsonFilter

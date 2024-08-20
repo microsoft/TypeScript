@@ -19,6 +19,7 @@ import {
     hasJSFileExtension,
     mapDefined,
     MapLike,
+    nodeCoreModules,
     normalizePath,
     Path,
     readConfigFile,
@@ -27,7 +28,6 @@ import {
     some,
     toFileNameLowerCase,
     TypeAcquisition,
-    unprefixedNodeCoreModules,
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts.js";
@@ -61,19 +61,6 @@ export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVers
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
-
-/** @internal */
-export const nodeCoreModuleList: readonly string[] = [
-    ...unprefixedNodeCoreModules,
-    ...[...unprefixedNodeCoreModules].map(name => `node:${name}`),
-    "node:sea",
-    "node:sqlite",
-    "node:test",
-    "node:test/reporters",
-];
-
-/** @internal */
-export const nodeCoreModules = new Set(nodeCoreModuleList);
 
 /** @internal */
 export function nonRelativeModuleNameForTypingCache(moduleName: string) {

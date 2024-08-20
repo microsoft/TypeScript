@@ -62,6 +62,7 @@ import {
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
     escapeString,
+    exclusivelyPrefixedNodeCoreModules,
     ExportAssignment,
     ExportDeclaration,
     Expression,
@@ -75,6 +76,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
+    forEach,
     forEachAncestorDirectory,
     forEachChild,
     forEachLeadingCommentRange,
@@ -271,7 +273,6 @@ import {
     JSDocLinkDisplayPart,
     JSDocLinkPlain,
     JSDocTypedefTag,
-    JsTyping,
     JsxEmit,
     JsxOpeningLikeElement,
     JsxTagNameExpression,
@@ -297,6 +298,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    nodeCoreModules,
     NodeFlags,
     nodeIsMissing,
     nodeIsPresent,
@@ -3851,7 +3853,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
-        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && nodeCoreModules.has(moduleSpecifier)) {
             if (usesNodeCoreModules === undefined) {
                 usesNodeCoreModules = consumesNodeCoreModules(fromFile);
             }
@@ -3896,7 +3898,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
 
 /** @internal */
 export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
-    return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
+    return some(sourceFile.imports, ({ text }) => nodeCoreModules.has(text));
 }
 
 /** @internal */
@@ -4124,11 +4126,17 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 
 /** @internal */
 export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean | undefined {
-    const decisionFromFile = firstDefined(file.imports, node => {
-        if (JsTyping.nodeCoreModules.has(node.text)) {
-            return startsWith(node.text, "node:");
+    let decisionFromFile;
+    for (const node of file.imports) {
+        if (nodeCoreModules.has(node.text) && !exclusivelyPrefixedNodeCoreModules.has(node.text)) {
+            if (startsWith(node.text, "node:")) {
+                return true;
+            }
+            else {
+                decisionFromFile = false;
+            }
         }
-    });
+    }
     return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
 }
 
