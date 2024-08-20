@@ -9,7 +9,11 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-     interval: weekly
+      interval: 'weekly'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'devcontainers'
     directory: '/'
