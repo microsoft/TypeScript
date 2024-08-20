@@ -45,8 +45,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -55,7 +55,9 @@ Output::
 
 Found 1 error in src/main.ts[90m:4[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -75,15 +77,15 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -92,7 +94,9 @@ Output::
 
 Found 1 error in src/main.ts[90m:4[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -112,7 +116,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -125,27 +129,8 @@ const a = {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "declaration": true,
-  "noEmitOnError": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
 
 
 //// [/user/username/projects/dev-build.d.ts]
@@ -180,14 +165,6 @@ define("src/other", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -207,6 +184,37 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js 
+Output::
+
 
 //// [/user/username/projects/dev-build.d.ts] file written with same contents
 //// [/user/username/projects/dev-build.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+exitCode:: ExitStatus.Success

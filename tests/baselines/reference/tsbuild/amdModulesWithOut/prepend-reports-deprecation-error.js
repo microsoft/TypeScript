@@ -75,8 +75,8 @@ const globalConst = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/app --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/app --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
@@ -103,7 +103,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/app/module.d.ts]
@@ -631,6 +630,8 @@ sourceFile:global.ts
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -639,8 +640,8 @@ export const x = 10;console.log(x);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/app --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/app --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
@@ -667,7 +668,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -885,3 +885,5 @@ sourceFile:global.ts
   "size": 1132
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

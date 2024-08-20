@@ -65,8 +65,8 @@ export const Other = 0;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.json
     * src/src/main/tsconfig.json
@@ -93,7 +93,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/dist/a.d.ts]
@@ -173,13 +172,15 @@ exports.Other = 0;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.json
     * src/src/main/tsconfig.json
@@ -204,7 +205,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/dist/a.d.ts] file written with same contents
@@ -212,3 +212,5 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 //// [/src/dist/b.d.ts] file written with same contents
 //// [/src/dist/b.js] file written with same contents
 //// [/src/dist/tsconfig.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

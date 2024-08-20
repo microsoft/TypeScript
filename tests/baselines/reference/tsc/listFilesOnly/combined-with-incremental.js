@@ -23,22 +23,22 @@ export const x = 1;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src --incremental --listFilesOnly
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src --incremental --listFilesOnly
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src --incremental
-exitCode:: ExitStatus.Success
 
 
 //// [/src/test.js]
@@ -83,26 +83,30 @@ exports.x = 1;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src --incremental --listFilesOnly
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src --incremental --listFilesOnly
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src --incremental
+
+
+
 exitCode:: ExitStatus.Success
-
-

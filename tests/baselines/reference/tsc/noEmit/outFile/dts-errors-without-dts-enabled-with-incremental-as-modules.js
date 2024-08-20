@@ -32,33 +32,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -99,14 +74,43 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -129,7 +133,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Fix error
@@ -139,33 +143,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -206,14 +185,43 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -236,36 +244,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Emit after fixing error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.js]
@@ -317,14 +304,39 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -347,7 +359,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error
@@ -357,33 +369,8 @@ export const a = class { private p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -424,14 +411,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: Emit when error
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -441,6 +420,7 @@ Program options: {
   "module": 2,
   "incremental": true,
   "project": "/home/src/projects/project",
+  "noEmit": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -450,8 +430,21 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: Emit when error
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+Output::
 
 
 //// [/home/src/projects/outFile.js]
@@ -508,14 +501,39 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -538,4 +556,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success

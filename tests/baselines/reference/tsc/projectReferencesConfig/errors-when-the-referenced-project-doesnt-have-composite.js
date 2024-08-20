@@ -48,8 +48,8 @@ import * as mod_0 from "../primary/a"
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /reference/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /reference/tsconfig.json
 [96mreference/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/primary' must have setting "composite": true.
 
 [7m7[0m     {
@@ -62,7 +62,6 @@ Output::
 
 Found 1 error in reference/tsconfig.json[90m:7[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/reference/bin/b.d.ts]
@@ -127,3 +126,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 812
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

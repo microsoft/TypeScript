@@ -97,8 +97,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -116,7 +116,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -411,6 +410,8 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -438,8 +439,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -453,7 +454,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -571,3 +571,5 @@ exports.m = mod;
   "size": 1605
 }
 
+
+exitCode:: ExitStatus.Success

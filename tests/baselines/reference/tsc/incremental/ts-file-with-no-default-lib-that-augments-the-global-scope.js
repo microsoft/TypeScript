@@ -54,9 +54,8 @@ export {};
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --rootDir src/project/src
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --rootDir src/project/src
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/dist/main.js]
@@ -110,3 +109,5 @@ export {};
   "size": 875
 }
 
+
+exitCode:: ExitStatus.Success

@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listFiles
 /home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
@@ -111,7 +111,6 @@ Output::
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
 /user/username/projects/sample1/tests/index.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -405,6 +404,8 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -417,8 +418,8 @@ export class someClass { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listFiles
 /home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
@@ -432,7 +433,6 @@ Output::
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
 /user/username/projects/sample1/tests/index.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts]
@@ -684,6 +684,8 @@ exports.someClass = someClass;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -697,13 +699,12 @@ class someClass2 { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listFiles
 /home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents
@@ -803,13 +804,16 @@ var someClass2 = /** @class */ (function () {
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listFiles
+
+
+
 exitCode:: ExitStatus.Success
-
-

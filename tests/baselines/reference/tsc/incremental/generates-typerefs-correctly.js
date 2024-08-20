@@ -62,9 +62,8 @@ export type Wrap<C> = {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/outDir/src/box.d.ts]
@@ -205,6 +204,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: modify js file
 Input::
@@ -231,9 +232,8 @@ export const something = 1;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/outDir/src/bug.d.ts]
@@ -351,3 +351,5 @@ exports.something = 1;
   "size": 1697
 }
 
+
+exitCode:: ExitStatus.Success

@@ -43,8 +43,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -60,35 +60,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "declaration": true,
-  "incremental": true,
-  "noEmitOnError": true,
-  "tscBuild": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No shapes updated in the builder::
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
@@ -150,13 +121,44 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "incremental": true,
+  "noEmitOnError": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -172,7 +174,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -198,7 +202,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -209,8 +213,8 @@ const a: string = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -218,35 +222,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "declaration": true,
-  "incremental": true,
-  "noEmitOnError": true,
-  "tscBuild": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No shapes updated in the builder::
 
 
 //// [/user/username/projects/dev-build.d.ts]
@@ -319,18 +294,50 @@ define("src/other", ["require", "exports"], function (require, exports) {
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "incremental": true,
+  "noEmitOnError": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/main.ts' is older than output '../dev-build.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

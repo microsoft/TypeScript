@@ -63,8 +63,8 @@ import { b } from "b"; export const g = b;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -89,64 +89,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project1/outFile.js",
-  "module": 2,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-No shapes updated in the builder::
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project2/outFile.js",
-  "module": 2,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/outFile.d.ts
-/src/project2/src/e.ts
-/src/project2/src/f.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.d.ts]
@@ -284,99 +226,6 @@ declare module "g" {
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/outFile.tsbuildinfo'
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project2/outFile.js",
-  "module": 2,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/outFile.d.ts
-/src/project2/src/e.ts
-/src/project2/src/f.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-
-
-
-Change:: local change
-Input::
-//// [/src/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -434,6 +283,103 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/outFile.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
+
+
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/outFile.d.ts
+/src/project2/src/e.ts
+/src/project2/src/f.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: local change
+Input::
+//// [/src/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
@@ -481,41 +427,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: non local change
-Input::
-//// [/src/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -573,6 +484,43 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: non local change
+Input::
+//// [/src/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/src/project1/outFile.d.ts]
@@ -700,13 +648,73 @@ declare module "d" {
 }
 
 
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+No shapes updated in the builder::
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/outFile.d.ts
+/src/project2/src/e.ts
+/src/project2/src/f.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: emit js files
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -731,57 +739,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project1/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project2/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/outFile.d.ts
-/src/project2/src/e.ts
-/src/project2/src/f.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.js]
@@ -942,13 +899,66 @@ define("g", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/outFile.d.ts
+/src/project2/src/e.ts
+/src/project2/src/f.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -971,7 +981,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/src/project2/src/e.ts",
   "/src/project2/src/f.ts",
@@ -998,7 +1010,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: js emit with change without emitDeclarationOnly
@@ -1008,8 +1020,8 @@ export const b = 10;const bLocal = 10;const alocal = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1034,62 +1046,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project1/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-No shapes updated in the builder::
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "outFile": "/src/project2/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/outFile.d.ts
-/src/project2/src/e.ts
-/src/project2/src/f.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
@@ -1168,41 +1124,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: local change
-Input::
-//// [/src/project1/src/b.ts]
-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -1214,7 +1135,6 @@ Program options: {
   "declaration": true,
   "outFile": "/src/project1/outFile.js",
   "module": 2,
-  "emitDeclarationOnly": true,
   "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
@@ -1245,7 +1165,6 @@ Program options: {
   "declaration": true,
   "outFile": "/src/project2/outFile.js",
   "module": 2,
-  "emitDeclarationOnly": true,
   "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
@@ -1260,6 +1179,43 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: local change
+Input::
+//// [/src/project1/src/b.ts]
+export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
@@ -1307,41 +1263,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: non local change
-Input::
-//// [/src/project1/src/b.ts]
-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -1399,6 +1320,43 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: non local change
+Input::
+//// [/src/project1/src/b.ts]
+export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/src/project1/outFile.d.ts]
@@ -1527,41 +1485,6 @@ declare module "d" {
 }
 
 
-
-Change:: js emit with change without emitDeclarationOnly
-Input::
-//// [/src/project1/src/b.ts]
-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -1573,6 +1496,7 @@ Program options: {
   "declaration": true,
   "outFile": "/src/project1/outFile.js",
   "module": 2,
+  "emitDeclarationOnly": true,
   "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
@@ -1603,6 +1527,7 @@ Program options: {
   "declaration": true,
   "outFile": "/src/project2/outFile.js",
   "module": 2,
+  "emitDeclarationOnly": true,
   "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
@@ -1617,6 +1542,43 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: js emit with change without emitDeclarationOnly
+Input::
+//// [/src/project1/src/b.ts]
+export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+[96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 1 error.
+
 
 
 //// [/src/project1/outFile.d.ts]
@@ -1779,3 +1741,61 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1191
 }
 
+
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+No shapes updated in the builder::
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/outFile.d.ts
+/src/project2/src/e.ts
+/src/project2/src/f.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

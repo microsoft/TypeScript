@@ -87,8 +87,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/myproject --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/myproject --explainFiles
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -129,7 +129,6 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-exitCode:: ExitStatus.Success
 
 
 //// [/home/src/projects/myproject/decls/main.d.ts]
@@ -167,3 +166,5 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+exitCode:: ExitStatus.Success

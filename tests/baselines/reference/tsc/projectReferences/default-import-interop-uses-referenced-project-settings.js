@@ -79,11 +79,10 @@ export declare const esm: number;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p app --pretty false
 Output::
-/home/src/tslibs/ts/lib/tsc --p app --pretty false
 app/src/index.ts(2,28): error TS2613: Module '"/app/src/local"' has no default export. Did you mean to use 'import { local } from "/app/src/local"' instead?
 app/src/index.ts(3,28): error TS2613: Module '"/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/node_modules/esm-package/index"' instead?
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/app/dist/index.js]
@@ -94,3 +93,5 @@ export {};
 export var local = 0;
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

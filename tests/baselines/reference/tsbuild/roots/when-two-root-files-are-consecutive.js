@@ -33,8 +33,8 @@ export const y = "world";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -42,7 +42,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/file1.d.ts]
@@ -123,6 +122,8 @@ exports.y = "world";
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: delete file1
 Input::
@@ -131,8 +132,8 @@ Input::
 //// [/src/file1.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -140,7 +141,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -185,3 +185,5 @@ exitCode:: ExitStatus.Success
   "size": 781
 }
 
+
+exitCode:: ExitStatus.Success

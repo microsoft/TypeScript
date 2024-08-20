@@ -25,8 +25,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -34,27 +34,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -70,21 +49,6 @@ Shape signatures in builder refreshed for::
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -106,9 +70,49 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.Success
 
 
 Change:: Fix error
@@ -118,8 +122,8 @@ const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -127,7 +131,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -149,17 +157,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -167,7 +173,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -189,17 +199,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: Emit after fixing error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -207,26 +215,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
 
 
 //// [/home/src/projects/project/a.js]
@@ -236,21 +224,44 @@ var a = "hello";
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/a.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Introduce error
@@ -260,8 +271,8 @@ const a = class { private p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -269,7 +280,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -291,17 +306,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: Emit when error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -309,26 +322,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
 
 
 //// [/home/src/projects/project/a.js]
@@ -343,18 +336,41 @@ var a = /** @class */ (function () {
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/a.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

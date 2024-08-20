@@ -28,8 +28,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -37,7 +37,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/index.js]
@@ -60,30 +59,34 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/index.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/index.js] file written with same contents
+
+exitCode:: ExitStatus.Success

@@ -142,8 +142,8 @@ export function createZoo(): Array<Dog> {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * animals/tsconfig.json
@@ -216,7 +216,6 @@ Output::
 
 Found 7 errors.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/user/username/projects/demo/animals/animal.d.ts]
@@ -663,3 +662,5 @@ function createZoo() {
 }
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

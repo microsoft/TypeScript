@@ -43,35 +43,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "incremental": true,
-  "noEmitOnError": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No shapes updated in the builder::
 
 
 //// [/user/username/projects/dev-build.js]
@@ -137,14 +110,45 @@ define("src/other", ["require", "exports"], function (require, exports) {
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "incremental": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -168,7 +172,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Fix error
@@ -180,35 +184,8 @@ export const a = class { p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "incremental": true,
-  "noEmitOnError": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No shapes updated in the builder::
 
 
 //// [/user/username/projects/dev-build.js] file written with same contents
@@ -252,14 +229,45 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "incremental": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -283,4 +291,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success

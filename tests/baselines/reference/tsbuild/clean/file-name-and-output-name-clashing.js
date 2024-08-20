@@ -30,8 +30,9 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -clean
+
+
+
 exitCode:: ExitStatus.Success
-
-

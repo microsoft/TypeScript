@@ -48,8 +48,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /beta/tsconfig.json --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --p /beta/tsconfig.json --explainFiles
 [96mbeta/b.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../alpha/a"' has no exported member 'm'.
 
 [7m1[0m import { m } from '../alpha/a'
@@ -65,7 +65,6 @@ beta/b.ts
 
 Found 1 error in beta/b.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/beta/bin/b.d.ts]
@@ -149,3 +148,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 1016
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -50,9 +50,8 @@ class class2 {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
-exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project2/class2.d.ts]
@@ -124,6 +123,8 @@ var class2 = /** @class */ (function () {
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Add class3 to project1 and build it
 Input::
@@ -132,8 +133,8 @@ class class3 {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
 [91merror[0m[90m TS6053: [0mFile '/src/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
@@ -150,7 +151,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/projects/project2/tsconfig.tsbuildinfo]
@@ -210,6 +210,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Add output of class3
 Input::
@@ -218,9 +220,8 @@ declare class class3 {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
-exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project2/class2.js] file written with same contents
@@ -290,6 +291,8 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Add excluded file to project1
 Input::
@@ -298,11 +301,12 @@ declare class file {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Delete output for class3
@@ -310,8 +314,8 @@ Input::
 //// [/src/projects/project1/class3.d.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
 [91merror[0m[90m TS6053: [0mFile '/src/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
@@ -328,7 +332,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/projects/project2/class2.js] file written with same contents
@@ -398,6 +401,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Create output for class3
 Input::
@@ -406,9 +411,8 @@ declare class class3 {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i -p src/projects/project2
 Output::
-/home/src/tslibs/ts/lib/tsc -i -p src/projects/project2
-exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project2/class2.js] file written with same contents
@@ -477,3 +481,5 @@ exitCode:: ExitStatus.Success
   "size": 1005
 }
 
+
+exitCode:: ExitStatus.Success

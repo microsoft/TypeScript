@@ -37,9 +37,8 @@ type MagicNumber = typeof import('./reexport').ConstantNumber
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/class1.d.ts]
@@ -171,6 +170,8 @@ Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: functi
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Modify imports used in global file
 Input::
@@ -179,8 +180,8 @@ export default 2;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project
 [96msrc/project/class1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '1' is not assignable to type '2'.
 
 [7m1[0m const a: MagicNumber = 1;
@@ -189,7 +190,6 @@ Output::
 
 Found 1 error in src/project/class1.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/class1.d.ts]
@@ -318,3 +318,5 @@ exports.default = 2;
   "size": 1467
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -17,8 +17,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 Version FakeTSVersion
 tsc: The TypeScript Compiler - Version FakeTSVersion
 
@@ -160,6 +160,7 @@ default: false
 
 You can learn about all of the compiler options at https://aka.ms/tsc
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

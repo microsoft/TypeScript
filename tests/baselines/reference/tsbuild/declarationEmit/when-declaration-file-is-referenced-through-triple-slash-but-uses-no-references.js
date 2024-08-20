@@ -117,8 +117,8 @@ export function getVar(): keyof typeof variable {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/solution/tsconfig.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/solution/tsconfig.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/solution/tsconfig.json
 
@@ -126,7 +126,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/solution/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/solution/lib/src/common/nominal.d.ts]
@@ -273,3 +272,5 @@ function getVar() {
   "size": 2013
 }
 
+
+exitCode:: ExitStatus.Success

@@ -31,8 +31,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -53,33 +53,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
-/home/src/projects/project/b.ts (used version)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -168,13 +141,42 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+/home/src/projects/project/b.ts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -195,7 +197,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -217,7 +221,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -227,8 +231,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -236,29 +240,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -328,37 +309,6 @@ Shape signatures in builder refreshed for::
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/tsconfig.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: Emit after fixing error
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -366,6 +316,7 @@ Program root files: [
 Program options: {
   "incremental": true,
   "declaration": true,
+  "noEmit": true,
   "tscBuild": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
@@ -376,8 +327,44 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/tsconfig.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: Emit after fixing error
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
 
 
 //// [/home/src/projects/project/a.d.ts]
@@ -457,21 +444,44 @@ exports.b = 10;
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Introduce error
@@ -481,8 +491,8 @@ export const a = class { private p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -503,29 +513,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -615,13 +602,38 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: Emit when error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -642,26 +654,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/a.js]
@@ -754,13 +746,35 @@ exports.a = /** @class */ (function () {
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -781,7 +795,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -803,4 +819,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

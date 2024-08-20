@@ -96,9 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --force
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --force
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -392,14 +391,15 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --force
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --force
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] file written with same contents
@@ -419,3 +419,5 @@ exitCode:: ExitStatus.Success
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+exitCode:: ExitStatus.Success

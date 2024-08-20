@@ -114,9 +114,8 @@ export function getVar() {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src
-exitCode:: ExitStatus.Success
 
 
 //// [/out/sub-project/index.d.ts]
@@ -371,3 +370,5 @@ module.exports = x;
   "size": 1159
 }
 
+
+exitCode:: ExitStatus.Success

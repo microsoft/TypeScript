@@ -64,8 +64,8 @@ export const Other = 0;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.json
     * src/src/main/tsconfig.json
@@ -92,7 +92,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/dist/a.js]
@@ -163,3 +162,5 @@ exports.Other = 0;
   "size": 803
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

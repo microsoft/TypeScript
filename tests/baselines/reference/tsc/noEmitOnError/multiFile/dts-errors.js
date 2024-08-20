@@ -41,25 +41,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
@@ -86,14 +69,6 @@ console.log("hi");
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -111,10 +86,39 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js 
+Output::
+
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+exitCode:: ExitStatus.Success
 
 
 Change:: Fix error
@@ -126,9 +130,14 @@ export const a = class { p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -146,19 +155,21 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -176,7 +187,4 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file written with same contents
+exitCode:: ExitStatus.Success

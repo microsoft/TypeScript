@@ -189,8 +189,8 @@ export const y = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b project1 project2 project3 project4 --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -b project1 project2 project3 project4 --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json
     * project2/tsconfig.json
@@ -479,171 +479,6 @@ project4/index.ts
   Matched by default include pattern '**/*'
 project4/utils.d.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/workspace/projects/project1/core.d.ts",
-  "/home/src/workspace/projects/project1/file.ts",
-  "/home/src/workspace/projects/project1/file2.ts",
-  "/home/src/workspace/projects/project1/index.ts",
-  "/home/src/workspace/projects/project1/utils.d.ts",
-  "/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"
-]
-Program options: {
-  "composite": true,
-  "typeRoots": [
-    "/home/src/workspace/projects/project1/typeroot1"
-  ],
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "explainFiles": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project1/core.d.ts
-/home/src/workspace/projects/project1/file.ts
-/home/src/workspace/projects/project1/file2.ts
-/home/src/workspace/projects/project1/index.ts
-/home/src/workspace/projects/project1/utils.d.ts
-/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project1/core.d.ts
-/home/src/workspace/projects/project1/file.ts
-/home/src/workspace/projects/project1/file2.ts
-/home/src/workspace/projects/project1/index.ts
-/home/src/workspace/projects/project1/utils.d.ts
-/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
-/home/src/workspace/projects/project1/core.d.ts (used version)
-/home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/index.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/utils.d.ts (used version)
-/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-
-Program root files: [
-  "/home/src/workspace/projects/project2/index.ts",
-  "/home/src/workspace/projects/project2/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "explainFiles": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspace/projects/project2/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project2/index.ts
-/home/src/workspace/projects/project2/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project2/index.ts
-/home/src/workspace/projects/project2/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
-/home/src/workspace/projects/project2/index.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project2/utils.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-
-Program root files: [
-  "/home/src/workspace/projects/project3/index.ts",
-  "/home/src/workspace/projects/project3/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "explainFiles": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspace/projects/project3/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project3/index.ts
-/home/src/workspace/projects/project3/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/project3/index.ts
-/home/src/workspace/projects/project3/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
-/home/src/workspace/projects/project3/index.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project3/utils.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-
-Program root files: [
-  "/home/src/workspace/projects/project4/index.ts",
-  "/home/src/workspace/projects/project4/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.esnext.d.ts",
-    "lib.dom.d.ts",
-    "lib.webworker.d.ts"
-  ],
-  "traceResolution": true,
-  "explainFiles": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspace/projects/project4/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
-/home/src/workspace/projects/project4/index.ts
-/home/src/workspace/projects/project4/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
-/home/src/workspace/projects/project4/index.ts
-/home/src/workspace/projects/project4/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts (used version)
-/home/src/workspace/projects/project4/index.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project4/utils.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 
 
 //// [/home/src/workspace/projects/project1/file.d.ts]
@@ -1040,3 +875,170 @@ exports.z = 10;
   "size": 1156
 }
 
+
+Program root files: [
+  "/home/src/workspace/projects/project1/core.d.ts",
+  "/home/src/workspace/projects/project1/file.ts",
+  "/home/src/workspace/projects/project1/file2.ts",
+  "/home/src/workspace/projects/project1/index.ts",
+  "/home/src/workspace/projects/project1/utils.d.ts",
+  "/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/workspace/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project1/core.d.ts
+/home/src/workspace/projects/project1/file.ts
+/home/src/workspace/projects/project1/file2.ts
+/home/src/workspace/projects/project1/index.ts
+/home/src/workspace/projects/project1/utils.d.ts
+/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project1/core.d.ts
+/home/src/workspace/projects/project1/file.ts
+/home/src/workspace/projects/project1/file2.ts
+/home/src/workspace/projects/project1/index.ts
+/home/src/workspace/projects/project1/utils.d.ts
+/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
+/home/src/workspace/projects/project1/core.d.ts (used version)
+/home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/index.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/utils.d.ts (used version)
+/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+
+Program root files: [
+  "/home/src/workspace/projects/project2/index.ts",
+  "/home/src/workspace/projects/project2/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspace/projects/project2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project2/index.ts
+/home/src/workspace/projects/project2/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project2/index.ts
+/home/src/workspace/projects/project2/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/workspace/projects/project2/index.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project2/utils.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+
+Program root files: [
+  "/home/src/workspace/projects/project3/index.ts",
+  "/home/src/workspace/projects/project3/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspace/projects/project3/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project3/index.ts
+/home/src/workspace/projects/project3/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/project3/index.ts
+/home/src/workspace/projects/project3/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/workspace/projects/project3/index.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project3/utils.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+
+Program root files: [
+  "/home/src/workspace/projects/project4/index.ts",
+  "/home/src/workspace/projects/project4/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.esnext.d.ts",
+    "lib.dom.d.ts",
+    "lib.webworker.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspace/projects/project4/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/workspace/projects/project4/index.ts
+/home/src/workspace/projects/project4/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/workspace/projects/project4/index.ts
+/home/src/workspace/projects/project4/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/workspace/projects/node_modules/@typescript/lib-esnext/index.d.ts (used version)
+/home/src/workspace/projects/project4/index.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project4/utils.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+
+exitCode:: ExitStatus.Success

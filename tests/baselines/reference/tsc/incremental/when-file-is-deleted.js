@@ -31,9 +31,8 @@ export class D { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/outDir/file1.d.ts]
@@ -127,15 +126,16 @@ exports.D = D;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: delete file with imports
 Input::
 //// [/src/project/file2.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
@@ -181,3 +181,5 @@ exitCode:: ExitStatus.Success
   "size": 785
 }
 
+
+exitCode:: ExitStatus.Success

@@ -386,8 +386,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -399,9 +399,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Only builds the leaf node project
@@ -411,8 +412,8 @@ const m = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -426,7 +427,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/tests/index.d.ts]
@@ -484,6 +484,8 @@ var m = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Detects type-only changes in upstream projects
 Input::
@@ -495,8 +497,8 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -514,7 +516,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -605,6 +606,8 @@ function multiply(a, b) { return a * b; }
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
+exitCode:: ExitStatus.Success
+
 
 Change:: rebuilds when tsconfig changes
 Input::
@@ -646,8 +649,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -661,7 +664,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -715,3 +717,5 @@ const m = 10;
   "size": 857
 }
 
+
+exitCode:: ExitStatus.Success

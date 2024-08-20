@@ -189,8 +189,8 @@ export const y = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -294,7 +294,29 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/workspace/projects/project1/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.file = void 0;
+exports.file = 10;
+
+
+//// [/home/src/workspace/projects/project1/file2.js]
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+
+
+//// [/home/src/workspace/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "type1";
+
+
+
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -322,24 +344,4 @@ project1/file.ts
 project1/index.ts
 project1/file2.ts
 
-
-//// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
-
-
-//// [/home/src/workspace/projects/project1/file2.js]
-/// <reference lib="webworker"/>
-/// <reference lib="scripthost"/>
-/// <reference lib="es5"/>
-
-
-//// [/home/src/workspace/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
-
-
+exitCode:: ExitStatus.Success

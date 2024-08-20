@@ -130,8 +130,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -149,7 +149,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts]
@@ -1048,6 +1047,8 @@ sourceFile:../../third_part1.ts
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -1067,8 +1068,8 @@ console.log(s);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -1084,7 +1085,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
@@ -1324,3 +1324,5 @@ sourceFile:../first_part3.ts
 //// [/src/third/thirdjs/output/third-output.js] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success

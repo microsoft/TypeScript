@@ -59,8 +59,8 @@ import { b } from "../../project1/src/b"; export const g = b;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -73,76 +73,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "composite": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project1/src/a.ts (computed .d.ts during emit)
-/src/project1/src/b.ts (computed .d.ts during emit)
-/src/project1/src/c.ts (computed .d.ts during emit)
-/src/project1/src/d.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "composite": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project2/src/e.ts (computed .d.ts during emit)
-/src/project1/src/a.d.ts (used version)
-/src/project2/src/f.ts (computed .d.ts during emit)
-/src/project1/src/b.d.ts (used version)
-/src/project2/src/g.ts (computed .d.ts during emit)
 
 
 //// [/src/project1/src/a.d.ts]
@@ -363,48 +293,6 @@ export declare const g = 10;
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: change
-Input::
-//// [/src/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
-
-[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -426,10 +314,99 @@ Program files::
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/src/project1/src/a.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project1/src/a.ts (computed .d.ts during emit)
+/src/project1/src/b.ts (computed .d.ts during emit)
+/src/project1/src/c.ts (computed .d.ts during emit)
+/src/project1/src/d.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project2/src/e.ts (computed .d.ts during emit)
+/src/project1/src/a.d.ts (used version)
+/src/project2/src/f.ts (computed .d.ts during emit)
+/src/project1/src/b.d.ts (used version)
+/src/project2/src/g.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: change
+Input::
+//// [/src/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
+
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
@@ -528,26 +505,6 @@ Shape signatures in builder refreshed for::
 
 //// [/src/project2/src/tsconfig.tsbuildinfo] file changed its modified time
 
-
-Change:: emit js files
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -556,7 +513,7 @@ Program root files: [
 ]
 Program options: {
   "composite": true,
-  "emitDeclarationOnly": false,
+  "emitDeclarationOnly": true,
   "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
@@ -569,32 +526,32 @@ Program files::
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/src/project1/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/src/project1/src/a.ts (computed .d.ts)
 
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "composite": true,
-  "emitDeclarationOnly": false,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
+exitCode:: ExitStatus.Success
 
-Semantic diagnostics in builder refreshed for::
 
-No shapes updated in the builder::
+Change:: emit js files
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
 
 
 //// [/src/project1/src/a.js]
@@ -843,67 +800,6 @@ exports.g = b_1.b;
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: no change run with js emit
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: js emit with change
-Input::
-//// [/src/project1/src/b.ts]
-export const b = 10;const bLocal = 10;const blocal = 10;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project1/src/tsconfig.json
-    * src/project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
-
-[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project1/src/a.ts",
   "/src/project1/src/b.ts",
@@ -925,10 +821,97 @@ Program files::
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/src/project1/src/b.ts
 
-Shape signatures in builder refreshed for::
-/src/project1/src/b.ts (computed .d.ts)
+No shapes updated in the builder::
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no change run with js emit
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: js emit with change
+Input::
+//// [/src/project1/src/b.ts]
+export const b = 10;const bLocal = 10;const blocal = 10;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
+
 
 
 //// [/src/project1/src/b.js]
@@ -1035,3 +1018,31 @@ var blocal = 10;
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo] file changed its modified time
+
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/b.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/b.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success

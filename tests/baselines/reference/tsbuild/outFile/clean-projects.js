@@ -333,9 +333,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --clean
-exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts] unlink
@@ -354,13 +353,16 @@ exitCode:: ExitStatus.Success
 //// [/src/third/thirdjs/output/third-output.js.map] unlink
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] unlink
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --clean
+
+
+
 exitCode:: ExitStatus.Success
-
-

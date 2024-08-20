@@ -30,8 +30,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
@@ -40,32 +40,6 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
-/home/src/projects/project/b.ts (used version)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -136,13 +110,41 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+/home/src/projects/project/b.ts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
@@ -151,7 +153,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -172,7 +176,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -182,30 +186,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -266,14 +248,40 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -294,34 +302,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Emit after fixing error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/a.js]
@@ -386,14 +375,37 @@ exports.b = 10;
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -414,7 +426,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error
@@ -424,8 +436,8 @@ export const a: number = "hello"
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
@@ -434,28 +446,6 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -526,22 +516,6 @@ Shape signatures in builder refreshed for::
 }
 
 
-
-Change:: Emit when error
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
-
-[7m1[0m export const a: number = "hello"
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -549,6 +523,7 @@ Program root files: [
 Program options: {
   "incremental": true,
   "project": "/home/src/projects/project",
+  "noEmit": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -558,8 +533,28 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Emit when error
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+Output::
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const a: number = "hello"
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+
 
 
 //// [/home/src/projects/project/a.js] file written with same contents
@@ -625,13 +620,34 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello"
@@ -640,7 +656,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -661,4 +679,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

@@ -55,8 +55,8 @@ declare type TheNum2 = "type2";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/packages/pkg1.tsconfig.json /src/packages/pkg2.tsconfig.json --verbose --traceResolution
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/packages/pkg1.tsconfig.json /src/packages/pkg2.tsconfig.json --verbose --traceResolution
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/packages/pkg1.tsconfig.json
     * src/packages/pkg2.tsconfig.json
@@ -83,7 +83,6 @@ File '/src/packages/typeroot2/sometype/package.json' does not exist.
 File '/src/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/src/packages/typeroot2/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot2/sometype/index.d.ts', primary: true. ========
-exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
@@ -212,3 +211,5 @@ exports.theNum = void 0;
 exports.theNum = "type2";
 
 
+
+exitCode:: ExitStatus.Success

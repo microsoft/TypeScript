@@ -29,8 +29,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/no-references
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/no-references
 [96msrc/no-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/src/no-references/tsconfig.json' is empty.
 
 [7m3[0m   "files": [],
@@ -39,6 +39,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

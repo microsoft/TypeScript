@@ -104,8 +104,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b core --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b core --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
@@ -121,7 +121,6 @@ TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
@@ -199,6 +198,8 @@ export function multiply(a, b) { return a * b; }
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -214,8 +215,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b core --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b core --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
@@ -231,7 +232,6 @@ TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
@@ -316,3 +316,5 @@ function multiply(a, b) { return a * b; }
   "size": 1139
 }
 
+
+exitCode:: ExitStatus.Success

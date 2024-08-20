@@ -59,9 +59,8 @@ export const Other = 0;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main /src/src/other
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main /src/src/other
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/main/a.d.ts]
@@ -212,3 +211,5 @@ exports.Other = 0;
   "size": 877
 }
 
+
+exitCode:: ExitStatus.Success

@@ -74,8 +74,8 @@ const globalConst = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/app --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/app --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
@@ -88,7 +88,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/app/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/app/module.d.ts]
@@ -599,3 +598,5 @@ sourceFile:lib/global.ts
   "size": 1155
 }
 
+
+exitCode:: ExitStatus.Success

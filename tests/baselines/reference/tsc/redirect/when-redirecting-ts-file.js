@@ -54,9 +54,8 @@ export const a = 1;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/out/copy1/node_modules/target/import.js]
@@ -83,3 +82,5 @@ exports.a = void 0;
 exports.a = 1;
 
 
+
+exitCode:: ExitStatus.Success

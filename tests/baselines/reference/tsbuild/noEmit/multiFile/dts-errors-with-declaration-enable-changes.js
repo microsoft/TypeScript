@@ -25,8 +25,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -34,27 +34,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -70,21 +49,6 @@ Shape signatures in builder refreshed for::
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -106,17 +70,57 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.Success
 
 
 Change:: With declaration enabled noEmit - Should report errors
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit --declaration
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -137,7 +141,22 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 59
+}
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -160,28 +179,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./a.ts"
-  ],
-  "errors": true,
-  "version": "FakeTSVersion",
-  "size": 59
-}
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: With declaration and declarationMap noEmit - Should report errors
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -202,7 +208,11 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -226,17 +236,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -244,7 +252,21 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 45
+}
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -266,27 +288,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"root":["./a.ts"],"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./a.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 45
-}
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Dts Emit with error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --declaration
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -309,27 +319,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "declaration": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
 
 
 //// [/home/src/projects/project/a.js]
@@ -355,6 +344,29 @@ var a = /** @class */ (function () {
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "declaration": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: Fix the error
 Input::
@@ -363,8 +375,8 @@ const a = class { public p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -372,7 +384,21 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 45
+}
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -394,27 +420,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"root":["./a.ts"],"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./a.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 45
-}
-
+exitCode:: ExitStatus.Success
 
 
 Change:: With declaration enabled noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit --declaration
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -422,7 +436,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -445,17 +463,15 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: With declaration and declarationMap noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc -b --v /home/src/projects/project --noEmit --declaration --declarationMap
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
@@ -463,7 +479,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -487,6 +507,4 @@ Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (used version)
 
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.Success

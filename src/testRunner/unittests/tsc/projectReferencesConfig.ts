@@ -36,7 +36,7 @@ function getConfig({ references, options, config }: {
     });
 }
 
-describe("unittests:: config:: project-references meta check", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references meta check", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "default setup was created correctly",
@@ -56,7 +56,7 @@ describe("unittests:: config:: project-references meta check", () => {
 /**
  * Validate that we enforce the basic settings constraints for referenced projects
  */
-describe("unittests:: config:: project-references constraint checking for settings", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references constraint checking for settings", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when declaration = false",
@@ -149,7 +149,7 @@ describe("unittests:: config:: project-references constraint checking for settin
 /**
  * Path mapping behavior
  */
-describe("unittests:: config:: project-references path mapping", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references path mapping", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "redirects to the output dts file",
@@ -167,7 +167,7 @@ describe("unittests:: config:: project-references path mapping", () => {
     });
 });
 
-describe("unittests:: config:: project-references nice-behavior", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-behavior", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "issues a nice error when the input file is missing",
@@ -208,7 +208,7 @@ describe("unittests:: config:: project-references nice-behavior", () => {
 /**
  * 'composite' behavior
  */
-describe("unittests:: config:: project-references behavior changes under composite: true", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references behavior changes under composite: true", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "doesnt infer the rootDir from source paths",
@@ -221,7 +221,7 @@ describe("unittests:: config:: project-references behavior changes under composi
     });
 });
 
-describe("unittests:: config:: project-references errors when a file in a composite project occurs outside the root", () => {
+describe("unittests:: tsc:: projectReferencesConfig:: project-references errors when a file in a composite project occurs outside the root", () => {
     verifyTsc({
         scenario: "projectReferencesConfig",
         subScenario: "errors when a file is outside the rootdir",

@@ -71,8 +71,8 @@ console.log(foo);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b src/tsconfig.json --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b src/tsconfig.json --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
@@ -96,7 +96,6 @@ src/strings/foo.json
   Imported via '../strings/foo.json' from file 'src/main/index.ts'
 src/main/index.ts
   Matched by include pattern './**/*.ts' in 'src/main/tsconfig.json'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/main/index.d.ts]
@@ -215,13 +214,15 @@ console.log(foo_json_1.foo);
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b src/tsconfig.json --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b src/tsconfig.json --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
@@ -231,6 +232,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than output 'src/main/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

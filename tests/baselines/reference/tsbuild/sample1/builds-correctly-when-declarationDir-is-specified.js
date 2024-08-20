@@ -95,9 +95,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -390,3 +389,5 @@ exports.m = mod;
   "size": 1592
 }
 
+
+exitCode:: ExitStatus.Success

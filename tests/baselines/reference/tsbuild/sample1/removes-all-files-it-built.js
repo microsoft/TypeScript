@@ -386,9 +386,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --clean
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] unlink
@@ -406,13 +405,16 @@ exitCode:: ExitStatus.Success
 //// [/user/username/projects/sample1/tests/index.js] unlink
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] unlink
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --clean
+
+
+
 exitCode:: ExitStatus.Success
-
-

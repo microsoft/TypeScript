@@ -32,8 +32,8 @@ export type t = string;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -48,7 +48,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/dist/index.d.ts]
@@ -143,13 +142,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -164,17 +165,18 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Matched by default include pattern '**/*'
@@ -182,6 +184,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-

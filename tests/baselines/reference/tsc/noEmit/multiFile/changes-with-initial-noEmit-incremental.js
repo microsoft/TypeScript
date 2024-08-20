@@ -51,9 +51,8 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --noEmit
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -191,13 +190,15 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
@@ -206,7 +207,6 @@ Output::
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/src/class.js]
@@ -376,6 +376,8 @@ function someFunc(arguments) {
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Introduce error with emit
 Input::
@@ -386,8 +388,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -420,7 +422,6 @@ Errors  Files
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
      1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/src/class.js]
@@ -608,6 +609,8 @@ exports.classC = classC;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Fix error and no emit
 Input::
@@ -618,9 +621,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --noEmit
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -750,13 +752,15 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
@@ -765,7 +769,6 @@ Output::
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/src/class.js]
@@ -898,3 +901,5 @@ exports.classC = classC;
   "size": 1766
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

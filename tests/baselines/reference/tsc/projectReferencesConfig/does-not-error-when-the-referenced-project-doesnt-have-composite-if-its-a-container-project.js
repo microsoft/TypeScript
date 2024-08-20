@@ -46,9 +46,8 @@ import * as mod_0 from "../primary/a"
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /reference/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /reference/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/reference/bin/tsconfig.tsbuildinfo]
@@ -67,3 +66,5 @@ exitCode:: ExitStatus.Success
   "size": 110
 }
 
+
+exitCode:: ExitStatus.Success

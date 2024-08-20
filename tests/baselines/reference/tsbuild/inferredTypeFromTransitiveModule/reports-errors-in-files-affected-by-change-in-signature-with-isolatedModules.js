@@ -76,8 +76,8 @@ bar("hello");
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -85,7 +85,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/bar.d.ts]
@@ -267,6 +266,8 @@ var bar_2 = require("./bar");
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -284,8 +285,8 @@ export default foo()(function foobar(): void {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -301,7 +302,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/obj/bar.d.ts]
@@ -444,6 +444,8 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -461,8 +463,8 @@ export default foo()(function foobar(param: string): void {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -470,7 +472,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/bar.d.ts]
@@ -599,6 +600,8 @@ export declare const lazyBar: LazyAction<(param: string) => void, typeof import(
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -616,8 +619,8 @@ export default foo()(function foobar(): void {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -633,7 +636,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/obj/bar.d.ts]
@@ -776,6 +778,8 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: Fix Error
 Input::
@@ -787,8 +791,8 @@ bar();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -796,7 +800,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/lazyIndex.d.ts] file written with same contents
@@ -917,3 +920,5 @@ var bar_2 = require("./bar");
   "size": 2569
 }
 
+
+exitCode:: ExitStatus.Success

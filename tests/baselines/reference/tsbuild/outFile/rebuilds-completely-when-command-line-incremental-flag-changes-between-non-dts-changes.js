@@ -130,8 +130,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --i --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --i --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -149,7 +149,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts]
@@ -353,6 +352,8 @@ c.doSomething();
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Make non incremental build with change in file that doesnt affect dts
 Input::
@@ -372,8 +373,8 @@ console.log(s);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -389,7 +390,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
@@ -458,6 +458,8 @@ function f() {
 //// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Make incremental build with change in file that doesnt affect dts
 Input::
@@ -477,8 +479,8 @@ console.log(s);console.log(s);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose --incremental
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -494,7 +496,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
@@ -559,3 +560,5 @@ function f() {
 }
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success

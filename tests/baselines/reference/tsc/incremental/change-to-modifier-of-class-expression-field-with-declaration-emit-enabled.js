@@ -41,9 +41,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.d.ts]
@@ -147,16 +146,19 @@ var wrapper = function () { return Messageable(); };
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: modify public to protected
@@ -173,8 +175,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
 [96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
 [7m3[0m     console.log( person.message );
@@ -196,7 +198,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/main.ts[90m:3[0m
      1  src/project/MessageablePerson.ts[90m:6[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/main.d.ts] file written with same contents
@@ -304,13 +305,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
 [96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
 [7m3[0m     console.log( person.message );
@@ -332,9 +335,10 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/main.ts[90m:3[0m
      1  src/project/MessageablePerson.ts[90m:6[0m
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: modify protected to public
@@ -351,9 +355,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.d.ts] file written with same contents
@@ -425,13 +428,16 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
+
+
+
 exitCode:: ExitStatus.Success
-
-

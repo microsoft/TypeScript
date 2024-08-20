@@ -95,8 +95,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --v --f
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --v --f
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -136,7 +136,6 @@ Output::
 
 Found 3 errors.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/user/username/projects/sample1/core/index.d.ts]
@@ -417,3 +416,5 @@ exports.m = mod;
   "size": 1565
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

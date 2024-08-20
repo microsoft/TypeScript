@@ -35,8 +35,8 @@ export {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /primary/tsconfig.json
 [96mprimary/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/primary/b.ts' is not listed within the file list of project '/primary/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
 [7m1[0m import * as b from './b'
@@ -45,7 +45,6 @@ Output::
 
 Found 1 error in primary/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/primary/bin/a.d.ts]
@@ -129,3 +128,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 905
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

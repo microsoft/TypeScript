@@ -44,8 +44,8 @@ export default hello.hello
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -71,7 +71,6 @@ src/src/index.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/dist/src/hello.json]
@@ -158,3 +157,5 @@ exports.default = hello_json_1.default.hello;
   "size": 1081
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

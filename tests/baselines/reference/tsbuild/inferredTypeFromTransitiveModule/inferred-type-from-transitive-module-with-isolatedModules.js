@@ -74,8 +74,8 @@ export { default as bar } from './bar';
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -83,7 +83,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/bar.d.ts]
@@ -259,6 +258,8 @@ Object.defineProperty(exports, "bar", { enumerable: true, get: function () { ret
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -276,8 +277,8 @@ export default foo()(function foobar(): void {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -285,7 +286,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/bar.d.ts]
@@ -410,6 +410,8 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -427,8 +429,8 @@ export default foo()(function foobar(param: string): void {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -436,7 +438,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/obj/bar.d.ts]
@@ -560,3 +561,5 @@ export declare const lazyBar: LazyAction<(param: string) => void, typeof import(
   "size": 2478
 }
 
+
+exitCode:: ExitStatus.Success

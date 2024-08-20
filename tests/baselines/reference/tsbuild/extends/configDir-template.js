@@ -87,8 +87,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /home/src/projects/myproject --explainFiles --v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /home/src/projects/myproject --explainFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -136,7 +136,6 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
-exitCode:: ExitStatus.Success
 
 
 //// [/home/src/projects/myproject/decls/main.d.ts]
@@ -187,3 +186,5 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+exitCode:: ExitStatus.Success

@@ -59,8 +59,8 @@ export const api = ky.extend({});
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -86,7 +86,6 @@ src/project/src/index.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/outFile.js]
@@ -112,13 +111,15 @@ define("index", ["require", "exports", "ky"], function (require, exports, ky_1) 
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -144,9 +145,10 @@ src/project/src/index.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/outFile.js] file written with same contents
 //// [/src/project/outFile.tsbuildinfo] file written with same contents
 //// [/src/project/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

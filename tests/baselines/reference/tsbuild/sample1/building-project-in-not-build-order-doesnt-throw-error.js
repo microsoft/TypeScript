@@ -96,8 +96,9 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --build logic2/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --build logic2/tsconfig.json
+
+
+
 exitCode:: ExitStatus.InvalidProject_OutputsSkipped
-
-

@@ -28,9 +28,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --rootDir src/project/src
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --rootDir src/project/src
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/dist/main.js]
@@ -79,13 +78,16 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --rootDir src/project/src
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --rootDir src/project/src
+
+
+
 exitCode:: ExitStatus.Success
-
-

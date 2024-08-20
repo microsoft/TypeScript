@@ -47,9 +47,8 @@ export const enum E { A = 1 }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/index.js]
@@ -59,3 +58,5 @@ var utils_1 = require("../utils");
 utils_1.E.A;
 
 
+
+exitCode:: ExitStatus.Success

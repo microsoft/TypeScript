@@ -28,9 +28,8 @@ const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/src/main.d.ts]
@@ -87,6 +86,8 @@ var x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: convert to modules
 Input::
@@ -100,9 +101,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/src/main.js] file written with same contents
@@ -151,3 +151,5 @@ exitCode:: ExitStatus.Success
   "size": 797
 }
 
+
+exitCode:: ExitStatus.Success

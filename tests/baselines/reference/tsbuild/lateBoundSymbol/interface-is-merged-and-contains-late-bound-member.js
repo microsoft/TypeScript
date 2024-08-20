@@ -49,8 +49,8 @@ type A = HKT<number>[typeof sym];
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -58,7 +58,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src/hkt.js]
@@ -145,6 +144,8 @@ var x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -164,8 +165,8 @@ type A = HKT<number>[typeof sym];
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -173,7 +174,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src/main.js]
@@ -258,6 +258,8 @@ var sym = Symbol();
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -277,8 +279,8 @@ const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -286,7 +288,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src/main.js]
@@ -371,3 +372,5 @@ var x = 10;
   "size": 1336
 }
 
+
+exitCode:: ExitStatus.Success

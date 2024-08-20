@@ -130,9 +130,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --build /src/second/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --build /src/second/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts]
@@ -211,3 +210,5 @@ var C = (function () {
   "size": 1223
 }
 
+
+exitCode:: ExitStatus.Success

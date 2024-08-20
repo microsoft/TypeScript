@@ -97,8 +97,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -116,20 +116,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/user/username/projects/sample1/tests/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.json": 1,
-  "/user/username/projects/sample1/logic/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/anotherModule.ts": 1,
-  "/user/username/projects/sample1/core/index.ts": 1,
-  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
-  "/user/username/projects/sample1/logic/index.ts": 1,
-  "/user/username/projects/sample1/core/index.d.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
-  "/user/username/projects/sample1/tests/index.ts": 1,
-  "/user/username/projects/sample1/logic/index.d.ts": 1
-} 
+
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -697,3 +684,19 @@ exports.m = mod;
   "size": 1582
 }
 
+
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/user/username/projects/sample1/tests/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.json": 1,
+  "/user/username/projects/sample1/logic/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/anotherModule.ts": 1,
+  "/user/username/projects/sample1/core/index.ts": 1,
+  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+  "/user/username/projects/sample1/logic/index.ts": 1,
+  "/user/username/projects/sample1/core/index.d.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
+  "/user/username/projects/sample1/tests/index.ts": 1,
+  "/user/username/projects/sample1/logic/index.d.ts": 1
+} 

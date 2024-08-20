@@ -61,8 +61,8 @@ import { b } from "../../project1/src/b"; export const g = b;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -87,72 +87,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project1/src/a.ts (computed .d.ts during emit)
-/src/project1/src/b.ts (computed .d.ts during emit)
-/src/project1/src/c.ts (computed .d.ts during emit)
-/src/project1/src/d.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project2/src/e.ts (computed .d.ts during emit)
-/src/project1/src/a.d.ts (used version)
-/src/project2/src/f.ts (computed .d.ts during emit)
-/src/project1/src/b.d.ts (used version)
-/src/project2/src/g.ts (computed .d.ts during emit)
 
 
 //// [/src/project1/src/a.d.ts]
@@ -397,13 +331,81 @@ export declare const g = 10;
 }
 
 
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project1/src/a.ts (computed .d.ts during emit)
+/src/project1/src/b.ts (computed .d.ts during emit)
+/src/project1/src/c.ts (computed .d.ts during emit)
+/src/project1/src/d.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project2/src/e.ts (computed .d.ts during emit)
+/src/project1/src/a.d.ts (used version)
+/src/project2/src/f.ts (computed .d.ts during emit)
+/src/project1/src/b.d.ts (used version)
+/src/project2/src/g.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -426,7 +428,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/src/project2/src/e.ts",
   "/src/project2/src/f.ts",
@@ -452,7 +456,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: change
@@ -462,8 +466,8 @@ export const a = 10;const aLocal = 10;const aa = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -488,58 +492,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/src/project1/src/a.ts
-
-Shape signatures in builder refreshed for::
-/src/project1/src/a.ts (computed .d.ts)
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": true,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/src/a.d.ts] file written with same contents
@@ -637,13 +589,67 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/a.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/a.ts (computed .d.ts)
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: emit js files
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -668,56 +674,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": false,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": false,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/src/a.js]
@@ -990,13 +946,65 @@ exports.g = b_1.b;
 }
 
 
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1019,7 +1027,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/src/project2/src/e.ts",
   "/src/project2/src/f.ts",
@@ -1045,15 +1055,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: no change run with js emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1076,7 +1086,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/src/project2/src/e.ts",
   "/src/project2/src/f.ts",
@@ -1102,7 +1114,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: js emit with change
@@ -1112,8 +1124,8 @@ export const b = 10;const bLocal = 10;const blocal = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project2/src --verbose --emitDeclarationOnly false
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1138,58 +1150,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project1/src/a.ts",
-  "/src/project1/src/b.ts",
-  "/src/project1/src/c.ts",
-  "/src/project1/src/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": false,
-  "tscBuild": true,
-  "configFilePath": "/src/project1/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project1/src/a.ts
-/src/project1/src/b.ts
-/src/project1/src/c.ts
-/src/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/src/project1/src/b.ts
-
-Shape signatures in builder refreshed for::
-/src/project1/src/b.ts (computed .d.ts)
-
-Program root files: [
-  "/src/project2/src/e.ts",
-  "/src/project2/src/f.ts",
-  "/src/project2/src/g.ts"
-]
-Program options: {
-  "incremental": true,
-  "declaration": true,
-  "emitDeclarationOnly": false,
-  "tscBuild": true,
-  "configFilePath": "/src/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project2/src/e.ts
-/src/project1/src/a.d.ts
-/src/project2/src/f.ts
-/src/project1/src/b.d.ts
-/src/project2/src/g.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/src/project1/src/b.d.ts] file written with same contents
@@ -1295,3 +1255,57 @@ var blocal = 10;
   "size": 1275
 }
 
+
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/b.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/b.ts (computed .d.ts)
+
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "emitDeclarationOnly": false,
+  "tscBuild": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

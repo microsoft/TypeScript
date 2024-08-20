@@ -68,10 +68,9 @@ E.A; F.A;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --pretty false
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --pretty false
 src/project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/index.js]
@@ -81,3 +80,5 @@ E.A;
 F.A;
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

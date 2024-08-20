@@ -127,8 +127,8 @@ export * from './dogconfig.js';
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b src/src-types src/src-dogs --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc -b src/src-types src/src-dogs --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src-types/tsconfig.json
     * src/src-dogs/tsconfig.json
@@ -141,7 +141,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/src-dogs/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src-dogs/dog.d.ts]
@@ -459,3 +458,5 @@ export * from './dogconfig.js';
   "size": 1102
 }
 
+
+exitCode:: ExitStatus.Success

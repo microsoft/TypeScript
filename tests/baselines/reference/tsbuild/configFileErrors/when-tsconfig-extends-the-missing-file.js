@@ -48,8 +48,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json
 [91merror[0m[90m TS5083: [0mCannot read file '/src/foobar.json'.
 
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/src/tsconfig.first.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
@@ -61,6 +61,7 @@ Output::
 
 Found 4 errors.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

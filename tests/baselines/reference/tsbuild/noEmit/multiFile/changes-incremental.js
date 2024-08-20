@@ -51,8 +51,8 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -68,7 +68,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/src/class.js]
@@ -238,13 +237,15 @@ function someFunc(arguments) {
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -252,17 +253,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -270,9 +272,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: Introduce error but still noEmit
@@ -284,8 +287,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -316,7 +319,6 @@ Output::
 
 Found 2 errors.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -506,6 +508,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: Fix error and emit
 Input::
@@ -516,8 +520,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -533,7 +537,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/src/class.js] file written with same contents
@@ -657,13 +660,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -679,17 +684,18 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
-
-
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -697,17 +703,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -715,17 +722,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -741,9 +749,10 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: Introduce error and emit
@@ -755,8 +764,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -792,7 +801,6 @@ Output::
 
 Found 3 errors.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/src/class.js]
@@ -970,13 +978,15 @@ exports.classC = classC;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1012,17 +1022,18 @@ Output::
 
 Found 3 errors.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1053,17 +1064,18 @@ Output::
 
 Found 2 errors.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1094,17 +1106,18 @@ Output::
 
 Found 2 errors.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1140,9 +1153,10 @@ Output::
 
 Found 3 errors.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: Fix error and no emit
@@ -1154,8 +1168,8 @@ export class classC {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1163,7 +1177,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -1293,13 +1306,15 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1315,7 +1330,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/src/class.js]
@@ -1449,13 +1463,15 @@ exports.classC = classC;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1463,17 +1479,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: No Change run with noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1481,17 +1498,18 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: No Change run with emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b -v src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -b -v src/project
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1507,6 +1525,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

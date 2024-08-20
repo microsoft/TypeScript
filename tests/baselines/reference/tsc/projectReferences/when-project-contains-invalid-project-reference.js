@@ -33,8 +33,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
 
 [7m7[0m     {
@@ -47,7 +47,6 @@ Output::
 
 Found 1 error in src/project/tsconfig.json[90m:7[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/theApp.js]
@@ -59,3 +58,5 @@ define("main", ["require", "exports"], function (require, exports) {
 });
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

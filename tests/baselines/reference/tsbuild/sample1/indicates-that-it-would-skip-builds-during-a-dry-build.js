@@ -386,14 +386,15 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --dry
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --dry
 [[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/core/tsconfig.json' is up to date
 
 [[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/logic/tsconfig.json' is up to date
 
 [[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/tests/tsconfig.json' is up to date
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

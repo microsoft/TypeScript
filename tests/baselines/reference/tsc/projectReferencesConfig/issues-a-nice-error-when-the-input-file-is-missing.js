@@ -45,8 +45,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /beta/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /beta/tsconfig.json
 [96mbeta/b.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6305: [0mOutput file '/alpha/bin/a.d.ts' has not been built from source file '/alpha/a.ts'.
 
 [7m1[0m import { m } from '../alpha/a'
@@ -55,7 +55,6 @@ Output::
 
 Found 1 error in beta/b.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/beta/bin/b.d.ts]
@@ -124,3 +123,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 954
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

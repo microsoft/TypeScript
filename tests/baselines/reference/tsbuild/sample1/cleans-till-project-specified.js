@@ -386,8 +386,9 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b logic --clean
 Output::
-/home/src/tslibs/ts/lib/tsc --b logic --clean
+
+
+
 exitCode:: ExitStatus.InvalidProject_OutputsSkipped
-
-

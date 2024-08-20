@@ -32,9 +32,8 @@ const y = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.d.ts]
@@ -115,6 +114,8 @@ var y = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: error and enable declarationMap
 Input::
@@ -123,8 +124,8 @@ const x: 20 = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declarationMap
 [96msrc/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type '20'.
 
 [7m1[0m const x: 20 = 10;
@@ -133,7 +134,6 @@ Output::
 
 Found 1 error in src/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -235,6 +235,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: fix error declarationMap
 Input::
@@ -243,9 +245,8 @@ const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declarationMap
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.d.ts]
@@ -326,3 +327,5 @@ declare const y = 10;
   "size": 960
 }
 
+
+exitCode:: ExitStatus.Success

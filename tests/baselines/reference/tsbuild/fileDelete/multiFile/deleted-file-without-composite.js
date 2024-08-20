@@ -34,8 +34,8 @@ export function child2() {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
@@ -55,7 +55,6 @@ src/child/child2.ts
   Matched by default include pattern '**/*'
 src/child/child.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/child/child.js]
@@ -90,6 +89,8 @@ function child2() {
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: delete child2 file
 Input::
@@ -97,8 +98,8 @@ Input::
 //// [/src/child/child2.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
@@ -130,7 +131,6 @@ src/child/child.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/child/child.js] file written with same contents
@@ -147,3 +147,5 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
   "size": 63
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

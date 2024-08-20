@@ -49,8 +49,8 @@ export const y = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p project1 --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p project1 --explainFiles
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -103,48 +103,6 @@ project1/utils.d.ts
 
 Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/workspace/projects/project1/core.d.ts",
-  "/home/src/workspace/projects/project1/file.ts",
-  "/home/src/workspace/projects/project1/file2.ts",
-  "/home/src/workspace/projects/project1/index.ts",
-  "/home/src/workspace/projects/project1/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "traceResolution": true,
-  "project": "/home/src/workspace/projects/project1",
-  "explainFiles": true,
-  "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
-/home/src/workspace/projects/project1/core.d.ts
-/home/src/workspace/projects/project1/file.ts
-/home/src/workspace/projects/project1/file2.ts
-/home/src/workspace/projects/project1/index.ts
-/home/src/workspace/projects/project1/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
-/home/src/workspace/projects/project1/core.d.ts
-/home/src/workspace/projects/project1/file.ts
-/home/src/workspace/projects/project1/file2.ts
-/home/src/workspace/projects/project1/index.ts
-/home/src/workspace/projects/project1/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
-/home/src/workspace/projects/project1/core.d.ts (used version)
-/home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/index.ts (computed .d.ts during emit)
-/home/src/workspace/projects/project1/utils.d.ts (used version)
 
 
 //// [/home/src/workspace/projects/project1/file.d.ts]
@@ -268,3 +226,47 @@ exports.x = "type1";
   "size": 1326
 }
 
+
+Program root files: [
+  "/home/src/workspace/projects/project1/core.d.ts",
+  "/home/src/workspace/projects/project1/file.ts",
+  "/home/src/workspace/projects/project1/file2.ts",
+  "/home/src/workspace/projects/project1/index.ts",
+  "/home/src/workspace/projects/project1/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "project": "/home/src/workspace/projects/project1",
+  "explainFiles": true,
+  "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/workspace/projects/project1/core.d.ts
+/home/src/workspace/projects/project1/file.ts
+/home/src/workspace/projects/project1/file2.ts
+/home/src/workspace/projects/project1/index.ts
+/home/src/workspace/projects/project1/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/workspace/projects/project1/core.d.ts
+/home/src/workspace/projects/project1/file.ts
+/home/src/workspace/projects/project1/file2.ts
+/home/src/workspace/projects/project1/index.ts
+/home/src/workspace/projects/project1/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.scripthost.d.ts (used version)
+/home/src/workspace/projects/project1/core.d.ts (used version)
+/home/src/workspace/projects/project1/file.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/file2.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/index.ts (computed .d.ts during emit)
+/home/src/workspace/projects/project1/utils.d.ts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

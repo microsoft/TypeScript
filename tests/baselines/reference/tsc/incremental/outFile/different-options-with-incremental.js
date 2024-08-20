@@ -38,38 +38,8 @@ import { b } from "./b";export const d = b;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project/a.ts",
-  "/src/project/b.ts",
-  "/src/project/c.ts",
-  "/src/project/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "outFile": "/src/outFile.js",
-  "module": 2,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-No shapes updated in the builder::
 
 
 //// [/src/outFile.js]
@@ -143,14 +113,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with sourceMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --sourceMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -162,7 +124,6 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
-  "sourceMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -174,8 +135,23 @@ Program files::
 /src/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with sourceMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --sourceMap
+Output::
 
 
 //// [/src/outFile.js]
@@ -253,14 +229,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: should re-emit only js so they dont contain sourcemap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -272,6 +240,7 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
+  "sourceMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -285,6 +254,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: should re-emit only js so they dont contain sourcemap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
+Output::
 
 
 //// [/src/outFile.js]
@@ -358,14 +337,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration, emit Dts and should not emit js
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declaration
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -377,7 +348,6 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
-  "declaration": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -391,6 +361,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration, emit Dts and should not emit js
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration
+Output::
 
 
 //// [/src/outFile.d.ts]
@@ -451,14 +431,6 @@ declare module "d" {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declaration --declarationMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -471,7 +443,6 @@ Program options: {
   "module": 2,
   "project": "/src/project",
   "declaration": true,
-  "declarationMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -485,6 +456,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration --declarationMap
+Output::
 
 
 //// [/src/outFile.d.ts]
@@ -549,14 +530,45 @@ declare module "d" {
 }
 
 
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/src/outFile.js",
+  "module": 2,
+  "project": "/src/project",
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -582,7 +594,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: local change
@@ -592,38 +604,8 @@ export const a = 10;const aLocal = 100;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project/a.ts",
-  "/src/project/b.ts",
-  "/src/project/c.ts",
-  "/src/project/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "outFile": "/src/outFile.js",
-  "module": 2,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-No shapes updated in the builder::
 
 
 //// [/src/outFile.js]
@@ -697,14 +679,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declaration --declarationMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -716,8 +690,6 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
-  "declaration": true,
-  "declarationMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -729,8 +701,23 @@ Program files::
 /src/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration --declarationMap
+Output::
 
 
 //// [/src/outFile.d.ts] file written with same contents
@@ -779,14 +766,45 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/src/outFile.js",
+  "module": 2,
+  "project": "/src/project",
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -812,41 +830,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: with inlineSourceMap
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --inlineSourceMap
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --inlineSourceMap
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project/a.ts",
-  "/src/project/b.ts",
-  "/src/project/c.ts",
-  "/src/project/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "outFile": "/src/outFile.js",
-  "module": 2,
-  "project": "/src/project",
-  "inlineSourceMap": true,
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/src/outFile.js]
@@ -921,14 +913,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with sourceMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --sourceMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -940,7 +924,7 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
-  "sourceMap": true,
+  "inlineSourceMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -954,6 +938,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with sourceMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --sourceMap
+Output::
 
 
 //// [/src/outFile.js]
@@ -1031,14 +1025,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: emit js files
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -1050,6 +1036,7 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
+  "sourceMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -1063,6 +1050,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: emit js files
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project
+Output::
 
 
 //// [/src/outFile.js]
@@ -1136,14 +1133,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declaration --declarationMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -1155,8 +1144,6 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "project": "/src/project",
-  "declaration": true,
-  "declarationMap": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -1170,6 +1157,16 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration --declarationMap
+Output::
 
 
 //// [/src/outFile.d.ts] file written with same contents
@@ -1218,14 +1215,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: with declaration and declarationMap, should not re-emit
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project --declaration --declarationMap
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -1253,4 +1242,43 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
 
+
+Change:: with declaration and declarationMap, should not re-emit
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project --declaration --declarationMap
+Output::
+
+
+
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/src/outFile.js",
+  "module": 2,
+  "project": "/src/project",
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success

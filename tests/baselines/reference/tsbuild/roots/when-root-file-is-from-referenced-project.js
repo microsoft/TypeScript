@@ -87,8 +87,8 @@ export function randomFn(str: string) {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -133,7 +133,6 @@ projects/shared/dist/src/logging.d.ts
 projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/random.ts'
-exitCode:: ExitStatus.Success
 
 
 //// [/home/src/workspaces/projects/server/dist/server/src/server.d.ts]
@@ -370,13 +369,15 @@ function randomFn(str) {
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -385,9 +386,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/server/src/server.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: edit logging file
@@ -400,8 +402,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -446,7 +448,6 @@ projects/shared/dist/src/logging.d.ts
 projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/random.ts'
-exitCode:: ExitStatus.Success
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
@@ -646,13 +647,15 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -661,9 +664,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: delete random file
@@ -671,8 +675,8 @@ Input::
 //// [/home/src/workspaces/projects/shared/src/random.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -712,7 +716,6 @@ projects/server/src/server.ts
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/logging.ts'
-exitCode:: ExitStatus.Success
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
@@ -867,13 +870,15 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b projects/server -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
@@ -882,6 +887,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

@@ -42,9 +42,8 @@ export default 42;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/main.d.ts]
@@ -131,3 +130,5 @@ exports.default = 42;
   "size": 1086
 }
 
+
+exitCode:: ExitStatus.Success

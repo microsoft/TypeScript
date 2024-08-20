@@ -66,8 +66,8 @@ export { C } from "./c";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -75,7 +75,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/a.d.ts]
@@ -221,6 +220,8 @@ export { C } from "./c";
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -234,8 +235,8 @@ export interface A {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -243,7 +244,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/a.d.ts]
@@ -369,3 +369,5 @@ export interface A {
   "size": 1637
 }
 
+
+exitCode:: ExitStatus.Success

@@ -77,8 +77,8 @@ export const b: Unrestricted = 1;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --listFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/shared/tsconfig.json
     * src/webpack/tsconfig.json
@@ -98,7 +98,6 @@ Output::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/webpack/index.ts
 /src/shared/typings-base/globals.d.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/src/target-tsc-build/shared/index.d.ts]
@@ -239,3 +238,5 @@ exports.b = 1;
   "size": 958
 }
 
+
+exitCode:: ExitStatus.Success

@@ -59,8 +59,8 @@ export function main() {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
@@ -112,7 +112,6 @@ src/childResult.d.ts
   Output from referenced project 'src/child/tsconfig.json' included because '--outFile' specified
 src/main/main.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/childResult.d.ts]
@@ -228,14 +227,16 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: delete child2 file
 Input::
 //// [/src/child/child2.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
@@ -296,7 +297,6 @@ src/main/main.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/childResult.d.ts]
@@ -393,3 +393,5 @@ define("child", ["require", "exports", "../child/child2"], function (require, ex
   "size": 960
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

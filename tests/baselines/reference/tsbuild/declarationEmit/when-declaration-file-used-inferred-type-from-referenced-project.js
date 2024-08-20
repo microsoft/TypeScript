@@ -72,8 +72,8 @@ export function fn4() {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/packages/pkg2/tsconfig.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/packages/pkg2/tsconfig.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/packages/pkg1/tsconfig.json
     * src/packages/pkg2/tsconfig.json
@@ -86,7 +86,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1/lib/src/index.d.ts]
@@ -218,3 +217,5 @@ function fn4() {
   "size": 1138
 }
 
+
+exitCode:: ExitStatus.Success

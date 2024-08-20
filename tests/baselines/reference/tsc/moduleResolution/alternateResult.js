@@ -154,8 +154,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -343,33 +343,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
-/home/src/projects/project/index.mts (used version)
 
 
 //// [/home/src/projects/project/index.mjs]
@@ -472,14 +445,43 @@ export {};
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
+/home/src/projects/project/index.mts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -679,7 +681,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -703,7 +707,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: delete the ndoe10Result in package/types
@@ -711,8 +715,8 @@ Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -925,7 +929,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -949,7 +955,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: add the alternateResult in @types
@@ -959,8 +965,8 @@ export declare const bar: number;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1161,7 +1167,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -1185,7 +1193,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: add the ndoe10Result in package/types
@@ -1195,8 +1203,8 @@ export declare const foo: number;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1384,7 +1392,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -1408,7 +1418,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: update package.json from @types so error is fixed
@@ -1428,8 +1438,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1576,32 +1586,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
@@ -1717,6 +1701,34 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: update package.json so error is fixed
 Input::
@@ -1737,8 +1749,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1857,33 +1869,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/foo/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
@@ -2015,6 +2000,35 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/foo/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: update package.json from @types so error is introduced
 Input::
@@ -2032,8 +2046,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2193,31 +2207,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
@@ -2333,6 +2322,33 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: update package.json so error is introduced
 Input::
@@ -2352,8 +2368,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2541,30 +2557,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
@@ -2664,14 +2656,40 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2871,7 +2889,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -2895,7 +2915,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: delete the ndoe10Result in package/types
@@ -2903,8 +2923,8 @@ Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3117,7 +3137,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3141,7 +3163,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: add the alternateResult in @types
@@ -3151,8 +3173,8 @@ export declare const bar2: number;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3353,7 +3375,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3377,7 +3401,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: add the ndoe10Result in package/types
@@ -3387,8 +3411,8 @@ export declare const foo2: number;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3576,7 +3600,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3600,4 +3626,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

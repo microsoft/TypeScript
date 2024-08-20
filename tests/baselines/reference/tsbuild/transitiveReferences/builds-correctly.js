@@ -89,8 +89,8 @@ export class A {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tsconfig.c.json --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tsconfig.c.json --listFiles
 /home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.ts
 /home/src/tslibs/ts/lib/lib.d.ts
@@ -101,7 +101,6 @@ Output::
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/transitiveReferences/a.d.ts]
@@ -254,3 +253,5 @@ a_1.X;
   "size": 45
 }
 
+
+exitCode:: ExitStatus.Success

@@ -32,8 +32,8 @@ export class D { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /src/project -i
 Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project -i
 [96msrc/project/file1.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '"hello"' is not assignable to type '30'.
 
 [7m1[0m export const x: 30 = "hello";
@@ -42,31 +42,6 @@ Output::
 
 Found 1 error in src/project/file1.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/project/file1.ts",
-  "/src/project/file2.ts"
-]
-Program options: {
-  "outFile": "/src/outFile.js",
-  "module": 2,
-  "noEmitOnError": true,
-  "project": "/src/project",
-  "incremental": true,
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/file1.ts
-/src/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/file1.ts
-/src/project/file2.ts
-
-No shapes updated in the builder::
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -122,25 +97,9 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: delete file without error
-Input::
-//// [/src/project/file2.ts] unlink
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p /src/project -i
-[96msrc/project/file1.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '"hello"' is not assignable to type '30'.
-
-[7m1[0m export const x: 30 = "hello";
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in src/project/file1.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
-  "/src/project/file1.ts"
+  "/src/project/file1.ts",
+  "/src/project/file2.ts"
 ]
 Program options: {
   "outFile": "/src/outFile.js",
@@ -154,12 +113,33 @@ Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/project/file1.ts
+/src/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/project/file1.ts
+/src/project/file2.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: delete file without error
+Input::
+//// [/src/project/file2.ts] unlink
+
+
+/home/src/tslibs/ts/lib/tsc.js --p /src/project -i
+Output::
+[96msrc/project/file1.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '"hello"' is not assignable to type '30'.
+
+[7m1[0m export const x: 30 = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in src/project/file1.ts[90m:1[0m
+
 
 
 //// [/src/outFile.tsbuildinfo]
@@ -208,3 +188,27 @@ No shapes updated in the builder::
   "size": 852
 }
 
+
+Program root files: [
+  "/src/project/file1.ts"
+]
+Program options: {
+  "outFile": "/src/outFile.js",
+  "module": 2,
+  "noEmitOnError": true,
+  "project": "/src/project",
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/file1.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/file1.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

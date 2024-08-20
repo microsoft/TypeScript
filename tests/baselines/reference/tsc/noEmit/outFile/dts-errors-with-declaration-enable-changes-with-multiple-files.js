@@ -38,39 +38,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -119,14 +88,49 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts",
@@ -153,15 +157,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: With declaration enabled noEmit - Should report errors
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit --declaration
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -199,33 +203,6 @@ Errors  Files
      1  home/src/projects/project/a.ts[90m:1[0m
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "declaration": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -340,13 +317,42 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "declaration": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: With declaration and declarationMap noEmit - Should report errors
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit --declaration --declarationMap
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -384,34 +390,6 @@ Errors  Files
      1  home/src/projects/project/a.ts[90m:1[0m
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "declaration": true,
-  "declarationMap": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -527,14 +505,46 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts",
@@ -561,15 +571,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Dts Emit with error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --declaration
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -607,32 +617,6 @@ Errors  Files
      1  home/src/projects/project/a.ts[90m:1[0m
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "declaration": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.js]
@@ -785,17 +769,6 @@ define("d", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: Fix the error
-Input::
-//// [/home/src/projects/project/a.ts]
-export const a = class { public p = 10; };
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts",
@@ -807,7 +780,7 @@ Program options: {
   "module": 2,
   "incremental": true,
   "project": "/home/src/projects/project",
-  "noEmit": true,
+  "declaration": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
@@ -819,13 +792,21 @@ Program files::
 /home/src/projects/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: Fix the error
+Input::
+//// [/home/src/projects/project/a.ts]
+export const a = class { public p = 10; };
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -874,13 +855,46 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: With declaration enabled noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit --declaration
 [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
@@ -907,33 +921,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "declaration": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -1027,13 +1014,42 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "declaration": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: With declaration and declarationMap noEmit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit --declaration --declarationMap
 [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
@@ -1060,34 +1076,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  home/src/projects/project/c.ts[90m:1[0m
      1  home/src/projects/project/d.ts[90m:1[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts",
-  "/home/src/projects/project/c.ts",
-  "/home/src/projects/project/d.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "project": "/home/src/projects/project",
-  "noEmit": true,
-  "declaration": true,
-  "declarationMap": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -1182,30 +1170,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: Fix the another 
-Input::
-//// [/home/src/projects/project/c.ts]
-export const c = class { public p = 10; };
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit --declaration --declarationMap
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
-
-[7m1[0m export const d = class { private p = 10; };
-[7m [0m [91m             ~[0m
-
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
-    [7m1[0m export const d = class { private p = 10; };
-    [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
-
-
-Found 1 error in home/src/projects/project/d.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts",
@@ -1231,13 +1195,34 @@ Program files::
 /home/src/projects/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-/home/src/projects/project/c.ts
-/home/src/projects/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Fix the another 
+Input::
+//// [/home/src/projects/project/c.ts]
+export const c = class { public p = 10; };
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
+Output::
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const d = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable d.
+
+
+Found 1 error in home/src/projects/project/d.ts[90m:1[0m
+
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -1310,3 +1295,38 @@ No shapes updated in the builder::
   "size": 1227
 }
 
+
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "project": "/home/src/projects/project",
+  "noEmit": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

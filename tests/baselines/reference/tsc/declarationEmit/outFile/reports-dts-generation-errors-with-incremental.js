@@ -60,8 +60,8 @@ export const api = ky.extend({});
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project --explainFiles --listEmittedFiles
 [96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
@@ -78,7 +78,6 @@ src/project/src/index.ts
 
 Found 1 error in src/project/src/index.ts[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/outFile.js]
@@ -137,13 +136,15 @@ define("src/index", ["require", "exports", "ky"], function (require, exports, ky
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project --explainFiles --listEmittedFiles
 [96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
@@ -158,17 +159,18 @@ src/project/src/index.ts
 
 Found 1 error in src/project/src/index.ts[90m:2[0m
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles -v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -190,6 +192,7 @@ src/project/src/index.ts
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

@@ -28,8 +28,8 @@ declare class c { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/project/src --explainFiles --traceResolution
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/project/src --explainFiles --traceResolution
 ======== Resolving type reference directive './fileOne.d.ts', containing file '/src/project/src/file2.d.ts', root directory '/src/project/src/node_modules/@types,/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/src/project/src/node_modules/@types, /src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
 Directory '/src/project/src/node_modules/@types' does not exist, skipping all lookups in it.
@@ -49,6 +49,7 @@ src/project/src/fileOne.d.ts
   Matched by default include pattern '**/*'
 src/project/src/file2.d.ts
   Matched by default include pattern '**/*'
+
+
+
 exitCode:: ExitStatus.Success
-
-

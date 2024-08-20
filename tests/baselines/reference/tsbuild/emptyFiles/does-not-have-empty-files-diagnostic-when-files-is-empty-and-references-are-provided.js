@@ -46,9 +46,8 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/with-references
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/with-references
-exitCode:: ExitStatus.Success
 
 
 //// [/src/core/index.d.ts]
@@ -110,3 +109,5 @@ function multiply(a, b) { return a * b; }
   "size": 915
 }
 
+
+exitCode:: ExitStatus.Success

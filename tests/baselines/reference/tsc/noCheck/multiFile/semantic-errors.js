@@ -30,24 +30,8 @@ export const b = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/src/a.d.ts]
@@ -73,14 +57,6 @@ exports.b = 10;
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -97,11 +73,39 @@ Program files::
 /src/a.ts
 /src/b.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
 
 //// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
 
 
 Change:: Fix `a` error with noCheck
@@ -111,24 +115,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/src/a.d.ts]
@@ -139,14 +127,6 @@ export declare const a = "hello";
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -163,78 +143,22 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -251,11 +175,101 @@ Program files::
 /src/a.ts
 /src/b.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+
 
 //// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error with noCheck
@@ -265,24 +279,8 @@ export const a: number = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/src/a.d.ts]
@@ -293,14 +291,6 @@ export declare const a: number;
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -317,19 +307,47 @@ Program files::
 /src/a.ts
 /src/b.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
 
 //// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const a: number = "hello";
@@ -338,7 +356,13 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -354,11 +378,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: Fix `a` error with noCheck
@@ -368,24 +388,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/src/a.d.ts]
@@ -396,14 +400,38 @@ export declare const a = "hello";
 //// [/src/b.d.ts] file written with same contents
 //// [/src/b.js] file written with same contents
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -419,11 +447,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: Add file with error
@@ -433,8 +457,8 @@ export const c: number = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -443,23 +467,6 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
 
 
 //// [/src/a.d.ts] file written with same contents
@@ -478,17 +485,6 @@ exports.c = "hello";
 
 
 
-
-Change:: Introduce error with noCheck
-Input::
-//// [/src/a.ts]
-export const a: number = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -497,7 +493,6 @@ Program root files: [
 Program options: {
   "declaration": true,
   "project": "/src/tsconfig.json",
-  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -506,6 +501,19 @@ Program files::
 /src/a.ts
 /src/b.ts
 /src/c.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Introduce error with noCheck
+Input::
+//// [/src/a.ts]
+export const a: number = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
 
 
 //// [/src/a.d.ts]
@@ -518,17 +526,6 @@ export declare const a: number;
 //// [/src/c.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
 
-
-Change:: Fix `a` error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -546,6 +543,19 @@ Program files::
 /src/a.ts
 /src/b.ts
 /src/c.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: Fix `a` error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
 
 
 //// [/src/a.d.ts]
@@ -558,55 +568,6 @@ export declare const a = "hello";
 //// [/src/c.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
 
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
-
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in src/c.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
-]
-Program options: {
-  "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
-
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -625,21 +586,15 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -648,7 +603,15 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
+//// [/src/c.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -666,6 +629,16 @@ Program files::
 /src/b.ts
 /src/c.ts
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
 
 //// [/src/a.d.ts] file written with same contents
 //// [/src/a.js] file written with same contents
@@ -673,3 +646,66 @@ Program files::
 //// [/src/b.js] file written with same contents
 //// [/src/c.d.ts] file written with same contents
 //// [/src/c.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in src/c.ts[90m:1[0m
+
+
+
+//// [/src/a.d.ts] file written with same contents
+//// [/src/a.js] file written with same contents
+//// [/src/b.d.ts] file written with same contents
+//// [/src/b.js] file written with same contents
+//// [/src/c.d.ts] file written with same contents
+//// [/src/c.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

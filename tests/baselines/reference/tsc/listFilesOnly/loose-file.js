@@ -20,10 +20,11 @@ export const x = 1;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js /src/test.ts --listFilesOnly
 Output::
-/home/src/tslibs/ts/lib/tsc /src/test.ts --listFilesOnly
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
+
+
+
 exitCode:: ExitStatus.Success
-
-

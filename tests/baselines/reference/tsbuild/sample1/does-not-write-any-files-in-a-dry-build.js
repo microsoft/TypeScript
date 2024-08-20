@@ -96,14 +96,15 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --dry
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --dry
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/core/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/logic/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/tests/tsconfig.json'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

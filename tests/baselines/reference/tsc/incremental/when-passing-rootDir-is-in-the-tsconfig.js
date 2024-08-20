@@ -29,9 +29,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/built/src/main.js]
@@ -80,13 +79,16 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
+
+
+
 exitCode:: ExitStatus.Success
-
-

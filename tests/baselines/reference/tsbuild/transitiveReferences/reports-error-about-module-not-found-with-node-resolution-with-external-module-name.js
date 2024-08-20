@@ -83,8 +83,8 @@ export class A {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tsconfig.c.json --listFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tsconfig.c.json --listFiles
 /home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.ts
 [96mb.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
@@ -101,7 +101,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/user/username/projects/transitiveReferences/a.d.ts]
@@ -252,3 +251,5 @@ a_1.X;
   "size": 45
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

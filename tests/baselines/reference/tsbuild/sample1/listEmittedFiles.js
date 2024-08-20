@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listEmittedFiles
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts
 TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts.map
@@ -112,7 +112,6 @@ TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
 TSFILE: /user/username/projects/sample1/tests/index.js
 TSFILE: /user/username/projects/sample1/tests/index.d.ts
 TSFILE: /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -406,6 +405,8 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-changes
 Input::
@@ -418,8 +419,8 @@ export class someClass { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listEmittedFiles
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/index.d.ts
 TSFILE: /user/username/projects/sample1/core/index.d.ts.map
@@ -429,7 +430,6 @@ TSFILE: /user/username/projects/sample1/logic/index.js.map
 TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
 TSFILE: /user/username/projects/sample1/tests/index.js
 TSFILE: /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts]
@@ -681,6 +681,8 @@ exports.someClass = someClass;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -694,12 +696,11 @@ class someClass2 { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listEmittedFiles
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/index.d.ts.map
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents
@@ -799,13 +800,16 @@ var someClass2 = /** @class */ (function () {
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --listEmittedFiles
+
+
+
 exitCode:: ExitStatus.Success
-
-

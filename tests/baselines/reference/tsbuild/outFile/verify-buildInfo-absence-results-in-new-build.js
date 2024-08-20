@@ -330,8 +330,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -349,7 +349,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
@@ -361,3 +360,5 @@ exitCode:: ExitStatus.Success
 
 //// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success

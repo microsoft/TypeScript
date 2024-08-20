@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose --stopBuildOnErrors
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -128,7 +128,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -261,13 +260,15 @@ multiply();
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose --stopBuildOnErrors
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -298,9 +299,10 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
 
 
 Change:: fix error
@@ -313,8 +315,8 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose --stopBuildOnErrors
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose --stopBuildOnErrors
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -332,7 +334,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents
@@ -603,3 +604,5 @@ exports.m = mod;
   "size": 1582
 }
 
+
+exitCode:: ExitStatus.Success

@@ -42,8 +42,8 @@ export default <div/>;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.tsx[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("solid-js/jsx-runtime")' call instead.
   To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.
 
@@ -53,7 +53,6 @@ Output::
 
 Found 1 error in src/main.tsx[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/main.d.ts]
@@ -164,3 +163,5 @@ exports.default = (0, jsx_runtime_1.jsx)("div", {});
   "size": 1506
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

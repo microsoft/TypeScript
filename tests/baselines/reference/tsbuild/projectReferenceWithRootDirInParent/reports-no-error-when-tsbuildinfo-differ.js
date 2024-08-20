@@ -65,8 +65,8 @@ export const Other = 0;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main/tsconfig.main.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main/tsconfig.main.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.other.json
     * src/src/main/tsconfig.main.json
@@ -79,7 +79,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/src/main/tsconfig.main.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/a.d.ts]
@@ -225,13 +224,15 @@ exports.Other = 0;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/main/tsconfig.main.json --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/main/tsconfig.main.json --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.other.json
     * src/src/main/tsconfig.main.json
@@ -240,6 +241,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/src/main/tsconfig.main.json' is up to date because newest input 'src/src/main/b.ts' is older than output 'src/dist/tsconfig.main.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

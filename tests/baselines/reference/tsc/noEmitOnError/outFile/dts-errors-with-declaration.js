@@ -43,8 +43,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const a = class { private p = 10; };
@@ -58,7 +58,9 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -78,15 +80,15 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const a = class { private p = 10; };
@@ -100,7 +102,9 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -120,7 +124,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -132,27 +136,8 @@ export const a = class { p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outFile": "/user/username/projects/dev-build.js",
-  "module": 2,
-  "declaration": true,
-  "noEmitOnError": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
 
 
 //// [/user/username/projects/dev-build.d.ts]
@@ -197,14 +182,6 @@ define("src/other", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc 
-exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -224,6 +201,37 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js 
+Output::
+
 
 //// [/user/username/projects/dev-build.d.ts] file written with same contents
 //// [/user/username/projects/dev-build.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "declaration": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+exitCode:: ExitStatus.Success

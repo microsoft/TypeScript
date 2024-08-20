@@ -29,9 +29,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /alpha/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /alpha/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/alpha/bin/src/a.d.ts]
@@ -88,3 +87,5 @@ exports.m = 3;
   "size": 795
 }
 
+
+exitCode:: ExitStatus.Success

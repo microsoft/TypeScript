@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -123,7 +123,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -431,13 +430,15 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -461,7 +462,8 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

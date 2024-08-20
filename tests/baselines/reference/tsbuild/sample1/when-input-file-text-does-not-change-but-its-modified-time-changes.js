@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -115,7 +115,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -409,14 +408,16 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: upstream project changes without changing file text
 Input::
 //// [/user/username/projects/sample1/core/index.ts] file changed its modified time
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -434,9 +435,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success

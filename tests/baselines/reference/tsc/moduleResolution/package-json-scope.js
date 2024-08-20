@@ -64,8 +64,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
 Output::
-/home/src/tslibs/ts/lib/tsc -p src --explainFiles --extendedDiagnostics
 File '/src/projects/project/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/project/package.json'.
 File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
@@ -103,7 +103,6 @@ src/fileA.ts
 
 Found 1 error in src/fileA.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/projects/project/src/fileA.d.ts]
@@ -247,14 +246,16 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Delete package.json
 Input::
 //// [/src/projects/project/package.json] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
 Output::
-/home/src/tslibs/ts/lib/tsc -p src --explainFiles --extendedDiagnostics
 File '/src/projects/project/src/package.json' does not exist.
 File '/src/projects/project/package.json' does not exist.
 File '/src/projects/package.json' does not exist.
@@ -298,6 +299,7 @@ src/fileA.ts
 
 Found 1 error in src/fileA.ts[90m:1[0m
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-

@@ -32,8 +32,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /alpha/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /alpha/tsconfig.json
 [96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/beta/b.ts' is not under 'rootDir' '/alpha'. 'rootDir' is expected to contain all source files.
 
 [7m1[0m import * as b from '../../beta/b'
@@ -47,7 +47,6 @@ Output::
 
 Found 2 errors in the same file, starting at: alpha/src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/alpha/bin/src/a.d.ts]
@@ -131,3 +130,5 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

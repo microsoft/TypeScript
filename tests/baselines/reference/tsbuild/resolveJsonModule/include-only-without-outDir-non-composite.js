@@ -42,8 +42,8 @@ export default hello.hello
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -59,7 +59,6 @@ src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
 src/src/index.ts
   Matched by include pattern 'src/**/*' in 'src/tsconfig.json'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src/index.js]
@@ -84,3 +83,5 @@ exports.default = hello_json_1.default.hello;
   "size": 53
 }
 
+
+exitCode:: ExitStatus.Success

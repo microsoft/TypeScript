@@ -41,8 +41,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -58,37 +58,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "declaration": true,
-  "noEmitOnError": true,
-  "tscBuild": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (used version)
-/user/username/projects/noemitonerror/src/main.ts (used version)
-/user/username/projects/noemitonerror/src/other.ts (used version)
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
@@ -107,29 +76,6 @@ Shape signatures in builder refreshed for::
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -161,21 +107,15 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
-Change:: Fix error
+Change:: no-change-run
 Input::
-//// [/user/username/projects/noEmitOnError/src/main.ts]
-import { A } from "../shared/types/db";
-const a: string = "hello";
 
 
-
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -183,7 +123,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m2[0m const a: string = 10;
+[7m [0m [91m      ~[0m
+
+
+Found 1 error.
+
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -212,8 +164,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/noemitonerror/shared/types/db.ts (used version)
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts during emit)
-/user/username/projects/noemitonerror/src/other.ts (computed .d.ts during emit)
+/user/username/projects/noemitonerror/src/main.ts (used version)
+/user/username/projects/noemitonerror/src/other.ts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: Fix error
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+const a: string = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
@@ -262,18 +235,52 @@ console.log("hi");
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "declaration": true,
+  "noEmitOnError": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts during emit)
+/user/username/projects/noemitonerror/src/other.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/main.ts' is older than output 'dev-build/shared/types/db.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

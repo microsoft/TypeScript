@@ -42,8 +42,8 @@ function main() { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
@@ -60,35 +60,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project/src/anotherFileWithSameReferenes.ts",
-  "/src/project/src/filePresent.ts",
-  "/src/project/src/main.ts"
-]
-Program options: {
-  "composite": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
-/src/project/src/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
-/src/project/src/main.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project/src/filepresent.ts (computed .d.ts during emit)
-/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts during emit)
-/src/project/src/main.ts (computed .d.ts during emit)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
@@ -211,13 +182,44 @@ function main() { }
 }
 
 
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/anotherFileWithSameReferenes.ts
+/src/project/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/anotherFileWithSameReferenes.ts
+/src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project/src/filepresent.ts (computed .d.ts during emit)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts during emit)
+/src/project/src/main.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
@@ -234,7 +236,9 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -256,7 +260,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: Modify main file
@@ -269,8 +273,8 @@ something();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
@@ -287,29 +291,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project/src/anotherFileWithSameReferenes.ts",
-  "/src/project/src/filePresent.ts",
-  "/src/project/src/main.ts"
-]
-Program options: {
-  "composite": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
-/src/project/src/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/src/project/src/main.ts
-
-Shape signatures in builder refreshed for::
-/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/main.js]
@@ -411,36 +392,6 @@ something();
 }
 
 
-
-Change:: Modify main file again
-Input::
-//// [/src/project/src/main.ts]
-/// <reference path="./filePresent.ts"/>
-/// <reference path="./fileNotFound.ts"/>
-function main() { }
-something();something();
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
-
-[7m2[0m /// <reference path="./fileNotFound.ts"/>
-[7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
-
-[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
-
-[7m2[0m /// <reference path="./fileNotFound.ts"/>
-[7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
-
-
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -463,6 +414,38 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Modify main file again
+Input::
+//// [/src/project/src/main.ts]
+/// <reference path="./filePresent.ts"/>
+/// <reference path="./fileNotFound.ts"/>
+function main() { }
+something();something();
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --p src/project
+Output::
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
+
+[7m2[0m /// <reference path="./fileNotFound.ts"/>
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
+
+[7m2[0m /// <reference path="./fileNotFound.ts"/>
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 
 
 //// [/src/project/src/main.js]
@@ -565,6 +548,31 @@ something();
 }
 
 
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/anotherFileWithSameReferenes.ts
+/src/project/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Add new file and update main file
 Input::
@@ -580,8 +588,8 @@ function foo() { return 20; }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
@@ -598,38 +606,6 @@ Found 2 errors in 2 files.
 Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:3[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/project/src/anotherFileWithSameReferenes.ts",
-  "/src/project/src/filePresent.ts",
-  "/src/project/src/main.ts",
-  "/src/project/src/newFile.ts"
-]
-Program options: {
-  "composite": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
-/src/project/src/newFile.ts
-/src/project/src/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
-/src/project/src/newFile.ts
-/src/project/src/main.ts
-
-Shape signatures in builder refreshed for::
-/src/project/src/newfile.ts (computed .d.ts)
-/src/project/src/filepresent.ts (computed .d.ts)
-/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
-/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
@@ -762,20 +738,8 @@ function foo() { return 20; }
 }
 
 
-
-Change:: Write file that could not be resolved
-Input::
-//// [/src/project/src/fileNotFound.ts]
-function something2() { return 20; }
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
-  "/src/project/src/fileNotFound.ts",
   "/src/project/src/filePresent.ts",
   "/src/project/src/main.ts",
   "/src/project/src/newFile.ts"
@@ -789,7 +753,6 @@ Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/project/src/filePresent.ts
-/src/project/src/fileNotFound.ts
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
@@ -797,17 +760,28 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/project/src/filePresent.ts
-/src/project/src/fileNotFound.ts
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
 
 Shape signatures in builder refreshed for::
-/src/project/src/filenotfound.ts (computed .d.ts)
+/src/project/src/newfile.ts (computed .d.ts)
 /src/project/src/filepresent.ts (computed .d.ts)
 /src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
-/src/project/src/newfile.ts (computed .d.ts)
 /src/project/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Write file that could not be resolved
+Input::
+//// [/src/project/src/fileNotFound.ts]
+function something2() { return 20; }
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --p src/project
+Output::
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
@@ -942,21 +916,6 @@ function something2() { return 20; }
 }
 
 
-
-Change:: Modify main file
-Input::
-//// [/src/project/src/main.ts]
-/// <reference path="./newFile.ts"/>
-/// <reference path="./filePresent.ts"/>
-/// <reference path="./fileNotFound.ts"/>
-function main() { }
-something();something();foo();something();
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/fileNotFound.ts",
@@ -979,10 +938,36 @@ Program files::
 /src/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/fileNotFound.ts
+/src/project/src/anotherFileWithSameReferenes.ts
+/src/project/src/newFile.ts
 /src/project/src/main.ts
 
 Shape signatures in builder refreshed for::
+/src/project/src/filenotfound.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
+/src/project/src/newfile.ts (computed .d.ts)
 /src/project/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success
+
+
+Change:: Modify main file
+Input::
+//// [/src/project/src/main.ts]
+/// <reference path="./newFile.ts"/>
+/// <reference path="./filePresent.ts"/>
+/// <reference path="./fileNotFound.ts"/>
+function main() { }
+something();something();foo();something();
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --p src/project
+Output::
 
 
 //// [/src/project/src/main.js]
@@ -1115,3 +1100,32 @@ something();
   "size": 1875
 }
 
+
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/fileNotFound.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts",
+  "/src/project/src/newFile.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/fileNotFound.ts
+/src/project/src/anotherFileWithSameReferenes.ts
+/src/project/src/newFile.ts
+/src/project/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success

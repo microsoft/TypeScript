@@ -27,8 +27,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
@@ -37,7 +37,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -52,15 +54,15 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
@@ -69,7 +71,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -84,7 +88,7 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: Fix error
@@ -94,9 +98,11 @@ const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -111,16 +117,18 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -135,28 +143,15 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Emit after fixing error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/projects/project/a.ts
 
 
 //// [/home/src/projects/outFile.js]
@@ -164,14 +159,31 @@ var a = "hello";
 
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -186,7 +198,7 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error
@@ -196,8 +208,8 @@ const a: number = "hello"
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
@@ -206,7 +218,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -221,15 +235,15 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: Emit when error
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
@@ -238,7 +252,10 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/home/src/projects/outFile.js] file written with same contents
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -252,16 +269,15 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-//// [/home/src/projects/outFile.js] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
@@ -270,7 +286,9 @@ Output::
 
 Found 1 error in home/src/projects/project/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -285,4 +303,4 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

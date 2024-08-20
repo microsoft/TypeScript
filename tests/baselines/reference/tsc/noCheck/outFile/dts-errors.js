@@ -32,8 +32,8 @@ export const b = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -47,24 +47,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/outFile.js]
@@ -88,13 +70,33 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -108,7 +110,10 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/outFile.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -127,8 +132,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/outFile.js] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix `a` error with noCheck
@@ -138,26 +142,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/outFile.d.ts]
@@ -185,14 +171,6 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -211,76 +189,20 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
-
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
-
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -299,9 +221,101 @@ Program files::
 /src/a.ts
 /src/b.ts
 
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+
 
 //// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error with noCheck
@@ -311,8 +325,8 @@ export const a = class { private p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -326,24 +340,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/outFile.js]
@@ -367,27 +363,6 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
-
-[7m1[0m export const a = class { private p = 10; };
-[7m [0m [91m             ~[0m
-
-  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
-    [7m1[0m export const a = class { private p = 10; };
-    [7m [0m [96m             ~[0m
-    Add a type annotation to the variable a.
-
-
-Found 1 error in src/a.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -406,16 +381,15 @@ Program files::
 /src/a.ts
 /src/b.ts
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-//// [/outFile.js] file written with same contents
 
-
-Change:: No Change run with checking
+Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -429,7 +403,54 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
+
+
+//// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+
+[7m1[0m export const a = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
+
+
+Found 1 error in src/a.ts[90m:1[0m
+
+
+
+//// [/outFile.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -447,8 +468,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/outFile.js] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix `a` error with noCheck
@@ -458,26 +478,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -497,14 +499,38 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -522,9 +548,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: Add file with error
@@ -534,8 +558,8 @@ export const c: number = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -544,25 +568,6 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
 
 
 //// [/outFile.d.ts]
@@ -599,6 +604,27 @@ define("c", ["require", "exports"], function (require, exports) {
 
 
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: Introduce error with noCheck
 Input::
@@ -607,8 +633,8 @@ export const a = class { private p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -622,26 +648,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
 
 
 //// [/outFile.js]
@@ -671,17 +677,6 @@ define("c", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: Fix `a` error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -701,6 +696,19 @@ Program files::
 /src/a.ts
 /src/b.ts
 /src/c.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+Change:: Fix `a` error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -726,53 +734,6 @@ define("c", ["require", "exports"], function (require, exports) {
 
 
 
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
-
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in src/c.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
-
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -793,17 +754,15 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
+exitCode:: ExitStatus.Success
 
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -812,7 +771,11 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -832,6 +795,79 @@ Program files::
 /src/b.ts
 /src/c.ts
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+
 
 //// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in src/c.ts[90m:1[0m
+
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

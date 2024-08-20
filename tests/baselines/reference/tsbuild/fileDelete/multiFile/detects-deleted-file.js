@@ -55,8 +55,8 @@ export function main() {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
@@ -93,7 +93,6 @@ src/child/child.d.ts
   File is output of project reference source 'src/child/child.ts'
 src/main/main.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/child/child.d.ts]
@@ -259,6 +258,8 @@ function main() {
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: delete child2 file
 Input::
@@ -267,8 +268,8 @@ Input::
 //// [/src/child/child2.ts] unlink
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
@@ -305,7 +306,6 @@ src/child/child.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/child/child.js] file written with same contents
@@ -366,3 +366,5 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 }
 
 //// [/src/main/tsconfig.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

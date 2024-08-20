@@ -38,8 +38,8 @@ import { b } from "./b";export const d = b;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -47,36 +47,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project/a.ts",
-  "/src/project/b.ts",
-  "/src/project/c.ts",
-  "/src/project/d.ts"
-]
-Program options: {
-  "incremental": true,
-  "outFile": "/src/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
-
-No shapes updated in the builder::
 
 
 //// [/src/outFile.js]
@@ -150,21 +120,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with sourceMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --sourceMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -175,7 +130,6 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "sourceMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -188,8 +142,30 @@ Program files::
 /src/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with sourceMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --sourceMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -267,21 +243,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: should re-emit only js so they dont contain sourcemap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -292,6 +253,7 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
+  "sourceMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -306,6 +268,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: should re-emit only js so they dont contain sourcemap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -379,21 +358,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration, emit Dts and should not emit js
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --declaration
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -404,7 +368,6 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "declaration": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -419,6 +382,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration, emit Dts and should not emit js
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --declaration
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.d.ts]
@@ -479,21 +459,6 @@ declare module "d" {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -505,7 +470,6 @@ Program options: {
   "outFile": "/src/outFile.js",
   "module": 2,
   "declaration": true,
-  "declarationMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -520,6 +484,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --declaration --declarationMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.d.ts]
@@ -584,40 +565,6 @@ declare module "d" {
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/outFile.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: local change
-Input::
-//// [/src/project/a.ts]
-export const a = 10;const aLocal = 100;
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/outFile.tsbuildinfo' is older than input 'src/project/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -628,6 +575,8 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
+  "declaration": true,
+  "declarationMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -640,13 +589,45 @@ Program files::
 /src/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/a.ts
-/src/project/b.ts
-/src/project/c.ts
-/src/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: local change
+Input::
+//// [/src/project/a.ts]
+export const a = 10;const aLocal = 100;
+
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/outFile.tsbuildinfo' is older than input 'src/project/a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -720,21 +701,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -745,8 +711,6 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "declaration": true,
-  "declarationMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -759,8 +723,30 @@ Program files::
 /src/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --declaration --declarationMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.d.ts] file written with same contents
@@ -809,37 +795,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: with inlineSourceMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --inlineSourceMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -850,7 +805,8 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "inlineSourceMap": true,
+  "declaration": true,
+  "declarationMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -865,6 +821,40 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with inlineSourceMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --inlineSourceMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -939,21 +929,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with sourceMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --sourceMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -964,7 +939,7 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "sourceMap": true,
+  "inlineSourceMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -979,6 +954,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with sourceMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --sourceMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -1056,21 +1048,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: emit js files
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -1081,6 +1058,7 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
+  "sourceMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -1095,6 +1073,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: emit js files
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.js]
@@ -1168,21 +1163,6 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 }
 
 
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
-
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/project/a.ts",
   "/src/project/b.ts",
@@ -1193,8 +1173,6 @@ Program options: {
   "incremental": true,
   "outFile": "/src/outFile.js",
   "module": 2,
-  "declaration": true,
-  "declarationMap": true,
   "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
@@ -1209,6 +1187,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --declaration --declarationMap
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+
 
 
 //// [/src/outFile.d.ts] file written with same contents
@@ -1257,18 +1252,48 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/src/outFile.js",
+  "module": 2,
+  "declaration": true,
+  "declarationMap": true,
+  "tscBuild": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: with declaration and declarationMap, should not re-emit
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project --verbose --declaration --declarationMap
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project --verbose --declaration --declarationMap
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

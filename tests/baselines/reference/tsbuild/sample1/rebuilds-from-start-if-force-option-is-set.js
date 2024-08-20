@@ -386,8 +386,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose --force
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose --force
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -405,7 +405,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] file written with same contents
@@ -425,3 +424,5 @@ exitCode:: ExitStatus.Success
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+exitCode:: ExitStatus.Success

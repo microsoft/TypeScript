@@ -41,9 +41,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.js]
@@ -125,16 +124,19 @@ var wrapper = function () { return Messageable(); };
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: modify public to protected
@@ -151,8 +153,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
 [96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
 [7m3[0m     console.log( person.message );
@@ -161,7 +163,6 @@ Output::
 
 Found 1 error in src/project/main.ts[90m:3[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/main.js] file written with same contents
@@ -245,13 +246,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
 [96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
 [7m3[0m     console.log( person.message );
@@ -260,9 +263,10 @@ Output::
 
 Found 1 error in src/project/main.ts[90m:3[0m
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-
 
 
 Change:: modify protected to public
@@ -279,9 +283,8 @@ export default MessageablePerson;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.js] file written with same contents
@@ -351,13 +354,16 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project --incremental
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project --incremental
+
+
+
 exitCode:: ExitStatus.Success
-
-

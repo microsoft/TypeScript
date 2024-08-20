@@ -28,31 +28,8 @@ export class class1 {}
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -noEmit -p src/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/project/class1.ts"
-]
-Program options: {
-  "incremental": true,
-  "strict": true,
-  "noEmit": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/class1.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/project/class1.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project/class1.ts (used version)
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -99,14 +76,41 @@ Shape signatures in builder refreshed for::
 }
 
 
+Program root files: [
+  "/src/project/class1.ts"
+]
+Program options: {
+  "incremental": true,
+  "strict": true,
+  "noEmit": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/class1.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/project/class1.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/src/project/class1.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -noEmit -p src/project
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/project/class1.ts"
 ]
@@ -126,4 +130,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success

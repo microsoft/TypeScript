@@ -26,9 +26,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --incremental --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --incremental --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -75,16 +74,19 @@ exitCode:: ExitStatus.Success
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --incremental --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --incremental --p src/project
+
+
+
 exitCode:: ExitStatus.Success
-
-
 
 
 Change:: incremental-declaration-doesnt-change
@@ -94,9 +96,8 @@ export const x = 10;export const xy = 100;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --incremental --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --incremental --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -142,3 +143,5 @@ exitCode:: ExitStatus.Success
   "size": 720
 }
 
+
+exitCode:: ExitStatus.Success

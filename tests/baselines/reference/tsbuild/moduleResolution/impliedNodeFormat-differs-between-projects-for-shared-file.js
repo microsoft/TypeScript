@@ -70,8 +70,8 @@ export function foo(): void;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/projects/a/tsconfig.json
     * src/projects/b/tsconfig.json
@@ -143,7 +143,6 @@ src/projects/node_modules/@types/pg/index.d.ts
 src/projects/b/src/index.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'src/projects/b/package.json' has field "type" with value "module"
-exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/a/src/index.js]
@@ -180,13 +179,15 @@ pg.foo();
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/projects/a/tsconfig.json
     * src/projects/b/tsconfig.json
@@ -195,6 +196,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/projects/b/tsconfig.json' is up to date because newest input 'src/projects/b/src/index.ts' is older than output 'src/projects/b/src/index.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

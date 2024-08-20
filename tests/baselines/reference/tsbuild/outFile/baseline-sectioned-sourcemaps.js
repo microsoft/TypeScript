@@ -130,8 +130,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -171,20 +171,7 @@ src/2/second-output.d.ts
   Output from referenced project 'src/second/tsconfig.json' included because '--outFile' specified
 src/third/third_part1.ts
   Part of 'files' list in tsconfig.json
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/src/third/tsconfig.json": 1,
-  "/src/first/tsconfig.json": 1,
-  "/src/second/tsconfig.json": 1,
-  "/src/first/first_PART1.ts": 1,
-  "/src/first/first_part2.ts": 1,
-  "/src/first/first_part3.ts": 1,
-  "/src/second/second_part1.ts": 1,
-  "/src/second/second_part2.ts": 1,
-  "/src/first/bin/first-output.d.ts": 1,
-  "/src/2/second-output.d.ts": 1,
-  "/src/third/third_part1.ts": 1
-} 
+
 
 //// [/src/2/second-output.d.ts]
 declare namespace N {
@@ -1110,6 +1097,21 @@ sourceFile:../../third_part1.ts
 }
 
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/src/third/tsconfig.json": 1,
+  "/src/first/tsconfig.json": 1,
+  "/src/second/tsconfig.json": 1,
+  "/src/first/first_PART1.ts": 1,
+  "/src/first/first_part2.ts": 1,
+  "/src/first/first_part3.ts": 1,
+  "/src/second/second_part1.ts": 1,
+  "/src/second/second_part2.ts": 1,
+  "/src/first/bin/first-output.d.ts": 1,
+  "/src/2/second-output.d.ts": 1,
+  "/src/third/third_part1.ts": 1
+} 
 
 Change:: incremental-declaration-changes
 Input::
@@ -1129,8 +1131,8 @@ console.log(s);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -1162,21 +1164,7 @@ src/2/second-output.d.ts
   Output from referenced project 'src/second/tsconfig.json' included because '--outFile' specified
 src/third/third_part1.ts
   Part of 'files' list in tsconfig.json
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/src/third/tsconfig.json": 1,
-  "/src/first/tsconfig.json": 1,
-  "/src/second/tsconfig.json": 1,
-  "/src/first/bin/first-output.tsbuildinfo": 1,
-  "/src/first/first_PART1.ts": 1,
-  "/src/first/first_part2.ts": 1,
-  "/src/first/first_part3.ts": 1,
-  "/src/2/second-output.tsbuildinfo": 1,
-  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
-  "/src/first/bin/first-output.d.ts": 1,
-  "/src/2/second-output.d.ts": 1,
-  "/src/third/third_part1.ts": 1
-} 
+
 
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
@@ -1570,6 +1558,22 @@ sourceFile:../first_part3.ts
 }
 
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/src/third/tsconfig.json": 1,
+  "/src/first/tsconfig.json": 1,
+  "/src/second/tsconfig.json": 1,
+  "/src/first/bin/first-output.tsbuildinfo": 1,
+  "/src/first/first_PART1.ts": 1,
+  "/src/first/first_part2.ts": 1,
+  "/src/first/first_part3.ts": 1,
+  "/src/2/second-output.tsbuildinfo": 1,
+  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+  "/src/first/bin/first-output.d.ts": 1,
+  "/src/2/second-output.d.ts": 1,
+  "/src/third/third_part1.ts": 1
+} 
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -1589,8 +1593,8 @@ console.log(s);
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/third --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
@@ -1614,18 +1618,7 @@ src/first/first_part3.ts
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/src/third/tsconfig.json": 1,
-  "/src/first/tsconfig.json": 1,
-  "/src/second/tsconfig.json": 1,
-  "/src/first/bin/first-output.tsbuildinfo": 1,
-  "/src/first/first_PART1.ts": 1,
-  "/src/first/first_part2.ts": 1,
-  "/src/first/first_part3.ts": 1,
-  "/src/2/second-output.tsbuildinfo": 1,
-  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
-} 
+
 
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
@@ -1860,3 +1853,17 @@ sourceFile:../first_part3.ts
 }
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/src/third/tsconfig.json": 1,
+  "/src/first/tsconfig.json": 1,
+  "/src/second/tsconfig.json": 1,
+  "/src/first/bin/first-output.tsbuildinfo": 1,
+  "/src/first/first_PART1.ts": 1,
+  "/src/first/first_part2.ts": 1,
+  "/src/first/first_part3.ts": 1,
+  "/src/2/second-output.tsbuildinfo": 1,
+  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
+} 

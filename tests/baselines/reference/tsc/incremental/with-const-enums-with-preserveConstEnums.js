@@ -40,9 +40,8 @@ export const enum AWorker {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
 Output::
-/home/src/tslibs/ts/lib/tsc -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.js]
@@ -125,6 +124,8 @@ var b = 1 /* A.ONE */;
 
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: change enum value
 Input::
@@ -136,9 +137,8 @@ export const enum A {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
 Output::
-/home/src/tslibs/ts/lib/tsc -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.js]
@@ -229,6 +229,8 @@ var b = 2 /* A.ONE */;
 
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: change enum value again
 Input::
@@ -240,9 +242,8 @@ export const enum A {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
 Output::
-/home/src/tslibs/ts/lib/tsc -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.js]
@@ -329,6 +330,8 @@ var b = 3 /* A.ONE */;
 
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: something else changes in b.d.ts
 Input::
@@ -340,9 +343,8 @@ export const randomThing = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
 Output::
-/home/src/tslibs/ts/lib/tsc -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.js] file written with same contents
@@ -416,6 +418,8 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/c.js] file written with same contents
 
+exitCode:: ExitStatus.Success
+
 
 Change:: something else changes in b.d.ts again
 Input::
@@ -427,9 +431,8 @@ export const randomThing = 10;export const randomThing2 = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
 Output::
-/home/src/tslibs/ts/lib/tsc -i /src/project/a.ts --tsbuildinfofile /src/project/a.tsbuildinfo --preserveConstEnums
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/a.js] file written with same contents
@@ -502,3 +505,5 @@ exitCode:: ExitStatus.Success
 }
 
 //// [/src/project/c.js] file written with same contents
+
+exitCode:: ExitStatus.Success

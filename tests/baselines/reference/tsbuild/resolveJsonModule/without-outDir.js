@@ -44,8 +44,8 @@ export default hello.hello
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -63,7 +63,6 @@ src/src/hello.json
   Part of 'files' list in tsconfig.json
 src/src/index.ts
   Part of 'files' list in tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/src/src/index.d.ts]
@@ -147,18 +146,21 @@ exports.default = hello_json_1.default.hello;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

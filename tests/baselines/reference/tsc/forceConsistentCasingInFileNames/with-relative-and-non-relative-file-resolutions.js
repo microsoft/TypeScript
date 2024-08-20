@@ -27,8 +27,8 @@ import * as xs4 from "./struct";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js /src/project/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc /src/project/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
 [96msrc/project/src/struct.d.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
@@ -68,6 +68,7 @@ src/project/src/struct.d.ts
 
 Found 2 errors in the same file, starting at: src/project/src/struct.d.ts[90m:2[0m
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-

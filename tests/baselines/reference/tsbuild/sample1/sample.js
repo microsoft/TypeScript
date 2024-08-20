@@ -96,8 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -115,20 +115,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/user/username/projects/sample1/tests/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.json": 1,
-  "/user/username/projects/sample1/logic/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/anotherModule.ts": 1,
-  "/user/username/projects/sample1/core/index.ts": 1,
-  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
-  "/user/username/projects/sample1/logic/index.ts": 1,
-  "/user/username/projects/sample1/core/index.d.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
-  "/user/username/projects/sample1/tests/index.ts": 1,
-  "/user/username/projects/sample1/logic/index.d.ts": 1
-} 
+
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -696,6 +683,21 @@ exports.m = mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/user/username/projects/sample1/tests/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.json": 1,
+  "/user/username/projects/sample1/logic/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/anotherModule.ts": 1,
+  "/user/username/projects/sample1/core/index.ts": 1,
+  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+  "/user/username/projects/sample1/logic/index.ts": 1,
+  "/user/username/projects/sample1/core/index.d.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
+  "/user/username/projects/sample1/tests/index.ts": 1,
+  "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
 
 Change:: incremental-declaration-changes
 Input::
@@ -708,8 +710,8 @@ export class someClass { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -727,23 +729,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/user/username/projects/sample1/tests/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.json": 1,
-  "/user/username/projects/sample1/logic/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/core/index.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.ts": 1,
-  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
-  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/logic/index.ts": 1,
-  "/user/username/projects/sample1/core/index.d.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
-  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/tests/index.ts": 1,
-  "/user/username/projects/sample1/logic/index.d.ts": 1
-} 
+
 
 //// [/user/username/projects/sample1/core/index.d.ts]
 export declare const someString: string;
@@ -1130,6 +1116,24 @@ exports.someClass = someClass;
 }
 
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/user/username/projects/sample1/tests/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.json": 1,
+  "/user/username/projects/sample1/logic/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/core/index.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.ts": 1,
+  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/logic/index.ts": 1,
+  "/user/username/projects/sample1/core/index.d.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
+  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/tests/index.ts": 1,
+  "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
 
 Change:: incremental-declaration-doesnt-change
 Input::
@@ -1143,8 +1147,8 @@ class someClass2 { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -1162,18 +1166,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/user/username/projects/sample1/tests/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.json": 1,
-  "/user/username/projects/sample1/logic/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/core/index.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.ts": 1,
-  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
-  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
-} 
+
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents
 //// [/user/username/projects/sample1/core/index.d.ts.map.baseline.txt] file written with same contents
@@ -1273,13 +1266,26 @@ var someClass2 = /** @class */ (function () {
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/user/username/projects/sample1/tests/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.json": 1,
+  "/user/username/projects/sample1/logic/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/core/index.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.ts": 1,
+  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
+} 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -1291,7 +1297,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
+
 readFiles:: {
   "/user/username/projects/sample1/tests/tsconfig.json": 1,
   "/user/username/projects/sample1/core/tsconfig.json": 1,
@@ -1300,8 +1310,6 @@ readFiles:: {
   "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
   "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 
-
-
 
 Change:: when logic config changes declaration dir
 Input::
@@ -1324,8 +1332,8 @@ Input::
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -1341,20 +1349,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-readFiles:: {
-  "/user/username/projects/sample1/tests/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.json": 1,
-  "/user/username/projects/sample1/logic/tsconfig.json": 1,
-  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/logic/index.ts": 1,
-  "/user/username/projects/sample1/core/index.d.ts": 1,
-  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
-  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1,
-  "/user/username/projects/sample1/tests/index.ts": 1,
-  "/user/username/projects/sample1/logic/decls/index.d.ts": 1
-} 
+
 
 //// [/user/username/projects/sample1/logic/decls/index.d.ts]
 export declare function getSecondsInDay(): number;
@@ -1514,13 +1509,28 @@ export declare const m: typeof mod;
 }
 
 
+exitCode:: ExitStatus.Success
+
+readFiles:: {
+  "/user/username/projects/sample1/tests/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.json": 1,
+  "/user/username/projects/sample1/logic/tsconfig.json": 1,
+  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/logic/index.ts": 1,
+  "/user/username/projects/sample1/core/index.d.ts": 1,
+  "/user/username/projects/sample1/core/anotherModule.d.ts": 1,
+  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1,
+  "/user/username/projects/sample1/tests/index.ts": 1,
+  "/user/username/projects/sample1/logic/decls/index.d.ts": 1
+} 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b tests --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
@@ -1532,7 +1542,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
 
+
+
+
 exitCode:: ExitStatus.Success
+
 readFiles:: {
   "/user/username/projects/sample1/tests/tsconfig.json": 1,
   "/user/username/projects/sample1/core/tsconfig.json": 1,
@@ -1541,4 +1555,3 @@ readFiles:: {
   "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
   "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 
-

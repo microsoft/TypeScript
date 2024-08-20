@@ -51,44 +51,14 @@ export const b = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json -i --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json -i --explainFiles
 home/src/tslibs/ts/lib/lib.es2015.d.ts
   Library referenced via 'es6' from file 'src/a.d.ts'
 src/a.d.ts
   Matched by default include pattern '**/*'
 src/b.d.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.d.ts",
-  "/src/b.d.ts"
-]
-Program options: {
-  "lib": [
-    "lib.es2015.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "project": "/src/tsconfig.json",
-  "incremental": true,
-  "explainFiles": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
-/src/a.d.ts
-/src/b.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
-/src/a.d.ts
-/src/b.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
-/src/b.d.ts (used version)
-/src/a.d.ts (used version)
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -139,3 +109,35 @@ Shape signatures in builder refreshed for::
   "size": 804
 }
 
+
+Program root files: [
+  "/src/a.d.ts",
+  "/src/b.d.ts"
+]
+Program options: {
+  "lib": [
+    "lib.es2015.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "project": "/src/tsconfig.json",
+  "incremental": true,
+  "explainFiles": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/src/a.d.ts
+/src/b.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/src/a.d.ts
+/src/b.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
+/src/b.d.ts (used version)
+/src/a.d.ts (used version)
+
+exitCode:: ExitStatus.Success

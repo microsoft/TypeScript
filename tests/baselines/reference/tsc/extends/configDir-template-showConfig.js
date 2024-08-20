@@ -87,8 +87,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/myproject --showConfig
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/myproject --showConfig
 {
     "compilerOptions": {
         "declarationDir": "./decls",
@@ -127,6 +127,7 @@ Output::
         "/home/src/projects/myproject/decls"
     ]
 }
+
+
+
 exitCode:: ExitStatus.Success
-
-

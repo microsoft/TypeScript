@@ -47,9 +47,8 @@ export const App = () => <div propA={true}></div>;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/src/index.js]
@@ -112,3 +111,5 @@ exports.App = App;
   "size": 1050
 }
 
+
+exitCode:: ExitStatus.Success

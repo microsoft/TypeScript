@@ -146,8 +146,8 @@ export function createZoo(): Array<Dog> {
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
@@ -162,6 +162,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkipped
-
-

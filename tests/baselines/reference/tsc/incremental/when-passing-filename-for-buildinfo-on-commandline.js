@@ -31,13 +31,12 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/.tsbuildinfo]
@@ -87,17 +86,20 @@ exports.x = 10;
 
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
+
+
+
 exitCode:: ExitStatus.Success
-
-

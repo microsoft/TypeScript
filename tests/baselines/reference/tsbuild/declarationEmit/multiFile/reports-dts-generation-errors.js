@@ -68,8 +68,8 @@ export default ky;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -97,7 +97,6 @@ src/project/index.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/index.js]
@@ -119,13 +118,15 @@ export const api = ky.extend({});
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
 Output::
-/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -153,9 +154,10 @@ src/project/index.ts
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/index.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

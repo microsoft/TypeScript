@@ -26,8 +26,8 @@ Some random string
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b src/project -i -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b src/project -i -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -35,7 +35,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.js]
@@ -80,6 +79,8 @@ exports.x = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: tsbuildinfo written has error
 Input::
@@ -88,8 +89,8 @@ Some random string{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./main.
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b src/project -i -v
 Output::
-/home/src/tslibs/ts/lib/tsc --b src/project -i -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -97,7 +98,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/main.js] file written with same contents
@@ -105,3 +105,5 @@ exitCode:: ExitStatus.Success
 {"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+exitCode:: ExitStatus.Success

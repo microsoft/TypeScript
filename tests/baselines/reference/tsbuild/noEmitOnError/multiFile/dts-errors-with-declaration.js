@@ -42,8 +42,8 @@ export { }
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -64,7 +64,24 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -96,30 +113,15 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "../shared/types/db.ts",
-    "../src/main.ts",
-    "../src/other.ts"
-  ],
-  "errors": true,
-  "version": "FakeTSVersion",
-  "size": 109
-}
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -140,7 +142,11 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -172,9 +178,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 Change:: Fix error
@@ -186,8 +190,8 @@ export const a = class { p = 10; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -195,37 +199,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "declaration": true,
-  "noEmitOnError": true,
-  "tscBuild": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (used version)
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts during emit)
-/user/username/projects/noemitonerror/src/other.ts (computed .d.ts during emit)
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
@@ -284,18 +257,52 @@ console.log("hi");
 }
 
 
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "declaration": true,
+  "noEmitOnError": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts during emit)
+/user/username/projects/noemitonerror/src/other.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
 [[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/main.ts' is older than output 'dev-build/shared/types/db.js'
 
+
+
+
 exitCode:: ExitStatus.Success
-
-

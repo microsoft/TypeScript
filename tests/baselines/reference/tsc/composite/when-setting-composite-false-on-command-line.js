@@ -32,9 +32,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --composite false --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --composite false --p src/project
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project/src/main.js]
@@ -44,3 +43,5 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+exitCode:: ExitStatus.Success

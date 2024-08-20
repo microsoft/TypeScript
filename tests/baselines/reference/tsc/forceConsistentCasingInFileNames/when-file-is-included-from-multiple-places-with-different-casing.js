@@ -44,8 +44,8 @@ declare const console: { log(msg: any): void; };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project/tsconfig.json --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project/tsconfig.json --explainFiles
 [96mhome/src/projects/project/src/anotherFile.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/anotherFile.ts'
@@ -309,7 +309,6 @@ Errors  Files
      3  home/src/projects/project/src/anotherFile.ts[90m:2[0m
      2  home/src/projects/project/src/oneMore.ts[90m:2[0m
      2  home/src/projects/project/src/Struct.d.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/home/src/projects/project/src/anotherFile.js]
@@ -322,3 +321,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

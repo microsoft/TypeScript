@@ -45,8 +45,8 @@ export default hello.hello
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -65,7 +65,6 @@ src/src/hello.json
   Part of 'files' list in tsconfig.json
 src/src/index.ts
   Part of 'files' list in tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/src/hello.json]
@@ -155,3 +154,5 @@ exports.default = hello_json_1.default.hello;
   "size": 1069
 }
 
+
+exitCode:: ExitStatus.Success

@@ -45,9 +45,8 @@ import * as mod_0 from "../primary/a"
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /primary/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/primary/bin/a.d.ts]
@@ -102,3 +101,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 749
 }
 
+
+exitCode:: ExitStatus.Success

@@ -33,8 +33,8 @@ export const b = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
@@ -43,29 +43,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/outFile.d.ts]
@@ -142,22 +119,6 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
-
-[7m1[0m export const a = "hello
-[7m [0m [91m                       [0m
-
-
-Found 1 error in src/a.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -181,7 +142,50 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+
+Change:: no-change-run
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+
+[7m1[0m export const a = "hello
+[7m [0m [91m                       [0m
+
+
+Found 1 error in src/a.ts[90m:1[0m
+
+
+
+
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "noCheck": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 Change:: Fix `a` error with noCheck
@@ -191,31 +195,8 @@ export const a = "hello";
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -284,14 +265,6 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -315,16 +288,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
 
 
-
-Change:: No Change run with checking
+Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -335,6 +310,7 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
+  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -343,12 +319,19 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
 
 
 //// [/outFile.tsbuildinfo]
@@ -386,14 +369,43 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -416,16 +428,18 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -449,7 +463,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: Introduce error with noCheck
@@ -459,8 +473,8 @@ export const a = "hello
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
@@ -469,29 +483,6 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "project": "/src/tsconfig.json",
-  "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -560,22 +551,6 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
-
-[7m1[0m export const a = "hello
-[7m [0m [91m                       [0m
-
-
-Found 1 error in src/a.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -599,15 +574,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-
-Change:: No Change run with checking
+Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
@@ -616,7 +591,9 @@ Output::
 
 Found 1 error in src/a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -627,6 +604,7 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
+  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -638,6 +616,24 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+
+[7m1[0m export const a = "hello
+[7m [0m [91m                       [0m
+
+
+Found 1 error in src/a.ts[90m:1[0m
+
 
 
 //// [/outFile.tsbuildinfo]
@@ -689,17 +685,6 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: Fix `a` error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -710,7 +695,6 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
-  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -722,6 +706,19 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Fix `a` error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -790,14 +787,6 @@ define("b", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -808,6 +797,7 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
+  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -816,12 +806,19 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
 
 
 //// [/outFile.tsbuildinfo]
@@ -859,29 +856,9 @@ No shapes updated in the builder::
 }
 
 
-
-Change:: Add file with error
-Input::
-//// [/src/c.ts]
-export const c: number = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
-
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in src/c.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/src/b.ts"
 ]
 Program options: {
   "declaration": true,
@@ -896,15 +873,34 @@ Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
-/src/c.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
-/src/c.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: Add file with error
+Input::
+//// [/src/c.ts]
+export const c: number = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in src/c.ts[90m:1[0m
+
 
 
 //// [/outFile.d.ts]
@@ -994,25 +990,6 @@ define("c", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: Introduce error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
-
-[7m1[0m export const a = "hello
-[7m [0m [91m                       [0m
-
-
-Found 1 error in src/a.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -1024,7 +1001,6 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
-  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -1034,9 +1010,34 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Introduce error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
+[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+
+[7m1[0m export const a = "hello
+[7m [0m [91m                       [0m
+
+
+Found 1 error in src/a.ts[90m:1[0m
+
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -1120,17 +1121,6 @@ define("c", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: Fix `a` error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -1155,6 +1145,19 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+Change:: Fix `a` error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello";
+
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+Output::
 
 
 //// [/outFile.d.ts] file written with same contents
@@ -1238,22 +1241,6 @@ define("c", ["require", "exports"], function (require, exports) {
 }
 
 
-
-Change:: No Change run with checking
-Input::
-
-
-Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
-
-[7m1[0m export const c: number = "hello";
-[7m [0m [91m             ~[0m
-
-
-Found 1 error in src/c.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -1265,6 +1252,7 @@ Program options: {
   "module": 2,
   "outFile": "/outFile.js",
   "project": "/src/tsconfig.json",
+  "noCheck": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -1274,13 +1262,27 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success
+
+
+Change:: No Change run with checking
+Input::
+
+
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+Output::
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error in src/c.ts[90m:1[0m
+
 
 
 //// [/outFile.tsbuildinfo]
@@ -1337,14 +1339,46 @@ No shapes updated in the builder::
 }
 
 
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -1370,15 +1404,15 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.Success
 
 
 Change:: No Change run with checking
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -1387,7 +1421,9 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/src/a.ts",
   "/src/b.ts",
@@ -1412,4 +1448,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

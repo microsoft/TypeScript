@@ -90,9 +90,8 @@ function testTscCompile(input: TestTscCompile) {
     const fs = inputFs.shadow();
 
     // Create system
-    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
+    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc.js`, env: environmentVariables }) as TscCompileSystem;
     sys.storeSignatureInfo = true;
-    sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
 
     let actualReadFileMap: ts.MapLike<number> | undefined;
@@ -123,20 +122,18 @@ function testTscCompile(input: TestTscCompile) {
         getPrograms = input.compile(sys);
     }
 
-    sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
-
     const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
     const programs = getPrograms();
     if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
-    if (shouldBaselinePrograms) {
-        const baseline: string[] = [];
-        baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
-        sys.write(baseline.join("\n"));
-    }
-    if (baselineReadFileCalls) {
-        sys.write(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
-    }
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+    const baseline: string[] = [];
+    if (shouldBaselinePrograms) {
+        baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
+    }
+    baseline.push(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}`, "");
+    if (baselineReadFileCalls) {
+        baseline.push(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
+    }
     actualReadFileMap = undefined;
     getPrograms = undefined;
 
@@ -151,10 +148,12 @@ function testTscCompile(input: TestTscCompile) {
             text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
+${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}
 Output::
 ${sys.output.map(sanitizeSysOutput).join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`,
+${patch ? vfs.formatPatch(patch) : ""}
+${baseline.join("\n")}`,
         };
     };
     return sys;

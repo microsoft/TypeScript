@@ -333,9 +333,8 @@ c.doSomething();
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --build --clean /src/second/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --build --clean /src/second/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts] unlink
@@ -343,3 +342,5 @@ exitCode:: ExitStatus.Success
 //// [/src/2/second-output.js] unlink
 //// [/src/2/second-output.js.map] unlink
 //// [/src/2/second-output.tsbuildinfo] unlink
+
+exitCode:: ExitStatus.Success

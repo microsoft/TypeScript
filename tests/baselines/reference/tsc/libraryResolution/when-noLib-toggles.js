@@ -49,37 +49,8 @@ const b = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.d.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "lib": [
-    "lib.es2015.d.ts"
-  ],
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
-/src/a.d.ts
-/src/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
-/src/a.d.ts
-/src/b.ts
-
-Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
-/src/a.d.ts (used version)
-/src/b.ts (computed .d.ts during emit)
 
 
 //// [/src/b.d.ts]
@@ -148,13 +119,44 @@ var b = 10;
 }
 
 
+Program root files: [
+  "/src/a.d.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "lib": [
+    "lib.es2015.d.ts"
+  ],
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/src/a.d.ts
+/src/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/src/a.d.ts
+/src/b.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
+/src/a.d.ts (used version)
+/src/b.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.Success
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noLib
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noLib
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
@@ -179,31 +181,6 @@ Output::
 
 Found 9 errors in the same file, starting at: src/tsconfig.json[90m:5[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/src/a.d.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "incremental": true,
-  "lib": [
-    "lib.es2015.d.ts"
-  ],
-  "project": "/src/tsconfig.json",
-  "noLib": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/src/a.d.ts
-/src/b.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/src/a.d.ts (used version)
-/src/b.ts (computed .d.ts)
 
 
 //// [/src/b.d.ts] file written with same contents
@@ -265,3 +242,30 @@ Shape signatures in builder refreshed for::
   "size": 350
 }
 
+
+Program root files: [
+  "/src/a.d.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "lib": [
+    "lib.es2015.d.ts"
+  ],
+  "project": "/src/tsconfig.json",
+  "noLib": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/src/a.d.ts
+/src/b.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/src/a.d.ts (used version)
+/src/b.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

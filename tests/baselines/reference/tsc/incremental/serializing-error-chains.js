@@ -43,8 +43,8 @@ declare function Component(props: { children?: number }): any;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project
 [96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2746: [0mThis JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 
 [7m10[0m (<Component>
@@ -66,7 +66,6 @@ Output::
 
 Found 3 errors in the same file, starting at: src/project/index.tsx[90m:10[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/index.js]
@@ -166,13 +165,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
 
 Change:: no-change-run
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc -p src/project
 [96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2746: [0mThis JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 
 [7m10[0m (<Component>
@@ -194,6 +195,7 @@ Output::
 
 Found 3 errors in the same file, starting at: src/project/index.tsx[90m:10[0m
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-

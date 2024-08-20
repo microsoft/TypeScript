@@ -64,8 +64,8 @@ export const Other = 0;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/src/other --verbose
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/src/other --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.json
 
@@ -73,7 +73,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/src/other/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/other.d.ts]
@@ -131,14 +130,15 @@ exports.Other = 0;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: Running tsc on main
 Input::
 
 
+/home/src/tslibs/ts/lib/tsc.js -p /src/src/main
 Output::
-/home/src/tslibs/ts/lib/tsc -p /src/src/main
-exitCode:: ExitStatus.Success
 
 
 //// [/src/dist/a.js]
@@ -155,3 +155,5 @@ exports.b = void 0;
 exports.b = 0;
 
 
+
+exitCode:: ExitStatus.Success

@@ -33,8 +33,8 @@ export const x = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --composite false --p src/project
 Output::
-/home/src/tslibs/ts/lib/tsc --composite false --p src/project
 [96msrc/project/tsconfig.json[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
 
 [7m6[0m         "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
@@ -43,7 +43,6 @@ Output::
 
 Found 1 error in src/project/tsconfig.json[90m:6[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/src/main.js]
@@ -53,3 +52,5 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

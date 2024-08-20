@@ -89,8 +89,8 @@ export { a } from 'a';
 
 
 
+/home/src/tslibs/ts/lib/tsc.js -b packages/b --verbose --traceResolution --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc -b packages/b --verbose --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
     * packages/b/tsconfig.json
@@ -165,7 +165,6 @@ packages/a/types/index.d.ts
 packages/b/index.js
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
-exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project/packages/a/types/index.d.ts]
@@ -264,3 +263,5 @@ export {};
   "size": 49
 }
 
+
+exitCode:: ExitStatus.Success

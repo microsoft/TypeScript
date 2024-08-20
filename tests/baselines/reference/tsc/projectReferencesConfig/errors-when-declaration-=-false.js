@@ -30,8 +30,8 @@ export { };
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --p /primary/tsconfig.json
 [96mprimary/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS6304: [0mComposite projects may not disable declaration emit.
 
 [7m5[0m     "declaration": false
@@ -40,7 +40,6 @@ Output::
 
 Found 1 error in primary/tsconfig.json[90m:5[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/primary/bin/a.d.ts]
@@ -106,3 +105,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 804
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -47,8 +47,8 @@ export const App = () => <div propA={true}></div>;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --p src/project --strict
 Output::
-/home/src/tslibs/ts/lib/tsc --p src/project --strict
 [96msrc/project/src/index.tsx[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'react/jsx-runtime'. '/src/project/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
 
 [7m1[0m export const App = () => <div propA={true}></div>;
@@ -57,7 +57,6 @@ Output::
 
 Found 1 error in src/project/src/index.tsx[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/src/index.js]
@@ -135,3 +134,5 @@ exports.App = App;
   "size": 1312
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

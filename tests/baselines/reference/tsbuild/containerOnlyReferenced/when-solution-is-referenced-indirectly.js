@@ -69,8 +69,8 @@ export const d = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project4 --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project4 --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
@@ -101,7 +101,6 @@ home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project2/src/b.d.ts]
@@ -264,6 +263,8 @@ exports.d = 10;
 }
 
 
+exitCode:: ExitStatus.Success
+
 
 Change:: modify project3 file
 Input::
@@ -272,8 +273,8 @@ export const cc = 10;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --b /src/project4 --verbose --explainFiles
 Output::
-/home/src/tslibs/ts/lib/tsc --b /src/project4 --verbose --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
@@ -300,7 +301,6 @@ src/project4/src/d.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
 
 
 //// [/src/project3/src/c.d.ts]
@@ -357,3 +357,5 @@ exports.cc = 10;
 }
 
 //// [/src/project4/tsconfig.tsbuildinfo] file changed its modified time
+
+exitCode:: ExitStatus.Success

@@ -96,9 +96,8 @@ export const m = mod;
 
 
 
+/home/src/tslibs/ts/lib/tsc.js --build logic/tsconfig.json
 Output::
-/home/src/tslibs/ts/lib/tsc --build logic/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
@@ -295,3 +294,5 @@ exports.m = mod;
   "size": 1444
 }
 
+
+exitCode:: ExitStatus.Success
