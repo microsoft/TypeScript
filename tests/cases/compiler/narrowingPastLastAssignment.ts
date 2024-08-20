@@ -157,6 +157,7 @@ function f12() {
 }
 
 function f13() {
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
     var foo: string | undefined;
     foo = '';
 

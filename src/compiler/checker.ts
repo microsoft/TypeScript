@@ -29576,7 +29576,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
                         }
                         if (hasDefiniteAssignment && symbol.lastAssignmentPos > 0) {
-                            symbol.lastAssignmentPos = -symbol.lastAssignmentPos;
+                            symbol.lastAssignmentPos *= -1;
                         }
                     }
                 }
