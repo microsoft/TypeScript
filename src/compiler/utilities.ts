@@ -11792,6 +11792,7 @@ export function isSideEffectImport(node: Node): boolean {
     return !!ancestor && !ancestor.importClause;
 }
 
+// require('module').builtinModules.filter(x => !x.startsWith('_'))
 const unprefixedNodeCoreModulesList = [
     "assert",
     "assert/strict",
@@ -11853,6 +11854,9 @@ const unprefixedNodeCoreModulesList = [
 /** @internal */
 export const unprefixedNodeCoreModules = new Set(unprefixedNodeCoreModulesList);
 
+// await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
+//   new Set(t.match(/(?<=')node:.+?(?=')/g))
+//     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
 /** @internal */
 export const exclusivelyPrefixedNodeCoreModules = new Set([
     "node:sea",
