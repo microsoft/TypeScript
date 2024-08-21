@@ -17668,9 +17668,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
+    function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]): Type[] | undefined {
         const templates = filter(types, isPatternLiteralType) as (TemplateLiteralType | StringMappingType)[];
         if (templates.length) {
+            const estimatedCount = templates.length * countWhere(types, t => !!(t.flags & TypeFlags.StringLiteral));
+            if (estimatedCount > 1000000) {
+                tracing?.instant(tracing.Phase.CheckTypes, "removeStringLiteralsMatchedByTemplateLiterals_DepthLimit", { typeIds: types.map(t => t.id) });
+                error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                return undefined;
+            }
+
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -17680,6 +17687,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
+        return types;
     }
 
     function isTypeMatchedByTemplateLiteralOrStringMapping(type: Type, template: TemplateLiteralType | StringMappingType) {
@@ -17804,7 +17812,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
             }
             if (includes & TypeFlags.StringLiteral && includes & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
-                removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+                typeSet = removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+                if (!typeSet) {
+                    return errorType;
+                }
             }
             if (includes & TypeFlags.IncludesConstrainedTypeVariable) {
                 removeConstrainedTypeVariables(typeSet);
