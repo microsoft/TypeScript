@@ -396,7 +396,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1499: [0mType-only import of an ECMAScript module from a CommonJS module must have a `"resolution-mode": "import"` attribute.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1541: [0mType-only import of an ECMAScript module from a CommonJS module must have a `"resolution-mode": "import"` attribute.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 
 [7m1[0m import type { TheNum } from 'pkg2'
@@ -631,7 +631,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1499: [0mType-only import of an ECMAScript module from a CommonJS module must have a `"resolution-mode": "import"` attribute.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1541: [0mType-only import of an ECMAScript module from a CommonJS module must have a `"resolution-mode": "import"` attribute.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 
 [7m1[0m import type { TheNum } from 'pkg2'
