@@ -7292,7 +7292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
                         if (context.flags & NodeBuilderFlags.NoTruncation) {
-                            return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                            return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)];
                         }
                         result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
