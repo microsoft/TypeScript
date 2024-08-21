@@ -6,7 +6,7 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     function scenarioName(text: string, options: ts.CompilerOptions) {
@@ -48,13 +48,13 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             };
         }
         function sys(options: ts.CompilerOptions) {
-            return loadProjectFromFiles({
+            return TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
                 "/src/project/d.ts": `import { b } from "./b";export const d = b;`,
-            });
+            }, { currentDirectory: "/" });
         }
         function verify(options: ts.CompilerOptions) {
             verifyTsc({
@@ -106,7 +106,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
     });
     describe("emitDeclarationOnly::", () => {
         function sys(options: ts.CompilerOptions) {
-            return loadProjectFromFiles({
+            return TestServerHost.createWatchedSystem({
                 "/src/project1/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(options),
                 }),
@@ -121,7 +121,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 "/src/project2/src/e.ts": `export const e = 10;`,
                 "/src/project2/src/f.ts": `import { a } from "${options.outFile ? "a" : "../../project1/src/a"}"; export const f = a;`,
                 "/src/project2/src/g.ts": `import { b } from "${options.outFile ? "b" : "../../project1/src/b"}"; export const g = b;`,
-            });
+            }, { currentDirectory: "/" });
         }
         function verifyWithIncremental(options: ts.CompilerOptions) {
             verifyTsc({

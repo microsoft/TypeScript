@@ -1,15 +1,18 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import { symbolLibContent } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects and emits them correctly`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/common/nominal.js": dedent`
                     /**
                      * @template T, Name
@@ -17,14 +20,13 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                      */
                     module.exports = {};
                     `,
-                "/src/common/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "include": ["nominal.js"]
-                    }`,
+                "/src/common/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    include: ["nominal.js"],
+                }),
                 "/src/sub-project/index.js": dedent`
                     import { Nominal } from '../common/nominal';
 
@@ -32,17 +34,16 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                      * @typedef {Nominal<string, 'MyNominal'>} MyNominal
                      */
                     `,
-                "/src/sub-project/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../common" }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
+                "/src/sub-project/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../common" },
+                    ],
+                    include: ["./index.js"],
+                }),
                 "/src/sub-project-2/index.js": dedent`
                     import { MyNominal } from '../sub-project/index';
 
@@ -57,41 +58,38 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         return 'key';
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../sub-project" }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
-                "/src/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "./sub-project" },
-                            { "path": "./sub-project-2" }
-                        ],
-                        "include": []
-                    }`,
-                "/src/tsconfig.base.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "skipLibCheck": true,
-                            "rootDir": "./",
-                            "outDir": "../lib",
-                            "allowJs": true,
-                            "checkJs": true,
-                            "declaration": true
-                        }
-                    }`,
+                "/src/sub-project-2/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../sub-project" },
+                    ],
+                    include: ["./index.js"],
+                }),
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "./sub-project" },
+                        { path: "./sub-project-2" },
+                    ],
+                    include: [],
+                }),
+                "/src/tsconfig.base.json": jsonToReadableText({
+                    compilerOptions: {
+                        skipLibCheck: true,
+                        rootDir: "./",
+                        outDir: "../lib",
+                        allowJs: true,
+                        checkJs: true,
+                        declaration: true,
+                    },
+                }),
                 [libFile.path]: `${libFile.content}${symbolLibContent}`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "/src"],
     });
 
@@ -99,40 +97,37 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
         sys: () =>
-            loadProjectFromFiles({
-                "/src/common/obj.json": dedent`
-                    {
-                        "val": 42
-                    }`,
+            TestServerHost.createWatchedSystem({
+                "/src/common/obj.json": jsonToReadableText({
+                    val: 42,
+                }),
                 "/src/common/index.ts": dedent`
                     import x = require("./obj.json");
                     export = x;
-                    `,
-                "/src/common/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "outDir": null,
-                            "composite": true
-                        },
-                        "include": ["index.ts", "obj.json"]
-                    }`,
+                `,
+                "/src/common/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        outDir: null, // eslint-disable-line no-restricted-syntax
+                        composite: true,
+                    },
+                    include: ["index.ts", "obj.json"],
+                }),
                 "/src/sub-project/index.js": dedent`
                     import mod from '../common';
 
                     export const m = mod;
                     `,
-                "/src/sub-project/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../common" }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
+                "/src/sub-project/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../common" },
+                    ],
+                    include: ["./index.js"],
+                }),
                 "/src/sub-project-2/index.js": dedent`
                     import { m } from '../sub-project/index';
 
@@ -144,43 +139,40 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         return variable;
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../sub-project" }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
-                "/src/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "./sub-project" },
-                            { "path": "./sub-project-2" }
-                        ],
-                        "include": []
-                    }`,
-                "/src/tsconfig.base.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "skipLibCheck": true,
-                            "rootDir": "./",
-                            "outDir": "../out",
-                            "allowJs": true,
-                            "checkJs": true,
-                            "resolveJsonModule": true,
-                            "esModuleInterop": true,
-                            "declaration": true
-                        }
-                    }`,
+                "/src/sub-project-2/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../sub-project" },
+                    ],
+                    include: ["./index.js"],
+                }),
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "./sub-project" },
+                        { path: "./sub-project-2" },
+                    ],
+                    include: [],
+                }),
+                "/src/tsconfig.base.json": jsonToReadableText({
+                    compilerOptions: {
+                        skipLibCheck: true,
+                        rootDir: "./",
+                        outDir: "../out",
+                        allowJs: true,
+                        checkJs: true,
+                        resolveJsonModule: true,
+                        esModuleInterop: true,
+                        declaration: true,
+                    },
+                }),
                 [libFile.path]: `${libFile.content}${symbolLibContent}`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "/src"],
     });
 });

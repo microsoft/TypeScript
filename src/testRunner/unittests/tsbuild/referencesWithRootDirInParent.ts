@@ -5,11 +5,11 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     function getProjectReferenceWithRootDirInParentSys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/src/main/a.ts": dedent`
                 import { b } from './b';
                 const a = b;
@@ -41,7 +41,7 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                     "node_modules",
                 ],
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     verifyTsc({

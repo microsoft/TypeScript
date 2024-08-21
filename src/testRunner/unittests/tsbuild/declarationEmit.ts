@@ -5,8 +5,10 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { FileOrFolderOrSymLinkMap } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    FileOrFolderOrSymLinkMap,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): FileOrFolderOrSymLinkMap {
@@ -67,7 +69,11 @@ declare type MyNominal<T, Name extends string> = T & {
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash",
-        sys: () => loadProjectFromFiles(getFiles()),
+        sys: () =>
+            TestServerHost.createWatchedSystem(
+                getFiles(),
+                { currentDirectory: "/" },
+            ),
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"],
     });
 
@@ -75,14 +81,14 @@ declare type MyNominal<T, Name extends string> = T & {
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash but uses no references",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 ...getFiles(),
                 "/src/solution/tsconfig.json": jsonToReadableText({
                     extends: "./tsconfig.base.json",
                     compilerOptions: { composite: true },
                     include: ["./src/**/*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"],
     });
 
@@ -90,7 +96,7 @@ declare type MyNominal<T, Name extends string> = T & {
         scenario: "declarationEmit",
         subScenario: "when declaration file used inferred type from referenced project",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
@@ -122,7 +128,7 @@ export function fn4() {
                     include: ["src"],
                     references: [{ path: "../pkg1" }],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"],
     });
 

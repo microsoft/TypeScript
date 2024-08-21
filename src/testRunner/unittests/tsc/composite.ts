@@ -2,7 +2,6 @@ import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: composite::", () => {
@@ -10,20 +9,19 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "when setting composite false on command line",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "es5",
-                            "module": "commonjs",
-                            "composite": true,
-                        },
-                        "include": [
-                            "src/**/*.ts"
-                        ]
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                        composite: true,
+                    },
+                    include: [
+                        "src/**/*.ts",
+                    ],
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
@@ -31,20 +29,19 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "when setting composite null on command line",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "es5",
-                            "module": "commonjs",
-                            "composite": true,
-                        },
-                        "include": [
-                            "src/**/*.ts"
-                        ]
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                        composite: true,
+                    },
+                    include: [
+                        "src/**/*.ts",
+                    ],
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--composite", "null", "--p", "src/project"],
     });
 
@@ -52,21 +49,20 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "when setting composite false on command line but has tsbuild info in config",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "es5",
-                            "module": "commonjs",
-                            "composite": true,
-                            "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
-                        },
-                        "include": [
-                            "src/**/*.ts"
-                        ]
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                        composite: true,
+                        tsBuildInfoFile: "tsconfig.json.tsbuildinfo",
+                    },
+                    include: [
+                        "src/**/*.ts",
+                    ],
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
@@ -74,21 +70,20 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "es5",
-                            "module": "commonjs",
-                            "composite": true,
-                            "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
-                        },
-                        "include": [
-                            "src/**/*.ts"
-                        ]
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                        composite: true,
+                        tsBuildInfoFile: "tsconfig.json.tsbuildinfo",
+                    },
+                    include: [
+                        "src/**/*.ts",
+                    ],
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
     });
 
@@ -96,7 +91,7 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "converting to modules",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -104,7 +99,7 @@ describe("unittests:: tsc:: composite::", () => {
                         composite: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-p", "/src/project"],
         edits: [
             {

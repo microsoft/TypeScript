@@ -5,7 +5,6 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
@@ -76,7 +75,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         scenario: "moduleResolution",
         subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
                 "/src/packages/pkg1.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
@@ -89,7 +88,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                     files: ["./pkg2_index.ts"],
                 }),
                 "/src/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
 });
@@ -99,7 +98,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         scenario: "moduleResolution",
         subScenario: "impliedNodeFormat differs between projects for shared file",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/projects/a/src/index.ts": "",
                 "/src/projects/a/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true },
@@ -120,7 +119,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
@@ -128,7 +127,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
 
 describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
     function sys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
             "/src/projects/project/packages/a/test/index.js": `import 'a';`,
             "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({

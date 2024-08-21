@@ -1,13 +1,18 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/node_modules/ambiguous-package/package.json]
-{ "name": "ambiguous-package" }
+{
+  "name": "ambiguous-package"
+}
 
 //// [/node_modules/ambiguous-package/index.d.ts]
 export declare const ambiguous: number;
 
 //// [/node_modules/esm-package/package.json]
-{ "name": "esm-package", "type": "module" }
+{
+  "name": "esm-package",
+  "type": "module"
+}
 
 //// [/node_modules/esm-package/index.d.ts]
 export declare const esm: number;

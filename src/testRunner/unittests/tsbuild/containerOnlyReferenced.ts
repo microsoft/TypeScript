@@ -3,14 +3,14 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "verify that subsequent builds after initial build doesnt build anything",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/folder/index.ts": `export const x = 10;`,
                 "/src/src/folder/tsconfig.json": jsonToReadableText({
                     files: ["index.ts"],
@@ -55,7 +55,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
                         { path: "./tests" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src", "--verbose"],
         edits: noChangeOnlyRuns,
     });
@@ -64,7 +64,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         scenario: "containerOnlyReferenced",
         subScenario: "when solution is referenced indirectly",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: [],
@@ -84,7 +84,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
                     references: [{ path: "../project3" }],
                 }),
                 "/src/project4/src/d.ts": "export const d = 10;",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/project4", "--verbose", "--explainFiles"],
         edits: [{
             caption: "modify project3 file",

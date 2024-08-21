@@ -6,11 +6,11 @@ import {
     verifyTsc,
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     function getProjFs(tsconfigFiles: object, additionalCompilerOptions?: CompilerOptions) {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/src/hello.json": jsonToReadableText({
                 hello: "world",
             }),
@@ -32,7 +32,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
                 },
                 ...tsconfigFiles,
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     function verfiyJson(
@@ -154,7 +154,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
         scenario: "resolveJsonModule",
         subScenario: "importing json module from project reference",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/strings/foo.json": jsonToReadableText({
                     foo: "bar baz",
                 }),
@@ -164,9 +164,9 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
                     references: [],
                 }),
                 "/src/main/index.ts": dedent`
-                import { foo } from '../strings/foo.json';
-                console.log(foo);
-            `,
+                    import { foo } from '../strings/foo.json';
+                    console.log(foo);
+                `,
                 "/src/main/tsconfig.json": jsonToReadableText({
                     extends: "../tsconfig.json",
                     include: [
@@ -192,7 +192,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
                     ],
                     files: [],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });

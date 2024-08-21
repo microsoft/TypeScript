@@ -4,7 +4,7 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "./tsc.js";
-import { loadProjectFromFiles } from "./vfs.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
     const commandLineArgs = buildType === "-b" ?
@@ -42,7 +42,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                     scenario: "noCheck",
                     subScenario: `${options.outFile ? "outFile" : "multiFile"}/${subScenario}${incremental ? " with incremental" : ""}`,
                     sys: () =>
-                        loadProjectFromFiles({
+                        TestServerHost.createWatchedSystem({
                             "/src/a.ts": aText,
                             "/src/b.ts": `export const b = 10;`,
                             "/src/tsconfig.json": jsonToReadableText({
@@ -52,7 +52,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                                     ...options,
                                 },
                             }),
-                        }),
+                        }, { currentDirectory: "/" }),
                     commandLineArgs: [...commandLineArgs, "--noCheck"],
                     edits: [
                         noChangeRun, // Should be no op

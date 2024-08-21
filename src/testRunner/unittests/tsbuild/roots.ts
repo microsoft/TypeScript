@@ -2,7 +2,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { forEachScenarioForRootsFromReferencedProject } from "../helpers/projectRoots.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: roots::", () => {
     verifyTsc({
@@ -10,14 +10,14 @@ describe("unittests:: tsbuild:: roots::", () => {
         subScenario: `when two root files are consecutive`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -33,7 +33,7 @@ describe("unittests:: tsbuild:: roots::", () => {
         subScenario: `when multiple root files are consecutive`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/file3.ts": `export const y = "world";`,
@@ -42,7 +42,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -58,18 +58,18 @@ describe("unittests:: tsbuild:: roots::", () => {
         subScenario: `when files are not consecutive`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/random.d.ts": `export const random = "world";`,
                 "/src/file2.ts": dedent`
-                import { random } from "./random";
-                export const y = "world";
-            `,
+                    import { random } from "./random";
+                    export const y = "world";
+                `,
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -85,7 +85,7 @@ describe("unittests:: tsbuild:: roots::", () => {
         subScenario: `when consecutive and non consecutive are mixed`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/random.d.ts": `export const random = "hello";`,
@@ -109,7 +109,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "delete file1",
             edit: sys => {

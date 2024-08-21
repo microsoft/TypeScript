@@ -4,7 +4,7 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - clean::", () => {
     verifyTsc({
@@ -12,26 +12,26 @@ describe("unittests:: tsbuild - clean::", () => {
         subScenario: `file name and output name clashing`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-clean"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/index.js": "",
                 "/src/bar.ts": "",
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { allowJs: true },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
     });
 
     verifyTsc({
         scenario: "clean",
         subScenario: "tsx with dts emit",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.tsx": "export const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: { declaration: true },
                     include: ["src/**/*.tsx", "src/**/*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "src/project", "-v", "--explainFiles"],
         edits: [
             noChangeRun,

@@ -10,11 +10,13 @@ module.exports = {};
 
 //// [/src/common/tsconfig.json]
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "include": ["nominal.js"]
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "nominal.js"
+  ]
 }
 
 //// [/src/sub-project/index.js]
@@ -27,14 +29,18 @@ import { Nominal } from '../common/nominal';
 
 //// [/src/sub-project/tsconfig.json]
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../common" }
-    ],
-    "include": ["./index.js"]
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
+  "include": [
+    "./index.js"
+  ]
 }
 
 //// [/src/sub-project-2/index.js]
@@ -54,38 +60,46 @@ export function getVar() {
 
 //// [/src/sub-project-2/tsconfig.json]
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../sub-project" }
-    ],
-    "include": ["./index.js"]
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../sub-project"
+    }
+  ],
+  "include": [
+    "./index.js"
+  ]
 }
 
 //// [/src/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./sub-project"
     },
-    "references": [
-        { "path": "./sub-project" },
-        { "path": "./sub-project-2" }
-    ],
-    "include": []
+    {
+      "path": "./sub-project-2"
+    }
+  ],
+  "include": []
 }
 
 //// [/src/tsconfig.base.json]
 {
-    "compilerOptions": {
-        "skipLibCheck": true,
-        "rootDir": "./",
-        "outDir": "../lib",
-        "allowJs": true,
-        "checkJs": true,
-        "declaration": true
-    }
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "rootDir": "./",
+    "outDir": "../lib",
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true
+  }
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]

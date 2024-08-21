@@ -1,11 +1,10 @@
 import { CompilerOptions } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { loadProjectFromFiles } from "./vfs.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
-    return loadProjectFromFiles({
+    return TestServerHost.createWatchedSystem({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 module: "NodeNext",
@@ -35,11 +34,11 @@ function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incrementa
             type: "module",
             main: "./distribution/index.js",
         }),
-    });
+    }, { currentDirectory: "/" });
 }
 
 function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
-    return loadProjectFromFiles({
+    return TestServerHost.createWatchedSystem({
         "/src/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 module: "amd",
@@ -62,7 +61,7 @@ function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions,
             declare const ky: KyInstance;
             export default ky;
         `,
-    });
+    }, { currentDirectory: "/" });
 }
 
 export function forEachDeclarationEmitWithErrorsScenario(

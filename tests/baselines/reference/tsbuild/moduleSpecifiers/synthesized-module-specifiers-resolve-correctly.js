@@ -8,11 +8,13 @@ export declare type Nominal<T, Name extends string> = T & {
 
 //// [/src/solution/common/tsconfig.json]
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "include": ["nominal.ts"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "nominal.ts"
+  ]
 }
 
 //// [/src/solution/sub-project/index.ts]
@@ -23,14 +25,18 @@ export type MyNominal = Nominal<string, 'MyNominal'>;
 
 //// [/src/solution/sub-project/tsconfig.json]
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../common" }
-    ],
-    "include": ["./index.ts"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
 }
 
 //// [/src/solution/sub-project-2/index.ts]
@@ -47,47 +53,57 @@ export function getVar(): keyof typeof variable {
 
 //// [/src/solution/sub-project-2/tsconfig.json]
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../sub-project" }
-    ],
-    "include": ["./index.ts"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../sub-project"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
 }
 
 //// [/src/solution/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./sub-project"
     },
-    "references": [
-        { "path": "./sub-project" },
-        { "path": "./sub-project-2" }
-    ],
-    "include": []
+    {
+      "path": "./sub-project-2"
+    }
+  ],
+  "include": []
 }
 
 //// [/src/tsconfig.base.json]
 {
-    "compilerOptions": {
-        "skipLibCheck": true,
-        "rootDir": "./",
-        "outDir": "lib",
-    }
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "rootDir": "./",
+    "outDir": "lib"
+  }
 }
 
 //// [/src/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "composite": true
-                    },
-                    "references": [
-                        { "path": "./solution" }
-                    ],
-                    "include": []
-                }
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./solution"
+    }
+  ],
+  "include": []
+}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

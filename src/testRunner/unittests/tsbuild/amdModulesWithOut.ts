@@ -1,11 +1,11 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     function outFileSys(prepend?: boolean) {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/app/file3.ts": dedent`
                 export const z = 30;
                 import { x } from "file1";
@@ -42,7 +42,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
                 },
                 exclude: ["module.d.ts"],
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     verifyTsc({

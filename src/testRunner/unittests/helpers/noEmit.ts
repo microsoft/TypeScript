@@ -13,7 +13,6 @@ import {
     verifyTsc,
 } from "./tsc.js";
 import { verifyTscWatch } from "./tscWatch.js";
-import { loadProjectFromFiles } from "./vfs.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: CompilerOptions) {
@@ -115,7 +114,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
     });
 
     function sys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/project/src/class.ts": dedent`
                 export class classC {
                     prop = 1;
@@ -140,7 +139,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
             "/src/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson(compilerOptions),
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 }
 
@@ -220,12 +219,12 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         subScenario: `${options.outFile ? "outFile" : "multiFile"}/dts errors with declaration enable changes${incremental ? " with incremental" : ""}${asModules ? " as modules" : ""}`,
                         commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit"],
                         sys: () =>
-                            loadProjectFromFiles({
+                            TestServerHost.createWatchedSystem({
                                 "/home/src/projects/project/a.ts": aContent,
                                 "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                                     compilerOptions: { ...options, incremental },
                                 }),
-                            }),
+                            }, { currentDirectory: "/" }),
                         modifySystem: asModules ?
                             sys => sys.writeFile("/home/src/projects/project/b.ts", `export const b = 10;`) :
                             undefined,
@@ -245,7 +244,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                 subScenario: `${options.outFile ? "outFile" : "multiFile"}/dts errors with declaration enable changes with multiple files`,
                 commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit"],
                 sys: () =>
-                    loadProjectFromFiles({
+                    TestServerHost.createWatchedSystem({
                         "/home/src/projects/project/a.ts": aContent,
                         "/home/src/projects/project/b.ts": `export const b = 10;`,
                         "/home/src/projects/project/c.ts": aContent.replace("a", "c"),
@@ -253,7 +252,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                             compilerOptions: { ...options, incremental: true },
                         }),
-                    }),
+                    }, { currentDirectory: "/" }),
                 edits: [
                     ...editsForDtsChanges(commandType, aContent, /*incremental*/ true, /*multiFile*/ true),
                     {

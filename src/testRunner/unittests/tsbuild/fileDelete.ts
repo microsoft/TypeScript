@@ -3,11 +3,11 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function sys(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/child/child.ts": dedent`
                 import { child2 } from "../child/child2";
                 export function child() {
@@ -33,7 +33,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                     references: [{ path: "../child" }],
                 }),
             } : {}),
-        });
+        }, { currentDirectory: "/" });
     }
 
     verifyTsc({

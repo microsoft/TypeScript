@@ -14,12 +14,12 @@ export {};
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "incremental": true,
-        "outDir": "dist",
-    },
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "incremental": true,
+    "outDir": "dist"
+  }
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]

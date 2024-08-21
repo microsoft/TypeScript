@@ -2,14 +2,14 @@ import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { commandLineCallbacks } from "../helpers/baseline.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     verifyTsc({
         scenario: "publicAPI",
         subScenario: "build with custom transformers",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/tsconfig.json": jsonToReadableText({
                     references: [
                         { path: "./shared/tsconfig.json" },
@@ -36,7 +36,7 @@ export class c2 { }
 export enum e2 { }
 // leading
 export function f22() { } // trailing`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         compile: sys => {
             const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);

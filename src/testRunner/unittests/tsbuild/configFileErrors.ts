@@ -4,14 +4,14 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/tsconfig.first.json": jsonToReadableText({
                     extends: "./foobar.json",
                     compilerOptions: {
@@ -33,7 +33,7 @@ describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the mis
                         { path: "./tsconfig.second.json" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
     });
 });
@@ -44,7 +44,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
             scenario: "configFileErrors",
             subScenario: `${outFile ? "outFile" : "multiFile"}/reports syntax errors in config file`,
             sys: () =>
-                loadProjectFromFiles({
+                TestServerHost.createWatchedSystem({
                     "/src/a.ts": "export function foo() { }",
                     "/src/b.ts": "export function bar() { }",
                     "/src/tsconfig.json": dedent`
@@ -57,7 +57,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         "b.ts"
     ]
 }`,
-                }),
+                }, { currentDirectory: "/" }),
             commandLineArgs: ["--b", "/src/tsconfig.json"],
             edits: [
                 {

@@ -1,13 +1,13 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - empty files option in tsconfig", () => {
     verifyTsc({
         scenario: "emptyFiles",
         subScenario: "has empty files diagnostic when files is empty and no references are provided",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/no-references/tsconfig.json": jsonToReadableText({
                     references: [],
                     files: [],
@@ -18,7 +18,7 @@ describe("unittests:: tsbuild - empty files option in tsconfig", () => {
                         skipDefaultLibCheck: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/no-references"],
     });
 
@@ -26,7 +26,7 @@ describe("unittests:: tsbuild - empty files option in tsconfig", () => {
         scenario: "emptyFiles",
         subScenario: "does not have empty files diagnostic when files is empty and references are provided",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/core/index.ts": "export function multiply(a: number, b: number) { return a * b; }",
                 "/src/core/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -48,7 +48,7 @@ describe("unittests:: tsbuild - empty files option in tsconfig", () => {
                         skipDefaultLibCheck: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--b", "/src/with-references"],
     });
 });

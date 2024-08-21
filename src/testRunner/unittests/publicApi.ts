@@ -4,7 +4,7 @@ import * as Harness from "../_namespaces/Harness.js";
 import * as ts from "../_namespaces/ts.js";
 import * as vfs from "../_namespaces/vfs.js";
 import { jsonToReadableText } from "./helpers.js";
-import { loadProjectFromFiles } from "./helpers/vfs.js";
+import { TestServerHost } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -263,7 +263,7 @@ class C {
 
 describe("unittests:: Public APIs:: createProgram", () => {
     function verifyAPI(useJsonParsingApi: boolean) {
-        const sys = loadProjectFromFiles({
+        const sys = TestServerHost.createWatchedSystem({
             "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
             "/src/projects/project/packages/a/test/index.js": `import 'a';`,
             "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({

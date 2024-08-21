@@ -1,12 +1,11 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     function getInferredTypeFromTransitiveModuleSys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/bar.ts": dedent`
                 interface RawAction {
                     (...args: any[]): Promise<any> | void;
@@ -57,7 +56,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                     incremental: true,
                 },
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     verifyTsc({

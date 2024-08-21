@@ -16,12 +16,12 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
     getTypeScriptLibTestLocation,
     libFile,
     SerializeOutputOrder,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
@@ -190,11 +190,11 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             scenario: "sample1",
             subScenario: "tsbuildinfo has error",
             sys: () =>
-                loadProjectFromFiles({
+                TestServerHost.createWatchedSystem({
                     "/src/project/main.ts": "export const x = 10;",
                     "/src/project/tsconfig.json": "{}",
                     "/src/project/tsconfig.tsbuildinfo": "Some random string",
-                }),
+                }, { currentDirectory: "/" }),
             commandLineArgs: ["--b", "src/project", "-i", "-v"],
             edits: [{
                 caption: "tsbuildinfo written has error",

@@ -1,10 +1,10 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeSys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/tsconfig.json": jsonToReadableText({
                 references: [
                     { path: "./shared/tsconfig.json" },
@@ -37,7 +37,7 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
                 references: [{ path: "../shared/tsconfig.json" }],
             }),
             "/src/webpack/index.ts": `export const b: Unrestricted = 1;`,
-        });
+        }, { currentDirectory: "/" });
     }
     verifyTsc({
         scenario: "configFileExtends",

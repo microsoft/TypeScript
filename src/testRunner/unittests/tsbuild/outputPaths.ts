@@ -6,7 +6,7 @@ import {
     verifyTsc,
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
@@ -42,21 +42,21 @@ describe("unittests:: tsbuild - output file paths", () => {
     verify({
         subScenario: "when rootDir is not specified",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is not specified and is composite",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -64,14 +64,14 @@ describe("unittests:: tsbuild - output file paths", () => {
                         composite: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits,
     }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
 
     verify({
         subScenario: "when rootDir is specified",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -79,14 +79,14 @@ describe("unittests:: tsbuild - output file paths", () => {
                         rootDir: "src",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
                 "/src/tsconfig.json": jsonToReadableText({
@@ -95,14 +95,14 @@ describe("unittests:: tsbuild - output file paths", () => {
                         rootDir: "src",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir and is composite",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
                 "/src/tsconfig.json": jsonToReadableText({
@@ -112,7 +112,7 @@ describe("unittests:: tsbuild - output file paths", () => {
                         composite: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         edits,
     }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
 });

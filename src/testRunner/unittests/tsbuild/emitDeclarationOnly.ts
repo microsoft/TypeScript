@@ -1,11 +1,11 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     function getEmitDeclarationOnlySys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/src/a.ts": dedent`
                 import { B } from "./b";
 
@@ -49,7 +49,7 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
                     emitDeclarationOnly: true,
                 },
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     function verifyEmitDeclarationOnly(disableMap?: true) {

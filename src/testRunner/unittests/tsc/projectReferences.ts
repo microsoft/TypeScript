@@ -1,13 +1,13 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({
         scenario: "projectReferences",
         subScenario: "when project contains invalid project reference",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -18,7 +18,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../Util/Dates" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project"],
     });
 
@@ -26,7 +26,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
         scenario: "projectReferences",
         subScenario: "when project references composite project with noEmit",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/utils/index.ts": "export const x = 10;",
                 "/src/utils/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -40,7 +40,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../utils" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project"],
     });
 
@@ -48,10 +48,10 @@ describe("unittests:: tsc:: projectReferences::", () => {
         scenario: "projectReferences",
         subScenario: "default import interop uses referenced project settings",
         sys: () =>
-            loadProjectFromFiles({
-                "/node_modules/ambiguous-package/package.json": `{ "name": "ambiguous-package" }`,
+            TestServerHost.createWatchedSystem({
+                "/node_modules/ambiguous-package/package.json": jsonToReadableText({ name: "ambiguous-package" }),
                 "/node_modules/ambiguous-package/index.d.ts": "export declare const ambiguous: number;",
-                "/node_modules/esm-package/package.json": `{ "name": "esm-package", "type": "module" }`,
+                "/node_modules/esm-package/package.json": jsonToReadableText({ name: "esm-package", type: "module" }),
                 "/node_modules/esm-package/index.d.ts": "export declare const esm: number;",
                 "/lib/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -85,7 +85,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                     import referencedSource from "../../lib/src/a"; // Error
                     import referencedDeclaration from "../../lib/dist/a"; // Error
                     import ambiguous from "ambiguous-package"; // Ok`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "app", "--pretty", "false"],
     });
 
@@ -93,7 +93,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
         scenario: "projectReferences",
         subScenario: "referencing ambient const enum from referenced project with preserveConstEnums",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/utils/index.ts": "export const enum E { A = 1 }",
                 "/src/utils/index.d.ts": "export declare const enum E { A = 1 }",
                 "/src/utils/tsconfig.json": jsonToReadableText({
@@ -112,7 +112,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../utils" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project"],
     });
 
@@ -120,7 +120,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
         scenario: "projectReferences",
         subScenario: "importing const enum from referenced project with preserveConstEnums and verbatimModuleSyntax",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/preserve/index.ts": "export const enum E { A = 1 }",
                 "/src/preserve/index.d.ts": "export declare const enum E { A = 1 }",
                 "/src/preserve/tsconfig.json": jsonToReadableText({
@@ -150,7 +150,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../no-preserve" },
                     ],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project", "--pretty", "false"],
     });
 });

@@ -10,11 +10,11 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     function getOutFileSys() {
-        return loadProjectFromFiles({
+        return TestServerHost.createWatchedSystem({
             "/src/first/first_PART1.ts": dedent`
                 interface TheFirst {
                     none: any;
@@ -112,7 +112,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     { path: "../second" },
                 ],
             }),
-        });
+        }, { currentDirectory: "/" });
     }
 
     function getOutFileSysAfterBuild() {

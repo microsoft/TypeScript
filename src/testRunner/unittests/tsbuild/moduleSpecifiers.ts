@@ -1,8 +1,11 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import { symbolLibContent } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
@@ -10,36 +13,34 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
         scenario: "moduleSpecifiers",
         subScenario: `synthesized module specifiers resolve correctly`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/solution/common/nominal.ts": dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
                     };
                     `,
-                "/src/solution/common/tsconfig.json": dedent`
-                    {
-                        "extends": "../../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "include": ["nominal.ts"]
-                    }`,
+                "/src/solution/common/tsconfig.json": jsonToReadableText({
+                    extends: "../../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    include: ["nominal.ts"],
+                }),
                 "/src/solution/sub-project/index.ts": dedent`
                     import { Nominal } from '../common/nominal';
 
                     export type MyNominal = Nominal<string, 'MyNominal'>;
                     `,
-                "/src/solution/sub-project/tsconfig.json": dedent`
-                    {
-                        "extends": "../../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../common" }
-                        ],
-                        "include": ["./index.ts"]
-                    }`,
+                "/src/solution/sub-project/tsconfig.json": jsonToReadableText({
+                    extends: "../../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../common" },
+                    ],
+                    include: ["./index.ts"],
+                }),
                 "/src/solution/sub-project-2/index.ts": dedent`
                     import { MyNominal } from '../sub-project/index';
 
@@ -51,47 +52,44 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         return 'key';
                     }
                     `,
-                "/src/solution/sub-project-2/tsconfig.json": dedent`
-                    {
-                        "extends": "../../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../sub-project" }
-                        ],
-                        "include": ["./index.ts"]
-                    }`,
-                "/src/solution/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "./sub-project" },
-                            { "path": "./sub-project-2" }
-                        ],
-                        "include": []
-                    }`,
-                "/src/tsconfig.base.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "skipLibCheck": true,
-                            "rootDir": "./",
-                            "outDir": "lib",
-                        }
-                    }`,
-                "/src/tsconfig.json": dedent`{
-                    "compilerOptions": {
-                        "composite": true
+                "/src/solution/sub-project-2/tsconfig.json": jsonToReadableText({
+                    extends: "../../tsconfig.base.json",
+                    compilerOptions: {
+                        composite: true,
                     },
-                    "references": [
-                        { "path": "./solution" }
+                    references: [
+                        { path: "../sub-project" },
                     ],
-                    "include": []
-                }`,
+                    include: ["./index.ts"],
+                }),
+                "/src/solution/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "./sub-project" },
+                        { path: "./sub-project-2" },
+                    ],
+                    include: [],
+                }),
+                "/src/tsconfig.base.json": jsonToReadableText({
+                    compilerOptions: {
+                        skipLibCheck: true,
+                        rootDir: "./",
+                        outDir: "lib",
+                    },
+                }),
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "./solution" },
+                    ],
+                    include: [],
+                }),
                 [libFile.path]: `${libFile.content}${symbolLibContent}`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "/src", "--verbose"],
     });
 });
@@ -102,7 +100,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
         scenario: "moduleSpecifiers",
         subScenario: `synthesized module specifiers across projects resolve correctly`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src-types/index.ts": dedent`
                     export * from './dogconfig.js';`,
                 "/src/src-types/dogconfig.ts": dedent`
@@ -144,49 +142,44 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
 
                     export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
                     `,
-                "/src/tsconfig-base.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "declaration": true,
-                            "module": "node16"
-                        }
-                    }`,
-                "/src/src-types/package.json": dedent`
-                    {
-                        "type": "module",
-                        "exports": "./index.js"
-                    }`,
-                "/src/src-dogs/package.json": dedent`
-                    {
-                        "type": "module",
-                        "exports": "./index.js"
-                    }`,
-                "/src/src-types/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig-base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "include": [
-                            "**/*"
-                        ]
-                    }`,
-                "/src/src-dogs/tsconfig.json": dedent`
-                    {
-                        "extends": "../tsconfig-base.json",
-                        "compilerOptions": {
-                            "composite": true
-                        },
-                        "references": [
-                            { "path": "../src-types" }
-                        ],
-                        "include": [
-                            "**/*"
-                        ]
-                    }`,
+                "/src/tsconfig-base.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                        module: "node16",
+                    },
+                }),
+                "/src/src-types/package.json": jsonToReadableText({
+                    type: "module",
+                    exports: "./index.js",
+                }),
+                "/src/src-dogs/package.json": jsonToReadableText({
+                    type: "module",
+                    exports: "./index.js",
+                }),
+                "/src/src-types/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig-base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    include: [
+                        "**/*",
+                    ],
+                }),
+                "/src/src-dogs/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig-base.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "../src-types" },
+                    ],
+                    include: [
+                        "**/*",
+                    ],
+                }),
                 "/src/src-types/node_modules": { symLink: "/src" },
                 "/src/src-dogs/node_modules": { symLink: "/src" },
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"],
     });
 });

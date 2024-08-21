@@ -3,17 +3,17 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "loose file",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/test.ts": dedent`
                         export const x = 1;`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"],
     });
 
@@ -21,10 +21,10 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/test.ts": `export const x = 1;`,
                 "/src/tsconfig.json": "{}",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
         edits: [
             {

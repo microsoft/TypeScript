@@ -5,14 +5,14 @@ export const x = 10;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "composite": true,
-    },
-    "include": [
-        "src/**/*.ts"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "composite": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]

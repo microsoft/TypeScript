@@ -1,7 +1,7 @@
 import { jsonToReadableText } from "../helpers.js";
 import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: noEmitOnError::", () => {
     forEachNoEmitOnErrorScenarioTsc([]);
@@ -10,7 +10,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         scenario: "noEmitOnError",
         subScenario: `multiFile/when declarationMap changes`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
@@ -20,7 +20,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/src/project/a.ts": "const x = 10;",
                 "/src/project/b.ts": "const y = 10;",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "/src/project"],
         edits: [
             {
@@ -45,7 +45,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         scenario: "noEmitOnError",
         subScenario: `outFile/when declarationMap changes`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
@@ -56,7 +56,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/src/project/a.ts": "const x = 10;",
                 "/src/project/b.ts": "const y = 10;",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "/src/project"],
         edits: [
             {
@@ -80,7 +80,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         scenario: "noEmitOnError",
         subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "outDir",
@@ -89,7 +89,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/src/project/file1.ts": `export const x: 30 = "hello";`,
                 "/src/project/file2.ts": `export class D { }`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "/src/project", "-i"],
         edits: [{
             caption: "delete file without error",
@@ -102,7 +102,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
         scenario: "noEmitOnError",
         subScenario: "outFile/file deleted before fixing error with noEmitOnError",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outFile: "../outFile.js",
@@ -112,7 +112,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/src/project/file1.ts": `export const x: 30 = "hello";`,
                 "/src/project/file2.ts": `export class D { }`,
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "/src/project", "-i"],
         edits: [{
             caption: "delete file without error",

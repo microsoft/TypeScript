@@ -5,15 +5,15 @@ export const x = 10;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "composite": true,
-        "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
-    },
-    "include": [
-        "src/**/*.ts"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "composite": true,
+    "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -34,10 +34,10 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/ts/lib/tsc.js --composite false --p src/project
 Output::
-[96msrc/project/tsconfig.json[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
+[96msrc/project/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
 
-[7m6[0m         "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
-[7m [0m [91m        ~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
 
 Found 1 error in src/project/tsconfig.json[90m:6[0m

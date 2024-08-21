@@ -1,7 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { getSysForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
     verifyTsc({
@@ -9,7 +9,7 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         subScenario: "with relative and non relative file resolutions",
         commandLineArgs: ["/src/project/src/struct.d.ts", "--forceConsistentCasingInFileNames", "--explainFiles"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/struct.d.ts": dedent`
                     import * as xs1 from "fp-ts/lib/Struct";
                     import * as xs2 from "fp-ts/lib/struct";
@@ -17,7 +17,7 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
                     import * as xs4 from "./struct";
                 `,
                 "/src/project/node_modules/fp-ts/lib/struct.d.ts": `export function foo(): void`,
-            }),
+            }, { currentDirectory: "/" }),
     });
 
     verifyTsc({
@@ -32,13 +32,13 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         subScenario: "with type ref from file",
         commandLineArgs: ["-p", "/src/project/src", "--explainFiles", "--traceResolution"],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/fileOne.d.ts": `declare class c { }`,
                 "/src/project/src/file2.d.ts": dedent`
                     /// <reference types="./fileOne.d.ts"/>
                     declare const y: c;
                 `,
                 "/src/project/src/tsconfig.json": "{ }",
-            }),
+            }, { currentDirectory: "/" }),
     });
 });

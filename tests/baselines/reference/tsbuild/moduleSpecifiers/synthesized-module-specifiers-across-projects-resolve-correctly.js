@@ -50,47 +50,49 @@ export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
 
 //// [/src/tsconfig-base.json]
 {
-    "compilerOptions": {
-        "declaration": true,
-        "module": "node16"
-    }
+  "compilerOptions": {
+    "declaration": true,
+    "module": "node16"
+  }
 }
 
 //// [/src/src-types/package.json]
 {
-    "type": "module",
-    "exports": "./index.js"
+  "type": "module",
+  "exports": "./index.js"
 }
 
 //// [/src/src-dogs/package.json]
 {
-    "type": "module",
-    "exports": "./index.js"
+  "type": "module",
+  "exports": "./index.js"
 }
 
 //// [/src/src-types/tsconfig.json]
 {
-    "extends": "../tsconfig-base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "include": [
-        "**/*"
-    ]
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "**/*"
+  ]
 }
 
 //// [/src/src-dogs/tsconfig.json]
 {
-    "extends": "../tsconfig-base.json",
-    "compilerOptions": {
-        "composite": true
-    },
-    "references": [
-        { "path": "../src-types" }
-    ],
-    "include": [
-        "**/*"
-    ]
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../src-types"
+    }
+  ],
+  "include": [
+    "**/*"
+  ]
 }
 
 //// [/src/src-types/node_modules] symlink(/src)

@@ -5,10 +5,10 @@ export const x = 10;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "incremental": true,
-        "outDir": "dist",
-    },
+  "compilerOptions": {
+    "incremental": true,
+    "outDir": "dist"
+  }
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]

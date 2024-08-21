@@ -1,13 +1,13 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: redirect::", () => {
     verifyTsc({
         scenario: "redirect",
         subScenario: "when redirecting ts file",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "out",
@@ -31,7 +31,7 @@ describe("unittests:: tsc:: redirect::", () => {
                     version: "1.0.0",
                     main: "index.js",
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-p", "src/project"],
     });
 });

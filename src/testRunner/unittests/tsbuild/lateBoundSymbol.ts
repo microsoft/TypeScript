@@ -1,40 +1,40 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
     verifyTsc({
         subScenario: "interface is merged and contains late bound member",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/src/globals.d.ts": dedent`
-                interface SymbolConstructor {
-                    (description?: string | number): symbol;
-                }
-                declare var Symbol: SymbolConstructor;
-            `,
+                    interface SymbolConstructor {
+                        (description?: string | number): symbol;
+                    }
+                    declare var Symbol: SymbolConstructor;
+                `,
                 "/src/src/hkt.ts": `export interface HKT<T> { }`,
                 "/src/src/main.ts": dedent`
-                import { HKT } from "./hkt";
+                    import { HKT } from "./hkt";
 
-                const sym = Symbol();
+                    const sym = Symbol();
 
-                declare module "./hkt" {
-                    interface HKT<T> {
-                        [sym]: { a: T }
+                    declare module "./hkt" {
+                        interface HKT<T> {
+                            [sym]: { a: T }
+                        }
                     }
-                }
-                const x = 10;
-                type A = HKT<number>[typeof sym];
-            `,
+                    const x = 10;
+                    type A = HKT<number>[typeof sym];
+                `,
                 "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         rootDir: "src",
                         incremental: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         scenario: "lateBoundSymbol",
         commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
         edits: [

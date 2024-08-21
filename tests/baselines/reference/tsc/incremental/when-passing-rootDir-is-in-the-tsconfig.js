@@ -5,11 +5,11 @@ export const x = 10;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "incremental": true,
-        "outDir": "./built",
-        "rootDir": "./"
-    },
+  "compilerOptions": {
+    "incremental": true,
+    "outDir": "./built",
+    "rootDir": "./"
+  }
 }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]

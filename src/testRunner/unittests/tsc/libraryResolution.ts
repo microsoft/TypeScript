@@ -9,7 +9,7 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(withoutConfig?: true) {
@@ -37,7 +37,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
         scenario: "libraryResolution",
         subScenario: "when noLib toggles",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/a.d.ts": `declare const a = "hello";`,
                 "/src/b.ts": `const b = 10;`,
                 "/src/tsconfig.json": jsonToReadableText({
@@ -47,7 +47,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6"],
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-p", "/src/tsconfig.json"],
         edits: [
             {
@@ -62,7 +62,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
         scenario: "libraryResolution",
         subScenario: "when one of the file skips default lib inclusion",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/a.d.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="es6"/>
@@ -74,7 +74,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6", "dom"],
                     },
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
         baselinePrograms: true,
     });

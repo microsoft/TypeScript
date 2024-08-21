@@ -8,27 +8,28 @@ import {
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
         scenario: "incremental",
         subScenario: "when passing filename for buildinfo on commandline",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "es5",
-                            "module": "commonjs",
-                        },
-                        "include": [
-                            "src/**/*.ts"
-                        ]
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                    },
+                    include: [
+                        "src/**/*.ts",
+                    ],
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
@@ -37,16 +38,15 @@ describe("unittests:: tsc:: incremental::", () => {
         scenario: "incremental",
         subScenario: "when passing rootDir from commandline",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "incremental": true,
-                            "outDir": "dist",
-                        },
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        incremental: true,
+                        outDir: "dist",
+                    },
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         edits: noChangeOnlyRuns,
     });
@@ -55,11 +55,11 @@ describe("unittests:: tsc:: incremental::", () => {
         scenario: "incremental",
         subScenario: "with only dts files",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.d.ts": "export const x = 10;",
                 "/src/project/src/another.d.ts": "export const y = 10;",
                 "/src/project/tsconfig.json": "{}",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--incremental", "--p", "src/project"],
         edits: [
             noChangeRun,
@@ -74,17 +74,16 @@ describe("unittests:: tsc:: incremental::", () => {
         scenario: "incremental",
         subScenario: "when passing rootDir is in the tsconfig",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "incremental": true,
-                            "outDir": "./built",
-                            "rootDir": "./"
-                        },
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        incremental: true,
+                        outDir: "./built",
+                        rootDir: "./",
+                    },
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project"],
         edits: noChangeOnlyRuns,
     });
@@ -93,11 +92,11 @@ describe("unittests:: tsc:: incremental::", () => {
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": "{}",
                 "/src/project/tsconfig.tsbuildinfo": "Some random string",
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project", "-i"],
         edits: [{
             caption: "tsbuildinfo written has error",
@@ -109,7 +108,7 @@ describe("unittests:: tsc:: incremental::", () => {
         scenario: "incremental",
         subScenario: `when global file is added, the signatures are updated`,
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
@@ -125,7 +124,7 @@ describe("unittests:: tsc:: incremental::", () => {
                     compilerOptions: { composite: true },
                     include: ["src/**/*.ts"],
                 }),
-            }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project"],
         edits: [
             noChangeRun,
@@ -181,12 +180,12 @@ declare global {
             scenario: "incremental",
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash",
             sys: () =>
-                loadProjectFromFiles({
+                TestServerHost.createWatchedSystem({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
-                }),
+                }, { currentDirectory: "/" }),
             commandLineArgs: ["--p", "src/project"],
         });
 
@@ -194,12 +193,12 @@ declare global {
             scenario: "incremental",
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash under --strict",
             sys: () =>
-                loadProjectFromFiles({
+                TestServerHost.createWatchedSystem({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
-                }),
+                }, { currentDirectory: "/" }),
             commandLineArgs: ["--p", "src/project", "--strict"],
         });
     });
@@ -209,7 +208,7 @@ declare global {
         subScenario: "when new file is added to the referenced project",
         commandLineArgs: ["-i", "-p", `src/projects/project2`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/projects/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
@@ -229,7 +228,7 @@ declare global {
                     ],
                 }),
                 "/src/projects/project2/class2.ts": `class class2 {}`,
-            }),
+            }, { currentDirectory: "/" }),
         edits: [
             {
                 caption: "Add class3 to project1 and build it",
@@ -266,7 +265,7 @@ declare global {
         subScenario: "serializing error chains",
         commandLineArgs: ["-p", `src/project`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
@@ -290,7 +289,7 @@ declare global {
                         <div />
                     </Component>)`,
                 [libFile.path]: `${libFile.content}\ninterface ReadonlyArray<T> { readonly length: number }`,
-            }),
+            }, { currentDirectory: "/" }),
         edits: noChangeOnlyRuns,
     });
 
@@ -298,7 +297,7 @@ declare global {
         scenario: "incremental",
         subScenario: "ts file with no-default-lib that augments the global scope",
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/src/main.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="esnext" />
@@ -310,16 +309,15 @@ declare global {
 
                     export {};
                 `,
-                "/src/project/tsconfig.json": dedent`
-                    {
-                        "compilerOptions": {
-                            "target": "ESNext",
-                            "module": "ESNext",
-                            "incremental": true,
-                            "outDir": "dist",
-                        },
-                    }`,
-            }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "ESNext",
+                        module: "ESNext",
+                        incremental: true,
+                        outDir: "dist",
+                    },
+                }),
+            }, { currentDirectory: "/" }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
     });
 
@@ -328,13 +326,13 @@ declare global {
         subScenario: "change to type that gets used as global through export in another file",
         commandLineArgs: ["-p", `src/project`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
                 "/src/project/constants.ts": "export default 1;",
                 "/src/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "Modify imports used in global file",
             edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
@@ -346,14 +344,14 @@ console.log(a);`,
         subScenario: "change to type that gets used as global through export in another file through indirect import",
         commandLineArgs: ["-p", `src/project`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
                 "/src/project/constants.ts": "export default 1;",
                 "/src/project/reexport.ts": `export { default as ConstantNumber } from "./constants"`,
                 "/src/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "Modify imports used in global file",
             edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
@@ -366,7 +364,7 @@ console.log(a);`,
             subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
             commandLineArgs: ["-p", "src/project", "--incremental"],
             sys: () =>
-                loadProjectFromFiles({
+                TestServerHost.createWatchedSystem({
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
                     "/src/project/main.ts": dedent`
                         import MessageablePerson from './MessageablePerson.js';
@@ -382,7 +380,7 @@ console.log(a);`,
                         const wrapper = () => Messageable();
                         type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
                         export default MessageablePerson;`,
-                }),
+                }, { currentDirectory: "/" }),
             modifySystem: sys =>
                 sys.appendFile(
                     libFile.path,
@@ -444,13 +442,13 @@ console.log(a);`,
             };
         }
         function sys(options: ts.CompilerOptions) {
-            return loadProjectFromFiles({
+            return TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
                 "/src/project/d.ts": `import { b } from "./b";export const d = b;`,
-            });
+            }, { currentDirectory: "/" });
         }
         function enableDeclarationMap(): TestTscEdit {
             return {
@@ -522,7 +520,7 @@ console.log(a);`,
         subScenario: "when file is deleted",
         commandLineArgs: ["-p", `/src/project`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
@@ -531,7 +529,7 @@ console.log(a);`,
                 }),
                 "/src/project/file1.ts": `export class  C { }`,
                 "/src/project/file2.ts": `export class D { }`,
-            }),
+            }, { currentDirectory: "/" }),
         edits: [
             {
                 caption: "delete file with imports",
@@ -545,7 +543,7 @@ console.log(a);`,
         subScenario: "generates typerefs correctly",
         commandLineArgs: ["-p", `/src/project`],
         sys: () =>
-            loadProjectFromFiles({
+            TestServerHost.createWatchedSystem({
                 "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
@@ -584,7 +582,7 @@ console.log(a);`,
                         [K in keyof C]: { wrapped: C[K] }
                     }
                 `,
-            }),
+            }, { currentDirectory: "/" }),
         edits: [{
             caption: "modify js file",
             edit: sys => sys.appendFile("/src/project/src/bug.js", `export const something = 1;`),
@@ -606,7 +604,7 @@ console.log(a);`,
                 subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
                 commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
                 sys: () =>
-                    loadProjectFromFiles({
+                    TestServerHost.createWatchedSystem({
                         "/src/project/a.ts": dedent`
                             import {A} from "./c"
                             let a = A.ONE
@@ -637,7 +635,7 @@ console.log(a);`,
                                 ONE = 1
                             }
                         `,
-                    }),
+                    }, { currentDirectory: "/" }),
                 edits: [
                     {
                         caption: "change enum value",
