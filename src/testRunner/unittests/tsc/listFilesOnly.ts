@@ -1,4 +1,3 @@
-import { dedent } from "../../_namespaces/Utils.js";
 import {
     noChangeRun,
     verifyTsc,
@@ -11,10 +10,9 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         subScenario: "loose file",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/test.ts": dedent`
-                        export const x = 1;`,
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["/src/test.ts", "--listFilesOnly"],
+                "/home/src/workspaces/project/test.ts": "export const x = 1;",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["test.ts", "--listFilesOnly"],
     });
 
     verifyTsc({
@@ -22,19 +20,19 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         subScenario: "combined with incremental",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/test.ts": `export const x = 1;`,
-                "/src/tsconfig.json": "{}",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
+                "/home/src/workspaces/project/test.ts": "export const x = 1;",
+                "/home/src/workspaces/project/tsconfig.json": "{}",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--incremental", "--listFilesOnly"],
         edits: [
             {
                 ...noChangeRun,
-                commandLineArgs: ["-p", "/src", "--incremental"],
+                commandLineArgs: ["--incremental"],
             },
             noChangeRun,
             {
                 ...noChangeRun,
-                commandLineArgs: ["-p", "/src", "--incremental"],
+                commandLineArgs: ["--incremental"],
             },
         ],
     });

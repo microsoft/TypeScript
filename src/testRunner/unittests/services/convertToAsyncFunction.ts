@@ -276,7 +276,7 @@ interface Array<T> {}`,
 };
 
 const moduleFile: File = {
-    path: "/module.ts",
+    path: "/home/src/workspaces/project/module.ts",
     content: `export function fn(res: any): any {
     return res;
 }`,
@@ -331,7 +331,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     extensions.forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: ts.Extension) {
-        const path = "/a" + extension;
+        const path = "/home/src/workspaces/project/a" + extension;
         const languageService = makeLanguageService({ path, content: t.source }, includeLib, includeModule);
         const program = languageService.getProgram()!;
 
@@ -445,7 +445,7 @@ const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: st
     testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
 });
 
-describe("unittests:: services:: convertToAsyncFunction", () => {
+describe("unittests:: services:: convertToAsyncFunction::", () => {
     _testConvertToAsyncFunction(
         "convertToAsyncFunction_basic",
         `

@@ -84,20 +84,23 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
 });
 
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem Watched recursive directories with windows style file system", () => {
-    function verifyWatchedDirectories(scenario: string, rootedPath: string, useProjectAtRoot: boolean) {
+    function verifyWatchedDirectories(scenario: string, rootedPath: string, useProjectAtRoot: boolean, watchableExempt?: boolean) {
         it(scenario, () => {
             const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
             const configFile: File = {
                 path: root + "project/tsconfig.json",
                 content: "{}",
+                watchableExempt,
             };
             const file1: File = {
                 path: root + "project/file1.ts",
                 content: "let x = 10;",
+                watchableExempt,
             };
             const file2: File = {
                 path: root + "project/file2.ts",
                 content: "let y = 10;",
+                watchableExempt,
             };
             const files = [configFile, file1, file2];
             const host = TestServerHost.createServerHost(files, { windowsStyleRoot: "c:/" });
@@ -107,10 +110,10 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem Watche
         });
     }
 
-    verifyWatchedDirectories("files at windows style root", "c:/", /*useProjectAtRoot*/ true);
+    verifyWatchedDirectories("files at windows style root", "c:/", /*useProjectAtRoot*/ true, /*watchableExempt*/ true);
     verifyWatchedDirectories("files not at windows style root", "c:/", /*useProjectAtRoot*/ false);
-    verifyWatchedDirectories("files at root", "c:/", /*useProjectAtRoot*/ true);
-    verifyWatchedDirectories("files not at root", "c:/", /*useProjectAtRoot*/ false);
+    verifyWatchedDirectories("files at root", "c:/workspaces/", /*useProjectAtRoot*/ true);
+    verifyWatchedDirectories("files not at root", "c:/workspaces/", /*useProjectAtRoot*/ false);
 });
 
 describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", () => {

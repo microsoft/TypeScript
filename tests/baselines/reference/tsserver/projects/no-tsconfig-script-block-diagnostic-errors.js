@@ -1,5 +1,5 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/f1.ts]
  
@@ -260,7 +260,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/f1.ts]
  
@@ -513,7 +513,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/f1.ts]
  
@@ -759,7 +759,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/f1.ts]
  
@@ -1018,7 +1018,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/f1.ts]
  

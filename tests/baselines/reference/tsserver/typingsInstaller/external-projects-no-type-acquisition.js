@@ -9,27 +9,31 @@ Before request
 //// [/user/username/projects/project/file3.d.ts]
 
 
-//// [/typesMap.json]
+//// [/home/src/tslibs/ts/lib/typesMap.json]
 {
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\d+)\\.min\\.js",
-                    "types": ["duck-types"]
-                }
-            },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }
+  "typesMap": {
+    "jquery": {
+      "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+      "types": [
+        "jquery"
+      ]
+    },
+    "quack": {
+      "match": "/duckquack-(\\d+)\\.min\\.js",
+      "types": [
+        "duck-types"
+      ]
+    }
+  },
+  "simpleMap": {
+    "Bacon": "baconjs",
+    "bliss": "blissfuljs",
+    "commander": "commander",
+    "cordova": "cordova",
+    "react": "react",
+    "lodash": "lodash"
+  }
+}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -132,7 +136,7 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/app/test.csproj
 
-TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
 TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
@@ -200,7 +204,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred 'react' typings due to presence of '.jsx' extension

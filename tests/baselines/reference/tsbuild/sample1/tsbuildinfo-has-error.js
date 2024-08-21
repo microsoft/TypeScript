@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/main.ts]
+//// [/home/src/workspaces/project/main.ts]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {}
 
-//// [/src/project/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
 Some random string
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -25,35 +25,35 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b src/project -i -v
+/home/src/tslibs/ts/lib/tsc.js --b -i -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because there was error reading file 'src/project/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because there was error reading file 'tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
 
-//// [/src/project/main.js]
+//// [/home/src/workspaces/project/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./main.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -74,7 +74,7 @@ exports.x = 10;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 633
+  "size": 624
 }
 
 
@@ -83,25 +83,25 @@ exitCode:: ExitStatus.Success
 Change:: tsbuildinfo written has error
 
 Input::
-//// [/src/project/tsconfig.tsbuildinfo]
-Some random string{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"5.7.0-dev"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+Some random string{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"5.7.0-dev"}
 
 
-/home/src/tslibs/ts/lib/tsc.js --b src/project -i -v
+/home/src/tslibs/ts/lib/tsc.js --b -i -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because there was error reading file 'src/project/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because there was error reading file 'tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
 
-//// [/src/project/main.js] file written with same contents
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/workspaces/project/main.js] file written with same contents
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 exitCode:: ExitStatus.Success

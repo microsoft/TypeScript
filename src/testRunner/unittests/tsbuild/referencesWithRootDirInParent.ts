@@ -7,29 +7,29 @@ import {
 } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
+describe("unittests:: tsbuild:: projectReferenceWithRootDirInParent:: with rootDir of project reference in parentDirectory", () => {
     function getProjectReferenceWithRootDirInParentSys() {
         return TestServerHost.createWatchedSystem({
-            "/src/src/main/a.ts": dedent`
+            "/home/src/workspaces/solution/src/main/a.ts": dedent`
                 import { b } from './b';
                 const a = b;
             `,
-            "/src/src/main/b.ts": dedent`
+            "/home/src/workspaces/solution/src/main/b.ts": dedent`
                 export const b = 0;
             `,
-            "/src/src/main/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/main/tsconfig.json": jsonToReadableText({
                 extends: "../../tsconfig.base.json",
                 references: [
                     { path: "../other" },
                 ],
             }),
-            "/src/src/other/other.ts": dedent`
+            "/home/src/workspaces/solution/src/other/other.ts": dedent`
                 export const Other = 0;
             `,
-            "/src/src/other/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/other/tsconfig.json": jsonToReadableText({
                 extends: "../../tsconfig.base.json",
             }),
-            "/src/tsconfig.base.json": jsonToReadableText({
+            "/home/src/workspaces/solution/tsconfig.base.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     declaration: true,
@@ -41,39 +41,39 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                     "node_modules",
                 ],
             }),
-        }, { currentDirectory: "/" });
+        }, { currentDirectory: "/home/src/workspaces/solution" });
     }
 
     verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "builds correctly",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/main", "/src/src/other"],
+        commandLineArgs: ["--b", "src/main", "/home/src/workspaces/solution/src/other"],
     });
 
     verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file because no rootDir in the base",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/main", "--verbose"],
-        modifySystem: sys => sys.replaceFileText("/src/tsconfig.base.json", `"rootDir": "./src/",`, ""),
+        commandLineArgs: ["--b", "src/main", "--verbose"],
+        modifySystem: sys => sys.replaceFileText("/home/src/workspaces/solution/tsconfig.base.json", `"rootDir": "./src/",`, ""),
     });
 
     verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/main", "--verbose"],
+        commandLineArgs: ["--b", "src/main", "--verbose"],
         modifySystem: sys => {
             sys.writeFile(
-                "/src/src/main/tsconfig.json",
+                "/home/src/workspaces/solution/src/main/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                     references: [{ path: "../other" }],
                 }),
             );
             sys.writeFile(
-                "/src/src/other/tsconfig.json",
+                "/home/src/workspaces/solution/src/other/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),
@@ -86,17 +86,17 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file without incremental",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/main", "--verbose"],
+        commandLineArgs: ["--b", "src/main", "--verbose"],
         modifySystem: sys => {
             sys.writeFile(
-                "/src/src/main/tsconfig.json",
+                "/home/src/workspaces/solution/src/main/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { outDir: "../../dist/" },
                     references: [{ path: "../other" }],
                 }),
             );
             sys.writeFile(
-                "/src/src/other/tsconfig.json",
+                "/home/src/workspaces/solution/src/other/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),
@@ -108,17 +108,17 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file without incremental with tsc",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/other", "--verbose"],
+        commandLineArgs: ["--b", "src/other", "--verbose"],
         modifySystem: sys => {
             sys.writeFile(
-                "/src/src/main/tsconfig.json",
+                "/home/src/workspaces/solution/src/main/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { outDir: "../../dist/" },
                     references: [{ path: "../other" }],
                 }),
             );
             sys.writeFile(
-                "/src/src/other/tsconfig.json",
+                "/home/src/workspaces/solution/src/other/tsconfig.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),
@@ -128,7 +128,7 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
             {
                 caption: "Running tsc on main",
                 edit: noop,
-                commandLineArgs: ["-p", "/src/src/main"],
+                commandLineArgs: ["-p", "src/main"],
             },
         ],
     });
@@ -137,19 +137,19 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports no error when tsbuildinfo differ",
         sys: getProjectReferenceWithRootDirInParentSys,
-        commandLineArgs: ["--b", "/src/src/main/tsconfig.main.json", "--verbose"],
+        commandLineArgs: ["--b", "src/main/tsconfig.main.json", "--verbose"],
         modifySystem: sys => {
-            sys.renameFile("/src/src/main/tsconfig.json", "/src/src/main/tsconfig.main.json");
-            sys.renameFile("/src/src/other/tsconfig.json", "/src/src/other/tsconfig.other.json");
+            sys.renameFile("/home/src/workspaces/solution/src/main/tsconfig.json", "/home/src/workspaces/solution/src/main/tsconfig.main.json");
+            sys.renameFile("/home/src/workspaces/solution/src/other/tsconfig.json", "/home/src/workspaces/solution/src/other/tsconfig.other.json");
             sys.writeFile(
-                "/src/src/main/tsconfig.main.json",
+                "/home/src/workspaces/solution/src/main/tsconfig.main.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                     references: [{ path: "../other/tsconfig.other.json" }],
                 }),
             );
             sys.writeFile(
-                "/src/src/other/tsconfig.other.json",
+                "/home/src/workspaces/solution/src/other/tsconfig.other.json",
                 jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),

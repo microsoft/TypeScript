@@ -1,33 +1,33 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/class.ts]
+//// [/home/src/workspaces/project/src/class.ts]
 export class classC {
     prop = 1;
 }
 
-//// [/src/project/src/indirectClass.ts]
+//// [/home/src/workspaces/project/src/indirectClass.ts]
 import { classC } from './class';
 export class indirectClass {
     classC = new classC();
 }
 
-//// [/src/project/src/directUse.ts]
+//// [/home/src/workspaces/project/src/directUse.ts]
 import { indirectClass } from './indirectClass';
 new indirectClass().classC.prop;
 
-//// [/src/project/src/indirectUse.ts]
+//// [/home/src/workspaces/project/src/indirectUse.ts]
 import { indirectClass } from './indirectClass';
 new indirectClass().classC.prop;
 
-//// [/src/project/src/noChangeFile.ts]
+//// [/home/src/workspaces/project/src/noChangeFile.ts]
 export function writeLog(s: string) {
 }
 
-//// [/src/project/src/noChangeFileWithEmitSpecificError.ts]
+//// [/home/src/workspaces/project/src/noChangeFileWithEmitSpecificError.ts]
 function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "incremental": true
@@ -50,19 +50,19 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
-//// [/src/project/src/class.js]
+//// [/home/src/workspaces/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
@@ -75,7 +75,7 @@ var classC = /** @class */ (function () {
 exports.classC = classC;
 
 
-//// [/src/project/src/indirectClass.js]
+//// [/home/src/workspaces/project/src/indirectClass.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
@@ -89,21 +89,21 @@ var indirectClass = /** @class */ (function () {
 exports.indirectClass = indirectClass;
 
 
-//// [/src/project/src/directUse.js]
+//// [/home/src/workspaces/project/src/directUse.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
-//// [/src/project/src/indirectUse.js]
+//// [/home/src/workspaces/project/src/indirectUse.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
-//// [/src/project/src/noChangeFile.js]
+//// [/home/src/workspaces/project/src/noChangeFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeLog = writeLog;
@@ -111,7 +111,7 @@ function writeLog(s) {
 }
 
 
-//// [/src/project/src/noChangeFileWithEmitSpecificError.js]
+//// [/home/src/workspaces/project/src/noChangeFileWithEmitSpecificError.js]
 function someFunc(arguments) {
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -120,13 +120,13 @@ function someFunc(arguments) {
 }
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"545032748-export class classC {\n    prop = 1;\n}","6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"545032748-export class classC {\n    prop = 1;\n}","6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -143,7 +143,7 @@ function someFunc(arguments) {
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -225,7 +225,7 @@ function someFunc(arguments) {
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1539
+  "size": 1530
 }
 
 
@@ -235,7 +235,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -246,7 +246,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -256,30 +256,30 @@ exitCode:: ExitStatus.Success
 Change:: Introduce error but still noEmit
 
 Input::
-//// [/src/project/src/class.ts]
+//// [/home/src/workspaces/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
@@ -288,17 +288,17 @@ Output::
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","signature":"-12157283604-export declare class classC {\n    prop1: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"-3531856636-export {};\n"},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"-3531856636-export {};\n"},"6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[5,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"affectedFilesPendingEmit":[2,4,3,5],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","signature":"-12157283604-export declare class classC {\n    prop1: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"-3531856636-export {};\n"},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"-3531856636-export {};\n"},"6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[5,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"affectedFilesPendingEmit":[2,4,3,5],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -315,7 +315,7 @@ Errors  Files
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -475,7 +475,7 @@ Errors  Files
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 2469
+  "size": 2460
 }
 
 
@@ -484,35 +484,35 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Change:: Fix error and emit
 
 Input::
-//// [/src/project/src/class.ts]
+//// [/home/src/workspaces/project/src/class.ts]
 export class classC {
     prop = 1;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
-//// [/src/project/src/class.js] file written with same contents
-//// [/src/project/src/indirectClass.js] file written with same contents
-//// [/src/project/src/directUse.js] file written with same contents
-//// [/src/project/src/indirectUse.js] file written with same contents
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/src/class.js] file written with same contents
+//// [/home/src/workspaces/project/src/indirectClass.js] file written with same contents
+//// [/home/src/workspaces/project/src/directUse.js] file written with same contents
+//// [/home/src/workspaces/project/src/indirectUse.js] file written with same contents
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -529,7 +529,7 @@ Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -619,7 +619,7 @@ Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1766
+  "size": 1757
 }
 
 
@@ -629,15 +629,15 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
@@ -648,7 +648,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -659,7 +659,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -670,15 +670,15 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
@@ -688,35 +688,35 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Change:: Introduce error and emit
 
 Input::
-//// [/src/project/src/class.ts]
+//// [/home/src/workspaces/project/src/class.ts]
 export class classC {
     prop1 = 1;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
@@ -725,12 +725,12 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
+     1  src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
-//// [/src/project/src/class.js]
+//// [/home/src/workspaces/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
@@ -743,14 +743,14 @@ var classC = /** @class */ (function () {
 exports.classC = classC;
 
 
-//// [/src/project/src/indirectClass.js] file written with same contents
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","signature":"-12157283604-export declare class classC {\n    prop1: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[5,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/src/indirectClass.js] file written with same contents
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","signature":"-12157283604-export declare class classC {\n    prop1: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[5,[{"start":76,"length":4,"code":2551,"category":1,"messageText":"Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?","relatedInformation":[{"file":"./src/class.ts","start":26,"length":5,"messageText":"'prop1' is declared here.","category":3,"code":2728}]}]],[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -767,7 +767,7 @@ exports.classC = classC;
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -901,7 +901,7 @@ exports.classC = classC;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 2330
+  "size": 2321
 }
 
 
@@ -911,29 +911,29 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
@@ -942,9 +942,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
+     1  src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
@@ -954,24 +954,24 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
@@ -980,8 +980,8 @@ Output::
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
 
 
 
@@ -991,24 +991,24 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
@@ -1017,8 +1017,8 @@ Output::
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
 
 
 
@@ -1028,29 +1028,29 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+[96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
     'prop1' is declared here.
 
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
@@ -1059,9 +1059,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/directUse.ts[90m:2[0m
-     1  src/project/src/indirectUse.ts[90m:2[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+     1  src/directUse.ts[90m:2[0m
+     1  src/indirectUse.ts[90m:2[0m
+     1  src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
@@ -1070,23 +1070,23 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Change:: Fix error and no emit
 
 Input::
-//// [/src/project/src/class.ts]
+//// [/home/src/workspaces/project/src/class.ts]
 export class classC {
     prop = 1;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -1103,7 +1103,7 @@ Output::
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -1203,7 +1203,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1799
+  "size": 1790
 }
 
 
@@ -1213,19 +1213,19 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 
-//// [/src/project/src/class.js]
+//// [/home/src/workspaces/project/src/class.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
@@ -1238,14 +1238,14 @@ var classC = /** @class */ (function () {
 exports.classC = classC;
 
 
-//// [/src/project/src/indirectClass.js] file written with same contents
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/src/indirectClass.js] file written with same contents
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/class.ts","./src/indirectclass.ts","./src/directuse.ts","./src/indirectuse.ts","./src/nochangefile.ts","./src/nochangefilewithemitspecificerror.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"545032748-export class classC {\n    prop = 1;\n}","signature":"-9508063301-export declare class classC {\n    prop: number;\n}\n"},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"9337978648-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n"},"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","6714567633-export function writeLog(s: string) {\n}",{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true}],"root":[[2,7]],"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"start":18,"length":18,"messageText":"Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.","category":1,"code":2396,"skippedOn":"noEmit"}]]],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/class.ts",
     "./src/indirectclass.ts",
     "./src/directuse.ts",
@@ -1262,7 +1262,7 @@ exports.classC = classC;
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -1352,7 +1352,7 @@ exports.classC = classC;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1766
+  "size": 1757
 }
 
 
@@ -1362,7 +1362,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -1373,7 +1373,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -1384,15 +1384,15 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p .
 Output::
-[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 
 

@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/utils/index.ts]
+//// [/home/src/workspaces/solution/utils/index.ts]
 export const enum E { A = 1 }
 
-//// [/src/utils/index.d.ts]
+//// [/home/src/workspaces/solution/utils/index.d.ts]
 export declare const enum E { A = 1 }
 
-//// [/src/utils/tsconfig.json]
+//// [/home/src/workspaces/solution/utils/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -15,10 +15,10 @@ export declare const enum E { A = 1 }
   }
 }
 
-//// [/src/project/index.ts]
+//// [/home/src/workspaces/solution/project/index.ts]
 import { E } from "../utils"; E.A;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "isolatedModules": true
@@ -46,11 +46,11 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p project
 Output::
 
 
-//// [/src/project/index.js]
+//// [/home/src/workspaces/solution/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");

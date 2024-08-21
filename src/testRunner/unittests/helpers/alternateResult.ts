@@ -1,10 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
-import {
-    FileOrFolderOrSymLinkMap,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
     return jsonToReadableText({
@@ -48,8 +45,8 @@ function mjs(packageName: string) {
     return `export const ${packageName} = 1;`;
 }
 
-function getFsContentsForAlternateResult(): FileOrFolderOrSymLinkMap {
-    return {
+function getSysForAlternateResult(forTsserver: boolean) {
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/project/node_modules/@types/bar/package.json": getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ false),
         "/home/src/projects/project/node_modules/@types/bar/index.d.ts": getFsContentsForAlternateResultDts("bar"),
         "/home/src/projects/project/node_modules/bar/package.json": getFsContentsForAlternateResultPackageJson("bar", /*addTypes*/ false, /*addTypesCondition*/ false),
@@ -84,7 +81,7 @@ function getFsContentsForAlternateResult(): FileOrFolderOrSymLinkMap {
             },
             files: ["index.mts"],
         }),
-    };
+    }, { currentDirectory: "/home/src/projects/project" });
 }
 
 export function verifyAlternateResultScenario(
@@ -97,11 +94,7 @@ export function verifyAlternateResultScenario(
 ) {
     action(
         "alternateResult",
-        () =>
-            TestServerHost.getCreateWatchedSystem(forTsserver)(
-                getFsContentsForAlternateResult(),
-                { currentDirectory: "/home/src/projects/project" },
-            ),
+        () => getSysForAlternateResult(forTsserver),
         () => [
             {
                 caption: "delete the alternateResult in @types",

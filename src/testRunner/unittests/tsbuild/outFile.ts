@@ -15,7 +15,7 @@ import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: tsbuild:: outFile::", () => {
     function getOutFileSys() {
         return TestServerHost.createWatchedSystem({
-            "/src/first/first_PART1.ts": dedent`
+            "/home/src/workspaces/solution/first/first_PART1.ts": dedent`
                 interface TheFirst {
                     none: any;
                 }
@@ -28,15 +28,15 @@ describe("unittests:: tsbuild:: outFile::", () => {
 
                 console.log(s);
             `,
-            "/src/first/first_part2.ts": dedent`
+            "/home/src/workspaces/solution/first/first_part2.ts": dedent`
                 console.log(f());
             `,
-            "/src/first/first_part3.ts": dedent`
+            "/home/src/workspaces/solution/first/first_part3.ts": dedent`
                 function f() {
                     return "JS does hoists";
                 }
             `,
-            "/src/first/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/first/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     composite: true,
@@ -54,7 +54,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 ],
                 references: [],
             }),
-            "/src/second/second_part1.ts": dedent`
+            "/home/src/workspaces/solution/second/second_part1.ts": dedent`
                 namespace N {
                     // Comment text
                 }
@@ -67,14 +67,14 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     f();
                 }
             `,
-            "/src/second/second_part2.ts": dedent`
+            "/home/src/workspaces/solution/second/second_part2.ts": dedent`
                 class C {
                     doSomething() {
                         console.log("something got done");
                     }
                 }
             `,
-            "/src/second/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/second/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     composite: true,
@@ -88,11 +88,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 },
                 references: [],
             }),
-            "/src/third/third_part1.ts": dedent`
+            "/home/src/workspaces/solution/third/third_part1.ts": dedent`
                 var c = new C();
                 c.doSomething();
             `,
-            "/src/third/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/third/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     composite: true,
@@ -112,12 +112,12 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     { path: "../second" },
                 ],
             }),
-        }, { currentDirectory: "/" });
+        }, { currentDirectory: "/home/src/workspaces/solution" });
     }
 
     function getOutFileSysAfterBuild() {
         const sys = getOutFileSys();
-        solutionBuildWithBaseline(sys, ["/src/third"], { dry: false, force: false, verbose: true });
+        solutionBuildWithBaseline(sys, ["/home/src/workspaces/solution/third"], { dry: false, force: false, verbose: true });
         return sys;
     }
 
@@ -126,17 +126,17 @@ describe("unittests:: tsbuild:: outFile::", () => {
         subScenario: "baseline sectioned sourcemaps",
         sys: getOutFileSys,
         scenario: "outFile",
-        commandLineArgs: ["--b", "/src/third", "--verbose", "--explainFiles"],
+        commandLineArgs: ["--b", "third", "--verbose", "--explainFiles"],
         baselineSourceMap: true,
         baselineReadFileCalls: true,
         edits: [
             {
                 caption: "incremental-declaration-changes",
-                edit: sys => sys.replaceFileText("/src/first/first_PART1.ts", "Hello", "Hola"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/solution/first/first_PART1.ts", "Hello", "Hola"),
             },
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
+                edit: sys => sys.appendFile("/home/src/workspaces/solution/first/first_PART1.ts", "console.log(s);"),
             },
         ],
     });
@@ -146,12 +146,12 @@ describe("unittests:: tsbuild:: outFile::", () => {
         subScenario: "when final project is not composite but uses project references",
         sys: getOutFileSys,
         scenario: "outFile",
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
+        commandLineArgs: ["--b", "third", "--verbose"],
         baselineSourceMap: true,
-        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifySystem: sys => sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"composite": true,`, ""),
         edits: [{
             caption: "incremental-declaration-doesnt-change",
-            edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
+            edit: sys => sys.appendFile("/home/src/workspaces/solution/first/first_PART1.ts", "console.log(s);"),
         }],
     });
 
@@ -160,9 +160,9 @@ describe("unittests:: tsbuild:: outFile::", () => {
         subScenario: "when final project is not composite but incremental",
         sys: getOutFileSys,
         scenario: "outFile",
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
+        commandLineArgs: ["--b", "third", "--verbose"],
         baselineSourceMap: true,
-        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
+        modifySystem: sys => sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
     });
 
     // Verify baseline with build info
@@ -170,11 +170,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
         subScenario: "when final project specifies tsBuildInfoFile",
         sys: getOutFileSys,
         scenario: "outFile",
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
+        commandLineArgs: ["--b", "third", "--verbose"],
         baselineSourceMap: true,
         modifySystem: sys =>
             sys.replaceFileText(
-                "/src/third/tsconfig.json",
+                "/home/src/workspaces/solution/third/tsconfig.json",
                 `"composite": true,`,
                 `"composite": true,
         "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`,
@@ -185,7 +185,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "clean projects",
         sys: getOutFileSysAfterBuild,
-        commandLineArgs: ["--b", "/src/third", "--clean"],
+        commandLineArgs: ["--b", "third", "--clean"],
         edits: noChangeOnlyRuns,
     });
 
@@ -193,38 +193,38 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "verify buildInfo absence results in new build",
         sys: getOutFileSysAfterBuild,
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifySystem: sys => sys.deleteFile("/src/first/bin/first-output.tsbuildinfo"),
+        commandLineArgs: ["--b", "third", "--verbose"],
+        modifySystem: sys => sys.deleteFile("/home/src/workspaces/solution/first/bin/first-output.tsbuildinfo"),
     });
 
     verifyTsc({
         scenario: "outFile",
         subScenario: "tsbuildinfo is not generated when incremental is set to false",
         sys: getOutFileSys,
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
+        commandLineArgs: ["--b", "third", "--verbose"],
+        modifySystem: sys => sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"composite": true,`, ""),
     });
 
     verifySolutionBuilderWithDifferentTsVersion({
         scenario: "outFile",
         subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
         sys: getOutFileSysAfterBuild,
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
-    }, ["/src/third"]);
+        commandLineArgs: ["--b", "third", "--verbose"],
+    }, ["/home/src/workspaces/solution/third"]);
 
     verifyTsc({
         scenario: "outFile",
         subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
         sys: getOutFileSys,
         // Make non composite third project
-        modifySystem: sys => sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifySystem: sys => sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"composite": true,`, ""),
         // Build with command line incremental
-        commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
+        commandLineArgs: ["--b", "third", "--i", "--verbose"],
         edits: [
             {
                 caption: "Make non incremental build with change in file that doesnt affect dts",
-                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
-                commandLineArgs: ["--b", "/src/third", "--verbose"],
+                edit: sys => sys.appendFile("/home/src/workspaces/solution/first/first_PART1.ts", "console.log(s);"),
+                commandLineArgs: ["--b", "third", "--verbose"],
                 discrepancyExplanation: () => [
                     "Clean build is non incremental so it will have non incremental tsbuildInfo for third project",
                     "The incremental build does not build third so will only update timestamps for third tsbuildInfo and hence its from incremental build before",
@@ -232,8 +232,8 @@ describe("unittests:: tsbuild:: outFile::", () => {
             },
             {
                 caption: "Make incremental build with change in file that doesnt affect dts",
-                edit: sys => sys.appendFile("/src/first/first_PART1.ts", "console.log(s);"),
-                commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
+                edit: sys => sys.appendFile("/home/src/workspaces/solution/first/first_PART1.ts", "console.log(s);"),
+                commandLineArgs: ["--b", "third", "--verbose", "--incremental"],
             },
         ],
     });
@@ -242,11 +242,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "when input file text does not change but its modified time changes",
         sys: getOutFileSys,
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
+        commandLineArgs: ["--b", "third", "--verbose"],
         edits: [
             {
                 caption: "upstream project changes without changing file text",
-                edit: sys => sys.setModifiedTime("/src/first/first_PART1.ts", sys.now()),
+                edit: sys => sys.setModifiedTime("/home/src/workspaces/solution/first/first_PART1.ts", sys.now()),
             },
         ],
     });
@@ -255,11 +255,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "builds till project specified",
         sys: getOutFileSys,
-        commandLineArgs: ["--build", "/src/second/tsconfig.json"],
+        commandLineArgs: ["--build", "second/tsconfig.json"],
         compile: sys => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
-            const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
-            sys.exit(builder.build("/src/second/tsconfig.json"));
+            const builder = ts.createSolutionBuilder(buildHost, ["/home/src/workspaces/solution/third/tsconfig.json"], {});
+            sys.exit(builder.build("/home/src/workspaces/solution/second/tsconfig.json"));
             return buildHost.getPrograms;
         },
     });
@@ -268,11 +268,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "cleans till project specified",
         sys: getOutFileSysAfterBuild,
-        commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
+        commandLineArgs: ["--build", "--clean", "second/tsconfig.json"],
         compile: sys => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
-            const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
-            sys.exit(builder.clean("/src/second/tsconfig.json"));
+            const builder = ts.createSolutionBuilder(buildHost, ["/home/src/workspaces/solution/third/tsconfig.json"], { verbose: true });
+            sys.exit(builder.clean("/home/src/workspaces/solution/second/tsconfig.json"));
             return buildHost.getPrograms;
         },
     });
@@ -281,17 +281,17 @@ describe("unittests:: tsbuild:: outFile::", () => {
         scenario: "outFile",
         subScenario: "non module projects without prepend",
         sys: getOutFileSys,
-        commandLineArgs: ["--b", "/src/third", "--verbose"],
+        commandLineArgs: ["--b", "third", "--verbose"],
         modifySystem: sys => {
             // Non Modules
-            sys.replaceFileText("/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            sys.replaceFileText("/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            sys.replaceFileText("/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/home/src/workspaces/solution/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/home/src/workspaces/solution/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
 
             // Own file emit
-            sys.replaceFileText("/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
-            sys.replaceFileText("/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
-            sys.replaceFileText("/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
+            sys.replaceFileText("/home/src/workspaces/solution/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
+            sys.replaceFileText("/home/src/workspaces/solution/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
+            sys.replaceFileText("/home/src/workspaces/solution/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
         },
     });
 });

@@ -7,11 +7,11 @@ describe("unittests:: tscWatch:: listFilesOnly::", () => {
         subScenario: "combined with watch",
         sys: () => {
             const sys = TestServerHost.createWatchedSystem({
-                "/src/test.ts": `export const x = 1;`,
-            }, { currentDirectory: "/" });
+                "/home/src/workspaces/project/test.ts": "export const x = 1;",
+            }, { currentDirectory: "/home/src/workspaces/project" });
             sys.exit = exitCode => sys.exitCode = exitCode;
             return sys;
         },
-        commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"],
+        commandLineArgs: ["test.ts", "--watch", "--listFilesOnly"],
     });
 });

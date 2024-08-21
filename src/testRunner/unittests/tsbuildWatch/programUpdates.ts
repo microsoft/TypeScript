@@ -169,16 +169,16 @@ describe("unittests:: tsbuildWatch:: watchMode:: programUpdates::", () => {
         commandLineArgs: ["-b", "-w", "sample1/logic"],
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
+                "/user/username/workspaces/solution/sample1/core/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                 }),
-                "/user/username/projects/sample1/core/index.ts": `function foo() { return 10; }`,
-                "/user/username/projects/sample1/logic/tsconfig.json": jsonToReadableText({
+                "/user/username/workspaces/solution/sample1/core/index.ts": `function foo() { return 10; }`,
+                "/user/username/workspaces/solution/sample1/logic/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                     references: [{ path: "../core" }],
                 }),
-                "/user/username/projects/sample1/logic/index.ts": `function bar() { return foo() + 1 };`,
-            }, { currentDirectory: "/user/username/projects" }),
+                "/user/username/workspaces/solution/sample1/logic/index.ts": `function bar() { return foo() + 1 };`,
+            }, { currentDirectory: "/user/username/workspaces/solution" }),
         edits: [
             {
                 caption: "Make non local change and build core",

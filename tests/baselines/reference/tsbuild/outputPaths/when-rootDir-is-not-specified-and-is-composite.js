@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/src/index.ts]
+//// [/home/src/workspaces/project/src/index.ts]
 export const x = 10;
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "outDir": "dist",
@@ -27,39 +27,39 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dist/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/dist/src/index.js]
+//// [/home/src/workspaces/project/dist/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/dist/src/index.d.ts]
+//// [/home/src/workspaces/project/dist/src/index.d.ts]
 export declare const x = 10;
 
 
-//// [/src/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo]
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.d.ts",
     "../src/index.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -89,7 +89,7 @@ export declare const x = 10;
   },
   "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 793
+  "size": 787
 }
 
 
@@ -99,12 +99,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/index.ts' is older than output 'dist/tsconfig.tsbuildinfo'
 
 
 
@@ -115,7 +115,7 @@ Change:: Normal build without change, that does not block emit on error to show 
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
 Output::
 
 

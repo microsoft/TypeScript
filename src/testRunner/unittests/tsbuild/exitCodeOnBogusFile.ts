@@ -1,3 +1,4 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -6,7 +7,7 @@ describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
     verifyTsc({
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
-        sys: () => TestServerHost.createWatchedSystem({}, { currentDirectory: "/" }),
+        sys: () => TestServerHost.createWatchedSystem(emptyArray, { currentDirectory: "/home/src/workspaces/project" }),
         commandLineArgs: ["-b", "bogus.json"],
     });
 });

@@ -1,12 +1,12 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/f1.ts]
+//// [/user/username/workspace/solution/projects/project/f1.ts]
 let x = 1;
 
-//// [/user/username/workspace/projects/project/f2.ts]
+//// [/user/username/workspace/solution/projects/project/f2.ts]
 let y = 2;
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -34,11 +34,11 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js]
+//// [/user/username/workspace/solution/projects/project/f1.js]
 var x = 1;
 
 
-//// [/user/username/workspace/projects/project/f2.js]
+//// [/user/username/workspace/solution/projects/project/f2.js]
 var y = 2;
 
 
@@ -46,55 +46,57 @@ var y = 2;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/f1.ts: *new*
+/user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
-/user/username/workspace/projects/project/f2.ts: *new*
+/user/username/workspace/solution/projects/project/f2.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts",
-  "/user/username/workspace/projects/project/f2.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts",
+  "/user/username/workspace/solution/projects/project/f2.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
-/user/username/workspace/projects/project/f2.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/project/f2.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Delete config file
 
 Input::
-//// [/user/username/workspace/projects/project/tsconfig.json] deleted
+//// [/user/username/workspace/solution/projects/project/tsconfig.json] deleted
 
 Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
@@ -105,7 +107,7 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[91merror[0m[90m TS5083: [0mCannot read file '/user/username/workspace/projects/project/tsconfig.json'.
+[91merror[0m[90m TS5083: [0mCannot read file '/user/username/workspace/solution/projects/project/tsconfig.json'.
 
 
 

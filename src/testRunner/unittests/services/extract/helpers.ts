@@ -118,7 +118,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
     [ts.Extension.Ts, ts.Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: ts.Extension) {
-        const path = "/a" + extension;
+        const path = "/home/src/workspaces/project/a" + extension;
         const { program } = makeProgram({ path, content: t.source });
 
         if (hasSyntacticDiagnostics(program)) {
@@ -183,7 +183,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             throw new Error(`Test ${caption} does not specify selection range`);
         }
         const f = {
-            path: "/a.ts",
+            path: "/home/src/workspaces/project/a.ts",
             content: t.source,
         };
         const host = TestServerHost.createServerHost([f]);

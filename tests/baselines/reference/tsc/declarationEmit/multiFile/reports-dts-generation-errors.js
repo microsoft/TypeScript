@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "NodeNext",
@@ -11,17 +11,17 @@ Input::
   }
 }
 
-//// [/src/project/index.ts]
+//// [/home/src/workspaces/project/index.ts]
 import ky from 'ky';
 export const api = ky.extend({});
 
 
-//// [/src/project/package.json]
+//// [/home/src/workspaces/project/package.json]
 {
   "type": "module"
 }
 
-//// [/src/project/node_modules/ky/distribution/index.d.ts]
+//// [/home/src/workspaces/project/node_modules/ky/distribution/index.d.ts]
 type KyInstance = {
     extend(options: Record<string,unknown>): KyInstance;
 }
@@ -29,7 +29,7 @@ declare const ky: KyInstance;
 export default ky;
 
 
-//// [/src/project/node_modules/ky/package.json]
+//// [/home/src/workspaces/project/node_modules/ky/package.json]
 {
   "name": "ky",
   "type": "module",
@@ -52,30 +52,30 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/project --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
 Output::
-[96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE: /src/project/index.js
-home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+TSFILE: /home/src/workspaces/project/index.js
+../../tslibs/ts/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
-src/project/node_modules/ky/distribution/index.d.ts
-  Imported via 'ky' from file 'src/project/index.ts'
-  File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
-src/project/index.ts
+node_modules/ky/distribution/index.d.ts
+  Imported via 'ky' from file 'index.ts'
+  File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
+index.ts
   Matched by default include pattern '**/*'
-  File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
+  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
-Found 1 error in src/project/index.ts[90m:2[0m
+Found 1 error in index.ts[90m:2[0m
 
 
 
 //// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
 
-//// [/src/project/index.js]
+//// [/home/src/workspaces/project/index.js]
 import ky from 'ky';
 export const api = ky.extend({});
 
@@ -87,28 +87,28 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/project --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
 Output::
-[96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE: /src/project/index.js
-home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+TSFILE: /home/src/workspaces/project/index.js
+../../tslibs/ts/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
-src/project/node_modules/ky/distribution/index.d.ts
-  Imported via 'ky' from file 'src/project/index.ts'
-  File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
-src/project/index.ts
+node_modules/ky/distribution/index.d.ts
+  Imported via 'ky' from file 'index.ts'
+  File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
+index.ts
   Matched by default include pattern '**/*'
-  File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
+  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
-Found 1 error in src/project/index.ts[90m:2[0m
+Found 1 error in index.ts[90m:2[0m
 
 
 
-//// [/src/project/index.js] file written with same contents
+//// [/home/src/workspaces/project/index.js] file written with same contents
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
@@ -116,42 +116,42 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles -v
+/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE: /src/project/index.js
-TSFILE: /src/project/tsconfig.tsbuildinfo
-home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+TSFILE: /home/src/workspaces/project/index.js
+TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
+../../tslibs/ts/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
-src/project/node_modules/ky/distribution/index.d.ts
-  Imported via 'ky' from file 'src/project/index.ts'
-  File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
-src/project/index.ts
+node_modules/ky/distribution/index.d.ts
+  Imported via 'ky' from file 'index.ts'
+  File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
+index.ts
   Matched by default include pattern '**/*'
-  File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project/tsconfig.json'...
+  File is ECMAScript module because 'package.json' has field "type" with value "module"
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
 Found 1 error.
 
 
 
-//// [/src/project/index.js] file written with same contents
-//// [/src/project/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/project/index.js] file written with same contents
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
 {"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./index.ts"

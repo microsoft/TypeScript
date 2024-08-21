@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
     });
 
     it("should use projectRootPath when searching for inferred project again", () => {
-        const projectRootPath = "/a/b/projects/project";
+        const projectRootPath = "/home/a/b/projects/project";
         const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
@@ -40,7 +40,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const configFile2 = {
-            path: "/a/b/projects/tsconfig.json",
+            path: "/home/a/b/projects/tsconfig.json",
             content: "{}",
         };
         const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
@@ -54,7 +54,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
     });
 
     it("should use projectRootPath when searching for inferred project again 2", () => {
-        const projectRootPath = "/a/b/projects/project";
+        const projectRootPath = "/home/a/b/projects/project";
         const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
@@ -65,7 +65,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const configFile2 = {
-            path: "/a/b/projects/tsconfig.json",
+            path: "/home/a/b/projects/tsconfig.json",
             content: "{}",
         };
         const host = TestServerHost.createServerHost([f1, configFile, configFile2]);

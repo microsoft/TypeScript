@@ -354,13 +354,13 @@ ${pluginOneAction()}`,
         verifyTsc({
             scenario: "declarationEmit",
             subScenario: scenarioName("reports dts generation errors"),
-            commandLineArgs: ["-p", `/src/project`, "--explainFiles", "--listEmittedFiles"],
+            commandLineArgs: ["--explainFiles", "--listEmittedFiles"],
             sys,
             edits: [
                 noChangeRun,
                 {
                     ...noChangeRun,
-                    commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
+                    commandLineArgs: ["-b", "--explainFiles", "--listEmittedFiles", "-v"],
                 },
             ],
         });

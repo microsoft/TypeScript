@@ -1,10 +1,10 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
-//// [/src/somefile.d.ts]
+//// [/user/someuser/workspaces/projects/somefile.d.ts]
 class c { }
 
-//// [/user/someuser/projects/someFolder/src/somefile.d.ts]
+//// [/user/someuser/workspaces/projects/someFolder/src/somefile.d.ts]
 class c { }
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -30,22 +30,24 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "untitled:Untitled-1",
         "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
         "scriptKindName": "TS",
-        "projectRootPath": "/user/someuser/projects/someFolder"
+        "projectRootPath": "/user/someuser/workspaces/projects/someFolder"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: untitled:Untitled-1 ProjectRootPath: /user/someuser/workspaces/projects/someFolder:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/Core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/workspaces/projects/someFolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -53,7 +55,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	untitled:Untitled-1 SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />"
 
 
-	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	../../../../../home/src/tslibs/ts/lib/lib.d.ts
 	  Default library for target 'es5'
 	untitled:Untitled-1
 	  Root file specified for compilation
@@ -64,7 +66,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder
+Info seq  [hh:mm:ss:mss] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/workspaces/projects/someFolder
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -86,15 +88,17 @@ PolledWatches::
   {"pollingInterval":2000}
 /typings/@epic/Core.d.ts: *new*
   {"pollingInterval":500}
-/user/someuser/projects/node_modules/@types: *new*
+/user/someuser/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/someuser/projects/someFolder/node_modules/@types: *new*
+/user/someuser/workspaces/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/someuser/workspaces/projects/someFolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/someuser/projects/someFolder/src/somefile.d.ts: *new*
+/user/someuser/workspaces/projects/someFolder/src/somefile.d.ts: *new*
   {}
 
 Projects::

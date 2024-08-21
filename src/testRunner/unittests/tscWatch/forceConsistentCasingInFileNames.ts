@@ -146,26 +146,26 @@ export const Fragment: unique symbol;
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", `${windowsStyleRoot}/${projectRootRelative}`, "--explainFiles"],
+            commandLineArgs: ["--w", "--p", `${windowsStyleRoot}workspaces/solution/${projectRootRelative}`, "--explainFiles"],
             sys: () => {
                 const moduleA: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/a.ts`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/a.ts`,
                     content: `
 export const a = 1;
 export const b = 2;
 `,
                 };
                 const moduleB: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/b.ts`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/b.ts`,
                     content: `
-import { a } from "${windowsStyleRoot.toLocaleUpperCase()}/${projectRootRelative}/a"
-import { b } from "${windowsStyleRoot.toLocaleLowerCase()}/${projectRootRelative}/a"
+import { a } from "${windowsStyleRoot.toLocaleUpperCase()}workspaces/solution/${projectRootRelative}/a"
+import { b } from "${windowsStyleRoot.toLocaleLowerCase()}workspaces/solution/${projectRootRelative}/a"
 
 a;b;
 `,
                 };
                 const tsconfig: File = {
-                    path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
+                    path: `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
                 return TestServerHost.createWatchedSystem(
@@ -173,7 +173,7 @@ a;b;
                     {
                         windowsStyleRoot,
                         useCaseSensitiveFileNames: false,
-                        currentDirectory: windowsStyleRoot,
+                        currentDirectory: `${windowsStyleRoot}workspaces/solution`,
                     },
                 );
             },
@@ -182,7 +182,7 @@ a;b;
                     caption: "Prepend a line to moduleA",
                     edit: sys =>
                         sys.prependFile(
-                            `${windowsStyleRoot}/${projectRootRelative}/a.ts`,
+                            `${windowsStyleRoot}workspaces/solution/${projectRootRelative}/a.ts`,
                             `// some comment
                         `,
                         ),

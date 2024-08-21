@@ -1,6 +1,6 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false newLine: 
 
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/workspace/projects/app.ts]
 var x = 1;
@@ -128,7 +128,7 @@ var y = 2;
 
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false newLine: 
 
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/workspace/projects/app.ts]
 var x = 1;

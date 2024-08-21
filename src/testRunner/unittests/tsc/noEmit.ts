@@ -16,17 +16,17 @@ describe("unittests:: tsc:: noEmit::", () => {
     verifyTsc({
         scenario: "noEmit",
         subScenario: "when project has strict true",
-        commandLineArgs: ["-noEmit", "-p", `src/project`],
+        commandLineArgs: ["-noEmit"],
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         strict: true,
                     },
                 }),
-                "/src/project/class1.ts": `export class class1 {}`,
-            }, { currentDirectory: "/" }),
+                "/home/src/workspaces/project/class1.ts": `export class class1 {}`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: noChangeOnlyRuns,
         baselinePrograms: true,
     });

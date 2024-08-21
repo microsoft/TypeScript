@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/first/first_PART1.ts]
+//// [/home/src/workspaces/solution/first/first_PART1.ts]
 interface TheFirst {
     none: any;
 }
@@ -14,17 +14,17 @@ interface NoJsForHereEither {
 console.log(s);
 
 
-//// [/src/first/first_part2.ts]
+//// [/home/src/workspaces/solution/first/first_part2.ts]
 console.log(f());
 
 
-//// [/src/first/first_part3.ts]
+//// [/home/src/workspaces/solution/first/first_part3.ts]
 function f() {
     return "JS does hoists";
 }
 
 
-//// [/src/first/tsconfig.json]
+//// [/home/src/workspaces/solution/first/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -44,7 +44,7 @@ function f() {
   "references": []
 }
 
-//// [/src/second/second_part1.ts]
+//// [/home/src/workspaces/solution/second/second_part1.ts]
 namespace N {
     // Comment text
 }
@@ -58,7 +58,7 @@ namespace N {
 }
 
 
-//// [/src/second/second_part2.ts]
+//// [/home/src/workspaces/solution/second/second_part2.ts]
 class C {
     doSomething() {
         console.log("something got done");
@@ -66,7 +66,7 @@ class C {
 }
 
 
-//// [/src/second/tsconfig.json]
+//// [/home/src/workspaces/solution/second/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -82,12 +82,12 @@ class C {
   "references": []
 }
 
-//// [/src/third/third_part1.ts]
+//// [/home/src/workspaces/solution/third/third_part1.ts]
 var c = new C();
 c.doSomething();
 
 
-//// [/src/third/tsconfig.json]
+//// [/home/src/workspaces/solution/third/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -129,31 +129,31 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
+/home/src/tslibs/ts/lib/tsc.js --b third --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/first/tsconfig.json
-    * src/second/tsconfig.json
-    * src/third/tsconfig.json
+    * first/tsconfig.json
+    * second/tsconfig.json
+    * third/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'first/tsconfig.json' is out of date because output file 'first/bin/first-output.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/first/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'second/tsconfig.json' is out of date because output file '2/second-output.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/second/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/second/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'third/tsconfig.json' is out of date because output file 'third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/third/tsconfig.json'...
 
 
 
-//// [/src/first/bin/first-output.js.map]
+//// [/home/src/workspaces/solution/first/bin/first-output.js.map]
 {"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
-//// [/src/first/bin/first-output.js]
+//// [/home/src/workspaces/solution/first/bin/first-output.js]
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -162,10 +162,10 @@ function f() {
 }
 //# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.d.ts.map]
+//// [/home/src/workspaces/solution/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
 
-//// [/src/first/bin/first-output.d.ts]
+//// [/home/src/workspaces/solution/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
 }
@@ -176,19 +176,19 @@ interface NoJsForHereEither {
 declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
 
-//// [/src/first/bin/first-output.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n","6007494133-console.log(f());\n","4357625305-function f() {\n    return \"JS does hoists\";\n}\n"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/first/bin/first-output.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n","6007494133-console.log(f());\n","4357625305-function f() {\n    return \"JS does hoists\";\n}\n"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts","version":"FakeTSVersion"}
 
-//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../first_part1.ts",
     "../first_part2.ts",
     "../first_part3.ts"
   ],
   "fileInfos": {
-    "../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "../first_part1.ts": "-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n",
     "../first_part2.ts": "6007494133-console.log(f());\n",
     "../first_part3.ts": "4357625305-function f() {\n    return \"JS does hoists\";\n}\n"
@@ -219,13 +219,13 @@ declare function f(): string;
   "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
   "latestChangedDtsFile": "./first-output.d.ts",
   "version": "FakeTSVersion",
-  "size": 1279
+  "size": 1273
 }
 
-//// [/src/2/second-output.js.map]
+//// [/home/src/workspaces/solution/2/second-output.js.map]
 {"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
-//// [/src/2/second-output.js]
+//// [/home/src/workspaces/solution/2/second-output.js]
 var N;
 (function (N) {
     function f() {
@@ -243,10 +243,10 @@ var C = (function () {
 }());
 //# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.d.ts.map]
+//// [/home/src/workspaces/solution/2/second-output.d.ts.map]
 {"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd"}
 
-//// [/src/2/second-output.d.ts]
+//// [/home/src/workspaces/solution/2/second-output.d.ts]
 declare namespace N {
 }
 declare namespace N {
@@ -256,18 +256,18 @@ declare class C {
 }
 //# sourceMappingURL=second-output.d.ts.map
 
-//// [/src/2/second-output.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n","3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/2/second-output.tsbuildinfo]
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n","3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts","version":"FakeTSVersion"}
 
-//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/2/second-output.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.d.ts",
     "../second/second_part1.ts",
     "../second/second_part2.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "../second/second_part1.ts": "-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n",
     "../second/second_part2.ts": "3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n"
   },
@@ -295,28 +295,28 @@ declare class C {
   "outSignature": "-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
   "latestChangedDtsFile": "./second-output.d.ts",
   "version": "FakeTSVersion",
-  "size": 1223
+  "size": 1217
 }
 
-//// [/src/third/thirdjs/output/third-output.js.map]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.js.map]
 {"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
-//// [/src/third/thirdjs/output/third-output.js]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.js]
 var c = new C();
 c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
-//// [/src/third/thirdjs/output/third-output.d.ts.map]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts.map]
 {"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../third_part1.ts"],"names":[],"mappings":"AAAA,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
-//// [/src/third/thirdjs/output/third-output.d.ts]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts]
 declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
-//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.tsbuildinfo]
 {"root":["../../third_part1.ts"],"version":"FakeTSVersion"}
 
-//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../../third_part1.ts"
@@ -325,7 +325,7 @@ declare var c: C;
   "size": 59
 }
 
-//// [/src/first/bin/first-output.js.map.baseline.txt]
+//// [/home/src/workspaces/solution/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
 JsFile: first-output.js
 mapUrl: first-output.js.map
@@ -333,7 +333,7 @@ sourceRoot:
 sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
 >>>var s = "Hello, world";
@@ -394,7 +394,7 @@ sourceFile:../first_PART1.ts
 8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_part2.ts
 -------------------------------------------------------------------
 >>>console.log(f());
@@ -427,7 +427,7 @@ sourceFile:../first_part2.ts
 9 >Emitted(3, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_part3.ts
 -------------------------------------------------------------------
 >>>function f() {
@@ -469,7 +469,7 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.d.ts.map.baseline.txt]
+//// [/home/src/workspaces/solution/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
 JsFile: first-output.d.ts
 mapUrl: first-output.d.ts.map
@@ -477,7 +477,7 @@ sourceRoot:
 sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.d.ts
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.d.ts
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
 >>>interface TheFirst {
@@ -577,7 +577,7 @@ sourceFile:../first_PART1.ts
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.d.ts
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.d.ts
 sourceFile:../first_part3.ts
 -------------------------------------------------------------------
 >>>declare function f(): string;
@@ -599,7 +599,7 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.d.ts.map
 
-//// [/src/2/second-output.js.map.baseline.txt]
+//// [/home/src/workspaces/solution/2/second-output.js.map.baseline.txt]
 ===================================================================
 JsFile: second-output.js
 mapUrl: second-output.js.map
@@ -607,7 +607,7 @@ sourceRoot:
 sources: ../second/second_part1.ts,../second/second_part2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/2/second-output.js
+emittedFile:/home/src/workspaces/solution/2/second-output.js
 sourceFile:../second/second_part1.ts
 -------------------------------------------------------------------
 >>>var N;
@@ -746,7 +746,7 @@ sourceFile:../second/second_part1.ts
 7 >Emitted(7, 19) Source(11, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/2/second-output.js
+emittedFile:/home/src/workspaces/solution/2/second-output.js
 sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
@@ -853,7 +853,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.d.ts.map.baseline.txt]
+//// [/home/src/workspaces/solution/2/second-output.d.ts.map.baseline.txt]
 ===================================================================
 JsFile: second-output.d.ts
 mapUrl: second-output.d.ts.map
@@ -861,7 +861,7 @@ sourceRoot:
 sources: ../second/second_part1.ts,../second/second_part2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/2/second-output.d.ts
+emittedFile:/home/src/workspaces/solution/2/second-output.d.ts
 sourceFile:../second/second_part1.ts
 -------------------------------------------------------------------
 >>>declare namespace N {
@@ -915,7 +915,7 @@ sourceFile:../second/second_part1.ts
 1 >Emitted(4, 2) Source(11, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/2/second-output.d.ts
+emittedFile:/home/src/workspaces/solution/2/second-output.d.ts
 sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>declare class C {
@@ -950,7 +950,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.d.ts.map
 
-//// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
 JsFile: third-output.js
 mapUrl: third-output.js.map
@@ -958,7 +958,7 @@ sourceRoot:
 sources: ../../third_part1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/third/thirdjs/output/third-output.js
+emittedFile:/home/src/workspaces/solution/third/thirdjs/output/third-output.js
 sourceFile:../../third_part1.ts
 -------------------------------------------------------------------
 >>>var c = new C();
@@ -1011,7 +1011,7 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.js.map
 
-//// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
 JsFile: third-output.d.ts
 mapUrl: third-output.d.ts.map
@@ -1019,7 +1019,7 @@ sourceRoot:
 sources: ../../third_part1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/third/thirdjs/output/third-output.d.ts
+emittedFile:/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts
 sourceFile:../../third_part1.ts
 -------------------------------------------------------------------
 >>>declare var c: C;
@@ -1051,7 +1051,7 @@ exitCode:: ExitStatus.Success
 Change:: incremental-declaration-doesnt-change
 
 Input::
-//// [/src/first/first_PART1.ts]
+//// [/home/src/workspaces/solution/first/first_PART1.ts]
 interface TheFirst {
     none: any;
 }
@@ -1066,29 +1066,29 @@ console.log(s);
 console.log(s);
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/third --verbose
+/home/src/tslibs/ts/lib/tsc.js --b third --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/first/tsconfig.json
-    * src/second/tsconfig.json
-    * src/third/tsconfig.json
+    * first/tsconfig.json
+    * second/tsconfig.json
+    * third/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
+[[90mHH:MM:SS AM[0m] Project 'first/tsconfig.json' is out of date because output 'first/bin/first-output.tsbuildinfo' is older than input 'first/first_PART1.ts'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/first/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'second/tsconfig.json' is up to date because newest input 'second/second_part2.ts' is older than output '2/second-output.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'third/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/home/src/workspaces/solution/third/tsconfig.json'...
 
 
 
-//// [/src/first/bin/first-output.js.map]
+//// [/home/src/workspaces/solution/first/bin/first-output.js.map]
 {"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
-//// [/src/first/bin/first-output.js]
+//// [/home/src/workspaces/solution/first/bin/first-output.js]
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -1098,20 +1098,20 @@ function f() {
 }
 //# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.d.ts.map] file written with same contents
-//// [/src/first/bin/first-output.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-20304251376-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nconsole.log(s);","6007494133-console.log(f());\n","4357625305-function f() {\n    return \"JS does hoists\";\n}\n"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/first/bin/first-output.d.ts.map] file written with same contents
+//// [/home/src/workspaces/solution/first/bin/first-output.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-20304251376-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nconsole.log(s);","6007494133-console.log(f());\n","4357625305-function f() {\n    return \"JS does hoists\";\n}\n"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts","version":"FakeTSVersion"}
 
-//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../first_part1.ts",
     "../first_part2.ts",
     "../first_part3.ts"
   ],
   "fileInfos": {
-    "../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "../first_part1.ts": "-20304251376-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nconsole.log(s);",
     "../first_part2.ts": "6007494133-console.log(f());\n",
     "../first_part3.ts": "4357625305-function f() {\n    return \"JS does hoists\";\n}\n"
@@ -1142,15 +1142,15 @@ function f() {
   "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
   "latestChangedDtsFile": "./first-output.d.ts",
   "version": "FakeTSVersion",
-  "size": 1294
+  "size": 1288
 }
 
-//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
-//// [/src/first/bin/first-output.js.map.baseline.txt]
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.js.map] file changed its modified time
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.js] file changed its modified time
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.d.ts] file changed its modified time
+//// [/home/src/workspaces/solution/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
+//// [/home/src/workspaces/solution/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
 JsFile: first-output.js
 mapUrl: first-output.js.map
@@ -1158,7 +1158,7 @@ sourceRoot:
 sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
 >>>var s = "Hello, world";
@@ -1246,7 +1246,7 @@ sourceFile:../first_PART1.ts
 8 >Emitted(3, 16) Source(12, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_part2.ts
 -------------------------------------------------------------------
 >>>console.log(f());
@@ -1279,7 +1279,7 @@ sourceFile:../first_part2.ts
 9 >Emitted(4, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.js
+emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_part3.ts
 -------------------------------------------------------------------
 >>>function f() {
@@ -1321,6 +1321,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
+//// [/home/src/workspaces/solution/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 
 exitCode:: ExitStatus.Success

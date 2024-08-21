@@ -3,7 +3,7 @@ import { getSysForTransitiveReferences } from "../helpers/transitiveReferences.j
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
+describe("unittests:: tsbuild:: transitiveReferences:: when project reference is referenced transitively", () => {
     function modifyFsBTsToNonRelativeImport(sys: TestServerHost, moduleResolution: "node" | "classic") {
         sys.writeFile(
             "b.ts",

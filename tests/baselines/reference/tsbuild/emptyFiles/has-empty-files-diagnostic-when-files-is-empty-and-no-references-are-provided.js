@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/no-references/tsconfig.json]
+//// [/home/src/workspaces/solution/no-references/tsconfig.json]
 {
   "references": [],
   "files": [],
@@ -28,9 +28,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/no-references
+/home/src/tslibs/ts/lib/tsc.js --b no-references
 Output::
-[96msrc/no-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/src/no-references/tsconfig.json' is empty.
+[96mno-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/home/src/workspaces/solution/no-references/tsconfig.json' is empty.
 
 [7m3[0m   "files": [],
 [7m [0m [91m           ~~[0m

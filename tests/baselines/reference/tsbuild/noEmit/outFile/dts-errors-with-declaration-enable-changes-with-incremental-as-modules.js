@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { private p = 10; };
@@ -31,12 +31,12 @@ declare const console: { log(msg: any): void; };
 export const b = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -111,12 +111,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/b.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'b.ts' is older than output '../outFile.tsbuildinfo'
 
 
 
@@ -127,21 +127,21 @@ Change:: With declaration enabled noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates there is change in compilerOptions
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
@@ -242,21 +242,21 @@ Change:: With declaration and declarationMap noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
@@ -359,12 +359,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/b.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'b.ts' is older than output '../outFile.tsbuildinfo'
 
 
 
@@ -375,21 +375,21 @@ Change:: Dts Emit with error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --declaration
+/home/src/tslibs/ts/lib/tsc.js -b --v . --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
@@ -508,12 +508,12 @@ Input::
 export const a = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -588,12 +588,12 @@ Change:: With declaration enabled noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates there is change in compilerOptions
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -667,12 +667,12 @@ Change:: With declaration and declarationMap noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v /home/src/projects/project --noEmit --declaration --declarationMap
+/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.tsbuildinfo'
 
 
 

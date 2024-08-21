@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 
@@ -12,7 +12,7 @@ declare global {
 export {};
 
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -38,29 +38,29 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --rootDir src/project/src
+/home/src/tslibs/ts/lib/tsc.js --rootDir src
 Output::
 
 
 //// [/home/src/tslibs/ts/lib/lib.esnext.d.ts] *Lib*
 
-//// [/src/project/dist/main.js]
+//// [/home/src/workspaces/project/dist/main.js]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 export {};
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.esnext.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n","affectsGlobalScope":true}],"root":[2],"options":{"module":99,"outDir":"./dist","rootDir":"./src","target":99},"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.esnext.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n","affectsGlobalScope":true}],"root":[2],"options":{"module":99,"outDir":"./dist","rootDir":"./src","target":99},"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.esnext.d.ts",
+    "../../tslibs/ts/lib/lib.esnext.d.ts",
     "./src/main.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.esnext.d.ts": {
+    "../../tslibs/ts/lib/lib.esnext.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -92,7 +92,7 @@ export {};
     "target": 99
   },
   "version": "FakeTSVersion",
-  "size": 875
+  "size": 866
 }
 
 

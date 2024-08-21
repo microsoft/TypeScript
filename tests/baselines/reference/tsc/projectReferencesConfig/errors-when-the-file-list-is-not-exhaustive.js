@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/primary/tsconfig.json]
+//// [/home/src/workspaces/project/primary/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -12,10 +12,10 @@ Input::
   ]
 }
 
-//// [/primary/a.ts]
+//// [/home/src/workspaces/project/primary/a.ts]
 import * as b from './b'
 
-//// [/primary/b.ts]
+//// [/home/src/workspaces/project/primary/b.ts]
 export {}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -34,9 +34,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p /primary/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js --p primary/tsconfig.json
 Output::
-[96mprimary/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/primary/b.ts' is not listed within the file list of project '/primary/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+[96mprimary/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/primary/b.ts' is not listed within the file list of project '/home/src/workspaces/project/primary/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
 [7m1[0m import * as b from './b'
 [7m [0m [91m                   ~~~~~[0m
@@ -46,31 +46,31 @@ Found 1 error in primary/a.ts[90m:1[0m
 
 
 
-//// [/primary/bin/b.js]
+//// [/home/src/workspaces/project/primary/bin/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/primary/bin/b.d.ts]
+//// [/home/src/workspaces/project/primary/bin/b.d.ts]
 export {};
 
 
-//// [/primary/bin/a.js]
+//// [/home/src/workspaces/project/primary/bin/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/primary/bin/a.d.ts]
+//// [/home/src/workspaces/project/primary/bin/a.d.ts]
 export {};
 
 
-//// [/primary/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../b.ts","../a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","errors":true,"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/primary/bin/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../b.ts","../a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","errors":true,"version":"FakeTSVersion"}
 
-//// [/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../b.ts",
     "../a.ts"
   ],
@@ -80,7 +80,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -124,7 +124,7 @@ export {};
   "latestChangedDtsFile": "./a.d.ts",
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 905
+  "size": 902
 }
 
 

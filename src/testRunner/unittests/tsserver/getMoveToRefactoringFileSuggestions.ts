@@ -102,7 +102,17 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file2: File = { path: "/home/src/projects/project/a/lib.d.ts", content: "" };
         const file3: File = { path: "/home/src/projects/project/a/file3.d.ts", content: "" };
         const file4: File = { path: "/home/src/projects/project/a/lib.es6.d.ts", content: "" };
-        const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/home/src/projects/project/a/lib.es6.d.ts"] }) };
+        const tsconfig: File = {
+            path: "/home/src/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                files: [
+                    "./file1.d.ts",
+                    "./a/lib.d.ts",
+                    "./a/file3.d.ts",
+                    "/home/src/projects/project/a/lib.es6.d.ts",
+                ],
+            }),
+        };
 
         const host = TestServerHost.createServerHost([file1, file2, file3, file4, tsconfig]);
         const session = new TestSession(host);

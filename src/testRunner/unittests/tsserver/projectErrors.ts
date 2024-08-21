@@ -212,9 +212,9 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
 
     describe("when opening new file that doesnt exist on disk yet", () => {
         function verifyNonExistentFile(useProjectRoot: boolean) {
-            const folderPath = "/user/someuser/projects/someFolder";
+            const folderPath = "/user/someuser/workspaces/projects/someFolder";
             const fileInRoot: File = {
-                path: `/src/somefile.d.ts`,
+                path: `/user/someuser/workspaces/projects/somefile.d.ts`,
                 content: "class c { }",
             };
             const fileInProjectRoot: File = {
@@ -812,9 +812,9 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
 describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", () => {
     it("rename a file", () => {
         const host = TestServerHost.createServerHost({
-            "/home/username/project/src/a.ts": `export const a = 10;`,
-            "/home/username/project/src/b.ts": `export const b = 10;`,
-            "/home/username/project/tsconfig.json": jsonToReadableText({
+            "/home/username/workspaces/project/src/a.ts": `export const a = 10;`,
+            "/home/username/workspaces/project/src/b.ts": `export const b = 10;`,
+            "/home/username/workspaces/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     strictNullChecks: true,
                 },
@@ -822,12 +822,12 @@ describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", ()
             }),
         }, { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
-        openFilesForSession([{ file: "/home/username/project/src/a.ts", projectRootPath: "/home/username/project" }], session);
-        host.renameFile("/home/username/project/src/b.ts", "/home/username/project/src/c.ts");
-        openFilesForSession([{ file: "/home/username/project/src/c.ts", content: `export const b = 10;`, projectRootPath: "/home/username/project" }], session);
+        openFilesForSession([{ file: "/home/username/workspaces/project/src/a.ts", projectRootPath: "/home/username/workspaces/project" }], session);
+        host.renameFile("/home/username/workspaces/project/src/b.ts", "/home/username/workspaces/project/src/c.ts");
+        openFilesForSession([{ file: "/home/username/workspaces/project/src/c.ts", content: `export const b = 10;`, projectRootPath: "/home/username/workspaces/project" }], session);
         host.runQueuedTimeoutCallbacks(); // Updates the project that c.ts now exists on the disk and schedules one more update
         host.runQueuedTimeoutCallbacks();
-        closeFilesForSession(["/home/username/project/src/c.ts"], session);
+        closeFilesForSession(["/home/username/workspaces/project/src/c.ts"], session);
         baselineTsserverLogs("projectErrors", "file rename on wsl2", session);
     });
 });

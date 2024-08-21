@@ -1,12 +1,12 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/f1.ts]
+//// [/user/username/workspace/solution/projects/project/f1.ts]
 let x = 1
 
-//// [/user/username/workspace/projects/project/f2.ts]
+//// [/user/username/workspace/solution/projects/project/f2.ts]
 let y = 1
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {},
   "files": [
@@ -40,11 +40,11 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js]
+//// [/user/username/workspace/solution/projects/project/f1.js]
 var x = 1;
 
 
-//// [/user/username/workspace/projects/project/f2.js]
+//// [/user/username/workspace/solution/projects/project/f2.js]
 var y = 1;
 
 
@@ -52,51 +52,53 @@ var y = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/f1.ts: *new*
+/user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
-/user/username/workspace/projects/project/f2.ts: *new*
+/user/username/workspace/solution/projects/project/f2.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts",
-  "/user/username/workspace/projects/project/f2.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts",
+  "/user/username/workspace/solution/projects/project/f2.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
-/user/username/workspace/projects/project/f2.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/project/f2.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Modify config to set outFile option
 
 Input::
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "outFile": "out.js"
@@ -124,7 +126,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/out.js]
+//// [/user/username/workspace/solution/projects/project/out.js]
 var x = 1;
 var y = 1;
 
@@ -132,24 +134,24 @@ var y = 1;
 
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts",
-  "/user/username/workspace/projects/project/f2.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts",
+  "/user/username/workspace/solution/projects/project/f2.ts"
 ]
 Program options: {
-  "outFile": "/user/username/workspace/projects/project/out.js",
+  "outFile": "/user/username/workspace/solution/projects/project/out.js",
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f2.ts
 
 No shapes updated in the builder::
 

@@ -12,7 +12,7 @@ describe("unittests:: tsserver:: projectRootFiles:: roots::", () => {
         forEachScenarioForRootsFromReferencedProject(/*forTsserver*/ true, (subScenario, sys, edits) => {
             it(subScenario, () => {
                 const session = new TestSession(sys());
-                openFilesForSession(["/home/src/workspaces/projects/server/src/server.ts"], session);
+                openFilesForSession(["/home/src/workspaces/solution/projects/server/src/server.ts"], session);
                 forEachTscWatchEdit(session, edits(), noop);
                 baselineTsserverLogs("projectRootFiles", subScenario, session);
             });

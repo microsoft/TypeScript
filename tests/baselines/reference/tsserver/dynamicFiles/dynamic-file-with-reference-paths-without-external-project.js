@@ -1,5 +1,5 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -84,7 +84,7 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
 TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
@@ -127,7 +127,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "/home/src/vscode/projects/bin",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:

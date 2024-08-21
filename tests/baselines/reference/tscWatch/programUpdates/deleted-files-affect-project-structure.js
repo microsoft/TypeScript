@@ -1,12 +1,12 @@
-currentDirectory:: /user/username/workspace/projects useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/f1.ts]
+//// [/user/username/workspace/solution/projects/project/f1.ts]
 export * from "./f2"
 
-//// [/user/username/workspace/projects/project/f2.ts]
+//// [/user/username/workspace/solution/projects/project/f2.ts]
 export * from "../projectc/f3"
 
-//// [/user/username/workspace/projects/projectc/f3.ts]
+//// [/user/username/workspace/solution/projects/projectc/f3.ts]
 export let y = 1;
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -25,7 +25,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w /user/username/workspace/projects/project/f1.ts --noImplicitAny
+/home/src/tslibs/ts/lib/tsc.js -w /user/username/workspace/solution/projects/project/f1.ts --noImplicitAny
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -34,14 +34,14 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/projectc/f3.js]
+//// [/user/username/workspace/solution/projects/projectc/f3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 
 
-//// [/user/username/workspace/projects/project/f2.js]
+//// [/user/username/workspace/solution/projects/project/f2.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -61,7 +61,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../projectc/f3"), exports);
 
 
-//// [/user/username/workspace/projects/project/f1.js]
+//// [/user/username/workspace/solution/projects/project/f1.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -85,21 +85,23 @@ __exportStar(require("./f2"), exports);
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/f1.ts: *new*
+/user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
-/user/username/workspace/projects/project/f2.ts: *new*
+/user/username/workspace/solution/projects/project/f2.ts: *new*
   {}
-/user/username/workspace/projects/projectc/f3.ts: *new*
+/user/username/workspace/solution/projects/projectc/f3.ts: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts"
 ]
 Program options: {
   "watch": true,
@@ -108,28 +110,28 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/projectc/f3.ts
-/user/username/workspace/projects/project/f2.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/projectc/f3.ts
+/user/username/workspace/solution/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/projectc/f3.ts
-/user/username/workspace/projects/project/f2.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/projectc/f3.ts
+/user/username/workspace/solution/projects/project/f2.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/projectc/f3.ts (used version)
-/user/username/workspace/projects/project/f2.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/projectc/f3.ts (used version)
+/user/username/workspace/solution/projects/project/f2.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Delete f2
 
 Input::
-//// [/user/username/workspace/projects/project/f2.ts] deleted
+//// [/user/username/workspace/solution/projects/project/f2.ts] deleted
 
 Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
@@ -143,7 +145,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mproject/f1.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './f2'. '/user/username/workspace/projects/project/f2.js' implicitly has an 'any' type.
+[96mproject/f1.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './f2'. '/user/username/workspace/solution/projects/project/f2.js' implicitly has an 'any' type.
 
 [7m1[0m export * from "./f2"
 [7m [0m [91m              ~~~~~~[0m
@@ -152,33 +154,35 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/f1.js] file written with same contents
 
 PolledWatches::
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types:
+/user/username/workspace/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
   {}
-/user/username/workspace/projects/project/f1.ts:
+/user/username/workspace/solution/projects/project/f1.ts:
   {}
 
 FsWatches *deleted*::
-/user/username/workspace/projects/project/f2.ts:
+/user/username/workspace/solution/projects/project/f2.ts:
   {}
-/user/username/workspace/projects/projectc/f3.ts:
+/user/username/workspace/solution/projects/projectc/f3.ts:
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts"
 ]
 Program options: {
   "watch": true,
@@ -187,12 +191,12 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
-/user/username/workspace/projects/project/f1.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/f1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

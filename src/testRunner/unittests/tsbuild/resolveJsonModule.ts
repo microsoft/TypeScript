@@ -8,17 +8,17 @@ import {
 } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
+describe("unittests:: tsbuild:: with resolveJsonModule:: option on project resolveJsonModuleAndComposite", () => {
     function getProjFs(tsconfigFiles: object, additionalCompilerOptions?: CompilerOptions) {
         return TestServerHost.createWatchedSystem({
-            "/src/src/hello.json": jsonToReadableText({
+            "/home/src/workspaces/solution/project/src/hello.json": jsonToReadableText({
                 hello: "world",
             }),
-            "/src/src/index.ts": dedent`
+            "/home/src/workspaces/solution/project/src/index.ts": dedent`
                 import hello from "./hello.json"
                 export default hello.hello
             `,
-            "/src/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     moduleResolution: "node",
@@ -32,7 +32,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
                 },
                 ...tsconfigFiles,
             }),
-        }, { currentDirectory: "/" });
+        }, { currentDirectory: "/home/src/workspaces/solution" });
     }
 
     function verfiyJson(
@@ -44,13 +44,13 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
         verifyTsc({
             scenario: "resolveJsonModule",
             sys: () => getProjFs(tsconfigFiles, additionalCompilerOptions),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
+            commandLineArgs: ["--b", "project", "--v", "--explainFiles", "--listEmittedFiles"],
             ...input,
         });
         verifyTsc({
             scenario: "resolveJsonModule",
             sys: () => getProjFs(tsconfigFiles, { composite: undefined, ...additionalCompilerOptions }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
+            commandLineArgs: ["--b", "project", "--v", "--explainFiles", "--listEmittedFiles"],
             ...input,
             subScenario: `${input.subScenario} non-composite`,
         });
@@ -71,8 +71,8 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
     verfiyJson({
         subScenario: "include only with json not in rootDir",
         modifySystem: sys => {
-            sys.renameFile("/src/src/hello.json", "/src/hello.json");
-            sys.replaceFileText("/src/src/index.ts", "./hello.json", "../hello.json");
+            sys.renameFile("/home/src/workspaces/solution/project/src/hello.json", "/home/src/workspaces/solution/project/hello.json");
+            sys.replaceFileText("/home/src/workspaces/solution/project/src/index.ts", "./hello.json", "../hello.json");
         },
     }, {
         include: [
@@ -83,8 +83,8 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
     verfiyJson({
         subScenario: "include only with json without rootDir but outside configDirectory",
         modifySystem: sys => {
-            sys.renameFile("/src/src/hello.json", "/hello.json");
-            sys.replaceFileText("/src/src/index.ts", "./hello.json", "../../hello.json");
+            sys.renameFile("/home/src/workspaces/solution/project/src/hello.json", "/home/src/workspaces/solution/hello.json");
+            sys.replaceFileText("/home/src/workspaces/solution/project/src/index.ts", "./hello.json", "../../hello.json");
         },
     }, {
         include: [
@@ -102,8 +102,8 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
     verfiyJson({
         subScenario: "include of json along with other include and file name matches ts file",
         modifySystem: sys => {
-            sys.renameFile("/src/src/hello.json", "/src/src/index.json");
-            sys.replaceFileText("/src/src/index.ts", "hello.json", "index.json");
+            sys.renameFile("/home/src/workspaces/solution/project/src/hello.json", "/home/src/workspaces/solution/project/src/index.json");
+            sys.replaceFileText("/home/src/workspaces/solution/project/src/index.ts", "hello.json", "index.json");
         },
     }, {
         include: [
@@ -149,25 +149,25 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
     }, { outDir: undefined });
 });
 
-describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
+describe("unittests:: tsbuild:: with resolveJsonModule:: option on project importJsonFromProjectReference", () => {
     verifyTsc({
         scenario: "resolveJsonModule",
         subScenario: "importing json module from project reference",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/strings/foo.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/strings/foo.json": jsonToReadableText({
                     foo: "bar baz",
                 }),
-                "/src/strings/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/strings/tsconfig.json": jsonToReadableText({
                     extends: "../tsconfig.json",
                     include: ["foo.json"],
                     references: [],
                 }),
-                "/src/main/index.ts": dedent`
+                "/home/src/workspaces/solution/project/main/index.ts": dedent`
                     import { foo } from '../strings/foo.json';
                     console.log(foo);
                 `,
-                "/src/main/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/main/tsconfig.json": jsonToReadableText({
                     extends: "../tsconfig.json",
                     include: [
                         "./**/*.ts",
@@ -176,7 +176,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
                         path: "../strings/tsconfig.json",
                     }],
                 }),
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -192,8 +192,8 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
                     ],
                     files: [],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--b", "project", "--verbose", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
 });

@@ -1,3 +1,4 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeRun,
@@ -8,8 +9,8 @@ import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
     const commandLineArgs = buildType === "-b" ?
-        ["-b", "/src/tsconfig.json", "-v"] :
-        ["-p", "/src/tsconfig.json"];
+        ["-b", "-v"] :
+        emptyArray;
 
     function forEachNoCheckScenarioWorker(
         subScenario: string,
@@ -22,11 +23,11 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
         };
         const noCheckFixError: TestTscEdit = {
             caption: "Fix `a` error with noCheck",
-            edit: sys => sys.writeFile("/src/a.ts", `export const a = "hello";`),
+            edit: sys => sys.writeFile("/home/src/workspaces/project/a.ts", `export const a = "hello";`),
         };
         const noCheckError: TestTscEdit = {
             caption: "Introduce error with noCheck",
-            edit: sys => sys.writeFile("/src/a.ts", aText),
+            edit: sys => sys.writeFile("/home/src/workspaces/project/a.ts", aText),
         };
         const noChangeRunWithCheckPendingDiscrepancy: TestTscEdit = {
             ...noChangeRun,
@@ -43,16 +44,16 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                     subScenario: `${options.outFile ? "outFile" : "multiFile"}/${subScenario}${incremental ? " with incremental" : ""}`,
                     sys: () =>
                         TestServerHost.createWatchedSystem({
-                            "/src/a.ts": aText,
-                            "/src/b.ts": `export const b = 10;`,
-                            "/src/tsconfig.json": jsonToReadableText({
+                            "/home/src/workspaces/project/a.ts": aText,
+                            "/home/src/workspaces/project/b.ts": `export const b = 10;`,
+                            "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                                 compilerOptions: {
                                     declaration: true,
                                     incremental,
                                     ...options,
                                 },
                             }),
-                        }, { currentDirectory: "/" }),
+                        }, { currentDirectory: "/home/src/workspaces/project" }),
                     commandLineArgs: [...commandLineArgs, "--noCheck"],
                     edits: [
                         noChangeRun, // Should be no op
@@ -70,7 +71,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                         checkNoChangeRun, // Should check errors and update buildInfo
                         {
                             caption: "Add file with error",
-                            edit: sys => sys.writeFile("/src/c.ts", `export const c: number = "hello";`),
+                            edit: sys => sys.writeFile("/home/src/workspaces/project/c.ts", `export const c: number = "hello";`),
                             commandLineArgs,
                         },
                         noCheckError,

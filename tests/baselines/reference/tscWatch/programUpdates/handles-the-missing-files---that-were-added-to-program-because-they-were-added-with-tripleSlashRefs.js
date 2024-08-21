@@ -1,6 +1,6 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/commonFile1.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
                     let x = y
 
@@ -20,12 +20,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w /user/username/workspace/projects/project/commonFile1.ts
+/home/src/tslibs/ts/lib/tsc.js -w /user/username/workspace/solution/projects/project/commonFile1.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mcommonFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/workspace/projects/project/commonFile2.ts' not found.
+[96mcommonFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/workspace/solution/projects/project/commonFile2.ts' not found.
 
 [7m1[0m /// <reference path="commonFile2.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~[0m
@@ -39,7 +39,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/commonFile1.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
 /// <reference path="commonFile2.ts"/>
 var x = y;
 
@@ -48,21 +48,23 @@ var x = y;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/commonFile2.ts: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/project/commonFile2.ts: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/commonFile1.ts: *new*
+/user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/commonFile1.ts"
+  "/user/username/workspace/solution/projects/project/commonFile1.ts"
 ]
 Program options: {
   "watch": true
@@ -70,41 +72,43 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/commonfile1.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: create file2
 
 Input::
-//// [/user/username/workspace/projects/project/commonFile2.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile2.ts]
 let y = 1
 
 
 PolledWatches::
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types:
+/user/username/workspace/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types:
+/user/username/workspace/solution/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/workspace/projects/project/commonFile2.ts:
+/user/username/workspace/solution/projects/project/commonFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
   {}
-/user/username/workspace/projects/project/commonFile1.ts:
+/user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
 
 Timeout callback:: count: 1
@@ -123,8 +127,8 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/commonFile1.js] file written with same contents
-//// [/user/username/workspace/projects/project/commonFile2.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/commonFile2.js]
 var y = 1;
 
 
@@ -132,22 +136,24 @@ var y = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types:
+/user/username/workspace/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types:
+/user/username/workspace/solution/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
   {}
-/user/username/workspace/projects/project/commonFile1.ts:
+/user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
-/user/username/workspace/projects/project/commonFile2.ts: *new*
+/user/username/workspace/solution/projects/project/commonFile2.ts: *new*
   {}
 
 
 Program root files: [
-  "/user/username/workspace/projects/project/commonFile1.ts"
+  "/user/username/workspace/solution/projects/project/commonFile1.ts"
 ]
 Program options: {
   "watch": true
@@ -155,16 +161,16 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile2.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile2.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Shape signatures in builder refreshed for::
-/user/username/workspace/projects/project/commonfile2.ts (computed .d.ts)
-/user/username/workspace/projects/project/commonfile1.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/commonfile2.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/commonfile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

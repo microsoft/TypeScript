@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { private p = 10; };
@@ -37,7 +37,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -124,7 +124,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -161,34 +161,34 @@ Change:: With declaration enabled noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable c.
 
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
@@ -197,9 +197,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  home/src/projects/project/a.ts[90m:1[0m
-     1  home/src/projects/project/c.ts[90m:1[0m
-     1  home/src/projects/project/d.ts[90m:1[0m
+     1  a.ts[90m:1[0m
+     1  c.ts[90m:1[0m
+     1  d.ts[90m:1[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -347,34 +347,34 @@ Change:: With declaration and declarationMap noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable c.
 
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
@@ -383,9 +383,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  home/src/projects/project/a.ts[90m:1[0m
-     1  home/src/projects/project/c.ts[90m:1[0m
-     1  home/src/projects/project/d.ts[90m:1[0m
+     1  a.ts[90m:1[0m
+     1  c.ts[90m:1[0m
+     1  d.ts[90m:1[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -535,7 +535,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -572,34 +572,34 @@ Change:: Dts Emit with error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --declaration
+/home/src/tslibs/ts/lib/tsc.js -p . --declaration
 Output::
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable a.
 
-[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable c.
 
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
@@ -608,9 +608,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  home/src/projects/project/a.ts[90m:1[0m
-     1  home/src/projects/project/c.ts[90m:1[0m
-     1  home/src/projects/project/d.ts[90m:1[0m
+     1  a.ts[90m:1[0m
+     1  c.ts[90m:1[0m
+     1  d.ts[90m:1[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -798,7 +798,7 @@ Input::
 export const a = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -885,24 +885,24 @@ Change:: With declaration enabled noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration
 Output::
-[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable c.
 
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
@@ -911,8 +911,8 @@ Output::
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  home/src/projects/project/c.ts[90m:1[0m
-     1  home/src/projects/project/d.ts[90m:1[0m
+     1  c.ts[90m:1[0m
+     1  d.ts[90m:1[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -1039,24 +1039,24 @@ Change:: With declaration and declarationMap noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
-[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable c.
 
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
@@ -1065,8 +1065,8 @@ Output::
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  home/src/projects/project/c.ts[90m:1[0m
-     1  home/src/projects/project/d.ts[90m:1[0m
+     1  c.ts[90m:1[0m
+     1  d.ts[90m:1[0m
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
@@ -1198,20 +1198,20 @@ Input::
 export const c = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit --declaration --declarationMap
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
-[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
     Add a type annotation to the variable d.
 
 
-Found 1 error in home/src/projects/project/d.ts[90m:1[0m
+Found 1 error in d.ts[90m:1[0m
 
 
 

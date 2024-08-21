@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -32,19 +32,19 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --composite false --p src/project
+/home/src/tslibs/ts/lib/tsc.js --composite false
 Output::
-[96msrc/project/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
 
 [7m6[0m     "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:6[0m
+Found 1 error in tsconfig.json[90m:6[0m
 
 
 
-//// [/src/project/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;

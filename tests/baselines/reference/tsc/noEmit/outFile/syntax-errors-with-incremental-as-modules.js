@@ -31,7 +31,7 @@ declare const console: { log(msg: any): void; };
 export const b = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 [96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
@@ -110,7 +110,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 [96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
@@ -154,7 +154,7 @@ Input::
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -227,7 +227,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -260,7 +260,7 @@ Change:: Emit after fixing error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js -p .
 Output::
 
 
@@ -340,7 +340,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -376,7 +376,7 @@ Input::
 export const a = "hello
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 [96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
@@ -453,7 +453,7 @@ Change:: Emit when error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js -p .
 Output::
 [96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
@@ -555,7 +555,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 [96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 

@@ -1,3 +1,4 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
@@ -38,21 +39,21 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
         subScenario: "when noLib toggles",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/a.d.ts": `declare const a = "hello";`,
-                "/src/b.ts": `const b = 10;`,
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/a.d.ts": `declare const a = "hello";`,
+                "/home/src/workspaces/project/b.ts": `const b = 10;`,
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         declaration: true,
                         incremental: true,
                         lib: ["es6"],
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-p", "/src/tsconfig.json"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: emptyArray,
         edits: [
             {
                 ...noChangeRun,
-                commandLineArgs: ["-p", "/src/tsconfig.json", "--noLib"],
+                commandLineArgs: ["--noLib"],
             },
         ],
         baselinePrograms: true,
@@ -63,19 +64,19 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
         subScenario: "when one of the file skips default lib inclusion",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/a.d.ts": dedent`
+                "/home/src/workspaces/project/a.d.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="es6"/>
                     declare const a = "hello";
                 `,
-                "/src/b.d.ts": `export const b = 10;`,
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/b.d.ts": `export const b = 10;`,
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         lib: ["es6", "dom"],
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["-i", "--explainFiles"],
         baselinePrograms: true,
     });
 });

@@ -1,16 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/src/hello.json]
+//// [/home/src/workspaces/solution/project/src/hello.json]
 {
   "hello": "world"
 }
 
-//// [/src/src/index.ts]
+//// [/home/src/workspaces/solution/project/src/index.ts]
 import hello from "./hello.json"
 export default hello.hello
 
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -45,39 +45,39 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-TSFILE: /src/dist/src/hello.json
-TSFILE: /src/dist/src/index.js
-TSFILE: /src/dist/src/index.js.map
-TSFILE: /src/dist/src/index.d.ts
-TSFILE: /src/dist/tsconfig.tsbuildinfo
-home/src/tslibs/ts/lib/lib.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
-src/src/hello.json
-  Imported via "./hello.json" from file 'src/src/index.ts'
+project/src/hello.json
+  Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
-src/src/index.ts
+project/src/index.ts
   Part of 'files' list in tsconfig.json
 
 
-//// [/src/dist/src/hello.json]
+//// [/home/src/workspaces/solution/project/dist/src/hello.json]
 {
     "hello": "world"
 }
 
 
-//// [/src/dist/src/index.js.map]
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
-//// [/src/dist/src/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -87,18 +87,18 @@ var hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 
-//// [/src/dist/src/index.d.ts]
+//// [/home/src/workspaces/solution/project/dist/src/index.d.ts]
 declare const _default: string;
 export default _default;
 
 
-//// [/src/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-6443385642-import hello from \"./hello.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true,"sourceMap":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-6443385642-import hello from \"./hello.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true,"sourceMap":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../src/hello.json",
     "../src/index.ts"
   ],
@@ -108,7 +108,7 @@ export default _default;
     ]
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -156,7 +156,7 @@ export default _default;
   },
   "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1086
+  "size": 1083
 }
 
 
@@ -166,12 +166,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/tsconfig.tsbuildinfo'
 
 
 

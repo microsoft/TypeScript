@@ -29,7 +29,7 @@ declare const console: { log(msg: any): void; };
 export const b = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -119,7 +119,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -153,7 +153,7 @@ Input::
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -243,7 +243,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -274,7 +274,7 @@ Change:: Emit after fixing error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js -p .
 Output::
 
 
@@ -365,7 +365,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -399,7 +399,7 @@ Input::
 export const a = class { private p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -485,7 +485,7 @@ Change:: Emit when error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js -p .
 Output::
 
 
@@ -574,7 +574,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
 Output::
 
 

@@ -8,14 +8,14 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
         subScenario: "interface is merged and contains late bound member",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/src/globals.d.ts": dedent`
+                "/home/src/workspaces/project/src/globals.d.ts": dedent`
                     interface SymbolConstructor {
                         (description?: string | number): symbol;
                     }
                     declare var Symbol: SymbolConstructor;
                 `,
-                "/src/src/hkt.ts": `export interface HKT<T> { }`,
-                "/src/src/main.ts": dedent`
+                "/home/src/workspaces/project/src/hkt.ts": `export interface HKT<T> { }`,
+                "/home/src/workspaces/project/src/main.ts": dedent`
                     import { HKT } from "./hkt";
 
                     const sym = Symbol();
@@ -28,23 +28,23 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
                     const x = 10;
                     type A = HKT<number>[typeof sym];
                 `,
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         rootDir: "src",
                         incremental: true,
                     },
                 }),
-            }, { currentDirectory: "/" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         scenario: "lateBoundSymbol",
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
+        commandLineArgs: ["--b", "--verbose"],
         edits: [
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: sys => sys.replaceFileText("/src/src/main.ts", "const x = 10;", ""),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/src/main.ts", "const x = 10;", ""),
             },
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: sys => sys.appendFile("/src/src/main.ts", "const x = 10;"),
+                edit: sys => sys.appendFile("/home/src/workspaces/project/src/main.ts", "const x = 10;"),
             },
         ],
     });

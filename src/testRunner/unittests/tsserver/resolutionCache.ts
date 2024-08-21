@@ -1,7 +1,10 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import {
+    compilerOptionsToConfigJson,
+    getPathForTypeScriptTypingInstallerCacheTest,
+} from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -11,7 +14,6 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
-import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/typingsInstaller.js";
 import {
     File,
     TestServerHost,
@@ -348,10 +350,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
                     path: "/user/username/projects/project/node_modules/@types/node/index.d.ts",
                     content: "declare var process: any",
                 };
-                const cwd = {
-                    path: "/user/username/projects/another",
-                };
-                const host = TestServerHost.createServerHost([f1, config, node, cwd]);
+                const host = TestServerHost.createServerHost([f1, config, node]);
                 const session = new TestSession(host);
                 openFilesForSession([f1], session);
                 baselineTsserverLogs("resolutionCache", subScenario, session);

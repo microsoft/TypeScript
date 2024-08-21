@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/test.ts]
+//// [/home/src/workspaces/project/test.ts]
 export const x = 1;
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -19,10 +19,10 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js /src/test.ts --listFilesOnly
+/home/src/tslibs/ts/lib/tsc.js test.ts --listFilesOnly
 Output::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/test.ts
+test.ts
 
 
 

@@ -43,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/projects/project/tsconfig.json --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --explainFiles
 Output::
 [96msrc/anotherFile.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:

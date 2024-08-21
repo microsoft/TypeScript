@@ -1,9 +1,9 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/commonFile1.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile1.ts]
 let x = 1
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -31,7 +31,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/commonFile1.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
 var x = 1;
 
 
@@ -39,49 +39,51 @@ var x = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/commonFile1.ts: *new*
+/user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/commonFile1.ts"
+  "/user/username/workspace/solution/projects/project/commonFile1.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/commonfile1.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Create commonFile2
 
 Input::
-//// [/user/username/workspace/projects/project/commonFile2.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile2.ts]
 let y = 1
 
 
@@ -101,8 +103,8 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/commonFile1.js] file written with same contents
-//// [/user/username/workspace/projects/project/commonFile2.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/commonFile2.js]
 var y = 1;
 
 
@@ -110,47 +112,49 @@ var y = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types:
+/user/username/workspace/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types:
+/user/username/workspace/solution/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
   {}
-/user/username/workspace/projects/project/commonFile1.ts:
+/user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
-/user/username/workspace/projects/project/commonFile2.ts: *new*
+/user/username/workspace/solution/projects/project/commonFile2.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json:
+/user/username/workspace/solution/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project:
+/user/username/workspace/solution/projects/project:
   {}
 
 
 Program root files: [
-  "/user/username/workspace/projects/project/commonFile1.ts",
-  "/user/username/workspace/projects/project/commonFile2.ts"
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
-/user/username/workspace/projects/project/commonFile2.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
-/user/username/workspace/projects/project/commonFile2.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/user/username/workspace/projects/project/commonfile2.ts (computed .d.ts)
-/user/username/workspace/projects/project/commonfile1.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/commonfile2.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/commonfile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

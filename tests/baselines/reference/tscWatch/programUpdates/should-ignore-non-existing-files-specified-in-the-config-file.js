@@ -1,12 +1,12 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/commonFile1.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile1.ts]
 let x = 1
 
-//// [/user/username/workspace/projects/project/commonFile2.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile2.ts]
 let y = 1
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
                     "compilerOptions": {},
                     "files": [
@@ -36,7 +36,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[91merror[0m[90m TS6053: [0mFile '/user/username/workspace/projects/project/commonFile3.ts' not found.
+[91merror[0m[90m TS6053: [0mFile '/user/username/workspace/solution/projects/project/commonFile3.ts' not found.
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
@@ -49,7 +49,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/commonFile1.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
 var x = 1;
 
 
@@ -57,38 +57,40 @@ var x = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/commonFile3.ts: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/project/commonFile3.ts: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/commonFile1.ts: *new*
+/user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/commonFile1.ts",
-  "/user/username/workspace/projects/project/commonFile3.ts"
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile3.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/commonfile1.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 
 exitCode:: ExitStatus.undefined

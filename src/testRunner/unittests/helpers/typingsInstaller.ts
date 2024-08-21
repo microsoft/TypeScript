@@ -5,34 +5,35 @@ import {
 import * as ts from "../../_namespaces/ts.js";
 import { stringifyIndented } from "../../_namespaces/ts.server.js";
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTestLocation } from "./contents.js";
 import { TestSession } from "./tsserver.js";
 import {
     File,
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-export const customTypesMap = {
-    path: "/typesMap.json" as ts.Path,
-    content: `{
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
-                    "types": ["duck-types"]
-                }
+export const customTypesMap: File = {
+    path: getPathForTypeScriptTestLocation("typesMap.json"),
+    content: jsonToReadableText({
+        typesMap: {
+            jquery: {
+                match: "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+                types: ["jquery"],
             },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }`,
+            quack: {
+                match: "/duckquack-(\\d+)\\.min\\.js",
+                types: ["duck-types"],
+            },
+        },
+        simpleMap: {
+            Bacon: "baconjs",
+            bliss: "blissfuljs",
+            commander: "commander",
+            cordova: "cordova",
+            react: "react",
+            lodash: "lodash",
+        },
+    }),
 };
 
 export function loggerToTypingsInstallerLog(logger: LoggerWithInMemoryLogs): ts.server.typingsInstaller.Log {
@@ -86,8 +87,8 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         super(
             testTypingInstaller.session.host,
             testTypingInstaller.globalTypingsCacheLocation,
-            "/safeList.json" as ts.Path,
-            customTypesMap.path,
+            getPathForTypeScriptTestLocation("typingSafeList.json") as ts.Path,
+            customTypesMap.path as ts.Path,
             testTypingInstaller.throttleLimit,
             log,
         );
@@ -164,12 +165,6 @@ export interface TestTypingsInstallerOptions {
     throttleLimit?: number;
     installAction?: InstallAction;
     throttledRequests?: number;
-}
-
-const typeScriptTypingInstallerCacheTest = "/home/src/typinginstaller/globalcache/data";
-
-export function getPathForTypeScriptTypingInstallerCacheTest(fileName: string) {
-    return `${typeScriptTypingInstallerCacheTest}/${fileName}`;
 }
 
 export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapter {

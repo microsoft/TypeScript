@@ -4,40 +4,40 @@ import { commandLineCallbacks } from "../helpers/baseline.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
+describe("unittests:: tsbuild:: PublicAPI:: with custom transformers when passed to build", () => {
     verifyTsc({
         scenario: "publicAPI",
         subScenario: "build with custom transformers",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/tsconfig.json": jsonToReadableText({
                     references: [
                         { path: "./shared/tsconfig.json" },
                         { path: "./webpack/tsconfig.json" },
                     ],
                     files: [],
                 }),
-                "/src/shared/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/shared/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                 }),
-                "/src/shared/index.ts": `export function f1() { }
+                "/home/src/workspaces/solution/shared/index.ts": `export function f1() { }
 export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`,
-                "/src/webpack/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/webpack/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                     },
                     references: [{ path: "../shared/tsconfig.json" }],
                 }),
-                "/src/webpack/index.ts": `export function f2() { }
+                "/home/src/workspaces/solution/webpack/index.ts": `export function f2() { }
 export class c2 { }
 export enum e2 { }
 // leading
 export function f22() { } // trailing`,
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--b", "/src/tsconfig.json"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--b"],
         compile: sys => {
             const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
             const buildHost = ts.createSolutionBuilderHost(
@@ -48,7 +48,11 @@ export function f22() { } // trailing`,
                 (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
             );
             buildHost.afterProgramEmitAndDiagnostics = cb;
-            const builder = ts.createSolutionBuilder(buildHost, ["/src/tsconfig.json"], { verbose: true });
+            const builder = ts.createSolutionBuilder(
+                buildHost,
+                ["/home/src/workspaces/solution/tsconfig.json"],
+                { verbose: true },
+            );
             const exitStatus = builder.build(
                 /*project*/ undefined,
                 /*cancellationToken*/ undefined,

@@ -947,16 +947,16 @@ describe("unittests:: tsserver:: projects::", () => {
 
     it("Properly handle Windows-style outDir", () => {
         const configFile: File = {
-            path: "C:\\a\\tsconfig.json",
+            path: "C:\\projects\\a\\tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
-                    outDir: `C:\\a\\b`,
+                    outDir: `C:\\projects\\a\\b`,
                 },
                 include: ["*.ts"],
             }),
         };
         const file1: File = {
-            path: "C:\\a\\f1.ts",
+            path: "C:\\projects\\a\\f1.ts",
             content: "let x = 1;",
         };
 

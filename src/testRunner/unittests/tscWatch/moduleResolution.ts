@@ -549,14 +549,14 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         commandLineArgs: ["-w", "--extendedDiagnostics", "--explainFiles"],
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/home/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmit: true,
                         traceResolution: true,
                     },
                     include: ["**/*.ts"],
                 }),
-                "/home/src/project/witha/node_modules/mymodule/index.d.ts": dedent`
+                "/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts": dedent`
                     declare module 'mymodule' {
                         export function readFile(): void;
                     }
@@ -564,14 +564,14 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                         export function promisify(): void;
                     }
                 `,
-                "/home/src/project/witha/a.ts": dedent`
+                "/home/src/workspaces/project/witha/a.ts": dedent`
                     import { readFile } from 'mymodule';
                     import { promisify, promisify2 } from 'mymoduleutils';
                     readFile();
                     promisify();
                     promisify2();
                 `,
-                "/home/src/project/withb/node_modules/mymodule/index.d.ts": dedent`
+                "/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts": dedent`
                     declare module 'mymodule' {
                         export function readFile(): void;
                     }
@@ -579,20 +579,20 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                         export function promisify2(): void;
                     }
                 `,
-                "/home/src/project/withb/b.ts": dedent`
+                "/home/src/workspaces/project/withb/b.ts": dedent`
                     import { readFile } from 'mymodule';
                     import { promisify, promisify2 } from 'mymoduleutils';
                     readFile();
                     promisify();
                     promisify2();
                 `,
-            }, { currentDirectory: "/home/src/project" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: [
             {
                 caption: "remove a file that will remove module augmentation",
                 edit: sys => {
-                    sys.replaceFileText("/home/src/project/withb/b.ts", `import { readFile } from 'mymodule';`, "");
-                    sys.deleteFile("/home/src/project/withb/node_modules/mymodule/index.d.ts");
+                    sys.replaceFileText("/home/src/workspaces/project/withb/b.ts", `import { readFile } from 'mymodule';`, "");
+                    sys.deleteFile("/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts");
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
@@ -600,14 +600,14 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                 caption: "write a file that will add augmentation",
                 edit: sys => {
                     sys.ensureFileOrFolder({
-                        path: "/home/src/project/withb/node_modules/mymoduleutils/index.d.ts",
+                        path: "/home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts",
                         content: dedent`
                             declare module 'mymoduleutils' {
                                 export function promisify2(): void;
                             }
                         `,
                     });
-                    sys.replaceFileText("/home/src/project/withb/b.ts", `readFile();`, "");
+                    sys.replaceFileText("/home/src/workspaces/project/withb/b.ts", `readFile();`, "");
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

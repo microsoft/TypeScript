@@ -1,4 +1,5 @@
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -6,7 +7,6 @@ import {
     TestSession,
     toExternalFile,
 } from "../helpers/tsserver.js";
-import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/typingsInstaller.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {

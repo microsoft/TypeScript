@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "amd",
@@ -32,9 +32,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-[96msrc/project/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
+[96mtsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/Util/Dates' not found.
 
 [7m7[0m     {
 [7m [0m [91m    ~[0m
@@ -44,11 +44,11 @@ Output::
 [7m [0m [91m~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:7[0m
+Found 1 error in tsconfig.json[90m:7[0m
 
 
 
-//// [/src/project/theApp.js]
+//// [/home/src/workspaces/project/theApp.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello
 
-//// [/src/b.ts]
+//// [/home/src/workspaces/project/b.ts]
 export const b = 10;
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "declaration": true
@@ -29,56 +29,55 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/a.d.ts]
+//// [/home/src/workspaces/project/a.d.ts]
 export declare const a = "hello";
 
 
-//// [/src/b.js]
+//// [/home/src/workspaces/project/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
 
 
-//// [/src/b.d.ts]
+//// [/home/src/workspaces/project/b.d.ts]
 export declare const b = 10;
 
 
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -86,78 +85,76 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Fix `a` error with noCheck
 
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
@@ -165,30 +162,29 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
@@ -196,29 +192,28 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
@@ -226,29 +221,28 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
@@ -256,78 +250,76 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
 Change:: Introduce error with noCheck
 
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -335,38 +327,37 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -374,77 +365,75 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Fix `a` error with noCheck
 
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
@@ -452,179 +441,175 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
 
 exitCode:: ExitStatus.Success
 
 Change:: Add file with error
 
 Input::
-//// [/src/c.ts]
+//// [/home/src/workspaces/project/c.ts]
 export const c: number = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in src/c.ts[90m:1[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js]
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = "hello";
 
 
-//// [/src/c.d.ts]
+//// [/home/src/workspaces/project/c.d.ts]
 export declare const c: number;
 
 
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Introduce error with noCheck
 
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
 
 
-Found 1 error in src/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello;
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js] file written with same contents
+//// [/home/src/workspaces/project/c.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Fix `a` error with noCheck
 
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js]
+//// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "hello";
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js] file written with same contents
+//// [/home/src/workspaces/project/c.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.Success
 
@@ -632,41 +617,40 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in src/c.ts[90m:1[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js] file written with same contents
+//// [/home/src/workspaces/project/c.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -674,34 +658,33 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc.js --noCheck
 Output::
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js] file written with same contents
+//// [/home/src/workspaces/project/c.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
   "noCheck": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.Success
 
@@ -709,40 +692,39 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
-[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
 [7m [0m [91m             ~[0m
 
 
-Found 1 error in src/c.ts[90m:1[0m
+Found 1 error in c.ts[90m:1[0m
 
 
 
-//// [/src/a.js] file written with same contents
-//// [/src/a.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/c.js] file written with same contents
-//// [/src/c.d.ts] file written with same contents
+//// [/home/src/workspaces/project/a.js] file written with same contents
+//// [/home/src/workspaces/project/a.d.ts] file written with same contents
+//// [/home/src/workspaces/project/b.js] file written with same contents
+//// [/home/src/workspaces/project/b.d.ts] file written with same contents
+//// [/home/src/workspaces/project/c.js] file written with same contents
+//// [/home/src/workspaces/project/c.d.ts] file written with same contents
 
 Program root files: [
-  "/src/a.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/home/src/workspaces/project/a.ts",
+  "/home/src/workspaces/project/b.ts",
+  "/home/src/workspaces/project/c.ts"
 ]
 Program options: {
   "declaration": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.ts
+/home/src/workspaces/project/c.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

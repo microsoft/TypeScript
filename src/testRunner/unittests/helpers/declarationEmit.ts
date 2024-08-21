@@ -5,7 +5,7 @@ import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
     return TestServerHost.createWatchedSystem({
-        "/src/project/tsconfig.json": jsonToReadableText({
+        "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 module: "NodeNext",
                 moduleResolution: "NodeNext",
@@ -15,31 +15,31 @@ function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incrementa
                 skipDefaultLibCheck: true,
             },
         }),
-        "/src/project/index.ts": dedent`
+        "/home/src/workspaces/project/index.ts": dedent`
             import ky from 'ky';
             export const api = ky.extend({});
         `,
-        "/src/project/package.json": jsonToReadableText({
+        "/home/src/workspaces/project/package.json": jsonToReadableText({
             type: "module",
         }),
-        "/src/project/node_modules/ky/distribution/index.d.ts": dedent`
+        "/home/src/workspaces/project/node_modules/ky/distribution/index.d.ts": dedent`
             type KyInstance = {
                 extend(options: Record<string,unknown>): KyInstance;
             }
             declare const ky: KyInstance;
             export default ky;
         `,
-        "/src/project/node_modules/ky/package.json": jsonToReadableText({
+        "/home/src/workspaces/project/node_modules/ky/package.json": jsonToReadableText({
             name: "ky",
             type: "module",
             main: "./distribution/index.js",
         }),
-    }, { currentDirectory: "/" });
+    }, { currentDirectory: "/home/src/workspaces/project" });
 }
 
 function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
     return TestServerHost.createWatchedSystem({
-        "/src/project/tsconfig.json": jsonToReadableText({
+        "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 module: "amd",
                 ...options,
@@ -50,18 +50,18 @@ function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions,
             },
             include: ["src"],
         }),
-        "/src/project/src/index.ts": dedent`
+        "/home/src/workspaces/project/src/index.ts": dedent`
             import ky from 'ky';
             export const api = ky.extend({});
         `,
-        "/src/project/ky.d.ts": dedent`
+        "/home/src/workspaces/project/ky.d.ts": dedent`
             type KyInstance = {
                 extend(options: Record<string,unknown>): KyInstance;
             }
             declare const ky: KyInstance;
             export default ky;
         `,
-    }, { currentDirectory: "/" });
+    }, { currentDirectory: "/home/src/workspaces/project" });
 }
 
 export function forEachDeclarationEmitWithErrorsScenario(

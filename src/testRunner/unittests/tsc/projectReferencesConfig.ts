@@ -42,14 +42,14 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references meta ch
         subScenario: "default setup was created correctly",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig(),
-                "/primary/a.ts": emptyModule(),
-                "/secondary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/primary/a.ts": emptyModule(),
+                "/home/src/workspaces/project/secondary/tsconfig.json": getConfig({
                     references: ["../primary"],
                 }),
-                "/secondary/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"],
+                "/home/src/workspaces/project/secondary/b.ts": moduleImporting("../primary/a"),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 });
 
@@ -62,14 +62,14 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
         subScenario: "errors when declaration = false",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig({
                     options: {
                         declaration: false,
                     },
                 }),
-                "/primary/a.ts": emptyModule(),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"],
+                "/home/src/workspaces/project/primary/a.ts": emptyModule(),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 
     verifyTsc({
@@ -77,21 +77,21 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
         subScenario: "errors when the referenced project doesnt have composite",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig({
                     options: {
                         composite: false,
                     },
                 }),
-                "/primary/a.ts": emptyModule(),
-                "/reference/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/a.ts": emptyModule(),
+                "/home/src/workspaces/project/reference/tsconfig.json": getConfig({
                     references: ["../primary"],
                     config: {
                         files: ["b.ts"],
                     },
                 }),
-                "/reference/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/reference/tsconfig.json"],
+                "/home/src/workspaces/project/reference/b.ts": moduleImporting("../primary/a"),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "reference/tsconfig.json"],
     });
 
     verifyTsc({
@@ -99,21 +99,21 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
         subScenario: "does not error when the referenced project doesnt have composite if its a container project",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig({
                     options: {
                         composite: false,
                     },
                 }),
-                "/primary/a.ts": emptyModule(),
-                "/reference/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/a.ts": emptyModule(),
+                "/home/src/workspaces/project/reference/tsconfig.json": getConfig({
                     references: ["../primary"],
                     config: {
                         files: [],
                     },
                 }),
-                "/reference/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/reference/tsconfig.json"],
+                "/home/src/workspaces/project/reference/b.ts": moduleImporting("../primary/a"),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "reference/tsconfig.json"],
     });
 
     verifyTsc({
@@ -121,15 +121,15 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
         subScenario: "errors when the file list is not exhaustive",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig({
                     config: {
                         files: ["a.ts"],
                     },
                 }),
-                "/primary/a.ts": "import * as b from './b'",
-                "/primary/b.ts": "export {}",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"],
+                "/home/src/workspaces/project/primary/a.ts": "import * as b from './b'",
+                "/home/src/workspaces/project/primary/b.ts": "export {}",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 
     verifyTsc({
@@ -137,12 +137,12 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
         subScenario: "errors when the referenced project doesnt exist",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/primary/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/primary/tsconfig.json": getConfig({
                     references: ["../foo"],
                 }),
-                "/primary/a.ts": emptyModule(),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"],
+                "/home/src/workspaces/project/primary/a.ts": emptyModule(),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 });
 
@@ -155,15 +155,15 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references path ma
         subScenario: "redirects to the output dts file",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/alpha/tsconfig.json": getConfig(),
-                "/alpha/a.ts": "export const m: number = 3;",
-                "/alpha/bin/a.d.ts": emptyModule(),
-                "/beta/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/alpha/a.ts": "export const m: number = 3;",
+                "/home/src/workspaces/project/alpha/bin/a.d.ts": emptyModule(),
+                "/home/src/workspaces/project/beta/tsconfig.json": getConfig({
                     references: ["../alpha"],
                 }),
-                "/beta/b.ts": "import { m } from '../alpha/a'",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json", "--explainFiles"],
+                "/home/src/workspaces/project/beta/b.ts": "import { m } from '../alpha/a'",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "beta/tsconfig.json", "--explainFiles"],
     });
 });
 
@@ -173,14 +173,14 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
         subScenario: "issues a nice error when the input file is missing",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/alpha/tsconfig.json": getConfig(),
-                "/alpha/a.ts": "export const m: number = 3;",
-                "/beta/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/alpha/a.ts": "export const m: number = 3;",
+                "/home/src/workspaces/project/beta/tsconfig.json": getConfig({
                     references: ["../alpha"],
                 }),
-                "/beta/b.ts": "import { m } from '../alpha/a'",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json"],
+                "/home/src/workspaces/project/beta/b.ts": "import { m } from '../alpha/a'",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "beta/tsconfig.json"],
     });
 
     verifyTsc({
@@ -188,20 +188,20 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
         subScenario: "issues a nice error when the input file is missing when module reference is not relative",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/alpha/tsconfig.json": getConfig(),
-                "/alpha/a.ts": "export const m: number = 3;",
-                "/beta/tsconfig.json": getConfig({
+                "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/alpha/a.ts": "export const m: number = 3;",
+                "/home/src/workspaces/project/beta/tsconfig.json": getConfig({
                     references: ["../alpha"],
                     options: {
                         baseUrl: "./",
                         paths: {
-                            "@alpha/*": ["/alpha/*"],
+                            "@alpha/*": ["/home/src/workspaces/project/alpha/*"],
                         },
                     },
                 }),
-                "/beta/b.ts": "import { m } from '@alpha/a'",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json"],
+                "/home/src/workspaces/project/beta/b.ts": "import { m } from '@alpha/a'",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "beta/tsconfig.json"],
     });
 });
 
@@ -214,10 +214,10 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references behavio
         subScenario: "doesnt infer the rootDir from source paths",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/alpha/tsconfig.json": getConfig(),
-                "/alpha/src/a.ts": "export const m: number = 3;",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/alpha/tsconfig.json"],
+                "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/alpha/src/a.ts": "export const m: number = 3;",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "alpha/tsconfig.json"],
     });
 });
 
@@ -227,10 +227,10 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references errors 
         subScenario: "errors when a file is outside the rootdir",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/alpha/tsconfig.json": getConfig(),
-                "/alpha/src/a.ts": "import * as b from '../../beta/b'",
-                "/beta/b.ts": "export { }",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "/alpha/tsconfig.json"],
+                "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
+                "/home/src/workspaces/project/alpha/src/a.ts": "import * as b from '../../beta/b'",
+                "/home/src/workspaces/project/beta/b.ts": "export { }",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--p", "alpha/tsconfig.json"],
     });
 });

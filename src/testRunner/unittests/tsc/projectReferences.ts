@@ -1,3 +1,4 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
@@ -8,8 +9,8 @@ describe("unittests:: tsc:: projectReferences::", () => {
         subScenario: "when project contains invalid project reference",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "amd",
                         outFile: "theApp.js",
@@ -18,8 +19,8 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../Util/Dates" },
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: emptyArray,
     });
 
     verifyTsc({
@@ -27,21 +28,21 @@ describe("unittests:: tsc:: projectReferences::", () => {
         subScenario: "when project references composite project with noEmit",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/utils/index.ts": "export const x = 10;",
-                "/src/utils/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/src/utils/index.ts": "export const x = 10;",
+                "/home/src/workspaces/solution/src/utils/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         noEmit: true,
                     },
                 }),
-                "/src/project/index.ts": `import { x } from "../utils";`,
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/index.ts": `import { x } from "../utils";`,
+                "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     references: [
                         { path: "../utils" },
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--p", "project"],
     });
 
     verifyTsc({
@@ -49,11 +50,11 @@ describe("unittests:: tsc:: projectReferences::", () => {
         subScenario: "default import interop uses referenced project settings",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/node_modules/ambiguous-package/package.json": jsonToReadableText({ name: "ambiguous-package" }),
-                "/node_modules/ambiguous-package/index.d.ts": "export declare const ambiguous: number;",
-                "/node_modules/esm-package/package.json": jsonToReadableText({ name: "esm-package", type: "module" }),
-                "/node_modules/esm-package/index.d.ts": "export declare const esm: number;",
-                "/lib/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/node_modules/ambiguous-package/package.json": jsonToReadableText({ name: "ambiguous-package" }),
+                "/home/src/workspaces/project/node_modules/ambiguous-package/index.d.ts": "export declare const ambiguous: number;",
+                "/home/src/workspaces/project/node_modules/esm-package/package.json": jsonToReadableText({ name: "esm-package", type: "module" }),
+                "/home/src/workspaces/project/node_modules/esm-package/index.d.ts": "export declare const esm: number;",
+                "/home/src/workspaces/project/lib/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declaration: true,
@@ -64,9 +65,9 @@ describe("unittests:: tsc:: projectReferences::", () => {
                     },
                     include: ["src"],
                 }),
-                "/lib/src/a.ts": "export const a = 0;",
-                "/lib/dist/a.d.ts": "export declare const a = 0;",
-                "/app/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/lib/src/a.ts": "export const a = 0;",
+                "/home/src/workspaces/project/lib/dist/a.d.ts": "export declare const a = 0;",
+                "/home/src/workspaces/project/app/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "esnext",
                         moduleResolution: "bundler",
@@ -78,14 +79,14 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../lib" },
                     ],
                 }),
-                "/app/src/local.ts": "export const local = 0;",
-                "/app/src/index.ts": `
+                "/home/src/workspaces/project/app/src/local.ts": "export const local = 0;",
+                "/home/src/workspaces/project/app/src/index.ts": `
                     import local from "./local"; // Error
                     import esm from "esm-package"; // Error
                     import referencedSource from "../../lib/src/a"; // Error
                     import referencedDeclaration from "../../lib/dist/a"; // Error
                     import ambiguous from "ambiguous-package"; // Ok`,
-            }, { currentDirectory: "/" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         commandLineArgs: ["--p", "app", "--pretty", "false"],
     });
 
@@ -94,17 +95,17 @@ describe("unittests:: tsc:: projectReferences::", () => {
         subScenario: "referencing ambient const enum from referenced project with preserveConstEnums",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/utils/index.ts": "export const enum E { A = 1 }",
-                "/src/utils/index.d.ts": "export declare const enum E { A = 1 }",
-                "/src/utils/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/utils/index.ts": "export const enum E { A = 1 }",
+                "/home/src/workspaces/solution/utils/index.d.ts": "export declare const enum E { A = 1 }",
+                "/home/src/workspaces/solution/utils/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declaration: true,
                         preserveConstEnums: true,
                     },
                 }),
-                "/src/project/index.ts": `import { E } from "../utils"; E.A;`,
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/index.ts": `import { E } from "../utils"; E.A;`,
+                "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         isolatedModules: true,
                     },
@@ -112,8 +113,8 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../utils" },
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--p", "project"],
     });
 
     verifyTsc({
@@ -121,26 +122,26 @@ describe("unittests:: tsc:: projectReferences::", () => {
         subScenario: "importing const enum from referenced project with preserveConstEnums and verbatimModuleSyntax",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/preserve/index.ts": "export const enum E { A = 1 }",
-                "/src/preserve/index.d.ts": "export declare const enum E { A = 1 }",
-                "/src/preserve/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/preserve/index.ts": "export const enum E { A = 1 }",
+                "/home/src/workspaces/solution/preserve/index.d.ts": "export declare const enum E { A = 1 }",
+                "/home/src/workspaces/solution/preserve/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declaration: true,
                         preserveConstEnums: true,
                     },
                 }),
-                "/src/no-preserve/index.ts": "export const enum E { A = 1 }",
-                "/src/no-preserve/index.d.ts": "export declare const enum F { A = 1 }",
-                "/src/no-preserve/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/no-preserve/index.ts": "export const enum E { A = 1 }",
+                "/home/src/workspaces/solution/no-preserve/index.d.ts": "export declare const enum F { A = 1 }",
+                "/home/src/workspaces/solution/no-preserve/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declaration: true,
                         preserveConstEnums: false,
                     },
                 }),
-                "/src/project/index.ts": `import { E } from "../preserve";\nimport { F } from "../no-preserve";\nE.A; F.A;`,
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/solution/project/index.ts": `import { E } from "../preserve";\nimport { F } from "../no-preserve";\nE.A; F.A;`,
+                "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "preserve",
                         verbatimModuleSyntax: true,
@@ -150,7 +151,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../no-preserve" },
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project", "--pretty", "false"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--p", "project", "--pretty", "false"],
     });
 });

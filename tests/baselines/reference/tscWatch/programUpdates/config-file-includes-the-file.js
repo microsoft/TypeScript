@@ -1,15 +1,15 @@
-currentDirectory:: /user/username/workspace/projects useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/f1.ts]
+//// [/user/username/workspace/solution/projects/project/f1.ts]
 export let x = 5
 
-//// [/user/username/workspace/projects/projectc/f2.ts]
+//// [/user/username/workspace/solution/projects/projectc/f2.ts]
 import {x} from "../project/f1"
 
-//// [/user/username/workspace/projects/projectc/f3.ts]
+//// [/user/username/workspace/solution/projects/projectc/f3.ts]
 export let y = 1
 
-//// [/user/username/workspace/projects/projectc/tsconfig.json]
+//// [/user/username/workspace/solution/projects/projectc/tsconfig.json]
 {
   "compilerOptions": {},
   "files": [
@@ -34,7 +34,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/projects/projectc/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/solution/projects/projectc/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -43,19 +43,19 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js]
+//// [/user/username/workspace/solution/projects/project/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 5;
 
 
-//// [/user/username/workspace/projects/projectc/f2.js]
+//// [/user/username/workspace/solution/projects/projectc/f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/workspace/projects/projectc/f3.js]
+//// [/user/username/workspace/solution/projects/projectc/f3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
@@ -66,49 +66,51 @@ exports.y = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/projectc/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/projectc/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/f1.ts: *new*
+/user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
-/user/username/workspace/projects/projectc/f2.ts: *new*
+/user/username/workspace/solution/projects/projectc/f2.ts: *new*
   {}
-/user/username/workspace/projects/projectc/f3.ts: *new*
+/user/username/workspace/solution/projects/projectc/f3.ts: *new*
   {}
-/user/username/workspace/projects/projectc/tsconfig.json: *new*
+/user/username/workspace/solution/projects/projectc/tsconfig.json: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/projectc/f2.ts",
-  "/user/username/workspace/projects/projectc/f3.ts"
+  "/user/username/workspace/solution/projects/projectc/f2.ts",
+  "/user/username/workspace/solution/projects/projectc/f3.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/user/username/workspace/projects/projectc/tsconfig.json",
-  "configFilePath": "/user/username/workspace/projects/projectc/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/projectc/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/projectc/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/projectc/f2.ts
-/user/username/workspace/projects/projectc/f3.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/projectc/f2.ts
+/user/username/workspace/solution/projects/projectc/f3.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
-/user/username/workspace/projects/projectc/f2.ts
-/user/username/workspace/projects/projectc/f3.ts
+/user/username/workspace/solution/projects/project/f1.ts
+/user/username/workspace/solution/projects/projectc/f2.ts
+/user/username/workspace/solution/projects/projectc/f3.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
-/user/username/workspace/projects/projectc/f2.ts (used version)
-/user/username/workspace/projects/projectc/f3.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/projectc/f2.ts (used version)
+/user/username/workspace/solution/projects/projectc/f3.ts (used version)
 
 exitCode:: ExitStatus.undefined

@@ -19,8 +19,8 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "when passing filename for buildinfo on commandline",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -29,8 +29,8 @@ describe("unittests:: tsc:: incremental::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--incremental", "--tsBuildInfoFile", ".tsbuildinfo", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
 
@@ -39,15 +39,15 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "when passing rootDir from commandline",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         outDir: "dist",
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--rootDir", "src"],
         edits: noChangeOnlyRuns,
     });
 
@@ -56,16 +56,16 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "with only dts files",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.d.ts": "export const x = 10;",
-                "/src/project/src/another.d.ts": "export const y = 10;",
-                "/src/project/tsconfig.json": "{}",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--incremental", "--p", "src/project"],
+                "/home/src/workspaces/project/src/main.d.ts": "export const x = 10;",
+                "/home/src/workspaces/project/src/another.d.ts": "export const y = 10;",
+                "/home/src/workspaces/project/tsconfig.json": "{}",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--incremental"],
         edits: [
             noChangeRun,
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: sys => sys.appendFile("/src/project/src/main.d.ts", "export const xy = 100;"),
+                edit: sys => sys.appendFile("/home/src/workspaces/project/src/main.d.ts", "export const xy = 100;"),
             },
         ],
     });
@@ -75,16 +75,16 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "when passing rootDir is in the tsconfig",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         outDir: "./built",
                         rootDir: "./",
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ts.emptyArray,
         edits: noChangeOnlyRuns,
     });
 
@@ -93,14 +93,14 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "tsbuildinfo has error",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": "{}",
-                "/src/project/tsconfig.tsbuildinfo": "Some random string",
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project", "-i"],
+                "/home/src/workspaces/project/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": "{}",
+                "/home/src/workspaces/project/tsconfig.tsbuildinfo": "Some random string",
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["-i"],
         edits: [{
             caption: "tsbuildinfo written has error",
-            edit: sys => sys.prependFile("/src/project/tsconfig.tsbuildinfo", "Some random string"),
+            edit: sys => sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string"),
         }],
     });
 
@@ -109,52 +109,52 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: `when global file is added, the signatures are updated`,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": dedent`
+                "/home/src/workspaces/project/src/main.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function main() { }
                 `,
-                "/src/project/src/anotherFileWithSameReferenes.ts": dedent`
+                "/home/src/workspaces/project/src/anotherFileWithSameReferenes.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function anotherFileWithSameReferenes() { }
                 `,
-                "/src/project/src/filePresent.ts": `function something() { return 10; }`,
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/filePresent.ts": `function something() { return 10; }`,
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["src/**/*.ts"],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ts.emptyArray,
         edits: [
             noChangeRun,
             {
                 caption: "Modify main file",
-                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/home/src/workspaces/project/src/main.ts`, `something();`),
             },
             {
                 caption: "Modify main file again",
-                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/home/src/workspaces/project/src/main.ts`, `something();`),
             },
             {
                 caption: "Add new file and update main file",
                 edit: sys => {
-                    sys.writeFile(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
+                    sys.writeFile(`/home/src/workspaces/project/src/newFile.ts`, "function foo() { return 20; }");
                     sys.prependFile(
-                        `/src/project/src/main.ts`,
+                        `/home/src/workspaces/project/src/main.ts`,
                         `/// <reference path="./newFile.ts"/>
 `,
                     );
-                    sys.appendFile(`/src/project/src/main.ts`, `foo();`);
+                    sys.appendFile(`/home/src/workspaces/project/src/main.ts`, `foo();`);
                 },
             },
             {
                 caption: "Write file that could not be resolved",
-                edit: sys => sys.writeFile(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
+                edit: sys => sys.writeFile(`/home/src/workspaces/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
             },
             {
                 caption: "Modify main file",
-                edit: sys => sys.appendFile(`/src/project/src/main.ts`, `something();`),
+                edit: sys => sys.appendFile(`/home/src/workspaces/project/src/main.ts`, `something();`),
             },
         ],
         baselinePrograms: true,
@@ -181,12 +181,12 @@ declare global {
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash",
             sys: () =>
                 TestServerHost.createWatchedSystem({
-                    "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                    "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
-                    "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
-                }, { currentDirectory: "/" }),
-            commandLineArgs: ["--p", "src/project"],
+                    "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                    "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                    "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                }, { currentDirectory: "/home/src/workspaces/project" }),
+            commandLineArgs: ts.emptyArray,
         });
 
         verifyTsc({
@@ -194,31 +194,31 @@ declare global {
             subScenario: "react-jsx-emit-mode with no backing types found doesn't crash under --strict",
             sys: () =>
                 TestServerHost.createWatchedSystem({
-                    "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                    "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
-                    "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
-                }, { currentDirectory: "/" }),
-            commandLineArgs: ["--p", "src/project", "--strict"],
+                    "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                    "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                    "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                }, { currentDirectory: "/home/src/workspaces/project" }),
+            commandLineArgs: ["--strict"],
         });
     });
 
     verifyTsc({
         scenario: "incremental",
         subScenario: "when new file is added to the referenced project",
-        commandLineArgs: ["-i", "-p", `src/projects/project2`],
+        commandLineArgs: ["-i", "-p", "project2"],
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/projects/project1/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/projects/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
                     },
                     exclude: ["temp"],
                 }),
-                "/src/projects/project1/class1.ts": `class class1 {}`,
-                "/src/projects/project1/class1.d.ts": `declare class class1 {}`,
-                "/src/projects/project2/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/projects/project1/class1.ts": `class class1 {}`,
+                "/home/src/workspaces/projects/project1/class1.d.ts": `declare class class1 {}`,
+                "/home/src/workspaces/projects/project2/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -227,12 +227,12 @@ declare global {
                         { path: "../project1" },
                     ],
                 }),
-                "/src/projects/project2/class2.ts": `class class2 {}`,
-            }, { currentDirectory: "/" }),
+                "/home/src/workspaces/projects/project2/class2.ts": `class class2 {}`,
+            }, { currentDirectory: "/home/src/workspaces/projects" }),
         edits: [
             {
                 caption: "Add class3 to project1 and build it",
-                edit: sys => sys.writeFile("/src/projects/project1/class3.ts", `class class3 {}`),
+                edit: sys => sys.writeFile("/home/src/workspaces/projects/project1/class3.ts", `class class3 {}`),
                 discrepancyExplanation: () => [
                     "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
                     "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
@@ -240,22 +240,22 @@ declare global {
             },
             {
                 caption: "Add output of class3",
-                edit: sys => sys.writeFile("/src/projects/project1/class3.d.ts", `declare class class3 {}`),
+                edit: sys => sys.writeFile("/home/src/workspaces/projects/project1/class3.d.ts", `declare class class3 {}`),
             },
             {
                 caption: "Add excluded file to project1",
                 edit: sys => {
-                    sys.ensureFileOrFolder({ path: "/src/projects/project1/temp" });
-                    sys.writeFile("/src/projects/project1/temp/file.d.ts", `declare class file {}`);
+                    sys.ensureFileOrFolder({ path: "/home/src/workspaces/projects/project1/temp" });
+                    sys.writeFile("/home/src/workspaces/projects/project1/temp/file.d.ts", `declare class file {}`);
                 },
             },
             {
                 caption: "Delete output for class3",
-                edit: sys => sys.deleteFile("/src/projects/project1/class3.d.ts"),
+                edit: sys => sys.deleteFile("/home/src/workspaces/projects/project1/class3.d.ts"),
             },
             {
                 caption: "Create output for class3",
-                edit: sys => sys.writeFile("/src/projects/project1/class3.d.ts", `declare class class3 {}`),
+                edit: sys => sys.writeFile("/home/src/workspaces/projects/project1/class3.d.ts", `declare class class3 {}`),
             },
         ],
     });
@@ -263,10 +263,10 @@ declare global {
     verifyTsc({
         scenario: "incremental",
         subScenario: "serializing error chains",
-        commandLineArgs: ["-p", `src/project`],
+        commandLineArgs: ts.emptyArray,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         strict: true,
@@ -274,7 +274,7 @@ declare global {
                         module: "esnext",
                     },
                 }),
-                "/src/project/index.tsx": dedent`
+                "/home/src/workspaces/project/index.tsx": dedent`
                     declare namespace JSX {
                         interface ElementChildrenAttribute { children: {}; }
                         interface IntrinsicElements { div: {} }
@@ -289,7 +289,7 @@ declare global {
                         <div />
                     </Component>)`,
                 [libFile.path]: `${libFile.content}\ninterface ReadonlyArray<T> { readonly length: number }`,
-            }, { currentDirectory: "/" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: noChangeOnlyRuns,
     });
 
@@ -298,7 +298,7 @@ declare global {
         subScenario: "ts file with no-default-lib that augments the global scope",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": dedent`
+                "/home/src/workspaces/project/src/main.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="esnext" />
 
@@ -309,7 +309,7 @@ declare global {
 
                     export {};
                 `,
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "ESNext",
                         module: "ESNext",
@@ -317,44 +317,44 @@ declare global {
                         outDir: "dist",
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--rootDir", "src"],
     });
 
     verifyTsc({
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file",
-        commandLineArgs: ["-p", `src/project`],
+        commandLineArgs: ts.emptyArray,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
-                "/src/project/class1.ts": `const a: MagicNumber = 1;
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
+                "/home/src/workspaces/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
-                "/src/project/constants.ts": "export default 1;",
-                "/src/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
-            }, { currentDirectory: "/" }),
+                "/home/src/workspaces/project/constants.ts": "export default 1;",
+                "/home/src/workspaces/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: [{
             caption: "Modify imports used in global file",
-            edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
+            edit: sys => sys.writeFile("/home/src/workspaces/project/constants.ts", "export default 2;"),
         }],
     });
 
     verifyTsc({
         scenario: "incremental",
         subScenario: "change to type that gets used as global through export in another file through indirect import",
-        commandLineArgs: ["-p", `src/project`],
+        commandLineArgs: ts.emptyArray,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
-                "/src/project/class1.ts": `const a: MagicNumber = 1;
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
+                "/home/src/workspaces/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
-                "/src/project/constants.ts": "export default 1;",
-                "/src/project/reexport.ts": `export { default as ConstantNumber } from "./constants"`,
-                "/src/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
-            }, { currentDirectory: "/" }),
+                "/home/src/workspaces/project/constants.ts": "export default 1;",
+                "/home/src/workspaces/project/reexport.ts": `export { default as ConstantNumber } from "./constants"`,
+                "/home/src/workspaces/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: [{
             caption: "Modify imports used in global file",
-            edit: sys => sys.writeFile("/src/project/constants.ts", "export default 2;"),
+            edit: sys => sys.writeFile("/home/src/workspaces/project/constants.ts", "export default 2;"),
         }],
     });
 
@@ -362,16 +362,16 @@ console.log(a);`,
         verifyTsc({
             scenario: "incremental",
             subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
-            commandLineArgs: ["-p", "src/project", "--incremental"],
+            commandLineArgs: ["--incremental"],
             sys: () =>
                 TestServerHost.createWatchedSystem({
-                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
-                    "/src/project/main.ts": dedent`
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
+                    "/home/src/workspaces/project/main.ts": dedent`
                         import MessageablePerson from './MessageablePerson.js';
                         function logMessage( person: MessageablePerson ) {
                             console.log( person.message );
                         }`,
-                    "/src/project/MessageablePerson.ts": dedent`
+                    "/home/src/workspaces/project/MessageablePerson.ts": dedent`
                         const Messageable = () => {
                             return class MessageableClass {
                                 public message = 'hello';
@@ -380,7 +380,7 @@ console.log(a);`,
                         const wrapper = () => Messageable();
                         type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
                         export default MessageablePerson;`,
-                }, { currentDirectory: "/" }),
+                }, { currentDirectory: "/home/src/workspaces/project" }),
             modifySystem: sys =>
                 sys.appendFile(
                     libFile.path,
@@ -392,12 +392,12 @@ console.log(a);`,
                 noChangeRun,
                 {
                     caption: "modify public to protected",
-                    edit: sys => sys.replaceFileText("/src/project/MessageablePerson.ts", "public", "protected"),
+                    edit: sys => sys.replaceFileText("/home/src/workspaces/project/MessageablePerson.ts", "public", "protected"),
                 },
                 noChangeRun,
                 {
                     caption: "modify protected to public",
-                    edit: sys => sys.replaceFileText("/src/project/MessageablePerson.ts", "protected", "public"),
+                    edit: sys => sys.replaceFileText("/home/src/workspaces/project/MessageablePerson.ts", "protected", "public"),
                 },
                 noChangeRun,
             ],
@@ -411,7 +411,7 @@ console.log(a);`,
             return {
                 caption,
                 edit: ts.noop,
-                commandLineArgs: ["--p", "/src/project", ...options],
+                commandLineArgs: [...options],
             };
         }
         function noChangeWithSubscenario(caption: string): TestTscEdit {
@@ -438,25 +438,25 @@ console.log(a);`,
         function localChange(): TestTscEdit {
             return {
                 caption: "local change",
-                edit: sys => sys.replaceFileText("/src/project/a.ts", "Local = 1", "Local = 10"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/a.ts", "Local = 1", "Local = 10"),
             };
         }
         function sys(options: ts.CompilerOptions) {
             return TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
-                "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
-                "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
-                "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
-                "/src/project/d.ts": `import { b } from "./b";export const d = b;`,
-            }, { currentDirectory: "/" });
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
+                "/home/src/workspaces/project/a.ts": `export const a = 10;const aLocal = 10;`,
+                "/home/src/workspaces/project/b.ts": `export const b = 10;const bLocal = 10;`,
+                "/home/src/workspaces/project/c.ts": `import { a } from "./a";export const c = a;`,
+                "/home/src/workspaces/project/d.ts": `import { b } from "./b";export const d = b;`,
+            }, { currentDirectory: "/home/src/workspaces/project" });
         }
         function enableDeclarationMap(): TestTscEdit {
             return {
                 caption: "declarationMap enabling",
                 edit: sys => {
-                    const config = JSON.parse(sys.readFile("/src/project/tsconfig.json")!);
+                    const config = JSON.parse(sys.readFile("/home/src/workspaces/project/tsconfig.json")!);
                     config.compilerOptions.declarationMap = true;
-                    sys.writeFile("/src/project/tsconfig.json", jsonToReadableText(config));
+                    sys.writeFile("/home/src/workspaces/project/tsconfig.json", jsonToReadableText(config));
                 },
             };
         }
@@ -468,7 +468,7 @@ console.log(a);`,
                 scenario: "incremental",
                 subScenario: scenarioName("different options"),
                 sys: () => sys({ composite: true, ...options }),
-                commandLineArgs: ["--p", "/src/project"],
+                commandLineArgs: ts.emptyArray,
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
                     noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
@@ -491,7 +491,7 @@ console.log(a);`,
                 scenario: "incremental",
                 subScenario: scenarioName("different options with incremental"),
                 sys: () => sys({ incremental: true, ...options }),
-                commandLineArgs: ["--p", "/src/project"],
+                commandLineArgs: ts.emptyArray,
                 edits: [
                     withOptionChange("with sourceMap", "--sourceMap"),
                     noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
@@ -518,22 +518,22 @@ console.log(a);`,
     verifyTsc({
         scenario: "incremental",
         subScenario: "when file is deleted",
-        commandLineArgs: ["-p", `/src/project`],
+        commandLineArgs: ts.emptyArray,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "outDir",
                     },
                 }),
-                "/src/project/file1.ts": `export class  C { }`,
-                "/src/project/file2.ts": `export class D { }`,
-            }, { currentDirectory: "/" }),
+                "/home/src/workspaces/project/file1.ts": `export class  C { }`,
+                "/home/src/workspaces/project/file2.ts": `export class D { }`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: [
             {
                 caption: "delete file with imports",
-                edit: sys => sys.deleteFile("/src/project/file2.ts"),
+                edit: sys => sys.deleteFile("/home/src/workspaces/project/file2.ts"),
             },
         ],
     });
@@ -541,10 +541,10 @@ console.log(a);`,
     verifyTsc({
         scenario: "incremental",
         subScenario: "generates typerefs correctly",
-        commandLineArgs: ["-p", `/src/project`],
+        commandLineArgs: ts.emptyArray,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "outDir",
@@ -552,12 +552,12 @@ console.log(a);`,
                     },
                     include: ["src"],
                 }),
-                "/src/project/src/box.ts": dedent`
+                "/home/src/workspaces/project/src/box.ts": dedent`
                     export interface Box<T> {
                         unbox(): T
                     }
                 `,
-                "/src/project/src/bug.js": dedent`
+                "/home/src/workspaces/project/src/bug.js": dedent`
                     import * as B from "./box.js"
                     import * as W from "./wrap.js"
 
@@ -577,15 +577,15 @@ console.log(a);`,
 
                     export const bug = wrap({ n: box(1) });
                 `,
-                "/src/project/src/wrap.ts": dedent`
+                "/home/src/workspaces/project/src/wrap.ts": dedent`
                     export type Wrap<C> = {
                         [K in keyof C]: { wrapped: C[K] }
                     }
                 `,
-            }, { currentDirectory: "/" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: [{
             caption: "modify js file",
-            edit: sys => sys.appendFile("/src/project/src/bug.js", `export const something = 1;`),
+            edit: sys => sys.appendFile("/home/src/workspaces/project/src/bug.js", `export const something = 1;`),
         }],
     });
 
@@ -596,20 +596,20 @@ console.log(a);`,
             DifferentFile = "aliased in different file ",
         }
         function fileWithEnum(withAlias: AliasType) {
-            return withAlias !== AliasType.DifferentFile ? "/src/project/b.d.ts" : "/src/project/worker.d.ts";
+            return withAlias !== AliasType.DifferentFile ? "/home/src/workspaces/project/b.d.ts" : "/home/src/workspaces/project/worker.d.ts";
         }
         function verify(withAlias: AliasType, preserveConstEnums: boolean) {
             verifyTsc({
                 scenario: "incremental",
                 subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
-                commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
+                commandLineArgs: ["-i", `a.ts`, "--tsbuildinfofile", "a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
                 sys: () =>
                     TestServerHost.createWatchedSystem({
-                        "/src/project/a.ts": dedent`
+                        "/home/src/workspaces/project/a.ts": dedent`
                             import {A} from "./c"
                             let a = A.ONE
                         `,
-                        "/src/project/b.d.ts": withAlias === AliasType.SameFile ?
+                        "/home/src/workspaces/project/b.d.ts": withAlias === AliasType.SameFile ?
                             dedent`
                                 declare const enum AWorker {
                                     ONE = 1
@@ -625,17 +625,17 @@ console.log(a);`,
                                     ONE = 1
                                 }
                             `,
-                        "/src/project/c.ts": dedent`
+                        "/home/src/workspaces/project/c.ts": dedent`
                             import {A} from "./b"
                             let b = A.ONE
                             export {A}
                         `,
-                        "/src/project/worker.d.ts": dedent`
+                        "/home/src/workspaces/project/worker.d.ts": dedent`
                             export const enum AWorker {
                                 ONE = 1
                             }
                         `,
-                    }, { currentDirectory: "/" }),
+                    }, { currentDirectory: "/home/src/workspaces/project" }),
                 edits: [
                     {
                         caption: "change enum value",
@@ -647,11 +647,11 @@ console.log(a);`,
                     },
                     {
                         caption: "something else changes in b.d.ts",
-                        edit: sys => sys.appendFile("/src/project/b.d.ts", "export const randomThing = 10;"),
+                        edit: sys => sys.appendFile("/home/src/workspaces/project/b.d.ts", "export const randomThing = 10;"),
                     },
                     {
                         caption: "something else changes in b.d.ts again",
-                        edit: sys => sys.appendFile("/src/project/b.d.ts", "export const randomThing2 = 10;"),
+                        edit: sys => sys.appendFile("/home/src/workspaces/project/b.d.ts", "export const randomThing2 = 10;"),
                     },
                 ],
             });

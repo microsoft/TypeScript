@@ -76,20 +76,20 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
-                "/src/packages/pkg1.tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
+                "/home/src/workspaces/project/packages/pkg1.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
                     files: ["./pkg1_index.ts"],
                 }),
-                "/src/packages/typeroot1/sometype/index.d.ts": dedent`declare type TheNum = "type1";`,
-                "/src/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
-                "/src/packages/pkg2.tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts": dedent`declare type TheNum = "type1";`,
+                "/home/src/workspaces/project/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
+                "/home/src/workspaces/project/packages/pkg2.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
                     files: ["./pkg2_index.ts"],
                 }),
-                "/src/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
+                "/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["-b", "packages/pkg1.tsconfig.json", "packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
 });
 
@@ -99,28 +99,28 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         subScenario: "impliedNodeFormat differs between projects for shared file",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/projects/a/src/index.ts": "",
-                "/src/projects/a/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/a/src/index.ts": "",
+                "/home/src/workspaces/project/a/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true },
                 }),
-                "/src/projects/b/src/index.ts": dedent`
+                "/home/src/workspaces/project/b/src/index.ts": dedent`
                     import pg from "pg";
                     pg.foo();
                 `,
-                "/src/projects/b/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/b/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true, module: "node16" },
                 }),
-                "/src/projects/b/package.json": jsonToReadableText({
+                "/home/src/workspaces/project/b/package.json": jsonToReadableText({
                     name: "b",
                     type: "module",
                 }),
-                "/src/projects/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
-                "/src/projects/node_modules/@types/pg/package.json": jsonToReadableText({
+                "/home/src/workspaces/project/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
+                "/home/src/workspaces/project/node_modules/@types/pg/package.json": jsonToReadableText({
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["-b", "a", "b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
 });
@@ -128,9 +128,9 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
 describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
     function sys() {
         return TestServerHost.createWatchedSystem({
-            "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
-            "/src/projects/project/packages/a/test/index.js": `import 'a';`,
-            "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/project/packages/a/index.js": `export const a = 'a';`,
+            "/home/src/workspaces/project/packages/a/test/index.js": `import 'a';`,
+            "/home/src/workspaces/project/packages/a/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     checkJs: true,
                     composite: true,
@@ -140,7 +140,7 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                     outDir: "types",
                 },
             }),
-            "/src/projects/project/packages/a/package.json": jsonToReadableText({
+            "/home/src/workspaces/project/packages/a/package.json": jsonToReadableText({
                 name: "a",
                 version: "0.0.0",
                 type: "module",
@@ -151,8 +151,8 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                     },
                 },
             }),
-            "/src/projects/project/packages/b/index.js": `export { a } from 'a';`,
-            "/src/projects/project/packages/b/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/project/packages/b/index.js": `export { a } from 'a';`,
+            "/home/src/workspaces/project/packages/b/tsconfig.json": jsonToReadableText({
                 references: [{ path: "../a" }],
                 compilerOptions: {
                     checkJs: true,
@@ -161,13 +161,13 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                     noImplicitAny: true,
                 },
             }),
-            "/src/projects/project/packages/b/package.json": jsonToReadableText({
+            "/home/src/workspaces/project/packages/b/package.json": jsonToReadableText({
                 name: "b",
                 version: "0.0.0",
                 type: "module",
             }),
-            "/src/projects/project/node_modules/a": { symLink: "/src/projects/project/packages/a" },
-        }, { currentDirectory: "/src/projects/project" });
+            "/home/src/workspaces/project/node_modules/a": { symLink: "/home/src/workspaces/project/packages/a" },
+        }, { currentDirectory: "/home/src/workspaces/project" });
     }
 
     verifyTsc({

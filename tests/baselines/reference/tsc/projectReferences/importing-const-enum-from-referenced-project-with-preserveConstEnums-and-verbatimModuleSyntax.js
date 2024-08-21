@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/preserve/index.ts]
+//// [/home/src/workspaces/solution/preserve/index.ts]
 export const enum E { A = 1 }
 
-//// [/src/preserve/index.d.ts]
+//// [/home/src/workspaces/solution/preserve/index.d.ts]
 export declare const enum E { A = 1 }
 
-//// [/src/preserve/tsconfig.json]
+//// [/home/src/workspaces/solution/preserve/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -15,13 +15,13 @@ export declare const enum E { A = 1 }
   }
 }
 
-//// [/src/no-preserve/index.ts]
+//// [/home/src/workspaces/solution/no-preserve/index.ts]
 export const enum E { A = 1 }
 
-//// [/src/no-preserve/index.d.ts]
+//// [/home/src/workspaces/solution/no-preserve/index.d.ts]
 export declare const enum F { A = 1 }
 
-//// [/src/no-preserve/tsconfig.json]
+//// [/home/src/workspaces/solution/no-preserve/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -30,12 +30,12 @@ export declare const enum F { A = 1 }
   }
 }
 
-//// [/src/project/index.ts]
+//// [/home/src/workspaces/solution/project/index.ts]
 import { E } from "../preserve";
 import { F } from "../no-preserve";
 E.A; F.A;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "preserve",
@@ -67,12 +67,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project --pretty false
+/home/src/tslibs/ts/lib/tsc.js --p project --pretty false
 Output::
-src/project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
+project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 
 
-//// [/src/project/index.js]
+//// [/home/src/workspaces/solution/project/index.js]
 import { E } from "../preserve";
 import { F } from "../no-preserve";
 E.A;

@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "outDir": "out"
@@ -11,26 +11,26 @@ Input::
   ]
 }
 
-//// [/src/project/copy1/node_modules/target/index.ts]
+//// [/home/src/workspaces/project/copy1/node_modules/target/index.ts]
 export const a = 1;
 
-//// [/src/project/copy1/node_modules/target/import.ts]
+//// [/home/src/workspaces/project/copy1/node_modules/target/import.ts]
 import {} from "./";
 
-//// [/src/project/copy1/node_modules/target/package.json]
+//// [/home/src/workspaces/project/copy1/node_modules/target/package.json]
 {
   "name": "target",
   "version": "1.0.0",
   "main": "index.js"
 }
 
-//// [/src/project/copy2/node_modules/target/index.ts]
+//// [/home/src/workspaces/project/copy2/node_modules/target/index.ts]
 export const a = 1;
 
-//// [/src/project/copy2/node_modules/target/import.ts]
+//// [/home/src/workspaces/project/copy2/node_modules/target/import.ts]
 import {} from "./";
 
-//// [/src/project/copy2/node_modules/target/package.json]
+//// [/home/src/workspaces/project/copy2/node_modules/target/package.json]
 {
   "name": "target",
   "version": "1.0.0",
@@ -53,30 +53,30 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p src/project
+/home/src/tslibs/ts/lib/tsc.js 
 Output::
 
 
-//// [/src/project/out/copy1/node_modules/target/index.js]
+//// [/home/src/workspaces/project/out/copy1/node_modules/target/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
 
 
-//// [/src/project/out/copy1/node_modules/target/import.js]
+//// [/home/src/workspaces/project/out/copy1/node_modules/target/import.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/src/project/out/copy2/node_modules/target/index.js]
+//// [/home/src/workspaces/project/out/copy2/node_modules/target/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
 
 
-//// [/src/project/out/copy2/node_modules/target/import.js]
+//// [/home/src/workspaces/project/out/copy2/node_modules/target/import.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 

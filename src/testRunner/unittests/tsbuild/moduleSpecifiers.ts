@@ -14,24 +14,24 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
         subScenario: `synthesized module specifiers resolve correctly`,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/solution/common/nominal.ts": dedent`
+                "/home/src/workspaces/packages/solution/common/nominal.ts": dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
                     };
                     `,
-                "/src/solution/common/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/solution/common/tsconfig.json": jsonToReadableText({
                     extends: "../../tsconfig.base.json",
                     compilerOptions: {
                         composite: true,
                     },
                     include: ["nominal.ts"],
                 }),
-                "/src/solution/sub-project/index.ts": dedent`
+                "/home/src/workspaces/packages/solution/sub-project/index.ts": dedent`
                     import { Nominal } from '../common/nominal';
 
                     export type MyNominal = Nominal<string, 'MyNominal'>;
                     `,
-                "/src/solution/sub-project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/solution/sub-project/tsconfig.json": jsonToReadableText({
                     extends: "../../tsconfig.base.json",
                     compilerOptions: {
                         composite: true,
@@ -41,7 +41,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     ],
                     include: ["./index.ts"],
                 }),
-                "/src/solution/sub-project-2/index.ts": dedent`
+                "/home/src/workspaces/packages/solution/sub-project-2/index.ts": dedent`
                     import { MyNominal } from '../sub-project/index';
 
                     const variable = {
@@ -52,7 +52,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         return 'key';
                     }
                     `,
-                "/src/solution/sub-project-2/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/solution/sub-project-2/tsconfig.json": jsonToReadableText({
                     extends: "../../tsconfig.base.json",
                     compilerOptions: {
                         composite: true,
@@ -62,7 +62,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     ],
                     include: ["./index.ts"],
                 }),
-                "/src/solution/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/solution/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                     },
@@ -72,14 +72,14 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     ],
                     include: [],
                 }),
-                "/src/tsconfig.base.json": jsonToReadableText({
+                "/home/src/workspaces/packages/tsconfig.base.json": jsonToReadableText({
                     compilerOptions: {
                         skipLibCheck: true,
                         rootDir: "./",
                         outDir: "lib",
                     },
                 }),
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                     },
@@ -89,8 +89,8 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     include: [],
                 }),
                 [libFile.path]: `${libFile.content}${symbolLibContent}`,
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-b", "/src", "--verbose"],
+            }, { currentDirectory: "/home/src/workspaces/packages" }),
+        commandLineArgs: ["-b", "--verbose"],
     });
 });
 
@@ -101,24 +101,24 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
         subScenario: `synthesized module specifiers across projects resolve correctly`,
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/src-types/index.ts": dedent`
+                "/home/src/workspaces/packages/src-types/index.ts": dedent`
                     export * from './dogconfig.js';`,
-                "/src/src-types/dogconfig.ts": dedent`
+                "/home/src/workspaces/packages/src-types/dogconfig.ts": dedent`
                     export interface DogConfig {
                         name: string;
                     }`,
-                "/src/src-dogs/index.ts": dedent`
+                "/home/src/workspaces/packages/src-dogs/index.ts": dedent`
                     export * from 'src-types';
                     export * from './lassie/lassiedog.js';
                     `,
-                "/src/src-dogs/dogconfig.ts": dedent`
+                "/home/src/workspaces/packages/src-dogs/dogconfig.ts": dedent`
                     import { DogConfig } from 'src-types';
 
                     export const DOG_CONFIG: DogConfig = {
                         name: 'Default dog',
                     };
                     `,
-                "/src/src-dogs/dog.ts": dedent`
+                "/home/src/workspaces/packages/src-dogs/dog.ts": dedent`
                     import { DogConfig } from 'src-types';
                     import { DOG_CONFIG } from './dogconfig.js';
                     
@@ -129,7 +129,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         }
                     }
                     `,
-                "/src/src-dogs/lassie/lassiedog.ts": dedent`
+                "/home/src/workspaces/packages/src-dogs/lassie/lassiedog.ts": dedent`
                     import { Dog } from '../dog.js';
                     import { LASSIE_CONFIG } from './lassieconfig.js';
                     
@@ -137,26 +137,26 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         protected static getDogConfig = () => LASSIE_CONFIG;
                     }
                     `,
-                "/src/src-dogs/lassie/lassieconfig.ts": dedent`
+                "/home/src/workspaces/packages/src-dogs/lassie/lassieconfig.ts": dedent`
                     import { DogConfig } from 'src-types';
 
                     export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
                     `,
-                "/src/tsconfig-base.json": jsonToReadableText({
+                "/home/src/workspaces/packages/tsconfig-base.json": jsonToReadableText({
                     compilerOptions: {
                         declaration: true,
                         module: "node16",
                     },
                 }),
-                "/src/src-types/package.json": jsonToReadableText({
+                "/home/src/workspaces/packages/src-types/package.json": jsonToReadableText({
                     type: "module",
                     exports: "./index.js",
                 }),
-                "/src/src-dogs/package.json": jsonToReadableText({
+                "/home/src/workspaces/packages/src-dogs/package.json": jsonToReadableText({
                     type: "module",
                     exports: "./index.js",
                 }),
-                "/src/src-types/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/src-types/tsconfig.json": jsonToReadableText({
                     extends: "../tsconfig-base.json",
                     compilerOptions: {
                         composite: true,
@@ -165,7 +165,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         "**/*",
                     ],
                 }),
-                "/src/src-dogs/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/packages/src-dogs/tsconfig.json": jsonToReadableText({
                     extends: "../tsconfig-base.json",
                     compilerOptions: {
                         composite: true,
@@ -177,9 +177,9 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         "**/*",
                     ],
                 }),
-                "/src/src-types/node_modules": { symLink: "/src" },
-                "/src/src-dogs/node_modules": { symLink: "/src" },
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"],
+                "/home/src/workspaces/packages/src-types/node_modules": { symLink: "/home/src/workspaces/packages" },
+                "/home/src/workspaces/packages/src-dogs/node_modules": { symLink: "/home/src/workspaces/packages" },
+            }, { currentDirectory: "/home/src/workspaces/packages" }),
+        commandLineArgs: ["-b", "src-types", "src-dogs", "--verbose"],
     });
 });

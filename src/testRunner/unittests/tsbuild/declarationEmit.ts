@@ -10,41 +10,41 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: declarationEmit", () => {
-    function getFiles(): FileOrFolderOrSymLinkMap {
-        return {
-            "/src/solution/tsconfig.base.json": jsonToReadableText({
+describe("unittests:: tsbuild:: declarationEmit::", () => {
+    function sys(additionalFiles?: FileOrFolderOrSymLinkMap) {
+        return TestServerHost.createWatchedSystem({
+            "/home/src/workspaces/solution/tsconfig.base.json": jsonToReadableText({
                 compilerOptions: {
                     rootDir: "./",
                     outDir: "lib",
                 },
             }),
-            "/src/solution/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true },
                 references: [{ path: "./src" }],
                 include: [],
             }),
-            "/src/solution/src/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true },
                 references: [{ path: "./subProject" }, { path: "./subProject2" }],
                 include: [],
             }),
-            "/src/solution/src/subProject/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/subProject/tsconfig.json": jsonToReadableText({
                 extends: "../../tsconfig.base.json",
                 compilerOptions: { composite: true },
                 references: [{ path: "../common" }],
                 include: ["./index.ts"],
             }),
-            "/src/solution/src/subProject/index.ts": dedent`
+            "/home/src/workspaces/solution/src/subProject/index.ts": dedent`
 import { Nominal } from '../common/nominal';
 export type MyNominal = Nominal<string, 'MyNominal'>;`,
-            "/src/solution/src/subProject2/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/subProject2/tsconfig.json": jsonToReadableText({
                 extends: "../../tsconfig.base.json",
                 compilerOptions: { composite: true },
                 references: [{ path: "../subProject" }],
                 include: ["./index.ts"],
             }),
-            "/src/solution/src/subProject2/index.ts": dedent`
+            "/home/src/workspaces/solution/src/subProject2/index.ts": dedent`
 import { MyNominal } from '../subProject/index';
 const variable = {
     key: 'value' as MyNominal,
@@ -52,44 +52,40 @@ const variable = {
 export function getVar(): keyof typeof variable {
     return 'key';
 }`,
-            "/src/solution/src/common/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/solution/src/common/tsconfig.json": jsonToReadableText({
                 extends: "../../tsconfig.base.json",
                 compilerOptions: { composite: true },
                 include: ["./nominal.ts"],
             }),
-            "/src/solution/src/common/nominal.ts": dedent`
+            "/home/src/workspaces/solution/src/common/nominal.ts": dedent`
 /// <reference path="./types.d.ts" preserve="true" />
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;`,
-            "/src/solution/src/common/types.d.ts": dedent`
+            "/home/src/workspaces/solution/src/common/types.d.ts": dedent`
 declare type MyNominal<T, Name extends string> = T & {
     specialKey: Name;
 };`,
-        };
+            ...additionalFiles,
+        }, { currentDirectory: "/home/src/workspaces/solution" });
     }
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash",
-        sys: () =>
-            TestServerHost.createWatchedSystem(
-                getFiles(),
-                { currentDirectory: "/" },
-            ),
-        commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"],
+        sys,
+        commandLineArgs: ["--b", "--verbose"],
     });
 
     verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash but uses no references",
         sys: () =>
-            TestServerHost.createWatchedSystem({
-                ...getFiles(),
-                "/src/solution/tsconfig.json": jsonToReadableText({
+            sys({
+                "/home/src/workspaces/solution/tsconfig.json": jsonToReadableText({
                     extends: "./tsconfig.base.json",
                     compilerOptions: { composite: true },
                     include: ["./src/**/*.ts"],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"],
+            }),
+        commandLineArgs: ["--b", "--verbose"],
     });
 
     verifyTsc({
@@ -97,39 +93,39 @@ declare type MyNominal<T, Name extends string> = T & {
         subScenario: "when declaration file used inferred type from referenced project",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         baseUrl: ".",
                         paths: { "@fluentui/*": ["packages/*/src"] },
                     },
                 }),
-                "/src/packages/pkg1/src/index.ts": dedent`
+                "/home/src/workspaces/project/packages/pkg1/src/index.ts": dedent`
 export interface IThing {
   a: string;
 }
 export interface IThings {
   thing1: IThing;
 }`,
-                "/src/packages/pkg1/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/packages/pkg1/tsconfig.json": jsonToReadableText({
                     extends: "../../tsconfig",
                     compilerOptions: { outDir: "lib" },
                     include: ["src"],
                 }),
-                "/src/packages/pkg2/src/index.ts": dedent`
+                "/home/src/workspaces/project/packages/pkg2/src/index.ts": dedent`
 import { IThings } from '@fluentui/pkg1';
 export function fn4() {
   const a: IThings = { thing1: { a: 'b' } };
   return a.thing1;
 }`,
-                "/src/packages/pkg2/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/packages/pkg2/tsconfig.json": jsonToReadableText({
                     extends: "../../tsconfig",
                     compilerOptions: { outDir: "lib" },
                     include: ["src"],
                     references: [{ path: "../pkg1" }],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--b", "packages/pkg2/tsconfig.json", "--verbose"],
     });
 
     forEachDeclarationEmitWithErrorsScenario(
@@ -137,7 +133,7 @@ export function fn4() {
             verifyTsc({
                 scenario: "declarationEmit",
                 subScenario: scenario("reports dts generation errors"),
-                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
+                commandLineArgs: ["-b", "--explainFiles", "--listEmittedFiles", "--v"],
                 sys,
                 edits: noChangeOnlyRuns,
             });

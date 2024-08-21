@@ -1,10 +1,10 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/f1.ts]
+//// [/user/username/workspace/solution/projects/project/f1.ts]
 export {}
 declare global {}
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -32,7 +32,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js]
+//// [/user/username/workspace/solution/projects/project/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -41,49 +41,51 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/f1.ts: *new*
+/user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: change `module` to 'none'
 
 Input::
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "none"
@@ -112,28 +114,28 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/f1.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/f1.js] file written with same contents
 
 
 Program root files: [
-  "/user/username/workspace/projects/project/f1.ts"
+  "/user/username/workspace/solution/projects/project/f1.ts"
 ]
 Program options: {
   "module": 0,
   "watch": true,
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/f1.ts
+/user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/f1.ts (used version)
+/user/username/workspace/solution/projects/project/f1.ts (used version)
 
 exitCode:: ExitStatus.undefined

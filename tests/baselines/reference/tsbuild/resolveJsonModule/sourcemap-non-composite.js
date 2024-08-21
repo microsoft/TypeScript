@@ -1,16 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/src/hello.json]
+//// [/home/src/workspaces/solution/project/src/hello.json]
 {
   "hello": "world"
 }
 
-//// [/src/src/index.ts]
+//// [/home/src/workspaces/solution/project/src/index.ts]
 import hello from "./hello.json"
 export default hello.hello
 
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "moduleResolution": "node",
@@ -44,38 +44,38 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-TSFILE: /src/dist/hello.json
-TSFILE: /src/dist/index.js
-TSFILE: /src/dist/index.js.map
-TSFILE: /src/dist/tsconfig.tsbuildinfo
-home/src/tslibs/ts/lib/lib.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
-src/src/hello.json
-  Imported via "./hello.json" from file 'src/src/index.ts'
+project/src/hello.json
+  Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
-src/src/index.ts
+project/src/index.ts
   Part of 'files' list in tsconfig.json
 
 
-//// [/src/dist/hello.json]
+//// [/home/src/workspaces/solution/project/dist/hello.json]
 {
     "hello": "world"
 }
 
 
-//// [/src/dist/index.js.map]
+//// [/home/src/workspaces/solution/project/dist/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
-//// [/src/dist/index.js]
+//// [/home/src/workspaces/solution/project/dist/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -85,10 +85,10 @@ var hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 
-//// [/src/dist/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
 {"root":["../src/index.ts","../src/hello.json"],"version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../src/index.ts",
@@ -105,12 +105,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/hello.json'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/hello.json'
 
 
 

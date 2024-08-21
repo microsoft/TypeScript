@@ -4,7 +4,7 @@ import {
 } from "../helpers/demoProjectReferences.js";
 import { verifyTsc } from "../helpers/tsc.js";
 
-describe("unittests:: tsbuild:: on demo project", () => {
+describe("unittests:: tsbuild:: on demo:: project", () => {
     verifyTsc({
         scenario: "demo",
         subScenario: "in master branch with everything setup correctly and reports no error",

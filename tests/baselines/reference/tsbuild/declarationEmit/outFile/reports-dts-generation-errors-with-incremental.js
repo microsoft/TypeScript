@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "amd",
@@ -15,12 +15,12 @@ Input::
   ]
 }
 
-//// [/src/project/src/index.ts]
+//// [/home/src/workspaces/project/src/index.ts]
 import ky from 'ky';
 export const api = ky.extend({});
 
 
-//// [/src/project/ky.d.ts]
+//// [/home/src/workspaces/project/ky.d.ts]
 type KyInstance = {
     extend(options: Record<string,unknown>): KyInstance;
 }
@@ -44,34 +44,34 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
+/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outFile.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
+[96msrc/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE: /src/project/outFile.js
-TSFILE: /src/project/outFile.tsbuildinfo
-home/src/tslibs/ts/lib/lib.d.ts
+TSFILE: /home/src/workspaces/project/outFile.js
+TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
-src/project/ky.d.ts
-  Imported via 'ky' from file 'src/project/src/index.ts'
-src/project/src/index.ts
-  Matched by include pattern 'src' in 'src/project/tsconfig.json'
+ky.d.ts
+  Imported via 'ky' from file 'src/index.ts'
+src/index.ts
+  Matched by include pattern 'src' in 'tsconfig.json'
 
 Found 1 error.
 
 
 
-//// [/src/project/outFile.js]
+//// [/home/src/workspaces/project/outFile.js]
 define("index", ["require", "exports", "ky"], function (require, exports, ky_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -80,18 +80,18 @@ define("index", ["require", "exports", "ky"], function (require, exports, ky_1) 
 });
 
 
-//// [/src/project/outFile.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/ky\" but cannot be named.","category":1,"code":4023}]]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/outFile.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/home/src/workspaces/project/ky\" but cannot be named.","category":1,"code":4023}]]],"version":"FakeTSVersion"}
 
-//// [/src/project/outFile.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./ky.d.ts",
     "./src/index.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./ky.d.ts": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
     "./src/index.ts": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"
   },
@@ -115,7 +115,7 @@ define("index", ["require", "exports", "ky"], function (require, exports, ky_1) 
         {
           "start": 34,
           "length": 3,
-          "messageText": "Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/ky\" but cannot be named.",
+          "messageText": "Exported variable 'api' has or is using name 'KyInstance' from external module \"/home/src/workspaces/project/ky\" but cannot be named.",
           "category": 1,
           "code": 4023
         }
@@ -123,7 +123,7 @@ define("index", ["require", "exports", "ky"], function (require, exports, ky_1) 
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1127
+  "size": 1134
 }
 
 
@@ -133,26 +133,26 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b /src/project --explainFiles --listEmittedFiles --v
+/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
-[96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
+[96msrc/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-home/src/tslibs/ts/lib/lib.d.ts
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
-src/project/ky.d.ts
-  Imported via 'ky' from file 'src/project/src/index.ts'
-src/project/src/index.ts
-  Matched by include pattern 'src' in 'src/project/tsconfig.json'
+ky.d.ts
+  Imported via 'ky' from file 'src/index.ts'
+src/index.ts
+  Matched by include pattern 'src' in 'tsconfig.json'
 
 Found 1 error.
 

@@ -8,7 +8,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: services:: languageService", () => {
+describe("unittests:: services:: languageService::", () => {
     const files: { [index: string]: string; } = {
         "foo.ts": `import Vue from "./vue";
 import Component from "./vue-class-component";

@@ -1,6 +1,7 @@
 import { LanguageService } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
+import { getTypeScriptLibTestLocation } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -13,7 +14,6 @@ import {
 } from "../helpers/tsserver.js";
 import {
     File,
-    getTypeScriptLibTestLocation,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 

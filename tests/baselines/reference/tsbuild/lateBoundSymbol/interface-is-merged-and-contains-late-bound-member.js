@@ -1,16 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/src/globals.d.ts]
+//// [/home/src/workspaces/project/src/globals.d.ts]
 interface SymbolConstructor {
     (description?: string | number): symbol;
 }
 declare var Symbol: SymbolConstructor;
 
 
-//// [/src/src/hkt.ts]
+//// [/home/src/workspaces/project/src/hkt.ts]
 export interface HKT<T> { }
 
-//// [/src/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 import { HKT } from "./hkt";
 
 const sym = Symbol();
@@ -24,7 +24,7 @@ const x = 10;
 type A = HKT<number>[typeof sym];
 
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "rootDir": "src",
@@ -48,36 +48,36 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/src/hkt.js]
+//// [/home/src/workspaces/project/src/hkt.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/src/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 var x = 10;
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }","-28636726258-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\nconst x = 10;\ntype A = HKT<number>[typeof sym];\n"],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }","-28636726258-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\nconst x = 10;\ntype A = HKT<number>[typeof sym];\n"],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/globals.d.ts",
     "./src/hkt.ts",
     "./src/main.ts"
@@ -89,7 +89,7 @@ var x = 10;
     ]
   ],
   "fileInfos": {
-    "../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -139,7 +139,7 @@ var x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1139
+  "size": 1133
 }
 
 
@@ -148,7 +148,7 @@ exitCode:: ExitStatus.Success
 Change:: incremental-declaration-doesnt-change
 
 Input::
-//// [/src/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 import { HKT } from "./hkt";
 
 const sym = Symbol();
@@ -163,30 +163,30 @@ type A = HKT<number>[typeof sym];
 
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/tsconfig.tsbuildinfo' is older than input 'src/src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-13476768170-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\n\ntype A = HKT<number>[typeof sym];\n","signature":"-13155653598-declare const sym: unique symbol;\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: {\n            a: T;\n        };\n    }\n}\nexport {};\n"}],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-13476768170-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\n\ntype A = HKT<number>[typeof sym];\n","signature":"-13155653598-declare const sym: unique symbol;\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: {\n            a: T;\n        };\n    }\n}\nexport {};\n"}],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/globals.d.ts",
     "./src/hkt.ts",
     "./src/main.ts"
@@ -198,7 +198,7 @@ var sym = Symbol();
     ]
   ],
   "fileInfos": {
-    "../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -252,7 +252,7 @@ var sym = Symbol();
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1324
+  "size": 1318
 }
 
 
@@ -261,7 +261,7 @@ exitCode:: ExitStatus.Success
 Change:: incremental-declaration-doesnt-change
 
 Input::
-//// [/src/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 import { HKT } from "./hkt";
 
 const sym = Symbol();
@@ -276,31 +276,31 @@ type A = HKT<number>[typeof sym];
 const x = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json --verbose
+/home/src/tslibs/ts/lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/tsconfig.tsbuildinfo' is older than input 'src/src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 var x = 10;
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-8082110290-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\n\ntype A = HKT<number>[typeof sym];\nconst x = 10;","signature":"-13155653598-declare const sym: unique symbol;\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: {\n            a: T;\n        };\n    }\n}\nexport {};\n"}],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileIdsList":[[3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1383980825-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;\n","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-8082110290-import { HKT } from \"./hkt\";\n\nconst sym = Symbol();\n\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: { a: T }\n    }\n}\n\ntype A = HKT<number>[typeof sym];\nconst x = 10;","signature":"-13155653598-declare const sym: unique symbol;\ndeclare module \"./hkt\" {\n    interface HKT<T> {\n        [sym]: {\n            a: T;\n        };\n    }\n}\nexport {};\n"}],"root":[[2,4]],"options":{"rootDir":"./src"},"referencedMap":[[4,1]],"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./src/globals.d.ts",
     "./src/hkt.ts",
     "./src/main.ts"
@@ -312,7 +312,7 @@ var x = 10;
     ]
   ],
   "fileInfos": {
-    "../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -366,7 +366,7 @@ var x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1336
+  "size": 1330
 }
 
 

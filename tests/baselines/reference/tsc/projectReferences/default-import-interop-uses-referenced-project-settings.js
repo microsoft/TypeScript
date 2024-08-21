@@ -1,23 +1,23 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/node_modules/ambiguous-package/package.json]
+//// [/home/src/workspaces/project/node_modules/ambiguous-package/package.json]
 {
   "name": "ambiguous-package"
 }
 
-//// [/node_modules/ambiguous-package/index.d.ts]
+//// [/home/src/workspaces/project/node_modules/ambiguous-package/index.d.ts]
 export declare const ambiguous: number;
 
-//// [/node_modules/esm-package/package.json]
+//// [/home/src/workspaces/project/node_modules/esm-package/package.json]
 {
   "name": "esm-package",
   "type": "module"
 }
 
-//// [/node_modules/esm-package/index.d.ts]
+//// [/home/src/workspaces/project/node_modules/esm-package/index.d.ts]
 export declare const esm: number;
 
-//// [/lib/tsconfig.json]
+//// [/home/src/workspaces/project/lib/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -32,13 +32,13 @@ export declare const esm: number;
   ]
 }
 
-//// [/lib/src/a.ts]
+//// [/home/src/workspaces/project/lib/src/a.ts]
 export const a = 0;
 
-//// [/lib/dist/a.d.ts]
+//// [/home/src/workspaces/project/lib/dist/a.d.ts]
 export declare const a = 0;
 
-//// [/app/tsconfig.json]
+//// [/home/src/workspaces/project/app/tsconfig.json]
 {
   "compilerOptions": {
     "module": "esnext",
@@ -56,10 +56,10 @@ export declare const a = 0;
   ]
 }
 
-//// [/app/src/local.ts]
+//// [/home/src/workspaces/project/app/src/local.ts]
 export const local = 0;
 
-//// [/app/src/index.ts]
+//// [/home/src/workspaces/project/app/src/index.ts]
 
                     import local from "./local"; // Error
                     import esm from "esm-package"; // Error
@@ -85,15 +85,15 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/ts/lib/tsc.js --p app --pretty false
 Output::
-app/src/index.ts(2,28): error TS2613: Module '"/app/src/local"' has no default export. Did you mean to use 'import { local } from "/app/src/local"' instead?
-app/src/index.ts(3,28): error TS2613: Module '"/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/node_modules/esm-package/index"' instead?
+app/src/index.ts(2,28): error TS2613: Module '"/home/src/workspaces/project/app/src/local"' has no default export. Did you mean to use 'import { local } from "/home/src/workspaces/project/app/src/local"' instead?
+app/src/index.ts(3,28): error TS2613: Module '"/home/src/workspaces/project/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/home/src/workspaces/project/node_modules/esm-package/index"' instead?
 
 
-//// [/app/dist/local.js]
+//// [/home/src/workspaces/project/app/dist/local.js]
 export var local = 0;
 
 
-//// [/app/dist/index.js]
+//// [/home/src/workspaces/project/app/dist/index.js]
 export {};
 
 

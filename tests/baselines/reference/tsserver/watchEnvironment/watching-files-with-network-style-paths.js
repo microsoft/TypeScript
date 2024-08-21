@@ -1,6 +1,6 @@
 Info seq  [hh:mm:ss:mss] For files of style c:/myprojects/project/x.js
 currentDirectory:: c:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [c:/myprojects/project/x.js]
 const x = 10
@@ -83,7 +83,7 @@ c:/myprojects/project/x.js (Open) *new*
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\typinginstaller\globalcache\data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\typinginstaller\globalcache\data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location 'c:\home\src\typinginstaller\globalcache\data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location 'c:\home\src\typinginstaller\globalcache\data'
@@ -126,7 +126,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "c:/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -243,7 +243,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
 const x = 10
@@ -310,7 +310,7 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
@@ -353,7 +353,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -462,7 +462,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
 const x = 10
@@ -545,7 +545,7 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
@@ -588,7 +588,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/c$/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -705,7 +705,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project/x.js
 currentDirectory:: c:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [c:/users/username/myprojects/project/x.js]
 const x = 10
@@ -788,7 +788,7 @@ c:/users/username/myprojects/project/x.js (Open) *new*
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\typinginstaller\globalcache\data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\typinginstaller\globalcache\data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location 'c:\home\src\typinginstaller\globalcache\data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location 'c:\home\src\typinginstaller\globalcache\data'
@@ -831,7 +831,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "c:/users/username/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -948,7 +948,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]
 const x = 10
@@ -1031,7 +1031,7 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/typinginstaller/globalcache/data/package.json'...
 TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/typinginstaller/globalcache/data'
@@ -1074,7 +1074,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/c$/users/username/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:

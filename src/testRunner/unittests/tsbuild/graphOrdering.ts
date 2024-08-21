@@ -2,7 +2,7 @@ import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild - graph-ordering", () => {
+describe("unittests:: tsbuild:: graphOrdering::", () => {
     let host: ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> | undefined;
     const deps: [string, string][] = [
         ["A", "B"],
@@ -19,7 +19,10 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     ];
 
     before(() => {
-        const sys = TestServerHost.createWatchedSystem({}, { useCaseSensitiveFileNames: true, currentDirectory: "/" });
+        const sys = TestServerHost.createWatchedSystem(ts.emptyArray, {
+            useCaseSensitiveFileNames: true,
+            currentDirectory: "/home/src/workspaces/project",
+        });
         host = ts.createSolutionBuilderHost(sys);
         writeProjects(sys, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });
@@ -67,7 +70,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     }
 
     function getProjectFileName(proj: string) {
-        return `/project/${proj}/tsconfig.json` as ts.ResolvedConfigFileName;
+        return `/home/src/workspaces/project/${proj}/tsconfig.json` as ts.ResolvedConfigFileName;
     }
 
     function writeProjects(sys: TestServerHost, projectNames: string[], deps: [string, string][]): string[] {
@@ -77,8 +80,8 @@ describe("unittests:: tsbuild - graph-ordering", () => {
             if (!projectNames.includes(dep[1])) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
         }
         for (const proj of projectNames) {
-            sys.ensureFileOrFolder({ path: `/project/${proj}` });
-            sys.writeFile(`/project/${proj}/${proj}.ts`, "export {}");
+            sys.ensureFileOrFolder({ path: `/home/src/workspaces/project/${proj}` });
+            sys.writeFile(`/home/src/workspaces/project/${proj}/${proj}.ts`, "export {}");
             const configFileName = getProjectFileName(proj);
             const configContent = jsonToReadableText({
                 compilerOptions: { composite: true },

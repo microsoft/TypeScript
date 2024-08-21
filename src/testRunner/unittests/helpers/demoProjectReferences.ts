@@ -1,9 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FileOrFolderOrSymLinkMap,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
     return jsonToReadableText({
@@ -15,8 +12,8 @@ export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: obj
         ...additional,
     });
 }
-export function getFsContentsForDemoProjectReferences(): FileOrFolderOrSymLinkMap {
-    return {
+export function getSysForDemoProjectReferences() {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/demo/animals/animal.ts": dedent`
             export type Size = "small" | "medium" | "large";
             export default interface Animal {
@@ -119,12 +116,5 @@ export function getFsContentsForDemoProjectReferences(): FileOrFolderOrSymLinkMa
                 },
             ],
         }),
-    };
-}
-
-export function getSysForDemoProjectReferences() {
-    return TestServerHost.createWatchedSystem(
-        getFsContentsForDemoProjectReferences(),
-        { currentDirectory: "/user/username/projects/demo" },
-    );
+    }, { currentDirectory: "/user/username/projects/demo" });
 }

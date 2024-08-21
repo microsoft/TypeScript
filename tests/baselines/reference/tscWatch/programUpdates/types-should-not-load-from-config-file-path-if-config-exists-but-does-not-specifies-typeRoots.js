@@ -1,9 +1,9 @@
-currentDirectory:: /user/username/workspace/projects/projectc useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/projectc useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/app.ts]
+//// [/user/username/workspace/solution/projects/project/app.ts]
 let x = 1
 
-//// [/user/username/workspace/projects/project/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "types": [
@@ -13,7 +13,7 @@ let x = 1
   }
 }
 
-//// [/user/username/workspace/projects/project/node_modules/@types/node/index.d.ts]
+//// [/user/username/workspace/solution/projects/project/node_modules/@types/node/index.d.ts]
 declare var process: any
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -32,7 +32,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/projects/project/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -50,7 +50,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/app.js]
+//// [/user/username/workspace/solution/projects/project/app.js]
 var x = 1;
 
 
@@ -58,17 +58,17 @@ var x = 1;
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/app.ts: *new*
+/user/username/workspace/solution/projects/project/app.ts: *new*
   {}
-/user/username/workspace/projects/project/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/workspace/projects/project: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/app.ts"
+  "/user/username/workspace/solution/projects/project/app.ts"
 ]
 Program options: {
   "types": [
@@ -76,18 +76,18 @@ Program options: {
   ],
   "typeRoots": [],
   "watch": true,
-  "project": "/user/username/workspace/projects/project/tsconfig.json",
-  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/app.ts
+/user/username/workspace/solution/projects/project/app.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/app.ts (used version)
+/user/username/workspace/solution/projects/project/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

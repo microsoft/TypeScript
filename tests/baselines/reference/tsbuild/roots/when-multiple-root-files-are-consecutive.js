@@ -1,18 +1,18 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/file1.ts]
+//// [/home/src/workspaces/project/file1.ts]
 export const x = "hello";
 
-//// [/src/file2.ts]
+//// [/home/src/workspaces/project/file2.ts]
 export const y = "world";
 
-//// [/src/file3.ts]
+//// [/home/src/workspaces/project/file3.ts]
 export const y = "world";
 
-//// [/src/file4.ts]
+//// [/home/src/workspaces/project/file4.ts]
 export const y = "world";
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true
@@ -38,75 +38,75 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/file1.js]
+//// [/home/src/workspaces/project/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = "hello";
 
 
-//// [/src/file1.d.ts]
+//// [/home/src/workspaces/project/file1.d.ts]
 export declare const x = "hello";
 
 
-//// [/src/file2.js]
+//// [/home/src/workspaces/project/file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/file2.d.ts]
+//// [/home/src/workspaces/project/file2.d.ts]
 export declare const y = "world";
 
 
-//// [/src/file3.js]
+//// [/home/src/workspaces/project/file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/file3.d.ts]
+//// [/home/src/workspaces/project/file3.d.ts]
 export declare const y = "world";
 
 
-//// [/src/file4.js]
+//// [/home/src/workspaces/project/file4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = "world";
 
 
-//// [/src/file4.d.ts]
+//// [/home/src/workspaces/project/file4.d.ts]
 export declare const y = "world";
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[[2,5]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[[2,5]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts","version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./file1.ts",
     "./file2.ts",
     "./file3.ts",
     "./file4.ts"
   ],
   "fileInfos": {
-    "../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -167,7 +167,7 @@ export declare const y = "world";
   },
   "latestChangedDtsFile": "./file4.d.ts",
   "version": "FakeTSVersion",
-  "size": 1181
+  "size": 1175
 }
 
 
@@ -176,34 +176,34 @@ exitCode:: ExitStatus.Success
 Change:: delete file1
 
 Input::
-//// [/src/file1.ts] deleted
-//// [/src/file1.js] deleted
-//// [/src/file1.d.ts] deleted
+//// [/home/src/workspaces/project/file1.ts] deleted
+//// [/home/src/workspaces/project/file1.js] deleted
+//// [/home/src/workspaces/project/file1.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that file 'src/file1.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that file 'file1.ts' was root file of compilation but not any more.
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/tsconfig.json'...
 
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[[2,4]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[[2,4]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts","version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./file2.ts",
     "./file3.ts",
     "./file4.ts"
   ],
   "fileInfos": {
-    "../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -255,7 +255,7 @@ Output::
   },
   "latestChangedDtsFile": "./file4.d.ts",
   "version": "FakeTSVersion",
-  "size": 1049
+  "size": 1043
 }
 
 

@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/main.ts]
+//// [/home/src/workspaces/project/src/main.ts]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -31,11 +31,11 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --composite null --p src/project
+/home/src/tslibs/ts/lib/tsc.js --composite null
 Output::
 
 
-//// [/src/project/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;

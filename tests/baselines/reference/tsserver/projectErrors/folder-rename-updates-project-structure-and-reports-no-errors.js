@@ -1,5 +1,5 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/myproject/bar/app.ts]
 class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }

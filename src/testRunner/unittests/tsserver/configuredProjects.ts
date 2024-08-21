@@ -361,22 +361,22 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
 
     it("files explicitly excluded in config file", () => {
         const configFile: File = {
-            path: "/user/username/projects/project/tsconfig.json",
+            path: "/user/username/projects/project/b/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {},
-                exclude: ["/a/c"],
+                exclude: ["/user/username/projects/project/c"],
             }),
         };
         const excludedFile1: File = {
-            path: "/a/c/excluedFile1.ts",
+            path: "/user/username/projects/project/c/excluedFile1.ts",
             content: `let t = 1;`,
         };
         const commonFile1: File = {
-            path: "/user/username/projects/project/commonFile1.ts",
+            path: "/user/username/projects/project/b/commonFile1.ts",
             content: "let x = 1",
         };
         const commonFile2: File = {
-            path: "/user/username/projects/project/commonFile2.ts",
+            path: "/user/username/projects/project/b/commonFile2.ts",
             content: "let y = 1",
         };
         const host = TestServerHost.createServerHost([commonFile1, commonFile2, excludedFile1, configFile]);
@@ -1179,19 +1179,19 @@ describe("unittests:: tsserver:: configuredProjects:: non-existing directories l
 
     it("Changed module resolution reflected when specifying files list", () => {
         const file1: File = {
-            path: "/users/username/projects/project/file1.ts",
+            path: "/users/username/solution/projects/project/file1.ts",
             content: 'import classc from "file2"',
         };
         const file2a: File = {
-            path: "/users/username/projects/file2.ts",
+            path: "/users/username/solution/projects/file2.ts",
             content: "export classc { method2a() { return 10; } }",
         };
         const file2: File = {
-            path: "/users/username/projects/project/file2.ts",
+            path: "/users/username/solution/projects/project/file2.ts",
             content: "export classc { method2() { return 10; } }",
         };
         const configFile: File = {
-            path: "/users/username/projects/project/tsconfig.json",
+            path: "/users/username/solution/projects/project/tsconfig.json",
             content: jsonToReadableText({ files: [file1.path], compilerOptions: { module: "amd" } }),
         };
         const files = [file1, file2a, configFile];

@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/index.js]
+//// [/home/src/workspaces/solution/index.js]
 
 
-//// [/src/bar.ts]
+//// [/home/src/workspaces/solution/bar.ts]
 
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/solution/tsconfig.json]
 {
   "compilerOptions": {
     "allowJs": true
@@ -29,6 +29,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b /src/tsconfig.json -clean
+/home/src/tslibs/ts/lib/tsc.js --b -clean
 
 exitCode:: ExitStatus.Success

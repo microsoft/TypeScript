@@ -264,9 +264,9 @@ class C {
 describe("unittests:: Public APIs:: createProgram", () => {
     function verifyAPI(useJsonParsingApi: boolean) {
         const sys = TestServerHost.createWatchedSystem({
-            "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
-            "/src/projects/project/packages/a/test/index.js": `import 'a';`,
-            "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+            "/home/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/home/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/home/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     checkJs: true,
                     composite: true,
@@ -276,7 +276,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     outDir: "types",
                 },
             }),
-            "/src/projects/project/packages/a/package.json": jsonToReadableText({
+            "/home/src/projects/project/packages/a/package.json": jsonToReadableText({
                 name: "a",
                 version: "0.0.0",
                 type: "module",
@@ -287,9 +287,9 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     },
                 },
             }),
-        }, { currentDirectory: "/src/projects/project" });
+        }, { currentDirectory: "/home/src/projects/project" });
         const commandLine = ts.getParsedCommandLineOfConfigFile(
-            "/src/projects/project/packages/a/tsconfig.json",
+            "/home/src/projects/project/packages/a/tsconfig.json",
             /*optionsToExtend*/ undefined,
             {
                 fileExists: sys.fileExists.bind(sys),
@@ -303,7 +303,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                 realpath: sys.realpath.bind(sys),
             },
         )!;
-        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/src/projects/project/packages/a/tsconfig.json")!) : undefined;
+        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/home/src/projects/project/packages/a/tsconfig.json")!) : undefined;
         // This is really createCompilerHost but we want to use our own sys so simple usage
         const host = ts.createCompilerHostWorker(
             useJsonParsingApi ? commandLine.options : config.compilerOptions,

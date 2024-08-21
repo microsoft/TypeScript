@@ -11,6 +11,7 @@ import {
 import {
     append,
     arrayFrom,
+    canWatchDirectoryOrFile,
     clear,
     clone,
     combinePaths,
@@ -31,6 +32,7 @@ import {
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
+    getPathComponents,
     getRelativePathToDirectoryOrUrl,
     hasProperty,
     HostWatchDirectory,
@@ -56,14 +58,19 @@ import {
 import { typingsInstaller } from "../../_namespaces/ts.server.js";
 import { timeIncrements } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import { sanitizeSysOutput } from "./baseline.js";
+import {
+    getPathForTypeScriptTestLocation,
+    tscTestDefaultCurrentDirectory,
+    tscTypeScriptTestLocation,
+    typeScriptTypingInstallerCacheTest,
+} from "./contents.js";
 import {
     createTypesRegistryFileContent,
     getTypesRegistryFileLocation,
 } from "./typingsInstaller.js";
 
 export const libFile: File = {
-    path: "/home/src/tslibs/ts/lib/lib.d.ts",
+    path: getPathForTypeScriptTestLocation("lib.d.ts"),
     content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -78,16 +85,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`,
 };
-
-export const tscTypeScriptTestLocation = getPathForTypeScriptTestLocation("tsc.js");
-
-function getPathForTypeScriptTestLocation(fileName: string) {
-    return combinePaths(getDirectoryPath(libFile.path), fileName);
-}
-
-export function getTypeScriptLibTestLocation(libName: string) {
-    return getPathForTypeScriptTestLocation(libMap.get(libName) ?? `lib.${libName}.d.ts`);
-}
 
 export const enum TestServerHostOsFlavor {
     Windows,
@@ -108,24 +105,29 @@ export interface TestServerHostCreationParameters {
     typingsInstallerTypesRegistry?: string | readonly string[];
 }
 
-export interface File {
+export interface WatchableExempt {
+    /** Add this field to true only if its the interesting scenario about what to watch  */
+    watchableExempt?: boolean;
+}
+
+export interface File extends WatchableExempt {
     path: string;
     content: string;
     fileSize?: number;
 }
 
-export interface Folder {
+export interface Folder extends WatchableExempt {
     path: string;
 }
 
-export interface SymLink {
+export interface SymLink extends WatchableExempt {
     /** Location of the symlink. */
     path: string;
     /** Relative path to the real file. */
     symLink: string;
 }
 
-export interface LibFile {
+export interface LibFile extends WatchableExempt {
     path: string;
     libFile: true;
 }
@@ -370,12 +372,6 @@ export enum SerializeOutputOrder {
     AfterDiff,
 }
 
-const typeScriptTypingInstallerCacheTest = "/home/src/typinginstaller/globalcache/data";
-
-export function getPathForTypeScriptTypingInstallerCacheTest(fileName: string) {
-    return `${typeScriptTypingInstallerCacheTest}/${fileName}`;
-}
-
 export type TestServerHostSnapshot = Map<Path, FSEntry>;
 
 export function cloneFsMap(fs: Map<Path, FSEntry>): TestServerHostSnapshot {
@@ -451,7 +447,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
-        this.currentDirectory = this.getHostSpecificPath(currentDirectory ?? "/home/src/vscode/projects/bin");
+        this.currentDirectory = this.getHostSpecificPath(currentDirectory ?? tscTestDefaultCurrentDirectory);
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
         this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s), this);
         this.toPath = s => toPath(s, this.currentDirectory, this.getCanonicalFileName);
@@ -497,7 +493,10 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         libMap.forEach(libFile => this.ensureLib(libFile));
 
         // Ensure global cache location has required data
-        this.globalTypingsCacheLocation = this.getHostSpecificPath(typingsInstallerGlobalCacheLocation ?? typeScriptTypingInstallerCacheTest);
+        this.globalTypingsCacheLocation = this.getHostSpecificPath(
+            typingsInstallerGlobalCacheLocation ??
+                typeScriptTypingInstallerCacheTest,
+        );
         this.typesRegistry = typingsInstallerTypesRegistry;
         if (this.directoryExists(this.globalTypingsCacheLocation)) {
             // Package.json
@@ -530,12 +529,20 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         });
     }
 
+    private static ensureWatchablePath(path: string, locationType: string) {
+        Debug.assert(
+            canWatchDirectoryOrFile(getPathComponents(path as Path)),
+            `Cannot use TestServerHost without reasonable ${locationType} like in "/home/src/workspaces/project" or something like that: refer to canWatchDirectoryOrFile`,
+        );
+    }
+
     static createWatchedSystem(
         fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         params:
             & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
             & { currentDirectory: string; },
     ): TestServerHost {
+        TestServerHost.ensureWatchablePath(params.currentDirectory, `currentDirectory: ${params.currentDirectory}`);
         return new TestServerHost(fileOrFolderList, params);
     }
 
@@ -612,11 +619,16 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.pendingInstalls.switchToBaseliningInvoke(logger, serializeOutputOrder);
     }
 
+    private ensureInitialFileOrFolder(f: FileOrFolderOrSymLink) {
+        if (!f.watchableExempt) TestServerHost.ensureWatchablePath(getDirectoryPath(f.path), `FileOrFolderOrSymLink path ${f.path}`);
+        this.ensureFileOrFolder(f);
+    }
+
     private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
         Debug.assert(this.fs.size === 0);
         if (isArray(fileOrFolderOrSymLinkList)) {
             fileOrFolderOrSymLinkList.forEach(f =>
-                this.ensureFileOrFolder(
+                this.ensureInitialFileOrFolder(
                     !this.windowsStyleRoot ?
                         f :
                         { ...f, path: this.getHostSpecificPath(f.path) },
@@ -629,10 +641,10 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
                     const path = this.getHostSpecificPath(key);
                     const value = fileOrFolderOrSymLinkList[key];
                     if (isString(value)) {
-                        this.ensureFileOrFolder({ path, content: value });
+                        this.ensureInitialFileOrFolder({ path, content: value });
                     }
                     else {
-                        this.ensureFileOrFolder({ path, ...value });
+                        this.ensureInitialFileOrFolder({ path, ...value });
                     }
                 }
             }
@@ -1346,6 +1358,12 @@ function baselineOutputs(baseline: string[], output: readonly string[], start: n
         baselinedOutput = append(baselinedOutput, sanitizeSysOutput(output[i]));
     }
     if (baselinedOutput) baseline.push(baselinedOutput.join(""));
+}
+
+function sanitizeSysOutput(output: string) {
+    return output
+        .replace(/Elapsed::\s\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+        .replace(/\d\d:\d\d:\d\d\s(?:A|P)M/g, "HH:MM:SS AM");
 }
 
 export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<Path, number>; };

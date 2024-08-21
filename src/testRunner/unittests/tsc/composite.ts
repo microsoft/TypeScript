@@ -10,8 +10,8 @@ describe("unittests:: tsc:: composite::", () => {
         subScenario: "when setting composite false on command line",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -21,8 +21,8 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--composite", "false", "--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--composite", "false"],
     });
 
     verifyTsc({
@@ -30,8 +30,8 @@ describe("unittests:: tsc:: composite::", () => {
         subScenario: "when setting composite null on command line",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -41,8 +41,8 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--composite", "null", "--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--composite", "null"],
     });
 
     verifyTsc({
@@ -50,8 +50,8 @@ describe("unittests:: tsc:: composite::", () => {
         subScenario: "when setting composite false on command line but has tsbuild info in config",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -62,8 +62,8 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--composite", "false", "--p", "src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--composite", "false"],
     });
 
     verifyTsc({
@@ -71,8 +71,8 @@ describe("unittests:: tsc:: composite::", () => {
         subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es5",
                         module: "commonjs",
@@ -83,8 +83,8 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["--composite", "false", "--tsBuildInfoFile", "null"],
     });
 
     verifyTsc({
@@ -92,19 +92,19 @@ describe("unittests:: tsc:: composite::", () => {
         subScenario: "converting to modules",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/project/src/main.ts": "const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/main.ts": "const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
                     },
                 }),
-            }, { currentDirectory: "/" }),
-        commandLineArgs: ["-p", "/src/project"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: [],
         edits: [
             {
                 caption: "convert to modules",
-                edit: sys => sys.replaceFileText("/src/project/tsconfig.json", "none", "es2015"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", "none", "es2015"),
             },
         ],
     });

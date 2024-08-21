@@ -1,6 +1,6 @@
-currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/workspace/projects/project/compile]
+//// [/user/username/workspace/solution/projects/project/compile]
 let x = 1
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -19,7 +19,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w /user/username/workspace/projects/project/compile
+/home/src/tslibs/ts/lib/tsc.js --w /user/username/workspace/solution/projects/project/compile
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -28,7 +28,7 @@ Output::
 
 
 
-//// [/user/username/workspace/projects/project/compile.js]
+//// [/user/username/workspace/solution/projects/project/compile.js]
 var x = 1;
 
 
@@ -36,19 +36,21 @@ var x = 1;
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/node_modules/@types: *new*
+/user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/workspace/projects/project/node_modules/@types: *new*
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/username/workspace/projects/project/compile: *new*
+/user/username/workspace/solution/projects/project/compile: *new*
   {}
 
 Program root files: [
-  "/user/username/workspace/projects/project/compile"
+  "/user/username/workspace/solution/projects/project/compile"
 ]
 Program options: {
   "allowNonTsExtensions": true
@@ -56,14 +58,14 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/compile
+/user/username/workspace/solution/projects/project/compile
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/user/username/workspace/projects/project/compile
+/user/username/workspace/solution/projects/project/compile
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/user/username/workspace/projects/project/compile (used version)
+/user/username/workspace/solution/projects/project/compile (used version)
 
 exitCode:: ExitStatus.undefined

@@ -171,7 +171,7 @@ describe("unittests:: tsc:: moduleResolution::", () => {
         subScenario: "package json scope",
         sys: () =>
             TestServerHost.createWatchedSystem({
-                "/src/projects/project/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson({
                         target: ScriptTarget.ES2016,
                         composite: true,
@@ -184,19 +184,19 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                         "fileB.mts",
                     ],
                 }),
-                "/src/projects/project/src/main.ts": "export const x = 10;",
-                "/src/projects/project/src/fileA.ts": dedent`
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/src/fileA.ts": dedent`
                     import { foo } from "./fileB.mjs";
                     foo();
                 `,
-                "/src/projects/project/src/fileB.mts": "export function foo() {}",
-                "/src/projects/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
-            }, { currentDirectory: "/src/projects/project" }),
+                "/home/src/workspaces/project/src/fileB.mts": "export function foo() {}",
+                "/home/src/workspaces/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {
                 caption: "Delete package.json",
-                edit: sys => sys.deleteFile(`/src/projects/project/package.json`),
+                edit: sys => sys.deleteFile("/home/src/workspaces/project/package.json"),
             },
         ],
     });

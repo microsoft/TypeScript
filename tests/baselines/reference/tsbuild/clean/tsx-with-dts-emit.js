@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/src/main.tsx]
+//// [/home/src/workspaces/solution/project/src/main.tsx]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "declaration": true
@@ -30,36 +30,36 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b src/project -v --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --b project -v --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-home/src/tslibs/ts/lib/lib.d.ts
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
-src/project/src/main.tsx
-  Matched by include pattern 'src/**/*.tsx' in 'src/project/tsconfig.json'
+project/src/main.tsx
+  Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
 
 
-//// [/src/project/src/main.js]
+//// [/home/src/workspaces/solution/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/project/src/main.d.ts]
+//// [/home/src/workspaces/solution/project/src/main.d.ts]
 export declare const x = 10;
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo]
 {"root":["./src/main.tsx"],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./src/main.tsx"
@@ -75,12 +75,12 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b src/project -v --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --b project -v --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/project/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/src/main.tsx' is older than output 'src/project/src/main.js'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/main.tsx' is older than output 'project/src/main.js'
 
 
 
@@ -91,9 +91,9 @@ Change:: clean build
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b /src/project --clean
-//// [/src/project/src/main.js] deleted
-//// [/src/project/src/main.d.ts] deleted
-//// [/src/project/tsconfig.tsbuildinfo] deleted
+/home/src/tslibs/ts/lib/tsc.js -b project --clean
+//// [/home/src/workspaces/solution/project/src/main.js] deleted
+//// [/home/src/workspaces/solution/project/src/main.d.ts] deleted
+//// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo] deleted
 
 exitCode:: ExitStatus.Success

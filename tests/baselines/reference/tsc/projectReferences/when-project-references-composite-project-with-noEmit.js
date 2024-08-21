@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
 Input::
-//// [/src/utils/index.ts]
+//// [/home/src/workspaces/solution/src/utils/index.ts]
 export const x = 10;
 
-//// [/src/utils/tsconfig.json]
+//// [/home/src/workspaces/solution/src/utils/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -11,10 +11,10 @@ export const x = 10;
   }
 }
 
-//// [/src/project/index.ts]
+//// [/home/src/workspaces/solution/project/index.ts]
 import { x } from "../utils";
 
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "references": [
     {
@@ -39,9 +39,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p src/project
+/home/src/tslibs/ts/lib/tsc.js --p project
 Output::
-[96msrc/project/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS6310: [0mReferenced project '/src/utils' may not disable emit.
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/solution/utils' not found.
 
 [7m3[0m     {
 [7m [0m [91m    ~[0m
@@ -51,11 +51,11 @@ Output::
 [7m [0m [91m~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:3[0m
+Found 1 error in project/tsconfig.json[90m:3[0m
 
 
 
-//// [/src/project/index.js]
+//// [/home/src/workspaces/solution/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 

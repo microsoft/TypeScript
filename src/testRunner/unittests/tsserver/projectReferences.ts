@@ -1034,7 +1034,7 @@ export function bar() {}`,
         };
         const tsconfigSrcPath = `/user/username/projects/myproject/tsconfig-src.json`;
         const tsconfigPath = `/user/username/projects/myproject/tsconfig.json`;
-        const dummyFilePath = "/dummy/dummy.ts";
+        const dummyFilePath = "/user/username/workspaces/dummy/dummy.ts";
         function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles }: Setup) {
             const tsconfigSrc: File = {
                 path: tsconfigSrcPath,

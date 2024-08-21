@@ -1,14 +1,12 @@
 import { dedent } from "../../_namespaces/Utils.js";
+import { tscTypeScriptTestLocation } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     logDiagnostics,
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    TestServerHost,
-    tscTypeScriptTestLocation,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: languageService::", () => {
     it("should work correctly on case-sensitive file systems", () => {

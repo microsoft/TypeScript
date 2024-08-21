@@ -355,24 +355,28 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
         });
 
         describe("resolution when resolution cache size", () => {
-            function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+            function verifyWithMaxCacheLimit(subScenario: string, atRoot: boolean) {
                 it(subScenario, () => {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
+                    const rootFolder = atRoot ? "/" : "/user/username/rootfolder/otherfolder/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
                         content: 'import a from "file2"',
+                        watchableExempt: atRoot,
                     };
                     const file2: File = {
                         path: rootFolder + "a/b/node_modules/file2.d.ts",
                         content: "export class a { }",
+                        watchableExempt: atRoot,
                     };
                     const file3: File = {
                         path: rootFolder + "a/b/project/file3.ts",
                         content: "export class c { }",
+                        watchableExempt: atRoot,
                     };
                     const configFile: File = {
                         path: rootFolder + "a/b/project/tsconfig.json",
                         content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
+                        watchableExempt: atRoot,
                     };
 
                     const host = TestServerHost.createServerHost([file1, file3, configFile]);
@@ -390,8 +394,8 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                     baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
                 });
             }
-            verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-            verifyWithMaxCacheLimit("project is at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+            verifyWithMaxCacheLimit("project is not at root level", /*atRoot*/ false);
+            verifyWithMaxCacheLimit("project is at root level", /*atRoot*/ true);
         });
     }
 

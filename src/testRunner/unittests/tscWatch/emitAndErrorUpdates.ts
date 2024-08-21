@@ -28,11 +28,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `default/${subScenario}`,
             commandLineArgs: ["--w"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -41,11 +37,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `defaultAndD/${subScenario}`,
             commandLineArgs: ["--w", "--d"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -54,11 +46,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModules/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -67,11 +55,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModulesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules", "--d"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -80,11 +64,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -93,14 +73,17 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
-            sys: () =>
-                TestServerHost.createWatchedSystem(
-                    files(),
-                    { currentDirectory: "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
+
+        function sys() {
+            return TestServerHost.createWatchedSystem(
+                files(),
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
+        }
     }
 
     describe("deep import changes", () => {

@@ -2,16 +2,15 @@ import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TscWatchSystem } from "./baseline.js";
+import { getTypeScriptLibTestLocation } from "./contents.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
-    FileOrFolderOrSymLinkMap,
-    getTypeScriptLibTestLocation,
     libFile,
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-function getFsContentsForLibResolution(libRedirection?: boolean): FileOrFolderOrSymLinkMap {
-    return {
+function getSysForLibResolution(libRedirection?: boolean, forTsserver?: boolean) {
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/workspace/projects/project1/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project1/file.ts": `export const file = 10;`,
         "/home/src/workspace/projects/project1/core.d.ts": `export const core = 10;`,
@@ -51,14 +50,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FileOrFolderOr
             "/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebWorkerInterface { }",
             "/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts": "interface ScriptHostInterface { }",
         } : undefined,
-    };
-}
-
-function getSysForLibResolution(libRedirection?: boolean, forTsserver?: boolean) {
-    return TestServerHost.getCreateWatchedSystem(forTsserver)(
-        getFsContentsForLibResolution(libRedirection),
-        { currentDirectory: "/home/src/workspace/projects" },
-    );
+    }, { currentDirectory: "/home/src/workspace/projects" });
 }
 
 function getLibResolutionEditOptions(
@@ -228,8 +220,8 @@ export function getCommandLineArgsForLibResolution(withoutConfig: true | undefin
         ["-p", "project1", "--explainFiles"];
 }
 
-function getFsContentsForLibResolutionUnknown(): FileOrFolderOrSymLinkMap {
-    return {
+export function getSysForLibResolutionUnknown() {
+    return TestServerHost.createWatchedSystem({
         "/home/src/workspace/projects/project1/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project1/file.ts": `export const file = 10;`,
         "/home/src/workspace/projects/project1/core.d.ts": `export const core = 10;`,
@@ -247,11 +239,5 @@ function getFsContentsForLibResolutionUnknown(): FileOrFolderOrSymLinkMap {
         }),
         [getTypeScriptLibTestLocation("webworker")]: "interface WebWorkerInterface { }",
         [getTypeScriptLibTestLocation("scripthost")]: "interface ScriptHostInterface { }",
-    };
-}
-export function getSysForLibResolutionUnknown() {
-    return TestServerHost.createWatchedSystem(
-        getFsContentsForLibResolutionUnknown(),
-        { currentDirectory: "/home/src/workspace/projects" },
-    );
+    }, { currentDirectory: "/home/src/workspace/projects" });
 }

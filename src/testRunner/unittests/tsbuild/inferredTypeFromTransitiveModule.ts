@@ -6,7 +6,7 @@ import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     function getInferredTypeFromTransitiveModuleSys() {
         return TestServerHost.createWatchedSystem({
-            "/src/bar.ts": dedent`
+            "/home/src/workspaces/project/bar.ts": dedent`
                 interface RawAction {
                     (...args: any[]): Promise<any> | void;
                 }
@@ -17,7 +17,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                 export default foo()(function foobar(param: string): void {
                 });
             `,
-            "/src/bundling.ts": dedent`
+            "/home/src/workspaces/project/bundling.ts": dedent`
                 export class LazyModule<TModule> {
                     constructor(private importCallback: () => Promise<TModule>) {}
                 }
@@ -30,7 +30,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                     }
                 }
             `,
-            "/src/global.d.ts": dedent`
+            "/home/src/workspaces/project/global.d.ts": dedent`
                 interface PromiseConstructor {
                     new <T>(): Promise<T>;
                 }
@@ -38,17 +38,17 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                 interface Promise<T> {
                 }
             `,
-            "/src/index.ts": dedent`
+            "/home/src/workspaces/project/index.ts": dedent`
                 import { LazyAction, LazyModule } from './bundling';
                 const lazyModule = new LazyModule(() =>
                     import('./lazyIndex')
                 );
                 export const lazyBar = new LazyAction(lazyModule, m => m.bar);
             `,
-            "/src/lazyIndex.ts": dedent`
+            "/home/src/workspaces/project/lazyIndex.ts": dedent`
                 export { default as bar } from './bar';
             `,
-            "/src/tsconfig.json": jsonToReadableText({
+            "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     declaration: true,
@@ -56,14 +56,14 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                     incremental: true,
                 },
             }),
-        }, { currentDirectory: "/" });
+        }, { currentDirectory: "/home/src/workspaces/project" });
     }
 
     verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "inferred type from transitive module",
         sys: getInferredTypeFromTransitiveModuleSys,
-        commandLineArgs: ["--b", "/src", "--verbose"],
+        commandLineArgs: ["--b", "--verbose"],
         edits: [
             {
                 caption: "incremental-declaration-changes",
@@ -80,7 +80,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         subScenario: "inferred type from transitive module with isolatedModules",
         sys: getInferredTypeFromTransitiveModuleSys,
         scenario: "inferredTypeFromTransitiveModule",
-        commandLineArgs: ["--b", "/src", "--verbose"],
+        commandLineArgs: ["--b", "--verbose"],
         modifySystem: changeToIsolatedModules,
         edits: [
             {
@@ -98,11 +98,11 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "reports errors in files affected by change in signature with isolatedModules",
         sys: getInferredTypeFromTransitiveModuleSys,
-        commandLineArgs: ["--b", "/src", "--verbose"],
+        commandLineArgs: ["--b", "--verbose"],
         modifySystem: sys => {
             changeToIsolatedModules(sys);
             sys.appendFile(
-                "/src/lazyIndex.ts",
+                "/home/src/workspaces/project/lazyIndex.ts",
                 `
 import { default as bar } from './bar';
 bar("hello");`,
@@ -123,20 +123,20 @@ bar("hello");`,
             },
             {
                 caption: "Fix Error",
-                edit: sys => sys.replaceFileText("/src/lazyIndex.ts", `bar("hello")`, "bar()"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/lazyIndex.ts", `bar("hello")`, "bar()"),
             },
         ],
     });
 });
 
 function changeToIsolatedModules(sys: TestServerHost) {
-    sys.replaceFileText("/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
+    sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
 }
 
 function changeBarParam(sys: TestServerHost) {
-    sys.replaceFileText("/src/bar.ts", "param: string", "");
+    sys.replaceFileText("/home/src/workspaces/project/bar.ts", "param: string", "");
 }
 
 function changeBarParamBack(sys: TestServerHost) {
-    sys.replaceFileText("/src/bar.ts", "foobar()", "foobar(param: string)");
+    sys.replaceFileText("/home/src/workspaces/project/bar.ts", "foobar()", "foobar(param: string)");
 }

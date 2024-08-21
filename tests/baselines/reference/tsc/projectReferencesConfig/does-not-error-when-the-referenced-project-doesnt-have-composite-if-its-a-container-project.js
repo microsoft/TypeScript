@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/primary/tsconfig.json]
+//// [/home/src/workspaces/project/primary/tsconfig.json]
 {
   "compilerOptions": {
     "composite": false,
@@ -9,10 +9,10 @@ Input::
   "references": []
 }
 
-//// [/primary/a.ts]
+//// [/home/src/workspaces/project/primary/a.ts]
 export { };
 
-//// [/reference/tsconfig.json]
+//// [/home/src/workspaces/project/reference/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -26,7 +26,7 @@ export { };
   "files": []
 }
 
-//// [/reference/b.ts]
+//// [/home/src/workspaces/project/reference/b.ts]
 import * as mod_0 from "../primary/a"
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -45,14 +45,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p /reference/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js --p reference/tsconfig.json
 Output::
 
 
-//// [/reference/bin/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/project/reference/bin/tsconfig.tsbuildinfo]
 {"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"},"version":"FakeTSVersion"}
 
-//// [/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [],
   "fileInfos": {},

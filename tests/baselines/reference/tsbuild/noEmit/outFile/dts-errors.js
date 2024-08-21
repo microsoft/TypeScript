@@ -27,7 +27,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -92,7 +92,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -149,7 +149,7 @@ Input::
 const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -200,7 +200,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -241,7 +241,7 @@ Change:: Emit after fixing error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js --b --v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -289,7 +289,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -308,7 +308,7 @@ Input::
 const a = class { private p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -373,7 +373,7 @@ Change:: Emit when error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc.js --b --v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -438,7 +438,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --v /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc.js --b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

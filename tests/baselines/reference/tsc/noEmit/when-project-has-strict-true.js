@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
 Input::
-//// [/src/project/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "incremental": true,
@@ -8,7 +8,7 @@ Input::
   }
 }
 
-//// [/src/project/class1.ts]
+//// [/home/src/workspaces/project/class1.ts]
 export class class1 {}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
@@ -27,21 +27,21 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
+/home/src/tslibs/ts/lib/tsc.js -noEmit
 Output::
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./class1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7660182596-export class class1 {}"],"root":[2],"options":{"strict":true},"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./class1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7660182596-export class class1 {}"],"root":[2],"options":{"strict":true},"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./class1.ts"
   ],
   "fileInfos": {
-    "../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -71,32 +71,31 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 693
+  "size": 684
 }
 
 
 Program root files: [
-  "/src/project/class1.ts"
+  "/home/src/workspaces/project/class1.ts"
 ]
 Program options: {
   "incremental": true,
   "strict": true,
   "noEmit": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/project/class1.ts
+/home/src/workspaces/project/class1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/project/class1.ts
+/home/src/workspaces/project/class1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.d.ts (used version)
-/src/project/class1.ts (used version)
+/home/src/workspaces/project/class1.ts (used version)
 
 exitCode:: ExitStatus.Success
 
@@ -104,25 +103,24 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -noEmit -p src/project
+/home/src/tslibs/ts/lib/tsc.js -noEmit
 Output::
 
 
 
 Program root files: [
-  "/src/project/class1.ts"
+  "/home/src/workspaces/project/class1.ts"
 ]
 Program options: {
   "incremental": true,
   "strict": true,
   "noEmit": true,
-  "project": "/src/project",
-  "configFilePath": "/src/project/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /home/src/tslibs/ts/lib/lib.d.ts
-/src/project/class1.ts
+/home/src/workspaces/project/class1.ts
 
 Semantic diagnostics in builder refreshed for::
 

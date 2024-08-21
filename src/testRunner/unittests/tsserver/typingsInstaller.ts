@@ -18,7 +18,6 @@ import {
     createTypesRegistry,
     customTypesMap,
     FileWithPackageName,
-    getPathForTypeScriptTypingInstallerCacheTest,
     loggerToTypingsInstallerLog,
 } from "../helpers/typingsInstaller.js";
 import {
@@ -31,6 +30,7 @@ import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
 import { stringifyIndented } from "../../_namespaces/ts.server.js";
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/contents.js";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {

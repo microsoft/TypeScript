@@ -91,7 +91,7 @@ describe("unittests:: tsserver:: completions::", () => {
     });
 
     it("works when files are included from two different drives of windows", () => {
-        const projectRoot = "e:/myproject";
+        const projectRoot = "e:/solution/myproject";
         const appPackage: File = {
             path: `${projectRoot}/package.json`,
             content: jsonToReadableText({
