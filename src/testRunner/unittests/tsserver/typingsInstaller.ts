@@ -1455,7 +1455,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const { discoverTypings, baseline } = setup([f]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
 
-        for (const name of ts.JsTyping.nodeCoreModuleList) {
+        for (const name of ts.nodeCoreModules) {
             discoverTypings(
                 [f.path],
                 ts.getDirectoryPath(f.path as ts.Path),

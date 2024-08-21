@@ -38,12 +38,14 @@ import {
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
     moduleSymbolToValidIdentifier,
+    nodeCoreModules,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
     Program,
     ScriptTarget,
+    shouldUseUriStyleNodeCoreModules,
     skipAlias,
     SourceFile,
     startsWith,
@@ -362,48 +364,61 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 }
 
 /** @internal */
-export function isImportableFile(
+export function isImportable(
     program: Program,
-    from: SourceFile,
-    to: SourceFile,
+    fromFile: SourceFile,
+    toFile: SourceFile | undefined,
+    toModule: Symbol,
     preferences: UserPreferences,
     packageJsonFilter: PackageJsonImportFilter | undefined,
     moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
     moduleSpecifierCache: ModuleSpecifierCache | undefined,
 ): boolean {
-    if (from === to) return false;
-    const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
+    if (!toFile) {
+        // Ambient module
+        let useNodePrefix;
+        const moduleName = stripQuotes(toModule.name);
+        if (nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+            return useNodePrefix === startsWith(moduleName, "node:");
+        }
+        return !packageJsonFilter
+            || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)
+            || fileContainsPackageImport(fromFile, moduleName);
+    }
+
+    Debug.assertIsDefined(toFile);
+    if (fromFile === toFile) return false;
+    const cachedResult = moduleSpecifierCache?.get(fromFile.path, toFile.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(from, cachedResult.packageName);
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(fromFile, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
     const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-        from.fileName,
-        to.fileName,
+        fromFile.fileName,
+        toFile.fileName,
         moduleSpecifierResolutionHost,
         /*preferSymlinks*/ false,
         toPath => {
-            const toFile = program.getSourceFile(toPath);
+            const file = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === to || !toFile) &&
-                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (file === toFile || !file) &&
+                isImportablePath(fromFile.fileName, toPath, getCanonicalFileName, globalTypingsCache);
         },
     );
 
     if (packageJsonFilter) {
-        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(to, moduleSpecifierResolutionHost) : undefined;
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
-        return !!importInfo?.importable || !!importInfo?.packageName && fileContainsPackageImport(from, importInfo.packageName);
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(toFile, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(fromFile.path, toFile.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || hasImportablePath && !!importInfo?.packageName && fileContainsPackageImport(fromFile, importInfo.packageName);
     }
 
     return hasImportablePath;
 }
 
-/** @internal */
-export function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
     return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
