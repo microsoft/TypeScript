@@ -1,18 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs", "lib": ["es2019"] } }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "antd": "*", "react": "*" } }
 
-// @Filename: /node_modules/@types/react/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts
 //// export declare function Component(): void;
 
-// @Filename: /node_modules/antd/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/antd/index.d.ts
 //// import "react";
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// Component/**/
 
 // react/index.d.ts will be in both the auto import provider program
@@ -27,7 +27,7 @@ verify.completions({
   includes: [{
     name: "Component",
     hasAction: true,
-    source: "/node_modules/@types/react/index",
+    source: "/home/src/workspaces/project/node_modules/@types/react/index",
     sortText: completion.SortText.AutoImportSuggestions,
   }],
   preferences: {

@@ -1,6 +1,11 @@
+import {
+    harnessSessionCurrentDirectory,
+    harnessTypingInstallerCacheLocation,
+} from "../../../harness/harnessLanguageService.js";
 import { replaceAll } from "../../../harness/tsserverLogger.js";
 import {
     createWatchUtils,
+    ensureWatchablePath,
     Watches,
     WatchUtils,
 } from "../../../harness/watchUtils.js";
@@ -11,7 +16,6 @@ import {
 import {
     append,
     arrayFrom,
-    canWatchDirectoryOrFile,
     clear,
     clone,
     combinePaths,
@@ -32,7 +36,6 @@ import {
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
-    getPathComponents,
     getRelativePathToDirectoryOrUrl,
     hasProperty,
     HostWatchDirectory,
@@ -60,9 +63,7 @@ import { timeIncrements } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     getPathForTypeScriptTestLocation,
-    tscTestDefaultCurrentDirectory,
     tscTypeScriptTestLocation,
-    typeScriptTypingInstallerCacheTest,
 } from "./contents.js";
 import {
     createTypesRegistryFileContent,
@@ -447,7 +448,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
-        this.currentDirectory = this.getHostSpecificPath(currentDirectory ?? tscTestDefaultCurrentDirectory);
+        this.currentDirectory = this.getHostSpecificPath(currentDirectory ?? harnessSessionCurrentDirectory);
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
         this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s), this);
         this.toPath = s => toPath(s, this.currentDirectory, this.getCanonicalFileName);
@@ -495,7 +496,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         // Ensure global cache location has required data
         this.globalTypingsCacheLocation = this.getHostSpecificPath(
             typingsInstallerGlobalCacheLocation ??
-                typeScriptTypingInstallerCacheTest,
+                harnessTypingInstallerCacheLocation,
         );
         this.typesRegistry = typingsInstallerTypesRegistry;
         if (this.directoryExists(this.globalTypingsCacheLocation)) {
@@ -529,20 +530,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         });
     }
 
-    private static ensureWatchablePath(path: string, locationType: string) {
-        Debug.assert(
-            canWatchDirectoryOrFile(getPathComponents(path as Path)),
-            `Cannot use TestServerHost without reasonable ${locationType} like in "/home/src/workspaces/project" or something like that: refer to canWatchDirectoryOrFile`,
-        );
-    }
-
     static createWatchedSystem(
         fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         params:
             & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
             & { currentDirectory: string; },
     ): TestServerHost {
-        TestServerHost.ensureWatchablePath(params.currentDirectory, `currentDirectory: ${params.currentDirectory}`);
+        ensureWatchablePath(params.currentDirectory, `currentDirectory: ${params.currentDirectory}`);
         return new TestServerHost(fileOrFolderList, params);
     }
 
@@ -620,7 +614,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     private ensureInitialFileOrFolder(f: FileOrFolderOrSymLink) {
-        if (!f.watchableExempt) TestServerHost.ensureWatchablePath(getDirectoryPath(f.path), `FileOrFolderOrSymLink path ${f.path}`);
+        if (!f.watchableExempt) ensureWatchablePath(getDirectoryPath(f.path), `Directory path of FileOrFolderOrSymLink: ${f.path}`);
         this.ensureFileOrFolder(f);
     }
 
