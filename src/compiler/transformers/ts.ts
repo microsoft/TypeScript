@@ -658,6 +658,7 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.OverrideKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.ImmediateKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.OutKeyword:

@@ -163,6 +163,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     function: SyntaxKind.FunctionKeyword,
     get: SyntaxKind.GetKeyword,
     if: SyntaxKind.IfKeyword,
+    immediate: SyntaxKind.ImmediateKeyword,
     implements: SyntaxKind.ImplementsKeyword,
     import: SyntaxKind.ImportKeyword,
     in: SyntaxKind.InKeyword,
@@ -351,7 +352,7 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
-const jsDocSeeOrLink = /@(?:see|link)/i;
+const jsDocSeeOrLinkOrImmediate = /@(?:see|link|immediate)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -2396,7 +2397,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             return false;
         }
 
-        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
+        return jsDocSeeOrLinkOrImmediate.test(text.slice(fullStartPos, pos));
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {

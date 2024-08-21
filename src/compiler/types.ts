@@ -196,6 +196,7 @@ export const enum SyntaxKind {
     ConstructorKeyword,
     DeclareKeyword,
     GetKeyword,
+    ImmediateKeyword,
     InferKeyword,
     IntrinsicKeyword,
     IsKeyword,
@@ -419,6 +420,7 @@ export const enum SyntaxKind {
     JSDocImplementsTag,
     JSDocAuthorTag,
     JSDocDeprecatedTag,
+    JSDocImmediateTag,
     JSDocClassTag,
     JSDocPublicTag,
     JSDocPrivateTag,
@@ -611,6 +613,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.GetKeyword
     | SyntaxKind.GlobalKeyword
     | SyntaxKind.IfKeyword
+    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.ImplementsKeyword
     | SyntaxKind.ImportKeyword
     | SyntaxKind.InferKeyword
@@ -669,6 +672,7 @@ export type ModifierSyntaxKind =
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
     | SyntaxKind.ExportKeyword
+    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.InKeyword
     | SyntaxKind.PrivateKeyword
     | SyntaxKind.ProtectedKeyword
@@ -865,9 +869,11 @@ export const enum ModifierFlags {
     In =                 1 << 13, // Contravariance modifier
     Out =                1 << 14, // Covariance modifier
     Decorator =          1 << 15, // Contains a decorator.
+    Immediate =          1 << 16, // Parameter
 
     // JSDoc-only modifiers
-    Deprecated =         1 << 16, // Deprecated tag.
+    Deprecated =         1 << 17, // Deprecated tag.
+    JSDocImmediate =     1 << 18, // Parameter
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
     /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
@@ -875,12 +881,12 @@ export const enum ModifierFlags {
     /** @internal */ JSDocProtected = 1 << 25,
     /** @internal */ JSDocReadonly = 1 << 26,
     /** @internal */ JSDocOverride = 1 << 27,
-
+    
     /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
-    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator | Immediate,
     /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
     /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
-    /** @internal */ JSDocOnlyModifiers = Deprecated,
+    /** @internal */ JSDocOnlyModifiers = Deprecated | JSDocImmediate,
     /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
 
     HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
@@ -891,9 +897,9 @@ export const enum ModifierFlags {
     ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
     NonPublicAccessibilityModifier = Private | Protected,
 
-    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
+    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out | Immediate,
     ExportDefault = Export | Default,
-    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
+    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Immediate | Decorator,
     Modifier = All & ~Decorator,
 }
 
@@ -1631,6 +1637,7 @@ export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
 export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
 export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
 export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+export type ImmediateKeyword = ModifierToken<SyntaxKind.ImmediateKeyword>;
 export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
 export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
 export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
@@ -1648,6 +1655,7 @@ export type Modifier =
     | DeclareKeyword
     | DefaultKeyword
     | ExportKeyword
+    | ImmediateKeyword
     | InKeyword
     | PrivateKeyword
     | ProtectedKeyword
@@ -3986,6 +3994,10 @@ export interface JSDocDeprecatedTag extends JSDocTag {
     kind: SyntaxKind.JSDocDeprecatedTag;
 }
 
+export interface JSDocImmediateTag extends JSDocTag {
+    kind: SyntaxKind.JSDocImmediateTag;
+}
+
 export interface JSDocClassTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocClassTag;
 }
@@ -4133,8 +4145,9 @@ export const enum FlowFlags {
     ArrayMutation  = 1 << 8,  // Potential array mutation
     Call           = 1 << 9,  // Potential assertion call
     ReduceLabel    = 1 << 10, // Temporarily reduce antecedents of label
-    Referenced     = 1 << 11, // Referenced as antecedent once
-    Shared         = 1 << 12, // Referenced as antecedent more than once
+    LambdaArgs     = 1 << 11, // Call expression with lambda arguments
+    Referenced     = 1 << 12, // Referenced as antecedent once
+    Shared         = 1 << 13, // Referenced as antecedent more than once
 
     Label = BranchLabel | LoopLabel,
     Condition = TrueCondition | FalseCondition,
@@ -6469,7 +6482,6 @@ export const enum ObjectFlags {
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
-    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -6477,6 +6489,7 @@ export const enum ObjectFlags {
     IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
+    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
 
     // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */
@@ -9070,6 +9083,8 @@ export interface NodeFactory {
     updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
     createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+    createJSDocImmediateTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
+    updateJSDocImmediateTag(node: JSDocImmediateTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
     createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;

@@ -225,6 +225,7 @@ import {
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocImmediateTag,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -938,6 +939,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         get updateJSDocDeprecatedTag() {
             return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag);
         },
+        get createJSDocImmediateTag() {
+            return getJSDocSimpleTagCreateFunction<JSDocImmediateTag>(SyntaxKind.JSDocImmediateTag);
+        },
+        get updateJSDocImmediateTag() {
+            return getJSDocSimpleTagUpdateFunction<JSDocImmediateTag>(SyntaxKind.JSDocImmediateTag);
+        },
         get createJSDocThrowsTag() {
             return getJSDocTypeLikeTagCreateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag);
         },
@@ -1471,6 +1478,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.ImmediateKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
@@ -1555,6 +1563,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (flags & ModifierFlags.Ambient) result.push(createModifier(SyntaxKind.DeclareKeyword));
         if (flags & ModifierFlags.Default) result.push(createModifier(SyntaxKind.DefaultKeyword));
         if (flags & ModifierFlags.Const) result.push(createModifier(SyntaxKind.ConstKeyword));
+        if (flags & ModifierFlags.Immediate) result.push(createModifier(SyntaxKind.ImmediateKeyword));
         if (flags & ModifierFlags.Public) result.push(createModifier(SyntaxKind.PublicKeyword));
         if (flags & ModifierFlags.Private) result.push(createModifier(SyntaxKind.PrivateKeyword));
         if (flags & ModifierFlags.Protected) result.push(createModifier(SyntaxKind.ProtectedKeyword));

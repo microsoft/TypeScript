@@ -329,6 +329,7 @@ import {
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getJSXTransformEnabled,
+    getLambdaArgument,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
     getMembersOfDeclaration,
@@ -2286,6 +2287,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var flowLoopStart = 0;
     var flowLoopCount = 0;
     var sharedFlowCount = 0;
+    var mutationFlowCount = 0;
     var flowAnalysisDisabled = false;
     var flowInvocationCount = 0;
     var lastFlowNode: FlowNode | undefined;
@@ -2323,6 +2325,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var flowLoopTypes: Type[][] = [];
     var sharedFlowNodes: FlowNode[] = [];
     var sharedFlowTypes: FlowType[] = [];
+    var mutationFlowNodes: FlowNode[] = [];
+    var mutationFlowStates: boolean[] = [];
     var flowNodeReachable: (boolean | undefined)[] = [];
     var flowNodePostSuper: (boolean | undefined)[] = [];
     var potentialThisCollisions: Node[] = [];
@@ -21428,8 +21432,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
-                // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
-                if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
+                // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void,
+                // and (x: () => void) => void is a subtype of (immediate x: () => void) => void.
+                if (related && checkMode & SignatureCheckMode.StrictArity && (i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) || isImmediateParameterPosition(source, i) && !isImmediateParameterPosition(target, i)) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
                     related = Ternary.False;
                 }
                 if (!related) {
@@ -28216,8 +28221,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 noCacheCheck = false;
             }
-            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
-                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation).antecedent;
+            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.LambdaArgs)) {
+                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowCall).antecedent;
             }
             else if (flags & FlowFlags.Call) {
                 const signature = getEffectsSignature((flow as FlowCall).node);
@@ -28285,8 +28290,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 noCacheCheck = false;
             }
-            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause)) {
-                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause).antecedent;
+            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause | FlowFlags.LambdaArgs)) {
+                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause | FlowCall).antecedent;
             }
             else if (flags & FlowFlags.Call) {
                 if ((flow as FlowCall).node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -28346,6 +28351,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = tryCast(reference, canHaveFlowNode)?.flowNode) {
         let key: string | undefined;
         let isKeySet = false;
+        let inLambdaArg = false;
         let flowDepth = 0;
         if (flowAnalysisDisabled) {
             return errorType;
@@ -28355,8 +28361,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         flowInvocationCount++;
         const sharedFlowStart = sharedFlowCount;
+        const mutationFlowStart = mutationFlowCount;
         const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
         sharedFlowCount = sharedFlowStart;
+        mutationFlowCount = mutationFlowStart;
         // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
         // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
         // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -28437,6 +28445,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         continue;
                     }
                 }
+                else if (flags & FlowFlags.LambdaArgs) {
+                    type = getTypeAtFlowLambdaArgs(flow as FlowCall);
+                }
                 else if (flags & FlowFlags.ReduceLabel) {
                     const target = (flow as FlowReduceLabel).node.target;
                     const saveAntecedents = target.antecedent;
@@ -28448,7 +28459,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Check if we should continue with the control flow of the containing function.
                     const container = (flow as FlowStart).node;
                     if (
-                        container && container !== flowContainer &&
+                        container && container !== flowContainer && !inLambdaArg &&
                         reference.kind !== SyntaxKind.PropertyAccessExpression &&
                         reference.kind !== SyntaxKind.ElementAccessExpression &&
                         !(reference.kind === SyntaxKind.ThisKeyword && container.kind !== SyntaxKind.ArrowFunction)
@@ -28462,7 +28473,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     // Unreachable code errors are reported in the binding phase. Here we
                     // simply return the non-auto declared type to reduce follow-on errors.
-                    type = convertAutoToAny(declaredType);
+                    type = inLambdaArg ? initialType : convertAutoToAny(declaredType);
                 }
                 if (sharedFlow) {
                     // Record visited node and the associated type in the cache.
@@ -28573,6 +28584,118 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return undefined;
+        }
+
+        function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
+            const flowType = getTypeAtFlowNode(flow.antecedent);
+            const saveInitialType = initialType;
+            initialType = getTypeFromFlowType(flowType);
+            let lambdaTypes: Type[] | undefined;
+            // We assume that lambda arguments in 'immediate' parameter positions may or may not have executed. Thus,
+            // lambda arguments can only have a widening effect and will have no effect if we already have the declared
+            // type (the widest possible type).
+            if (initialType !== declaredType) {
+                const saveInLambdaArg = inLambdaArg;
+                inLambdaArg = true;
+                const args = flow.node.arguments;
+                let signatures: readonly Signature[] | undefined;
+                for (let i = 0; i < args.length; i++) {
+                    const lambda = getLambdaArgument(args[i]);
+                    // We use isMutationFlowNode to quickly check whether the reference is mutated anywhere in the lambda.
+                    // This check doesn't require resolving any types, thus eliminating circularities that would otherwise
+                    // occur for no good reason.
+                    if (lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false)) {
+                        // Only when we know that the reference is actually mutated in the lambda do we resolve types and
+                        // signatures. Note that we don't perform type inference and overload resolution, again to reduce
+                        // circularities. Instead, we simply check if any signature has a deferred callback marker in the
+                        // particular argument position.
+                        signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
+                        if (some(signatures, sig => isImmediateParameterPosition(sig, i))) {
+                            const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
+                            if (lambdaType !== initialType) {
+                                lambdaTypes ??= [initialType];
+                                lambdaTypes.push(lambdaType);
+                            }
+                        }
+                    }
+                }
+                inLambdaArg = saveInLambdaArg;
+            }
+            initialType = saveInitialType;
+            return lambdaTypes ? createFlowType(getUnionOrEvolvingArrayType(lambdaTypes, UnionReduction.Literal), isIncomplete(flowType)) : flowType;
+        }
+
+        function isMutationFlowNode(flow: FlowNode, noCacheCheck: boolean): boolean {
+            while (true) {
+                const flags = flow.flags;
+                if (flags & FlowFlags.Shared) {
+                    if (!noCacheCheck) {
+                        let cached = getMutationStateForFlowNode(flow);
+                        if (cached === undefined) {
+                            setMutationStateForFlowNode(flow, cached = isMutationFlowNode(flow, /*noCacheCheck*/ true));
+                        }
+                        return cached;
+                    }
+                    noCacheCheck = false;
+                }
+                if (flags & FlowFlags.Assignment) {
+                    if (isOrContainsMatchingReference(reference, (flow as FlowAssignment).node)) {
+                        return true;
+                    }
+                }
+                else if (flags & FlowFlags.BranchLabel) {
+                    return some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                }
+                else if (flags & FlowFlags.LoopLabel) {
+                    let cached = getMutationStateForFlowNode(flow);
+                    if (cached === undefined) {
+                        const index = setMutationStateForFlowNode(flow, false);
+                        cached = mutationFlowStates[index] = some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                    }
+                    return cached;
+                }
+                else if (flags & FlowFlags.ArrayMutation) {
+                    if (declaredType === autoType || declaredType === autoArrayType) {
+                        const node = (flow as FlowArrayMutation).node;
+                        const expr = node.kind === SyntaxKind.CallExpression ?
+                            (node.expression as PropertyAccessExpression).expression :
+                            (node.left as ElementAccessExpression).expression;
+                        if (isMatchingReference(reference, getReferenceCandidate(expr))) {
+                            return true;
+                        }
+                    }
+                }
+                else if (flags & FlowFlags.LambdaArgs) {
+                    const mutation = some((flow as FlowCall).node.arguments, arg => {
+                        const lambda = getLambdaArgument(arg);
+                        return !!(lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false));
+                    });
+                    if (mutation) {
+                        return true;
+                    }
+                }
+                else if (!(flags & (FlowFlags.Call | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ReduceLabel))) {
+                    return false;
+                }
+                flow = (flow as FlowAssignment | FlowArrayMutation | FlowCall | FlowCondition | FlowSwitchClause | FlowReduceLabel).antecedent;
+            }
+        }
+
+        function getMutationStateForFlowNode(flow: FlowNode) {
+            for (let i = mutationFlowStart; i < mutationFlowCount; i++) {
+                if (mutationFlowNodes[i] === flow) {
+                    return mutationFlowStates[i];
+                }
+            }
+            return undefined;
+        }
+
+        function setMutationStateForFlowNode(flow: FlowNode, state: boolean) {
+            const index = mutationFlowCount;
+            mutationFlowNodes[index] = flow;
+            mutationFlowStates[index] = state;
+            mutationFlowCount++;
+            return index;
         }
 
         function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType | undefined {
@@ -37729,6 +37852,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return elementType && isTypeAny(elementType) ? anyType : restType;
     }
 
+    function isImmediateParameterPosition(signature: Signature, pos: number) {
+        return someSignature(signature, s => {
+            const index = pos < s.parameters.length ? pos : signatureHasRestParameter(s) ? s.parameters.length - 1 : -1;
+            return index >= 0 && !!(getDeclarationModifierFlagsFromSymbol(s.parameters[index]) & (ModifierFlags.Immediate | ModifierFlags.JSDocImmediate));
+        });
+    }
+
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
     // parameter. For example, the parameter count of (x: number, y: number, ...z: string[]) is 3 and
     // the parameter count of (x: number, ...args: [number, ...string[], boolean])) is also 3. In the
@@ -41180,6 +41310,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
         if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
             error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+        }
+        if (hasEffectiveModifier(node, ModifierFlags.Immediate | ModifierFlags.JSDocImmediate)) {
+            const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
+            if (!areTypesComparable(getTypeOfSymbol(node.symbol), funcType)) {
+                error(node, Diagnostics.An_immediate_parameter_must_have_a_type_that_permits_functions);
+            }
         }
     }
 
@@ -51063,6 +51199,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         flags |= inOutFlag;
                         break;
                     }
+
+                    case SyntaxKind.ImmediateKeyword:
+                        if (node.kind !== SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics.immediate_modifier_can_only_appear_on_a_parameter_declaration);
+                        }
+                        if (flags & ModifierFlags.Immediate) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "immediate");
+                        }
+                        if (flags & ModifierFlags.Public) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "public");
+                        }
+                        if (flags & ModifierFlags.Protected) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "protected");
+                        }
+                        if (flags & ModifierFlags.Private) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "private");
+                        }
+                        if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "readonly");
+                        }
+                        flags |= ModifierFlags.Immediate;
+                        break;
                 }
             }
         }

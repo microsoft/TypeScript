@@ -4847,6 +4847,7 @@ namespace Parser {
             // Skip modifiers
             parseModifiers(/*allowDecorators*/ false);
         }
+        parseOptional(SyntaxKind.DotDotDotToken);
         if (isIdentifier() || token() === SyntaxKind.ThisKeyword) {
             nextToken();
             return true;
@@ -9079,6 +9080,9 @@ namespace Parser {
                     case "deprecated":
                         hasDeprecatedTag = true;
                         tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
+                        break;
+                    case "immediate":
+                        tag = parseSimpleTag(start, factory.createJSDocImmediateTag, tagName, margin, indentText);
                         break;
                     case "this":
                         tag = parseThisTag(start, tagName, margin, indentText);

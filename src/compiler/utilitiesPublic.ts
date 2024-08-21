@@ -140,6 +140,7 @@ import {
     isJSDocDeprecatedTag,
     isJSDocEnumTag,
     isJSDocFunctionType,
+    isJSDocImmediateTag,
     isJSDocImplementsTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
@@ -183,6 +184,7 @@ import {
     JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocImmediateTag,
     JSDocImplementsTag,
     JSDocLink,
     JSDocLinkCode,
@@ -1161,6 +1163,16 @@ export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | u
     return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
 }
 
+/** Gets the JSDoc immediate tag for the node if present */
+export function getJSDocImmediateTag(node: Node): JSDocImmediateTag | undefined {
+    return getFirstJSDocTag(node, isJSDocImmediateTag);
+}
+
+/** @internal */
+export function getJSDocImmediateTagNoCache(node: Node): JSDocImmediateTag | undefined {
+    return getFirstJSDocTag(node, isJSDocImmediateTag, /*noCache*/ true);
+}
+
 /** Gets the JSDoc enum tag for the node if present */
 export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
     return getFirstJSDocTag(node, isJSDocEnumTag);
@@ -1598,6 +1610,7 @@ export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         case SyntaxKind.DeclareKeyword:
         case SyntaxKind.DefaultKeyword:
         case SyntaxKind.ExportKeyword:
+        case SyntaxKind.ImmediateKeyword:
         case SyntaxKind.InKeyword:
         case SyntaxKind.PublicKeyword:
         case SyntaxKind.PrivateKeyword:

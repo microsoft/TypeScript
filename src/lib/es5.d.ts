@@ -449,7 +449,7 @@ interface String {
      * @param searchValue A string to search for.
      * @param replacer A function that returns the replacement text.
      */
-    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string | RegExp, /** @immediate */ replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
@@ -1141,14 +1141,14 @@ interface JSON {
      * @param reviver A function that transforms the results. This function is called for each member of the object.
      * If a member contains nested objects, the nested objects are transformed before the parent object is.
      */
-    parse(text: string, reviver?: (this: any, key: string, value: any) => any): any;
+    parse(text: string, /** @immediate */ reviver?: (this: any, key: string, value: any) => any): any;
     /**
      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
      * @param value A JavaScript value, usually an object or array, to be converted.
      * @param replacer A function that transforms the results.
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
      */
-    stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string;
+    stringify(value: any, /** @immediate */ replacer?: (this: any, key: string, value: any) => any, space?: string | number): string;
     /**
      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
      * @param value A JavaScript value, usually an object or array, to be converted.
@@ -1221,7 +1221,7 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): this is readonly S[];
+    every<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): this is readonly S[];
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1230,7 +1230,7 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
      * Determines whether the specified callback function returns true for any element of an array.
      * @param predicate A function that accepts up to three arguments. The some method calls
@@ -1239,57 +1239,57 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: T, index: number, array: readonly T[]) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: T, index: number, array: readonly T[]) => void, thisArg?: any): void;
     /**
      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U>(callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any): U[];
+    map<U>(/** @immediate */ callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S[];
+    filter<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T[];
+    filter(/** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
+    reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
+    reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U;
 
     readonly [n: number]: T;
 }
@@ -1371,7 +1371,7 @@ interface Array<T> {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: T, b: T) => number): this;
+    sort(/** @immediate */ compareFn?: (a: T, b: T) => number): this;
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
@@ -1412,7 +1412,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
+    every<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1421,7 +1421,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
      * Determines whether the specified callback function returns true for any element of an array.
      * @param predicate A function that accepts up to three arguments. The some method calls
@@ -1430,57 +1430,57 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
     /**
      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
+    filter<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
+    filter(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+    reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+    reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 
     [n: number]: T;
 }
@@ -1896,7 +1896,7 @@ interface Int8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -1915,7 +1915,7 @@ interface Int8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1926,7 +1926,7 @@ interface Int8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -1937,7 +1937,7 @@ interface Int8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -1946,7 +1946,7 @@ interface Int8Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -1984,7 +1984,7 @@ interface Int8Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -1996,8 +1996,8 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2009,7 +2009,7 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int8Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int8Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2021,8 +2021,8 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2034,7 +2034,7 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int8Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int8Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -2063,7 +2063,7 @@ interface Int8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2074,7 +2074,7 @@ interface Int8Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Int8Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2128,7 +2128,7 @@ interface Int8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
 }
 declare var Int8Array: Int8ArrayConstructor;
 
@@ -2176,7 +2176,7 @@ interface Uint8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -2195,7 +2195,7 @@ interface Uint8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2206,7 +2206,7 @@ interface Uint8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2217,7 +2217,7 @@ interface Uint8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2226,7 +2226,7 @@ interface Uint8Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Uint8Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Uint8Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -2264,7 +2264,7 @@ interface Uint8Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2276,8 +2276,8 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2289,7 +2289,7 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2301,8 +2301,8 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2314,7 +2314,7 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -2343,7 +2343,7 @@ interface Uint8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2354,7 +2354,7 @@ interface Uint8Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Uint8Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2409,7 +2409,7 @@ interface Uint8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
 }
 declare var Uint8Array: Uint8ArrayConstructor;
 
@@ -2457,7 +2457,7 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -2476,7 +2476,7 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2487,7 +2487,7 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2498,7 +2498,7 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2507,7 +2507,7 @@ interface Uint8ClampedArray {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -2545,7 +2545,7 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2557,8 +2557,8 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2570,7 +2570,7 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2582,8 +2582,8 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2595,7 +2595,7 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -2624,7 +2624,7 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2635,7 +2635,7 @@ interface Uint8ClampedArray {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Uint8ClampedArray view of the ArrayBuffer store for this array, referencing the elements
@@ -2690,7 +2690,7 @@ interface Uint8ClampedArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
 declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
@@ -2738,7 +2738,7 @@ interface Int16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -2757,7 +2757,7 @@ interface Int16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2768,7 +2768,7 @@ interface Int16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2779,7 +2779,7 @@ interface Int16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2788,7 +2788,7 @@ interface Int16Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
     /**
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
@@ -2825,7 +2825,7 @@ interface Int16Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2837,8 +2837,8 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2850,7 +2850,7 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2862,8 +2862,8 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2875,7 +2875,7 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -2904,7 +2904,7 @@ interface Int16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2915,7 +2915,7 @@ interface Int16Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Int16Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2970,7 +2970,7 @@ interface Int16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
 }
 declare var Int16Array: Int16ArrayConstructor;
 
@@ -3018,7 +3018,7 @@ interface Uint16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -3037,7 +3037,7 @@ interface Uint16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3048,7 +3048,7 @@ interface Uint16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3059,7 +3059,7 @@ interface Uint16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3068,7 +3068,7 @@ interface Uint16Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Uint16Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Uint16Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -3106,7 +3106,7 @@ interface Uint16Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3118,8 +3118,8 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3131,7 +3131,7 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3143,8 +3143,8 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3156,7 +3156,7 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -3185,7 +3185,7 @@ interface Uint16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3196,7 +3196,7 @@ interface Uint16Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Uint16Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3251,7 +3251,7 @@ interface Uint16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
 }
 declare var Uint16Array: Uint16ArrayConstructor;
 /**
@@ -3298,7 +3298,7 @@ interface Int32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -3317,7 +3317,7 @@ interface Int32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3328,7 +3328,7 @@ interface Int32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3339,7 +3339,7 @@ interface Int32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3348,7 +3348,7 @@ interface Int32Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Int32Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Int32Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -3386,7 +3386,7 @@ interface Int32Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Int32Array) => number, thisArg?: any): Int32Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Int32Array) => number, thisArg?: any): Int32Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3398,8 +3398,8 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3411,7 +3411,7 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3423,8 +3423,8 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3436,7 +3436,7 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -3465,7 +3465,7 @@ interface Int32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3476,7 +3476,7 @@ interface Int32Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Int32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3531,7 +3531,7 @@ interface Int32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
 }
 declare var Int32Array: Int32ArrayConstructor;
 
@@ -3579,7 +3579,7 @@ interface Uint32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -3598,7 +3598,7 @@ interface Uint32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3609,7 +3609,7 @@ interface Uint32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3620,7 +3620,7 @@ interface Uint32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3629,7 +3629,7 @@ interface Uint32Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
     /**
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
@@ -3666,7 +3666,7 @@ interface Uint32Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3678,8 +3678,8 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3691,7 +3691,7 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3703,8 +3703,8 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3716,7 +3716,7 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -3745,7 +3745,7 @@ interface Uint32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3756,7 +3756,7 @@ interface Uint32Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Uint32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3811,7 +3811,7 @@ interface Uint32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
 }
 declare var Uint32Array: Uint32ArrayConstructor;
 
@@ -3859,7 +3859,7 @@ interface Float32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -3878,7 +3878,7 @@ interface Float32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3889,7 +3889,7 @@ interface Float32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3900,7 +3900,7 @@ interface Float32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3909,7 +3909,7 @@ interface Float32Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Float32Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Float32Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -3947,7 +3947,7 @@ interface Float32Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3959,8 +3959,8 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3972,7 +3972,7 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3984,8 +3984,8 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3997,7 +3997,7 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -4026,7 +4026,7 @@ interface Float32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -4037,7 +4037,7 @@ interface Float32Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Float32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -4092,7 +4092,7 @@ interface Float32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
 }
 declare var Float32Array: Float32ArrayConstructor;
 
@@ -4140,7 +4140,7 @@ interface Float64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
+    every(/** @immediate */ predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -4159,7 +4159,7 @@ interface Float64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
+    filter(/** @immediate */ predicate: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -4170,7 +4170,7 @@ interface Float64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number | undefined;
+    find(/** @immediate */ predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -4181,7 +4181,7 @@ interface Float64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number;
+    findIndex(/** @immediate */ predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -4190,7 +4190,7 @@ interface Float64Array {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: number, index: number, array: Float64Array) => void, thisArg?: any): void;
+    forEach(/** @immediate */ callbackfn: (value: number, index: number, array: Float64Array) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -4228,7 +4228,7 @@ interface Float64Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    map(/** @immediate */ callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -4240,8 +4240,8 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
+    reduce(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -4253,7 +4253,7 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
+    reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -4265,8 +4265,8 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
+    reduceRight(/** @immediate */ callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -4278,7 +4278,7 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
+    reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
@@ -4307,7 +4307,7 @@ interface Float64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
+    some(/** @immediate */ predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -4318,7 +4318,7 @@ interface Float64Array {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(/** @immediate */ comparefn?: (a: number, b: number) => number): this;
 
     /**
      * Gets a new Float64Array view of the ArrayBuffer store for this array, referencing the elements
@@ -4373,7 +4373,7 @@ interface Float64ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
+    from<T>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
 }
 declare var Float64Array: Float64ArrayConstructor;
 

@@ -172,6 +172,7 @@ import {
     getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
+    getJSDocImmediateTagNoCache,
     getJSDocImplementsTags,
     getJSDocOverrideTagNoCache,
     getJSDocParameterTags,
@@ -7060,7 +7061,7 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+    if (alwaysIncludeJSDoc || includeJSDoc && (isInJSFile(node) || isParameter(node) && node.jsDoc)) {
         if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
             node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
@@ -7099,15 +7100,18 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
 
 function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
-    if (!!node.parent && !isParameter(node)) {
+    if (node.parent) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
+            if (!isParameter(node)) {
+                if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+                if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+                if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+                if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
+            }
         }
-        if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+        if (!isParameter(node) && getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+        if (getJSDocImmediateTagNoCache(node)) flags |= ModifierFlags.JSDocImmediate;
     }
 
     return flags;
@@ -7197,6 +7201,8 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
             return ModifierFlags.In;
         case SyntaxKind.OutKeyword:
             return ModifierFlags.Out;
+        case SyntaxKind.ImmediateKeyword:
+            return ModifierFlags.Immediate;
         case SyntaxKind.Decorator:
             return ModifierFlags.Decorator;
     }
@@ -11795,4 +11801,16 @@ export function hasInferredType(node: Node): node is HasInferredType {
 export function isSideEffectImport(node: Node): boolean {
     const ancestor = findAncestor(node, isImportDeclaration);
     return !!ancestor && !ancestor.importClause;
+}
+
+/** @internal */
+export function getLambdaArgument(node: Node): FunctionLikeDeclaration | undefined {
+    switch (node.kind) {
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+            return !hasSyntacticModifier(node, ModifierFlags.Async) && !(node as FunctionLikeDeclaration).asteriskToken ? node as FunctionLikeDeclaration : undefined;
+        case SyntaxKind.ParenthesizedExpression:
+            return getLambdaArgument((node as ParenthesizedExpression).expression);
+    }
+    return undefined;
 }

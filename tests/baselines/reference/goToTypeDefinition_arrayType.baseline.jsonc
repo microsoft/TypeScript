@@ -83,7 +83,7 @@
 //      * [11,2,22,1].sort((a, b) => a - b)
 //      * ```
 //      */
-//     sort(compareFn?: (a: T, b: T) => number): this;
+//     sort(/** @immediate */ compareFn?: (a: T, b: T) => number): this;
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
@@ -124,7 +124,7 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
+//     every<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
 //     /**
 //      * Determines whether all the members of an array satisfy the specified test.
 //      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -133,7 +133,7 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+//     every(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Determines whether the specified callback function returns true for any element of an array.
 //      * @param predicate A function that accepts up to three arguments. The some method calls
@@ -142,57 +142,57 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+//     some(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Performs the specified action for each element in an array.
 //      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
 //      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+//     forEach(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 //     /**
 //      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
 //      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+//     map<U>(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 //     /**
 //      * Returns the elements of an array that meet the condition specified in a callback function.
 //      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
+//     filter<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
 //     /**
 //      * Returns the elements of an array that meet the condition specified in a callback function.
 //      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
+//     filter(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
 //     /**
 //      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-//     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+//     reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+//     reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
 //     /**
 //      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+//     reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 //     /**
 //      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-//     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+//     reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+//     reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
 //     /**
 //      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+//     reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 // 
 //     [n: number]: T;
 // }|>
@@ -336,7 +336,7 @@
 //      * [11,2,22,1].sort((a, b) => a - b)
 //      * ```
 //      */
-//     sort(compareFn?: (a: T, b: T) => number): this;
+//     sort(/** @immediate */ compareFn?: (a: T, b: T) => number): this;
 //     /**
 //      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 //      * @param start The zero-based location in the array from which to start removing elements.
@@ -377,7 +377,7 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
+//     every<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
 //     /**
 //      * Determines whether all the members of an array satisfy the specified test.
 //      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -386,7 +386,7 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+//     every(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Determines whether the specified callback function returns true for any element of an array.
 //      * @param predicate A function that accepts up to three arguments. The some method calls
@@ -395,57 +395,57 @@
 //      * @param thisArg An object to which the this keyword can refer in the predicate function.
 //      * If thisArg is omitted, undefined is used as the this value.
 //      */
-//     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+//     some(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
 //     /**
 //      * Performs the specified action for each element in an array.
 //      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
 //      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+//     forEach(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 //     /**
 //      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
 //      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+//     map<U>(/** @immediate */ callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 //     /**
 //      * Returns the elements of an array that meet the condition specified in a callback function.
 //      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
+//     filter<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
 //     /**
 //      * Returns the elements of an array that meet the condition specified in a callback function.
 //      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
 //      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
 //      */
-//     filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
+//     filter(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
 //     /**
 //      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-//     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+//     reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+//     reduce(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
 //     /**
 //      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+//     reduce<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 //     /**
 //      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-//     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+//     reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
+//     reduceRight(/** @immediate */ callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
 //     /**
 //      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 //      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
 //      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
 //      */
-//     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+//     reduceRight<U>(/** @immediate */ callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 // 
 //     [n: number]: T;
 // }|>

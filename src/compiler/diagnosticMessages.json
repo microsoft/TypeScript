@@ -971,6 +971,10 @@
         "category": "Error",
         "code": 1293
     },
+    "'immediate' modifier can only appear on a parameter declaration.": {
+        "category": "Error",
+        "code": 1294
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -3940,6 +3944,11 @@
         "category": "Error",
         "code": 2873
     },
+    "An 'immediate' parameter must have a type that permits functions.": {
+        "category": "Error",
+        "code": 2874
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

@@ -101,6 +101,7 @@ import {
     getImmediatelyInvokedFunctionExpression,
     getJSDocHost,
     getJSDocTypeTag,
+    getLambdaArgument,
     getLeftmostAccessExpression,
     getNameOfDeclaration,
     getNameOrArgument,
@@ -317,6 +318,7 @@ import {
     unreachableCodeIsError,
     unusedLabelIsError,
     VariableDeclaration,
+    walkUpParenthesizedExpressions,
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts.js";
@@ -544,6 +546,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
     var hasFlowEffects: boolean;
+    var hasFlowMutation: boolean;
 
     // state used for emit helpers
     var emitFlags: NodeFlags;
@@ -623,6 +626,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         activeLabelList = undefined;
         hasExplicitReturn = false;
         hasFlowEffects = false;
+        hasFlowMutation = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
@@ -1009,12 +1013,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const saveExceptionTarget = currentExceptionTarget;
             const saveActiveLabelList = activeLabelList;
             const saveHasExplicitReturn = hasExplicitReturn;
-            const isImmediatelyInvoked = (
-                containerFlags & ContainerFlags.IsFunctionExpression &&
+            const isRegularFunctionExpression = containerFlags & ContainerFlags.IsFunctionExpression &&
                 !hasSyntacticModifier(node, ModifierFlags.Async) &&
-                !(node as FunctionLikeDeclaration).asteriskToken &&
-                !!getImmediatelyInvokedFunctionExpression(node)
-            ) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+                !(node as FunctionLikeDeclaration).asteriskToken;
+            const isImmediatelyInvoked = isRegularFunctionExpression && !!getImmediatelyInvokedFunctionExpression(node) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+            const isLambdaArgument = isRegularFunctionExpression && walkUpParenthesizedExpressions(node.parent).kind === SyntaxKind.CallExpression;
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
             // similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
@@ -1025,7 +1028,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+            currentReturnTarget = isImmediatelyInvoked || isLambdaArgument || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -1047,7 +1050,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
-                if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                if (isLambdaArgument && hasFlowMutation || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
                     (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                 }
             }
@@ -1390,6 +1393,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function createFlowMutation(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement) {
         setFlowNodeReferenced(antecedent);
         hasFlowEffects = true;
+        if (node.kind !== SyntaxKind.VariableDeclaration && node.kind !== SyntaxKind.BindingElement) hasFlowMutation = true;
         const result = createFlowNode(flags, node, antecedent) as FlowAssignment | FlowArrayMutation;
         if (currentExceptionTarget) {
             addAntecedent(currentExceptionTarget, result);
@@ -1401,6 +1405,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         setFlowNodeReferenced(antecedent);
         hasFlowEffects = true;
         return createFlowNode(FlowFlags.Call, node, antecedent) as FlowCall;
+    }
+
+    function createFlowLambdaArgs(antecedent: FlowNode, node: CallExpression) {
+        setFlowNodeReferenced(antecedent);
+        return createFlowNode(FlowFlags.LambdaArgs, node, antecedent) as FlowCall;
     }
 
     function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -2211,9 +2220,21 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bind(node.expression);
             }
             else {
-                bindEachChild(node);
+                bind(node.expression);
+                bindEach(node.typeArguments);
+                let hasLambdaArgs = false;
+                for (const arg of node.arguments) {
+                    const saveHasFlowMutation = hasFlowMutation;
+                    hasFlowMutation = false;
+                    bind(arg);
+                    hasLambdaArgs ||= !!getLambdaArgument(arg) && hasFlowMutation;
+                    hasFlowMutation ||= saveHasFlowMutation;
+                }
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
                     currentFlow = createFlowCall(currentFlow, node);
+                }
+                if (hasLambdaArgs) {
+                    currentFlow = createFlowLambdaArgs(currentFlow, node);
                 }
             }
         }

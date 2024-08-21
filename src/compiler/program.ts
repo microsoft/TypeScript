@@ -3342,6 +3342,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         case SyntaxKind.ProtectedKeyword:
                         case SyntaxKind.ReadonlyKeyword:
                         case SyntaxKind.DeclareKeyword:
+                        case SyntaxKind.ImmediateKeyword:
                         case SyntaxKind.AbstractKeyword:
                         case SyntaxKind.OverrideKeyword:
                         case SyntaxKind.InKeyword:
