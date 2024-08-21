@@ -418,8 +418,7 @@ export function isImportable(
     return hasImportablePath;
 }
 
-/** @internal */
-export function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
     return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
