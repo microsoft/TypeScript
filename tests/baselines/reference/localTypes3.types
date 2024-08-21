@@ -104,9 +104,9 @@ function f2() {
 
     let v = new C("hello");
 >v : f<number>.C<string>
->  :   ^^^^^^ ^^ ^^^^^^ 
+>  : ^^^^^^^^^^^^^^^^^^^
 >new C("hello") : f<number>.C<string>
->               :   ^^^^^^ ^^ ^^^^^^ 
+>               : ^^^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >"hello" : "hello"
@@ -118,7 +118,7 @@ function f2() {
 >v.x : number
 >    : ^^^^^^
 >v : f<number>.C<string>
->  :   ^^^^^^ ^^ ^^^^^^ 
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -128,7 +128,7 @@ function f2() {
 >v.y : string
 >    : ^^^^^^
 >v : f<number>.C<string>
->  :   ^^^^^^ ^^ ^^^^^^ 
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 }
@@ -179,9 +179,9 @@ function f3() {
 
     let v = new C();
 >v : f<number, string>.C
->  :   ^^^^^^  ^^^^^^ ^^
+>  : ^^^^^^^^^^^^^^^^^^^
 >new C() : f<number, string>.C
->        :   ^^^^^^  ^^^^^^ ^^
+>        : ^^^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -191,7 +191,7 @@ function f3() {
 >v.x : number
 >    : ^^^^^^
 >v : f<number, string>.C
->  :   ^^^^^^  ^^^^^^ ^^
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -201,7 +201,7 @@ function f3() {
 >v.y : string
 >    : ^^^^^^
 >v : f<number, string>.C
->  :   ^^^^^^  ^^^^^^ ^^
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 }

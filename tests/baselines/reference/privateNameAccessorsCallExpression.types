@@ -51,7 +51,7 @@ class A {
 >func : () => void
 >     : ^^^^^^^^^^
 >this.#fieldFunc : () => void
->                :           
+>                : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 

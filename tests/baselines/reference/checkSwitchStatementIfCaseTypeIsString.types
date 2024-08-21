@@ -20,11 +20,11 @@ class A {
 >x.forEach((v) => {            switch(v) {                case "test": use(this);            }        }) : void
 >                                                                                                        : ^^^^
 >x.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->          : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>          : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >x : string[]
 >  : ^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(v) => {            switch(v) {                case "test": use(this);            }        } : (v: string) => void
 >                                                                                             : ^ ^^^^^^^^^^^^^^^^^
 >v : string
@@ -40,7 +40,7 @@ class A {
 >use(this) : void
 >          : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >this : this
 >     : ^^^^
             }

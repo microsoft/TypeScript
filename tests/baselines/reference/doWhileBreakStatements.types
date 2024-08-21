@@ -97,7 +97,7 @@ do{
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () { } : () => void
->                :           
+>                : ^^^^^^^^^^
 
     break EIGHT;
 >EIGHT : any

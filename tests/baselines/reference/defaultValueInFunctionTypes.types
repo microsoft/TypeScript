@@ -23,7 +23,7 @@ var y = <(a : string = "") => any>(undefined)
 >y : (a?: string) => any
 >  : ^ ^^^      ^^^^^   
 ><(a : string = "") => any>(undefined) : (a?: string) => any
->                                      :   ^                
+>                                      : ^ ^^^      ^^^^^   
 >a : string
 >  : ^^^^^^
 >"" : ""

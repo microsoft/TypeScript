@@ -47,9 +47,9 @@ let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // 
 >"y" : "y"
 >    : ^^^
 >nextValues : (a: { x: string; }) => { x: string; }
->           : ^ ^^^^^^^^^^^^^^^^^^^^^              
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a : (a: { x: string; }) => { x: string; }
->       : ^ ^^^^^^^^^^^^^^^^^^^^^              
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >a : { x: string; }

@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.ts] ////
+
+=== node_modules/@trpc/server/internals/config.d.ts ===
+export interface RootConfig<T> {
+    prop: T;
+>prop : T
+>     : ^
+}
+=== node_modules/@trpc/server/internals/utils.d.ts ===
+export interface ErrorFormatterShape<T={}> {
+    prop: T;
+>prop : T
+>     : ^
+}
+export type PickFirstDefined<TType, TPick> = undefined extends TType
+>PickFirstDefined : PickFirstDefined<TType, TPick>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? undefined extends TPick
+    ? never
+    : TPick
+  : TType;
+export interface ErrorFormatter<T={},U={}> {
+    prop: [T, U];
+>prop : [T, U]
+>     : ^^^^^^
+}
+export interface DefaultErrorShape<T={}> {
+    prop: T;
+>prop : T
+>     : ^
+}
+=== node_modules/@trpc/server/middleware.d.ts ===
+export interface MiddlewareFunction<T={},U={}> {
+    prop: [T, U];
+>prop : [T, U]
+>     : ^^^^^^
+}
+export interface MiddlewareBuilder<T={},U={}> {
+    prop: [T, U];
+>prop : [T, U]
+>     : ^^^^^^
+}
+=== node_modules/@trpc/server/index.d.ts ===
+import { RootConfig } from './internals/config';
+>RootConfig : any
+>           : ^^^
+
+import { ErrorFormatterShape, PickFirstDefined, ErrorFormatter, DefaultErrorShape } from './internals/utils';
+>ErrorFormatterShape : any
+>                    : ^^^
+>PickFirstDefined : any
+>                 : ^^^
+>ErrorFormatter : any
+>               : ^^^
+>DefaultErrorShape : any
+>                  : ^^^
+
+declare class TRPCBuilder<TParams> {
+>TRPCBuilder : TRPCBuilder<TParams>
+>            : ^^^^^^^^^^^^^^^^^^^^
+
+    create<TOptions extends Record<string, any>>(): {
+>create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>; router: {}; }
+>       : ^        ^^^^^^^^^                   ^^^^^^^                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+        procedure: {};
+>procedure : {}
+>          : ^^
+
+        middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{
+>middleware : <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
+>           : ^          ^^^^^^^^^                   ^^  ^^                                                                                                                                                                                                                                                               ^^^^^                                                                                                                                                                                                                                                              
+>fn : import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                                                                                                          ^^^^^^^^^^^^^^^^
+
+            _config: RootConfig<{
+>_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                                                                             ^^^^
+
+                errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+>errorShape : ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            }>;
+        }, TNewParams>) => import("./middleware").MiddlewareBuilder<{
+            _config: RootConfig<{
+>_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                                                                             ^^^^
+
+                errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+>errorShape : ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            }>;
+        }, TNewParams>;
+        router: {};
+>router : {}
+>       : ^^
+
+    };
+} 
+
+export declare const initTRPC: TRPCBuilder<object>;
+>initTRPC : TRPCBuilder<object>
+>         : ^^^^^^^^^^^^^^^^^^^
+
+export {};
+=== index.ts ===
+import { initTRPC } from "@trpc/server";
+>initTRPC : TRPCBuilder<object>
+>         : ^^^^^^^^^^^^^^^^^^^
+
+const trpc = initTRPC.create();
+>trpc : { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>; router: {}; }
+>     : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>initTRPC.create() : { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>; router: {}; }
+>                  : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>initTRPC.create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<import("node_modules/@trpc/server/internals/utils").PickFirstDefined<TOptions["errorFormatter"], import("node_modules/@trpc/server/internals/utils").ErrorFormatter<object, import("node_modules/@trpc/server/internals/utils").DefaultErrorShape<{}>>>>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<import("node_modules/@trpc/server/internals/utils").PickFirstDefined<TOptions["errorFormatter"], import("node_modules/@trpc/server/internals/utils").ErrorFormatter<object, import("node_modules/@trpc/server/internals/utils").DefaultErrorShape<{}>>>>; }>; }, TNewParams>; router: {}; }
+>                : ^        ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>initTRPC : TRPCBuilder<object>
+>         : ^^^^^^^^^^^^^^^^^^^
+>create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<import("node_modules/@trpc/server/internals/utils").PickFirstDefined<TOptions["errorFormatter"], import("node_modules/@trpc/server/internals/utils").ErrorFormatter<object, import("node_modules/@trpc/server/internals/utils").DefaultErrorShape<{}>>>>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<import("node_modules/@trpc/server/internals/utils").PickFirstDefined<TOptions["errorFormatter"], import("node_modules/@trpc/server/internals/utils").ErrorFormatter<object, import("node_modules/@trpc/server/internals/utils").DefaultErrorShape<{}>>>>; }>; }, TNewParams>; router: {}; }
+>       : ^        ^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+
+export const middleware = trpc.middleware;
+>middleware : <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>
+>           : ^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>trpc.middleware : <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>
+>                : ^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>trpc : { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>; router: {}; }
+>     : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>middleware : <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>
+>           : ^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const router = trpc.router;
+>router : {}
+>       : ^^
+>trpc.router : {}
+>            : ^^
+>trpc : { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>; router: {}; }
+>     : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>router : {}
+>       : ^^
+
+export const publicProcedure = trpc.procedure;
+>publicProcedure : {}
+>                : ^^
+>trpc.procedure : {}
+>               : ^^
+>trpc : { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>) => import("node_modules/@trpc/server/middleware").MiddlewareBuilder<{ _config: import("node_modules/@trpc/server/internals/config").RootConfig<{ errorShape: import("node_modules/@trpc/server/internals/utils").ErrorFormatterShape<never>; }>; }, TNewParams>; router: {}; }
+>     : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^          ^^^^^^^^^                   ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>procedure : {}
+>          : ^^
+

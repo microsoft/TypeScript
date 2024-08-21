@@ -7,7 +7,7 @@ const CONFIG = {
 >CONFIG : { foo: string; setFoo: (foo: string) => void; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >{    foo: '',    setFoo: function(foo: string) {        CONFIG.foo = foo;    }} : { foo: string; setFoo: (foo: string) => void; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^                     ^^^
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 
     foo: '',
 >foo : string
@@ -19,7 +19,7 @@ const CONFIG = {
 >setFoo : (foo: string) => void
 >       : ^   ^^      ^^^^^^^^^
 >function(foo: string) {        CONFIG.foo = foo;    } : (foo: string) => void
->                                                      :                      
+>                                                      : ^   ^^      ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 
@@ -41,7 +41,7 @@ const helper = function<T>(t: T[]) {
 >helper : <T>(t: T[]) => void
 >       : ^ ^^ ^^   ^^^^^^^^^
 >function<T>(t: T[]) {    helper(t.slice(1));} : <T>(t: T[]) => void
->                                              :                    
+>                                              : ^ ^^ ^^   ^^^^^^^^^
 >t : T[]
 >  : ^^^
 

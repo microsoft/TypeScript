@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/declarationEmitAliasInlineing.ts] ////
+
+=== a.ts ===
+type O = {
+>O : Symbol(O, Decl(a.ts, 0, 0))
+
+    prop: string
+>prop : Symbol(prop, Decl(a.ts, 0, 10))
+
+    prop2: string
+>prop2 : Symbol(prop2, Decl(a.ts, 1, 16))
+}
+
+type I = {
+>I : Symbol(I, Decl(a.ts, 3, 1))
+
+    prop: string
+>prop : Symbol(prop, Decl(a.ts, 5, 10))
+}
+
+export const fn = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
+>fn : Symbol(fn, Decl(a.ts, 9, 12))
+>v : Symbol(v, Decl(a.ts, 9, 19))
+>O : Symbol(O, Decl(a.ts, 0, 0))
+>p : Symbol(p, Decl(a.ts, 9, 32))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(a.ts, 0, 0))
+>key : Symbol(key, Decl(a.ts, 9, 52))
+>O : Symbol(O, Decl(a.ts, 0, 0))
+>p2 : Symbol(p2, Decl(a.ts, 9, 66))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(a.ts, 0, 0))
+>I : Symbol(I, Decl(a.ts, 3, 1))
+
+=== aExp.ts ===
+export type O = {
+>O : Symbol(O, Decl(aExp.ts, 0, 0))
+
+    prop: string
+>prop : Symbol(prop, Decl(aExp.ts, 0, 17))
+
+    prop2: string
+>prop2 : Symbol(prop2, Decl(aExp.ts, 1, 16))
+}
+
+export type I = {
+>I : Symbol(I, Decl(aExp.ts, 3, 1))
+
+    prop: string
+>prop : Symbol(prop, Decl(aExp.ts, 5, 17))
+}
+
+export const fnExp = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
+>fnExp : Symbol(fnExp, Decl(aExp.ts, 9, 12))
+>v : Symbol(v, Decl(aExp.ts, 9, 22))
+>O : Symbol(O, Decl(aExp.ts, 0, 0))
+>p : Symbol(p, Decl(aExp.ts, 9, 35))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(aExp.ts, 0, 0))
+>key : Symbol(key, Decl(aExp.ts, 9, 55))
+>O : Symbol(O, Decl(aExp.ts, 0, 0))
+>p2 : Symbol(p2, Decl(aExp.ts, 9, 69))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(aExp.ts, 0, 0))
+>I : Symbol(I, Decl(aExp.ts, 3, 1))
+
+=== b.ts ===
+import {fn} from './a'
+>fn : Symbol(fn, Decl(b.ts, 0, 8))
+
+import {fnExp} from './aExp'
+>fnExp : Symbol(fnExp, Decl(b.ts, 1, 8))
+
+export const f = fn;
+>f : Symbol(f, Decl(b.ts, 2, 12))
+>fn : Symbol(fn, Decl(b.ts, 0, 8))
+
+export const fExp = fnExp;
+>fExp : Symbol(fExp, Decl(b.ts, 3, 12))
+>fnExp : Symbol(fnExp, Decl(b.ts, 1, 8))
+

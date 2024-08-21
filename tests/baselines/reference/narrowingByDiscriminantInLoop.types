@@ -251,11 +251,11 @@ function f1(x: A | B) {
 
         x.prop;
 >x.prop : { a: string; } | { b: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : A | B
 >  : ^^^^^
 >prop : { a: string; } | { b: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^^^^^^^      ^^^
 
         if (x.kind === true) {
 >x.kind === true : boolean
@@ -273,11 +273,11 @@ function f1(x: A | B) {
 >x.prop.a : string
 >         : ^^^^^^
 >x.prop : { a: string; }
->       : ^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^
 >x : A
 >  : ^
 >prop : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
         }
@@ -297,11 +297,11 @@ function f1(x: A | B) {
 >x.prop.b : string
 >         : ^^^^^^
 >x.prop : { b: string; }
->       : ^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^
 >x : B
 >  : ^
 >prop : { b: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
         }
@@ -330,11 +330,11 @@ function f2(x: A | B) {
 >x.prop.a : string
 >         : ^^^^^^
 >x.prop : { a: string; }
->       : ^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^
 >x : A
 >  : ^
 >prop : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
         }
@@ -352,11 +352,11 @@ function f2(x: A | B) {
 >x.prop.b : string
 >         : ^^^^^^
 >x.prop : { b: string; }
->       : ^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^
 >x : B
 >  : ^
 >prop : { b: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
         }

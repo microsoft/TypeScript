@@ -5,7 +5,7 @@ const fn1 = () => ({
 >fn1 : () => { test: <T = undefined>(value: T) => T; extraValue: () => void; }
 >    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    test: <T = undefined>(value: T): T => value,    extraValue: () => {},}) : () => { test: <T = undefined>(value: T) => T; extraValue: () => void; }
->                                                                                    :                                                                        
+>                                                                                    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    test: <T = undefined>(value: T): T => value,    extraValue: () => {},}) : { test: <T = undefined>(value: T) => T; extraValue: () => void; }
 >                                                                              : ^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: <T = undefined>(value: T): T => value,    extraValue: () => {},} : { test: <T = undefined>(value: T) => T; extraValue: () => void; }
@@ -15,7 +15,7 @@ const fn1 = () => ({
 >test : <T = undefined>(value: T) => T
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 ><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
->                                      :                               
+>                                      : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 >value : T
 >      : ^
 >value : T
@@ -25,7 +25,7 @@ const fn1 = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 })
 
@@ -33,7 +33,7 @@ const fn1async = () => ({
 >fn1async : () => { test: <T = undefined>(value: T) => Promise<T>; extraValue: () => void; }
 >         : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    test: async <T = undefined>(value: T): Promise<T> => value,    extraValue: () => {},}) : () => { test: <T = undefined>(value: T) => Promise<T>; extraValue: () => void; }
->                                                                                                   :                                                                                 
+>                                                                                                   : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    test: async <T = undefined>(value: T): Promise<T> => value,    extraValue: () => {},}) : { test: <T = undefined>(value: T) => Promise<T>; extraValue: () => void; }
 >                                                                                             : ^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: async <T = undefined>(value: T): Promise<T> => value,    extraValue: () => {},} : { test: <T = undefined>(value: T) => Promise<T>; extraValue: () => void; }
@@ -43,7 +43,7 @@ const fn1async = () => ({
 >test : <T = undefined>(value: T) => Promise<T>
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
->                                                     :                                        
+>                                                     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >value : T
 >      : ^
 >value : T
@@ -53,7 +53,7 @@ const fn1async = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 })
 
@@ -61,7 +61,7 @@ const fn2 = () => ({
 >fn2 : () => { test: <T>(value: T) => T; extraValue: () => void; }
 >    : ^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    test: <T>(value: T): T => value,    extraValue: () => {},}) : () => { test: <T>(value: T) => T; extraValue: () => void; }
->                                                                        :                                                            
+>                                                                        : ^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    test: <T>(value: T): T => value,    extraValue: () => {},}) : { test: <T>(value: T) => T; extraValue: () => void; }
 >                                                                  : ^^^^^^^^^ ^^     ^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: <T>(value: T): T => value,    extraValue: () => {},} : { test: <T>(value: T) => T; extraValue: () => void; }
@@ -71,7 +71,7 @@ const fn2 = () => ({
 >test : <T>(value: T) => T
 >     : ^ ^^     ^^ ^^^^^ 
 ><T>(value: T): T => value : <T>(value: T) => T
->                          :                   
+>                          : ^ ^^     ^^ ^^^^^ 
 >value : T
 >      : ^
 >value : T
@@ -81,7 +81,7 @@ const fn2 = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 })
 
@@ -89,7 +89,7 @@ const fn2async = () => ({
 >fn2async : () => { test: <T>(value: T) => Promise<T>; extraValue: () => void; }
 >         : ^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    test: async <T>(value: T): Promise<T> => value,    extraValue: () => {},}) : () => { test: <T>(value: T) => Promise<T>; extraValue: () => void; }
->                                                                                       :                                                                     
+>                                                                                       : ^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    test: async <T>(value: T): Promise<T> => value,    extraValue: () => {},}) : { test: <T>(value: T) => Promise<T>; extraValue: () => void; }
 >                                                                                 : ^^^^^^^^^ ^^     ^^ ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: async <T>(value: T): Promise<T> => value,    extraValue: () => {},} : { test: <T>(value: T) => Promise<T>; extraValue: () => void; }
@@ -99,7 +99,7 @@ const fn2async = () => ({
 >test : <T>(value: T) => Promise<T>
 >     : ^ ^^     ^^ ^^^^^          
 >async <T>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
->                                         :                            
+>                                         : ^ ^^     ^^ ^^^^^          
 >value : T
 >      : ^
 >value : T
@@ -109,7 +109,7 @@ const fn2async = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 })
 
@@ -117,7 +117,7 @@ const fn3 = () => ({
 >fn3 : () => { extraValue: () => void; test: <T = undefined>(value: T) => T; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >() => ({    extraValue: () => {},    test: <T = undefined>(value: T): T => value,}) : () => { extraValue: () => void; test: <T = undefined>(value: T) => T; }
->                                                                                    :                                                                        
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >({    extraValue: () => {},    test: <T = undefined>(value: T): T => value,}) : { extraValue: () => void; test: <T = undefined>(value: T) => T; }
 >                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >{    extraValue: () => {},    test: <T = undefined>(value: T): T => value,} : { extraValue: () => void; test: <T = undefined>(value: T) => T; }
@@ -127,13 +127,13 @@ const fn3 = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
     test: <T = undefined>(value: T): T => value,
 >test : <T = undefined>(value: T) => T
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 ><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
->                                      :                               
+>                                      : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 >value : T
 >      : ^
 >value : T
@@ -145,7 +145,7 @@ const fn3async = () => ({
 >fn3async : () => { extraValue: () => void; test: <T = undefined>(value: T) => Promise<T>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >() => ({    extraValue: () => {},    test: async <T = undefined>(value: T): Promise<T> => value,}) : () => { extraValue: () => void; test: <T = undefined>(value: T) => Promise<T>; }
->                                                                                                   :                                                                                 
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >({    extraValue: () => {},    test: async <T = undefined>(value: T): Promise<T> => value,}) : { extraValue: () => void; test: <T = undefined>(value: T) => Promise<T>; }
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >{    extraValue: () => {},    test: async <T = undefined>(value: T): Promise<T> => value,} : { extraValue: () => void; test: <T = undefined>(value: T) => Promise<T>; }
@@ -155,13 +155,13 @@ const fn3async = () => ({
 >extraValue : () => void
 >           : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
     test: async <T = undefined>(value: T): Promise<T> => value,
 >test : <T = undefined>(value: T) => Promise<T>
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
->                                                     :                                        
+>                                                     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >value : T
 >      : ^
 >value : T
@@ -173,7 +173,7 @@ const fn4 = () => ({
 >fn4 : () => { extraValue: string; test: <T = undefined>(value: T) => T; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >() => ({    extraValue: '',    test: <T = undefined>(value: T): T => value,}) : () => { extraValue: string; test: <T = undefined>(value: T) => T; }
->                                                                              :                                                                    
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >({    extraValue: '',    test: <T = undefined>(value: T): T => value,}) : { extraValue: string; test: <T = undefined>(value: T) => T; }
 >                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^ ^^^
 >{    extraValue: '',    test: <T = undefined>(value: T): T => value,} : { extraValue: string; test: <T = undefined>(value: T) => T; }
@@ -189,7 +189,7 @@ const fn4 = () => ({
 >test : <T = undefined>(value: T) => T
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 ><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
->                                      :                               
+>                                      : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^ 
 >value : T
 >      : ^
 >value : T
@@ -201,7 +201,7 @@ const fn4async = () => ({
 >fn4async : () => { extraValue: string; test: <T = undefined>(value: T) => Promise<T>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >() => ({    extraValue: '',    test: async <T = undefined>(value: T): Promise<T> => value,}) : () => { extraValue: string; test: <T = undefined>(value: T) => Promise<T>; }
->                                                                                             :                                                                             
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >({    extraValue: '',    test: async <T = undefined>(value: T): Promise<T> => value,}) : { extraValue: string; test: <T = undefined>(value: T) => Promise<T>; }
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^     ^^ ^^^^^          ^^^
 >{    extraValue: '',    test: async <T = undefined>(value: T): Promise<T> => value,} : { extraValue: string; test: <T = undefined>(value: T) => Promise<T>; }
@@ -217,7 +217,7 @@ const fn4async = () => ({
 >test : <T = undefined>(value: T) => Promise<T>
 >     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
->                                                     :                                        
+>                                                     : ^ ^^^^^^^^^^^^^^     ^^ ^^^^^          
 >value : T
 >      : ^
 >value : T

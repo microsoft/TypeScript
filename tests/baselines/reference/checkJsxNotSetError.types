@@ -5,7 +5,7 @@ const Foo = () => (
 >Foo : () => any
 >    : ^^^^^^^^^
 >() => (    <div>foo</div>) : () => any
->                           :          
+>                           : ^^^^^^^^^
 >(    <div>foo</div>) : any
 >                     : ^^^
 

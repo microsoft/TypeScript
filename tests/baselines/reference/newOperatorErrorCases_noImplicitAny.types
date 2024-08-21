@@ -13,7 +13,7 @@ new fnNumber(); // Error
 >new fnNumber() : any
 >               : ^^^
 >fnNumber : (this: void) => number
->         : ^    ^^    ^^^^^^^^^^^
+>         : ^    ^^    ^^^^^      
 
 function fnVoid(this: void): void {}
 >fnVoid : (this: void) => void
@@ -25,7 +25,7 @@ new fnVoid(); // Error
 >new fnVoid() : any
 >             : ^^^
 >fnVoid : (this: void) => void
->       : ^    ^^    ^^^^^^^^^
+>       : ^    ^^    ^^^^^    
 
 function functionVoidNoThis(): void {}
 >functionVoidNoThis : () => void
@@ -35,5 +35,5 @@ new functionVoidNoThis(); // Error
 >new functionVoidNoThis() : any
 >                         : ^^^
 >functionVoidNoThis : () => void
->                   : ^^^^^^^^^^
+>                   : ^^^^^^    
 

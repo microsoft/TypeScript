@@ -31,11 +31,11 @@ function foo() {
 >[].forEach(function () { i }) : void
 >                              : ^^^^
 >[].forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->           : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>           : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function () { i } : () => void
 >                  : ^^^^^^^^^^
 >i : number

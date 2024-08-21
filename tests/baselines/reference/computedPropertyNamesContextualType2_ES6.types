@@ -44,7 +44,7 @@ var o: I = {
 >"bar" : "bar"
 >      : ^^^^^
 >y => y.length : (y: string) => number
->              :                      
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >y.length : number

@@ -29,7 +29,7 @@ class P {
 >zzz : (p?: this) => this
 >    : ^ ^^^^^^^^^^^^^^^^
 >(p = this) => this : (p?: this) => this
->                   :   ^               
+>                   : ^ ^^^^^^^^^^^^^^^^
 >p : this
 >  : ^^^^
 >this : this

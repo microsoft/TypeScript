@@ -287,7 +287,7 @@ function f5() {
 >z1 : () => C
 >   : ^^^^^^^
 >function () {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : () => C
->                                                                                                                                 :        
+>                                                                                                                                 : ^^^^^^^
 
         enum E {
 >E : E
@@ -319,7 +319,7 @@ function f5() {
 >z2 : () => C
 >   : ^^^^^^^
 >() => {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : () => C
->                                                                                                                           :        
+>                                                                                                                           : ^^^^^^^
 
         enum E {
 >E : E

@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 700 / 700 (nearest 100)
-Type Count: 2,600 / 2,600 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 27,000 / 27,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 2,500
 
 === a.ts ===
 export const texts: string[] = [];
@@ -19,11 +17,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 
@@ -33,11 +31,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 
@@ -47,11 +45,11 @@ texts.push("100");
 >texts.push("100") : number
 >                  : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^      
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"100" : "100"
 >      : ^^^^^
 

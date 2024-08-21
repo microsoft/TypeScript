@@ -5,7 +5,7 @@ var foo = (dummy) => { };
 >foo : (dummy: any) => void
 >    : ^     ^^^^^^^^^^^^^^
 >(dummy) => { } : (dummy: any) => void
->               :                     
+>               : ^     ^^^^^^^^^^^^^^
 >dummy : any
 
 function test()

@@ -9,6 +9,6 @@ declare function decorator(constructor: any): any;
 
 @decorator
 >decorator : (constructor: any) => any
->          : ^           ^^   ^^^^^^^^
+>          : ^           ^^   ^^^^^   
 
 default class {}

@@ -5,7 +5,7 @@ var func = function (){return "ONE";};
 >func : () => string
 >     : ^^^^^^^^^^^^
 >function (){return "ONE";} : () => string
->                           :             
+>                           : ^^^^^^^^^^^^
 >"ONE" : "ONE"
 >      : ^^^^^
 

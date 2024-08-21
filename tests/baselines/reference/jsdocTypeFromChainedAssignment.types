@@ -94,7 +94,7 @@ A.s = A.t = function g(m) {
 >s : (m: number) => any
 >  : ^ ^^      ^^^^^^^^
 >A.t = function g(m) {    return m + this.x} : (m: number) => any
->                                            :                   
+>                                            : ^ ^^      ^^^^^^^^
 >A.t : (m: number) => any
 >    : ^ ^^      ^^^^^^^^
 >A : typeof A
@@ -102,7 +102,7 @@ A.s = A.t = function g(m) {
 >t : (m: number) => any
 >  : ^ ^^      ^^^^^^^^
 >function g(m) {    return m + this.x} : (m: number) => any
->                                      :                   
+>                                      : ^ ^^      ^^^^^^^^
 >g : (m: number) => any
 >  : ^ ^^      ^^^^^^^^
 >m : number

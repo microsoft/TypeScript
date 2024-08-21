@@ -45,7 +45,7 @@ const functionExpression = function(p: Promise<number>) {
 >functionExpression : (p: Promise<number>) => void
 >                   : ^ ^^               ^^^^^^^^^
 >function(p: Promise<number>) {  for await (const _ of []);  await p;} : (p: Promise<number>) => void
->                                                                      :                             
+>                                                                      : ^ ^^               ^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 
@@ -66,7 +66,7 @@ const arrowFunc = (p: Promise<number>) => {
 >arrowFunc : (p: Promise<number>) => number
 >          : ^ ^^               ^^^^^^^^^^^
 >(p: Promise<number>) => {  for await (const _ of []);  return await p;} : (p: Promise<number>) => number
->                                                                        :                               
+>                                                                        : ^ ^^               ^^^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 

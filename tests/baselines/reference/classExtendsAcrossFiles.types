@@ -9,13 +9,13 @@ export const a = {
 >a : { f: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{    f: () => {        class A { }        class B extends A { }        b.f();    }} : { f: () => void; }
->                                                                                    : ^^^^^          ^^^
+>                                                                                    : ^^^^^^^^^^^^^^^^^^
 
     f: () => {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        class A { }        class B extends A { }        b.f();    } : () => void
->                                                                           :           
+>                                                                           : ^^^^^^^^^^
 
         class A { }
 >A : A
@@ -47,13 +47,13 @@ export const b = {
 >b : { f: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{    f: () => {        class A { }        class B extends A { }        a.f();    }} : { f: () => void; }
->                                                                                    : ^^^^^          ^^^
+>                                                                                    : ^^^^^^^^^^^^^^^^^^
 
     f: () => {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        class A { }        class B extends A { }        a.f();    } : () => void
->                                                                           :           
+>                                                                           : ^^^^^^^^^^
 
         class A { }
 >A : A

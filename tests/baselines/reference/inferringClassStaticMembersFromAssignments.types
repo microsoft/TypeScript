@@ -55,7 +55,7 @@ export let F2 = function () { };
 >F2 : { (): void; staticProp: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () { } : { (): void; staticProp: number; }
->                :                                  
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 F2.staticProp = 0;
 >F2.staticProp = 0 : 0
@@ -124,7 +124,7 @@ let F4 = function () { };
 >F4 : { (): void; staticProp: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () { } : { (): void; staticProp: number; }
->                :                                  
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 F4.staticProp = 0;
 >F4.staticProp = 0 : 0

@@ -43,7 +43,7 @@ var i: I = {
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
 >s => s : (s: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string

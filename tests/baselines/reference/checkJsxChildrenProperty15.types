@@ -9,7 +9,7 @@ const Tag = (x: {}) => <div></div>;
 >Tag : (x: {}) => JSX.Element
 >    : ^ ^^  ^^^^^^^^^^^^^^^^
 >(x: {}) => <div></div> : (x: {}) => JSX.Element
->                       :                       
+>                       : ^ ^^  ^^^^^^^^^^^^^^^^
 >x : {}
 >  : ^^
 ><div></div> : JSX.Element

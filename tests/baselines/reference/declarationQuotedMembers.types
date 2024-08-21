@@ -9,5 +9,5 @@ export const example = mapped;
 >example : { "a-b-c": number; }
 >        : ^^^^^^^^^^^^^^^^^^^^
 >mapped : { "a-b-c": number; }
->       :                     
+>       : ^^^^^^^^^^^^^^^^^^^^
 

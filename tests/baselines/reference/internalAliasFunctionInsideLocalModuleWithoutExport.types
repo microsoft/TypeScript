@@ -43,6 +43,6 @@ export module c {
 >bVal2 : (x: number) => number
 >      : ^ ^^      ^^^^^^^^^^^
 >b : (x: number) => number
->  :                      
+>  : ^ ^^      ^^^^^^^^^^^
 }
 

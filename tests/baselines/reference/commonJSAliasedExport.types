@@ -31,7 +31,7 @@ const donkey = (ast) =>  ast;
 >donkey : (ast: any) => any
 >       : ^   ^^^^^^^^^^^^^
 >(ast) =>  ast : (ast: any) => any
->              :                  
+>              : ^   ^^^^^^^^^^^^^
 >ast : any
 >ast : any
 
@@ -52,7 +52,7 @@ module.exports = donkey;
 >module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
 >       : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (ast: any): any; funky: (declaration: any) => boolean; }
->        : ^^^   ^^^^^^^^^^^^^^^^^^^^                             ^^^
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >donkey : (ast: any) => any
 >       : ^   ^^^^^^^^^^^^^
 
@@ -66,9 +66,9 @@ module.exports.funky = funky;
 >module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
 >       : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (ast: any): any; funky: (declaration: any) => boolean; }
->        : ^^^   ^^^^^^^^^^^^^^^^^^^^                             ^^^
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >funky : (declaration: any) => boolean
 >      : ^           ^^^^^^^^^^^^^^^^^
 >funky : (declaration: any) => boolean
->      :                              
+>      : ^           ^^^^^^^^^^^^^^^^^
 

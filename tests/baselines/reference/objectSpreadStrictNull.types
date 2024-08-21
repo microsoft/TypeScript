@@ -50,11 +50,11 @@ function f(
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
@@ -64,13 +64,13 @@ function f(
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn?: string | number; }
@@ -79,10 +79,10 @@ function f(
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     // undefined
     let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
@@ -91,13 +91,13 @@ function f(
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: number | undefined; }
->                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                              : ^^^^^^                  ^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
 >undefinedNumber : { sn: number | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
 
     let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
 >undefinedUnionDuplicates : { sn: string | number; }
@@ -105,15 +105,15 @@ function f(
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
->                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^^^^^^                  ^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
 >undefinedString : { sn: string | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
 >undefinedNumber : { sn: number | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
 
     let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
 >allUndefined : { sn: string | number | undefined; }
@@ -121,11 +121,11 @@ function f(
 >sn : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^                  ^^^
 >undefinedString : { sn: string | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
 >undefinedNumber : { sn: number | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
 
     let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
 >undefinedWithOptionalContinues : { sn: string | number | boolean; }
@@ -135,11 +135,11 @@ function f(
 >{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | undefined; }
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >undefinedString : { sn: string | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                  ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 }
 
 type Movie = {
@@ -213,11 +213,11 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
     // ok, undefined is stripped from optional properties when spread
     fields = { ...fields, ...partialFields };
 >fields = { ...fields, ...partialFields } : { foo: number; bar: string; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^      ^^^^^^^      ^^^
 >fields : Fields
 >       : ^^^^^^
 >{ ...fields, ...partialFields } : { foo: number; bar: string; }
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^^      ^^^^^^^      ^^^
 >fields : Fields
 >       : ^^^^^^
 >partialFields : Partial<Fields>
@@ -226,11 +226,11 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
     // error: not optional, undefined remains
     fields = { ...fields, ...nearlyPartialFields };
 >fields = { ...fields, ...nearlyPartialFields } : { foo: number | undefined; bar: string | undefined; }
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^^                  ^^^^^^^                  ^^^
 >fields : Fields
 >       : ^^^^^^
 >{ ...fields, ...nearlyPartialFields } : { foo: number | undefined; bar: string | undefined; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^                  ^^^^^^^                  ^^^
 >fields : Fields
 >       : ^^^^^^
 >nearlyPartialFields : NearlyPartialFields

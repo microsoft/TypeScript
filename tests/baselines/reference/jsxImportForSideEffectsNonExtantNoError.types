@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,100 / 2,100 (nearest 100)
-Type Count: 6,700 / 6,700 (nearest 100)
-Instantiation count: 73,000 / 73,000 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
 
 === jsxImportForSideEffectsNonExtantNoError.tsx ===
 /// <reference path="react16.d.ts" />

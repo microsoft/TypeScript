@@ -9,13 +9,13 @@ export const a = {
 >a : { f: () => Promise<void>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    f: async () => {        await b.f();    }} : { f: () => Promise<void>; }
->                                                : ^^^^^                   ^^^
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f: async () => {
 >f : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {        await b.f();    } : () => Promise<void>
->                                       :                    
+>                                       : ^^^^^^^^^^^^^^^^^^^
 
         await b.f();
 >await b.f() : void
@@ -39,13 +39,13 @@ export const b = {
 >b : { f: () => Promise<void>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    f: async () => {        await a.f();    }} : { f: () => Promise<void>; }
->                                                : ^^^^^                   ^^^
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f: async () => {
 >f : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {        await a.f();    } : () => Promise<void>
->                                       :                    
+>                                       : ^^^^^^^^^^^^^^^^^^^
 
         await a.f();
 >await a.f() : void

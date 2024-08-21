@@ -5,7 +5,7 @@ var fa = function(): any { return 3; }
 >fa : () => any
 >   : ^^^^^^   
 >function(): any { return 3; } : () => any
->                              :          
+>                              : ^^^^^^   
 >3 : 3
 >  : ^
 
@@ -13,7 +13,7 @@ fa = function() { } // should not work
 >fa = function() { } : () => void
 >                    : ^^^^^^^^^^
 >fa : () => any
->   : ^^^^^^^^^
+>   : ^^^^^^   
 >function() { } : () => void
 >               : ^^^^^^^^^^
 
@@ -21,13 +21,13 @@ var fv = function(): void {}
 >fv : () => void
 >   : ^^^^^^    
 >function(): void {} : () => void
->                    :           
+>                    : ^^^^^^    
 
 fv = function() { return 0; } // should work
 >fv = function() { return 0; } : () => number
 >                              : ^^^^^^^^^^^^
 >fv : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 >function() { return 0; } : () => number
 >                         : ^^^^^^^^^^^^
 >0 : 0
@@ -41,7 +41,7 @@ function execAny(callback:(val:any)=>any) { return callback(0) }
 >val : any
 >callback(0) : any
 >callback : (val: any) => any
->         : ^   ^^   ^^^^^^^^
+>         : ^   ^^   ^^^^^   
 >0 : 0
 >  : ^
 
@@ -61,7 +61,7 @@ function execVoid(callback:(val:any)=>void) { callback(0); }
 >callback(0) : void
 >            : ^^^^
 >callback : (val: any) => void
->         : ^   ^^   ^^^^^^^^^
+>         : ^   ^^   ^^^^^    
 >0 : 0
 >  : ^
 

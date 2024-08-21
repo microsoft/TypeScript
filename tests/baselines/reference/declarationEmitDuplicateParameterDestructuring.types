@@ -5,7 +5,7 @@ export const fn1 = ({ prop: a, prop: b }: { prop: number }) => a + b;
 >fn1 : ({ prop: a, prop: b }: { prop: number; }) => number
 >    : ^                    ^^                 ^^^^^^^^^^^
 >({ prop: a, prop: b }: { prop: number }) => a + b : ({ prop: a, prop: b }: { prop: number; }) => number
->                                                  :                                                    
+>                                                  : ^                    ^^                 ^^^^^^^^^^^
 >prop : any
 >     : ^^^
 >a : number
@@ -27,7 +27,7 @@ export const fn2 = ({ prop: a }: { prop: number }, { prop: b }: { prop: number }
 >fn2 : ({ prop: a }: { prop: number; }, { prop: b }: { prop: number; }) => number
 >    : ^           ^^                 ^^           ^^                 ^^^^^^^^^^^
 >({ prop: a }: { prop: number }, { prop: b }: { prop: number }) => a + b : ({ prop: a }: { prop: number; }, { prop: b }: { prop: number; }) => number
->                                                                        :                                                                           
+>                                                                        : ^           ^^                 ^^           ^^                 ^^^^^^^^^^^
 >prop : any
 >     : ^^^
 >a : number

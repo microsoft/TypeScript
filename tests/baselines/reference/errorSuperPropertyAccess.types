@@ -297,13 +297,13 @@ class SomeDerived1 extends SomeBase {
 >x : { test: () => any; }
 >  : ^^^^^^^^^^^^^^^^^^^^
 >{            test: function () { return super.publicFunc(); }        } : { test: () => any; }
->                                                                       : ^^^^^^^^         ^^^
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^
 
             test: function () { return super.publicFunc(); }
 >test : () => any
 >     : ^^^^^^^^^
 >function () { return super.publicFunc(); } : () => any
->                                           :          
+>                                           : ^^^^^^^^^
 >super.publicFunc() : any
 >                   : ^^^
 >super.publicFunc : any

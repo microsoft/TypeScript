@@ -95,7 +95,7 @@ var f = (x: string) => f(x);
 >f : (x: string) => any
 >  : ^ ^^      ^^^^^^^^
 >(x: string) => f(x) : (x: string) => any
->                    :                   
+>                    : ^ ^^      ^^^^^^^^
 >x : string
 >  : ^^^^^^
 >f(x) : any

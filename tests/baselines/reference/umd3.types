@@ -9,11 +9,11 @@ Foo.fn();
 >Foo.fn() : void
 >         : ^^^^
 >Foo.fn : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >fn : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
 let x: Foo.Thing;
 >x : Foo.Thing

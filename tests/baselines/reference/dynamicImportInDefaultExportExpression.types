@@ -9,7 +9,7 @@ export default {
 >getInstance : () => Promise<any>
 >            : ^^^^^^^^^^^^^^^^^^
 >function () {        return import('./foo2');    } : () => Promise<any>
->                                                   :                   
+>                                                   : ^^^^^^^^^^^^^^^^^^
 
         return import('./foo2');
 >import('./foo2') : Promise<any>

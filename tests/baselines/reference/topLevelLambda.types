@@ -9,7 +9,7 @@ module M {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {this.window;} : () => void
->                     :           
+>                     : ^^^^^^^^^^
 >this.window : any
 >            : ^^^
 >this : any

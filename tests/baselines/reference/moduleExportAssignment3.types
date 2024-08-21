@@ -5,7 +5,7 @@ var mod = require('./mod')
 >mod : () => void
 >    : ^^^^^^^^^^
 >require('./mod') : () => void
->                 :           
+>                 : ^^^^^^^^^^
 >require : any
 >'./mod' : "./mod"
 >        : ^^^^^^^

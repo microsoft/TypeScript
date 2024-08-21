@@ -5,7 +5,7 @@ var v = () => {
 >v : () => void
 >  : ^^^^^^^^^^
 >() => {     yield foo  } : () => void
->                         :           
+>                         : ^^^^^^^^^^
 
      yield foo
 >yield foo : any

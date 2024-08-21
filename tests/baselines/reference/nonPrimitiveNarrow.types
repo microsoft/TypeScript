@@ -78,11 +78,11 @@ if (typeof b === 'object') {
 >b.toString() : string
 >             : ^^^^^^
 >b.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >b : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 } else {
    b.toString(); // error, never

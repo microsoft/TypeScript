@@ -5,7 +5,7 @@ var v = function * foo() { }
 >v : () => Generator<never, void, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function * foo() { } : () => Generator<never, void, unknown>
->                     :                                      
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => Generator<never, void, unknown>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

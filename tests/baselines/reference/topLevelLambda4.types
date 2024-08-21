@@ -5,7 +5,7 @@ export var x = () => this.window;
 >x : () => any
 >  : ^^^^^^^^^
 >() => this.window : () => any
->                  :          
+>                  : ^^^^^^^^^
 >this.window : any
 >            : ^^^
 >this : undefined

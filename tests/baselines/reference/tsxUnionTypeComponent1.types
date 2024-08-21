@@ -71,7 +71,7 @@ class MyButtonComponent extends React.Component<{},{}> {
 >MyButtonComponent : MyButtonComponent
 >                  : ^^^^^^^^^^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

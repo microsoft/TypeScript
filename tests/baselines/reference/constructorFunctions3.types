@@ -147,7 +147,7 @@ A.t = function g(m) {
 >t : (m: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function g(m) {    return m + 1} : (m: number) => number
->                                 :                      
+>                                 : ^ ^^      ^^^^^^^^^^^
 >g : (m: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >m : number

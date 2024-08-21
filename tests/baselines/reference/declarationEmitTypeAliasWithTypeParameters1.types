@@ -13,7 +13,7 @@ export const y = (x: Foo<string>) => 1
 >y : (x: Foo<string>) => number
 >  : ^ ^^           ^^^^^^^^^^^
 >(x: Foo<string>) => 1 : (x: Foo<string>) => number
->                      :                           
+>                      : ^ ^^           ^^^^^^^^^^^
 >x : Foo<string>
 >  : ^^^^^^^^^^^
 >1 : 1

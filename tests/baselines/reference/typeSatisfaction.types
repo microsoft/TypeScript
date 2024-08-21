@@ -74,7 +74,7 @@ const t5 = (m => m.substring(0)) satisfies T2; // Ok
 >t5 : (m: string) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >(m => m.substring(0)) satisfies T2 : (m: string) => string
->                                   :                      
+>                                   : ^ ^^^^^^^^^^^^^^^^^^^
 >(m => m.substring(0)) : (m: string) => string
 >                      : ^ ^^^^^^^^^^^^^^^^^^^
 >m => m.substring(0) : (m: string) => string
@@ -84,11 +84,11 @@ const t5 = (m => m.substring(0)) satisfies T2; // Ok
 >m.substring(0) : string
 >               : ^^^^^^
 >m.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >m : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

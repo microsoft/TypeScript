@@ -7,7 +7,7 @@ const items = require("./some-mod")();
 >require("./some-mod")() : Item[]
 >                        : ^^^^^^
 >require("./some-mod") : () => Item[]
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^^^^^  
 >require : any
 >        : ^^^
 >"./some-mod" : "./some-mod"
@@ -37,5 +37,5 @@ declare function getItems(): Item[];
 
 export = getItems;
 >getItems : () => Item[]
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 

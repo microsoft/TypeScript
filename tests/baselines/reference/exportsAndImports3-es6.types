@@ -72,7 +72,7 @@ export { v as v1, f as f1, C as C1, I as I1, E as E1, D as D1, M as M1, N as N1,
 >f : () => void
 >  : ^^^^^^^^^^
 >f1 : () => void
->   :           
+>   : ^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >C1 : typeof C
@@ -115,7 +115,7 @@ export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >f1 : () => void
 >   : ^^^^^^^^^^
 >f : () => void
->  :           
+>  : ^^^^^^^^^^
 >C1 : typeof import("t1").C
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >C : typeof import("t1").C
@@ -158,7 +158,7 @@ import { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >f1 : () => void
 >   : ^^^^^^^^^^
 >f : () => void
->  :           
+>  : ^^^^^^^^^^
 >C1 : typeof C
 >   : ^^^^^^^^
 >C : typeof C

@@ -34,7 +34,7 @@ var v4: T<string>;
 
 function f<U>() {
 >f : <U>() => void
->  : ^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^
 
     class C { }
 >C : C

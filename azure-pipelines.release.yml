@@ -77,6 +77,7 @@ extends:
               - script: |
                   npx hereby LKG
                   npx hereby clean
+                  node ./scripts/addPackageJsonGitHead.mjs package.json
                   npm pack
                 displayName: 'LKG, clean, pack'
 

@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
     it("return (es5)", async () => {
@@ -82,5 +82,27 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
             { done: false, value: 1 },
             { done: true, value: 2 },
         ]);
+    });
+    it("Supports global `AsyncIterator.prototype` if present", () => {
+        class AsyncIterator {}
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export async function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { AsyncIterator },
+        );
+        const g = gen();
+        assert.instanceOf(g, AsyncIterator);
+    });
+    it("Ignores global `AsyncIterator.prototype` if missing", () => {
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export async function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { AsyncIterator: undefined },
+        );
+        gen();
     });
 });

@@ -9,7 +9,8 @@ import {
     isString,
     noop,
     SourceMapper,
-} from "./_namespaces/ts";
+    toSorted,
+} from "./_namespaces/ts.js";
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
@@ -23,8 +24,8 @@ import {
     ScriptInfo,
     SourceMapFileWatcher,
     TextStorage,
-} from "./_namespaces/ts.server";
-import { LoggerWithInMemoryLogs } from "./tsserverLogger";
+} from "./_namespaces/ts.server.js";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 interface ProjectData {
     projectStateVersion: Project["projectStateVersion"];
@@ -93,7 +94,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function sendLogsToLogger(title: string, logs: StateItemLog[] | undefined) {
         if (!logs) return;
         logger.log(title);
-        logs.sort((a, b) => compareStringsCaseSensitive(a[0], b[0]))
+        toSorted(logs, (a, b) => compareStringsCaseSensitive(a[0], b[0]))
             .forEach(([title, propertyLogs]) => {
                 logger.log(title);
                 propertyLogs.forEach(p => isString(p) ? logger.log(p) : p.forEach(s => logger.log(s)));
@@ -104,6 +105,12 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(
+            /*toRetainConfiguredProjects*/ undefined,
+            /*openFilesWithRetainedConfiguredProject*/ undefined,
+            /*externalProjectsRetainingConfiguredProjects*/ undefined,
+        );
+        const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
             projects,
@@ -118,7 +125,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", noOpenRef(project), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredClose", isConfiguredProject(project) && project.deferredClose, projectDiff, projectPropertyLogs);
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
@@ -149,7 +156,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 dirty: project.dirty,
                 isClosed: project.isClosed(),
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
-                noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
+                noOpenRef: noOpenRef(project),
                 deferredClose: isConfiguredProject(project) && project.deferredClose,
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,

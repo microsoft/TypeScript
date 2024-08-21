@@ -67,7 +67,7 @@ function foo(): Stuff | Date {
 >b : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -75,7 +75,7 @@ function foo(): Stuff | Date {
 >c : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -83,7 +83,7 @@ function foo(): Stuff | Date {
 >d : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -91,7 +91,7 @@ function foo(): Stuff | Date {
 >e : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -99,7 +99,7 @@ function foo(): Stuff | Date {
 >f : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -107,7 +107,7 @@ function foo(): Stuff | Date {
 >g : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -115,7 +115,7 @@ function foo(): Stuff | Date {
 >h : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -123,7 +123,7 @@ function foo(): Stuff | Date {
 >i : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -131,7 +131,7 @@ function foo(): Stuff | Date {
 >j : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -139,7 +139,7 @@ function foo(): Stuff | Date {
 >k : () => number
 >  : ^^^^^^^^^^^^
 >() => 123 : () => number
->          :             
+>          : ^^^^^^^^^^^^
 >123 : 123
 >    : ^^^
   }

@@ -27,7 +27,7 @@ import {
     SourceFile,
     SyntaxKind,
     TypeChecker,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 interface RawNavigateToItem {
     readonly name: string;
@@ -164,7 +164,8 @@ function getContainers(declaration: Declaration): readonly string[] {
         container = getContainerNode(container);
     }
 
-    return containers.reverse();
+    containers.reverse();
+    return containers;
 }
 
 function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {

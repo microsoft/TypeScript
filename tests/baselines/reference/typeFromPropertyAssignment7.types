@@ -17,7 +17,7 @@ obj.method = function (hunch) {
 >method : (hunch: any) => boolean
 >       : ^     ^^^^^^^^^^^^^^^^^
 >function (hunch) {    return true;} : (hunch: any) => boolean
->                                    :                        
+>                                    : ^     ^^^^^^^^^^^^^^^^^
 >hunch : any
 
     return true;

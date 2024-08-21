@@ -5,7 +5,7 @@ export const Foo = (opts: {
 >Foo : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
 >    : ^    ^^                               ^^^^^                               
 >(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
->                                                                                             :                                                                           
+>                                                                                             : ^    ^^                               ^^^^^                               
 >opts : { a?(): void; b?: () => void; }
 >     : ^^^^^^^^    ^^^^^^          ^^^
 

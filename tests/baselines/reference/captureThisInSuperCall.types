@@ -25,7 +25,7 @@ class B extends A {
 >test : () => void
 >     : ^^^^^^^^^^
 >() => this.someMethod() : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >this.someMethod() : void
 >                  : ^^^^
 >this.someMethod : () => void

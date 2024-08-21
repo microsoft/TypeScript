@@ -5,7 +5,7 @@ var a = () => {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => {    var arg = arguments[0];  // error} : () => void
->                                              :           
+>                                              : ^^^^^^^^^^
 
     var arg = arguments[0];  // error
 >arg : any
@@ -22,13 +22,13 @@ var b = function () {
 >b : () => void
 >  : ^^^^^^^^^^
 >function () {    var a = () => {        var arg = arguments[0];  // error    }} : () => void
->                                                                                :           
+>                                                                                : ^^^^^^^^^^
 
     var a = () => {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => {        var arg = arguments[0];  // error    } : () => void
->                                                      :           
+>                                                      : ^^^^^^^^^^
 
         var arg = arguments[0];  // error
 >arg : any

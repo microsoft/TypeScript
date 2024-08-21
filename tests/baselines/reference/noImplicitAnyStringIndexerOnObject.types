@@ -29,13 +29,13 @@ var c = {
 >c : { get: (key: string) => string; }
 >  : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 >{  get: (key: string) => 'foobar'} : { get: (key: string) => string; }
->                                   : ^^^^^^^                       ^^^
+>                                   : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 
   get: (key: string) => 'foobar'
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'foobar' : (key: string) => string
->                          :                        
+>                          : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'foobar' : "foobar"
@@ -64,13 +64,13 @@ var d = {
 >d : { set: (key: string) => string; }
 >  : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 >{  set: (key: string) => 'foobar'} : { set: (key: string) => string; }
->                                   : ^^^^^^^                       ^^^
+>                                   : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 
   set: (key: string) => 'foobar'
 >set : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'foobar' : (key: string) => string
->                          :                        
+>                          : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'foobar' : "foobar"
@@ -92,13 +92,13 @@ const bar = d['hello'];
 >e : { get: (key: string) => string; set: (key: string) => string; }
 >  : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 >{    get: (key: string) => 'foobar',    set: (key: string) => 'foobar'  } : { get: (key: string) => string; set: (key: string) => string; }
->                                                                          : ^^^^^^^                       ^^^^^^^                       ^^^
+>                                                                          : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^
 
     get: (key: string) => 'foobar',
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'foobar' : (key: string) => string
->                          :                        
+>                          : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'foobar' : "foobar"
@@ -108,7 +108,7 @@ const bar = d['hello'];
 >set : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'foobar' : (key: string) => string
->                          :                        
+>                          : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'foobar' : "foobar"
@@ -163,13 +163,13 @@ const bar = d['hello'];
 >e : { get: (key: string) => string; set: (key: string, value: string) => string; }
 >  : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^^^
 >{    get: (key: string) => 'foobar',    set: (key: string, value: string) => 'foobar'  } : { get: (key: string) => string; set: (key: string, value: string) => string; }
->                                                                                         : ^^^^^^^                       ^^^^^^^                                      ^^^
+>                                                                                         : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^^^
 
     get: (key: string) => 'foobar',
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'foobar' : (key: string) => string
->                          :                        
+>                          : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'foobar' : "foobar"
@@ -179,7 +179,7 @@ const bar = d['hello'];
 >set : (key: string, value: string) => string
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^^^
 >(key: string, value: string) => 'foobar' : (key: string, value: string) => string
->                                         :                                       
+>                                         : ^   ^^      ^^     ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
@@ -236,13 +236,13 @@ const bar = d['hello'];
 >e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
 >  : ^^^^^^^^   ^^                 ^^^^^^^^^^^^^^^^^^^   ^^                 ^^     ^^      ^^^^^^^^^^^^^^
 >{    get: (key: "hello" | "world") => 'foobar',    set: (key: "hello" | "world", value: string) => 'foobar'  } : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
->                                                                                                               : ^^^^^^^                                  ^^^^^^^                                                 ^^^
+>                                                                                                               : ^^^^^^^^   ^^                 ^^^^^^^^^^^^^^^^^^^   ^^                 ^^     ^^      ^^^^^^^^^^^^^^
 
     get: (key: "hello" | "world") => 'foobar',
 >get : (key: "hello" | "world") => string
 >    : ^   ^^                 ^^^^^^^^^^^
 >(key: "hello" | "world") => 'foobar' : (key: "hello" | "world") => string
->                                     :                                   
+>                                     : ^   ^^                 ^^^^^^^^^^^
 >key : "hello" | "world"
 >    : ^^^^^^^^^^^^^^^^^
 >'foobar' : "foobar"
@@ -252,7 +252,7 @@ const bar = d['hello'];
 >set : (key: "hello" | "world", value: string) => string
 >    : ^   ^^                 ^^     ^^      ^^^^^^^^^^^
 >(key: "hello" | "world", value: string) => 'foobar' : (key: "hello" | "world", value: string) => string
->                                                    :                                                  
+>                                                    : ^   ^^                 ^^     ^^      ^^^^^^^^^^^
 >key : "hello" | "world"
 >    : ^^^^^^^^^^^^^^^^^
 >value : string
@@ -315,7 +315,7 @@ const bar = d['hello'];
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -323,7 +323,7 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
@@ -343,7 +343,7 @@ const bar = d['hello'];
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -351,7 +351,7 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
@@ -373,7 +373,7 @@ const bar = d['hello'];
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -381,7 +381,7 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
@@ -403,7 +403,7 @@ const bar = d['hello'];
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -411,7 +411,7 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
@@ -433,11 +433,11 @@ const bar = d['hello'];
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
->                                                                           : ^^^^^^^                       ^^^^^^^                                    ^^^
+>                                                                           : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -445,13 +445,13 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
 >      : ^^^^^^
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
->    : ^^^^^^^                       ^^^^^^^                                    ^^^
+>    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -469,11 +469,11 @@ const bar = d['hello'];
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
->                                                                           : ^^^^^^^                       ^^^^^^^                                    ^^^
+>                                                                           : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -481,13 +481,13 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
 >      : ^^^^^^
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
->    : ^^^^^^^                       ^^^^^^^                                    ^^^
+>    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 >'modified' : "modified"
@@ -507,11 +507,11 @@ const bar = d['hello'];
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
->                                                                           : ^^^^^^^                       ^^^^^^^                                    ^^^
+>                                                                           : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -519,13 +519,13 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
 >      : ^^^^^^
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
->    : ^^^^^^^                       ^^^^^^^                                    ^^^
+>    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 >1 : 1
@@ -545,11 +545,11 @@ const bar = d['hello'];
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
->                                                                           : ^^^^^^^                       ^^^^^^^                                    ^^^
+>                                                                           : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >get : (key: string) => string
 >    : ^   ^^      ^^^^^^^^^^^
 >(key: string) => 'hello' : (key: string) => string
->                         :                        
+>                         : ^   ^^      ^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >'hello' : "hello"
@@ -557,13 +557,13 @@ const bar = d['hello'];
 >set : (key: string, value: string) => void
 >    : ^   ^^      ^^     ^^      ^^^^^^^^^
 >(key: string, value: string) => {} : (key: string, value: string) => void
->                                   :                                     
+>                                   : ^   ^^      ^^     ^^      ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >value : string
 >      : ^^^^^^
 >foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
->    : ^^^^^^^                       ^^^^^^^                                    ^^^
+>    : ^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^   ^^      ^^     ^^      ^^^^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 }

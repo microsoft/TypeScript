@@ -9,10 +9,10 @@ function * foo() {
 >v : { [x: number]: () => Generator<any, void, unknown>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ [yield]: foo } : { [x: number]: () => Generator<any, void, unknown>; }
->                 : ^^^^^^^^^^^^^^^                                   ^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[yield] : () => Generator<any, void, unknown>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
 >foo : () => Generator<any, void, unknown>
->    :                                    
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

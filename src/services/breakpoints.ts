@@ -70,7 +70,7 @@ import {
     VariableStatement,
     WhileStatement,
     WithStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Get the breakpoint span in given sourceFile

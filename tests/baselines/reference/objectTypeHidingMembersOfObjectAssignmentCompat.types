@@ -63,13 +63,13 @@ var a = {
 >a : { toString: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    toString: () => { }} : { toString: () => void; }
->                          : ^^^^^^^^^^^^          ^^^
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     toString: () => { }
 >toString : () => void
 >         : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 }
 o = a; // error
 >o = a : { toString: () => void; }

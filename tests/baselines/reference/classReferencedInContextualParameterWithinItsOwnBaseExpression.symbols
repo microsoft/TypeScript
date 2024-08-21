@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/classReferencedInContextualParameterWithinItsOwnBaseExpression.ts] ////
+
+=== classReferencedInContextualParameterWithinItsOwnBaseExpression.ts ===
+interface Pretty<To> {
+>Pretty : Symbol(Pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 0, 0))
+>To : Symbol(To, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 0, 17))
+
+  (a: To): string;
+>a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 1, 3))
+>To : Symbol(To, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 0, 17))
+}
+
+interface Schema<A> {
+>Schema : Symbol(Schema, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 2, 1))
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 17))
+
+  readonly pretty?: Pretty<A>;
+>pretty : Symbol(Schema.pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 21))
+>Pretty : Symbol(Pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 0, 0))
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 17))
+}
+
+interface Class<A> {
+>Class : Symbol(Class, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 6, 1), Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 13))
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 8, 16))
+
+  new (): A;
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 8, 16))
+}
+
+declare const Class: <Self>(
+>Class : Symbol(Class, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 6, 1), Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 13))
+>Self : Symbol(Self, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 22))
+
+  identifier: string,
+>identifier : Symbol(identifier, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 28))
+
+) => <Fields>(
+>Fields : Symbol(Fields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 14, 6))
+
+  fields: Fields,
+>fields : Symbol(fields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 14, 14))
+>Fields : Symbol(Fields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 14, 6))
+
+  annotations?: Schema<Self>,
+>annotations : Symbol(annotations, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 15, 17))
+>Schema : Symbol(Schema, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 2, 1))
+>Self : Symbol(Self, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 22))
+
+) => Class<OutputFrom<Fields>>;
+>Class : Symbol(Class, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 6, 1), Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 13))
+>OutputFrom : Symbol(OutputFrom, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 21, 2))
+>Fields : Symbol(Fields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 14, 6))
+
+type Type<TOutput> = {
+>Type : Symbol(Type, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 17, 31))
+>TOutput : Symbol(TOutput, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 19, 10))
+
+  _TOutput: TOutput;
+>_TOutput : Symbol(_TOutput, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 19, 22))
+>TOutput : Symbol(TOutput, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 19, 10))
+
+};
+
+type OutputFrom<TFields> = {
+>OutputFrom : Symbol(OutputFrom, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 21, 2))
+>TFields : Symbol(TFields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 23, 16))
+
+  [K in keyof TFields]: "_TOutput" extends keyof TFields[K]
+>K : Symbol(K, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 24, 3))
+>TFields : Symbol(TFields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 23, 16))
+>TFields : Symbol(TFields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 23, 16))
+>K : Symbol(K, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 24, 3))
+
+    ? TFields[K]["_TOutput"]
+>TFields : Symbol(TFields, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 23, 16))
+>K : Symbol(K, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 24, 3))
+
+    : never;
+};
+
+declare function string(): Type<string>;
+>string : Symbol(string, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 27, 2))
+>Type : Symbol(Type, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 17, 31))
+
+export class A extends Class<A>("A")(
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 29, 40))
+>Class : Symbol(Class, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 6, 1), Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 12, 13))
+>A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 29, 40))
+
+  { a: string },
+>a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 32, 3))
+>string : Symbol(string, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 27, 2))
+  {
+    pretty: (a) => JSON.stringify(a),
+>pretty : Symbol(pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 33, 3))
+>a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
+
+  },
+) {}
+

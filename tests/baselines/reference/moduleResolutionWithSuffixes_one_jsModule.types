@@ -36,7 +36,7 @@ exports.ios = ios;
 >ios : () => void
 >    : ^^^^^^^^^^
 >ios : () => void
->    :           
+>    : ^^^^^^^^^^
 
 === /foo.js ===
 "use strict";
@@ -69,5 +69,5 @@ exports.base = base;
 >base : () => void
 >     : ^^^^^^^^^^
 >base : () => void
->     :           
+>     : ^^^^^^^^^^
 

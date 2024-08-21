@@ -90,7 +90,7 @@ class D extends C {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => this.c + 1 : () => number
->                 :             
+>                 : ^^^^^^^^^^^^
 >this.c + 1 : number
 >           : ^^^^^^
 >this.c : number
@@ -106,7 +106,7 @@ class D extends C {
 >ff : () => void
 >   : ^^^^^^^^^^
 >function () { this.c + 1 } : () => void
->                           :           
+>                           : ^^^^^^^^^^
 >this.c + 1 : any
 >           : ^^^
 >this.c : any
@@ -251,7 +251,7 @@ class DD extends CC {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => this.c + 1 : () => number
->                 :             
+>                 : ^^^^^^^^^^^^
 >this.c + 1 : number
 >           : ^^^^^^
 >this.c : number
@@ -267,7 +267,7 @@ class DD extends CC {
 >ff : () => void
 >   : ^^^^^^^^^^
 >function () { this.c + 1 } : () => void
->                           :           
+>                           : ^^^^^^^^^^
 >this.c + 1 : any
 >           : ^^^
 >this.c : any

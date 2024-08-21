@@ -71,7 +71,6 @@ import {
     ReportEmitErrorSummary,
     SolutionBuilder,
     SolutionBuilderHostBase,
-    sort,
     SourceFile,
     startsWith,
     startTracing,
@@ -80,14 +79,15 @@ import {
     sys,
     System,
     toPath,
+    toSorted,
     tracing,
     validateLocaleAndSetLanguage,
     version,
     WatchCompilerHost,
     WatchOfConfigFile,
     WatchOptions,
-} from "./_namespaces/ts";
-import * as performance from "./performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./performance.js";
 
 interface Statistic {
     name: string;
@@ -170,7 +170,7 @@ function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
 function getOptionsForHelp(commandLine: ParsedCommandLine) {
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
-        sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+        toSorted(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
         filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
 }
 
@@ -653,7 +653,7 @@ function executeCommandLineWorker(
                 configParseResult.errors.forEach(reportDiagnostic);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }
@@ -693,7 +693,7 @@ function executeCommandLineWorker(
     }
     else {
         if (commandLineOptions.showConfig) {
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }

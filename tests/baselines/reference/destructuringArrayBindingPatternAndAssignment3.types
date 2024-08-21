@@ -30,20 +30,20 @@ const [c, d = c, e = e] = [1]; // error for e = e
 >  : ^
 
 const [f, g = f, h = i, i = f] = [1]; // error for h = i
->f : any
->  : ^^^
->g : any
->  : ^^^
->f : any
->  : ^^^
->h : any
->  : ^^^
->i : any
->  : ^^^
->i : any
->  : ^^^
->f : any
->  : ^^^
+>f : number
+>  : ^^^^^^
+>g : number
+>  : ^^^^^^
+>f : number
+>  : ^^^^^^
+>h : number
+>  : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i : number
+>  : ^^^^^^
+>f : number
+>  : ^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1

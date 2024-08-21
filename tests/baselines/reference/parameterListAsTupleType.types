@@ -23,7 +23,7 @@ const x = (a: number) => 5;
 >x : (a: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(a: number) => 5 : (a: number) => number
->                 :                      
+>                 : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >5 : 5

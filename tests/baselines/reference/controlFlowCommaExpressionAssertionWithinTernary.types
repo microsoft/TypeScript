@@ -34,7 +34,7 @@ function foo2(param: number | null | undefined): number | null {
 >assert(param !== undefined) : void
 >                            : ^^^^
 >assert : (value: any) => asserts value
->       : ^     ^^   ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^   ^^^^^             
 >param !== undefined : boolean
 >                    : ^^^^^^^
 >param : number | null

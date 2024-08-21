@@ -13,7 +13,7 @@ export const username = () => 'username';
 >username : () => string
 >         : ^^^^^^^^^^^^
 >() => 'username' : () => string
->                 :             
+>                 : ^^^^^^^^^^^^
 >'username' : "username"
 >           : ^^^^^^^^^^
 
@@ -25,7 +25,7 @@ const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >sayHello : (name?: string) => any
 >         : ^    ^^^      ^^^^^^^^
 >(name?: string) => void (`Hello, ${name}!`) : (name?: string) => any
->                                            :      ^                
+>                                            : ^    ^^^      ^^^^^^^^
 >name : string
 >     : ^^^^^^
 >void (`Hello, ${name}!`) : undefined

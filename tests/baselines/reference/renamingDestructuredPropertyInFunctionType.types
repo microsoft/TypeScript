@@ -304,7 +304,7 @@ const f2 = function({ a: string }: O) { };
 >f2 : ({ a: string }: O) => void
 >   : ^             ^^ ^^^^^^^^^
 >function({ a: string }: O) { } : ({ a: string }: O) => void
->                               :                           
+>                               : ^             ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -314,7 +314,7 @@ const f3 = ({ a: string, b, c }: O) => { };
 >f3 : ({ a: string, b, c }: O) => void
 >   : ^                   ^^ ^^^^^^^^^
 >({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
->                                :                                 
+>                                : ^                   ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -328,7 +328,7 @@ const f4 = function({ a: string }: O): typeof string { return string; };
 >f4 : ({ a: string }: O) => typeof string
 >   : ^             ^^ ^^^^^             
 >function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => typeof string
->                                                             :                                    
+>                                                             : ^             ^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string
@@ -342,7 +342,7 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 >f5 : ({ a: string, b, c }: O) => typeof string
 >   : ^                   ^^ ^^^^^             
 >({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => typeof string
->                                              :                                          
+>                                              : ^                   ^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string
@@ -404,7 +404,7 @@ const f7 = ({ a: string = "", b, c }: O) => { };
 >f7 : ({ a: string, b, c }: O) => void
 >   : ^                   ^^ ^^^^^^^^^
 >({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
->                                     :                                 
+>                                     : ^                   ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -420,7 +420,7 @@ const f8 = ({ "a": string }: O) => { };
 >f8 : ({ "a": string }: O) => void
 >   : ^               ^^ ^^^^^^^^^
 >({ "a": string }: O) => { } : ({ "a": string }: O) => void
->                            :                             
+>                            : ^               ^^ ^^^^^^^^^
 >string : string
 >       : ^^^^^^
 
@@ -442,7 +442,7 @@ const f11 =  ({ [2]: string }) => { };
 >f11 : ({ [2]: string }: { 2: any; }) => void
 >    : ^               ^^^^^^^^^^^^^^^^^^^^^^
 >({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
->                         :                                       
+>                         : ^               ^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >string : any

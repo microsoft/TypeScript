@@ -22,6 +22,6 @@ let x = class B implements A {
 >func : () => void
 >     : ^^^^^^^^^^
 >() => {    } : () => void
->             :           
+>             : ^^^^^^^^^^
     }
 };

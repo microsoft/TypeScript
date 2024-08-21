@@ -5,7 +5,7 @@ var v = (public x: string) => { };
 >v : (x: string) => void
 >  : ^ ^^      ^^^^^^^^^
 >(public x: string) => { } : (x: string) => void
->                          :                    
+>                          : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

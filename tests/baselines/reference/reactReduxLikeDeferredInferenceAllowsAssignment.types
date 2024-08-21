@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 800 / 800 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 26,000 / 26,000 (nearest 500)
+Instantiation count: 2,500
 
 === reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {
@@ -179,7 +176,7 @@ type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 
 declare const connect: {
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^              ^^^  ^^         ^^^  ^^               ^^                ^^                  ^^              ^^^^^                                                                             
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
@@ -262,7 +259,7 @@ const simpleAction = (payload: boolean) => ({
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
 >             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(payload: boolean) => ({  type: "SIMPLE_ACTION",  payload}) : (payload: boolean) => { type: string; payload: boolean; }
->                                                            :                                                          
+>                                                            : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >payload : boolean
 >        : ^^^^^^^
 >({  type: "SIMPLE_ACTION",  payload}) : { type: string; payload: boolean; }
@@ -285,7 +282,7 @@ const thunkAction = (param1: number, param2: string) => async (
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
 >            : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 >(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->                                                                                                        :                                                                                               
+>                                                                                                        : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 >param1 : number
 >       : ^^^^^^
 >param2 : string
@@ -337,7 +334,7 @@ const mapDispatchToProps = { simpleAction, thunkAction };
 >mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
 >                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
->                              : ^^^^^^^^^^^^^^^^                                                         ^^^^^^^^^^^^^^^                                                                                              ^^^
+>                              : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
 >             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
@@ -357,7 +354,7 @@ const Test1 = connect(
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^              ^^^  ^^^^^^^^^^^^^^  ^^               ^^                ^^                  ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   null,
   mapDispatchToProps

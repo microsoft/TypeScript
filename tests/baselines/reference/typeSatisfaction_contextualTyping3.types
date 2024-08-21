@@ -7,7 +7,7 @@ const obj = {
 >obj : { foo: (param?: any) => any; }
 >    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} satisfies {   [key: string]: (...params: any) => any;} : { foo: (param?: any) => any; }
->                                                                                               : ^^^^^^^      ^             ^^^
+>                                                                                               : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} : { foo: (param?: any) => any; }
 >                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
 
@@ -15,7 +15,7 @@ const obj = {
 >foo : (param?: any) => any
 >    : ^     ^^^^^^^^^^^^^^
 >(param = "default") => param : (param?: any) => any
->                             :       ^             
+>                             : ^     ^^^^^^^^^^^^^^
 >param : any
 >"default" : "default"
 >          : ^^^^^^^^^
@@ -33,7 +33,7 @@ const obj2 = {
 >obj2 : { foo: (param?: string) => string; }
 >     : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} satisfies {   [key: string]: Function;} : { foo: (param?: string) => string; }
->                                                                                : ^^^^^^^      ^                   ^^^
+>                                                                                : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} : { foo: (param?: string) => string; }
 >                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ const obj2 = {
 >foo : (param?: string) => string
 >    : ^     ^^^^^^^^^^^^^^^^^^^^
 >(param = "default") => param : (param?: string) => string
->                             :       ^                   
+>                             : ^     ^^^^^^^^^^^^^^^^^^^^
 >param : string
 >      : ^^^^^^
 >"default" : "default"
@@ -66,7 +66,7 @@ const fn = ((x = "ok") => null) satisfies StringOrNumberFunc;
 >fn : (x?: string | number) => null
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >((x = "ok") => null) satisfies StringOrNumberFunc : (x?: string | number) => null
->                                                  :   ^                          
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >((x = "ok") => null) : (x?: string | number) => null
 >                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x = "ok") => null : (x?: string | number) => null

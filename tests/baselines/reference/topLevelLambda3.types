@@ -5,7 +5,7 @@ var f = () => {this.window;}
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {this.window;} : () => void
->                     :           
+>                     : ^^^^^^^^^^
 >this.window : Window & typeof globalThis
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis

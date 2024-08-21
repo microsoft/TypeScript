@@ -17,11 +17,11 @@ var r = c.toString();
 >c.toString() : string
 >             : ^^^^^^
 >c.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >c : C
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r2 = c.hasOwnProperty('');
 >r2 : boolean
@@ -29,11 +29,11 @@ var r2 = c.hasOwnProperty('');
 >c.hasOwnProperty('') : boolean
 >                     : ^^^^^^^
 >c.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >c : C
 >  : ^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'' : ""
 >   : ^^
 

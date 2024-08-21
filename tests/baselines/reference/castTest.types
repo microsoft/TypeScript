@@ -52,7 +52,7 @@ var f = <(res : number) => void>null;
 >f : (res: number) => void
 >  : ^   ^^      ^^^^^    
 ><(res : number) => void>null : (res: number) => void
->                             :                      
+>                             : ^   ^^      ^^^^^    
 >res : number
 >    : ^^^^^^
 
@@ -115,7 +115,7 @@ var p_cast = <Point> ({
 >add : (dx: number, dy: number) => Point
 >    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
->                                                                           :                                  
+>                                                                           : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -148,7 +148,7 @@ var p_cast = <Point> ({
 >mult : (p: Point) => Point
 >     : ^ ^^^^^^^^^^^^^^^^^
 >function(p) { return p; } : (p: Point) => Point
->                          :                    
+>                          : ^ ^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >p : Point

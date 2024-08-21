@@ -21,7 +21,7 @@ var f = function () { };
 >f : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
->                :           
+>                : ^^^^^^^^^^
 
 var r1 = o['data']; // Should be number
 >r1 : number

@@ -30,13 +30,13 @@ Color.prototype = {
 >prototype : { negate: () => this; lighten: (ratio: any) => this; darken: (ratio: any) => this; saturate: (ratio: any) => this; desaturate: (ratio: any) => this; whiten: (ratio: any) => this; blacken: (ratio: any) => this; greyscale: () => this; clearer: (ratio: any) => this; toJSON: () => any; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{	negate: function () {return this;},	lighten: function (ratio) {return this;},	darken: function (ratio) {return this;},	saturate: function (ratio) {return this;},	desaturate: function (ratio) {return this;},	whiten: function (ratio) {return this;},	blacken: function (ratio) {return this;},	greyscale: function () {return this;},	clearer: function (ratio) {return this;},	toJSON: function () {return this.rgb();},} : { negate: () => this; lighten: (ratio: any) => this; darken: (ratio: any) => this; saturate: (ratio: any) => this; desaturate: (ratio: any) => this; whiten: (ratio: any) => this; blacken: (ratio: any) => this; greyscale: () => this; clearer: (ratio: any) => this; toJSON: () => any; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^          ^^^^^^^^^^^                    ^^^^^^^^^^                    ^^^^^^^^^^^^                    ^^^^^^^^^^^^^^                    ^^^^^^^^^^                    ^^^^^^^^^^^                    ^^^^^^^^^^^^^          ^^^^^^^^^^^                    ^^^^^^^^^^         ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	negate: function () {return this;},
 >negate : () => this
 >       : ^^^^^^^^^^
 >function () {return this;} : () => this
->                           :           
+>                           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -44,7 +44,7 @@ Color.prototype = {
 >lighten : (ratio: any) => this
 >        : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -54,7 +54,7 @@ Color.prototype = {
 >darken : (ratio: any) => this
 >       : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -64,7 +64,7 @@ Color.prototype = {
 >saturate : (ratio: any) => this
 >         : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -74,7 +74,7 @@ Color.prototype = {
 >desaturate : (ratio: any) => this
 >           : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -84,7 +84,7 @@ Color.prototype = {
 >whiten : (ratio: any) => this
 >       : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -94,7 +94,7 @@ Color.prototype = {
 >blacken : (ratio: any) => this
 >        : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -104,7 +104,7 @@ Color.prototype = {
 >greyscale : () => this
 >          : ^^^^^^^^^^
 >function () {return this;} : () => this
->                           :           
+>                           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -112,7 +112,7 @@ Color.prototype = {
 >clearer : (ratio: any) => this
 >        : ^     ^^^^^^^^^^^^^^
 >function (ratio) {return this;} : (ratio: any) => this
->                                :                     
+>                                : ^     ^^^^^^^^^^^^^^
 >ratio : any
 >      : ^^^
 >this : this
@@ -122,7 +122,7 @@ Color.prototype = {
 >toJSON : () => any
 >       : ^^^^^^^^^
 >function () {return this.rgb();} : () => any
->                                 :          
+>                                 : ^^^^^^^^^
 >this.rgb() : any
 >           : ^^^
 >this.rgb : any

@@ -36,6 +36,6 @@ declare namespace exports {
 >        : ^^^^^^^^^^^^^^
 
     export { Sub };
->Sub : typeof import("input").Sub
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Sub : typeof Sub
+>    : ^^^^^^^^^^
 }

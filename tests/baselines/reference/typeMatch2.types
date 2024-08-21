@@ -321,7 +321,7 @@ function f4() {
 >mf : (n: any) => boolean
 >   : ^ ^^^^^^^^^^^^^^^^^
 >function m(n) { return false; } : (n: any) => boolean
->                                :                    
+>                                : ^ ^^^^^^^^^^^^^^^^^
 >m : (n: any) => boolean
 >  : ^ ^^^^^^^^^^^^^^^^^
 >n : any
@@ -333,7 +333,7 @@ function f4() {
 >zf : (n: number) => boolean
 >   : ^ ^^      ^^^^^^^^^^^^
 >function z(n: number) { return true; } : (n: number) => boolean
->                                       :                       
+>                                       : ^ ^^      ^^^^^^^^^^^^
 >z : (n: number) => boolean
 >  : ^ ^^      ^^^^^^^^^^^^
 >n : number

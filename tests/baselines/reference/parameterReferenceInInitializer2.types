@@ -7,7 +7,7 @@ function Example(x = function(x: any) { return x; }) { // Error: parameter 'x' c
 >x : (x: any) => any
 >  : ^ ^^   ^^^^^^^^
 >function(x: any) { return x; } : (x: any) => any
->                               :                
+>                               : ^ ^^   ^^^^^^^^
 >x : any
 >x : any
 

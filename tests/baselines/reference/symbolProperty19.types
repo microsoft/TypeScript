@@ -5,7 +5,7 @@ var i = {
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag](): { p: any; }; }
->                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.iterator]: { p: null },
 >[Symbol.iterator] : { p: null; }
@@ -42,7 +42,7 @@ var it = i[Symbol.iterator];
 >it : { p: any; }
 >   : ^^^^^^^^^^^
 >i[Symbol.iterator] : { p: any; }
->                   :            
+>                   : ^^^^^^^^^^^
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
@@ -56,7 +56,7 @@ var str = i[Symbol.toStringTag]();
 >str : { p: any; }
 >    : ^^^^^^^^^^^
 >i[Symbol.toStringTag]() : { p: any; }
->                        :            
+>                        : ^^^^^^^^^^^
 >i[Symbol.toStringTag] : () => { p: any; }
 >                      : ^^^^^^^^^^^^^^^^^
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }

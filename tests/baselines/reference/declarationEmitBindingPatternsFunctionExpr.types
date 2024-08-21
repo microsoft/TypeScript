@@ -12,7 +12,7 @@ let notReferenced = ({ name: alias }: Named) => { }
 >notReferenced : ({ name: alias }: Named) => void
 >              : ^               ^^     ^^^^^^^^^
 >({ name: alias }: Named) => { } : ({ name: alias }: Named) => void
->                                :                                 
+>                                : ^               ^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >alias : string
@@ -25,7 +25,7 @@ const duplicateIndetifiers = ({ name: alias, name: alias2 }: Named) => { }
 >duplicateIndetifiers : ({ name: alias, name: alias2 }: Named) => void
 >                     : ^                             ^^     ^^^^^^^^^
 >({ name: alias, name: alias2 }: Named) => { } : ({ name: alias, name: alias2 }: Named) => void
->                                              :                                               
+>                                              : ^                             ^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >alias : string
@@ -39,7 +39,7 @@ const duplicateIndetifiers2 = (name: string, { name: alias }: Named) => { }
 >duplicateIndetifiers2 : (name: string, { name: alias }: Named) => void
 >                      : ^    ^^      ^^               ^^     ^^^^^^^^^
 >(name: string, { name: alias }: Named) => { } : (name: string, { name: alias }: Named) => void
->                                              :                                               
+>                                              : ^    ^^      ^^               ^^     ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >name : any
@@ -51,7 +51,7 @@ const duplicateIndetifiers3 = ({ name: alias }: Named, { name: alias2 }: Named) 
 >duplicateIndetifiers3 : ({ name: alias }: Named, { name: alias2 }: Named) => void
 >                      : ^               ^^     ^^                ^^     ^^^^^^^^^
 >({ name: alias }: Named, { name: alias2 }: Named) => { } : ({ name: alias }: Named, { name: alias2 }: Named) => void
->                                                         :                                                          
+>                                                         : ^               ^^     ^^                ^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >alias : string
@@ -72,7 +72,7 @@ const shadowedVariable = ({ value: alias }: { value: string }): typeof value => 
 >shadowedVariable : ({ value: alias }: { value: string; }) => typeof value
 >                 : ^                ^^                  ^^^^^            
 >({ value: alias }: { value: string }): typeof value => value : ({ value: alias }: { value: string; }) => typeof value
->                                                             :                                                       
+>                                                             : ^                ^^                  ^^^^^            
 >value : any
 >      : ^^^
 >alias : string

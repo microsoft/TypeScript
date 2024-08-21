@@ -1,0 +1,121 @@
+//// [tests/cases/conformance/asyncGenerators/asyncGeneratorPromiseNextType.ts] ////
+
+=== asyncGeneratorPromiseNextType.ts ===
+// https://github.com/microsoft/TypeScript/issues/44808
+
+type Result = {message: string}
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+>message : Symbol(message, Decl(asyncGeneratorPromiseNextType.ts, 2, 15))
+
+async function *saverGen(): AsyncGenerator<void, void, Promise<Result> | undefined> {
+>saverGen : Symbol(saverGen, Decl(asyncGeneratorPromiseNextType.ts, 2, 31))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+    let pending: Promise<Result>[] = [];
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 5, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+    while (true) {
+        const p: Promise<Result> | undefined = yield;
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 7, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+        if (p != null)
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 7, 13))
+
+            pending.push(p);
+>pending.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 5, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 7, 13))
+
+        else {
+            const results = await Promise.all(pending);
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 11, 17))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 5, 7))
+
+            pending = [];
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 5, 7))
+
+            console.log('Storing...');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+            await storeResults(results);
+>storeResults : Symbol(storeResults, Decl(asyncGeneratorPromiseNextType.ts, 17, 1))
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 11, 17))
+        }
+    }
+}
+
+function storeResults(results: Result[]) {
+>storeResults : Symbol(storeResults, Decl(asyncGeneratorPromiseNextType.ts, 17, 1))
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 19, 22))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+    console.log(results);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 19, 22))
+
+    return Promise.resolve();
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}
+
+async function *saverGen2() {
+>saverGen2 : Symbol(saverGen2, Decl(asyncGeneratorPromiseNextType.ts, 22, 1))
+
+    let pending: Promise<Result>[] = [];
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 25, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+    while (true) {
+        const p: Promise<Result> | undefined = yield;
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 27, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(asyncGeneratorPromiseNextType.ts, 0, 0))
+
+        if (p != null)
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 27, 13))
+
+            pending.push(p);
+>pending.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 25, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(asyncGeneratorPromiseNextType.ts, 27, 13))
+
+        else {
+            const results = await Promise.all(pending);
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 31, 17))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 25, 7))
+
+            pending = [];
+>pending : Symbol(pending, Decl(asyncGeneratorPromiseNextType.ts, 25, 7))
+
+            console.log('Storing...');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+            await storeResults(results);
+>storeResults : Symbol(storeResults, Decl(asyncGeneratorPromiseNextType.ts, 17, 1))
+>results : Symbol(results, Decl(asyncGeneratorPromiseNextType.ts, 31, 17))
+        }
+    }
+}
+

@@ -1,14 +1,14 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
     libContent,
-} from "./contents";
-import { loadProjectFromFiles } from "./vfs";
+} from "./contents.js";
+import { loadProjectFromFiles } from "./vfs.js";
 import {
     createWatchedSystem,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
     return jsonToReadableText({

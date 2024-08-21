@@ -13,7 +13,7 @@ class C {
 >fn : () => Promise<this>
 >   : ^^^^^^^^^^^^^^^^^^^
 >async () => await this : () => Promise<this>
->                       :                    
+>                       : ^^^^^^^^^^^^^^^^^^^
 >await this : this
 >           : ^^^^
 >this : this

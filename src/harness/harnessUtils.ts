@@ -1,12 +1,12 @@
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+import vm from "vm";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 export function encodeString(s: string): string {
     return Buffer.from(s).toString("utf8");
 }
 
 export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
-    const vm = require("vm");
     if (nodeContext) {
         vm.runInNewContext(fileContents, nodeContext, fileName);
     }
@@ -41,7 +41,7 @@ export function readTestFile(path: string) {
     try {
         content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
     }
-    catch (err) {
+    catch {
         return undefined;
     }
 
@@ -205,10 +205,6 @@ export function sourceFileToJSON(file: ts.Node): string {
                     }
                     break;
 
-                case "originalKeywordKind":
-                    o[propertyName] = getKindName((n as any)[propertyName]);
-                    break;
-
                 case "flags":
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
@@ -337,7 +333,7 @@ const maxHarnessFrames = 1;
 export function filterStack(error: Error, stackTraceLimit = Infinity) {
     const stack = (error as any).stack as string;
     if (stack) {
-        const lines = stack.split(/\r\n?|\n/g);
+        const lines = stack.split(/\r\n?|\n/);
         const filtered: string[] = [];
         let frameCount = 0;
         let harnessFrameCount = 0;
@@ -359,7 +355,7 @@ export function filterStack(error: Error, stackTraceLimit = Infinity) {
                     harnessFrameCount++;
                 }
 
-                line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                line = line.replace(/\bfile:\/\/\/(.*?)(?=(?::\d+)*(?:$|\)))/, (_, path) => ts.sys.resolvePath(path));
                 frameCount++;
             }
 
@@ -377,11 +373,11 @@ function isStackFrame(line: string) {
 }
 
 function isMocha(line: string) {
-    return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
+    return /[\\/](?:node_modules|components)[\\/]mocha(?:js)?[\\/]|[\\/]mocha\.js/.test(line);
 }
 
 function isNode(line: string) {
-    return /\((timers|events|node|module)\.js:/.test(line);
+    return /\((?:timers|events|node|module)\.js:/.test(line);
 }
 
 function isHarness(line: string) {

@@ -12,7 +12,7 @@ class Foo {
 >prop : () => number
 >     : ^^^^^^^^^^^^
 >() => {        return 0;    } : () => number
->                              :             
+>                              : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0

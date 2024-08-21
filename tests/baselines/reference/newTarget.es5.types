@@ -18,7 +18,7 @@ class A {
 >b : () => typeof A
 >  : ^^^^^^^^^^^^^^
 >() => new.target : () => typeof A
->                 :               
+>                 : ^^^^^^^^^^^^^^
 >new.target : typeof A
 >           : ^^^^^^^^
 >target : typeof A
@@ -28,7 +28,7 @@ class A {
 >c : () => any
 >  : ^^^^^^^^^
 >function () { return new.target; } : () => any
->                                   :          
+>                                   : ^^^^^^^^^
 >new.target : () => any
 >           : ^^^^^^^^^
 >target : () => any
@@ -38,7 +38,7 @@ class A {
 >d : () => any
 >  : ^^^^^^^^^
 >function () { return new.target; } : () => any
->                                   :          
+>                                   : ^^^^^^^^^
 >new.target : () => any
 >           : ^^^^^^^^^
 >target : () => any
@@ -70,7 +70,7 @@ class B extends A {
 >f : () => typeof B
 >  : ^^^^^^^^^^^^^^
 >() => new.target : () => typeof B
->                 :               
+>                 : ^^^^^^^^^^^^^^
 >new.target : typeof B
 >           : ^^^^^^^^
 >target : typeof B
@@ -86,7 +86,7 @@ function f1() {
 >g : () => void
 >  : ^^^^^^^^^^
 >new.target : () => void
->           :           
+>           : ^^^^^^^^^^
 >target : () => void
 >       : ^^^^^^^^^^
 
@@ -94,7 +94,7 @@ function f1() {
 >h : () => () => void
 >  : ^^^^^^^^^^^^^^^^
 >() => new.target : () => () => void
->                 :                 
+>                 : ^^^^^^^^^^^^^^^^
 >new.target : () => void
 >           : ^^^^^^^^^^
 >target : () => void
@@ -105,13 +105,13 @@ const f2 = function () {
 >f2 : () => void
 >   : ^^^^^^^^^^
 >function () {    const i = new.target;    const j = () => new.target;} : () => void
->                                                                       :           
+>                                                                       : ^^^^^^^^^^
 
     const i = new.target;
 >i : () => void
 >  : ^^^^^^^^^^
 >new.target : () => void
->           :           
+>           : ^^^^^^^^^^
 >target : () => void
 >       : ^^^^^^^^^^
 
@@ -119,7 +119,7 @@ const f2 = function () {
 >j : () => () => void
 >  : ^^^^^^^^^^^^^^^^
 >() => new.target : () => () => void
->                 :                 
+>                 : ^^^^^^^^^^^^^^^^
 >new.target : () => void
 >           : ^^^^^^^^^^
 >target : () => void
@@ -130,13 +130,13 @@ const O = {
 >O : { k: () => any; }
 >  : ^^^^^^^^^^^^^^^^^
 >{    k: function () { return new.target; }} : { k: () => any; }
->                                            : ^^^^^         ^^^
+>                                            : ^^^^^^^^^^^^^^^^^
 
     k: function () { return new.target; }
 >k : () => any
 >  : ^^^^^^^^^
 >function () { return new.target; } : () => any
->                                   :          
+>                                   : ^^^^^^^^^
 >new.target : () => any
 >           : ^^^^^^^^^
 >target : () => any

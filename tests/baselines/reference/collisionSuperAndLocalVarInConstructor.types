@@ -56,7 +56,7 @@ class c extends Foo {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {            var _super = 10; // Should be error        } : () => void
->                                                                :           
+>                                                                : ^^^^^^^^^^
 
             var _super = 10; // Should be error
 >_super : number

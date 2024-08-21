@@ -1,7 +1,7 @@
-import * as documents from "./_namespaces/documents";
-import { Compiler } from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
+import * as documents from "./_namespaces/documents.js";
+import { Compiler } from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;
@@ -44,7 +44,7 @@ namespace SourceMapDecoder {
 namespace SourceMapSpanWriter {
     let sourceMapRecorder: Compiler.WriterAggregator;
     let sourceMapSources: string[];
-    let sourceMapNames: string[] | null | undefined;
+    let sourceMapNames: string[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
     let jsFile: documents.TextDocument;
     let jsLineMap: readonly number[];

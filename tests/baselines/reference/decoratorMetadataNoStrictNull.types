@@ -5,7 +5,7 @@ const dec = (obj: {}, prop: string) => undefined
 >dec : (obj: {}, prop: string) => any
 >    : ^   ^^  ^^    ^^      ^^^^^^^^
 >(obj: {}, prop: string) => undefined : (obj: {}, prop: string) => any
->                                     :                               
+>                                     : ^   ^^  ^^    ^^      ^^^^^^^^
 >obj : {}
 >    : ^^
 >prop : string

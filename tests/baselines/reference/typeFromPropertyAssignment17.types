@@ -99,7 +99,7 @@ minimatch.filter = filter
 >filter : () => void
 >       : ^^^^^^^^^^
 >filter : () => void
->       :           
+>       : ^^^^^^^^^^
 
 function filter() {
 >filter : () => void
@@ -125,7 +125,7 @@ M.defaults = function (def) {
 >defaults : (def: any) => any
 >         : ^   ^^^^^^^^^^^^^
 >function (def) {    return def} : (def: any) => any
->                                :                  
+>                                : ^   ^^^^^^^^^^^^^
 >def : any
 
     return def

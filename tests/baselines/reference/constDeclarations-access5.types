@@ -304,7 +304,7 @@ m.x.toString();
 >m.x.toString() : string
 >               : ^^^^^^
 >m.x.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >m.x : 0
 >    : ^
 >m : typeof m
@@ -312,7 +312,7 @@ m.x.toString();
 >x : 0
 >  : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 === constDeclarations_access_1.ts ===
 export const x = 0;

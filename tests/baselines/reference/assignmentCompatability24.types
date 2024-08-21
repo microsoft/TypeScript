@@ -33,7 +33,7 @@ module __test2__ {
 >obj : <Tstring>(a: Tstring) => Tstring
 >    : ^       ^^ ^^       ^^^^^^^^^^^^
 >function f<Tstring>(a: Tstring) { return a; } : <Tstring>(a: Tstring) => Tstring
->                                              :                                 
+>                                              : ^       ^^ ^^       ^^^^^^^^^^^^
 >f : <Tstring>(a: Tstring) => Tstring
 >  : ^       ^^ ^^       ^^^^^^^^^^^^
 >a : Tstring
@@ -45,7 +45,7 @@ module __test2__ {
 >__val__obj : <Tstring>(a: Tstring) => Tstring
 >           : ^       ^^ ^^       ^^^^^^^^^^^^
 >obj : <Tstring>(a: Tstring) => Tstring
->    :                                 
+>    : ^       ^^ ^^       ^^^^^^^^^^^^
 }
 __test2__.__val__obj = __test1__.__val__obj4
 >__test2__.__val__obj = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>

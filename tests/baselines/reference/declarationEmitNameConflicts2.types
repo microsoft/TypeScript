@@ -43,7 +43,7 @@ module X.Y.base.Z {
 >f : () => void
 >  : ^^^^^^^^^^
 >X.Y.base.f : () => void
->           :           
+>           : ^^^^^^^^^^
 >X.Y.base : typeof base
 >         : ^^^^^^^^^^^
 >X.Y : typeof Y

@@ -25,7 +25,7 @@ for(;;) {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {        continue TWO;    } : () => void
->                                  :           
+>                                  : ^^^^^^^^^^
 
         continue TWO;
 >TWO : any
@@ -42,7 +42,7 @@ for(;;) {
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () {        continue THREE;    } : () => void
->                                          :           
+>                                          : ^^^^^^^^^^
 
         continue THREE;
 >THREE : any

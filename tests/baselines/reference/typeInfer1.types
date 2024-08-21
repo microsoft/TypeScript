@@ -25,7 +25,7 @@ var x: ITextWriter2 = {
 >Write : (s: string) => void
 >      : ^ ^^      ^^^^^    
 >function (s:string):void {} : (s: string) => void
->                            :                    
+>                            : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -33,7 +33,7 @@ var x: ITextWriter2 = {
 >WriteLine : (s: string) => void
 >          : ^ ^^      ^^^^^    
 >function(s:string):void {} : (s: string) => void
->                           :                    
+>                           : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 }
@@ -48,7 +48,7 @@ var yyyyyyyy: ITextWriter2 = {
 >Moo : () => string
 >    : ^^^^^^^^^^^^
 >function() { return "cow"; } : () => string
->                             :             
+>                             : ^^^^^^^^^^^^
 >"cow" : "cow"
 >      : ^^^^^
 }

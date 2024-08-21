@@ -5,7 +5,7 @@ var obj = function f<T>(a: T) { // should not error
 >obj : <T>(a: T) => T
 >    : ^ ^^ ^^ ^^^^^^
 >function f<T>(a: T) { // should not error    var x: T;    return a;} : <T>(a: T) => T
->                                                                     :               
+>                                                                     : ^ ^^ ^^ ^^^^^^
 >f : <T>(a: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >a : T
@@ -25,7 +25,7 @@ var obj2 = function f<T>(a: T): T { // should not error
 >obj2 : <T>(a: T) => T
 >     : ^ ^^ ^^ ^^^^^ 
 >function f<T>(a: T): T { // should not error    var x: T;    return a;} : <T>(a: T) => T
->                                                                        :               
+>                                                                        : ^ ^^ ^^ ^^^^^ 
 >f : <T>(a: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >a : T

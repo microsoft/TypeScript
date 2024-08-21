@@ -23,7 +23,7 @@ class a {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                var _this = 2;                return callback(_this);            } : (callback: any) => () => any
->                                                                                                        :                             
+>                                                                                                        : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                var _this = 2;                return callback(_this);            } : () => any
 >                                                                                          : ^^^^^^^^^
@@ -60,7 +60,7 @@ class a {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(_this);            } : (callback: any) => () => any
->                                                                          :                             
+>                                                                          : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(_this);            } : () => any
 >                                                            : ^^^^^^^^^

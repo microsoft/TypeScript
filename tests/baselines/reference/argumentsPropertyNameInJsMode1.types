@@ -5,13 +5,13 @@ const foo = {
 >foo : { f1: (params: any) => void; }
 >    : ^^^^^^^      ^^^^^^^^^^^^^^^^^
 >{   f1: (params) => { }} : { f1: (params: any) => void; }
->                         : ^^^^^^                     ^^^
+>                         : ^^^^^^^      ^^^^^^^^^^^^^^^^^
 
    f1: (params) => { }
 >f1 : (params: any) => void
 >   : ^      ^^^^^^^^^^^^^^
 >(params) => { } : (params: any) => void
->                :                      
+>                : ^      ^^^^^^^^^^^^^^
 >params : any
 >       : ^^^
 }

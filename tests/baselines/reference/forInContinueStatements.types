@@ -123,7 +123,7 @@ for (var x in {}){
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () { } : () => void
->                :           
+>                : ^^^^^^^^^^
 
     continue EIGHT;
 >EIGHT : any

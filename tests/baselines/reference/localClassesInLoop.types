@@ -40,11 +40,11 @@ for (let x = 0; x < 2; ++x) {
 >data.push(() => C) : number
 >                   : ^^^^^^
 >data.push : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >data : any[]
 >     : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >() => C : () => typeof C
 >        : ^^^^^^^^^^^^^^
 >C : typeof C

@@ -23,7 +23,7 @@ class Bar<T> {
 >callme(new Foo(this)) : Foo<any>
 >                      : ^^^^^^^^
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >new Foo(this) : Foo<T>
 >              : ^^^^^^
 >Foo : typeof Foo
@@ -45,7 +45,7 @@ class Bar<T> {
 >callme(new Foo(this)) : Foo<any>
 >                      : ^^^^^^^^
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >new Foo(this) : Foo<T>
 >              : ^^^^^^
 >Foo : typeof Foo
@@ -59,13 +59,13 @@ class Bar<T> {
 }
 declare function callme(x: Foo<any>): Foo<any>;
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
->       : ^^^ ^^        ^^^        ^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : Foo<any>
 >  : ^^^^^^^^
 
 declare function callme(x: object): string;
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^      ^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : object
 >  : ^^^^^^
 

@@ -2,8 +2,13 @@ import {
     createWatchUtils,
     Watches,
     WatchUtils,
-} from "../../../harness/watchUtils";
+} from "../../../harness/watchUtils.js";
 import {
+    CreateDirectoryWatcherEventBody,
+    CreateFileWatcherEventBody,
+} from "../../../server/protocol.js";
+import {
+    append,
     arrayFrom,
     clear,
     clone,
@@ -43,9 +48,10 @@ import {
     SortedArray,
     sys,
     toPath,
-} from "../../_namespaces/ts";
-import { typingsInstaller } from "../../_namespaces/ts.server";
-import { timeIncrements } from "../../_namespaces/vfs";
+} from "../../_namespaces/ts.js";
+import { typingsInstaller } from "../../_namespaces/ts.server.js";
+import { timeIncrements } from "../../_namespaces/vfs.js";
+import { sanitizeSysOutput } from "./baseline.js";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -274,11 +280,13 @@ type TimeOutCallback = (...args: any[]) => void;
 export interface TestFileWatcher {
     cb: FileWatcherCallback;
     pollingInterval: PollingInterval;
+    event?: CreateFileWatcherEventBody;
 }
 
 export interface TestFsWatcher {
     cb: FsWatchCallback;
     inode: number | undefined;
+    event?: CreateDirectoryWatcherEventBody;
 }
 
 export interface WatchInvokeOptions {
@@ -360,6 +368,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     watchDirectory: HostWatchDirectory;
     service?: server.ProjectService;
     osFlavor: TestServerHostOsFlavor;
+    preferNonRecursiveWatch: boolean;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
@@ -387,6 +396,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
+        this.preferNonRecursiveWatch = this.osFlavor === TestServerHostOsFlavor.Linux;
         this.inodeWatching = this.osFlavor !== TestServerHostOsFlavor.Windows;
         if (this.inodeWatching) this.inodes = new Map();
 
@@ -402,7 +412,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             fileSystemEntryExists: this.fileSystemEntryExists.bind(this),
             useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
             getCurrentDirectory: this.getCurrentDirectory.bind(this),
-            fsSupportsRecursiveFsWatch: this.osFlavor !== TestServerHostOsFlavor.Linux,
+            fsSupportsRecursiveFsWatch: !this.preferNonRecursiveWatch,
             getAccessibleSortedChildDirectories: path => this.getDirectories(path),
             realpath: this.realpath.bind(this),
             tscWatchFile,
@@ -456,6 +466,17 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     setTime(time: number) {
         this.time = time;
+    }
+
+    switchToBaseliningInvoke(logger: StateLogger, serializeOutputOrder: SerializeOutputOrder) {
+        const originalSetTime = this.setTime;
+        this.setTime = time => {
+            logger.log(`Host is moving to new time`);
+            return originalSetTime.call(this, time);
+        };
+        this.timeoutCallbacks.switchToBaseliningInvoke(logger, serializeOutputOrder);
+        this.immediateCallbacks.switchToBaseliningInvoke(logger, serializeOutputOrder);
+        this.pendingInstalls.switchToBaseliningInvoke(logger, serializeOutputOrder);
     }
 
     private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
@@ -535,33 +556,33 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.addFileOrFolderInFolder(baseFolder, newFile);
     }
 
-    renameFolder(folderName: string, newFolderName: string) {
+    renameFolder(folderName: string, newFolderName: string, skipFolderEntryWatches?: true) {
         const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
         const path = this.toPath(fullPath);
         const folder = this.fs.get(path) as FsFolder;
         Debug.assert(!!folder);
 
+        const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+        const newFolder = this.toFsFolder(newFullPath);
+
+        // Invoke watches for files in the folder as deleted (from old path)
+        this.renameFolderEntries(folder, newFolder, skipFolderEntryWatches);
+
         // Only remove the folder
         this.removeFileOrFolder(folder, /*isRenaming*/ true);
 
         // Add updated folder with new folder name
-        const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
-        const newFolder = this.toFsFolder(newFullPath);
         const newPath = newFolder.path;
-        const basePath = getDirectoryPath(path);
-        Debug.assert(basePath !== path);
-        Debug.assert(basePath === getDirectoryPath(newPath));
+        const basePath = getDirectoryPath(newPath);
+        this.ensureFileOrFolder({ path: getDirectoryPath(newFullPath) });
         const baseFolder = this.fs.get(basePath) as FsFolder;
         this.addFileOrFolderInFolder(baseFolder, newFolder);
-
-        // Invoke watches for files in the folder as deleted (from old path)
-        this.renameFolderEntries(folder, newFolder);
     }
 
-    private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder) {
+    private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder, skipWatches: true | undefined) {
         for (const entry of oldFolder.entries) {
             this.fs.delete(entry.path);
-            this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted, entry.fullPath);
+            if (!skipWatches) this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted, entry.fullPath);
 
             entry.fullPath = combinePaths(newFolder.fullPath, getBaseFileName(entry.fullPath));
             entry.path = this.toPath(entry.fullPath);
@@ -570,9 +591,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             }
             this.fs.set(entry.path, entry);
             this.setInode(entry.path);
-            this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created, entry.fullPath);
+            if (!skipWatches) this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created, entry.fullPath);
             if (isFsFolder(entry)) {
-                this.renameFolderEntries(entry, entry);
+                this.renameFolderEntries(entry, entry, skipWatches);
             }
         }
     }
@@ -1180,11 +1201,7 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
 function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
     let baselinedOutput: string[] | undefined;
     for (let i = start; i < end; i++) {
-        (baselinedOutput ||= []).push(
-            output[i]
-                .replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-                .replace(/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s(A|P)M/g, "HH:MM:SS AM"),
-        );
+        baselinedOutput = append(baselinedOutput, sanitizeSysOutput(output[i]));
     }
     if (baselinedOutput) baseline.push(baselinedOutput.join(""));
 }

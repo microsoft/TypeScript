@@ -27,7 +27,7 @@ class Foo {
 >f : () => string
 >  : ^^^^^^^^^^^^
 >() => this.x : () => string
->             :             
+>             : ^^^^^^^^^^^^
 >this.x : string
 >       : ^^^^^^
 >this : this

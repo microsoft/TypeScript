@@ -27,7 +27,7 @@ do {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {        continue TWO;    } : () => void
->                                  :           
+>                                  : ^^^^^^^^^^
 
         continue TWO;
 >TWO : any
@@ -46,7 +46,7 @@ do {
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () {        continue THREE;    } : () => void
->                                          :           
+>                                          : ^^^^^^^^^^
 
         continue THREE;
 >THREE : any

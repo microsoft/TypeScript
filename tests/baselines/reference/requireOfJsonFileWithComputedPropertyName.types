@@ -9,7 +9,7 @@ let x = b1;
 >x : { [x: number]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [x: number]: number; }
->   :                         
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 import b2 = require('./b.json');
 >b2 : { [x: number]: number; }
@@ -25,7 +25,7 @@ if (x) {
 >x : { [x: number]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [x: number]: number; }
->   :                         
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 === b.json ===

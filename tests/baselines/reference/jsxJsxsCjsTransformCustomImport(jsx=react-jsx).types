@@ -1,10 +1,10 @@
 //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,100 / 2,200 (nearest 100)
-Type Count: 7,600 / 7,600 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 67,000 / 67,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxJsxsCjsTransformCustomImport.tsx ===
 /// <reference path="react16.d.ts" />

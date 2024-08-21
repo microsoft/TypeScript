@@ -28,7 +28,7 @@ let Foo = class {
 >inc : () => void
 >    : ^^^^^^^^^^
 >() => {        this.bar++;    } : () => void
->                                :           
+>                                : ^^^^^^^^^^
 
         this.bar++;
 >this.bar++ : number

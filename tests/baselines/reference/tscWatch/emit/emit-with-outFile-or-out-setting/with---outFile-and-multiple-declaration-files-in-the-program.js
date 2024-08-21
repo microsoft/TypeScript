@@ -110,7 +110,12 @@ Program files::
 /a/b/project/src/main.ts
 /a/b/project/src/main2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/output/AnotherDependency/file1.d.ts
+/a/b/dependencies/file2.d.ts
+/a/b/project/src/main.ts
+/a/b/project/src/main2.ts
 
 No shapes updated in the builder::
 

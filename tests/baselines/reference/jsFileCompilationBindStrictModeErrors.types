@@ -100,7 +100,7 @@ var eval = function () {
 >eval : () => void
 >     : ^^^^^^^^^^
 >function () {} : () => void
->               :           
+>               : ^^^^^^^^^^
 
 };
 

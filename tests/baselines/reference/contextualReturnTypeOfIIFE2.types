@@ -24,7 +24,7 @@ app.foo.bar = (function () {
 >bar : { someFun: (arg: number) => void; }
 >    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >(function () {  const someFun = (arg: number) => {};  return { someFun };})() : { someFun: (arg: number) => void; }
->                                                                              :                                    
+>                                                                              : ^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >(function () {  const someFun = (arg: number) => {};  return { someFun };}) : () => { someFun: (arg: number) => void; }
 >                                                                            : ^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >function () {  const someFun = (arg: number) => {};  return { someFun };} : () => { someFun: (arg: number) => void; }
@@ -34,7 +34,7 @@ app.foo.bar = (function () {
 >someFun : (arg: number) => void
 >        : ^   ^^      ^^^^^^^^^
 >(arg: number) => {} : (arg: number) => void
->                    :                      
+>                    : ^   ^^      ^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 

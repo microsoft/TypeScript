@@ -31,7 +31,7 @@ var x = c.foo;
 >x : (x: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >c.foo : (x: number) => number
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >c : IC<number>
 >  : ^^^^^^^^^^
 >foo : (x: number) => number
@@ -41,7 +41,7 @@ var y = c.bar;
 >y : (x: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >c.bar : (x: number) => number
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >c : IC<number>
 >  : ^^^^^^^^^^
 >bar : (x: number) => number

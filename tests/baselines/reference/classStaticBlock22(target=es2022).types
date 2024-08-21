@@ -147,7 +147,7 @@ class C {
 >propLambda : () => void
 >           : ^^^^^^^^^^
 >() => { await; } : () => void
->                 :           
+>                 : ^^^^^^^^^^
 >await : "any"
 >      : ^^^^^
 
@@ -155,7 +155,7 @@ class C {
 >propFunc : () => void
 >         : ^^^^^^^^^^
 >function () { await; } : () => void
->                       :           
+>                       : ^^^^^^^^^^
 >await : "any"
 >      : ^^^^^
     }
@@ -197,7 +197,7 @@ class C {
 >propLambda : () => void
 >           : ^^^^^^^^^^
 >() => { await; } : () => void
->                 :           
+>                 : ^^^^^^^^^^
 >await : "any"
 >      : ^^^^^
 
@@ -205,7 +205,7 @@ class C {
 >propFunc : () => void
 >         : ^^^^^^^^^^
 >function () { await; } : () => void
->                       :           
+>                       : ^^^^^^^^^^
 >await : "any"
 >      : ^^^^^
     }

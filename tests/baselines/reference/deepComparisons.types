@@ -1,15 +1,13 @@
 //// [tests/cases/compiler/deepComparisons.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 2,000 / 2,000 (nearest 100)
-Instantiation count: 3,500 / 3,500 (nearest 500)
-Symbol count: 26,500 / 27,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 2,500
 
 === deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^^^^^^^^^^
 
     let v1: Extract<T, string> = 0 as any as T;  // Error
 >v1 : Extract<T, string>
@@ -56,7 +54,7 @@ type Bar<T> = { x: Bar<T[]> };
 
 function f2<U>() {
 >f2 : <U>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
 >x : Foo<U>
@@ -83,7 +81,7 @@ type Foo2<T> = { x: Foo1<T> };
 
 function f3<U>() {
 >f3 : <U>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
 >x : Foo1<U>
@@ -131,6 +129,6 @@ function g() {
 >f() : F<any>
 >    : ^^^^^^
 >f : <T = any>() => F<T>
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    
 }
 

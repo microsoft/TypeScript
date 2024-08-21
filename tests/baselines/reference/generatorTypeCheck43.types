@@ -9,7 +9,7 @@ function* g() {
 >x : { [x: number]: () => Generator<never, void, unknown>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        *[yield 0]() {        }    } : { [x: number]: () => Generator<never, void, unknown>; }
->                                      : ^^^^^^^^^^^^^^^                                     ^^^
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         *[yield 0]() {
 >[yield 0] : () => Generator<never, void, unknown>

@@ -146,7 +146,7 @@ export const a = import("package/cjs");
 >a : Promise<{ default: typeof import("index"); }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("package/cjs") : Promise<{ default: typeof import("index"); }>
->                      : ^^^^^^^^                                    ^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"package/cjs" : "package/cjs"
 >              : ^^^^^^^^^^^^^
 
@@ -170,7 +170,7 @@ export const f = import("inner");
 >f : Promise<{ default: typeof import("node_modules/inner/index"); cjsMain: true; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("inner") : Promise<{ default: typeof import("node_modules/inner/index"); cjsMain: true; }>
->                : ^^^^^^^^                                                                            ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner" : "inner"
 >        : ^^^^^^^
 
@@ -180,7 +180,7 @@ export const d = import("inner/cjs");
 >d : Promise<{ default: typeof import("node_modules/inner/index"); cjsNonmain: true; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("inner/cjs") : Promise<{ default: typeof import("node_modules/inner/index"); cjsNonmain: true; }>
->                    : ^^^^^^^^                                                                               ^
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner/cjs" : "inner/cjs"
 >            : ^^^^^^^^^^^
 

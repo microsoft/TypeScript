@@ -42,7 +42,7 @@ const v = getV();
 >getV() : Foo | Bar
 >       : ^^^^^^^^^
 >getV : () => Foo | Bar
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^         
 
 switch ((v.type)) {
 >(v.type) : "foo" | "bar"

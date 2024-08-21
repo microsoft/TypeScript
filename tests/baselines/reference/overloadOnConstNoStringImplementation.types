@@ -34,7 +34,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('hi') : number
 >         : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 
@@ -42,7 +42,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('bye') : number
 >          : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >'bye' : "bye"
 >      : ^^^^^
 
@@ -56,7 +56,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb(hm) : number
 >       : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >hm : string
 >   : ^^^^^^
 
@@ -64,7 +64,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('uh') : number
 >         : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >'uh' : "uh"
 >     : ^^^^
 
@@ -72,7 +72,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb(1) : number
 >      : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^   ^^^^^^^^^^^
+>   : ^ ^^   ^^^^^      
 >1 : 1
 >  : ^
 }
@@ -95,7 +95,7 @@ x2(1, cb); // error
 >1 : 1
 >  : ^
 >cb : (number: any) => number
->   : ^      ^^^^^^^^^^^^^^^^
+>   : ^      ^^^^^^^^^^      
 
 x2(1, (x: 'hi') => 1); // error
 >x2(1, (x: 'hi') => 1) : any

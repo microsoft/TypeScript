@@ -5,7 +5,7 @@ const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${
 >f : (hdr: string, val: number) => `${string}:\t${number}\r\n`
 >  : ^   ^^      ^^   ^^      ^^^^^                           
 >(hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n` : (hdr: string, val: number) => `${string}:\t${number}\r\n`
->                                                                                   :                                                          
+>                                                                                   : ^   ^^      ^^   ^^      ^^^^^                           
 >hdr : string
 >    : ^^^^^^
 >val : number

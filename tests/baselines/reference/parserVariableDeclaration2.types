@@ -13,14 +13,14 @@
 >check : () => void
 >      : ^^^^^^^^^^
 >function () {        } : () => void
->                       :           
+>                       : ^^^^^^^^^^
         }
 
         var checkNot = function () {
 >checkNot : () => void
 >         : ^^^^^^^^^^
 >function () {        } : () => void
->                       :           
+>                       : ^^^^^^^^^^
         }
 
         MUnit.test(a);

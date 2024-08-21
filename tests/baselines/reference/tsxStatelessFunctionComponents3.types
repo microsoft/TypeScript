@@ -9,7 +9,7 @@ const Foo = (props: any) => <div/>;
 >Foo : (props: any) => JSX.Element
 >    : ^     ^^   ^^^^^^^^^^^^^^^^
 >(props: any) => <div/> : (props: any) => JSX.Element
->                       :                            
+>                       : ^     ^^   ^^^^^^^^^^^^^^^^
 >props : any
 ><div/> : JSX.Element
 >       : ^^^^^^^^^^^

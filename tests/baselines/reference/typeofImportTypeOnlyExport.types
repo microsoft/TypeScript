@@ -9,7 +9,7 @@ export const c = classMap();
 >c : { directive: typeof import("lit").ClassMapDirective; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classMap() : { directive: typeof import("lit").ClassMapDirective; }
->           :                                                             
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classMap : () => { directive: typeof import("lit").ClassMapDirective; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -28,7 +28,7 @@ export const directive =
 
   <C>(class_: C) =>
 ><C>(class_: C) =>  () => ({    directive: class_,  }) : <C>(class_: C) => () => { directive: C; }
->                                                      :                                          
+>                                                      : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class_ : C
 >       : ^
 
@@ -52,7 +52,7 @@ export const classMap = directive(ClassMapDirective);
 >classMap : () => { directive: typeof ClassMapDirective; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directive(ClassMapDirective) : () => { directive: typeof ClassMapDirective; }
->                             :                                               
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directive : <C>(class_: C) => () => { directive: C; }
 >          : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassMapDirective : typeof ClassMapDirective

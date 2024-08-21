@@ -109,7 +109,7 @@ var ResultIsBoolean5 = delete { x: 1, y: (n: number) => { return n; } };
 >y : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -160,7 +160,7 @@ var ResultIsBoolean9 = delete foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = delete A.foo();
 >ResultIsBoolean10 : boolean
@@ -244,7 +244,7 @@ delete foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 delete objA.a;
 >delete objA.a : boolean

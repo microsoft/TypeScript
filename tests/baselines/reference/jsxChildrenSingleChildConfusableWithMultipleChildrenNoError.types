@@ -36,7 +36,7 @@ export class App extends React.Component<{}> {
 >App : App
 >    : ^^^
 >React.Component : React.Component<{}, {}, any>
->                : ^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

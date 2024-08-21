@@ -17,7 +17,7 @@ class C {
 >p : (this: T, a: string) => any
 >  : ^^^^^^^^^^ ^^      ^^^^^^^^
 >(a) => this.fn("" + a) : (this: T, a: string) => any
->                       :                            
+>                       : ^^^^^^^^^^ ^^      ^^^^^^^^
 >a : string
 >  : ^^^^^^
 >this.fn("" + a) : any

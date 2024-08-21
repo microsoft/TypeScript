@@ -27,7 +27,7 @@ interface Attribs2 {
 
 function make1<T extends {x: string}> (obj: T) {
 >make1 : <T extends { x: string; }>(obj: T) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^      ^^^^^   ^^ ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >obj : T
@@ -44,7 +44,7 @@ function make1<T extends {x: string}> (obj: T) {
 
 function make2<T extends {x: number}> (obj: T) {
 >make2 : <T extends { x: number; }>(obj: T) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^      ^^^^^   ^^ ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >obj : T
@@ -61,7 +61,7 @@ function make2<T extends {x: number}> (obj: T) {
 
 function make3<T extends {y: string}> (obj: T) {
 >make3 : <T extends { y: string; }>(obj: T) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^      ^^^^^   ^^ ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >obj : T

@@ -37,13 +37,13 @@ var GlobalIns = {
 >this.accept_foo(this) : boolean
 >                      : ^^^^^^^
 >this.accept_foo : (foo: Foo) => boolean
->                : ^   ^^   ^^^^^^^^^^^^
+>                : ^   ^^   ^^^^^       
 >this : { prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^       ^^^
 >accept_foo : (foo: Foo) => boolean
->           : ^   ^^   ^^^^^^^^^^^^
+>           : ^   ^^   ^^^^^       
 >this : { prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^       ^^^
 
   },
   accept_foo (foo: Foo): boolean {

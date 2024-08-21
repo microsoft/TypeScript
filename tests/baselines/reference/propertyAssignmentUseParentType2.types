@@ -4,9 +4,9 @@
 /** @type {{ (): boolean; nuo: 789 }} */
 export const inlined = () => true
 >inlined : { (): boolean; nuo: 789; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 789; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -16,7 +16,7 @@ inlined.nuo = 789
 >inlined.nuo : 789
 >            : ^^^
 >inlined : { (): boolean; nuo: 789; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
 >    : ^^^
 >789 : 789
@@ -25,9 +25,9 @@ inlined.nuo = 789
 /** @type {{ (): boolean; nuo: 789 }} */
 export const duplicated = () => true
 >duplicated : { (): boolean; nuo: 789; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 789; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^   ^^^
 >true : true
 >     : ^^^^
 
@@ -38,7 +38,7 @@ duplicated.nuo = 789
 >duplicated.nuo : 789
 >               : ^^^
 >duplicated : { (): boolean; nuo: 789; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
 >    : ^^^
 >789 : 789
@@ -47,9 +47,9 @@ duplicated.nuo = 789
 /** @type {{ (): boolean; nuo: 789 }} */
 export const conflictingDuplicated = () => true
 >conflictingDuplicated : { (): boolean; nuo: 789; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 1000; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^    ^^^
 >true : true
 >     : ^^^^
 
@@ -60,7 +60,7 @@ conflictingDuplicated.nuo = 789
 >conflictingDuplicated.nuo : 789
 >                          : ^^^
 >conflictingDuplicated : { (): boolean; nuo: 789; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
 >    : ^^^
 >789 : 789

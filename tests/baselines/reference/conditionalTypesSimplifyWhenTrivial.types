@@ -5,7 +5,7 @@ const fn1 = <Params>(
 >fn1 : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
 >    : ^      ^^      ^^                                          ^^^^^      
 ><Params>(    params: Pick<Params, Exclude<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
->                                                                                    :                                                                       
+>                                                                                    : ^      ^^      ^^                                          ^^^^^      
 
     params: Pick<Params, Exclude<keyof Params, never>>,
 >params : Pick<Params, Exclude<keyof Params, never>>
@@ -40,7 +40,7 @@ const fn3 = <Params>(
 >fn3 : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
 >    : ^      ^^      ^^                                                 ^^^^^      
 ><Params>(    params: Pick<Params, Extract<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
->                                                                                           :                                                                              
+>                                                                                           : ^      ^^      ^^                                                 ^^^^^      
 
     params: Pick<Params, Extract<keyof Params, keyof Params>>,
 >params : Pick<Params, Extract<keyof Params, keyof Params>>
@@ -87,7 +87,7 @@ const fn5 = <Params>(
 >fn5 : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
 >    : ^      ^^      ^^                                                     ^^^^^      
 ><Params>(    params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
->                                                                                               :                                                                                  
+>                                                                                               : ^      ^^      ^^                                                     ^^^^^      
 
     params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,
 >params : Pick<Params, ExcludeWithDefault<keyof Params, never, never>>
@@ -122,7 +122,7 @@ const fn7 = <Params>(
 >fn7 : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
 >    : ^      ^^      ^^                                                            ^^^^^      
 ><Params>(    params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
->                                                                                                      :                                                                                         
+>                                                                                                      : ^      ^^      ^^                                                            ^^^^^      
 
     params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,
 >params : Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>
@@ -161,7 +161,7 @@ const fn9 = <Params>(
 >fn9 : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>) => Params
 >    : ^      ^^      ^^                                                                            ^^^^^      
 ><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,): Params => params : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>) => Params
->                                                                                                                      :                                                                                                         
+>                                                                                                                      : ^      ^^      ^^                                                                            ^^^^^      
 
     params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,
 >params : Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>
@@ -196,7 +196,7 @@ const fn11 = <Params>(
 >fn11 : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>) => Params
 >     : ^      ^^      ^^                                                                                   ^^^^^      
 ><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>) => Params
->                                                                                                                             :                                                                                                                
+>                                                                                                                             : ^      ^^      ^^                                                                                   ^^^^^      
 
     params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,
 >params : Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>

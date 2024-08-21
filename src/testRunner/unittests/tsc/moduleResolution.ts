@@ -1,16 +1,26 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import {
+    ModuleKind,
+    ScriptTarget,
+} from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult";
-import { libContent } from "../helpers/contents";
-import { verifyTsc } from "../helpers/tsc";
-import { verifyTscWatch } from "../helpers/tscWatch";
-import { loadProjectFromFiles } from "../helpers/vfs";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/alternateResult.js";
+import {
+    compilerOptionsToConfigJson,
+    libContent,
+} from "../helpers/contents.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import {
+    createWatchedSystem,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
     verifyTsc({
@@ -212,5 +222,99 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 "/a/lib/lib.es5.d.ts": libContent,
             }, { currentDirectory: "/home/src/projects/component-type-checker/packages/app" }),
         commandLineArgs: ["--traceResolution", "--explainFiles"],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "late discovered dependency symlink",
+        sys: () =>
+            createWatchedSystem({
+                "/workspace/packageA/index.d.ts": dedent`
+            export declare class Foo {
+                private f: any;
+            }`,
+                "/workspace/packageB/package.json": dedent`
+            {
+                "private": true,
+                "dependencies": {
+                    "package-a": "file:../packageA"
+                }
+            }`,
+                "/workspace/packageB/index.d.ts": dedent`
+            import { Foo } from "package-a";
+            export declare function invoke(): Foo;`,
+                "/workspace/packageC/package.json": dedent`
+            {
+                "private": true,
+                "dependencies": {
+                    "package-b": "file:../packageB",
+                    "package-a": "file:../packageA"
+                }
+            }`,
+                "/workspace/packageC/index.ts": dedent`
+            import * as pkg from "package-b";
+
+            export const a = pkg.invoke();`,
+                "/workspace/packageC/node_modules/package-a": { symLink: "/workspace/packageA" },
+                "/workspace/packageB/node_modules/package-a": { symLink: "/workspace/packageA" },
+                "/workspace/packageC/node_modules/package-b": { symLink: "/workspace/packageB" },
+                "/a/lib/lib.d.ts": libContent,
+                "/workspace/packageC/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                    },
+                }),
+            }, { currentDirectory: "/workspace/packageC" }),
+        commandLineArgs: ["--traceResolution", "--explainFiles", "--watch"],
+        edits: [
+            {
+                caption: "change index.ts",
+                edit: fs =>
+                    fs.writeFile(
+                        "/workspace/packageC/index.ts",
+                        dedent`
+                import * as pkg from "package-b";
+    
+                export const aa = pkg.invoke();`,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "package json scope",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/projects/project/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        target: ScriptTarget.ES2016,
+                        composite: true,
+                        module: ModuleKind.Node16,
+                        traceResolution: true,
+                    }),
+                    files: [
+                        "main.ts",
+                        "fileA.ts",
+                        "fileB.mts",
+                    ],
+                }),
+                "/src/projects/project/src/main.ts": "export const x = 10;",
+                "/src/projects/project/src/fileA.ts": dedent`
+                    import { foo } from "./fileB.mjs";
+                    foo();
+                `,
+                "/src/projects/project/src/fileB.mts": "export function foo() {}",
+                "/src/projects/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
+                "/lib/lib.es2016.full.d.ts": libFile.content,
+            }, { cwd: "/src/projects/project" }),
+        commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
+        edits: [
+            {
+                caption: "Delete package.json",
+                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+            },
+        ],
     });
 });

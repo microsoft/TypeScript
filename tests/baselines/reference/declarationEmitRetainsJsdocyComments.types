@@ -9,7 +9,7 @@ export const foo = (p: string) => {
 >foo : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
 >    : ^ ^^      ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >(p: string) => {    return {        /**         * comment2         * @param s          */        bar: (s: number) => {},        /**         * comment3         * @param s          */        bar2(s: number) {},    }} : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
->                                                                                                                                                                                                                       :                                                                    
+>                                                                                                                                                                                                                       : ^ ^^      ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >p : string
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ export const foo = (p: string) => {
 >bar : (s: number) => void
 >    : ^ ^^      ^^^^^^^^^
 >(s: number) => {} : (s: number) => void
->                  :                    
+>                  : ^ ^^      ^^^^^^^^^
 >s : number
 >  : ^^^^^^
 

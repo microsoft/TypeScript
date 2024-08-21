@@ -32,7 +32,7 @@ class C3 extends x { } // error
 >C3 : C3
 >   : ^^
 >x : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
 module M { export var x = 1; }
 >M : typeof M

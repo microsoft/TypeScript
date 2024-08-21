@@ -13,7 +13,7 @@ class Foo {
 >lamda : (_super: number) => (x: any) => this
 >      : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
->                                                                                                                             :                                     
+>                                                                                                                             : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >_super : number
 >       : ^^^^^^
 
@@ -35,7 +35,7 @@ class Foo {
 >lambda : () => (x: any) => this
 >       : ^^^^^^^ ^^^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  :                       
+>                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -66,7 +66,7 @@ class Foo2 extends Foo {
 >lamda : (_super: number) => (x: any) => this
 >      : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
->                                                                                                                          :                                     
+>                                                                                                                          : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >_super : number
 >       : ^^^^^^
 
@@ -88,7 +88,7 @@ class Foo2 extends Foo {
 >lambda : () => (x: any) => this
 >       : ^^^^^^^ ^^^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  :                       
+>                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -118,13 +118,13 @@ class Foo2 extends Foo {
 >prop4 : { doStuff: (_super: number) => void; }
 >      : ^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^
 >{        doStuff: (_super: number) => { // should be error        }    } : { doStuff: (_super: number) => void; }
->                                                                         : ^^^^^^^^^^^                        ^^^
+>                                                                         : ^^^^^^^^^^^^      ^^      ^^^^^^^^^^^^
 
         doStuff: (_super: number) => { // should be error
 >doStuff : (_super: number) => void
 >        : ^      ^^      ^^^^^^^^^
 >(_super: number) => { // should be error        } : (_super: number) => void
->                                                  :                         
+>                                                  : ^      ^^      ^^^^^^^^^
 >_super : number
 >       : ^^^^^^
         }
@@ -220,7 +220,7 @@ class Foo4 extends Foo {
 >lambda : () => (x: any) => this
 >       : ^^^^^^^ ^^^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  :                       
+>                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this

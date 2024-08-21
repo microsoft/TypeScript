@@ -17,7 +17,7 @@ var functions = [function() {
 >functions : (() => void)[]
 >          : ^^^^^^^^^^^^^^
 >[function() {    [1, 2, 3].NonexistantMethod();    anotherNonExistingMethod();}] : (() => void)[]
->                                                                                 : ^          ^^^
+>                                                                                 : ^^^^^^^^^^^^^^
 >function() {    [1, 2, 3].NonexistantMethod();    anotherNonExistingMethod();} : () => void
 >                                                                               : ^^^^^^^^^^
 

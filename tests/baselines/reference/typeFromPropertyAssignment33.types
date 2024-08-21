@@ -92,7 +92,7 @@ ExpandoMerge.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 

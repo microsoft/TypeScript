@@ -5,7 +5,7 @@ var recurser = function foo() {
 >recurser : () => void
 >         : ^^^^^^^^^^
 >function foo() {} : () => void
->                  :           
+>                  : ^^^^^^^^^^
 >foo : () => void
 >    : ^^^^^^^^^^
 

@@ -61,7 +61,7 @@ declare function d_f7(x, ...r): void;
 // Implicit-'any' errors for x1, y2, x3, and y3.
 declare function d_f8(x1, y1: number): any;
 >d_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -69,7 +69,7 @@ declare function d_f8(x1, y1: number): any;
 
 declare function d_f8(x2: string, y2): any;
 >d_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^^^^^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -77,7 +77,7 @@ declare function d_f8(x2: string, y2): any;
 
 declare function d_f8(x3, y3): any;
 >d_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->     : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^   ^^^
+>     : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any

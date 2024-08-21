@@ -8,7 +8,7 @@ const x = (a) => {
 >x : (a: any) => string
 >  : ^ ^^^^^^^^^^^^^^^^
 >(a) => {    return '';} : (a: any) => string
->                        :                   
+>                        : ^ ^^^^^^^^^^^^^^^^
 >a : any
 
     return '';

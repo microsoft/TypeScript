@@ -23,7 +23,7 @@ class A {
 >c : () => number
 >  : ^^^^^^^^^^^^
 >() => this.a : () => number
->             :             
+>             : ^^^^^^^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this

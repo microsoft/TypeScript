@@ -75,7 +75,7 @@ class MyDerived extends MyBase {
 >l2 : any
 >super["m1"].bind(this) : any
 >super["m1"].bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >super["m1"] : (a: string) => string
 >            : ^ ^^      ^^^^^^^^^^^
 >super : MyBase
@@ -83,7 +83,7 @@ class MyDerived extends MyBase {
 >"m1" : "m1"
 >     : ^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
 >     : ^^^^
 
@@ -102,15 +102,15 @@ class MyDerived extends MyBase {
         super["m2"].bind(this);                                // Should error, instance property, not a public instance member function
 >super["m2"].bind(this) : any
 >super["m2"].bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>                 : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >super["m2"] : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 >super : MyBase
 >      : ^^^^^^
 >"m2" : "m2"
 >     : ^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
 >     : ^^^^
 

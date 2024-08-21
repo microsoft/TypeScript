@@ -147,7 +147,7 @@ const o10 = {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {        } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >yield : () => void
 >      : ^^^^^^^^^^
 
@@ -186,7 +186,7 @@ const o12 = {
 >x : () => void
 >  : ^^^^^^^^^^
 >function await() {        } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >await : () => void
 >      : ^^^^^^^^^^
 
@@ -247,14 +247,14 @@ const o15 = {
 };
 === yieldStarWithValueIsOk.ts ===
 const o16 = {
->o16 : { f(): AsyncGenerator<any, void, undefined>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, undefined>; }
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o16 : { f(): AsyncGenerator<any, void, unknown>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, unknown>; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f() {
->f : () => AsyncGenerator<any, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<any, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield * [];
 >yield * [] : any

@@ -17,7 +17,7 @@ class Test {
 >x : () => number
 >  : ^^^^^^^^^^^^
 >() => this["prop1"] : () => number
->                    :             
+>                    : ^^^^^^^^^^^^
 >this["prop1"] : number
 >              : ^^^^^^
 >this : this

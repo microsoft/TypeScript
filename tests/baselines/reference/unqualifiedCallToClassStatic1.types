@@ -9,7 +9,7 @@ class Vector {
 >foo : () => void
 >    : ^^^^^^^^^^
 >() => {  // 'foo' cannot be called in an unqualified manner.  foo(); } : () => void
->                                                                       :           
+>                                                                       : ^^^^^^^^^^
 
   // 'foo' cannot be called in an unqualified manner.
   foo();

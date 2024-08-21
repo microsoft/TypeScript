@@ -5,7 +5,7 @@ var fn = function (val: boolean) { return val; }
 >fn : (val: boolean) => boolean
 >   : ^   ^^       ^^^^^^^^^^^^
 >function (val: boolean) { return val; } : (val: boolean) => boolean
->                                        :                          
+>                                        : ^   ^^       ^^^^^^^^^^^^
 >val : boolean
 >    : ^^^^^^^
 >val : boolean

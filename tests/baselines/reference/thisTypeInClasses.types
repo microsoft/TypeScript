@@ -114,7 +114,7 @@ class C5 {
 >f1 : (x: this) => this
 >   : ^ ^^    ^^^^^    
 >(x: this): this => this : (x: this) => this
->                        :                  
+>                        : ^ ^^    ^^^^^    
 >x : this
 >  : ^^^^
 >this : this
@@ -124,7 +124,7 @@ class C5 {
 >f2 : (x: this) => this
 >   : ^ ^^    ^^^^^^^^^
 >(x: this) => this : (x: this) => this
->                  :                  
+>                  : ^ ^^    ^^^^^^^^^
 >x : this
 >  : ^^^^
 >this : this
@@ -134,7 +134,7 @@ class C5 {
 >f3 : (x: this) => (y: this) => this
 >   : ^ ^^    ^^^^^^ ^^    ^^^^^^^^^
 >(x: this) => (y: this) => this : (x: this) => (y: this) => this
->                               :                               
+>                               : ^ ^^    ^^^^^^ ^^    ^^^^^^^^^
 >x : this
 >  : ^^^^
 >(y: this) => this : (y: this) => this
@@ -148,7 +148,7 @@ class C5 {
 >f4 : (x: this) => () => this
 >   : ^ ^^    ^^^^^^^^^^^^^^^
 >(x: this) => {            let g = (y: this) => {                return () => this;            }            return g(this);        } : (x: this) => () => this
->                                                                                                                                    :                        
+>                                                                                                                                    : ^ ^^    ^^^^^^^^^^^^^^^
 >x : this
 >  : ^^^^
 
@@ -156,7 +156,7 @@ class C5 {
 >g : (y: this) => () => this
 >  : ^ ^^    ^^^^^^^^^^^^^^^
 >(y: this) => {                return () => this;            } : (y: this) => () => this
->                                                              :                        
+>                                                              : ^ ^^    ^^^^^^^^^^^^^^^
 >y : this
 >  : ^^^^
 

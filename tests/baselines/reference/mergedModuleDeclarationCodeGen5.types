@@ -46,25 +46,25 @@ module M.buz.plop {
 >v1 : () => void
 >   : ^^^^^^^^^^
 >gunk : () => void
->     :           
+>     : ^^^^^^^^^^
 
     var v2 = buz; // buz
 >v2 : () => void
 >   : ^^^^^^^^^^
 >buz : () => void
->    :           
+>    : ^^^^^^^^^^
 
     export var v3 = doom; // _plop.doom
 >v3 : () => void
 >   : ^^^^^^^^^^
 >doom : () => void
->     :           
+>     : ^^^^^^^^^^
 
     export var v4 = M; // _plop.M
 >v4 : () => void
 >   : ^^^^^^^^^^
 >M : () => void
->  :           
+>  : ^^^^^^^^^^
 
     export var v5 = fudge; // fudge
 >v5 : typeof fudge

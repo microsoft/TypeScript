@@ -5,7 +5,7 @@
 
 function base<T>() {
 >base : <T>() => typeof Base
->     : ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^
 
     class Base {
 >Base : Base
@@ -24,9 +24,9 @@ class Gen<T> extends base<T>() {}  // Error, T not in scope
 >Gen : Gen<T>
 >    : ^^^^^^
 >base<T>() : base<T>.Base
->          :      ^ ^^^^^
+>          : ^^^^^^^^^^^^
 >base : <T>() => typeof Base
->     : ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^
 
 class Spec extends Gen<string> {}
 >Spec : Spec

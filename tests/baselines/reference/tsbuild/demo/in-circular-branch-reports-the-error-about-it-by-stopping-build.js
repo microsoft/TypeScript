@@ -148,7 +148,7 @@ export function createZoo(): Array<Dog> {
 
 Output::
 /a/lib/tsc --b --verbose
-[[90m12:00:25 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * core/tsconfig.json

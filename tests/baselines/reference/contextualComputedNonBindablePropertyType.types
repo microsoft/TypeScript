@@ -11,7 +11,7 @@ declare function forceMatch<T>(matched: {
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
 >           : ^ ^^       ^^                          ^^^^^    
 >matched : { [key in keyof T]: key; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^
 
   [key in keyof T]: key;
 }): void;
@@ -20,7 +20,7 @@ forceMatch({
 >forceMatch({  [testD()]: "d",}) : void
 >                                : ^^^^
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
->           : ^ ^^       ^^                          ^^^^^^^^^
+>           : ^ ^^       ^^                          ^^^^^    
 >{  [testD()]: "d",} : { d: "d"; }
 >                    : ^^^^^^^^^^^
 
@@ -30,7 +30,7 @@ forceMatch({
 >testD() : "d"
 >        : ^^^
 >testD : () => "d"
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >"d" : "d"
 >    : ^^^
 
@@ -54,7 +54,7 @@ forceMatch2({
 >forceMatch2({  [testD()]: ({ key }) => {},}) : void
 >                                             : ^^^^
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
->            : ^ ^^       ^^                                                       ^^^^^^^^^
+>            : ^ ^^       ^^                                                       ^^^^^    
 >{  [testD()]: ({ key }) => {},} : { d: ({ key }: { key: "d"; }) => void; }
 >                                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -64,9 +64,9 @@ forceMatch2({
 >testD() : "d"
 >        : ^^^
 >testD : () => "d"
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >({ key }) => {} : ({ key }: { key: "d"; }) => void
->                :                                 
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "d"
 >    : ^^^
 
@@ -95,9 +95,9 @@ type Mapped = {
 
 const propSelector =  <propName extends string>(propName: propName): propName => propName;
 >propSelector : <propName extends string>(propName: propName) => propName
->             : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^        
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 ><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
->                                                                    :                                                          
+>                                                                    : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >propName : propName
 >         : ^^^^^^^^
 >propName : propName
@@ -113,7 +113,7 @@ const unexpectedlyFailingExample: Mapped = {
 >foo : (arg: "expects a string literal") => "expects a string literal"
 >    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg) => 'expects a string literal' : (arg: "expects a string literal") => "expects a string literal"
->                                    :                                                                
+>                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : "expects a string literal"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'expects a string literal' : "expects a string literal"
@@ -123,7 +123,7 @@ const unexpectedlyFailingExample: Mapped = {
 >baz : (arg: boolean) => true
 >    : ^   ^^^^^^^^^^^^^^^^^^
 >(arg) => true : (arg: boolean) => true
->              :                       
+>              : ^   ^^^^^^^^^^^^^^^^^^
 >arg : boolean
 >    : ^^^^^^^
 >true : true
@@ -135,11 +135,11 @@ const unexpectedlyFailingExample: Mapped = {
 >propSelector('bar') : "bar"
 >                    : ^^^^^
 >propSelector : <propName extends string>(propName: propName) => propName
->             : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^^^^^^^^^
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >'bar' : "bar"
 >      : ^^^^^
 >(arg) => 51345 : (arg: number) => number
->               :                        
+>               : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >51345 : 51345

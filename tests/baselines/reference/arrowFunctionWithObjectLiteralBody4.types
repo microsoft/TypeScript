@@ -5,7 +5,7 @@ var v = a => <any><any>{}
 >v : (a: any) => any
 >  : ^ ^^^^^^^^^^   
 >a => <any><any>{} : (a: any) => any
->                  :                
+>                  : ^ ^^^^^^^^^^   
 >a : any
 ><any><any>{} : any
 ><any>{} : any

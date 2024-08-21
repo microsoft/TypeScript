@@ -5,7 +5,7 @@ var foo = async (a = await): Promise<void> => {
 >foo : (a?: any) => Promise<void>
 >    : ^ ^^^^^^^^^^^             
 >async (a = await): Promise<void> => {} : (a?: any) => Promise<void>
->                                       :   ^                       
+>                                       : ^ ^^^^^^^^^^^             
 >a : any
 >  : ^^^
 >await : any

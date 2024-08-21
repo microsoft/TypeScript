@@ -321,7 +321,7 @@ function area3(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^     
 >s : never
 >  : ^^^^^
     }
@@ -407,7 +407,7 @@ function area4(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^     
 >s : never
 >  : ^^^^^
 }
@@ -452,7 +452,7 @@ function f1(m: Message) {
 
         m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^
     }
     else if (m.kind === "D") {
 >m.kind === "D" : boolean
@@ -460,7 +460,7 @@ function f1(m: Message) {
 >m.kind : "B" | "C" | "D"
 >       : ^^^^^^^^^^^^^^^
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 >kind : "B" | "C" | "D"
 >     : ^^^^^^^^^^^^^^^
 >"D" : "D"
@@ -468,12 +468,12 @@ function f1(m: Message) {
 
         m;  // { kind: "D" }
 >m : { kind: "D"; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^
     }
     else {
         m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
@@ -499,7 +499,7 @@ function f2(m: Message) {
     }
     m;  // { kind: "B" | "C", y: number } | { kind: "D" }
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 }
 
 function f3(m: Message) {
@@ -548,7 +548,7 @@ function f4(m: Message, x: "A" | "D") {
 
         m;  // { kind: "A", x: string } | { kind: "D" }
 >m : { kind: "A"; x: string; } | { kind: "D"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^
     }
 }
 
@@ -572,7 +572,7 @@ function f5(m: Message) {
 
             m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^
 
             break;
         case "D":
@@ -581,13 +581,13 @@ function f5(m: Message) {
 
             m;  // { kind: "D" }
 >m : { kind: "D"; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^
 
             break;
         default:
             m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
@@ -611,7 +611,7 @@ function f6(m: Message) {
 
             m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^
 
         case "D":
 >"D" : "D"
@@ -619,13 +619,13 @@ function f6(m: Message) {
 
             m;  // { kind: "A", x: string } | { kind: "D" }
 >m : { kind: "A"; x: string; } | { kind: "D"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^
 
             break;
         default:
             m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
@@ -655,7 +655,7 @@ function f7(m: Message) {
     }
     m;  // { kind: "B" | "C", y: number } | { kind: "D" }
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 }
 
 function f8(m: Message) {
@@ -689,5 +689,5 @@ function f8(m: Message) {
     }
     m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^      ^^^
 }

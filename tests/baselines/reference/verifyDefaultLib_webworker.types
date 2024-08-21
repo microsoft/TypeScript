@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/verifyDefaultLib_webworker.ts] ////
 
 === Performance Stats ===
-Assignability cache: 600 / 600 (nearest 100)
-Type Count: 6,200 / 6,200 (nearest 100)
-Instantiation count: 1,000 / 1,000 (nearest 500)
-Symbol count: 14,500 / 14,500 (nearest 500)
+Type Count: 5,000
 
 === verifyDefaultLib_webworker.ts ===
 var x: Worker;

@@ -43,7 +43,7 @@ class TestController {
 >p1 : (e: string) => void
 >   : ^ ^^^^^^^^^^^^^^^^^
 >e => { } : (e: string) => void
->         :                    
+>         : ^ ^^^^^^^^^^^^^^^^^
 >e : string
 >  : ^^^^^^
 
@@ -51,7 +51,7 @@ class TestController {
 >p2 : () => (vvvvvvvvv: number) => this
 >   : ^^^^^^^         ^^^^^^^^^^^^^^^^^
 >() => { return vvvvvvvvv => this; } : () => (vvvvvvvvv: number) => this
->                                    :                                  
+>                                    : ^^^^^^^         ^^^^^^^^^^^^^^^^^
 >vvvvvvvvv => this : (vvvvvvvvv: number) => this
 >                  : ^         ^^^^^^^^^^^^^^^^^
 >vvvvvvvvv : number

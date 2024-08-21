@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithObjectLiterals2.ts] ////
+
+=== usingDeclarationsWithObjectLiterals2.ts ===
+{
+  using _ = { [Symbol.dispose]() {}, value: null };
+>_ : Symbol(_, Decl(usingDeclarationsWithObjectLiterals2.ts, 1, 7))
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(usingDeclarationsWithObjectLiterals2.ts, 1, 13))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>value : Symbol(value, Decl(usingDeclarationsWithObjectLiterals2.ts, 1, 36))
+}
+
+async function f() {
+>f : Symbol(f, Decl(usingDeclarationsWithObjectLiterals2.ts, 2, 1))
+  {
+    await using _ = { async [Symbol.asyncDispose]() {}, value: null };
+>_ : Symbol(_, Decl(usingDeclarationsWithObjectLiterals2.ts, 6, 15))
+>[Symbol.asyncDispose] : Symbol([Symbol.asyncDispose], Decl(usingDeclarationsWithObjectLiterals2.ts, 6, 21))
+>Symbol.asyncDispose : Symbol(SymbolConstructor.asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncDispose : Symbol(SymbolConstructor.asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>value : Symbol(value, Decl(usingDeclarationsWithObjectLiterals2.ts, 6, 55))
+  }
+}
+
+export {};
+

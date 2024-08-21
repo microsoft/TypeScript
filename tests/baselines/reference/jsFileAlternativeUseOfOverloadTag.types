@@ -9,7 +9,7 @@ const example1 = {
 >example1 : { constructor: (value: any) => any; }
 >         : ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 >{  /**   * @overload Example1(value)   *   Creates Example1   *   @param value [String]   */  constructor: function Example1(value, options) {},} : { constructor: (value: any) => any; }
->                                                                                                                                                  : ^^^^^^^^^^^^^^^                   ^^^
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 
   /**
    * @overload Example1(value)
@@ -20,7 +20,7 @@ const example1 = {
 >constructor : (value: any) => any
 >            : ^     ^^^^^^^^^^^^^
 >function Example1(value, options) {} : (value: any) => any
->                                     :                    
+>                                     : ^     ^^^^^^^^^^^^^
 >Example1 : (value: any) => any
 >         : ^     ^^^^^^^^^^^^^
 >value : any
@@ -32,7 +32,7 @@ const example2 = {
 >example2 : { constructor: { (value: any, secretAccessKey: any, sessionToken: any): any; (): any; }; }
 >         : ^^^^^^^^^^^^^^^^^^     ^^^^^^^               ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  /**   * Example 2   *   * @overload Example2(value)   *   Creates Example2   *   @param value [String]   *   @param secretAccessKey [String]   *   @param sessionToken [String]   *   @example Creates with string value   *     const example = new Example('');   * @overload Example2(options)   *   Creates Example2   *   @option options value [String]   *   @example Creates with options object   *     const example = new Example2({   *       value: '',   *     });   */  constructor: function Example2() {},} : { constructor: { (value: any, secretAccessKey: any, sessionToken: any): any; (): any; }; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^                                                                        ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^     ^^^^^^^               ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   /**
    * Example 2
@@ -56,7 +56,7 @@ const example2 = {
 >constructor : { (value: any, secretAccessKey: any, sessionToken: any): any; (): any; }
 >            : ^^^     ^^^^^^^               ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^
 >function Example2() {} : { (value: any, secretAccessKey: any, sessionToken: any): any; (): any; }
->                       :                                                                         
+>                       : ^^^     ^^^^^^^               ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^
 >Example2 : { (value: any, secretAccessKey: any, sessionToken: any): any; (): any; }
 >         : ^^^     ^^^^^^^               ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -66,7 +66,7 @@ const example3 = {
 >example3 : { evaluate: () => any; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{  /**   * @overload evaluate(options = {}, [callback])   *   Evaluate something   *   @note Something interesting   *   @param options [map]   *   @return [string] returns evaluation result   *   @return [null] returns nothing if callback provided   *   @callback callback function (error, result)   *     If callback is provided it will be called with evaluation result   *     @param error [Error]   *     @param result [String]   *   @see callback   */  evaluate: function evaluate(options, callback) {},} : { evaluate: () => any; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^         ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   /**
    * @overload evaluate(options = {}, [callback])
@@ -85,7 +85,7 @@ const example3 = {
 >evaluate : () => any
 >         : ^^^^^^^^^
 >function evaluate(options, callback) {} : () => any
->                                        :          
+>                                        : ^^^^^^^^^
 >evaluate : () => any
 >         : ^^^^^^^^^
 >options : any

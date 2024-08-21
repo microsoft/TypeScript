@@ -69,7 +69,7 @@ f2({ toString: (s) => s }) // error, missing property value from ArgsString
 >toString : (s: string) => string
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => s : (s: string) => string
->         :                      
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -85,7 +85,7 @@ f2({ toString: (s: string) => s }) // error, missing property value from ArgsStr
 >toString : (s: string) => string
 >         : ^ ^^      ^^^^^^^^^^^
 >(s: string) => s : (s: string) => string
->                 :                      
+>                 : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -105,7 +105,7 @@ f2({ value: '', toString: (s) => s.uhhh }) // error
 >toString : (s: string) => any
 >         : ^ ^^^^^^^^^^^^^^^^
 >(s) => s.uhhh : (s: string) => any
->              :                   
+>              : ^ ^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.uhhh : any

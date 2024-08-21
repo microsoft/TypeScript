@@ -35,7 +35,7 @@ var e3 = () => { } // error
 >e3 : () => void
 >   : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
 // enum then class
 enum e4 { One } // error

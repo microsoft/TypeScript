@@ -1,0 +1,167 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts ===
+type ComputedGetter<T> = (oldValue?: T) => T;
+>ComputedGetter : Symbol(ComputedGetter, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 20))
+>oldValue : Symbol(oldValue, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 26))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 20))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 20))
+
+type ComputedOptions = Record<string, ComputedGetter<any>>;
+>ComputedOptions : Symbol(ComputedOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 45))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ComputedGetter : Symbol(ComputedGetter, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 0))
+
+type ExtractComputedReturns<T extends any> = {
+>ExtractComputedReturns : Symbol(ExtractComputedReturns, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 1, 59))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 3, 28))
+
+  [key in keyof T]: T[key] extends (...args: any[]) => infer TReturn
+>key : Symbol(key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 4, 3))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 3, 28))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 3, 28))
+>key : Symbol(key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 4, 3))
+>args : Symbol(args, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 4, 36))
+>TReturn : Symbol(TReturn, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 4, 60))
+
+    ? TReturn
+>TReturn : Symbol(TReturn, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 4, 60))
+
+    : never;
+};
+
+interface ComponentOptionsBase<D, C extends ComputedOptions> {
+>ComponentOptionsBase : Symbol(ComponentOptionsBase, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 7, 2))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 31))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 33))
+>ComputedOptions : Symbol(ComputedOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 45))
+
+  data?: D;
+>data : Symbol(ComponentOptionsBase.data, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 62))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 31))
+
+  computed?: C;
+>computed : Symbol(ComponentOptionsBase.computed, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 10, 11))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 33))
+}
+
+type ComponentPublicInstance<D = {}, C extends ComputedOptions = {}> = D &
+>ComponentPublicInstance : Symbol(ComponentPublicInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 12, 1))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 14, 29))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 14, 36))
+>ComputedOptions : Symbol(ComputedOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 45))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 14, 29))
+
+  ExtractComputedReturns<C>;
+>ExtractComputedReturns : Symbol(ExtractComputedReturns, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 1, 59))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 14, 36))
+
+type ComponentOptions<
+>ComponentOptions : Symbol(ComponentOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 15, 28))
+
+  D = any,
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 17, 22))
+
+  C extends ComputedOptions = any,
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 18, 10))
+>ComputedOptions : Symbol(ComputedOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 45))
+
+> = ComponentOptionsBase<D, C> & ThisType<ComponentPublicInstance<D, C>>;
+>ComponentOptionsBase : Symbol(ComponentOptionsBase, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 7, 2))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 17, 22))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 18, 10))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>ComponentPublicInstance : Symbol(ComponentPublicInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 12, 1))
+>D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 17, 22))
+>C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 18, 10))
+
+interface App {
+>App : Symbol(App, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 20, 73))
+
+  mixin(mixin: ComponentOptions): this;
+>mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+>mixin : Symbol(mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 23, 8))
+>ComponentOptions : Symbol(ComponentOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 15, 28))
+}
+
+interface InjectionKey<T> extends Symbol {}
+>InjectionKey : Symbol(InjectionKey, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 24, 1))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 23))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+interface Ref<T> {
+>Ref : Symbol(Ref, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 43))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 14))
+
+  _v: T;
+>_v : Symbol(Ref._v, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 18))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 14))
+}
+
+declare function reactive<T extends object>(target: T): Ref<T>;
+>reactive : Symbol(reactive, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 30, 1))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 26))
+>target : Symbol(target, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 44))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 26))
+>Ref : Symbol(Ref, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 43))
+>T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 26))
+
+interface ThemeInstance {
+>ThemeInstance : Symbol(ThemeInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 63))
+
+  readonly name: Readonly<Ref<string>>;
+>name : Symbol(ThemeInstance.name, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 34, 25))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Ref : Symbol(Ref, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 43))
+}
+
+declare const ThemeSymbol: InjectionKey<ThemeInstance>;
+>ThemeSymbol : Symbol(ThemeSymbol, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 13))
+>InjectionKey : Symbol(InjectionKey, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 24, 1))
+>ThemeInstance : Symbol(ThemeInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 63))
+
+declare function inject(
+>inject : Symbol(inject, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 55))
+
+  this: ComponentPublicInstance,
+>this : Symbol(this, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 40, 24))
+>ComponentPublicInstance : Symbol(ComponentPublicInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 12, 1))
+
+  key: InjectionKey<any> | string,
+>key : Symbol(key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 41, 32))
+>InjectionKey : Symbol(InjectionKey, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 24, 1))
+
+): any;
+
+declare const app: App;
+>app : Symbol(app, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 45, 13))
+>App : Symbol(App, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 20, 73))
+
+app.mixin({
+>app.mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+>app : Symbol(app, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 45, 13))
+>mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+
+  computed: {
+>computed : Symbol(computed, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 46, 11))
+
+    $vuetify() {
+>$vuetify : Symbol($vuetify, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 47, 13))
+
+      // this is meant to be `any` here
+      return reactive({
+>reactive : Symbol(reactive, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 30, 1))
+
+        theme: inject.call(this, ThemeSymbol),
+>theme : Symbol(theme, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 50, 23))
+>inject.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>inject : Symbol(inject, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 55))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>ThemeSymbol : Symbol(ThemeSymbol, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 13))
+
+      });
+    },
+  },
+});
+

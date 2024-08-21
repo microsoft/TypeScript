@@ -423,7 +423,7 @@ function f10() {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        const z = x;  // any    } : () => void
->                                         :           
+>                                         : ^^^^^^^^^^
 
         const z = x;  // any
 >z : any

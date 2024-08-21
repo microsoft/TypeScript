@@ -89,7 +89,7 @@ function f7(a, func = (a) => { return 1 }){ }  // not error
 >func : (a: any) => number
 >     : ^ ^^^^^^^^^^^^^^^^
 >(a) => { return 1 } : (a: any) => number
->                    :                   
+>                    : ^ ^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >1 : 1

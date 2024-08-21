@@ -5,7 +5,7 @@ const identity = (a) => a;
 >identity : (a: any) => any
 >         : ^ ^^^^^^^^^^^^^
 >(a) => a : (a: any) => any
->         :                
+>         : ^ ^^^^^^^^^^^^^
 >a : any
 >a : any
 
@@ -180,7 +180,7 @@ const h = (.../* comment h */args) => args.length;
 >h : (...args: any[]) => number
 >  : ^^^^    ^^^^^^^^^^^^^^^^^^
 >(.../* comment h */args) => args.length : (...args: any[]) => number
->                                        :  ^^^                      
+>                                        : ^^^^    ^^^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 >args.length : number
@@ -194,7 +194,7 @@ const i = (
 >i : (first: any, ...rest: any[]) => number
 >  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 >(  first, .../* comment i */rest) => rest.length : (first: any, ...rest: any[]) => number
->                                                 :              ^^^                      
+>                                                 : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 
   first, .../* comment i */rest
 >first : any
@@ -213,7 +213,7 @@ const j = (
 >j : (first: any, ...rest: any[]) => number
 >  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 >(  first,  .../* comment j */  rest) => rest.length : (first: any, ...rest: any[]) => number
->                                                    :              ^^^                      
+>                                                    : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 
   first,
 >first : any

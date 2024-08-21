@@ -9,7 +9,7 @@ class A {
 >#fieldFunc : () => void
 >           : ^^^^^^^^^^
 >function() { this.x = 10; } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >this.x = 10 : 10
 >            : ^^
 >this.x : any
@@ -24,7 +24,7 @@ class A {
 >#fieldFunc2 : (a: any, ...b: any[]) => void
 >            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >function(a, ...b) {} : (a: any, ...b: any[]) => void
->                     :          ^^^                 
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
 >b : any[]
 >  : ^^^^^
@@ -59,7 +59,7 @@ class A {
 >func : () => void
 >     : ^^^^^^^^^^
 >this.#fieldFunc : () => void
->                :           
+>                : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 
