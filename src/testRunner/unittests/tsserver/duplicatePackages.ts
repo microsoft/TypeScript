@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: duplicatePackages::", () => {
@@ -28,7 +28,7 @@ describe("unittests:: tsserver:: duplicatePackages::", () => {
             content: "{}",
         };
 
-        const host = createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
+        const host = TestServerHost.createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
         const session = new TestSession(host);
 
         openFilesForSession([aUser, bUser], session);

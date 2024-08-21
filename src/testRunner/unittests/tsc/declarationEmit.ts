@@ -6,9 +6,9 @@ import {
     verifyTsc,
 } from "../helpers/tsc.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLink,
     isSymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: declarationEmit::", () => {
@@ -31,7 +31,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 verifyTsc({
                     scenario: "declarationEmit",
                     subScenario,
-                    sys: () => createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
+                    sys: () => TestServerHost.createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
                     commandLineArgs: ["-p", rootProject, "--explainFiles"],
                 });
             });
@@ -42,7 +42,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     scenario: "declarationEmit",
                     subScenario: caseChangeScenario,
                     sys: () =>
-                        createWatchedSystem(
+                        TestServerHost.createWatchedSystem(
                             files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
                             { currentDirectory: "/user/username/projects/myproject" },
                         ),
@@ -261,7 +261,7 @@ ${pluginOneAction()}`,
         scenario: "declarationEmit",
         subScenario: "when using Windows paths and uppercase letters",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `D:\\Work\\pkg1\\package.json`,
                     content: jsonToReadableText({

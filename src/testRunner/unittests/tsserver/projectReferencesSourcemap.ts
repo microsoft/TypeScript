@@ -9,7 +9,6 @@ import {
     TestSessionRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -436,7 +435,7 @@ fn5();
             });
 
             it("when projects are not built", () => {
-                const host = createServerHost(files);
+                const host = TestServerHost.createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession(options.openFiles, session);
                 runActions(session, options.action);

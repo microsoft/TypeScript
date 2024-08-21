@@ -1,13 +1,10 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
-import {
-    getCreateWatchedSystem,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
-    return getCreateWatchedSystem(forTsserver)({
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json": jsonToReadableText({
             extends: "@something/tsconfig-base/tsconfig.json",
             compilerOptions: {
@@ -31,7 +28,7 @@ export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
 }
 
 export function getConfigDirExtendsSys(forTsserver?: boolean): TestServerHost {
-    return getCreateWatchedSystem(forTsserver)({
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/configs/first/tsconfig.json": jsonToReadableText({
             extends: "../second/tsconfig.json",
             include: ["${configDir}/src"], // eslint-disable-line no-template-curly-in-string

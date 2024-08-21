@@ -5,7 +5,6 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -18,7 +17,7 @@ describe("unittests:: tscWatch:: emit:: with outFile or out setting", () => {
             subScenario: `emit with outFile or out setting/${subScenario}`,
             commandLineArgs: ["--w", "-p", "/home/src/projects/a/tsconfig.json"],
             sys: () =>
-                createWatchedSystem({
+                TestServerHost.createWatchedSystem({
                     "/home/src/projects/a/a.ts": "let x = 1",
                     "/home/src/projects/a/b.ts": "let y = 1",
                     "/home/src/projects/a/tsconfig.json": jsonToReadableText({ compilerOptions: { out, outFile } }),
@@ -72,7 +71,7 @@ describe("unittests:: tscWatch:: emit:: with outFile or out setting", () => {
                         files: [file1.path, file2.path, file3.path, file4.path],
                     }),
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [file1, file2, file3, file4, configFile],
                     { currentDirectory: "/home/src/projects/a/b/project" },
                 );
@@ -142,7 +141,7 @@ describe("unittests:: tscWatch:: emit:: for configured projects", () => {
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
                 const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, ...additionalFiles];
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     firstReloadFileList ?
                         ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
                         files,
@@ -369,7 +368,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
             subScenario: `emit file content/${subScenario}`,
             commandLineArgs: ["--w", "/home/src/projects/a/app.ts"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     [{
                         path: "/home/src/projects/a/app.ts",
                         content: ["var x = 1;", "var y = 2;"].join(newLine),
@@ -412,7 +411,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                 path: "/home/src/projects/a/b/tsconfig.json",
                 content: "{}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );
@@ -449,7 +448,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                 path: `${currentDirectory}/file3.ts`,
                 content: `import { E2 } from "./file2"; const v: E2 = E2.V;`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3],
                 { currentDirectory },
             );
@@ -481,7 +480,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                     ],
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 {
                     currentDirectory: projectLocation,
@@ -526,7 +525,7 @@ describe("unittests:: tscWatch:: emit:: with when module emit is specified as no
                 path: "/home/src/projects/a/rootFolder/project/Scripts/Javascript.js",
                 content: "var zz = 10;",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [configFile, file1, file2],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );

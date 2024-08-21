@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: refactors::", () => {
@@ -15,7 +15,7 @@ describe("unittests:: tsserver:: refactors::", () => {
             path: "/home/src/projects/project/a.ts",
             content: "function f() {\n  1;\n}",
         };
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
 
@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: refactors::", () => {
             content: '{ "files": ["./a.ts"] }',
         };
 
-        const host = createServerHost([aTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -75,7 +75,7 @@ describe("unittests:: tsserver:: refactors::", () => {
     it("handles canonicalization of tsconfig path", () => {
         const aTs: File = { path: "/home/src/projects/project/Foo/a.ts", content: "const x = 0;" };
         const tsconfig: File = { path: "/home/src/projects/project/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
-        const host = createServerHost([aTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -102,7 +102,7 @@ describe("unittests:: tsserver:: refactors::", () => {
     const a = 1;`,
         };
         const tsconfig: File = { path: "/home/src/projects/project/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
-        const host = createServerHost([aTs, bTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -135,7 +135,7 @@ describe("unittests:: tsserver:: refactors::", () => {
             path: "/home/src/projects/project/Foo/tsconfig.json",
             content: `{ "files": ["./a.ts"] }`,
         };
-        const host = createServerHost([aTs, bTxt, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTxt, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -177,7 +177,7 @@ describe("unittests:: tsserver:: refactors::", () => {
             path: "/home/src/projects/project/Bar/tsconfig.json",
             content: `{ "files": ["./a.ts"] }`,
         };
-        const host = createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
+        const host = TestServerHost.createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
         const session = new TestSession(host);
         openFilesForSession([barATs], session);
 

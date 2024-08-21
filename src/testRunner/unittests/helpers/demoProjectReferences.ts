@@ -1,8 +1,8 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLinkMap,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
@@ -123,7 +123,7 @@ export function getFsContentsForDemoProjectReferences(): FileOrFolderOrSymLinkMa
 }
 
 export function getSysForDemoProjectReferences() {
-    return createWatchedSystem(
+    return TestServerHost.createWatchedSystem(
         getFsContentsForDemoProjectReferences(),
         { currentDirectory: "/user/username/projects/demo" },
     );

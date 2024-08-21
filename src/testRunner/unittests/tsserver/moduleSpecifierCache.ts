@@ -6,9 +6,9 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const packageJson: File = {
@@ -138,7 +138,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache::", () => {
 });
 
 function setup() {
-    const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
+    const host = TestServerHost.createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
     const session = new TestSession(host);
     openFilesForSession([aTs, bTs, cTs], session);
     const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;

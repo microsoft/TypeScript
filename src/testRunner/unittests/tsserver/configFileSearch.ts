@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
@@ -19,7 +19,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             path: "/home/src/project/project/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, configFile]);
+        const host = TestServerHost.createServerHost([f1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([{ file: f1, projectRootPath: "/home/src/project/project/a" }], session);
 
@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             path: "/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, configFile, configFile2]);
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
         const session = new TestSession(host);
         openFilesForSession([{ file: f1, projectRootPath }], session);
 
@@ -68,7 +68,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             path: "/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, configFile, configFile2]);
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
@@ -93,7 +93,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         function openClientFile(files: File[]) {
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([{ file, projectRootPath: "/a/b/projects/proj" }], session);
             return { host, session };
@@ -128,7 +128,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
             it(scenario, () => {
                 const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
-                const host = createServerHost([{ path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const host = TestServerHost.createServerHost([{ path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
                 const session = new TestSession(host);
                 openFilesForSession([{ file: path, projectRootPath }], session);
                 baselineTsserverLogs("configFileSearch", scenario, session);

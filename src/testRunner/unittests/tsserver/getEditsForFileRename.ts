@@ -11,8 +11,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getEditsForFileRename::", () => {
@@ -30,7 +30,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
             content: "{}",
         };
 
-        const host = createServerHost([userTs, newTs, tsconfig]);
+        const host = TestServerHost.createServerHost([userTs, newTs, tsconfig]);
         const options: ts.CompilerOptions = {};
         const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
         const lsHost: ts.LanguageServiceHost = {
@@ -81,7 +81,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
             content: "{}",
         };
 
-        const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+        const host = TestServerHost.createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aUserTs, bUserTs], session);
 
@@ -100,7 +100,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
         const cTs: File = { path: "/home/src/projects/project/c.ts", content: "export {};" };
         const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./a.ts", "./b.ts"] }) };
 
-        const host = createServerHost([aTs, cTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, cTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs, cTs], session);
 
@@ -120,7 +120,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
                 if (closedBeforeChange && !openedBeforeChange) return;
                 it(`works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, () => {
                     const oldFilePath = "/home/src/projects/myproject/src/old.ts";
-                    const host = createServerHost({
+                    const host = TestServerHost.createServerHost({
                         "/home/src/projects/myproject/src/index.ts": `import {} from '@/old';`,
                         [oldFilePath]: `export const x = 10;`,
                         "/home/src/projects/myproject/tsconfig.json": jsonToReadableText({
@@ -223,7 +223,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
             `;
             const componentsWhatever = `${projectRootPath}/components/whatever`;
             const functionsWhatever = `${projectRootPath}/functions/whatever`;
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 "/home/src/myprojects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es2016",

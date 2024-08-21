@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 // More tests in fourslash/smartSelection_*
@@ -24,7 +24,7 @@ class Foo {
     }
 }`,
         };
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         session.executeCommandSeq<ts.server.protocol.SelectionRangeRequest>({

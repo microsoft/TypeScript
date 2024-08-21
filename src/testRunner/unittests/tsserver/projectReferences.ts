@@ -13,9 +13,9 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 function logDefaultProjectAndDefaultConfiguredProject(session: TestSession, file: File) {
@@ -328,7 +328,7 @@ function foo() {
             content: aTs.content,
         };
         const files = [aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -370,7 +370,7 @@ function foo() {
             path: `${projectLocation}/src/project/tsconfig.json`,
             content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
         };
-        const host = createServerHost([utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const host = TestServerHost.createServerHost([utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
         const session = new TestSession(host);
         openFilesForSession([projectIndex], session);
         verifyGetErrRequest({ session, files: [projectIndex] });
@@ -413,7 +413,7 @@ function foo() {
             const files = [bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
             const host = alreadyBuilt ?
                 createHostWithSolutionBuild(files, [aConfig.path]) :
-                createServerHost(files);
+                TestServerHost.createServerHost(files);
 
             // Create symlink in node module
             const session = new TestSession(host);
@@ -574,7 +574,7 @@ testCompositeFunction('why hello there', 42);`,
             path: `/user/username/projects/myproject/node_modules/emit-composite`,
             symLink: `/user/username/projects/myproject/packages/emit-composite`,
         };
-        const host = createServerHost([compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         openFilesForSession([consumerIndex], session);
         verifyGetErrRequest({ session, files: [consumerIndex] });
@@ -644,7 +644,7 @@ testCompositeFunction('why hello there', 42);`,
         };
 
         const files = [solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
@@ -764,7 +764,7 @@ testCompositeFunction('why hello there', 42);`,
         };
 
         const files = [solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([bFile], session);
 
@@ -838,7 +838,7 @@ ${usage}`,
                     path: `${solutionLocation}/shared/src/index.ts`,
                     content: definition,
                 };
-                const host = createServerHost([solution, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const host = TestServerHost.createServerHost([solution, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
                 const session = new TestSession(host);
                 openFilesForSession([apiFile], session);
 
@@ -955,7 +955,7 @@ export const foo = local;`,
         };
 
         const files = [solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
@@ -1059,7 +1059,7 @@ export function bar() {}`,
                 path: dummyFilePath,
                 content: "let a = 10;",
             };
-            const host = createServerHost([
+            const host = TestServerHost.createServerHost([
                 tsconfigSrc,
                 tsconfig,
                 main,
@@ -1354,7 +1354,7 @@ bar;`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            const host = createServerHost([config1, class1, class1Dts, config2, class2]);
+            const host = TestServerHost.createServerHost([config1, class1, class1Dts, config2, class2]);
             const session = new TestSession(host);
             openFilesForSession([class2], session);
             return { host, session, class1 };
@@ -1505,7 +1505,7 @@ bar;`,
                 symLink: `/user/username/projects/myproject/shared`,
             };
             const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             if (built) {
                 solutionBuildWithBaseline(host, [solnConfig.path]);
                 host.clearOutput();
@@ -1565,7 +1565,7 @@ bar;`,
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
         const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
 
-        const host = createServerHost([
+        const host = TestServerHost.createServerHost([
             mainFile,
             mainConfig,
             coreFile,
@@ -1681,7 +1681,7 @@ const b: B = new B();`,
                     }),
                 };
 
-                const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                const host = TestServerHost.createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
                 const session = new TestSession(host);
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
@@ -1825,7 +1825,7 @@ const b: B = new B();`,
                 path: "/home/src/projects/random/tsconfig.json",
                 content: "{ }",
             };
-            const host = createServerHost([appDemo, app, appConfig, demoHelpers, demoConfig, solutionConfig, randomTs, randomConfig]);
+            const host = TestServerHost.createServerHost([appDemo, app, appConfig, demoHelpers, demoConfig, solutionConfig, randomTs, randomConfig]);
             const session = new TestSession(host);
             openFilesForSession([appDemo], session);
             return {
@@ -1940,7 +1940,7 @@ const b: B = new B();`,
                 }
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             [indexDts.path]: indexDts.content,
             "/home/src/projects/project/src/index.ts": dedent`
                 const api = {}

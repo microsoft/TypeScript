@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 function checkDeclarationFiles(file: File, session: TestSession): void {
@@ -101,7 +101,7 @@ describe("unittests:: tsserver:: declarationFileMaps:: with declaration file map
     };
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
-        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
+        const host = TestServerHost.createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
         const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);
@@ -278,7 +278,7 @@ describe("unittests:: tsserver:: declarationFileMaps:: with declaration file map
             content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
         };
 
-        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
+        const host = TestServerHost.createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
         const session = new TestSession(host);
         checkDeclarationFiles(aTs, session);
         openFilesForSession([bTs], session);
@@ -380,7 +380,7 @@ describe("unittests:: tsserver:: declarationFileMaps:: with declaration file map
             }),
         };
 
-        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const host = TestServerHost.createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
@@ -402,7 +402,7 @@ describe("unittests:: tsserver:: declarationFileMaps:: with declaration file map
             path: aDtsMap.path,
             content: jsonToReadableText(aDtsInlinedSources),
         };
-        const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
+        const host = TestServerHost.createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
         const session = new TestSession(host);
 
         openFilesForSession([userTs], session);

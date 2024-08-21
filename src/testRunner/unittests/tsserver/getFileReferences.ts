@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getFileReferences::", () => {
@@ -37,7 +37,7 @@ describe("unittests:: tsserver:: getFileReferences::", () => {
     };
 
     function makeSampleSession() {
-        const host = createServerHost([aTs, bTs, cTs, dTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTs, cTs, dTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs, cTs, dTs], session);
         return session;

@@ -3,7 +3,6 @@ import { jsonToReadableText } from "../helpers.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
     FileOrFolderOrSymLinkMap,
-    getCreateWatchedSystem,
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
@@ -99,7 +98,7 @@ export function verifyAlternateResultScenario(
     action(
         "alternateResult",
         () =>
-            getCreateWatchedSystem(forTsserver)(
+            TestServerHost.getCreateWatchedSystem(forTsserver)(
                 getFsContentsForAlternateResult(),
                 { currentDirectory: "/home/src/projects/project" },
             ),

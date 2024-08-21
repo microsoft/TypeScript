@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getExportReferences::", () => {
@@ -28,7 +28,7 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
             path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([mainTs, modTs, tsconfig]);
+        const host = TestServerHost.createServerHost([mainTs, modTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([mainTs, modTs], session);
         return { session, modTs };

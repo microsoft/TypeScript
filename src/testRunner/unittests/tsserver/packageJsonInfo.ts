@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const tsConfig: File = {
@@ -127,7 +127,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 });
 
 function setup(files: readonly File[] = [tsConfig, packageJson]) {
-    const host = createServerHost(files);
+    const host = TestServerHost.createServerHost(files);
     const session = new TestSession(host);
     openFilesForSession([files[0]], session);
     const projectService = session.getProjectService();

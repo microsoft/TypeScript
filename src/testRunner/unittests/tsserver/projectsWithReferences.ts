@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectsWithReferences:: invoking when references are already built", () => {
@@ -86,7 +86,7 @@ X;`,
                 content: `export class X {}
 export class A {}`,
             };
-            const host = createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const host = TestServerHost.createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const session = new TestSession(host);
             openFilesForSession([cTs], session);
             return { host, session, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
@@ -201,7 +201,7 @@ X;`,
                 content: `export class X {}
 export class A {}`,
             };
-            const host = createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const host = TestServerHost.createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const session = new TestSession(host);
             openFilesForSession([cTs], session);
             return { host, session, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };

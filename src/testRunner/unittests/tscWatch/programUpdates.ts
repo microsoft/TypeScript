@@ -15,7 +15,6 @@ import {
     watchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     getTypeScriptLibTestLocation,
     libFile,
@@ -55,7 +54,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                 path: "/user/username/workspace/projects/project/c/module.d.ts",
                 content: `export let x: number`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [appFile, moduleFile],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -77,7 +76,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                     include: ["app.ts"],
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [f1, config],
                 {
                     currentDirectory: "/user/username/workspace",
@@ -114,7 +113,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                 path: "/user/username/workspace/projects/project/e/f3.ts",
                 content: "let z = 1",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [configFile, file1, file2, file3],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -126,7 +125,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
         subScenario: "add new files to a configured program without file list",
         commandLineArgs: ["-w"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [commonFile1, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             ),
@@ -155,7 +154,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                     ]
                 }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -167,7 +166,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
         subScenario: "handle recreated files correctly",
         commandLineArgs: ["-w", "--explainFiles"],
         sys: () => {
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -201,7 +200,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                 content: `/// <reference path="commonFile2.ts"/>
                     let x = y`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1],
                 { currentDirectory: ts.getDirectoryPath(commonFile1.path) },
             );
@@ -227,7 +226,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                     "files": ["${commonFile1.path}", "${commonFile2.path}"]
                 }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -265,7 +264,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                         "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -301,7 +300,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                     compilerOptions: { allowUnusedLabels: true },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aTs, tsconfig],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -352,7 +351,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
                     files: ["a.ts"],
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aTs, bCssTs, tsconfig],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -408,7 +407,7 @@ export class A {
                     compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aTs, bTs, tsconfig],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -455,7 +454,7 @@ export class A {
                 path: "/user/username/workspace/projects/projectc/excluedFile1.ts",
                 content: `let t = 1;`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, excludedFile1, configFile],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -488,7 +487,7 @@ export class A {
                     "files": ["${file1.path}"]
                 }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, nodeModuleFile, classicModuleFile, configFile],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -526,7 +525,7 @@ export class A {
                         "someOtherProperty": {}
                     }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -550,7 +549,7 @@ export class A {
                 path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -582,7 +581,7 @@ export class A {
                 path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -613,7 +612,7 @@ export class A {
                 path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -648,7 +647,7 @@ export class A {
                 path: "/user/username/workspace/projects/projectc/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, file3, configFile],
                 { currentDirectory: "/user/username/workspace/projects" },
             );
@@ -664,7 +663,7 @@ export class A {
                 path: "/user/username/workspace/projects/project/f1.ts",
                 content: "export {}\ndeclare global {}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -693,7 +692,7 @@ export class A {
             path: "/user/username/workspace/projects/projectd/f3.ts",
             content: "export let y = 1;",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [file1, file2, file3],
             { currentDirectory: "/user/username/workspace/projects" },
         ));
@@ -743,7 +742,7 @@ export class A {
                 path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -774,7 +773,7 @@ export class A {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -805,7 +804,7 @@ export class A {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, configFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -837,7 +836,7 @@ export class A {
                 path: `/user/username/projects/myproject/Project/tsconfig.json`,
                 content: jsonToReadableText({ include: [".", "./**/*.json"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, configFile],
                 { currentDirectory: `/user/username/projects/myproject/Project` },
             );
@@ -868,7 +867,7 @@ export class A {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -899,7 +898,7 @@ export class A {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -926,7 +925,7 @@ export class A {
                 path: "/user/username/workspace/projects/project/f2.ts",
                 content: "let y = 2;",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -953,7 +952,7 @@ export class A {
                 path: configFilePath,
                 content: "{",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, corruptedConfig],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -994,7 +993,7 @@ declare const eval: any`,
                     },
                 ),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [libES5, libES2015Promise, app, config1],
                 { currentDirectory: "/home/src/projects/project" },
             );
@@ -1044,7 +1043,7 @@ declare const eval: any`,
                     ],
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [f, config],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -1083,7 +1082,7 @@ declare const eval: any`,
                 path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();',
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [moduleFile, file1],
                 { currentDirectory: "/users/username/projects/project" },
             );
@@ -1111,7 +1110,7 @@ declare const eval: any`,
                 path: "/users/username/projects/project/tsconfig.json",
                 content: `{}`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [moduleFile, file1, configFile],
                 { currentDirectory: "/users/username/projects/project" },
             );
@@ -1146,7 +1145,7 @@ declare const eval: any`,
                     const cwd = {
                         path: "/user/username/workspace/projects/projectc",
                     };
-                    return createWatchedSystem(
+                    return TestServerHost.createWatchedSystem(
                         [f1, config, node, cwd],
                         { currentDirectory: cwd.path },
                     );
@@ -1166,7 +1165,7 @@ declare const eval: any`,
                 path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();',
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1],
                 { currentDirectory: "/users/username/projects/project" },
             );
@@ -1198,7 +1197,7 @@ declare const eval: any`,
                         }
                     }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -1220,7 +1219,7 @@ declare const eval: any`,
                         "compilerOptions": {}
                     }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -1236,7 +1235,7 @@ declare const eval: any`,
                 path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 10",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -1286,7 +1285,7 @@ declare const eval: any`,
                 path: "/user/username/workspace/projects/project/file1.ts",
                 content: "let t = 10;",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -1317,7 +1316,7 @@ declare const eval: any`,
                 path: "/user/username/workspace/projects/project/node_modules/@types/typings/lib.d.ts",
                 content: `export const x: number`,
             };
-            return createWatchedSystem([f, config, t1, t2], { currentDirectory: ts.getDirectoryPath(f.path) });
+            return TestServerHost.createWatchedSystem([f, config, t1, t2], { currentDirectory: ts.getDirectoryPath(f.path) });
         },
     });
 
@@ -1326,7 +1325,7 @@ declare const eval: any`,
             path: "/user/username/workspace/projects/project/compile",
             content: "let x = 1",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [f],
             { currentDirectory: "/user/username/workspace/projects/project" },
         ));
@@ -1369,7 +1368,7 @@ declare const eval: any`,
     }
 }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFilePath) },
             );
@@ -1414,7 +1413,7 @@ declare const eval: any`,
                             compilerOptions: compilerOptionsToConfigJson(options),
                         }),
                     };
-                    return createWatchedSystem(
+                    return TestServerHost.createWatchedSystem(
                         [file1, file2, tsconfig],
                         { currentDirectory: "/user/username/projects/myproject" },
                     );
@@ -1476,7 +1475,7 @@ function two() {
     }
 }`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file],
                 { currentDirectory: "/user/username/workspace/projects/project" },
             );
@@ -1513,7 +1512,7 @@ export function two() {
                 path: `${projectLocation}/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, configFile],
                 { currentDirectory: projectLocation },
             );
@@ -1562,7 +1561,7 @@ export default test;`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, tsconfigFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1589,7 +1588,7 @@ foo().hello`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem([aFile, config], { currentDirectory: "/user/username/projects/myproject" });
+            return TestServerHost.createWatchedSystem([aFile, config], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
@@ -1632,7 +1631,7 @@ v === 'foo';`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1660,7 +1659,7 @@ class D extends C { prop = 1; }`,
                 path: `/user/username/projects/project/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { target: "es6" } }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, config],
                 { currentDirectory: "/user/username/projects/project" },
             );
@@ -1692,7 +1691,7 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1740,7 +1739,7 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/project/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: false } }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, config],
                 { useCaseSensitiveFileNames: false, currentDirectory: "/user/username/projects/project" },
             );
@@ -1771,7 +1770,7 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { moduleResolution: "node" } }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, jsonFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1800,7 +1799,7 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1847,7 +1846,7 @@ interface Document {
                     subScenario: `updates errors in lib file/${subScenario}`,
                     commandLineArgs: ["-w", aFile.path, ...commandLineOptions],
                     sys: () =>
-                        createWatchedSystem(
+                        TestServerHost.createWatchedSystem(
                             [aFile, libFileWithDocument],
                             { currentDirectory: "/user/username/projects/myproject" },
                         ),
@@ -1931,7 +1930,7 @@ interface Document {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, configFile, libFileWithDocument],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -1968,7 +1967,7 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, configFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2004,7 +2003,7 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [aFile, bFile, configFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2041,7 +2040,7 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [index, configFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2070,7 +2069,7 @@ import { x } from "../b";`,
                     compilerOptions: {},
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [index, configFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2110,7 +2109,7 @@ import { x } from "../b";`,
                     files: [commonFile1.path, commonFile2.path],
                 }),
             };
-            return createWatchedSystem([
+            return TestServerHost.createWatchedSystem([
                 commonFile1,
                 commonFile2,
                 configFile,
@@ -2201,7 +2200,7 @@ import { x } from "../b";`,
                     include: ["client/**/*", "folder2"],
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, module2, symlink, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2255,7 +2254,7 @@ import { x } from "../b";`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [config1, class1, config2, class2, class1Dt],
                 { currentDirectory: "/user/username/projects/myproject/projects" },
             );
@@ -2302,7 +2301,7 @@ import { x } from "../b";`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: `{}`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2338,7 +2337,7 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, module2, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2383,7 +2382,7 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, module2, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2427,7 +2426,7 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, module2, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -2466,7 +2465,7 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [module1, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             );

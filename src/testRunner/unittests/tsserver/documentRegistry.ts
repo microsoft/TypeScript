@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     }
 
     function createSessionAndHost() {
-        const host = createServerHost([file, moduleFile, configFile]);
+        const host = TestServerHost.createServerHost([file, moduleFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         checkProject(session, /*moduleIsOrphan*/ false);
@@ -125,7 +125,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
 
 describe("unittests:: tsserver:: documentRegistry:: works when reusing orphan script info with different scriptKind", () => {
     it("works when reusing orphan script info with different scriptKind", () => {
-        const host = createServerHost({});
+        const host = TestServerHost.createServerHost({});
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         const newText = "exrpot const x = 10;";
         const content = `import x from 'react';\n${newText}`;

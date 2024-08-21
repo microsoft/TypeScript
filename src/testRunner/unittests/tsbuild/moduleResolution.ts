@@ -6,11 +6,11 @@ import {
     verifyTsc,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {
-        return createWatchedSystem([
+        return TestServerHost.createWatchedSystem([
             {
                 path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
                 content: dedent`

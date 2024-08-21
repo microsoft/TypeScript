@@ -8,7 +8,7 @@ import { jsonToReadableText } from "../helpers.js";
 import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
     verifyAlternateResultScenario(
@@ -28,7 +28,7 @@ describe("unittests:: tsc:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "pnpm style layout",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 // button@0.0.1
                 "/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts": dedent`
                     export interface Button {
@@ -170,7 +170,7 @@ describe("unittests:: tsc:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "package json scope",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/src/projects/project/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson({
                         target: ScriptTarget.ES2016,

@@ -4,9 +4,7 @@ import { jsonToReadableText } from "../helpers.js";
 import { TscWatchSystem } from "./baseline.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLinkMap,
-    getCreateWatchedSystem,
     getTypeScriptLibTestLocation,
     libFile,
     TestServerHost,
@@ -57,7 +55,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FileOrFolderOr
 }
 
 function getSysForLibResolution(libRedirection?: boolean, forTsserver?: boolean) {
-    return getCreateWatchedSystem(forTsserver)(
+    return TestServerHost.getCreateWatchedSystem(forTsserver)(
         getFsContentsForLibResolution(libRedirection),
         { currentDirectory: "/home/src/workspace/projects" },
     );
@@ -252,7 +250,7 @@ function getFsContentsForLibResolutionUnknown(): FileOrFolderOrSymLinkMap {
     };
 }
 export function getSysForLibResolutionUnknown() {
-    return createWatchedSystem(
+    return TestServerHost.createWatchedSystem(
         getFsContentsForLibResolutionUnknown(),
         { currentDirectory: "/home/src/workspace/projects" },
     );

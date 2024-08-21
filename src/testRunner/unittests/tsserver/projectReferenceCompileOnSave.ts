@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project references and compile on save", () => {
@@ -52,7 +52,7 @@ fn2();
     describe("when dependency project is not open", () => {
         describe("Of usageTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -76,7 +76,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -100,7 +100,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -130,7 +130,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -160,7 +160,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -201,7 +201,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -242,7 +242,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -272,7 +272,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to depenedency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -302,7 +302,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to depenedency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -343,7 +343,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -387,7 +387,7 @@ fn2();
 
         describe("Of dependencyTs in usage project", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -411,7 +411,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -435,7 +435,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -465,7 +465,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -495,7 +495,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -536,7 +536,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -577,7 +577,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -607,7 +607,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -637,7 +637,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -678,7 +678,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs], session);
 
@@ -724,7 +724,7 @@ fn2();
     describe("when the depedency file is open", () => {
         describe("Of usageTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -748,7 +748,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -772,7 +772,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -813,7 +813,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -854,7 +854,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency with file", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -895,7 +895,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -936,7 +936,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage with project", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -977,7 +977,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1018,7 +1018,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1059,7 +1059,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1102,7 +1102,7 @@ fn2();
 
         describe("Of dependencyTs in usage project", () => {
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1126,7 +1126,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1167,7 +1167,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to dependency", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1208,7 +1208,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to usage", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1249,7 +1249,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to dependency", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1293,7 +1293,7 @@ fn2();
 
         describe("Of dependencyTs", () => {
             it("with initial file open, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1317,7 +1317,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency", session);
             });
             it("with initial file open, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1341,7 +1341,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project", session);
             });
             it("with local change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1382,7 +1382,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to dependency", session);
             });
             it("with local change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1423,7 +1423,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to dependency", session);
             });
             it("with local change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1464,7 +1464,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to usage", session);
             });
             it("with local change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1505,7 +1505,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to usage", session);
             });
             it("with change to dependency, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1546,7 +1546,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1587,7 +1587,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1628,7 +1628,7 @@ fn2();
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to usage", session);
             });
             it("with change to usage, with specifying project file", () => {
-                const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
+                const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
                 const session = new TestSession(host);
                 openFilesForSession([usageTs, dependencyTs], session);
 
@@ -1728,7 +1728,7 @@ describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project re
     }
 }`,
         };
-        const host = createServerHost([tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
 
         // ts build should succeed
         ensureErrorFreeBuild(host, [siblingConfig.path]);

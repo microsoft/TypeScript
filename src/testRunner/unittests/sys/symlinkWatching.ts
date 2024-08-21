@@ -10,9 +10,9 @@ import {
     Deferred,
 } from "../../_namespaces/Utils.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLinkMap,
     osFlavorToString,
+    TestServerHost,
     TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: sys:: symlinkWatching::", () => {
@@ -764,7 +764,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     describe("with virtualFileSystem::", () => {
         const root = ts.normalizePath("/tests/baselines/symlinks");
         function getSys(osFlavor?: TestServerHostOsFlavor) {
-            return createWatchedSystem({
+            return TestServerHost.createWatchedSystem({
                 [`${root}/folder/file.ts`]: "export const x = 10;",
                 [`${root}/linked`]: { symLink: `${root}/folder` },
             }, { osFlavor, currentDirectory: root });
@@ -807,7 +807,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         verifyWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.Linux);
 
         function getRecursiveSys(osFlavor: TestServerHostOsFlavor) {
-            return createWatchedSystem({
+            return TestServerHost.createWatchedSystem({
                 ...getRecursiveFs("recursivefsevents"),
                 ...getRecursiveFs("recursivefseventssub"),
                 ...getRecursiveFs("recursivefseventsparallel"),

@@ -9,8 +9,8 @@ import {
     verifyTscWatch,
 } from "./tscWatch.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLinkMap,
+    TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
 function getFsContentsForNoEmitOnError(
@@ -115,7 +115,7 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
                         scenario: "noEmitOnError",
                         subScenario,
                         sys: () =>
-                            createWatchedSystem(
+                            TestServerHost.createWatchedSystem(
                                 fsContents(mainErrorContent),
                                 { currentDirectory: "/user/username/projects/noEmitOnError" },
                             ),
@@ -146,7 +146,7 @@ export function forEachNoEmitOnErrorScenarioTscWatch(commandLineArgs: string[]) 
                 subScenario,
                 commandLineArgs: [...commandLineArgs, "--w"],
                 sys: () =>
-                    createWatchedSystem(
+                    TestServerHost.createWatchedSystem(
                         fsContents(errorTypes[0][1]),
                         { currentDirectory: "/user/username/projects/noEmitOnError" },
                     ),

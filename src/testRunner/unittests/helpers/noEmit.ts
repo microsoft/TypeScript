@@ -14,10 +14,7 @@ import {
 } from "./tsc.js";
 import { verifyTscWatch } from "./tscWatch.js";
 import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: CompilerOptions) {
     const discrepancyExplanation = () => [
@@ -296,7 +293,7 @@ function forEachNoEmitAndErrorsWorker(
                 action(
                     `${options.outFile ? "outFile" : "multiFile"}/${subScenario}${incremental ? " with incremental" : ""}${asModules ? " as modules" : ""}`,
                     () => {
-                        const sys = createWatchedSystem({
+                        const sys = TestServerHost.createWatchedSystem({
                             "/home/src/projects/project/a.ts": aContent,
                             "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                                 compilerOptions: compilerOptionsToConfigJson(compilerOptions),

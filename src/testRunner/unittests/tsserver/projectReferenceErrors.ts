@@ -9,8 +9,8 @@ import {
     verifyGetErrScenario,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferenceErrors:: with project references and error reporting", () => {
@@ -143,7 +143,7 @@ fnErr();
     });
 
     it("when options for dependency project are different from usage project", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/home/src/projects/project/a/index.ts": dedent`
                 export function f2() {
                     return console.log()

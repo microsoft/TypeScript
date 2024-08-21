@@ -15,8 +15,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
     TestServerHostOsFlavor,
     Tsc_WatchDirectory,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -46,7 +46,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const files = [index, file1, configFile];
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-            const host = createServerHost(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
+            const host = TestServerHost.createServerHost(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
             const session = new TestSession(host);
             openFilesForSession([index], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
@@ -100,7 +100,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem Watche
                 content: "let y = 10;",
             };
             const files = [configFile, file1, file2];
-            const host = createServerHost(files, { windowsStyleRoot: "c:/" });
+            const host = TestServerHost.createServerHost(files, { windowsStyleRoot: "c:/" });
             const session = new TestSession(host);
             openFilesForSession([file1], session);
             baselineTsserverLogs("watchEnvironment", scenario, session);
@@ -135,7 +135,7 @@ describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", ()
         };
         const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [index, file1, configFile, nodeModulesExistingUnusedFile],
             { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables },
         );
@@ -194,7 +194,7 @@ describe("unittests:: tsserver:: watchEnvironment:: networkStylePaths", () => {
         function verifyFilePathStyle(path: string, logger: LoggerWithInMemoryLogs) {
             const windowsStyleRoot = path.substring(0, ts.getRootLength(path));
             const file: File = { path, content: "const x = 10" };
-            const host = createServerHost(
+            const host = TestServerHost.createServerHost(
                 [file],
                 { windowsStyleRoot },
             );
@@ -222,7 +222,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1));
+        const host = TestServerHost.createServerHost(files.concat(commonFile1));
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -250,7 +250,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
+        const host = TestServerHost.createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -278,7 +278,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
+        const host = TestServerHost.createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -310,7 +310,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1));
+        const host = TestServerHost.createServerHost(files.concat(commonFile1));
         const session = new TestSession(host);
         openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
         baselineTsserverLogs("watchEnvironment", `with watchFile option in configFile`, session);
@@ -334,7 +334,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
+        const host = TestServerHost.createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
         baselineTsserverLogs("watchEnvironment", `with watchDirectory option in configFile`, session);
@@ -358,7 +358,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
+        const host = TestServerHost.createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -406,7 +406,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             };
             const { main, bar, foo } = setupFiles();
             const files = [main, bar, foo, configFile];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             setupConfigureHost(session, configureHost);
             openFilesForSession([main], session);
@@ -426,7 +426,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setupExternalProject(configureHost?: boolean) {
             const { main, bar, foo } = setupFiles();
             const files = [main, bar, foo];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             setupConfigureHost(session, configureHost);
             openExternalProjectForSession({
@@ -451,7 +451,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         it("external project watch options errors", () => {
             const { main, bar, foo } = setupFiles();
             const files = [main, bar, foo];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openExternalProjectForSession({
                 projectFileName: `/user/username/projects/myproject/project.csproj`,
@@ -467,7 +467,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setupInferredProject(configureHost?: boolean) {
             const { main, bar, foo } = setupFiles();
             const files = [main, bar, foo];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             setupConfigureHost(session, configureHost);
             setCompilerOptionsForInferredProjectsRequestForSession({
@@ -491,7 +491,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         it("inferred project watch options errors", () => {
             const { main, bar, foo } = setupFiles();
             const files = [main, bar, foo];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             setCompilerOptionsForInferredProjectsRequestForSession({
                 options: { excludeDirectories: ["**/../*"] },
@@ -512,7 +512,7 @@ describe("unittests:: tsserver:: watchEnvironment:: file names on case insensiti
                 path: `${projectRootPath}/foo.ts`,
                 content: `import { foo } from "bar"`,
             };
-            const host = createServerHost([file]);
+            const host = TestServerHost.createServerHost([file]);
             const session = new TestSession(host);
             openFilesForSession([{ file, projectRootPath }], session);
             baselineTsserverLogs("watchEnvironment", scenario, session);
@@ -539,7 +539,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
             path: `/user/username/projects/myproject/index.ts`,
             content: `import * as tsconfig from "./tsconfig.json";`,
         };
-        const host = createServerHost([config, index]);
+        const host = TestServerHost.createServerHost([config, index]);
         const session = new TestSession(host);
         openFilesForSession([index], session);
         baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);
@@ -560,7 +560,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
             path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
             content: `export function randomSeed(): string;`,
         };
-        const host = createServerHost([config, main, randomSeed], { osFlavor: TestServerHostOsFlavor.Linux });
+        const host = TestServerHost.createServerHost([config, main, randomSeed], { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([main], session);
         verifyGetErrRequest({ session, files: [main] });
@@ -579,7 +579,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
 
 describe("unittests:: tsserver:: watchEnvironment:: perVolumeCasing", () => {
     it("new file addition", () => {
-        const host = createServerHost([]);
+        const host = TestServerHost.createServerHost([]);
         // Make /Volumes case sensitive
         host.getCanonicalFileName = s => ts.startsWith(s, "/Volumes/") ? s : ts.toFileNameLowerCase(s);
         host.ensureFileOrFolder({ path: "/Volumes/git/projects/project/foo.ts", content: `export const foo = "foo";` });

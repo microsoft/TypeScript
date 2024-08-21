@@ -8,7 +8,6 @@ import { TscWatchSystem } from "./baseline.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
-    getCreateWatchedSystem,
     osFlavorToString,
     TestServerHost,
     TestServerHostOsFlavor,
@@ -33,7 +32,7 @@ function getMonorepoSymlinkedSiblingPackagesSys(forTsserver: boolean, built: boo
             "dist/**/*",
         ],
     });
-    const sys = getCreateWatchedSystem(forTsserver)({
+    const sys = TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/project/packages/package1/package.json": getPackageJson("package1"),
         "/home/src/projects/project/packages/package1/tsconfig.json": configText,
         "/home/src/projects/project/packages/package1/src/index.ts": dedent`
@@ -145,7 +144,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
     built: boolean,
     osFlavor: TestServerHostOsFlavor,
 ): TestServerHost {
-    const sys = getCreateWatchedSystem(forTsserver)({
+    const sys = TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/c/3/c-impl/c/src/c.ts": `export const c: string = 'test';`,
         "/home/src/projects/c/3/c-impl/c/src/index.ts": `export * from './c';`,
         "/home/src/projects/c/3/c-impl/c/tsconfig.json": jsonToReadableText({

@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", () => {
@@ -23,7 +23,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", 
             content: `var v = 10; module.exports = v;`,
         };
 
-        const host = createServerHost([file1, moduleFile]);
+        const host = TestServerHost.createServerHost([file1, moduleFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -45,7 +45,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", 
             content: "let x =1;",
         };
 
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession([file1], session);
@@ -60,7 +60,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", 
     });
 
     it("handles resolutions when currentNodeModulesDepth changes when referencing file from another file", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/username/projects/project1/src/file1.js": dedent`
                 import {x} from 'glob';
                 import {y} from 'minimatch'; // This imported file will add imports from minimatch to program

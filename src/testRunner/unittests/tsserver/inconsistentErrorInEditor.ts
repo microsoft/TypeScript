@@ -4,10 +4,10 @@ import {
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: tsserver:: inconsistentErrorInEditor::", () => {
     it("should not error", () => {
-        const host = createServerHost([]);
+        const host = TestServerHost.createServerHost([]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -37,7 +37,7 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor::", () => {
     });
 
     it("should not error 2", () => {
-        const host = createServerHost([]);
+        const host = TestServerHost.createServerHost([]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,

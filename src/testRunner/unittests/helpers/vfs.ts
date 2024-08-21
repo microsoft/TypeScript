@@ -15,7 +15,7 @@ export function loadProjectFromFiles(
     files: FileOrFolderOrSymLinkMap,
     options?: FsOptions,
 ): TestServerHost {
-    return new TestServerHost(files, {
+    return TestServerHost.createWatchedSystem(files, {
         currentDirectory: options?.currentDirectory ?? "/",
         environmentVariables: options?.environmentVariables,
     });

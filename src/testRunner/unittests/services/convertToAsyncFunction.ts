@@ -1,9 +1,9 @@
 import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import {
-    createServerHost,
     File,
     libFile as vfsWatch_LibFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 import {
     extractTest,
@@ -413,7 +413,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         if (includeModule) {
             files.push(moduleFile);
         }
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const projectService = new TestProjectService(host);
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();

@@ -108,30 +108,6 @@ export interface TestServerHostCreationParameters {
     typingsInstallerTypesRegistry?: string | readonly string[];
 }
 
-export function createWatchedSystem(
-    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
-    params?:
-        & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
-        & { currentDirectory: string; },
-): TestServerHost {
-    return new TestServerHost(fileOrFolderList, params);
-}
-
-export function createServerHost(
-    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
-    params?: Omit<TestServerHostCreationParameters, "currentDirectory">,
-): TestServerHost {
-    if ((params as TestServerHostCreationParameters)?.currentDirectory) (params as TestServerHostCreationParameters).currentDirectory = undefined;
-    const host = new TestServerHost(fileOrFolderList, params);
-    // Just like sys, patch the host to use writeFile
-    patchWriteFileEnsuringDirectory(host);
-    return host;
-}
-
-export function getCreateWatchedSystem(forTsserver: boolean | undefined) {
-    return (!forTsserver ? createWatchedSystem : createServerHost);
-}
-
 export interface File {
     path: string;
     content: string;
@@ -455,7 +431,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     preferNonRecursiveWatch: boolean;
     globalTypingsCacheLocation: string;
     private readonly typesRegistry: string | readonly string[] | undefined;
-    constructor(
+    private constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
             useCaseSensitiveFileNames,
@@ -552,6 +528,30 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
                     emptyArray,
             )),
         });
+    }
+
+    static createWatchedSystem(
+        fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+        params:
+            & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
+            & { currentDirectory: string; },
+    ): TestServerHost {
+        return new TestServerHost(fileOrFolderList, params);
+    }
+
+    static createServerHost(
+        fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+        params?: Omit<TestServerHostCreationParameters, "currentDirectory">,
+    ): TestServerHost {
+        if ((params as TestServerHostCreationParameters)?.currentDirectory) (params as TestServerHostCreationParameters).currentDirectory = undefined;
+        const host = new TestServerHost(fileOrFolderList, params);
+        // Just like sys, patch the host to use writeFile
+        patchWriteFileEnsuringDirectory(host);
+        return host;
+    }
+
+    static getCreateWatchedSystem(forTsserver: boolean | undefined) {
+        return (!forTsserver ? TestServerHost.createWatchedSystem : TestServerHost.createServerHost);
     }
 
     private nextInode = 0;

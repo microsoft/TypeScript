@@ -10,8 +10,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: openfile::", () => {
@@ -21,7 +21,7 @@ describe("unittests:: tsserver:: openfile::", () => {
             content: "let x = 1",
         };
         const projectFileName = "externalProject";
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         const session = new TestSession(host);
         // create a project
         openExternalProjectForSession({
@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: openfile::", () => {
                 path: "/home/src/projects/project/a/tsconfig.json",
                 content: "",
             };
-            const host = createServerHost([file1, file2, configFile, configFile2], {
+            const host = TestServerHost.createServerHost([file1, file2, configFile, configFile2], {
                 useCaseSensitiveFileNames,
             });
             const session = new TestSession(host);
@@ -89,7 +89,7 @@ describe("unittests:: tsserver:: openfile::", () => {
             content: "{}",
         };
         const files = [aFile, configFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: aFile, projectRootPath }], session);
 
@@ -113,7 +113,7 @@ describe("unittests:: tsserver:: openfile::", () => {
             content: "{}",
         };
         const files = [aFile, configFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: aFile, content: aFile.content, projectRootPath }], session);
         openFilesForSession([{ file: aFile, content: `${aFile.content}export const y = 10;`, projectRootPath }], session);
@@ -137,7 +137,7 @@ function bar() {
 foo();
 bar();`,
         };
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         verifyGetErrRequest({ session, files: [file] });
@@ -177,7 +177,7 @@ bar();`,
 
     describe("opening file and refreshing program", () => {
         function createHostAndSession() {
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 "/home/src/projects/project/a.ts": "export const a = 10;",
                 "/home/src/projects/project/b.ts": "export const b = 10;",
                 "/home/src/projects/project/tsconfig.json": "{}",

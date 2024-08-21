@@ -10,8 +10,8 @@ import {
 } from "../helpers/baseline.js";
 import { watchBaseline } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: builder cancellationToken::", () => {
@@ -50,7 +50,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
-            const { sys, baseline } = createBaseline(createWatchedSystem(
+            const { sys, baseline } = createBaseline(TestServerHost.createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             ));

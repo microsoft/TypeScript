@@ -13,7 +13,6 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -169,7 +168,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: programUpdates::", () => {
         subScenario: "with outFile and non local change",
         commandLineArgs: ["-b", "-w", "sample1/logic"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                 }),
@@ -244,7 +243,7 @@ createSomeObject().message;`,
                 };
 
                 const files = [libraryTs, libraryTsconfig, appTs, appTsconfig];
-                return createWatchedSystem(files, { currentDirectory: `${"/user/username/projects"}/sample1` });
+                return TestServerHost.createWatchedSystem(files, { currentDirectory: `${"/user/username/projects"}/sample1` });
             },
             edits: [
                 {
@@ -368,7 +367,7 @@ createSomeObject().message;`,
                 subScenario: "reportErrors/declarationEmitErrors/when fixing error files all files are emitted",
                 commandLineArgs: ["-b", "-w", subProject],
                 sys: () =>
-                    createWatchedSystem(
+                    TestServerHost.createWatchedSystem(
                         [fileWithError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` },
                     ),
@@ -382,7 +381,7 @@ createSomeObject().message;`,
                 subScenario: "reportErrors/declarationEmitErrors/when file with no error changes",
                 commandLineArgs: ["-b", "-w", subProject],
                 sys: () =>
-                    createWatchedSystem(
+                    TestServerHost.createWatchedSystem(
                         [fileWithError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` },
                     ),
@@ -403,7 +402,7 @@ createSomeObject().message;`,
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
-                        createWatchedSystem(
+                        TestServerHost.createWatchedSystem(
                             [fileWithFixedError, fileWithoutError, tsconfig],
                             { currentDirectory: `${"/user/username/projects"}/${solution}` },
                         ),
@@ -418,7 +417,7 @@ createSomeObject().message;`,
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when file with no error changes",
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
-                        createWatchedSystem(
+                        TestServerHost.createWatchedSystem(
                             [fileWithFixedError, fileWithoutError, tsconfig],
                             { currentDirectory: `${"/user/username/projects"}/${solution}` },
                         ),
@@ -470,7 +469,7 @@ createSomeObject().message;`,
                     },
                 }),
             };
-            return createWatchedSystem([index, configFile], { currentDirectory: "/user/username/projects/myproject" });
+            return TestServerHost.createWatchedSystem([index, configFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
@@ -619,7 +618,7 @@ createSomeObject().message;`,
                     files: [otherFile2.path],
                 }),
             };
-            return createWatchedSystem([
+            return TestServerHost.createWatchedSystem([
                 alphaExtendedConfigFile,
                 project1Config,
                 commonFile1,
@@ -783,7 +782,7 @@ createSomeObject().message;`,
                     files: [],
                 }),
             };
-            return createWatchedSystem([
+            return TestServerHost.createWatchedSystem([
                 configFile,
                 alphaExtendedConfigFile,
                 project1Config,
@@ -818,7 +817,7 @@ createSomeObject().message;`,
         scenario: "programUpdates",
         subScenario: "tsbuildinfo has error",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/project/main.ts": "export const x = 10;",
                 "/user/username/projects/project/tsconfig.json": "{}",
                 "/user/username/projects/project/tsconfig.tsbuildinfo": "Some random string",

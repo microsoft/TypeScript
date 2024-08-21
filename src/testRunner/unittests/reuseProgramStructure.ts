@@ -14,8 +14,8 @@ import {
     updateProgramText,
 } from "./helpers.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: reuseProgramStructure:: General", () => {
@@ -835,7 +835,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
         }
 
         function verifyProgram(files: File[], rootFiles: string[], options: ts.CompilerOptions, configFile: string) {
-            const system = createWatchedSystem(files);
+            const system = TestServerHost.createWatchedSystem(files, { currentDirectory: ts.getDirectoryPath(configFile) });
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
@@ -950,7 +950,13 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 path: "/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions, include: ["packages/**/*.ts"] }),
             };
-            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, configFile]), configFile.path);
+            verifyProgramWithConfigFile(
+                TestServerHost.createWatchedSystem(
+                    [app, module1, module2, module3, configFile],
+                    { currentDirectory: configFile.path },
+                ),
+                configFile.path,
+            );
         });
         it("has the same root file names", () => {
             const module1: File = {
@@ -966,7 +972,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const rootFiles = [module1.path, module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem([module1, module2, module3], { currentDirectory: "/src/packages" });
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -1001,7 +1007,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module1.path, module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem([module1, module2, module3], { currentDirectory: "/src/packages" });
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -1026,7 +1032,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem([module1, module2, module3], { currentDirectory: "/src/packages" });
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,

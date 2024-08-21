@@ -23,8 +23,8 @@ import {
 } from "../helpers/typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
                 typeAcquisition: { enable: true },
             }),
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f1, f2, config, typesConfig],
             { typingsInstallerTypesRegistry: "config" },
         );
@@ -98,7 +98,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "declare const $: { x: number }",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1, tsconfig, packageJson],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -137,7 +137,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "declare const $: { x: number }",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1, packageJson],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -162,7 +162,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [jqueryJs],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -188,7 +188,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: "/user/username/projects/project/app.ts",
             content: "",
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
 
         const projectFileName = "/user/username/projects/app/test.csproj";
         const session = new TestSession(host);
@@ -211,7 +211,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: "/home/src/projects/project/node_modules/@types/node/index.d.ts",
             content: "declare var node;",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [appJs, nodeDts],
             { typingsInstallerTypesRegistry: "node" },
         );
@@ -234,7 +234,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: "/user/username/projects/project/app.ts",
             content: "",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -260,7 +260,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "declare const $: { x: number }",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -309,7 +309,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "declare const lodash: { x: number }",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [lodashJs, file2Jsx, file3dts, customTypesMap],
             { typingsInstallerTypesRegistry: ["lodash", "react"] },
         );
@@ -339,7 +339,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [jqueryJs],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -366,7 +366,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [jqueryJs],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -399,7 +399,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [jqueryJs, file2Ts],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -462,7 +462,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "declare const moment: { x: number }",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [lodashJs, commanderJs, file3dts, packageJson, customTypesMap],
             { typingsInstallerTypesRegistry: ["jquery", "commander", "moment", "express"] },
         );
@@ -533,7 +533,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "declare const lodash: { x: number }",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [lodashJs, commanderJs, file3, packageJson, customTypesMap],
             { typingsInstallerTypesRegistry: ["commander", "express", "jquery", "moment", "lodash"] },
         );
@@ -601,7 +601,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 package: "gulp",
             };
 
-            const host = createServerHost(
+            const host = TestServerHost.createServerHost(
                 [lodashJs, commanderJs, file3, customTypesMap],
                 { typingsInstallerTypesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"] },
             );
@@ -831,7 +831,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/zkat__cacache/index.d.ts"),
             content: "",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [app, jsconfig, pkgJson, commander, commanderPackage, cacache, cacachePackage],
             { typingsInstallerTypesRegistry: ["zkat__cacache", "nested", "commander"] },
         );
@@ -900,7 +900,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
                 content: "",
             };
-            const host = createServerHost(
+            const host = TestServerHost.createServerHost(
                 [app, jsconfig, pkgJson, commander, commanderPackage, jquery, jqueryPackage, nestedPackage],
                 { typingsInstallerTypesRegistry: ["jquery", "nested", "commander"] },
             );
@@ -956,7 +956,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [app, jsconfig, jquery, jqueryPackage],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -994,7 +994,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [app, jsconfig, bowerJson],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -1028,7 +1028,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/commander/index.d.ts"),
             content: "export let x: number",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f, brokenPackageJson],
             { typingsInstallerTypesRegistry: "commander" },
         );
@@ -1066,7 +1066,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest(`node_modules/@types/${emberComponentDirectory}/index.d.ts`),
             content: "export let x: number",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file],
             { typingsInstallerTypesRegistry: ["node", "commander"] },
         );
@@ -1093,7 +1093,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "module.exports = 0",
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file, commanderJS],
             { typingsInstallerTypesRegistry: "commander" },
         );
@@ -1125,7 +1125,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 `,
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f1],
             { typingsInstallerTypesRegistry: "foo" },
         );
@@ -1148,7 +1148,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
     });
 
     it("cached unresolved typings are not recomputed if program structure did not change", () => {
-        const host = createServerHost([]);
+        const host = TestServerHost.createServerHost([]);
         const session = new TestSession(host);
         const f = {
             path: "/home/src/projects/project/app.js",
@@ -1247,7 +1247,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "export let x: number",
             package: "commander",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1, tsconfig, packageJson, file2, tsconfig2, packageJson2],
             { typingsInstallerTypesRegistry: ["jquery", "commander"] },
         );
@@ -1305,7 +1305,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 },
             }),
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1, packageJson, jquery, cacheConfig, cacheLockConfig],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -1359,7 +1359,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
             content: "declare const $: { x: number }",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file1, packageJson, cacheConfig, cacheLockConfig, jquery],
             { typingsInstallerTypesRegistry: "jquery" },
         );
@@ -1435,7 +1435,7 @@ describe("unittests:: tsserver:: typingsInstaller:: Invalid package names", () =
                 },
             }),
         };
-        const host = createServerHost([f1, packageJson]);
+        const host = TestServerHost.createServerHost([f1, packageJson]);
         const session = new TestSession({
             host,
             installAction: "installWorker should not be invoked",
@@ -1685,7 +1685,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
     });
 
     function setup(files: readonly File[]) {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const logger = createLoggerWithInMemoryLogs(host);
         const log = loggerToTypingsInstallerLog(logger);
         const testhost = patchHostTimeouts(
@@ -1763,7 +1763,7 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/commander/index.d.ts"),
             content: "export let x: number",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f1, packageFile],
             { typingsInstallerTypesRegistry: "commander" },
         );
@@ -1804,7 +1804,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/commander/index.d.ts"),
             content: "export let x: number",
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f1, packageFile, packageLockFile],
             { typingsInstallerTypesRegistry: "commander" },
         );
@@ -1829,7 +1829,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             path: "/home/src/projects/project/package.json",
             content: jsonToReadableText({ dependencies: { commander: "1.0.0" } }),
         };
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [f1, packageFile],
             { typingsInstallerTypesRegistry: "commander" },
         );
@@ -2380,7 +2380,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
             content: `export var x: string;`,
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [app, fooo],
             { typingsInstallerTypesRegistry: "foo" },
         );
@@ -2469,7 +2469,7 @@ declare module "stream" {
 }`,
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file],
             { typingsInstallerTypesRegistry: "node" },
         );
@@ -2566,7 +2566,7 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
             }),
         };
 
-        const host = createServerHost(
+        const host = TestServerHost.createServerHost(
             [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson, typingsCachePackageLockJson],
             {
                 typingsInstallerGlobalCacheLocation: typingsCache,

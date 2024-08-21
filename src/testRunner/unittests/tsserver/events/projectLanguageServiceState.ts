@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => {
@@ -28,7 +28,7 @@ describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => 
             path: config.path,
             content: jsonToReadableText({ exclude: ["largefile.js"] }),
         };
-        const host = createServerHost([f1, f2, config]);
+        const host = TestServerHost.createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
@@ -61,7 +61,7 @@ describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => 
             path: "/user/username/projects/project/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, f2, f3, config]);
+        const host = TestServerHost.createServerHost([f1, f2, f3, config]);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
         const project = session.getProjectService().configuredProjects.get(config.path)!;

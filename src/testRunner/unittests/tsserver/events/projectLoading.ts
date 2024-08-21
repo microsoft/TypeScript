@@ -10,7 +10,6 @@ import {
     toExternalFiles,
 } from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
@@ -39,7 +38,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
                     path: configBPath,
                     content: "{}",
                 };
-                const host = createServerHost(files.concat(bTs, configB));
+                const host = TestServerHost.createServerHost(files.concat(bTs, configB));
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
                 openFilesForSession([bTs], session);
@@ -47,7 +46,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
             });
 
             it("when change is detected in the config file", () => {
-                const host = createServerHost(files);
+                const host = TestServerHost.createServerHost(files);
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
 
@@ -67,7 +66,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
                         extends: "../a/tsconfig.json",
                     }),
                 };
-                const host = createServerHost(files.concat(bTs, configB));
+                const host = TestServerHost.createServerHost(files.concat(bTs, configB));
                 const session = createSession(host);
                 openFilesForSession([bTs], session);
 
@@ -113,7 +112,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
                         }),
                     };
 
-                    const host = createServerHost(files.concat(aDTs, aDTsMap, bTs, configB));
+                    const host = TestServerHost.createServerHost(files.concat(aDTs, aDTsMap, bTs, configB));
                     const session = createSession(host);
                     openFilesForSession([bTs], session);
 
@@ -132,7 +131,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
                 const projectFileName = `/user/username/projects/a/project.csproj`;
 
                 function createSessionAndOpenProject(lazyConfiguredProjectsFromExternalProject: boolean) {
-                    const host = createServerHost(files);
+                    const host = TestServerHost.createServerHost(files);
                     const session = createSession(host);
                     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                         command: ts.server.protocol.CommandTypes.Configure,

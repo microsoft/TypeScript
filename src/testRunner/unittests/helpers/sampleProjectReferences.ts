@@ -2,7 +2,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { getProjectConfigWithNodeNext } from "./contents.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
-import { getCreateWatchedSystem } from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({
@@ -25,7 +25,7 @@ export function getSysForSampleProjectReferences(
     skipReferenceCoreFromTest?: boolean,
     forTsserver?: boolean,
 ) {
-    return getCreateWatchedSystem(forTsserver)({
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 ...getProjectConfigWithNodeNext(withNodeNext),

@@ -5,11 +5,11 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: codeFix::", () => {
     function setup() {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/home/src/projects/project/src/file.ts": dedent`
                 import * as os from "os";
                 import * as https from "https";

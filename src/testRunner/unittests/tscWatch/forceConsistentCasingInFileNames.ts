@@ -6,9 +6,9 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
@@ -33,7 +33,7 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
             subScenario,
             commandLineArgs: ["--w", "--p", tsconfig.path],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     [loggerFile, anotherFile, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -84,7 +84,7 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [moduleA, moduleB, moduleC, tsconfig],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -108,7 +108,7 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
         subScenario: "jsxImportSource option changed",
         commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts`,
                     content: `export namespace JSX {
@@ -168,7 +168,7 @@ a;b;
                     path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [moduleA, moduleB, tsconfig],
                     {
                         windowsStyleRoot,
@@ -225,7 +225,7 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [moduleA, symlinkA, moduleB, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
@@ -282,7 +282,7 @@ a;b;
                     // Use outFile because otherwise the real and linked files will have the same output path
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [moduleA, symlinkA, moduleB, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
@@ -313,7 +313,7 @@ a;b;
         subScenario: "with nodeNext resolution",
         commandLineArgs: ["--w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/web/src/bin.ts": `import { foo } from "yargs";`,
                 "/Users/name/projects/web/node_modules/@types/yargs/index.d.ts": "export function foo(): void;",
                 "/Users/name/projects/web/node_modules/@types/yargs/index.d.mts": "export function foo(): void;",
@@ -344,7 +344,7 @@ a;b;
         subScenario: "self name package reference",
         commandLineArgs: ["-w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/web/package.json": jsonToReadableText({
                     name: "@this/package",
                     type: "module",
@@ -375,7 +375,7 @@ a;b;
         subScenario: "package json is looked up for file",
         commandLineArgs: ["-w", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/Users/name/projects/lib-boilerplate/package.json": jsonToReadableText({
                     name: "lib-boilerplate",
                     version: "0.0.2",

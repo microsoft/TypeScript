@@ -8,8 +8,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: plugins:: loading", () => {
@@ -18,7 +18,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
     const testProtocolCommandResponse = "testProtocolCommandResponse";
 
     function createHostWithPlugin(files: readonly File[], globalPlugins?: readonly string[]) {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Loading plugin: ${moduleName}`);
             return {
@@ -176,7 +176,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "some-other-plugin": ["someOtherFile.txt"],
         };
 
-        const host = createServerHost([aTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Require:: ${moduleName}`);
             return {
@@ -229,7 +229,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                 compilerOptions: { plugins: [{ name: "myplugin" }] },
             }),
         };
-        const host = createServerHost([aTs, bTs, cTs, config]);
+        const host = TestServerHost.createServerHost([aTs, bTs, cTs, config]);
         host.require = () => {
             return {
                 module: () => ({
@@ -329,7 +329,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, dTs, bVue, config]);
+        const host = TestServerHost.createServerHost([aTs, dTs, bVue, config]);
         host.require = () => {
             return {
                 module: () => ({
@@ -380,7 +380,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, bVue, config]);
+        const host = TestServerHost.createServerHost([aTs, bVue, config]);
         let currentVueScriptKind = ts.ScriptKind.TS;
         host.require = () => {
             return {

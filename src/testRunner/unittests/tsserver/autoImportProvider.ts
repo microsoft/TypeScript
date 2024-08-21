@@ -7,8 +7,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const angularFormsDts: File = {
@@ -396,7 +396,7 @@ describe("unittests:: tsserver:: autoImportProvider:: monorepo", () => {
 });
 
 function setup(files: File[]) {
-    const host = createServerHost(files);
+    const host = TestServerHost.createServerHost(files);
     const session = new TestSession(host);
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,

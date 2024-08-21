@@ -2,8 +2,8 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
@@ -45,7 +45,7 @@ describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specif
                 path: "/home/src/projects/project/src/deps.d.ts",
                 content: `declare module "thing";`,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [configFile, file1, declFile, packageFile],
                 { currentDirectory: "/home/src/projects/project" },
             );

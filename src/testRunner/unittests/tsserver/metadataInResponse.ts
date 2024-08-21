@@ -7,8 +7,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with metadataInResponse::", () => {
@@ -21,7 +21,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         }),
     };
     function createHostWithPlugin(files: readonly File[]) {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             assert.equal(moduleName, "myplugin");
             return {

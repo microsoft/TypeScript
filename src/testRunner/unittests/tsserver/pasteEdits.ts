@@ -6,8 +6,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: pasteEdits::", () => {
@@ -31,7 +31,7 @@ export const s = 2;`,
 function e();
 const f = r + s;`;
 
-        const host = createServerHost([target, file1, tsconfig]);
+        const host = TestServerHost.createServerHost([target, file1, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([target], session);
 

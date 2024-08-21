@@ -1,7 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: reexport:: with reexport when referenced project reexports definitions from another file", () => {
     verifyTscWatch({
@@ -9,7 +9,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: reexport:: with reexport when r
         subScenario: "Reports errors correctly",
         commandLineArgs: ["-b", "-w", "-verbose", "src"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/reexport/src/tsconfig.json": jsonToReadableText({
                     files: [],
                     include: [],

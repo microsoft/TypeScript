@@ -7,7 +7,7 @@ import {
     toExternalFile,
 } from "../helpers/tsserver.js";
 import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/typingsInstaller.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {
@@ -19,7 +19,7 @@ describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
             path: "/user/username/projects/project/app.d.ts",
             content: "",
         };
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             projectFileName: "/user/username/projects/project/proj.csproj",
@@ -50,7 +50,7 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
             path: "/user/username/projects/project/jsconfig.json",
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] }),
         };
-        const host = createServerHost([f1, barjs, barTypings, config]);
+        const host = TestServerHost.createServerHost([f1, barjs, barTypings, config]);
         const session = new TestSession(host);
 
         openFilesForSession([f1], session);

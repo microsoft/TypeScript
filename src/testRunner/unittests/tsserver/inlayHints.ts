@@ -4,8 +4,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: inlayHints::", () => {
@@ -27,7 +27,7 @@ describe("unittests:: tsserver:: inlayHints::", () => {
             path: "/user/username/projects/project/commonFile2.ts",
             content: "let y = 1",
         };
-        const host = createServerHost([app, commonFile1, commonFile2, configFile]);
+        const host = TestServerHost.createServerHost([app, commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,

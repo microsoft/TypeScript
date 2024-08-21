@@ -16,8 +16,8 @@ import {
     watchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolution", () => {
@@ -38,7 +38,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolut
             path: `/user/username/projects/myproject/settings.json`,
             content: jsonToReadableText({ content: "Print this" }),
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [mainFile, config, settingsJson],
             { currentDirectory: "/user/username/projects/myproject" },
         ));
@@ -73,7 +73,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolut
     describe("hasInvalidatedResolutions", () => {
         function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
             it(subScenario, () => {
-                const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem({
+                const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem({
                     [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                         compilerOptions: { traceResolution: true, extendedDiagnostics: true },
                         files: ["main.ts"],
@@ -139,7 +139,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch expose error count to watc
             path: `/user/username/projects/myproject/index.ts`,
             content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [mainFile, config],
             { currentDirectory: ts.getDirectoryPath(config.path) },
         ));
@@ -178,7 +178,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost does not implement se
             path: `/user/username/projects/myproject/main.ts`,
             content: "const x = 10;",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [config, mainFile],
             { currentDirectory: ts.getDirectoryPath(config.path) },
         ));
@@ -224,7 +224,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost can add extraFileExte
             content: "",
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [config, mainFile, otherFile],
                 { currentDirectory: ts.getDirectoryPath(config.path) },
             ),
@@ -269,7 +269,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost uses createSemanticDi
             content: "export const y = 10;",
         };
         return {
-            ...createBaseline(createWatchedSystem(
+            ...createBaseline(TestServerHost.createWatchedSystem(
                 [config, mainFile, otherFile],
                 { currentDirectory: ts.getDirectoryPath(config.path) },
             )),
@@ -539,7 +539,7 @@ describe("unittests:: tscWatch:: watchAPI:: when getParsedCommandLine is impleme
             path: `/user/username/projects/myproject/projects/project2/class2.ts`,
             content: `class class2 {}`,
         };
-        const system = createWatchedSystem(
+        const system = TestServerHost.createWatchedSystem(
             [config1, class1, class1Dts, config2, class2],
             { currentDirectory: "/user/username/projects/myproject/projects" },
         );
@@ -645,7 +645,7 @@ describe("unittests:: tscWatch:: watchAPI:: when getParsedCommandLine is impleme
 describe("unittests:: tscWatch:: watchAPI:: when builder emit occurs with emitOnlyDtsFiles", () => {
     function verify(subScenario: string, outFile?: string) {
         it(subScenario, () => {
-            const system = createWatchedSystem({
+            const system = TestServerHost.createWatchedSystem({
                 [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                     compilerOptions: { composite: true, noEmitOnError: true, module: "amd", outFile },
                     files: ["a.ts", "b.ts"],
@@ -736,7 +736,7 @@ describe("unittests:: tscWatch:: watchAPI:: when builder emit occurs with emitOn
 
 describe("unittests:: tscWatch:: watchAPI:: when creating program with project references but not config file", () => {
     function setup(libExtends: boolean) {
-        const system = createWatchedSystem({
+        const system = TestServerHost.createWatchedSystem({
             "/user/username/projects/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: { types: [] },
                 files: ["app.ts"],

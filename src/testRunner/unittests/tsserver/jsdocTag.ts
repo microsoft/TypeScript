@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
@@ -27,7 +27,7 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
     }) {
         it(subScenario, () => {
             const { command, displayPartsForJSDoc } = options;
-            const host = createServerHost([file, config]);
+            const host = TestServerHost.createServerHost([file, config]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -114,7 +114,7 @@ x(1)`,
             };
 
             const { command, displayPartsForJSDoc } = options;
-            const host = createServerHost([linkInParamTag, config]);
+            const host = TestServerHost.createServerHost([linkInParamTag, config]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -167,7 +167,7 @@ function foo (x) { }
 foo`,
             };
             const { command, displayPartsForJSDoc } = options;
-            const host = createServerHost([linkInParamJSDoc, config]);
+            const host = TestServerHost.createServerHost([linkInParamJSDoc, config]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,

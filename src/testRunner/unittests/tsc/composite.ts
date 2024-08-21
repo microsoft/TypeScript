@@ -3,7 +3,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
@@ -118,7 +118,7 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "synthetic jsx import of ESM module from CJS module no crash no jsx element",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/projects/project/src/main.ts": "export default 42;",
                 "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
@@ -145,7 +145,7 @@ describe("unittests:: tsc:: composite::", () => {
         scenario: "composite",
         subScenario: "synthetic jsx import of ESM module from CJS module error on jsx element",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/projects/project/src/main.tsx": "export default <div/>;",
                 "/home/src/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {

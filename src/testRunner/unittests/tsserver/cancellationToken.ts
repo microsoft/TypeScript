@@ -5,7 +5,7 @@ import {
     TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: cancellationToken::", () => {
     // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
@@ -24,7 +24,7 @@ describe("unittests:: tsserver:: cancellationToken::", () => {
             path: "/home/src/projects/myproject/app.ts",
             content: "let xyz = 1;",
         };
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         const session = new TestSession({ host, useCancellationToken: true });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -60,7 +60,7 @@ describe("unittests:: tsserver:: cancellationToken::", () => {
             }),
         };
 
-        const host = createServerHost([f1, config]);
+        const host = TestServerHost.createServerHost([f1, config]);
         const session = new TestSession({
             host,
             useCancellationToken: true,
@@ -152,7 +152,7 @@ describe("unittests:: tsserver:: cancellationToken::", () => {
                 compilerOptions: {},
             }),
         };
-        const host = createServerHost([f1, config]);
+        const host = TestServerHost.createServerHost([f1, config]);
         const session = new TestSession({
             host,
             throttleWaitMilliseconds: 0,

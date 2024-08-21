@@ -7,7 +7,6 @@ import {
     TestSession,
 } from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
@@ -31,7 +30,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 path: "/users/username/projects/project/tsconfig.json",
                 content: `{}`,
             };
-            const host = createServerHost([commonFile1, configFile]);
+            const host = TestServerHost.createServerHost([commonFile1, configFile]);
             const session = createSession(host);
             openFilesForSession([commonFile1], session);
 
@@ -63,7 +62,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                     };
 
                     const files = [f1, config];
-                    const host = createServerHost(files);
+                    const host = TestServerHost.createServerHost(files);
                     const session = createSession(host);
                     openFilesForSession([f1], session);
 
@@ -126,7 +125,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, configFile];
 
                 const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
-                const host = createServerHost([filesToReload[0], configFile]);
+                const host = TestServerHost.createServerHost([filesToReload[0], configFile]);
 
                 // Initial project creation
                 const session = createSession(host);
@@ -376,7 +375,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                         content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
                     };
 
-                    const host = createServerHost([file1, file3, configFile]);
+                    const host = TestServerHost.createServerHost([file1, file3, configFile]);
                     const session = createSession(host);
                     openFilesForSession([file1], session);
 

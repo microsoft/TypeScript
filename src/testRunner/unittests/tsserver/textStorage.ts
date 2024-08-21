@@ -4,7 +4,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: textStorage", () => {
     const f = {
@@ -22,7 +22,7 @@ describe("unittests:: tsserver:: textStorage", () => {
     }
 
     it("text based storage should be have exactly the same as script version cache", () => {
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
         const ts2 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
@@ -56,7 +56,7 @@ describe("unittests:: tsserver:: textStorage", () => {
     });
 
     it("should switch to script version cache if necessary", () => {
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
 
@@ -74,7 +74,7 @@ describe("unittests:: tsserver:: textStorage", () => {
     });
 
     it("should be able to return the file size immediately after construction", () => {
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
 
@@ -82,7 +82,7 @@ describe("unittests:: tsserver:: textStorage", () => {
     });
 
     it("should be able to return the file size when backed by text", () => {
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
 
@@ -93,7 +93,7 @@ describe("unittests:: tsserver:: textStorage", () => {
     });
 
     it("should be able to return the file size when backed by a script version cache", () => {
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
 
@@ -109,7 +109,7 @@ describe("unittests:: tsserver:: textStorage", () => {
             content: " ".repeat(ts.server.maxFileSize + 1),
         };
 
-        const host = createServerHost([largeFile]);
+        const host = TestServerHost.createServerHost([largeFile]);
 
         // The large-file handling requires a ScriptInfo with a containing project
         const session = new TestSession(host);
@@ -134,7 +134,7 @@ describe("unittests:: tsserver:: textStorage", () => {
             content: oldText,
         };
 
-        const host = createServerHost([changingFile]);
+        const host = TestServerHost.createServerHost([changingFile]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(changingFile.path)));
 

@@ -5,9 +5,9 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: symlinkCache::", () => {
@@ -59,7 +59,7 @@ describe("unittests:: tsserver:: symlinkCache::", () => {
             path: "/home/src/projects/project/packages/app/node_modules/dep",
             symLink: "../../dep",
         };
-        const host = createServerHost([
+        const host = TestServerHost.createServerHost([
             appTsconfigJson,
             appSrcIndexTs,
             depPackageJson,

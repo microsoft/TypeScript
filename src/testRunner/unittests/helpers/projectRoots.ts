@@ -4,13 +4,10 @@ import {
     noopChange,
     TscWatchCompileChange,
 } from "./tscWatch.js";
-import {
-    getCreateWatchedSystem,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 function getSysForRootsFromReferencedProject(forTsserver: boolean, serverFirst: boolean) {
-    return getCreateWatchedSystem(forTsserver)({
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/workspaces/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 composite: true,

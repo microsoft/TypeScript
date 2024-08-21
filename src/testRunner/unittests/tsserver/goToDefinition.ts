@@ -4,8 +4,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: services:: goToDefinition::", () => {
@@ -39,7 +39,7 @@ declare class Stuff {
 `,
             },
         ];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -106,7 +106,7 @@ declare class Stuff {
 `,
             },
         ];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({

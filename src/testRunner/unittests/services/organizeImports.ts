@@ -1,8 +1,8 @@
 import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 import {
     newLineCharacter,
@@ -1120,7 +1120,7 @@ export * from "lib";
         }
 
         function makeLanguageService(...files: File[]) {
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const projectService = new TestProjectService({ host, useSingleInferredProject: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));

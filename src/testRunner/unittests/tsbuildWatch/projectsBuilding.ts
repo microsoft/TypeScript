@@ -6,8 +6,8 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
@@ -59,7 +59,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         subScenario: `when there are 3 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -84,7 +84,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         subScenario: `when there are 5 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -109,7 +109,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         subScenario: `when there are 8 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -148,7 +148,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         subScenario: `when there are 23 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),

@@ -12,9 +12,9 @@ import {
     toExternalFiles,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     getTypeScriptLibTestLocation,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: externalProjects::", () => {
@@ -31,7 +31,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 }),
             };
 
-            const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
+            const host = TestServerHost.createServerHost([f1, config], { useCaseSensitiveFileNames: false });
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -66,7 +66,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
         };
         const p1 = { projectFileName: "/home/src/projects/project/a/proj1.csproj", rootFiles: [toExternalFile(f1.path)], options: {} };
 
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         host.require = (_initialPath, moduleName) => {
             assert.equal(moduleName, "myplugin");
             return {
@@ -123,7 +123,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
         const p2 = makeProject(f2);
         const p3 = makeProject(f3);
 
-        const host = createServerHost([f1, f2, f3]);
+        const host = TestServerHost.createServerHost([f1, f2, f3]);
         const session = new TestSession(host);
         openExternalProjectsForSession([p1, p2], session);
         openExternalProjectsForSession([p1, p3], session);
@@ -142,7 +142,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: "let y =1;",
         };
         const projectFileName = "externalproject";
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: toExternalFiles([file1.path, file2.path]),
@@ -163,7 +163,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
     it("external project for dynamic file", () => {
         const projectFileName = "^ScriptDocument1 file1.ts";
         const externalFiles = toExternalFiles(["^ScriptDocument1 file1.ts"]);
-        const host = createServerHost([]);
+        const host = TestServerHost.createServerHost([]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: externalFiles,
@@ -190,7 +190,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             path: `/user/username/projects/myproject/^app.ts`,
             content: "const y = 10;",
         };
-        const host = createServerHost([file, app]);
+        const host = TestServerHost.createServerHost([file, app]);
         const session = new TestSession(host);
         openExternalProjectsForSession([{
             projectFileName: `/user/username/projects/myproject/myproject.njsproj`,
@@ -235,7 +235,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: "let z =1;",
         };
         const projectFileName = "externalproject";
-        const host = createServerHost([file1, file2, file3, config1, config2]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, config1, config2]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: toExternalFiles([config1.path, config2.path, file3.path]),
@@ -270,7 +270,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: jsonToReadableText({ compilerOptions: {} }),
         };
         const projectFileName = "externalproject";
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -305,7 +305,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: jsonToReadableText({ compilerOptions: {} }),
         };
         const projectFileName = "externalproject";
-        const host = createServerHost([file1, file2, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -337,7 +337,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             path: "/home/src/projects/project/a/b/f2.ts",
             content: "let y = 1",
         };
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession(host);
 
         openExternalProjectForSession({
@@ -368,7 +368,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: "export let y = 1",
         };
 
-        const host = createServerHost([file1, file2, file3]);
+        const host = TestServerHost.createServerHost([file1, file2, file3]);
         const session = new TestSession(host);
 
         openExternalProjectForSession({
@@ -394,7 +394,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             path: "/home/src/projects/project/a/largefile.js",
             content: "",
         };
-        const host = createServerHost([f1, f2]);
+        const host = TestServerHost.createServerHost([f1, f2]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
@@ -435,7 +435,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 content: "{}",
             };
             const projectFileName = "/user/someuser/projects/project/WebApplication6.csproj";
-            const host = createServerHost([site, configFile]);
+            const host = TestServerHost.createServerHost([site, configFile]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -494,7 +494,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 path: "/home/src/projects/project/a/b/tsconfig.json",
                 content: "",
             };
-            const host = createServerHost([f1, f2]);
+            const host = TestServerHost.createServerHost([f1, f2]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -560,7 +560,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 path: "/home/src/projects/project/a/b/d/tsconfig.json",
                 content: "{}",
             };
-            const host = createServerHost([f1, cLib, cTsconfig, dLib, dTsconfig]);
+            const host = TestServerHost.createServerHost([f1, cLib, cTsconfig, dLib, dTsconfig]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -672,7 +672,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 },
             ),
         };
-        const host = createServerHost([libES5, libES2015Promise, app, config1]);
+        const host = TestServerHost.createServerHost([libES5, libES2015Promise, app, config1]);
         const session = new TestSession(host);
         openFilesForSession([app], session);
 
@@ -697,7 +697,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 ],
             }),
         };
-        const host = createServerHost([f, config]);
+        const host = TestServerHost.createServerHost([f, config]);
         const session = new TestSession(host);
         openFilesForSession([f], session);
         closeFilesForSession([f], session);
@@ -716,7 +716,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: jsonToReadableText({}),
         };
         const projectFileName = "/home/src/projects/project/a/b/project.csproj";
-        const host = createServerHost([f1, config]);
+        const host = TestServerHost.createServerHost([f1, config]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -758,7 +758,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: "{}",
         };
         const files = [tsconfig];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
 
         // Create external project
@@ -811,7 +811,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             options: {},
         };
 
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         host.require = (_initialPath, moduleName) => {
             assert.equal(moduleName, "myplugin");
             return {

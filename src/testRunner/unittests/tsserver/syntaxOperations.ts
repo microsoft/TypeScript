@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: syntaxOperations::", () => {
@@ -35,7 +35,7 @@ describe("Test Suite 1", () => {
             content: "{}",
         };
         const files = [app, tsconfig];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: app.path, content: app.content }], session);
 

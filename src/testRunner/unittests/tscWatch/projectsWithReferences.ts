@@ -16,10 +16,7 @@ import {
     getSysForTransitiveReferences,
 } from "../helpers/transitiveReferences.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: projectsWithReferences:: invoking when references are already built", () => {
     function verifySampleProject(withNodeNext: boolean) {
@@ -180,7 +177,7 @@ describe("unittests:: tscWatch:: projectsWithReferences:: invoking when referenc
         subScenario: "on transitive references in different folders",
         sys: () =>
             solutionBuildWithBaseline(
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true },
@@ -290,7 +287,7 @@ X;`,
         subScenario: "on transitive references in different folders with no files clause",
         sys: () =>
             solutionBuildWithBaseline(
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                         "/user/username/projects/transitiveReferences/b/tsconfig.json": jsonToReadableText({

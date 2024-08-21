@@ -4,9 +4,9 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     FileOrFolderOrSymLinkMap,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
@@ -29,7 +29,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `default/${subScenario}`,
             commandLineArgs: ["--w"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -42,7 +42,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `defaultAndD/${subScenario}`,
             commandLineArgs: ["--w", "--d"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -55,7 +55,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `isolatedModules/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -68,7 +68,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `isolatedModulesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules", "--d"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -81,7 +81,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
@@ -94,7 +94,7 @@ describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error upda
             subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     files(),
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),

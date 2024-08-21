@@ -3,10 +3,7 @@ import { createHasErrorMessageLogger } from "../../../../harness/tsserverLogger.
 import * as Harness from "../../../_namespaces/Harness.js";
 import * as ts from "../../../_namespaces/ts.js";
 import { customTypesMap } from "../../helpers/typingsInstaller.js";
-import {
-    createServerHost,
-    TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../../helpers/virtualFileSystemWithWatch.js";
 
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     host: TestServerHost;
@@ -164,7 +161,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
     }
 
     function makeProgram(f: { path: string; content: string; }) {
-        const host = createServerHost([f]); // libFile is expensive to parse repeatedly - only test when required
+        const host = TestServerHost.createServerHost([f]); // libFile is expensive to parse repeatedly - only test when required
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
@@ -189,7 +186,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             path: "/a.ts",
             content: t.source,
         };
-        const host = createServerHost([f]);
+        const host = TestServerHost.createServerHost([f]);
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;

@@ -8,7 +8,7 @@ import {
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: regionDiagnostics::", () => {
     it("diagnostics for select nodes in a single file", () => {
@@ -23,7 +23,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
 
                 foo(10, 50);`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession([file1], session);
@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
         };
 
         const files = [file1, file2, file3, file4];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession(files, session);
@@ -144,7 +144,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
         };
 
         it("region has suggestion diagnostics", () => {
-            const host = createServerHost([config, indexFile, otherFile]);
+            const host = TestServerHost.createServerHost([config, indexFile, otherFile]);
             const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
             openFilesForSession([indexFile], session);
@@ -173,7 +173,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
         });
 
         it("region does not have suggestion diagnostics", () => {
-            const host = createServerHost([config, indexFile, otherFile]);
+            const host = TestServerHost.createServerHost([config, indexFile, otherFile]);
             const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
             openFilesForSession([indexFile], session);
@@ -214,7 +214,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
 
                 foo(10, 50);`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -246,7 +246,7 @@ describe("unittests:: tsserver:: regionDiagnostics::", () => {
 
                 foo(10, 50);`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession([file1], session);

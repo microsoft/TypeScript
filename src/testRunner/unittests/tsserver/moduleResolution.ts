@@ -12,8 +12,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: moduleResolution::", () => {
@@ -48,7 +48,7 @@ describe("unittests:: tsserver:: moduleResolution::", () => {
                         }
                     `,
             };
-            const host = createServerHost([
+            const host = TestServerHost.createServerHost([
                 configFile,
                 fileA,
                 fileB,
@@ -183,7 +183,7 @@ describe("unittests:: tsserver:: moduleResolution::", () => {
                 import { FOO } from "package-a";
                 console.log(FOO);
             `;
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 "/home/src/projects/project/packages/package-a/package.json": getPackageJson("package-a"),
                 "/home/src/projects/project/packages/package-a/tsconfig.json": getTsConfig(),
                 "/home/src/projects/project/packages/package-a/src/index.ts": `export * from "./subfolder";`,

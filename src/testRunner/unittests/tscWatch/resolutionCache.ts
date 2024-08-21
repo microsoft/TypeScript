@@ -8,9 +8,9 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution caching", () => {
@@ -25,7 +25,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
             content: `foo()`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [root, imported],
             { currentDirectory: "/users/username/projects/project" },
         ));
@@ -113,7 +113,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
             content: `export const y = 1;`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [root],
             { currentDirectory: "/users/username/projects/project" },
         ));
@@ -173,7 +173,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
             content: `export const y = 1;export const x = 10;`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             [root, imported],
             { currentDirectory: "/users/username/projects/project" },
         ));
@@ -238,7 +238,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
         subScenario: "works when module resolution changes to ambient module",
         commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
         sys: () =>
-            createWatchedSystem([{
+            TestServerHost.createWatchedSystem([{
                 path: "/users/username/projects/project/foo.ts",
                 content: `import * as fs from "fs";`,
             }], { currentDirectory: "/users/username/projects/project" }),
@@ -292,7 +292,7 @@ declare module "url" {
 }
 `,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [root, file],
                 { currentDirectory: "/users/username/projects/project" },
             );
@@ -346,7 +346,7 @@ declare module "fs" {
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1, file2, module1, configFile],
                 { currentDirectory: "/a/b/projects/myProject/" },
             );
@@ -373,7 +373,7 @@ declare module "fs" {
                 path: `/user/username/projects/myproject/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file, module],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -406,7 +406,7 @@ declare module "fs" {
                         path: `/user/username/projects/myproject/tsconfig.json`,
                         content: "{}",
                     };
-                    return createWatchedSystem(
+                    return TestServerHost.createWatchedSystem(
                         [file1, file2, config],
                         { currentDirectory: ts.getDirectoryPath(config.path) },
                     );
@@ -446,7 +446,7 @@ declare module "fs" {
                     },
                 }),
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [app, tsconfig],
                 { currentDirectory: ts.getDirectoryPath(tsconfig.path) },
             );
@@ -521,7 +521,7 @@ declare namespace myapp {
                 path: `${linkedPackageRoot}/dist/other.d.ts`,
                 content: 'export declare const Foo = "BAR";',
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther],
                 { currentDirectory: mainPackageRoot },
             );
@@ -568,7 +568,7 @@ declare namespace NodeJS {
                     content: "{}",
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [file, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
@@ -615,7 +615,7 @@ declare namespace NodeJS {
         scenario,
         subScenario: "reusing type ref resolution",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/users/username/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
@@ -662,7 +662,7 @@ declare namespace NodeJS {
         subScenario: "scoped package installation",
         commandLineArgs: ["--w", "-p", `.`, "--traceResolution", "--extendedDiagnostics"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/myproject/lib/app.ts": dedent`
                 import { myapp } from "@myapp/ts-types";
                 const x: 10 = myapp;

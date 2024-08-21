@@ -8,11 +8,11 @@ import {
     runWatchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
     FileOrFolderOrSymLinkMap,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirect::", () => {
@@ -24,7 +24,7 @@ describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirec
 
     function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
         const { sys, baseline, cb, getPrograms } = createBaseline(
-            createWatchedSystem(files, { currentDirectory: ts.getDirectoryPath(ts.getDirectoryPath(config)) }),
+            TestServerHost.createWatchedSystem(files, { currentDirectory: ts.getDirectoryPath(ts.getDirectoryPath(config)) }),
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], /*buildOptions*/ undefined, /*versionToWrite*/ undefined, originalRead);
                 sys.clearOutput();

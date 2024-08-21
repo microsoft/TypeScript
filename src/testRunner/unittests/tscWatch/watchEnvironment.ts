@@ -5,7 +5,6 @@ import {
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     SymLink,
     TestServerHost,
@@ -28,7 +27,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
             };
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [file1],
                 {
                     environmentVariables,
@@ -107,7 +106,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                 path: "/user/username/projects/project/commonFile2.ts",
                 content: "let y = 1",
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [commonFile1, commonFile2, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );
@@ -173,7 +172,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                 sys: () => {
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-                    return createWatchedSystem(
+                    return TestServerHost.createWatchedSystem(
                         [file, configFile],
                         {
                             osFlavor: TestServerHostOsFlavor.Linux,
@@ -251,7 +250,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     };
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                    return createWatchedSystem(
+                    return TestServerHost.createWatchedSystem(
                         [file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB],
                         {
                             osFlavor: TestServerHostOsFlavor.Linux,
@@ -299,7 +298,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`,
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [file1, file2, configFile],
                     {
                         currentDirectory: ts.getDirectoryPath(configFile.path),
@@ -382,7 +381,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`,
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [file1, file2, configFile],
                     {
                         currentDirectory: ts.getDirectoryPath(configFile.path),
@@ -428,7 +427,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: `/user/username/projects/myproject/src/file2.ts`,
                     content: `export const x = 10;`,
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [file1, file2, configFile],
                     {
                         currentDirectory: ts.getDirectoryPath(configFile.path),
@@ -479,7 +478,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: "/user/username/projects/project/commonFile2.ts",
                     content: "let y = 1",
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [commonFile1, commonFile2, configFile],
                     { currentDirectory: ts.getDirectoryPath(configFile.path) },
                 );
@@ -507,7 +506,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: "/user/username/projects/project/commonFile2.ts",
                     content: "let y = 1",
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [commonFile1, commonFile2, configFile],
                     {
                         currentDirectory: ts.getDirectoryPath(configFile.path),
@@ -538,7 +537,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: "/user/username/projects/project/commonFile2.ts",
                     content: "let y = 1",
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [commonFile1, commonFile2, configFile],
                     {
                         currentDirectory: ts.getDirectoryPath(configFile.path),
@@ -566,7 +565,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: "/user/username/projects/project/commonFile2.ts",
                     content: "let y = 1",
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [commonFile1, commonFile2, configFile],
                     { currentDirectory: ts.getDirectoryPath(configFile.path) },
                 );
@@ -599,7 +598,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                     path: `/user/username/projects/myproject/node_modules/bar/temp/index.d.ts`,
                     content: "export function temp(): string;",
                 };
-                return createWatchedSystem(
+                return TestServerHost.createWatchedSystem(
                     [main, bar, foo, fooBar, temp, configFile],
                     { currentDirectory: "/user/username/projects/myproject", osFlavor },
                 );
@@ -664,7 +663,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
         subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 {
                     [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                     [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
@@ -701,7 +700,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
             subScenario: `fsWatch/when using file watching thats on inode`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
@@ -731,7 +730,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
             subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
@@ -761,7 +760,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
             subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
@@ -804,7 +803,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
                 subScenario: `fsWatch/fsWatchWithTimestamp ${osFlavor === TestServerHostOsFlavor.MacOs}${watchFile ? ` ${watchFile}` : ""}`,
                 commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
-                    createWatchedSystem(
+                    TestServerHost.createWatchedSystem(
                         {
                             "/user/username/projects/myproject/main.ts": `export const x = 10;`,
                             "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ files: ["main.ts"] }),
@@ -839,7 +838,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
         subScenario: "fsEvent for change is repeated",
         commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
             }, { currentDirectory: "/user/username/projects/project" }),
         edits: [

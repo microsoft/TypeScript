@@ -9,8 +9,8 @@ import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: moduleResolution::", () => {
@@ -18,7 +18,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: `watches for changes to package-json main fields`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
                     content: jsonToReadableText({
@@ -91,7 +91,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "diagnostics from cache",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -169,7 +169,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                         }
                     `,
             };
-            return createWatchedSystem(
+            return TestServerHost.createWatchedSystem(
                 [configFile, fileA, fileB, packageFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
@@ -306,7 +306,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "module resolutions from file are partially used",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -376,7 +376,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "module resolutions from files with partially used import attributes",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -446,7 +446,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "type reference resolutions reuse",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -548,7 +548,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         subScenario: "ambient module names are resolved correctly",
         commandLineArgs: ["-w", "--extendedDiagnostics", "--explainFiles"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmit: true,
@@ -618,7 +618,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "type reference resolutions with impliedMode",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/myproject/package.json": jsonToReadableText({
                     name: "myproject",
                     version: "1.0.0",
@@ -681,7 +681,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         scenario: "moduleResolution",
         subScenario: "late discovered dependency symlink",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/workspace/packageA/index.d.ts": dedent`
                     export declare class Foo {
                         private f: any;

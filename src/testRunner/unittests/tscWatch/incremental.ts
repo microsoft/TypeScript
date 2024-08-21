@@ -11,7 +11,6 @@ import {
     watchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     libFile,
     TestServerHost,
@@ -46,7 +45,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
             files(),
             { currentDirectory: project },
         ));
@@ -153,7 +152,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
             });
 
             it("verify that state is read correctly", () => {
-                const system = createWatchedSystem(
+                const system = TestServerHost.createWatchedSystem(
                     [file1, fileModified, config],
                     { currentDirectory: project },
                 );
@@ -398,7 +397,7 @@ export const Fragment: unique symbol;
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/projects/project/main.ts": "export const x = 10;",
                 "/home/src/projects/project/tsconfig.json": "{}",
                 "/home/src/projects/project/tsconfig.tsbuildinfo": "Some random string",

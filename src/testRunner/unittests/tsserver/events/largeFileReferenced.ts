@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: largeFileReferenced:: with large file", () => {
@@ -25,7 +25,7 @@ describe("unittests:: tsserver:: events:: largeFileReferenced:: with large file"
             fileSize: ts.server.maxFileSize + 1,
         };
         files.push(largeFile);
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         return session;
     }

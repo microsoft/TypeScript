@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getMoveToRefactoringFileSuggestions::", () => {
@@ -38,7 +38,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, file3, file4, nodeModulesFile1, nodeModulesFile2, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, file3, file4, nodeModulesFile1, nodeModulesFile2, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
@@ -63,7 +63,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file7: File = { path: "/home/src/projects/project/file7.ts", content: "" };
         const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"] }) };
 
-        const host = createServerHost([file1, file2, file3, file4, file5, file6, file7, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, file4, file5, file6, file7, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -84,7 +84,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file5: File = { path: "/home/src/projects/project/file5.js", content: "" };
         const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./file1.js", "./file2.js", "./file3.mts", "./file4.ts", "./file5.js"] }) };
 
-        const host = createServerHost([file1, file2, file3, file4, file5, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, file4, file5, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -104,7 +104,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file4: File = { path: "/home/src/projects/project/a/lib.es6.d.ts", content: "" };
         const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/home/src/projects/project/a/lib.es6.d.ts"] }) };
 
-        const host = createServerHost([file1, file2, file3, file4, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, file4, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -132,7 +132,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             }),
         };
 
-        const host = createServerHost([file1, file2, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -161,7 +161,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             }),
         };
 
-        const host = createServerHost([file1, file2, tsconfig]);
+        const host = TestServerHost.createServerHost([file1, file2, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 

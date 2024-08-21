@@ -6,7 +6,6 @@ import {
     runWatchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -22,7 +21,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         };
 
         const allPkgFiles = pkgs(pkgFiles);
-        const system = createWatchedSystem([typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
+        const system = TestServerHost.createWatchedSystem([typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
         writePkgReferences(system);
         const { sys, baseline, cb, getPrograms } = createBaseline(system);
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);

@@ -8,8 +8,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer::", () => {
@@ -38,7 +38,7 @@ import { something } from "something";
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({
             host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
@@ -100,7 +100,7 @@ import { something } from "something";
         };
         const expectedErrorMessage = "')' expected.";
 
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession({
             host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
@@ -165,7 +165,7 @@ function fooB() { }`,
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({
             host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
@@ -209,7 +209,7 @@ function fooB() { }`,
             path: "/user/username/projects/myproject/index.ts",
             content: "",
         };
-        const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
+        const host = TestServerHost.createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
         const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([indexTs], session);

@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: auxiliaryProject::", () => {
@@ -26,7 +26,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             path: "/user/username/projects/project/b.js",
             content: `export class B {}`,
         };
-        const host = createServerHost([aTs, bDts, bJs]);
+        const host = TestServerHost.createServerHost([aTs, bDts, bJs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -69,7 +69,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",
@@ -124,7 +124,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",

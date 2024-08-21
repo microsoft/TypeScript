@@ -1,9 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    createWatchedSystem,
-    TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - graph-ordering", () => {
     let host: ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> | undefined;
@@ -22,7 +19,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     ];
 
     before(() => {
-        const sys = createWatchedSystem({}, { useCaseSensitiveFileNames: true, currentDirectory: "/" });
+        const sys = TestServerHost.createWatchedSystem({}, { useCaseSensitiveFileNames: true, currentDirectory: "/" });
         host = ts.createSolutionBuilderHost(sys);
         writeProjects(sys, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });

@@ -18,7 +18,6 @@ import {
 } from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
-    createServerHost,
     File,
     FileOrFolderOrSymLink,
     SerializeOutputOrder,
@@ -552,7 +551,7 @@ function filePath(file: string | File) {
 
 function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
-        const host = createServerHost(allFiles());
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -563,7 +562,7 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
 
 function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
     it("verifies the errors in projects", () => {
-        const host = createServerHost(allFiles());
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -580,7 +579,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
 
 function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
     it("verifies the errors using sync commands", () => {
-        const host = createServerHost(allFiles());
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
@@ -627,7 +626,7 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
 }
 
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-    const host = createServerHost(files);
+    const host = TestServerHost.createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;

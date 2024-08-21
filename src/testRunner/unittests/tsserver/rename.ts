@@ -8,8 +8,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: rename::", () => {
@@ -17,7 +17,7 @@ describe("unittests:: tsserver:: rename::", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 0;" };
         const bTs: File = { path: "/home/src/projects/project/b.ts", content: 'import { a } from "./a";' };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
@@ -55,7 +55,7 @@ describe("unittests:: tsserver:: rename::", () => {
 
     it("works with prefixText and suffixText when enabled", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 0; const o = { x };" };
-        const host = createServerHost([aTs]);
+        const host = TestServerHost.createServerHost([aTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -94,7 +94,7 @@ describe("unittests:: tsserver:: rename::", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export default function() {}" };
         const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
@@ -112,7 +112,7 @@ describe("unittests:: tsserver:: rename::", () => {
     it("rename behavior is based on file of rename initiation", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 1; export { x };" };
         const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 
@@ -142,7 +142,7 @@ describe("unittests:: tsserver:: rename::", () => {
                 }
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             [file.path]: file.content,
             "C:/temp/test/project1/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
@@ -189,7 +189,7 @@ describe("unittests:: tsserver:: rename::", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 1;" };
         const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import * as foo from './a.js';` };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 

@@ -11,8 +11,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const packageJson: File = {
@@ -165,7 +165,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
                 render/**/
             }`,
         };
-        const host = createServerHost([utilsTs, classesTs, tsconfig]);
+        const host = TestServerHost.createServerHost([utilsTs, classesTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([classesTs], session);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
@@ -345,7 +345,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
 
 function createSetup(files: readonly File[], openFiles: readonly File[], completionRequestLocation: protocol.FileLocationRequestArgs) {
     return () => {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,

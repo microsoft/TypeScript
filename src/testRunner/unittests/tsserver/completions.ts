@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: completions::", () => {
@@ -25,7 +25,7 @@ describe("unittests:: tsserver:: completions::", () => {
             content: "{}",
         };
 
-        const host = createServerHost([aTs, bTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTs, tsconfig]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -201,7 +201,7 @@ export interface BrowserRouterProps {
             globalReactPackage,
         ];
 
-        const host = createServerHost(files, { windowsStyleRoot: "c:/", typingsInstallerGlobalCacheLocation: globalTypingsCacheLocation });
+        const host = TestServerHost.createServerHost(files, { windowsStyleRoot: "c:/", typingsInstallerGlobalCacheLocation: globalTypingsCacheLocation });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -230,7 +230,7 @@ export interface BrowserRouterProps {
     });
 
     it("in project where there are no imports but has project references setup", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/username/projects/app/src/index.ts": "",
             "/user/username/projects/app/tsconfig.json": JSON.stringify(
                 {
@@ -324,7 +324,7 @@ export interface BrowserRouterProps {
         }
         function verify(withExistingImport: boolean, includeCompletionsForModuleExports: boolean) {
             it(`in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}${!includeCompletionsForModuleExports ? " without includeCompletionsForModuleExports" : ""}`, () => {
-                const host = createServerHost({
+                const host = TestServerHost.createServerHost({
                     "/user/username/projects/app/src/index.ts": `
 
 ${withExistingImport ? "import { MyClass } from 'shared';" : ""}`,

@@ -5,14 +5,14 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getApplicableRefactors::", () => {
     it("works when taking position", () => {
         const aTs: File = { path: "/home/src/projects/project/a.ts", content: "" };
-        const host = createServerHost([aTs]);
+        const host = TestServerHost.createServerHost([aTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -38,7 +38,7 @@ describe("unittests:: tsserver:: getApplicableRefactors::", () => {
     }
 }`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: getApplicableRefactors::", () => {
             path: "/home/src/projects/project/a.ts",
             content: `type A<B, C, D = B> = Partial<C | string | D> & D | C;`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -70,7 +70,7 @@ describe("unittests:: tsserver:: getApplicableRefactors::", () => {
 const b = 1;
 function foo() { }`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 

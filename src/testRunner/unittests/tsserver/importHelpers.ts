@@ -7,7 +7,7 @@ import {
     TestSession,
     toExternalFile,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: importHelpers::", () => {
     it("should not crash in tsserver", () => {
@@ -19,7 +19,7 @@ describe("unittests:: tsserver:: importHelpers::", () => {
             path: "/user/username/projects/project/node_modules/tslib/index.d.ts",
             content: "",
         };
-        const host = createServerHost([f1, tslib]);
+        const host = TestServerHost.createServerHost([f1, tslib]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             projectFileName: "p",
@@ -73,7 +73,7 @@ a.bar;`,
             }),
         };
 
-        const host = createServerHost([config2, config1, type1, file1, file2, file3]);
+        const host = TestServerHost.createServerHost([config2, config1, type1, file1, file2, file3]);
         const session = new TestSession(host);
 
         openFilesForSession([file3, file1], session);

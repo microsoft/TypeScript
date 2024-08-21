@@ -1,13 +1,13 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: resolveJsonModule:: emit file --incremental", () => {
     verifyTscWatch({
         scenario: "resolveJsonModule",
         subScenario: "incremental always prefers declaration file over document",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/home/src/projects/project/main.ts": `import data from "./data.json"; let x: string = data;`,
                 "/home/src/projects/project/data.json": `{}`, // this file intentionally left blank
                 "/home/src/projects/project/data.d.json.ts": `declare var val: string; export default val;`,

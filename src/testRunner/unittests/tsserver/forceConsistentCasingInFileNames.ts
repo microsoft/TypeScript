@@ -12,9 +12,9 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
@@ -48,7 +48,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
             content: jsonToReadableText({ extends: "./tsconfig.all.json" }),
         };
 
-        const host = createServerHost([file1, file2, file2Dts, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
+        const host = TestServerHost.createServerHost([file1, file2, file2Dts, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -77,7 +77,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
             }),
         };
 
-        const host = createServerHost([loggerFile, anotherFile, tsconfig, tsconfig]);
+        const host = TestServerHost.createServerHost([loggerFile, anotherFile, tsconfig, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([{ file: loggerFile, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [loggerFile] });
@@ -126,7 +126,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
             }),
         };
 
-        const host = createServerHost([loggerFile, anotherFile, tsconfig, tsconfig]);
+        const host = TestServerHost.createServerHost([loggerFile, anotherFile, tsconfig, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [anotherFile] });
@@ -160,7 +160,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
         ) {
             it(subScenario, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
+                const host = TestServerHost.createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB], session);
                 verifyGetErrRequest({
@@ -178,7 +178,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with target open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
+                const host = TestServerHost.createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, moduleA], session);
                 verifyGetErrRequest({
@@ -205,7 +205,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with link open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
+                const host = TestServerHost.createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, linkPath], session);
                 verifyGetErrRequest({
@@ -223,7 +223,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with target and link open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
+                const host = TestServerHost.createServerHost([moduleA, symlinkA, moduleB, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, moduleA, linkPath], session);
                 verifyGetErrRequest({

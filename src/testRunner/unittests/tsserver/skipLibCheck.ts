@@ -7,7 +7,7 @@ import {
     TestSession,
     toExternalFiles,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with skipLibCheck::", () => {
     it("should be turned on for js-only inferred projects", () => {
@@ -27,7 +27,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                     name: number;
                 };`,
         };
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession(host);
         openFilesForSession([file1, file2], session);
 
@@ -69,7 +69,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                     name: number;
                 };`,
         };
-        const host = createServerHost([jsFile, dTsFile]);
+        const host = TestServerHost.createServerHost([jsFile, dTsFile]);
         const session = new TestSession(host);
 
         openExternalProjectForSession({
@@ -100,7 +100,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                     name: number;
                 };`,
         };
-        const host = createServerHost([jsFile, dTsFile]);
+        const host = TestServerHost.createServerHost([jsFile, dTsFile]);
         const session = new TestSession(host);
 
         openExternalProjectForSession({
@@ -135,7 +135,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
             content: `
                 declare var x: string;`,
         };
-        const host = createServerHost([jsconfigFile, jsFile, dTsFile1, dTsFile2]);
+        const host = TestServerHost.createServerHost([jsconfigFile, jsFile, dTsFile1, dTsFile2]);
         const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
@@ -160,7 +160,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                 x === "string";`,
         };
 
-        const host = createServerHost([jsFile]);
+        const host = TestServerHost.createServerHost([jsFile]);
         const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
@@ -186,7 +186,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                 x === "string";`,
         };
 
-        const host = createServerHost([jsconfigFile, jsFile]);
+        const host = TestServerHost.createServerHost([jsconfigFile, jsFile]);
         const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
@@ -213,7 +213,7 @@ describe("unittests:: tsserver:: with skipLibCheck::", () => {
                 x === "string";`,
         };
 
-        const host = createServerHost([jsconfigFile, jsFile]);
+        const host = TestServerHost.createServerHost([jsconfigFile, jsFile]);
         const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 

@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
@@ -166,7 +166,7 @@ describe("unittests:: tsserver:: completionsIncomplete::", () => {
 });
 
 function setup(files: File[]) {
-    const host = createServerHost(files);
+    const host = TestServerHost.createServerHost(files);
     const session = new TestSession(host);
     const projectService = session.getProjectService();
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({

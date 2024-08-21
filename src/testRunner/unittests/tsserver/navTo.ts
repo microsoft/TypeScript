@@ -6,8 +6,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", () => {
@@ -20,7 +20,7 @@ describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", ()
             path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -66,7 +66,7 @@ describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", ()
             content: `import a = require("../a");
 export const ghijkl = a.abcdef;`,
         };
-        const host = createServerHost([configFile1, file1, configFile2, file2]);
+        const host = TestServerHost.createServerHost([configFile1, file1, configFile2, file2]);
         const session = new TestSession(host);
         openFilesForSession([file1, file2], session);
 
@@ -114,7 +114,7 @@ export const ghijkl = a.abcdef;`,
             content: `import a = require("../a");
 export const ghijkl = a.abcdef;`,
         };
-        const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
+        const host = TestServerHost.createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -134,7 +134,7 @@ export const ghijkl = a.abcdef;`,
             path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 

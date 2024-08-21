@@ -5,8 +5,8 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeReferenceDirectives::", () => {
@@ -57,7 +57,7 @@ declare class TestLib {
         };
 
         const files = [typeLib, appLib, testFile, testConfig];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
@@ -86,7 +86,7 @@ declare class TestLib {
             content: `interface LocalFileSystem { someProperty: string; }`,
         };
         const files = [file, tsconfig, filesystem];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);

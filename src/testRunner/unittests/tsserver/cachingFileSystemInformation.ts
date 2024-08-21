@@ -10,7 +10,6 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     Folder,
     SymLink,
@@ -110,7 +109,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
             content: `foo()`,
         };
 
-        const host = createServerHost([root, imported]);
+        const host = TestServerHost.createServerHost([root, imported]);
         const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({
             module: ts.server.protocol.ModuleKind.AMD,
@@ -175,7 +174,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
             content: `export var y = 1`,
         };
 
-        const host = createServerHost([root]);
+        const host = TestServerHost.createServerHost([root]);
         const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({
             module: ts.server.protocol.ModuleKind.AMD,
@@ -239,7 +238,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
             }),
         };
         const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
-        const host = createServerHost(projectFiles);
+        const host = TestServerHost.createServerHost(projectFiles);
         const session = new TestSession(host);
         openFilesForSession([clientFile], session);
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
@@ -316,7 +315,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                     }),
                 };
                 const projectFiles = [file1, file2, tsconfigFile];
-                const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
+                const host = TestServerHost.createServerHost(projectFiles, { useCaseSensitiveFileNames });
                 const session = new TestSession(host);
                 openFilesForSession([file1], session);
 
@@ -356,7 +355,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
             };
 
             const files = [file1, file2, tsconfig];
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -425,7 +424,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
 }
 `,
             });
-            const host = createServerHost([app, tsconfigJson, packageJson]);
+            const host = TestServerHost.createServerHost([app, tsconfigJson, packageJson]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -568,7 +567,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
         };
 
         const files = [app, tsconfig];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([app], session);
 
@@ -615,7 +614,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                 include: ["client/**/*", "folder2"],
             }),
         };
-        const host = createServerHost([module1, module2, symlink, config]);
+        const host = TestServerHost.createServerHost([module1, module2, symlink, config]);
         const session = new TestSession(host);
         openFilesForSession([`${symlink.path}/module2.ts`], session);
         host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
