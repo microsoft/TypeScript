@@ -193,6 +193,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.ts *new*
@@ -412,6 +413,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.ts *changed*
@@ -620,6 +622,7 @@ Projects::
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -630,6 +633,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.d.ts *new*
@@ -784,6 +788,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /a/index.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
     originalConfiguredProjects: 1 *changed*
         /a/tsconfig.json *new*
 /c/tsconfig.json (Configured)
@@ -796,6 +801,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.d.ts *changed*

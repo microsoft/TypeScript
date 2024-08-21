@@ -186,6 +186,7 @@ Projects::
 /a/b/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/project/file1.ts (Open) *new*
@@ -221,6 +222,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/project/file1.ts (Open)
@@ -283,6 +285,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/project/file1.ts (Open)

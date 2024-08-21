@@ -120,6 +120,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts *new*
@@ -206,6 +207,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /a/bin/a.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts *changed*
@@ -304,6 +306,7 @@ Projects::
     documentPositionMappers: 2 *changed*
         /a/bin/a.d.ts: identitySourceMapConsumer
         /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts
@@ -390,6 +393,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts
@@ -518,9 +522,11 @@ Projects::
     documentPositionMappers: 0 *changed*
         /a/bin/a.d.ts: identitySourceMapConsumer *deleted*
         /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/bin/a.d.ts *deleted*

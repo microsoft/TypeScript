@@ -197,6 +197,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/f1.ts (Open) *new*
@@ -338,6 +339,7 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/f1.ts *changed*

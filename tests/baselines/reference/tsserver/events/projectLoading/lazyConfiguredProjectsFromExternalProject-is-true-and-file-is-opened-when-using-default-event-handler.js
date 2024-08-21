@@ -239,6 +239,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

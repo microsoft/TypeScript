@@ -441,6 +441,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 
 Before request
 

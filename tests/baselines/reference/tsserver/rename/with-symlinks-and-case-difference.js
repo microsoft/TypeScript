@@ -240,6 +240,7 @@ Projects::
 c:/temp/test/project1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -615,6 +616,7 @@ c:/temp/test/project1/tsconfig.json (Configured) *changed*
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         c:/temp/test/project1/index.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

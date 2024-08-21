@@ -215,6 +215,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] Resolution from : /a/b/app.js for "fooo" goes to: {
   "resolvedFileName": "/a/b/node_modules/fooo/index.d.ts",
@@ -326,6 +327,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
@@ -469,6 +471,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2 *changed*
     dirty: true
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/app.js (Open)

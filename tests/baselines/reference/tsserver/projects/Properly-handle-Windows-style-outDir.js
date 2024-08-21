@@ -207,6 +207,7 @@ Projects::
 C:/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 C:/a/f1.ts (Open) *new*

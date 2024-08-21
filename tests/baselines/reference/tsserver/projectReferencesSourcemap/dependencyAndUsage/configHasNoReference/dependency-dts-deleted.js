@@ -380,6 +380,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -576,9 +577,11 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -784,12 +787,15 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/random/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -908,14 +914,17 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1054,14 +1063,17 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 1 *changed*
         /user/username/projects/myproject/dependency/tsconfig.json *new*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
@@ -1088,15 +1100,18 @@ Projects::
     dirty: true *changed*
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1210,17 +1225,20 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
+    autoImportProviderHost: undefined *changed*
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 Before request
 
@@ -1507,6 +1525,7 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -1515,6 +1534,7 @@ Projects::
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 Before request
 
@@ -1849,6 +1869,7 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -1858,6 +1879,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1981,6 +2003,7 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -1990,6 +2013,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2107,6 +2131,7 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2116,6 +2141,7 @@ Projects::
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2218,6 +2244,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2227,6 +2254,7 @@ Projects::
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2329,6 +2357,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2339,6 +2368,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2494,6 +2524,7 @@ Projects::
     noOpenRef: true
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *deleted*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2505,6 +2536,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

@@ -239,6 +239,7 @@ Projects::
 /user/username/projects/myproject/foo/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.es2017.d.ts *new*
@@ -453,9 +454,11 @@ Projects::
 /user/username/projects/myproject/bar/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/foo/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.dom.d.ts *new*

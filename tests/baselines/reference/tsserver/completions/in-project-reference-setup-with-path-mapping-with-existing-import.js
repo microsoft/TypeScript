@@ -2548,7 +2548,7 @@ Projects::
 /user/username/projects/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3
-    autoImportProviderHost: undefined *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
 /user/username/projects/app/src/index.ts (Open)

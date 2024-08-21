@@ -95,6 +95,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -144,6 +145,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -238,6 +240,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -298,10 +301,11 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
-/dev/null/inferredProject1* (Inferred)
+/dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

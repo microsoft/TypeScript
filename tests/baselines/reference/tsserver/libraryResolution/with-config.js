@@ -479,6 +479,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *new*
@@ -551,6 +552,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 3: /home/src/projects/project1/tsconfig.json
@@ -707,6 +709,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
