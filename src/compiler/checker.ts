@@ -26982,18 +26982,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, context.signature) : undefined;
                 const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
                 if (inferredCovariantType || inferredContravariantType) {
-                    // If we have both co- and contra-variant inferences, we prefer the co-variant inference if it is not 'never',
-                    // all co-variant inferences are assignable to it (i.e. it isn't one of a conflicting set of candidates), it is
-                    // assignable to some contra-variant inference, and no other type parameter is constrained to this type parameter
-                    // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
-                    // Similarly ignore co-variant `any` inference when both are available as almost everything is assignable to it
-                    // and it would spoil the overall inference.
+                    // ideally all inferences would be tried out in a ranked order but that's too costly
+                    // a local heuristic (created based on empirical testing) is used to pick the best candidate here:
+                    // 1. covariant `never` and `any` are ignored as they are assignable to most types and choosing them would spoil the overall result
+                    // 2. covariant inference has to be compatible with at least some contravariant inferences
+                    // 3. the variable being inferred isn't referred to by another variable's constraint directly
+                    //    or if it is then the all of the other's covariant candidates must be compatible with the inferred covariant type
+                    //
+                    // to determine compatibility between the types assignability is used to allow for own covariant inference to be chosen
+                    // when the contravariant inference has optional properties that are not present in the covariant inference
+                    // this helps in situations like this when the covariant source can be used to call the source of the contravariant inference:
+                    //
+                    // const validate = (_: { query?: unknown; body?: unknown }) => {};
+                    // route({
+                    //   pre: validate,
+                    //   schema: {
+                    //     query: ''
+                    //   },
+                    // });
+                    //
+                    // however, for return types inferences subtyping is used. In those situations, the contravariant inference often comes from the argument of mapping function
+                    // and the outer covariant requirement can still be satisfied by the return position of the return type when it's a subtype of that required return type.
+                    // this helps to provide better contextual parameter types in scenarios like this:
+                    //
+                    // declare const obs: Observable<{ a?: string; b?: number }>;
+                    // const test = (): Observable<{ a?: string }> => obs.pipe(tap((arg) => {}));
+                    const compareTypes = inference.priority! & InferencePriority.ReturnType ? isTypeSubtypeOf : isTypeAssignableTo;
                     const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
                         !(inferredCovariantType.flags & (TypeFlags.Never | TypeFlags.Any)) &&
-                            some(inference.contraCandidates, t => isTypeAssignableTo(inferredCovariantType, t)) &&
+                            some(inference.contraCandidates, t => compareTypes(inferredCovariantType, t)) &&
                             every(context.inferences, other =>
                                 other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
-                                every(other.candidates, t => isTypeAssignableTo(t, inferredCovariantType))));
+                                every(other.candidates, t => compareTypes(t, inferredCovariantType))));
                     inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
