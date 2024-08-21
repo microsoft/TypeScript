@@ -6,10 +6,11 @@ templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only pe
 templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
 templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
+templateLiteralTypes1.ts(251,7): error TS2590: Expression produces a union type that is too complex to represent.
 templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== templateLiteralTypes1.ts (7 errors) ====
+==== templateLiteralTypes1.ts (8 errors) ====
     // Template types example from #12754
     
     const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
@@ -276,6 +277,8 @@ templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type 
     export type SpacingShorthand =
         | `${Spacing} ${Spacing}`
         | `${Spacing} ${Spacing} ${Spacing}`
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2590: Expression produces a union type that is too complex to represent.
         | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2590: Expression produces a union type that is too complex to represent.
