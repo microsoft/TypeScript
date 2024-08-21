@@ -4639,14 +4639,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                             }
+
+                            const message = overrideHost?.kind === SyntaxKind.ImportDeclaration && overrideHost.importClause?.isTypeOnly ? Diagnostics.Type_only_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_Colon_import_attribute :
+                                overrideHost?.kind === SyntaxKind.ImportType ? Diagnostics.Type_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_Colon_import_attribute :
+                                Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead;
                             diagnostics.add(createDiagnosticForNodeFromMessageChain(
                                 getSourceFileOfNode(errorNode),
                                 errorNode,
-                                chainDiagnosticMessages(
-                                    diagnosticDetails,
-                                    Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead,
-                                    moduleReference,
-                                ),
+                                chainDiagnosticMessages(diagnosticDetails, message, moduleReference),
                             ));
                         }
                     }

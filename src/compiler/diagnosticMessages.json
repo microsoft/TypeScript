@@ -1649,6 +1649,14 @@
         "category": "Error",
         "code": 1498
     },
+    "Type-only import of an ECMAScript module from a CommonJS module must have a `\"resolution-mode\": \"import\"` attribute.": {
+        "category": "Error",
+        "code": 1499
+    },
+    "Type import of an ECMAScript module from a CommonJS module must have a `\"resolution-mode\": \"import\"` attribute.": {
+        "category": "Error",
+        "code": 1500
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
