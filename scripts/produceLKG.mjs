@@ -50,10 +50,13 @@ async function copyTypesMap() {
 async function copyScriptOutputs() {
     await copyFromBuiltLocal("cancellationToken.js");
     await copyFromBuiltLocal("tsc.js");
+    await copyFromBuiltLocal("_tsc.js");
     await copyFromBuiltLocal("tsserver.js");
+    await copyFromBuiltLocal("_tsserver.js");
     await copyFromBuiltLocal("tsserverlibrary.js");
     await copyFromBuiltLocal("typescript.js");
     await copyFromBuiltLocal("typingsInstaller.js");
+    await copyFromBuiltLocal("_typingsInstaller.js");
     await copyFromBuiltLocal("watchGuard.js");
 }
 

@@ -915,12 +915,15 @@ export const produceLKG = task({
         const expectedFiles = [
             "built/local/cancellationToken.js",
             "built/local/tsc.js",
+            "built/local/_tsc.js",
             "built/local/tsserver.js",
+            "built/local/_tsserver.js",
             "built/local/tsserverlibrary.js",
             "built/local/tsserverlibrary.d.ts",
             "built/local/typescript.js",
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
+            "built/local/_typingsInstaller.js",
             "built/local/watchGuard.js",
         ].concat(libs().map(lib => lib.target));
         const missingFiles = expectedFiles
