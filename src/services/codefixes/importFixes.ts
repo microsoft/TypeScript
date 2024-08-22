@@ -336,6 +336,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 exportingFileName,
                 compilerOptions,
                 createModuleSpecifierResolutionHost(program, host),
+                preferences,
             );
             const importKind = getImportKind(futureExportingSourceFile, exportKind, program);
             const addAsTypeOnly = getAddAsTypeOnly(
