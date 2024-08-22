@@ -310,8 +310,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
     }
 }
 
-/** @internal */
-export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {

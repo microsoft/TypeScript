@@ -66,7 +66,7 @@ function pasteEdits(
     if (pastedText.length !== pasteLocations.length) {
         actualPastedText = pastedText.length === 1 ? pastedText[0] : pastedText.join(getNewLineOrDefaultFromHost(formatContext.host, formatContext.options));
     }
-    
+
     let newText = targetFile.text;
     for (let i = pasteLocations.length - 1; i >= 0; i--) {
         const { pos, end } = pasteLocations[i];
@@ -121,13 +121,13 @@ function pasteEdits(
             const endPos = startPos + textToBePasted.length;
             const range: TextRange = { pos: startPos, end: endPos };
             offset += textToBePasted.length - oldTextLength;
-            
+
             const enclosingNode = findAncestor(
                 getTokenAtPosition(updatedFile, range.pos),
                 ancestorNode => rangeContainsRange(ancestorNode, range),
             );
             if (!enclosingNode) return;
-            
+
             forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
                 const isImportCandidate = isIdentifier(node) &&
                     rangeContainsPosition(range, node.getStart(updatedFile)) &&
@@ -146,7 +146,7 @@ function pasteEdits(
         });
         importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
     });
-    
+
     /**
      * If there are no import fixes, getPasteEdits should return without making any changes to the file.
      */
@@ -188,7 +188,7 @@ function addImportsForUnresolvedIdentifiers(
     else {
         const context: CodeFixContextBase = {
             sourceFile: updatedFile,
-            program: originalProgram!,
+            program: originalProgram,
             cancellationToken,
             host,
             preferences,
