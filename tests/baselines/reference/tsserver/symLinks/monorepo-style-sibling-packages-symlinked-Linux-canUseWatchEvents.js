@@ -544,6 +544,7 @@ Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts *new*
@@ -777,6 +778,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 7: /home/src/projects/project/packages/package2/tsconfig.json
@@ -920,6 +922,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts

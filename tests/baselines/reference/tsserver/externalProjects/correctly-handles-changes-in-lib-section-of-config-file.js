@@ -222,6 +222,7 @@ Projects::
 /src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /compiler/lib.es5.d.ts *new*
@@ -265,6 +266,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

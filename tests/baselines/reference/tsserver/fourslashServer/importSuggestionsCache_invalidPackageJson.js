@@ -199,6 +199,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -296,6 +297,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -352,6 +354,16 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 2,
       "success": true
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+/jsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -952,3 +964,12 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*

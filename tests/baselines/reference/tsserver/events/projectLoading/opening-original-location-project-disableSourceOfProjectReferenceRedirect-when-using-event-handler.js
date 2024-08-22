@@ -249,6 +249,7 @@ Projects::
 /user/username/projects/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -478,6 +479,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/a/a.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
     originalConfiguredProjects: 1 *changed*
         /user/username/projects/a/tsconfig.json *new*
 

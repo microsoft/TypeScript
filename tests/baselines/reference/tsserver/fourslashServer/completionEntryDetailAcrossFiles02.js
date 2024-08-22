@@ -111,6 +111,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -999,9 +1000,11 @@ Projects::
     dirty: true *changed*
     isClosed: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *changed*

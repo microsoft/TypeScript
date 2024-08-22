@@ -224,6 +224,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -394,6 +395,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -3029,6 +3031,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3225,6 +3228,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *changed*

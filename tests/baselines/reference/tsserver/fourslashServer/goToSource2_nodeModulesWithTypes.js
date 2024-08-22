@@ -185,6 +185,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -303,6 +304,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /node_modules/foo/types/main.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::

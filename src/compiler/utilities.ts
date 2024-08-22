@@ -11796,3 +11796,83 @@ export function isSideEffectImport(node: Node): boolean {
     const ancestor = findAncestor(node, isImportDeclaration);
     return !!ancestor && !ancestor.importClause;
 }
+
+// require('module').builtinModules.filter(x => !x.startsWith('_'))
+const unprefixedNodeCoreModulesList = [
+    "assert",
+    "assert/strict",
+    "async_hooks",
+    "buffer",
+    "child_process",
+    "cluster",
+    "console",
+    "constants",
+    "crypto",
+    "dgram",
+    "diagnostics_channel",
+    "dns",
+    "dns/promises",
+    "domain",
+    "events",
+    "fs",
+    "fs/promises",
+    "http",
+    "http2",
+    "https",
+    "inspector",
+    "inspector/promises",
+    "module",
+    "net",
+    "os",
+    "path",
+    "path/posix",
+    "path/win32",
+    "perf_hooks",
+    "process",
+    "punycode",
+    "querystring",
+    "readline",
+    "readline/promises",
+    "repl",
+    "stream",
+    "stream/consumers",
+    "stream/promises",
+    "stream/web",
+    "string_decoder",
+    "sys",
+    "test/mock_loader",
+    "timers",
+    "timers/promises",
+    "tls",
+    "trace_events",
+    "tty",
+    "url",
+    "util",
+    "util/types",
+    "v8",
+    "vm",
+    "wasi",
+    "worker_threads",
+    "zlib",
+];
+
+/** @internal */
+export const unprefixedNodeCoreModules = new Set(unprefixedNodeCoreModulesList);
+
+// await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
+//   new Set(t.match(/(?<=')node:.+?(?=')/g))
+//     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
+/** @internal */
+export const exclusivelyPrefixedNodeCoreModules = new Set([
+    "node:sea",
+    "node:sqlite",
+    "node:test",
+    "node:test/reporters",
+]);
+
+/** @internal */
+export const nodeCoreModules = new Set([
+    ...unprefixedNodeCoreModulesList,
+    ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
+    ...exclusivelyPrefixedNodeCoreModules,
+]);

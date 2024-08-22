@@ -220,6 +220,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /tests/cases/fourslash/server/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

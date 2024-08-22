@@ -10,7 +10,7 @@ import {
     File,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: duplicate packages", () => {
+describe("unittests:: tsserver:: duplicatePackages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
     it("works with import fixes", () => {
         const packageContent = "export const foo: number;";

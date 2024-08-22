@@ -286,6 +286,7 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open) *new*

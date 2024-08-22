@@ -458,6 +458,7 @@ Projects::
 /user/username/projects/myproject/app/src/program/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0

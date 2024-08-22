@@ -333,6 +333,7 @@ Projects::
 /user/username/projects/sample1/tests/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -382,6 +383,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -454,6 +456,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -504,6 +507,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -576,6 +580,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -631,6 +636,7 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
@@ -697,3 +703,4 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false

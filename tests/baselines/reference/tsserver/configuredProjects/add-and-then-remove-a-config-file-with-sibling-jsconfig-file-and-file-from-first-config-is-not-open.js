@@ -224,6 +224,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -264,6 +265,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -472,10 +474,12 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -527,6 +531,7 @@ Projects::
 /user/username/projects/myproject/folder/jsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -632,6 +637,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -770,11 +776,13 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -882,6 +890,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -959,6 +968,7 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1182,6 +1192,7 @@ Projects::
 /dev/null/inferredProject3* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1221,6 +1232,7 @@ Projects::
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -1299,6 +1311,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -1450,9 +1463,11 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject4* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/folder/jsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 0

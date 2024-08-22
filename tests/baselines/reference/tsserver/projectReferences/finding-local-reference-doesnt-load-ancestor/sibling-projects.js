@@ -251,6 +251,7 @@ Projects::
 /user/username/projects/solution/compiler/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/solution/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -669,6 +670,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/solution/compiler/types.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

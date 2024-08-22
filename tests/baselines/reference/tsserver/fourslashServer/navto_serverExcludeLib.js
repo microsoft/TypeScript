@@ -146,6 +146,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -228,6 +229,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /node_modules/bar/index.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open)

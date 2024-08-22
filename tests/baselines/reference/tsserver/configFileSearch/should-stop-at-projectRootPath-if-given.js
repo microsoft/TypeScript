@@ -59,6 +59,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/file1.ts (Open) *new*
@@ -107,6 +108,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/file1.ts *changed*
@@ -323,9 +325,11 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/file1.ts (Open) *changed*

@@ -210,6 +210,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts *new*
@@ -346,9 +347,11 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts
@@ -493,12 +496,15 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -541,12 +547,15 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -748,9 +757,11 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -993,6 +1004,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -1102,6 +1114,7 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -1309,6 +1322,7 @@ Projects::
 /dev/null/inferredProject3* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file3.ts *deleted*

@@ -234,6 +234,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts *new*
@@ -267,6 +268,12 @@ Before running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
 1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
+
+Projects::
+/user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
