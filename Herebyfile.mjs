@@ -328,7 +328,10 @@ function entrypointBuildTask(options) {
                 await fs.promises.mkdir(outDir, { recursive: true });
                 const moduleSpecifier = path.relative(outDir, output);
                 const lines = [
-                    `require("node:module").enableCompileCache?.();`,
+                    `const m = require("node:module");`,
+                    `if (m.enableCompileCache) {`,
+                    `  m.enableCompileCache();`,
+                    `}`,
                     `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
                 ];
                 await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
