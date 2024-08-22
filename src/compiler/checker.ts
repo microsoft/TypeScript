@@ -595,6 +595,7 @@ import {
     isIntrinsicJsxName,
     isInTypeQuery,
     isIterationStatement,
+    isJSDoc,
     isJSDocAllType,
     isJSDocAugmentsTag,
     isJSDocCallbackTag,
@@ -36488,20 +36489,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const declaration = signature.declaration;
         const modifiers = getSelectedEffectiveModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier);
 
-        // (1) Public constructors and (2) constructor functions are always accessible.
-        if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
+        // (1) Public constructors are always accessible
+        if (!modifiers) {
+            return true;
+        }
+        const constructorNode = isJSDocSignature(declaration) ? findAncestor(declaration, isJSDoc)!.parent : declaration;
+
+        // (2) Constructor functions are always accessible
+        if (constructorNode.kind !== SyntaxKind.Constructor) {
             return true;
         }
 
-        const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol)!;
-        const declaringClass = getDeclaredTypeOfSymbol(declaration.parent.symbol) as InterfaceType;
+        const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(constructorNode.parent.symbol)!;
+        const declaringClass = getDeclaredTypeOfSymbol(constructorNode.parent.symbol) as InterfaceType;
 
         // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
         if (!isNodeWithinClass(node, declaringClassDeclaration)) {
             const containingClass = getContainingClass(node);
             if (containingClass && modifiers & ModifierFlags.Protected) {
                 const containingType = getTypeOfNode(containingClass);
-                if (typeHasProtectedAccessibleBase(declaration.parent.symbol, containingType as InterfaceType)) {
+                if (typeHasProtectedAccessibleBase(constructorNode.parent.symbol, containingType as InterfaceType)) {
                     return true;
                 }
             }

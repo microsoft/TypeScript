@@ -25,17 +25,17 @@
 //   ^
 // | ----------------------------------------------------------------------
 // | t(**eventName: string**, eventName2: number | string, eventName3: any): number
-// | @type {FooHandler} callback
+// | - A kind of magic
 // | ----------------------------------------------------------------------
 //        ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, **eventName2: number | string**, eventName3: any): number
-// | @type {FooHandler} callback
+// | - A kind of magic
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, eventName2: number | string, **eventName3: any**): number
-// | @type {FooHandler} callback
+// | - A kind of magic
 // | ----------------------------------------------------------------------
 
 [
@@ -192,18 +192,13 @@
               "isRest": false
             }
           ],
-          "documentation": [],
-          "tags": [
+          "documentation": [
             {
-              "name": "type",
-              "text": [
-                {
-                  "text": "{FooHandler} callback",
-                  "kind": "text"
-                }
-              ]
+              "text": "- A kind of magic",
+              "kind": "text"
             }
-          ]
+          ],
+          "tags": []
         }
       ],
       "applicableSpan": {
@@ -374,18 +369,13 @@
               "isRest": false
             }
           ],
-          "documentation": [],
-          "tags": [
+          "documentation": [
             {
-              "name": "type",
-              "text": [
-                {
-                  "text": "{FooHandler} callback",
-                  "kind": "text"
-                }
-              ]
+              "text": "- A kind of magic",
+              "kind": "text"
             }
-          ]
+          ],
+          "tags": []
         }
       ],
       "applicableSpan": {
@@ -556,18 +546,13 @@
               "isRest": false
             }
           ],
-          "documentation": [],
-          "tags": [
+          "documentation": [
             {
-              "name": "type",
-              "text": [
-                {
-                  "text": "{FooHandler} callback",
-                  "kind": "text"
-                }
-              ]
+              "text": "- A kind of magic",
+              "kind": "text"
             }
-          ]
+          ],
+          "tags": []
         }
       ],
       "applicableSpan": {
