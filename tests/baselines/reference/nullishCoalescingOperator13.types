@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator13.ts] ////
+
+=== nullishCoalescingOperator13.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54551
+
+declare const b: string | undefined
+>b : string | undefined
+
+const c = b ?? await Promise.resolve("str").then(v => v)
+>c : string
+>b ?? await Promise.resolve("str").then(v => v) : string
+>b : string | undefined
+>await Promise.resolve("str").then(v => v) : string
+>Promise.resolve("str").then(v => v) : Promise<string>
+>Promise.resolve("str").then : <TResult1 = string, TResult2 = never>(onfulfilled?: ((value: string) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.resolve("str") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>"str" : "str"
+>then : <TResult1 = string, TResult2 = never>(onfulfilled?: ((value: string) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>v => v : (v: string) => string
+>v : string
+>v : string
+
+const d = b ?? await Promise.resolve("str").then(null, v => "str")
+>d : string
+>b ?? await Promise.resolve("str").then(null, v => "str") : string
+>b : string | undefined
+>await Promise.resolve("str").then(null, v => "str") : string
+>Promise.resolve("str").then(null, v => "str") : Promise<string>
+>Promise.resolve("str").then : <TResult1 = string, TResult2 = never>(onfulfilled?: ((value: string) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.resolve("str") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>"str" : "str"
+>then : <TResult1 = string, TResult2 = never>(onfulfilled?: ((value: string) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>v => "str" : (v: any) => string
+>v : any
+>"str" : "str"
+
+export {}
