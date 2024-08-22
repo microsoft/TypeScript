@@ -70,6 +70,7 @@ import {
     setEmitFlags,
     setOriginalNode,
     setSourceMapRange,
+    setSyntheticLeadingComments,
     setTextRange,
     singleOrMany,
     some,
@@ -376,11 +377,15 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         setOriginalNode(classExpression, node);
         setTextRange(classExpression, location);
 
+        setSyntheticLeadingComments(classExpression, undefined);
+
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
         const varInitializer = classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression;
         const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, varInitializer);
         setOriginalNode(varDecl, node);
+
+        setSyntheticLeadingComments(varDecl, undefined);
 
         const varDeclList = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
         const varStatement = factory.createVariableStatement(/*modifiers*/ undefined, varDeclList);
@@ -669,7 +674,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
         const expression = generateConstructorDecorationExpression(node);
         if (expression) {
-            statements.push(setOriginalNode(factory.createExpressionStatement(expression), node));
+            statements.push(setSyntheticLeadingComments(setOriginalNode(factory.createExpressionStatement(expression), node), undefined));
         }
     }
 
