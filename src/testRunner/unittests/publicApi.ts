@@ -23,7 +23,7 @@ describe("unittests:: Public APIs", () => {
         });
     }
 
-    describe("for the typescript.d.ts", () => {
+    describe("for typescript.d.ts", () => {
         verifyApi("typescript.d.ts");
     });
 });
