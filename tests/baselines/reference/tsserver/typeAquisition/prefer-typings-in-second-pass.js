@@ -388,3 +388,4 @@ Projects::
 /a/b/jsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*

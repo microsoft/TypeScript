@@ -197,6 +197,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/f1.ts (Open) *new*
@@ -224,6 +225,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
@@ -291,6 +293,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/f1.ts (Open)

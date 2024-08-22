@@ -234,6 +234,7 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open) *new*
@@ -451,9 +452,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -690,12 +693,15 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -786,13 +792,16 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -884,14 +893,17 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -1006,15 +1018,18 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -1095,9 +1110,11 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *changed*
@@ -1174,10 +1191,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts
@@ -1278,10 +1297,12 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *deleted*

@@ -140,7 +140,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -372,6 +371,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -443,6 +443,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -478,7 +479,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/jsFile2.js
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/jsFile2.js
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/jsFile2.js ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -650,6 +650,7 @@ Projects::
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -687,7 +688,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/jsFile1.js
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/jsFile1.js
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/jsFile1.js ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -848,6 +848,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -964,6 +965,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1

@@ -40,8 +40,8 @@ function* g002() { // Generator<number, void, unknown>
 }
 
 function* g003() { // Generator<any (implicit), void, unknown>
->g003 : () => Generator<any, void, any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g003 : () => Generator<any, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // NOTE: In strict mode, `[]` produces the type `never[]`.
     //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.

@@ -246,6 +246,7 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/main.ts (Open) *new*
@@ -299,6 +300,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/main.ts *changed*
@@ -321,7 +323,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Invoking /a/tsconfig.json:: wildcard for open scriptInfo:: /a/main.js
 Info seq  [hh:mm:ss:mss] Project: /a/tsconfig.json Detected output file: /a/main.js
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/main.js ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -398,6 +399,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -477,6 +479,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -624,9 +627,11 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Before request
 
@@ -687,11 +692,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/main.js *changed*
@@ -916,15 +923,18 @@ Projects::
     dirty: true
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/main.js *deleted*

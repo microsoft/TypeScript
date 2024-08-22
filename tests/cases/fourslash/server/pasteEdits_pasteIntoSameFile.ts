@@ -10,12 +10,12 @@
 // @Filename: /tsconfig.json
 ////{ "files": ["target.ts"] }
 
-const range = test.ranges();
+const ranges = test.ranges();
 verify.pasteEdits({
     args: {
         pastedText: [ `console.log(k);`],
-        pasteLocations: [range[1]],
-        copiedFrom: { file: "target.ts", range: [range[0]] },
+        pasteLocations: [ranges[1]],
+        copiedFrom: { file: "target.ts", range: [ranges[0]] },
     },
     newFileContents: {}
 });

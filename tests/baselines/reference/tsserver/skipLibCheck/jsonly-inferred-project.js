@@ -217,6 +217,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Before request
 
@@ -432,6 +433,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/file1.js *changed*
@@ -696,6 +698,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file1.js (Open) *changed*

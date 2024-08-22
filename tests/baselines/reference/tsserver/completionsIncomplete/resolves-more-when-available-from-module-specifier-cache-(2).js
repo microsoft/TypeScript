@@ -1725,6 +1725,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -2372,6 +2373,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -6249,6 +6251,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before request
 
@@ -6290,6 +6293,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -7061,6 +7065,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -7100,6 +7105,7 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -11325,3 +11331,4 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false

@@ -616,6 +616,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -828,9 +829,11 @@ Projects::
 /user/username/projects/myproject/core/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -1568,6 +1571,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/core/src/file1.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 /user/username/projects/myproject/coreRef1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1586,6 +1590,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/refToCoreRef3/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

@@ -437,7 +437,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         name: "generateTrace",
         type: "string",
         isFilePath: true,
-        isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
@@ -1694,6 +1693,13 @@ export const optionsForBuild: CommandLineOption[] = [
         name: "clean",
         category: Diagnostics.Command_line_Options,
         description: Diagnostics.Delete_the_outputs_of_all_projects,
+        type: "boolean",
+        defaultValueDescription: false,
+    },
+    {
+        name: "stopBuildOnErrors",
+        category: Diagnostics.Command_line_Options,
+        description: Diagnostics.Skip_building_downstream_projects_on_error_in_upstream_project,
         type: "boolean",
         defaultValueDescription: false,
     },
@@ -3762,7 +3768,7 @@ function convertJsonOptionOfListType(
  *  \*\*        # matches the recursive directory wildcard "**".
  *  \/?$        # matches an optional trailing directory separator at the end of the string.
  */
-const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+const invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
 
 /**
  * Matches the portion of a wildcard path that does not contain wildcards.

@@ -8,7 +8,6 @@
 // @Filename: /tsconfig.json
 ////{ "files": ["target.ts"] }
 
-const range = test.ranges();
 verify.pasteEdits({
     args: {
         pastedText: [ `/**
@@ -17,7 +16,7 @@ verify.pasteEdits({
 * line 3
 * line 4
 */`],
-    pasteLocations: [range[0]],
+    pasteLocations: test.ranges(),
     },
     newFileContents: {}
 });

@@ -61,8 +61,8 @@ const assignability1: () => AsyncIterableIterator<number> = async function * () 
 const assignability2: () => AsyncIterableIterator<number> = async function * () {
 >assignability2 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, unknown>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -112,8 +112,8 @@ const assignability4: () => AsyncIterable<number> = async function * () {
 const assignability5: () => AsyncIterable<number> = async function * () {
 >assignability5 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, unknown>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -163,8 +163,8 @@ const assignability7: () => AsyncIterator<number> = async function * () {
 const assignability8: () => AsyncIterator<number> = async function * () {
 >assignability8 : () => AsyncIterator<number>
 >               : ^^^^^^                     
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, unknown>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any

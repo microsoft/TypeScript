@@ -276,6 +276,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1 *changed*
     dirty: true *changed*
+    autoImportProviderHost: false *changed*
 
 Before running PendingInstalls callback:: count: 0
 

@@ -244,6 +244,7 @@ Projects::
 /user/username/projects/solution/compiler/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

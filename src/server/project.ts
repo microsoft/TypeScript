@@ -1365,20 +1365,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     onAutoImportProviderSettingsChanged() {
-        if (this.autoImportProviderHost === false) {
-            this.autoImportProviderHost = undefined;
-        }
-        else {
-            this.autoImportProviderHost?.markAsDirty();
-        }
+        this.markAutoImportProviderAsDirty();
     }
 
     /** @internal */
     onPackageJsonChange() {
         this.moduleSpecifierCache.clear();
-        if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.markAsDirty();
-        }
+        this.markAutoImportProviderAsDirty();
     }
 
     /** @internal */
@@ -2275,7 +2268,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (dependencySelection) {
             tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
             const start = timestamp();
-            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry);
+            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry) ?? false;
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
@@ -2552,7 +2545,7 @@ export class AutoImportProviderProject extends Project {
             const symlinkCache = hostProject.getSymlinkCache();
             for (const name of arrayFrom(dependencyNames.keys())) {
                 // Avoid creating a large project that would significantly slow down time to editor interactivity
-                if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
+                if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded >= this.maxDependencies) {
                     hostProject.log(`AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`);
                     return ts.emptyArray;
                 }

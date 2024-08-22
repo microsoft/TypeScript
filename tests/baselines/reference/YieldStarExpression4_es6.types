@@ -2,8 +2,8 @@
 
 === YieldStarExpression4_es6.ts ===
 function *g() {
->g : () => Generator<any, void, any>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => Generator<any, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
 >yield * [] : any

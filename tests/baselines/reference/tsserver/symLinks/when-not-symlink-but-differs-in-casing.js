@@ -417,6 +417,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
@@ -532,6 +533,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -666,6 +668,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -821,6 +824,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1

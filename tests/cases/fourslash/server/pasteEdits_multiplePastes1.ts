@@ -19,13 +19,13 @@
 // @Filename: /tsconfig.json
 ////{ "files": ["file1.ts", "target.ts", "file3.ts"] }
 
-const range = test.ranges();
+const ranges = test.ranges();
 verify.pasteEdits({
     args: {
         pastedText: [ `const g = p + q;
 function e();
 const f = r + s;`],
-    pasteLocations: [range[0], range[1]],
+    pasteLocations: [ranges[0], ranges[1]],
     },
     newFileContents: {
         "/target.ts":

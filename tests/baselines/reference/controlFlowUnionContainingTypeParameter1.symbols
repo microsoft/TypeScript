@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/controlFlowUnionContainingTypeParameter1.ts] ////
+
+=== controlFlowUnionContainingTypeParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/44814
+
+class TestClass<T> {
+>TestClass : Symbol(TestClass, Decl(controlFlowUnionContainingTypeParameter1.ts, 0, 0))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 16))
+
+  typeguard(val: unknown): val is T {
+>typeguard : Symbol(TestClass.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 20))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 3, 12))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 3, 12))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 16))
+
+    return true;
+  }
+  f(v: number): void {}
+>f : Symbol(TestClass.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 5, 3))
+>v : Symbol(v, Decl(controlFlowUnionContainingTypeParameter1.ts, 6, 4))
+
+  h(v: T): void {}
+>h : Symbol(TestClass.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 6, 23))
+>v : Symbol(v, Decl(controlFlowUnionContainingTypeParameter1.ts, 7, 4))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 16))
+
+  func(val: T | number): void {
+>func : Symbol(TestClass.func, Decl(controlFlowUnionContainingTypeParameter1.ts, 7, 18))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 8, 7))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 16))
+
+    if (this.typeguard(val)) {
+>this.typeguard : Symbol(TestClass.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 20))
+>this : Symbol(TestClass, Decl(controlFlowUnionContainingTypeParameter1.ts, 0, 0))
+>typeguard : Symbol(TestClass.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 2, 20))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 8, 7))
+
+      this.h(val);
+>this.h : Symbol(TestClass.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 6, 23))
+>this : Symbol(TestClass, Decl(controlFlowUnionContainingTypeParameter1.ts, 0, 0))
+>h : Symbol(TestClass.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 6, 23))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 8, 7))
+
+      return;
+    }
+    this.f(val);
+>this.f : Symbol(TestClass.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 5, 3))
+>this : Symbol(TestClass, Decl(controlFlowUnionContainingTypeParameter1.ts, 0, 0))
+>f : Symbol(TestClass.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 5, 3))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 8, 7))
+  }
+}
+
+class TestClass2<T extends Date> {
+>TestClass2 : Symbol(TestClass2, Decl(controlFlowUnionContainingTypeParameter1.ts, 15, 1))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 17))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  typeguard(val: unknown): val is T {
+>typeguard : Symbol(TestClass2.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 34))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 18, 12))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 18, 12))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 17))
+
+    return true;
+  }
+  f(v: number): void {}
+>f : Symbol(TestClass2.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 20, 3))
+>v : Symbol(v, Decl(controlFlowUnionContainingTypeParameter1.ts, 21, 4))
+
+  h(v: T): void {}
+>h : Symbol(TestClass2.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 21, 23))
+>v : Symbol(v, Decl(controlFlowUnionContainingTypeParameter1.ts, 22, 4))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 17))
+
+  func(val: T | number): void {
+>func : Symbol(TestClass2.func, Decl(controlFlowUnionContainingTypeParameter1.ts, 22, 18))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 23, 7))
+>T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 17))
+
+    if (this.typeguard(val)) {
+>this.typeguard : Symbol(TestClass2.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 34))
+>this : Symbol(TestClass2, Decl(controlFlowUnionContainingTypeParameter1.ts, 15, 1))
+>typeguard : Symbol(TestClass2.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 34))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 23, 7))
+
+      this.h(val);
+>this.h : Symbol(TestClass2.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 21, 23))
+>this : Symbol(TestClass2, Decl(controlFlowUnionContainingTypeParameter1.ts, 15, 1))
+>h : Symbol(TestClass2.h, Decl(controlFlowUnionContainingTypeParameter1.ts, 21, 23))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 23, 7))
+
+      return;
+    }
+    val;
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 23, 7))
+
+    this.f(val);
+>this.f : Symbol(TestClass2.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 20, 3))
+>this : Symbol(TestClass2, Decl(controlFlowUnionContainingTypeParameter1.ts, 15, 1))
+>f : Symbol(TestClass2.f, Decl(controlFlowUnionContainingTypeParameter1.ts, 20, 3))
+>val : Symbol(val, Decl(controlFlowUnionContainingTypeParameter1.ts, 23, 7))
+  }
+}
+

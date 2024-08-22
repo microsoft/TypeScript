@@ -90,6 +90,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -161,9 +162,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -229,9 +232,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -354,7 +359,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -401,13 +405,16 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -446,11 +453,13 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true *changed*
     deferredClose: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -527,6 +536,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -578,6 +588,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -646,7 +657,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*,/user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -696,6 +706,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -797,9 +808,11 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -883,9 +896,11 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -976,9 +991,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1045,11 +1062,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1184,11 +1203,13 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject3* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1383,6 +1404,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -1411,6 +1433,7 @@ Projects::
     projectProgramVersion: 1
     isOrphan: true *changed*
     deferredClose: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1485,6 +1508,7 @@ Projects::
 /dev/null/inferredProject4* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1532,6 +1556,7 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -1596,7 +1621,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject4*
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1630,6 +1654,7 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1698,9 +1723,11 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1784,9 +1811,11 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1877,9 +1906,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1946,11 +1977,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -2085,11 +2118,13 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject5* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1

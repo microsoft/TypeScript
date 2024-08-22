@@ -105,7 +105,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
         if (failed) {
             const grep = fs.readFileSync(".failed-tests", "utf8")
-                .split(/\r?\n/g)
+                .split(/\r?\n/)
                 .map(test => test.trim())
                 .filter(test => test.length > 0)
                 .map(regExpEscape)

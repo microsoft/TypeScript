@@ -124,7 +124,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /common/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -192,6 +191,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /common/src/MyModule.ts *new*
@@ -371,9 +371,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /web/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /common/src/MyModule.ts *changed*
@@ -433,6 +435,20 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 2,
       "success": true
     }
+After Request
+Projects::
+/common/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+/web/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -576,3 +592,15 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/common/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/web/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*

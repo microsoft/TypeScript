@@ -268,7 +268,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -354,6 +353,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -485,6 +485,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -679,6 +680,20 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*
+/packages/dep/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 7,
@@ -706,10 +721,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -922,10 +939,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1142,10 +1161,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

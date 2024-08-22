@@ -178,6 +178,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -210,6 +211,7 @@ Projects::
     projectProgramVersion: 1
     isOrphan: true *changed*
     deferredClose: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 before waitForPendingPlugins
 

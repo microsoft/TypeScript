@@ -41,6 +41,7 @@ import {
     hasAbstractModifier,
     Identifier,
     idText,
+    InternalNodeBuilderFlags,
     IntersectionType,
     isArrowFunction,
     isAutoAccessorPropertyDeclaration,
@@ -222,7 +223,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.PropertyDeclaration:
             let flags = NodeBuilderFlags.NoTruncation;
             flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
@@ -241,7 +242,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor: {
             Debug.assertIsDefined(declarations);
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
             const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
             const orderedAccessors = allAccessors.secondAccessor
                 ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
@@ -300,6 +301,9 @@ export function addNewNodeForMemberSymbol(
             }
 
             for (const signature of signatures) {
+                if (signature.declaration && (signature.declaration.flags & NodeFlags.Ambient)) {
+                    continue;
+                }
                 // Ensure nodes are fresh so they can have different positions when going through formatting.
                 outputMethod(quotePreference, signature, modifiers, createName(declarationName));
             }
@@ -392,7 +396,7 @@ export function createSignatureDeclarationFromSignature(
         | NodeBuilderFlags.SuppressAnyReturnType
         | NodeBuilderFlags.AllowEmptyTuple
         | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
-    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration;
+    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration;
     if (!signatureDeclaration) {
         return undefined;
     }
@@ -506,6 +510,7 @@ export function createSignatureDeclarationFromCallExpression(
         contextNode,
         scriptTarget,
         NodeBuilderFlags.NoTruncation,
+        InternalNodeBuilderFlags.AllowUnresolvedNames,
         tracker,
     );
 
@@ -519,7 +524,7 @@ export function createSignatureDeclarationFromCallExpression(
     const parameters = createDummyParameters(args.length, names, argumentTypeNodes, /*minArgumentCount*/ undefined, isJs);
     const type = isJs || contextualType === undefined
         ? undefined
-        : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
+        : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
 
     switch (kind) {
         case SyntaxKind.MethodDeclaration:
@@ -589,8 +594,8 @@ function createTypeParameterName(index: number) {
 }
 
 /** @internal */
-export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    let typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
     if (typeNode && isImportTypeNode(typeNode)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
         if (importableReference) {
@@ -604,8 +609,8 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 }
 
 /** @internal */
-export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, tracker);
+export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, internalFlags, tracker);
     if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
         if (importableReference) {
@@ -625,7 +630,7 @@ function typeContainsTypeParameter(type: Type) {
     return type.flags & TypeFlags.TypeParameter;
 }
 
-function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) {
     // Types to be used as the types of the parameters in the new function
     // E.g. from this source:
     //   added("", 0)
@@ -668,7 +673,7 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
 
         // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
         const widenedInstanceType = checker.getBaseTypeOfLiteralType(instanceType);
-        const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, scriptTarget, flags, tracker);
+        const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, scriptTarget, flags, internalFlags, tracker);
         if (!argumentTypeNode) {
             continue;
         }
@@ -686,7 +691,7 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
         // We instead want to output:
         //    function added<T extends string>(value: T) { ... }
         const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, tracker)
+            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, internalFlags, tracker)
             : undefined;
 
         if (argumentTypeParameter) {
@@ -795,7 +800,7 @@ function createMethodImplementingSignatures(
 function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
     if (length(signatures)) {
         const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
-        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, getNoopSymbolTrackerWithResolver(context));
+        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
     }
 }
 

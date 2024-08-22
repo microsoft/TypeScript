@@ -205,6 +205,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /users/username/projects/project/referenceFile1.ts (Open) *new*
@@ -261,6 +262,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -376,6 +378,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

@@ -27,8 +27,8 @@ async function * f3() {
 }
 === F4.ts ===
 async function * f4() {
->f4 : () => AsyncGenerator<number, void, any>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : () => AsyncGenerator<number, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* [1];
 >x : any

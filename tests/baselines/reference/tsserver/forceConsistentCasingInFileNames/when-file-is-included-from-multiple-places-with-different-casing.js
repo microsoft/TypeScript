@@ -250,6 +250,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -650,6 +651,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -726,6 +728,7 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 1 *changed*
         /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -790,6 +793,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -869,6 +873,7 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
         /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts: identitySourceMapConsumer *deleted*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1211,6 +1216,7 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1288,6 +1294,7 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 1 *changed*
         /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 
 Before request
 
@@ -1329,6 +1336,7 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1408,6 +1416,7 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
         /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts: identitySourceMapConsumer *deleted*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck

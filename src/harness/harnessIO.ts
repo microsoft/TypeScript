@@ -282,6 +282,7 @@ export namespace Compiler {
         baselineFile?: string;
         libFiles?: string;
         noTypesAndSymbols?: boolean;
+        captureSuggestions?: boolean;
     }
 
     // Additional options not already in ts.optionDeclarations
@@ -303,6 +304,7 @@ export namespace Compiler {
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
         { name: "noCheck", type: "boolean", defaultValueDescription: false },
         { name: "reportDiagnostics", type: "boolean", defaultValueDescription: false }, // used to enable error collection in `transpile` baselines
+        { name: "captureSuggestions", type: "boolean", defaultValueDescription: false }, // Adds suggestion diagnostics to error baselines
     ];
 
     let optionsIndex: Map<string, ts.CommandLineOption>;
@@ -428,7 +430,7 @@ export namespace Compiler {
 
         ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
         const host = new fakes.CompilerHost(fs, options);
-        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
+        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion, harnessSettings?.captureSuggestions === "true");
         result.symlinks = symlinks;
         (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, { ...harnessSettings, ...newOptions }, compilerOptions, originalCurrentDirectory, symlinks);
         return result as CompileFilesResult;
@@ -582,7 +584,7 @@ export namespace Compiler {
                     let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
                     location = Utils.removeTestPathPrefixes(location);
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
-                        location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
+                        location = location.replace(/(lib.*\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
                     errLines.push(`!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
                 }
@@ -603,7 +605,7 @@ export namespace Compiler {
 
         let topDiagnostics = minimalDiagnosticsToString(diagnostics, options && options.pretty);
         topDiagnostics = Utils.removeTestPathPrefixes(topDiagnostics);
-        topDiagnostics = topDiagnostics.replace(/^(lib(?:.*)\.d\.ts)\(\d+,\d+\)/igm, "$1(--,--)");
+        topDiagnostics = topDiagnostics.replace(/^(lib.*\.d\.ts)\(\d+,\d+\)/gim, "$1(--,--)");
 
         yield [diagnosticSummaryMarker, topDiagnostics + IO.newLine() + IO.newLine(), diagnostics.length];
 
@@ -666,7 +668,7 @@ export namespace Compiler {
                         // Calculate the start of the squiggle
                         const squiggleStart = Math.max(0, relativeOffset);
                         // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~");
+                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/\S/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~");
 
                         // If the error ended here, or we're at the end of the file, emit its message
                         if ((lineIndex === lines.length - 1) || nextLineStart > end) {
@@ -862,7 +864,7 @@ export namespace Compiler {
             for (const file of allFiles) {
                 const { unitName } = file;
                 let typeLines = "=== " + unitName + " ===\r\n";
-                const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
+                const codeLines = ts.flatMap(file.content.split(/\r?\n/), e => e.split(/[\r\u2028\u2029]/));
                 const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                 let lastIndexWritten: number | undefined;
                 for (const result of gen) {
@@ -1103,7 +1105,7 @@ function splitVaryBySettingValue(text: string, varyBy: string): string[] | undef
     let star = false;
     const includes: string[] = [];
     const excludes: string[] = [];
-    for (let s of text.split(/,/g)) {
+    for (let s of text.split(/,/)) {
         s = s.trim().toLowerCase();
         if (s.length === 0) continue;
         if (s === "*") {
@@ -1247,8 +1249,8 @@ export namespace TestCaseParser {
     }
 
     // Regex for parsing options in the format "@Alpha: Value of any sort"
-    const optionRegex = /^[/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm; // multiple matches on multiple lines
-    const linkRegex = /^[/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm; // multiple matches on multiple lines
+    const optionRegex = /^\/{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm; // multiple matches on multiple lines
+    const linkRegex = /^\/{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm; // multiple matches on multiple lines
 
     export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined, absoluteRootDir?: string) {
         const linkMetaData = linkRegex.exec(line);
