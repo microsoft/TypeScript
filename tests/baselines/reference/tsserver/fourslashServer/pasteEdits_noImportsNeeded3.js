@@ -1,13 +1,42 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/file1.ts]
-export const b = 2;
+//// [/a.ts]
+function foo() {
+   const p = 1;
+   console.log("yes");
+}
+class bar {
+    constructor() {
+        function a() {
+          const regex = /x/g;
+          console.log("have a good day");
+        }
+        a();
+        function b() {
+           function c() {
+               // const test = 1 + 2 + 3;
+           }
+        }
+        b();
+    }
+    c() {
+        console.log("hello again");
+        /**  */
+        
+    }
+}
 
-//// [/file2.ts]
-import { b } from './file1';
-const a = 1;
-const c = a + b;
-const t = 9;
+//// [/b.ts]
+export const aa = 1;
+export const bb = 2;
+export const cc = 3;
+export const dd = 4;
+export const ee = 5;
+const juice = aa;
+const sauce = bb;
+const fig = cc;
+const tomato = dd;
+const apple = ee;
 
 //// [/lib.d.ts]
 lib.d.ts-Text
@@ -18,13 +47,8 @@ lib.decorators.d.ts-Text
 //// [/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
-//// [/target.ts]
-export const tt = 2;
-function f();
-const p = 1;
-
 //// [/tsconfig.json]
-{ "files": ["file1.ts", "file2.ts", "target.ts"] }
+{ "files": ["a.ts", "b.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -32,11 +56,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/target.ts"
+        "file": "/a.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /target.ts ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -46,34 +70,31 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /target.ts to open"
+        "reason": "Creating possible configured project for /a.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
-  "/file1.ts",
-  "/file2.ts",
-  "/target.ts"
+  "/a.ts",
+  "/b.ts"
  ],
  "options": {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export const b = 2;"
-	/file2.ts Text-1 "import { b } from './file1';\nconst a = 1;\nconst c = a + b;\nconst t = 9;"
-	/target.ts SVC-1-0 "export const tt = 2;\nfunction f();\nconst p = 1;"
+	/a.ts SVC-1-0 "function foo() {\n   const p = 1;\n   console.log(\"yes\");\n}\nclass bar {\n    constructor() {\n        function a() {\n          const regex = /x/g;\n          console.log(\"have a good day\");\n        }\n        a();\n        function b() {\n           function c() {\n               // const test = 1 + 2 + 3;\n           }\n        }\n        b();\n    }\n    c() {\n        console.log(\"hello again\");\n        /**  */\n        \n    }\n}"
+	/b.ts Text-1 "export const aa = 1;\nexport const bb = 2;\nexport const cc = 3;\nexport const dd = 4;\nexport const ee = 5;\nconst juice = aa;\nconst sauce = bb;\nconst fig = cc;\nconst tomato = dd;\nconst apple = ee;"
 
 
 	lib.d.ts
@@ -82,12 +103,9 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators' from file 'lib.d.ts'
 	lib.decorators.legacy.d.ts
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	file1.ts
+	a.ts
 	  Part of 'files' list in tsconfig.json
-	  Imported via './file1' from file 'file2.ts'
-	file2.ts
-	  Part of 'files' list in tsconfig.json
-	target.ts
+	b.ts
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -106,17 +124,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/target.ts",
+        "triggerFile": "/a.ts",
         "configFile": "/tsconfig.json",
         "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /target.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -131,9 +149,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/file1.ts: *new*
-  {"pollingInterval":500}
-/file2.ts: *new*
+/b.ts: *new*
   {"pollingInterval":500}
 /lib.d.ts: *new*
   {"pollingInterval":500}
@@ -150,11 +166,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/file1.ts *new*
-    version: Text-1
+/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
-/file2.ts *new*
+        /tsconfig.json *default*
+/b.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -170,10 +186,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/target.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -221,33 +233,117 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/target.ts",
+        "file": "/a.ts",
         "pastedText": [
-          "const c = a + b;\nconst t = 9;"
+          "const juice = aa",
+          "const sauce = bb",
+          "const fig = cc",
+          "const tomato = dd",
+          "const apple = ee"
         ],
         "pasteLocations": [
           {
             "start": {
-              "line": 2,
-              "offset": 1
+              "line": 3,
+              "offset": 17
             },
             "end": {
-              "line": 2,
-              "offset": 14
+              "line": 3,
+              "offset": 20
+            }
+          },
+          {
+            "start": {
+              "line": 8,
+              "offset": 27
+            },
+            "end": {
+              "line": 8,
+              "offset": 27
+            }
+          },
+          {
+            "start": {
+              "line": 14,
+              "offset": 19
+            },
+            "end": {
+              "line": 14,
+              "offset": 41
+            }
+          },
+          {
+            "start": {
+              "line": 21,
+              "offset": 13
+            },
+            "end": {
+              "line": 21,
+              "offset": 13
+            }
+          },
+          {
+            "start": {
+              "line": 22,
+              "offset": 9
+            },
+            "end": {
+              "line": 22,
+              "offset": 9
             }
           }
         ],
         "copiedFrom": {
-          "file": "file2.ts",
+          "file": "b.ts",
           "spans": [
             {
               "start": {
-                "line": 3,
+                "line": 6,
                 "offset": 1
               },
               "end": {
-                "line": 4,
-                "offset": 13
+                "line": 6,
+                "offset": 17
+              }
+            },
+            {
+              "start": {
+                "line": 7,
+                "offset": 1
+              },
+              "end": {
+                "line": 7,
+                "offset": 17
+              }
+            },
+            {
+              "start": {
+                "line": 8,
+                "offset": 1
+              },
+              "end": {
+                "line": 8,
+                "offset": 15
+              }
+            },
+            {
+              "start": {
+                "line": 9,
+                "offset": 1
+              },
+              "end": {
+                "line": 9,
+                "offset": 18
+              }
+            },
+            {
+              "start": {
+                "line": 10,
+                "offset": 1
+              },
+              "end": {
+                "line": 10,
+                "offset": 17
               }
             }
           ]
@@ -258,13 +354,12 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export const b = 2;"
-	/file2.ts Text-1 "import { b } from './file1';\nconst a = 1;\nconst c = a + b;\nconst t = 9;"
-	/target.ts SVC-1-1 "export const tt = 2;\nconst c = a + b;\nconst t = 9;\nconst p = 1;"
+	/a.ts SVC-1-1 "function foo() {\n   const p = 1;\n   console.log(\"const juice = aa\");\n}\nclass bar {\n    constructor() {\n        function a() {\n          const regex = /xconst sauce = bb/g;\n          console.log(\"have a good day\");\n        }\n        a();\n        function b() {\n           function c() {\n               // const fig = cc;\n           }\n        }\n        b();\n    }\n    c() {\n        console.log(\"hello again\");\n        /** const tomato = dd */\n        const apple = ee\n    }\n}"
+	/b.ts Text-1 "export const aa = 1;\nexport const bb = 2;\nexport const cc = 3;\nexport const dd = 4;\nexport const ee = 5;\nconst juice = aa;\nconst sauce = bb;\nconst fig = cc;\nconst tomato = dd;\nconst apple = ee;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
@@ -282,7 +377,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/target.ts",
+            "fileName": "/a.ts",
             "textChanges": [
               {
                 "start": {
@@ -293,18 +388,62 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { b } from './file1';\n\n"
+                "newText": "import { ee } from \"./b\";\n\n"
               },
               {
                 "start": {
-                  "line": 2,
-                  "offset": 1
+                  "line": 3,
+                  "offset": 17
                 },
                 "end": {
-                  "line": 2,
-                  "offset": 14
+                  "line": 3,
+                  "offset": 20
                 },
-                "newText": "const c = a + b;\nconst t = 9;"
+                "newText": "const juice = aa"
+              },
+              {
+                "start": {
+                  "line": 8,
+                  "offset": 27
+                },
+                "end": {
+                  "line": 8,
+                  "offset": 27
+                },
+                "newText": "const sauce = bb"
+              },
+              {
+                "start": {
+                  "line": 14,
+                  "offset": 19
+                },
+                "end": {
+                  "line": 14,
+                  "offset": 41
+                },
+                "newText": "const fig = cc"
+              },
+              {
+                "start": {
+                  "line": 21,
+                  "offset": 13
+                },
+                "end": {
+                  "line": 21,
+                  "offset": 13
+                },
+                "newText": "const tomato = dd"
+              },
+              {
+                "start": {
+                  "line": 22,
+                  "offset": 9
+                },
+                "end": {
+                  "line": 22,
+                  "offset": 9
+                },
+                "newText": "const apple = ee"
               }
             ]
           }
@@ -320,11 +459,11 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/file1.ts
-    version: Text-1
+/a.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
-        /tsconfig.json
-/file2.ts
+        /tsconfig.json *default*
+/b.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -340,7 +479,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/target.ts (Open) *changed*
-    version: SVC-1-2 *changed*
-    containingProjects: 1
-        /tsconfig.json *default*

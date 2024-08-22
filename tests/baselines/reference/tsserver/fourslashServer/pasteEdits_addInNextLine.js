@@ -255,6 +255,8 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/b.ts Text-1 "export interface Foo { }\nexport const a = 1;\nexport const t = 1;\n\nexport const foo: Foo = { };\nexport const k = a+ t;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

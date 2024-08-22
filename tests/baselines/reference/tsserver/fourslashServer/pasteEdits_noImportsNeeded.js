@@ -1,13 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/file1.ts]
-export const b = 2;
+//// [/a.ts]
+export interface Foo { }
 
-//// [/file2.ts]
-import { b } from './file1';
-const a = 1;
-const c = a + b;
-const t = 9;
+export const foo: Foo = {}
+
+//// [/b.ts]
+
 
 //// [/lib.d.ts]
 lib.d.ts-Text
@@ -18,13 +17,8 @@ lib.decorators.d.ts-Text
 //// [/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
-//// [/target.ts]
-export const tt = 2;
-function f();
-const p = 1;
-
 //// [/tsconfig.json]
-{ "files": ["file1.ts", "file2.ts", "target.ts"] }
+{ "files": ["a.ts", "b.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -32,11 +26,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/target.ts"
+        "file": "/b.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /target.ts ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -46,34 +40,31 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /target.ts to open"
+        "reason": "Creating possible configured project for /b.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
-  "/file1.ts",
-  "/file2.ts",
-  "/target.ts"
+  "/a.ts",
+  "/b.ts"
  ],
  "options": {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export const b = 2;"
-	/file2.ts Text-1 "import { b } from './file1';\nconst a = 1;\nconst c = a + b;\nconst t = 9;"
-	/target.ts SVC-1-0 "export const tt = 2;\nfunction f();\nconst p = 1;"
+	/a.ts Text-1 "export interface Foo { }\n\nexport const foo: Foo = {}"
+	/b.ts SVC-1-0 ""
 
 
 	lib.d.ts
@@ -82,12 +73,9 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators' from file 'lib.d.ts'
 	lib.decorators.legacy.d.ts
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	file1.ts
+	a.ts
 	  Part of 'files' list in tsconfig.json
-	  Imported via './file1' from file 'file2.ts'
-	file2.ts
-	  Part of 'files' list in tsconfig.json
-	target.ts
+	b.ts
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -106,17 +94,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/target.ts",
+        "triggerFile": "/b.ts",
         "configFile": "/tsconfig.json",
         "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /target.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -131,9 +119,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/file1.ts: *new*
-  {"pollingInterval":500}
-/file2.ts: *new*
+/a.ts: *new*
   {"pollingInterval":500}
 /lib.d.ts: *new*
   {"pollingInterval":500}
@@ -150,14 +136,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/file1.ts *new*
+/a.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/file2.ts *new*
-    version: Text-1
+/b.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -170,10 +156,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/target.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -221,24 +203,24 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/target.ts",
+        "file": "/b.ts",
         "pastedText": [
-          "const c = a + b;\nconst t = 9;"
+          "export"
         ],
         "pasteLocations": [
           {
             "start": {
-              "line": 2,
+              "line": 1,
               "offset": 1
             },
             "end": {
-              "line": 2,
-              "offset": 14
+              "line": 1,
+              "offset": 1
             }
           }
         ],
         "copiedFrom": {
-          "file": "file2.ts",
+          "file": "a.ts",
           "spans": [
             {
               "start": {
@@ -246,8 +228,8 @@ Info seq  [hh:mm:ss:mss] request:
                 "offset": 1
               },
               "end": {
-                "line": 4,
-                "offset": 13
+                "line": 3,
+                "offset": 7
               }
             }
           ]
@@ -258,17 +240,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export const b = 2;"
-	/file2.ts Text-1 "import { b } from './file1';\nconst a = 1;\nconst c = a + b;\nconst t = 9;"
-	/target.ts SVC-1-1 "export const tt = 2;\nconst c = a + b;\nconst t = 9;\nconst p = 1;"
+	/a.ts Text-1 "export interface Foo { }\n\nexport const foo: Foo = {}"
+	/b.ts SVC-1-1 "export"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
-Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -280,35 +259,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/target.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "newText": "import { b } from './file1';\n\n"
-              },
-              {
-                "start": {
-                  "line": 2,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 2,
-                  "offset": 14
-                },
-                "newText": "const c = a + b;\nconst t = 9;"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }
@@ -320,14 +271,14 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/file1.ts
+/a.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/file2.ts
-    version: Text-1
+/b.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -340,7 +291,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/target.ts (Open) *changed*
-    version: SVC-1-2 *changed*
-    containingProjects: 1
-        /tsconfig.json *default*
