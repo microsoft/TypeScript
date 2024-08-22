@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/exhaustiveSwitchTypeofPrimitive1.ts] ////
+
+=== exhaustiveSwitchTypeofPrimitive1.ts ===
+function woo(x: string): number {
+>woo : (x: string) => number
+>x : string
+
+  switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string
+
+    case "string":
+>"string" : "string"
+
+      return 1;
+>1 : 1
+  }
+}
+
