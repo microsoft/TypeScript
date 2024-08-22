@@ -7269,16 +7269,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mapToTypeNodes(types: readonly Type[] | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
-                    if (context.flags & NodeBuilderFlags.NoTruncation) {
-                        return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")];
-                    }
-                    else if (!isBareList) {
-                        return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                    if (!isBareList) {
+                        return [
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")
+                                : factory.createTypeReferenceNode("...", /*typeArguments*/ undefined),
+                        ];
                     }
                     else if (types.length > 2) {
                         return [
                             typeToTypeNodeHelper(types[0], context),
-                            factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - 2} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                             typeToTypeNodeHelper(types[types.length - 1], context),
                         ];
                     }
@@ -7291,10 +7294,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                        if (context.flags & NodeBuilderFlags.NoTruncation) {
-                            return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")];
-                        }
-                        result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                        result.push(
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined),
+                        );
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                         if (typeNode) {
                             result.push(typeNode);
