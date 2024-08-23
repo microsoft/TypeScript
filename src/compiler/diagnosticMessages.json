@@ -1818,6 +1818,14 @@
         "code": 1540,
         "reportsDeprecated": true
     },
+    "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1541
+    },
+    "Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1542
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -8196,6 +8204,14 @@
     "Wrap all invalid decorator expressions in parentheses": {
         "category": "Message",
         "code": 95195
+    },
+    "Add 'resolution-mode' import attribute": {
+        "category": "Message",
+        "code": 95196
+    },
+    "Add 'resolution-mode' import attribute to all type-only imports that need it": {
+        "category": "Message",
+        "code": 95197
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
