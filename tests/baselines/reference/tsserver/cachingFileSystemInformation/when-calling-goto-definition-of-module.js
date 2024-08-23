@@ -275,6 +275,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/controllers/vessels/client.ts (Open) *new*

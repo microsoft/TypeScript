@@ -237,6 +237,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
@@ -453,6 +454,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
@@ -693,6 +695,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project/x.js
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
@@ -933,6 +936,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
@@ -1173,3 +1177,4 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*

@@ -277,6 +277,7 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -488,6 +489,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /a/index.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
@@ -731,6 +733,7 @@ Projects::
 /a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 3 *changed*
         /b/tsconfig.json *new*
         /a/tsconfig.json *new*
@@ -1136,6 +1139,7 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 3
         /b/tsconfig.json
         /a/tsconfig.json
@@ -1641,6 +1645,7 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 3
         /b/tsconfig.json
         /a/tsconfig.json

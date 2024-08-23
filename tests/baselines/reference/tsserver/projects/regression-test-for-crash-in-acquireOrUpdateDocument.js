@@ -52,6 +52,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/file1.ts (Open) *new*
@@ -215,6 +216,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -380,6 +382,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*

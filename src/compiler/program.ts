@@ -75,6 +75,7 @@ import {
     ensureTrailingDirectorySeparator,
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
+    exclusivelyPrefixedNodeCoreModules,
     explainIfFileIsRedirectAndImpliedFormat,
     ExportAssignment,
     ExportDeclaration,
@@ -302,7 +303,6 @@ import {
     sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted,
     SourceOfProjectReferenceRedirect,
-    stableSort,
     startsWith,
     Statement,
     StringLiteral,
@@ -316,6 +316,7 @@ import {
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
+    toSorted,
     trace,
     tracing,
     tryCast,
@@ -323,6 +324,7 @@ import {
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
+    unprefixedNodeCoreModules,
     VariableDeclaration,
     VariableStatement,
     Version,
@@ -1392,16 +1394,13 @@ export function getImpliedNodeFormatForFileWorker(
     host: ModuleResolutionHost,
     options: CompilerOptions,
 ) {
-    switch (getEmitModuleResolutionKind(options)) {
-        case ModuleResolutionKind.Node16:
-        case ModuleResolutionKind.NodeNext:
-            return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
-                fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
-                fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
-                undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
-        default:
-            return undefined;
-    }
+    const moduleResolution = getEmitModuleResolutionKind(options);
+    const shouldLookupFromPackageJson = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
+        || pathContainsNodeModules(fileName);
+    return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
+        fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
+        shouldLookupFromPackageJson && fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+        undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
 
     function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
         const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
@@ -1761,7 +1760,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let sourceFileToPackageName = new Map<Path, string>();
     // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
     let redirectTargetsMap = createMultiMap<Path, string>();
-    let usesUriStyleNodeCoreModules = false;
+    let usesUriStyleNodeCoreModules: boolean | undefined;
 
     /**
      * map with
@@ -1887,7 +1886,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+        files = toSorted(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
         filesWithReferencesProcessed = undefined;
@@ -3112,7 +3111,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
             // Stop searching if the line is not empty and not a comment
             const lineText = file.text.slice(lineStarts[line], lineStarts[line + 1]).trim();
-            if (lineText !== "" && !/^(\s*)\/\/(.*)$/.test(lineText)) {
+            if (lineText !== "" && !/^\s*\/\/.*$/.test(lineText)) {
                 return -1;
             }
 
@@ -3502,7 +3501,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, moduleNameExpr);
                     if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
-                        usesUriStyleNodeCoreModules = startsWith(moduleNameExpr.text, "node:");
+                        if (startsWith(moduleNameExpr.text, "node:") && !exclusivelyPrefixedNodeCoreModules.has(moduleNameExpr.text)) {
+                            // Presence of `node:` prefix takes precedence over unprefixed node core modules
+                            usesUriStyleNodeCoreModules = true;
+                        }
+                        else if (usesUriStyleNodeCoreModules === undefined && unprefixedNodeCoreModules.has(moduleNameExpr.text)) {
+                            // Avoid `unprefixedNodeCoreModules.has` for every import
+                            usesUriStyleNodeCoreModules = false;
+                        }
                     }
                 }
             }

@@ -239,6 +239,7 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *new*

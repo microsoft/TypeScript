@@ -536,6 +536,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -754,6 +755,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 0
 
@@ -940,6 +942,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1103,6 +1106,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 0
 
@@ -1269,6 +1273,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -1434,6 +1439,7 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 0
 
@@ -1608,6 +1614,7 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -1773,6 +1780,7 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 0
 
@@ -1926,6 +1934,7 @@ Projects::
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -2099,6 +2108,7 @@ Projects::
     projectStateVersion: 6 *changed*
     projectProgramVersion: 5
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 0
 
@@ -2247,6 +2257,7 @@ Projects::
     projectStateVersion: 6
     projectProgramVersion: 6 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

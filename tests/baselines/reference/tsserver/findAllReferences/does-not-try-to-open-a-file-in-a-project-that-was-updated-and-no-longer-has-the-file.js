@@ -315,6 +315,7 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *new*
@@ -550,9 +551,11 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/core/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open)
@@ -611,9 +614,11 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /packages/core/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *changed*
@@ -764,11 +769,13 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 /packages/core/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /packages/core/dist/loading-indicator.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open)

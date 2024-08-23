@@ -147,6 +147,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -361,109 +362,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -542,97 +579,129 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -813,109 +882,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -1018,109 +1123,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -1193,97 +1334,129 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -1464,109 +1637,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -1669,109 +1878,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -1844,97 +2089,129 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -2115,109 +2392,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -2320,109 +2633,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -2495,97 +2844,129 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
@@ -2766,109 +3147,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -2971,109 +3388,145 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [

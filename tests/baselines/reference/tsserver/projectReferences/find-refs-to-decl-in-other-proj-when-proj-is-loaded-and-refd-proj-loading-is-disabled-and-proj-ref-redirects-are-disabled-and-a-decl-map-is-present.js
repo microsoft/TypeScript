@@ -298,6 +298,7 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open) *new*
@@ -529,9 +530,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)
@@ -735,11 +738,13 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/b/lib/index.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
     originalConfiguredProjects: 1 *changed*
         /user/username/projects/myproject/b/tsconfig.json *new*
 /user/username/projects/myproject/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)

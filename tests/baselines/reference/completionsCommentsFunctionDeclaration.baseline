@@ -9170,7 +9170,11 @@
           ]
         }
       ],
-      "defaultCommitCharacters": []
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
     }
   },
   {

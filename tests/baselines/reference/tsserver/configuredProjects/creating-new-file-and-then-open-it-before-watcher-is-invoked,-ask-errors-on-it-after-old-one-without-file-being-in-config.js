@@ -192,6 +192,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -220,8 +221,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/src/sub/fooBar.ts
+Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/src/sub/fooBar.ts
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: /user/username/projects/myproject:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -322,9 +324,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

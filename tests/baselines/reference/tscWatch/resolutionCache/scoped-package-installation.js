@@ -524,7 +524,20 @@ File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.tsx' 
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts', result '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'.
 ======== Module name '@myapp/ts-types' was successfully resolved to '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'. ========
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/node_modules/@myapp/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/package.json' does not exist.
+File '/user/username/projects/myproject/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@myapp/ts-types/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@myapp/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -534,10 +547,20 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@myapp/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/node_modules:

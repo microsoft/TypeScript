@@ -40,7 +40,7 @@ describe("unittests:: services:: Transpile", () => {
 
                 transpileOptions.reportDiagnostics = true;
 
-                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/gi, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
                 const toBeCompiled = [{
                     unitName,
                     content: input,
@@ -291,6 +291,11 @@ var x = 0;`,
 
     transpilesCorrectly("Supports setting 'declaration'", "x;", {
         options: { compilerOptions: { declaration: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true,
+    });
+
+    transpilesCorrectly("Supports setting 'declarationMap'", "x;", {
+        options: { compilerOptions: { declarationMap: true }, fileName: "input.js", reportDiagnostics: true },
         testVerbatimModuleSyntax: true,
     });
 

@@ -403,6 +403,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 
 Before running PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -439,6 +440,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
@@ -533,6 +535,8 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/node_modules/@types/jquery/package.json 2000 undefined Project: /jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/node_modules/@types/package.json 2000 undefined Project: /jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -674,11 +678,34 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules:
+  {"pollingInterval":500}
+/tmp/node_modules/@types/jquery/package.json: *new*
+  {"pollingInterval":2000}
+/tmp/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/jsconfig.json:
+  {}
+/tmp/package.json:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
+/bower_components:
+  {}
+
 Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /app.js (Open)

@@ -213,6 +213,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open) *new*
@@ -278,9 +279,11 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open)

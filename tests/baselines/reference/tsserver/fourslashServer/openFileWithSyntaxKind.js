@@ -108,6 +108,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -221,9 +222,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *changed*
@@ -337,7 +340,9 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "t",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [

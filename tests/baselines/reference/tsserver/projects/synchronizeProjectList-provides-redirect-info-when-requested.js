@@ -202,6 +202,7 @@ Projects::
 /users/username/projects/project/A/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -397,9 +398,11 @@ Projects::
 /users/username/projects/project/A/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /users/username/projects/project/B/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

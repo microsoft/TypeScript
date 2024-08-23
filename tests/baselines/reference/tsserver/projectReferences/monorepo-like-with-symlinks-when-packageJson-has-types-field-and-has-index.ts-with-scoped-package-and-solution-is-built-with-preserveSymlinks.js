@@ -158,7 +158,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/@issue/b/lib/index.d.ts","../../node_modules/@issue/b/lib/bar.d.ts","./src/index.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/@issue/b/lib/index.d.ts","../../node_modules/@issue/b/lib/bar.d.ts","./src/index.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-5677608893-export declare function foo(): void;\n","impliedFormat":1},{"version":"-2904461644-export declare function bar(): void;\n","impliedFormat":1},{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -185,12 +185,22 @@ export {};
       "affectsGlobalScope": true
     },
     "../../node_modules/@issue/b/lib/index.d.ts": {
+      "original": {
+        "version": "-5677608893-export declare function foo(): void;\n",
+        "impliedFormat": 1
+      },
       "version": "-5677608893-export declare function foo(): void;\n",
-      "signature": "-5677608893-export declare function foo(): void;\n"
+      "signature": "-5677608893-export declare function foo(): void;\n",
+      "impliedFormat": "commonjs"
     },
     "../../node_modules/@issue/b/lib/bar.d.ts": {
+      "original": {
+        "version": "-2904461644-export declare function bar(): void;\n",
+        "impliedFormat": 1
+      },
       "version": "-2904461644-export declare function bar(): void;\n",
-      "signature": "-2904461644-export declare function bar(): void;\n"
+      "signature": "-2904461644-export declare function bar(): void;\n",
+      "impliedFormat": "commonjs"
     },
     "./src/index.ts": {
       "original": {
@@ -220,7 +230,7 @@ export {};
   },
   "latestChangedDtsFile": "./lib/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1018
+  "size": 1078
 }
 
 
@@ -453,6 +463,7 @@ Projects::
 /user/username/projects/myproject/packages/A/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -601,6 +612,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -672,6 +684,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck

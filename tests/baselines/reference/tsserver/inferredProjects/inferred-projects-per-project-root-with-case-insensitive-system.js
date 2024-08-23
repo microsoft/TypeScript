@@ -241,6 +241,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Before request
 
@@ -380,6 +381,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /A/file2.ts (Open) *new*
@@ -557,6 +559,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -747,9 +750,11 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -840,9 +845,11 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -936,9 +943,11 @@ Projects::
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts *changed*
@@ -1034,9 +1043,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -1132,11 +1143,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject3* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -1378,12 +1391,14 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject3* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -1720,6 +1735,7 @@ Projects::
 /dev/null/inferredProject4* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -1910,9 +1926,11 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -2003,9 +2021,11 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -2099,9 +2119,11 @@ Projects::
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts *changed*
@@ -2197,9 +2219,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -2295,11 +2319,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject5* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -2571,12 +2597,14 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject5* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -2913,6 +2941,7 @@ Projects::
 /dev/null/inferredProject6* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -3103,9 +3132,11 @@ Projects::
 /dev/null/inferredProject6* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject7* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -3196,9 +3227,11 @@ Projects::
 /dev/null/inferredProject6* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -3292,9 +3325,11 @@ Projects::
 /dev/null/inferredProject6* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts *changed*
@@ -3390,9 +3425,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -3488,11 +3525,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject7* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -3734,12 +3773,14 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject7* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -4076,6 +4117,7 @@ Projects::
 /dev/null/inferredProject8* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -4266,9 +4308,11 @@ Projects::
 /dev/null/inferredProject8* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject9* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -4359,9 +4403,11 @@ Projects::
 /dev/null/inferredProject8* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts (Open)
@@ -4455,9 +4501,11 @@ Projects::
 /dev/null/inferredProject8* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts *changed*
@@ -4553,9 +4601,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts
@@ -4651,11 +4701,13 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
+    autoImportProviderHost: false
 /dev/null/inferredProject9* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /A/file2.ts

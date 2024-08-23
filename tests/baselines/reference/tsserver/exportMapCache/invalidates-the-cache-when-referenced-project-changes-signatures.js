@@ -450,6 +450,7 @@ Projects::
 /packages/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -516,8 +517,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/packages/lib/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "foo",
@@ -585,6 +586,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -625,6 +627,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -672,8 +675,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/packages/lib/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "food",

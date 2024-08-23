@@ -166,6 +166,8 @@ Output::
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 

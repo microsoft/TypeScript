@@ -203,6 +203,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /users/username/projects/project/a.ts (Open) *new*

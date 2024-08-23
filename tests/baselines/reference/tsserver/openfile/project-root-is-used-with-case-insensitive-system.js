@@ -209,6 +209,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts *new*
@@ -268,6 +269,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -334,6 +336,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -394,6 +397,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -460,6 +464,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -520,6 +525,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -586,6 +592,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
@@ -646,6 +653,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*
@@ -712,6 +720,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
@@ -772,6 +781,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*
@@ -838,6 +848,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
@@ -898,6 +909,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*

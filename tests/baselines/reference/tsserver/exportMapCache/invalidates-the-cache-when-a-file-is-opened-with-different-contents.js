@@ -216,6 +216,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open) *new*
@@ -251,6 +252,12 @@ Info seq  [hh:mm:ss:mss] response:
       "success": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
 
 Before request
 
@@ -297,10 +304,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render(): Element {\n}",
-            "filterText": "render",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render(): Element {\n}",
+            "filterText": "render"
           },
           {
             "name": "abstract",
@@ -387,6 +394,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -451,6 +464,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open)
@@ -503,6 +517,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open) *changed*
@@ -573,10 +588,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render2(): Element {\n}",
-            "filterText": "render2",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render2(): Element {\n}",
+            "filterText": "render2"
           },
           {
             "name": "abstract",
@@ -671,3 +686,4 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false

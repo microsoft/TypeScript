@@ -104,6 +104,7 @@ import {
 type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
 const enum ES2017SubstitutionFlags {
+    None = 0,
     /** Enables substitutions for async methods with `super` calls. */
     AsyncMethodsWithSuper = 1 << 0,
 }
@@ -132,7 +133,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: ES2017SubstitutionFlags;
+    let enabledSubstitutions = ES2017SubstitutionFlags.None;
 
     /**
      * This keeps track of containers where `super` is valid, for use with

@@ -285,6 +285,7 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts (Open) *new*
@@ -354,6 +355,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts *changed*
@@ -588,9 +590,11 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts *deleted*
@@ -664,6 +668,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /b/b.ts *changed*
@@ -910,9 +915,11 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 /user/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/a.ts *new*

@@ -320,6 +320,7 @@ Projects::
 /user/username/projects/solution/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/solution/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -1009,6 +1010,7 @@ Projects::
 /user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/solution/a/tsconfig.json *new*
         /user/username/projects/solution/b/tsconfig.json *new*
@@ -1233,6 +1235,7 @@ Projects::
 /user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 4 *changed*
         /user/username/projects/solution/a/tsconfig.json
         /user/username/projects/solution/b/tsconfig.json

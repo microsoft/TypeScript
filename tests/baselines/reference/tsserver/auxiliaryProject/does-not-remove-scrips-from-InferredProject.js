@@ -69,6 +69,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a.ts (Open) *new*
@@ -157,6 +158,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /b.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -221,6 +223,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     noDtsResolutionProject: /dev/null/auxiliaryProject1*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
@@ -406,7 +409,9 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     noDtsResolutionProject: /dev/null/auxiliaryProject1*
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*

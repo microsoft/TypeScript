@@ -123,7 +123,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -194,6 +193,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.ts *new*
@@ -413,6 +413,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.ts *changed*
@@ -621,6 +622,7 @@ Projects::
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -631,6 +633,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.d.ts *new*
@@ -785,6 +788,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /a/index.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
     originalConfiguredProjects: 1 *changed*
         /a/tsconfig.json *new*
 /c/tsconfig.json (Configured)
@@ -797,6 +801,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/index.d.ts *changed*

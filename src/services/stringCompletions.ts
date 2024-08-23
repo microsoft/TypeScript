@@ -1,4 +1,3 @@
-import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers.js";
 import {
     CompletionKind,
     createCompletionDetails,
@@ -823,7 +822,7 @@ function getFilenameWithExtensionOption(name: string, program: Program, extensio
         return { name, extension: tryGetExtensionFromPath(name) };
     }
 
-    let allowedEndings = getModuleSpecifierPreferences(
+    let allowedEndings = moduleSpecifiers.getModuleSpecifierPreferences(
         { importModuleSpecifierEnding: extensionOptions.endingPreference },
         program,
         program.getCompilerOptions(),

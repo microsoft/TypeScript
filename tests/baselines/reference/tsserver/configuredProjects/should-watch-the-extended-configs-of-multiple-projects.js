@@ -228,6 +228,7 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open) *new*
@@ -445,9 +446,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -486,10 +489,12 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

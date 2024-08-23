@@ -380,6 +380,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -568,9 +569,11 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/random/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -683,9 +686,11 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -740,9 +745,11 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -855,9 +862,11 @@ Projects::
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 Before request
 
@@ -1048,6 +1057,7 @@ Projects::
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
