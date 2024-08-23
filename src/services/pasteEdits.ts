@@ -74,7 +74,7 @@ function pasteEdits(
     }
 
     let importAdder: codefix.ImportAdder;
-    const symbolsUsageCopiedFrom = new Map<string, [Symbol, boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>();
+    const symbolsUsageCopiedFrom = new Map<string, SymbolInfo>();
     Debug.checkDefined(host.runWithTemporaryFileUpdate).call(host, targetFile.fileName, newText, (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => {
         importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom) {
@@ -98,11 +98,11 @@ function pasteEdits(
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()), { pos: copiedFrom.range[0].pos, end: copiedFrom.range[copiedFrom.range.length - 1].end });
             // Map created with `symbol.name` as the key to retrieve symbols declared in the old file that need to be resolved in the target file (only the one's that were exported).
             for (const [symbol, [isValidTypeOnlyUseSite, declaration]] of usage.oldImportsNeededByTargetFile) {
-                symbolsUsageCopiedFrom.set(symbol.name, [symbol, isValidTypeOnlyUseSite, declaration]);
+                symbolsUsageCopiedFrom.set(symbol.name, { symbol, isValidTypeOnlyUseSite, declaration });
             }
             for (const [symbol, isValidTypeOnlyUseSite] of usage.targetFileImportsFromOldFile) {
                 if (symbol.parent) {
-                    symbolsUsageCopiedFrom.set(symbol.name, [symbol, isValidTypeOnlyUseSite, undefined]);
+                    symbolsUsageCopiedFrom.set(symbol.name, { symbol, isValidTypeOnlyUseSite });
                 }
             }
         }
@@ -173,16 +173,16 @@ function addImportsForUnresolvedIdentifiers(
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
     copiedFrom?: { file: SourceFile; range: TextRange[]; } | undefined,
-    symbolsUsageCopiedFrom?: Map<string, [Symbol, boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>,
+    symbolsUsageCopiedFrom?: Map<string, SymbolInfo>,
 ) {
     if (copiedFrom) {
         const usageValues = symbolsUsageCopiedFrom!.get(node.text);
         if (!usageValues) return;
-        const [symbol, isValidTypeOnlyUseSite, referenceImport] = usageValues;
+        const { symbol, isValidTypeOnlyUseSite, declaration } = usageValues;
         return importAdder.addImportFromExportedSymbol(
             skipAlias(symbol, updatedProgram.getTypeChecker()),
             isValidTypeOnlyUseSite,
-            referenceImport,
+            declaration,
         );
     }
     else {
@@ -200,4 +200,10 @@ function addImportsForUnresolvedIdentifiers(
             /*useAutoImportProvider*/ true,
         );
     }
+}
+
+interface SymbolInfo {
+    symbol: Symbol;
+    isValidTypeOnlyUseSite: boolean;
+    declaration?: codefix.ImportOrRequireAliasDeclaration;
 }
