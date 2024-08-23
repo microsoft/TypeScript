@@ -8,12 +8,12 @@ function update(b: Readonly<Float32Array>) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const c = copy(b);
->c : Float32Array<Float32Array<ArrayBuffer>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->copy(b) : Float32Array<Float32Array<ArrayBuffer>>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->copy : (a: Float32Array) => Float32Array<Float32Array<ArrayBuffer>>
->     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>copy(b) : Float32Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>copy : (a: Float32Array) => Float32Array<ArrayBuffer>
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : Readonly<Float32Array<ArrayBuffer>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -22,10 +22,10 @@ function update(b: Readonly<Float32Array>) {
 >          : ^^^^
 >add : (a: Float32Array, b: Float32Array, c?: Float32Array) => void
 >    : ^ ^^            ^^ ^^            ^^ ^^^            ^^^^^^^^^
->c : Float32Array<Float32Array<ArrayBuffer>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->c : Float32Array<Float32Array<ArrayBuffer>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function add(a: Float32Array, b: Float32Array, c: Float32Array = a) {
@@ -66,14 +66,14 @@ function add(a: Float32Array, b: Float32Array, c: Float32Array = a) {
 }
 
 function copy(a: Float32Array) {
->copy : (a: Float32Array) => Float32Array<Float32Array<ArrayBuffer>>
->     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>copy : (a: Float32Array) => Float32Array<ArrayBuffer>
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : Float32Array<ArrayBuffer>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Float32Array(a);
->new Float32Array(a) : Float32Array<Float32Array<ArrayBuffer>>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float32Array(a) : Float32Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : Float32Array<ArrayBuffer>
