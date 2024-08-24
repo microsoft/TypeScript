@@ -60,7 +60,7 @@ type b = /* leading */NewType_1;
 type /*RENAME*/NewType_2 = {
     x: string;
 } /* inner */ | string // trailing
-    ;
+;
 
 type c = NewType_2
 `,
