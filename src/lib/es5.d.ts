@@ -2101,6 +2101,7 @@ interface Int8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array<ArrayBufferLike>;
     new (length: number): Int8Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Int8Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int8Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int8Array<ArrayBuffer>;
 
@@ -2381,6 +2382,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array<ArrayBufferLike>;
     new (length: number): Uint8Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Uint8Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint8Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8Array<ArrayBuffer>;
 
@@ -2661,6 +2663,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray<ArrayBufferLike>;
     new (length: number): Uint8ClampedArray<ArrayBuffer>;
+    new (array: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint8ClampedArray<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8ClampedArray<ArrayBuffer>;
 
@@ -2940,6 +2943,7 @@ interface Int16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array<ArrayBufferLike>;
     new (length: number): Int16Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Int16Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int16Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int16Array<ArrayBuffer>;
 
@@ -3220,6 +3224,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array<ArrayBufferLike>;
     new (length: number): Uint16Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Uint16Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint16Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint16Array<ArrayBuffer>;
 
@@ -3499,6 +3504,7 @@ interface Int32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array<ArrayBufferLike>;
     new (length: number): Int32Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Int32Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int32Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int32Array<ArrayBuffer>;
 
@@ -3778,6 +3784,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array<ArrayBufferLike>;
     new (length: number): Uint32Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Uint32Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint32Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint32Array<ArrayBuffer>;
 
@@ -4058,6 +4065,7 @@ interface Float32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array<ArrayBufferLike>;
     new (length: number): Float32Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Float32Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Float32Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float32Array<ArrayBuffer>;
 
@@ -4338,6 +4346,7 @@ interface Float64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array<ArrayBufferLike>;
     new (length: number): Float64Array<ArrayBuffer>;
+    new (array: ArrayLike<number>): Float64Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Float64Array<Buffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float64Array<ArrayBuffer>;
 
