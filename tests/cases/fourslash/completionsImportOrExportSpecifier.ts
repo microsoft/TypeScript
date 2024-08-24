@@ -30,7 +30,6 @@
 //// import { type foo as /*typeImport2*/ } from "./exports";
 //// import { type foo, type /*typeImport3*/ as typeImport3 } from "./exports";
 //// import * as _a from "./exports";
-//// type _b = _a./*namespaceImport2*/;
 ////
 //// export { type /*typeExport0*/ } from "./exports";
 //// export { type /*typeExport1*/ as typeExport1 } from "./exports";
@@ -64,7 +63,6 @@ verify.completions({ marker: "typeImport0", exact: [__some_type_as, __some_type2
 verify.completions({ marker: "typeImport1", exact: [__some_type, __some_type2, __some_value, "foo"] });
 verify.completions({ marker: "typeImport2", exact: [] });
 verify.completions({ marker: "typeImport3", exact: [__some_type, __some_type2, __some_value] });
-verify.completions({ marker: 'namespaceImport2', exact: [__some_type2_squared] })
 
 verify.completions({ marker: "typeExport0", exact: [__some_type, __some_type2, __some_value, "foo"] });
 verify.completions({ marker: "typeExport1", exact: [__some_type, __some_type2, __some_value, "foo"] });

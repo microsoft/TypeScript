@@ -1863,13 +1863,6 @@ function createCompletionEntry(
         }
     }
 
-    // TODO: the output code is still invalid (QualifiedName current cannot have form in namespace["invalid text name"] and but is no other way to access it)
-    // generating namespace["invalid text name"] with a type error is better than generating 'namespace.invalid text name' and have a syntax error.
-    if (needsConvertPropertyAccess && contextToken?.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
-        replacementSpan = createTextSpanFromNode(contextToken, sourceFile);
-        insertText = `[${quotePropertyName(sourceFile, preferences, name)}]`;
-    }
-
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
     // 'getSymbolKind' which is permissible given that it is backwards compatible; but
     // really we should consider passing the meaning for the node so that we don't report
