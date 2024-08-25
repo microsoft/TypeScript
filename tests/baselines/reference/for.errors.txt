@@ -34,3 +34,8 @@ for.ts(29,6): error TS1109: Expression expected.
          ~
 !!! error TS1109: Expression expected.
     }
+    
+    for (var m = ['k' in {}]; ;); // ok
+    
+    for (var n = (b = 'k' in {}) => {}; ;); // ok
+    

@@ -32,6 +32,11 @@ for (; ;) { // ok
 for () { // error
 }
 
+for (var m = ['k' in {}]; ;); // ok
+
+for (var n = (b = 'k' in {}) => {}; ;); // ok
+
+
 //// [for.js]
 for (var i = 0; i < 10; i++) { // ok
     var x1 = i;
@@ -57,3 +62,9 @@ for (;;) { // ok
 for (;; // error
 ) { // error
 }
+for (var m = ['k' in {}];;)
+    ; // ok
+for (var n = function (b) {
+    if (b === void 0) { b = 'k' in {}; }
+};;)
+    ; // ok
