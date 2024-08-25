@@ -21,7 +21,7 @@ const ok = receiver~>fn(true);
 >receiver : number
 >         : ^^^^^^
 >fn : (this: number, arg: boolean) => string
->   : ^    ^^      ^^   ^^       ^^^^^^^^^^^
+>   : ^    ^^      ^^   ^^       ^^^^^      
 >true : true
 >     : ^^^^
 
