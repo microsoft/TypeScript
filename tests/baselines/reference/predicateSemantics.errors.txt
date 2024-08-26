@@ -74,3 +74,7 @@ predicateSemantics.ts(36,8): error TS2872: This kind of expression is always tru
     // Should be OK
     console.log((cond || undefined) && 1 / cond);
     
+    function foo(this: Object | undefined) {
+        // Should be OK
+        return this ?? 0;
+    }
