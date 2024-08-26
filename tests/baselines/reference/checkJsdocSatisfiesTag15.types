@@ -4,29 +4,42 @@
 /** @satisfies {(uuid: string) => void} */
 export const fn1 = uuid => {};
 >fn1 : (uuid: string) => void
+>    : ^    ^^^^^^^^^^^^^^^^^
 >uuid => {} : (uuid: string) => void
+>           : ^    ^^^^^^^^^^^^^^^^^
 >uuid : string
+>     : ^^^^^^
 
 /** @typedef {Parameters<typeof fn1>} Foo */
 
 /** @type Foo */
 export const v1 = ['abc'];
 >v1 : [uuid: string]
+>   : ^^^^^^^^^^^^^^
 >['abc'] : [string]
+>        : ^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
 /** @type Foo */
 export const v2 = [123]; // error
 >v2 : [uuid: string]
+>   : ^^^^^^^^^^^^^^
 >[123] : [number]
+>      : ^^^^^^^^
 >123 : 123
+>    : ^^^
 
 /** @satisfies {(a: string, ...args: never) => void} */
 export const fn2 = (a, b) => {};
 >fn2 : (a: string, b: never) => void
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >(a, b) => {} : (a: string, b: never) => void
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : never
+>  : ^^^^^
 
 /** 
  * @satisfies {(a: string, ...args: never) => void}
@@ -34,9 +47,13 @@ export const fn2 = (a, b) => {};
  */
 export const fn3 = (a, b) => {};
 >fn3 : (a: string, b: never) => void
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^
 >(a, b) => {} : (a: string, b: never) => void
+>             : ^ ^^      ^^ ^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : never
+>  : ^^^^^
 
 /** 
  * @satisfies {(a: string, ...args: never) => void}
@@ -45,9 +62,13 @@ export const fn3 = (a, b) => {};
  */
 export const fn4 = (a, b) => {};
 >fn4 : (a: string, b: number) => void
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(a, b) => {} : (a: string, b: number) => void
+>             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 /** 
  * @satisfies {(a: string, ...args: number[]) => void}
@@ -56,9 +77,13 @@ export const fn4 = (a, b) => {};
  */
 export const fn5 = (a, b) => {};
 >fn5 : (a: string, b: string) => void
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(a, b) => {} : (a: string, b: string) => void
+>             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 /** 
  * @satisfies {(a: string, ...args: number[]) => void}
@@ -67,12 +92,18 @@ export const fn5 = (a, b) => {};
  */
 export const fn6 = (a, b) => {};
 >fn6 : (a: string, b: string | number) => void
+>    : ^ ^^      ^^ ^^               ^^^^^^^^^
 >(a, b) => {} : (a: string, b: string | number) => void
+>             : ^ ^^      ^^ ^^               ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 
 /** @satisfies {(uuid: string) => void} */
 export function fn7(uuid) {}
 >fn7 : (uuid: any) => void
+>    : ^    ^^^^^^^^^^^^^^
 >uuid : any
+>     : ^^^
 

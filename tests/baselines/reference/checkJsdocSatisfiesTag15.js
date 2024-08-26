@@ -48,7 +48,8 @@ export function fn7(uuid) {}
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn7 = exports.fn6 = exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.v2 = exports.v1 = exports.fn1 = void 0;
+exports.fn6 = exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.v2 = exports.v1 = exports.fn1 = void 0;
+exports.fn7 = fn7;
 /** @satisfies {(uuid: string) => void} */
 var fn1 = function (uuid) { };
 exports.fn1 = fn1;
@@ -89,7 +90,6 @@ var fn6 = function (a, b) { };
 exports.fn6 = fn6;
 /** @satisfies {(uuid: string) => void} */
 function fn7(uuid) { }
-exports.fn7 = fn7;
 
 
 //// [a.d.ts]
@@ -98,9 +98,9 @@ export function fn7(uuid: any): void;
 export function fn1(uuid: string): void;
 /** @typedef {Parameters<typeof fn1>} Foo */
 /** @type Foo */
-export const v1: [uuid: string];
+export const v1: Foo;
 /** @type Foo */
-export const v2: [uuid: string];
+export const v2: Foo;
 export function fn2(a: string, b: never): void;
 export function fn3(a: string, b: never): void;
 export function fn4(a: string, b: number): void;
