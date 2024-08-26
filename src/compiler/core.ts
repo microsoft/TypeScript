@@ -2592,7 +2592,7 @@ export function isNodeLikeSystem(): boolean {
 }
 
 /** @internal */
-interface PrefixSuffixTrie<T extends {}> {
+export interface PrefixSuffixTrie<T extends {}> {
     iterateAllMatches(input: string): Iterable<T>;
     set(prefix: string, suffix: string, fn: (value: T | undefined) => T | undefined): void;
     hasAnyMatch(input: string): boolean;
