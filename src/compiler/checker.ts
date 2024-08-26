@@ -39818,6 +39818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NewExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.ThisKeyword:
                 return PredicateSemantics.Sometimes;
             case SyntaxKind.BinaryExpression:
                 // List of operators that can produce null/undefined:
