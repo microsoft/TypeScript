@@ -336,6 +336,7 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
@@ -1889,9 +1890,16 @@ function createCompletionEntry(
     if (parentNamedImportOrExport) {
         const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
         if (!isIdentifierText(name, languageVersion)) {
-            insertText = JSON.stringify(name);
+            insertText = quotePropertyName(sourceFile, preferences, name);
+
             if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
-                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                // check if it is import { ^here as name } from '...'
+                // we have to access the scanner here to check if it is { ^here as name } or { ^here, as, name }.
+                scanner.setText(sourceFile.text);
+                scanner.resetTokenState(position);
+                if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
+                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                }
             }
         }
         else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
@@ -4948,7 +4956,10 @@ function getCompletionData(
                 return !isFromObjectTypeDeclaration(contextToken);
 
             case SyntaxKind.Identifier: {
-                if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                if ((
+                    containingNodeKind === SyntaxKind.ImportSpecifier ||
+                    containingNodeKind === SyntaxKind.ExportSpecifier
+                ) &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
                 ) {
