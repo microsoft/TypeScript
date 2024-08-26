@@ -252,7 +252,7 @@ interface String {
     [Symbol.iterator](): StringIterator<string>;
 }
 
-interface Int8Array<Buffer extends ArrayBufferLike> {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -287,7 +287,7 @@ interface Int8ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>;
 }
 
-interface Uint8Array<Buffer extends ArrayBufferLike> {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -322,7 +322,7 @@ interface Uint8ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>;
 }
 
-interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -359,7 +359,7 @@ interface Uint8ClampedArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>;
 }
 
-interface Int16Array<Buffer extends ArrayBufferLike> {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -396,7 +396,7 @@ interface Int16ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>;
 }
 
-interface Uint16Array<Buffer extends ArrayBufferLike> {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -431,7 +431,7 @@ interface Uint16ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>;
 }
 
-interface Int32Array<Buffer extends ArrayBufferLike> {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -466,7 +466,7 @@ interface Int32ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>;
 }
 
-interface Uint32Array<Buffer extends ArrayBufferLike> {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -501,7 +501,7 @@ interface Uint32ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>;
 }
 
-interface Float32Array<Buffer extends ArrayBufferLike> {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -536,7 +536,7 @@ interface Float32ArrayConstructor {
     from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>;
 }
 
-interface Float64Array<Buffer extends ArrayBufferLike> {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
     /**
      * Returns an array of key, value pairs for every entry in the array

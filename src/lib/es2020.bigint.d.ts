@@ -128,12 +128,12 @@ declare var BigInt: BigIntConstructor;
  * A typed array of 64-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated, an exception is raised.
  */
-interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface BigInt64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
 
     /** The ArrayBuffer instance referenced by the array. */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /** The length in bytes of the array. */
     readonly byteLength: number;
@@ -163,7 +163,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: bigint, index: number, array: BigInt64Array<Buffer>) => boolean, thisArg?: any): boolean;
+    every(predicate: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => boolean, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -182,7 +182,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: bigint, index: number, array: BigInt64Array<Buffer>) => any, thisArg?: any): BigInt64Array<ArrayBuffer>;
+    filter(predicate: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => any, thisArg?: any): BigInt64Array<ArrayBuffer>;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -193,7 +193,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: bigint, index: number, array: BigInt64Array<Buffer>) => boolean, thisArg?: any): bigint | undefined;
+    find(predicate: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => boolean, thisArg?: any): bigint | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -204,7 +204,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: bigint, index: number, array: BigInt64Array<Buffer>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -213,7 +213,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: bigint, index: number, array: BigInt64Array<Buffer>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => void, thisArg?: any): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
@@ -259,7 +259,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: bigint, index: number, array: BigInt64Array<Buffer>) => bigint, thisArg?: any): BigInt64Array<ArrayBuffer>;
+    map(callbackfn: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => bigint, thisArg?: any): BigInt64Array<ArrayBuffer>;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -271,7 +271,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array<Buffer>) => bigint): bigint;
+    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array<TArrayBuffer>) => bigint): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -283,7 +283,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array<Buffer>) => U, initialValue: U): U;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array<TArrayBuffer>) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -295,7 +295,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array<Buffer>) => bigint): bigint;
+    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array<TArrayBuffer>) => bigint): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -307,7 +307,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array<Buffer>) => U, initialValue: U): U;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array<TArrayBuffer>) => U, initialValue: U): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;
@@ -334,7 +334,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: bigint, index: number, array: BigInt64Array<Buffer>) => boolean, thisArg?: any): boolean;
+    some(predicate: (value: bigint, index: number, array: BigInt64Array<TArrayBuffer>) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.
@@ -348,7 +348,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): BigInt64Array<Buffer>;
+    subarray(begin?: number, end?: number): BigInt64Array<TArrayBuffer>;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
@@ -357,7 +357,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): BigInt64Array<Buffer>;
+    valueOf(): BigInt64Array<TArrayBuffer>;
 
     /** Yields each value in the array. */
     values(): ArrayIterator<bigint>;
@@ -372,7 +372,7 @@ interface BigInt64ArrayConstructor {
     readonly prototype: BigInt64Array<ArrayBufferLike>;
     new (length?: number): BigInt64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigInt64Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): BigInt64Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): BigInt64Array<TArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
@@ -404,12 +404,12 @@ declare var BigInt64Array: BigInt64ArrayConstructor;
  * A typed array of 64-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated, an exception is raised.
  */
-interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface BigUint64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
 
     /** The ArrayBuffer instance referenced by the array. */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /** The length in bytes of the array. */
     readonly byteLength: number;
@@ -439,7 +439,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: bigint, index: number, array: BigUint64Array<Buffer>) => boolean, thisArg?: any): boolean;
+    every(predicate: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => boolean, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -458,7 +458,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: bigint, index: number, array: BigUint64Array<Buffer>) => any, thisArg?: any): BigUint64Array<ArrayBuffer>;
+    filter(predicate: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => any, thisArg?: any): BigUint64Array<ArrayBuffer>;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -469,7 +469,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: bigint, index: number, array: BigUint64Array<Buffer>) => boolean, thisArg?: any): bigint | undefined;
+    find(predicate: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => boolean, thisArg?: any): bigint | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -480,7 +480,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: bigint, index: number, array: BigUint64Array<Buffer>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -489,7 +489,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: bigint, index: number, array: BigUint64Array<Buffer>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => void, thisArg?: any): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
@@ -535,7 +535,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: bigint, index: number, array: BigUint64Array<Buffer>) => bigint, thisArg?: any): BigUint64Array<ArrayBuffer>;
+    map(callbackfn: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => bigint, thisArg?: any): BigUint64Array<ArrayBuffer>;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -547,7 +547,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array<Buffer>) => bigint): bigint;
+    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array<TArrayBuffer>) => bigint): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -559,7 +559,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array<Buffer>) => U, initialValue: U): U;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array<TArrayBuffer>) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -571,7 +571,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array<Buffer>) => bigint): bigint;
+    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array<TArrayBuffer>) => bigint): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -583,7 +583,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array<Buffer>) => U, initialValue: U): U;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array<TArrayBuffer>) => U, initialValue: U): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;
@@ -610,7 +610,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: bigint, index: number, array: BigUint64Array<Buffer>) => boolean, thisArg?: any): boolean;
+    some(predicate: (value: bigint, index: number, array: BigUint64Array<TArrayBuffer>) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.
@@ -624,7 +624,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): BigUint64Array<Buffer>;
+    subarray(begin?: number, end?: number): BigUint64Array<TArrayBuffer>;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
@@ -633,7 +633,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): BigUint64Array<Buffer>;
+    valueOf(): BigUint64Array<TArrayBuffer>;
 
     /** Yields each value in the array. */
     values(): ArrayIterator<bigint>;
@@ -648,7 +648,7 @@ interface BigUint64ArrayConstructor {
     readonly prototype: BigUint64Array<ArrayBufferLike>;
     new (length?: number): BigUint64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigUint64Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): BigUint64Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): BigUint64Array<TArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
@@ -670,7 +670,7 @@ interface BigUint64ArrayConstructor {
 }
 declare var BigUint64Array: BigUint64ArrayConstructor;
 
-interface DataView<Buffer extends ArrayBufferLike> {
+interface DataView<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.

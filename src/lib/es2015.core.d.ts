@@ -542,38 +542,38 @@ interface StringConstructor {
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
-interface Int8Array<Buffer extends ArrayBufferLike> {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8Array<Buffer extends ArrayBufferLike> {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int16Array<Buffer extends ArrayBufferLike> {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint16Array<Buffer extends ArrayBufferLike> {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int32Array<Buffer extends ArrayBufferLike> {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint32Array<Buffer extends ArrayBufferLike> {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float32Array<Buffer extends ArrayBufferLike> {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float64Array<Buffer extends ArrayBufferLike> {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

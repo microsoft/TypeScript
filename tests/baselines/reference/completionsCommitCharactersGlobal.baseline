@@ -51,7 +51,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -75,9 +75,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -91,11 +91,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -147,13 +147,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -223,7 +223,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -247,9 +247,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -263,11 +263,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -319,13 +319,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -394,7 +394,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -418,9 +418,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -434,11 +434,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -490,13 +490,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -563,7 +563,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -587,9 +587,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -603,11 +603,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -659,13 +659,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -732,7 +732,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -756,9 +756,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -772,11 +772,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -828,13 +828,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -900,7 +900,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -924,9 +924,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -940,11 +940,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -996,13 +996,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1071,7 +1071,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1095,9 +1095,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1111,11 +1111,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -1167,13 +1167,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1242,7 +1242,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1266,9 +1266,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1282,11 +1282,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -1338,13 +1338,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1423,7 +1423,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1447,9 +1447,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1463,11 +1463,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -1519,13 +1519,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1597,7 +1597,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1621,9 +1621,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1637,11 +1637,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -1693,13 +1693,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1768,7 +1768,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1792,9 +1792,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1808,11 +1808,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -1864,13 +1864,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1941,7 +1941,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -1965,9 +1965,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -1981,11 +1981,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -2037,13 +2037,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -2115,7 +2115,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -2139,9 +2139,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -2155,11 +2155,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -2211,13 +2211,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -2288,7 +2288,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -2312,9 +2312,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -2328,11 +2328,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -2384,13 +2384,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -2463,7 +2463,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -2487,9 +2487,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -2503,11 +2503,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -2559,13 +2559,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -2597,7 +2597,7 @@
 // | interface ArrayBufferConstructor
 // | type ArrayBufferLike = ArrayBuffer
 // | interface ArrayBufferTypes
-// | interface ArrayBufferView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface ArrayBufferView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | interface ArrayConstructor
 // | interface ArrayLike<T>
 // | asserts
@@ -2623,7 +2623,7 @@
 // | interface ClassSetterDecoratorContext<This = unknown, Value = unknown>
 // | interface ConcatArray<T>
 // | type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface DataViewConstructor
 // | interface Date
@@ -2641,10 +2641,10 @@
 // | type Exclude<T, U> = T extends U ? never : T
 // | type Extract<T, U> = T extends U ? T : never
 // | false
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
 // | interface Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | interface Float64ArrayConstructor
 // | interface Function
@@ -2657,13 +2657,13 @@
 // | interface ImportMeta
 // | infer
 // | type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
 // | interface Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface Int32ArrayConstructor
 // | namespace Intl
@@ -2735,16 +2735,16 @@
 // | var TypeError: TypeErrorConstructor
 // | interface TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
 // | interface Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
 // | interface Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint32ArrayConstructor
 // | type Uncapitalize<S extends string> = intrinsic
@@ -2777,7 +2777,7 @@
 // | interface ArrayBufferConstructor
 // | type ArrayBufferLike = ArrayBuffer
 // | interface ArrayBufferTypes
-// | interface ArrayBufferView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface ArrayBufferView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | interface ArrayConstructor
 // | interface ArrayLike<T>
 // | asserts
@@ -2803,7 +2803,7 @@
 // | interface ClassSetterDecoratorContext<This = unknown, Value = unknown>
 // | interface ConcatArray<T>
 // | type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never
-// | interface DataView<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface DataViewConstructor
 // | interface Date
@@ -2821,10 +2821,10 @@
 // | type Exclude<T, U> = T extends U ? never : T
 // | type Extract<T, U> = T extends U ? T : never
 // | false
-// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
 // | interface Float32ArrayConstructor
-// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | interface Float64ArrayConstructor
 // | interface Function
@@ -2837,13 +2837,13 @@
 // | interface ImportMeta
 // | infer
 // | type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any
-// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
 // | interface Int8ArrayConstructor
-// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int16ArrayConstructor
-// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface Int32ArrayConstructor
 // | namespace Intl
@@ -2915,16 +2915,16 @@
 // | var TypeError: TypeErrorConstructor
 // | interface TypeErrorConstructor
 // | typeof
-// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ArrayConstructor
-// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
 // | interface Uint8ClampedArrayConstructor
-// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
 // | interface Uint16ArrayConstructor
-// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint32ArrayConstructor
 // | type Uncapitalize<S extends string> = intrinsic
@@ -4160,7 +4160,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -4974,7 +4974,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -5072,7 +5072,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -5374,7 +5374,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -5472,7 +5472,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -5570,7 +5570,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -6894,7 +6894,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -6992,7 +6992,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -7090,7 +7090,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -7188,7 +7188,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -8903,7 +8903,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -9717,7 +9717,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -9815,7 +9815,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -10117,7 +10117,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -10215,7 +10215,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -10313,7 +10313,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -11637,7 +11637,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -11735,7 +11735,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -11833,7 +11833,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -11931,7 +11931,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -13645,7 +13645,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -14459,7 +14459,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -14557,7 +14557,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -14859,7 +14859,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -14957,7 +14957,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -15055,7 +15055,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -16379,7 +16379,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -16477,7 +16477,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -16575,7 +16575,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -16673,7 +16673,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -18319,7 +18319,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -19133,7 +19133,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -19231,7 +19231,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -19533,7 +19533,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -19631,7 +19631,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -19729,7 +19729,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -21053,7 +21053,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -21151,7 +21151,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -21249,7 +21249,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -21347,7 +21347,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -22998,7 +22998,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -23812,7 +23812,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -23910,7 +23910,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -24212,7 +24212,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -24310,7 +24310,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -24408,7 +24408,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -25732,7 +25732,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -25830,7 +25830,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -25928,7 +25928,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -26026,7 +26026,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -27672,7 +27672,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -28486,7 +28486,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -28584,7 +28584,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -28886,7 +28886,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -28984,7 +28984,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -29082,7 +29082,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -30406,7 +30406,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -30504,7 +30504,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -30602,7 +30602,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -30700,7 +30700,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -32414,7 +32414,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -33228,7 +33228,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -33326,7 +33326,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -33628,7 +33628,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -33726,7 +33726,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -33824,7 +33824,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -35148,7 +35148,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -35246,7 +35246,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -35344,7 +35344,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -35442,7 +35442,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -37156,7 +37156,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -37970,7 +37970,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -38068,7 +38068,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -38370,7 +38370,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -38468,7 +38468,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -38566,7 +38566,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -39890,7 +39890,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -39988,7 +39988,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -40086,7 +40086,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -40184,7 +40184,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -41906,7 +41906,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -42720,7 +42720,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -42818,7 +42818,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -43120,7 +43120,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -43218,7 +43218,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -43316,7 +43316,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -44640,7 +44640,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -44738,7 +44738,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -44836,7 +44836,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -44934,7 +44934,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -46678,7 +46678,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -47492,7 +47492,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -47590,7 +47590,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -47892,7 +47892,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -47990,7 +47990,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -48088,7 +48088,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -49412,7 +49412,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -49510,7 +49510,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -49608,7 +49608,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -49706,7 +49706,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -51421,7 +51421,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -52235,7 +52235,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -52333,7 +52333,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -52635,7 +52635,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -52733,7 +52733,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -52831,7 +52831,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -54155,7 +54155,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -54253,7 +54253,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -54351,7 +54351,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -54449,7 +54449,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -56193,7 +56193,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -57007,7 +57007,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -57105,7 +57105,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -57407,7 +57407,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -57505,7 +57505,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -57603,7 +57603,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -58927,7 +58927,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -59025,7 +59025,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -59123,7 +59123,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -59221,7 +59221,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -60965,7 +60965,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -61779,7 +61779,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -61877,7 +61877,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -62179,7 +62179,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -62277,7 +62277,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -62375,7 +62375,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -63699,7 +63699,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -63797,7 +63797,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -63895,7 +63895,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -63993,7 +63993,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -65782,7 +65782,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -66596,7 +66596,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -66694,7 +66694,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -66996,7 +66996,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -67094,7 +67094,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -67192,7 +67192,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -68516,7 +68516,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -68614,7 +68614,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -68712,7 +68712,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -68810,7 +68810,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -70599,7 +70599,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -71413,7 +71413,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -71511,7 +71511,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -71813,7 +71813,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -71911,7 +71911,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -72009,7 +72009,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -73333,7 +73333,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -73431,7 +73431,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -73529,7 +73529,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -73627,7 +73627,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -74449,7 +74449,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -76936,7 +76936,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -77785,7 +77785,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -77904,7 +77904,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -78468,7 +78468,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -78587,7 +78587,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -78706,7 +78706,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -82710,7 +82710,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -82829,7 +82829,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -82948,7 +82948,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -83067,7 +83067,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -83920,7 +83920,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -86407,7 +86407,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -87256,7 +87256,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -87375,7 +87375,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -87939,7 +87939,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -88058,7 +88058,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -88177,7 +88177,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -92181,7 +92181,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -92300,7 +92300,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -92419,7 +92419,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {
@@ -92538,7 +92538,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "Buffer",
+              "text": "TArrayBuffer",
               "kind": "typeParameterName"
             },
             {

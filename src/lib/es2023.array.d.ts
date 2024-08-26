@@ -145,7 +145,7 @@ interface ReadonlyArray<T> {
     with(index: number, value: T): T[];
 }
 
-interface Int8Array<Buffer extends ArrayBufferLike> {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -209,7 +209,7 @@ interface Int8Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Int8Array<ArrayBuffer>;
 }
 
-interface Uint8Array<Buffer extends ArrayBufferLike> {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -273,7 +273,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Uint8Array<ArrayBuffer>;
 }
 
-interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -345,7 +345,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Uint8ClampedArray<ArrayBuffer>;
 }
 
-interface Int16Array<Buffer extends ArrayBufferLike> {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -409,7 +409,7 @@ interface Int16Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Int16Array<ArrayBuffer>;
 }
 
-interface Uint16Array<Buffer extends ArrayBufferLike> {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -481,7 +481,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Uint16Array<ArrayBuffer>;
 }
 
-interface Int32Array<Buffer extends ArrayBufferLike> {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -545,7 +545,7 @@ interface Int32Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Int32Array<ArrayBuffer>;
 }
 
-interface Uint32Array<Buffer extends ArrayBufferLike> {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -617,7 +617,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Uint32Array<ArrayBuffer>;
 }
 
-interface Float32Array<Buffer extends ArrayBufferLike> {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -689,7 +689,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Float32Array<ArrayBuffer>;
 }
 
-interface Float64Array<Buffer extends ArrayBufferLike> {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -761,7 +761,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: number): Float64Array<ArrayBuffer>;
 }
 
-interface BigInt64Array<Buffer extends ArrayBufferLike> {
+interface BigInt64Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.
@@ -833,7 +833,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
     with(index: number, value: bigint): BigInt64Array<ArrayBuffer>;
 }
 
-interface BigUint64Array<Buffer extends ArrayBufferLike> {
+interface BigUint64Array<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Returns the value of the last element in the array where predicate is true, and undefined
      * otherwise.

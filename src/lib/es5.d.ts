@@ -1701,11 +1701,11 @@ interface ArrayBufferConstructor {
 }
 declare var ArrayBuffer: ArrayBufferConstructor;
 
-interface ArrayBufferView<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface ArrayBufferView<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -1718,8 +1718,8 @@ interface ArrayBufferView<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     readonly byteOffset: number;
 }
 
-interface DataView<Buffer extends ArrayBufferLike = ArrayBufferLike> {
-    readonly buffer: Buffer;
+interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
+    readonly buffer: TArrayBuffer;
     readonly byteLength: number;
     readonly byteOffset: number;
     /**
@@ -1847,7 +1847,7 @@ interface DataView<Buffer extends ArrayBufferLike = ArrayBufferLike> {
 }
 interface DataViewConstructor {
     readonly prototype: DataView<ArrayBufferLike>;
-    new <Buffer extends ArrayBufferLike & { BYTES_PER_ELEMENT?: never; }>(buffer: Buffer, byteOffset?: number, byteLength?: number): DataView<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike & { BYTES_PER_ELEMENT?: never; }>(buffer: TArrayBuffer, byteOffset?: number, byteLength?: number): DataView<TArrayBuffer>;
 }
 declare var DataView: DataViewConstructor;
 
@@ -1855,7 +1855,7 @@ declare var DataView: DataViewConstructor;
  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
  * number of bytes could not be allocated an exception is raised.
  */
-interface Int8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -1864,7 +1864,7 @@ interface Int8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -2081,7 +2081,7 @@ interface Int8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Int8Array<Buffer>;
+    subarray(begin?: number, end?: number): Int8Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -2102,7 +2102,7 @@ interface Int8ArrayConstructor {
     readonly prototype: Int8Array<ArrayBufferLike>;
     new (length: number): Int8Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int8Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int8Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int8Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int8Array<ArrayBuffer>;
 
     /**
@@ -2136,7 +2136,7 @@ declare var Int8Array: Int8ArrayConstructor;
  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -2145,7 +2145,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -2362,7 +2362,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Uint8Array<Buffer>;
+    subarray(begin?: number, end?: number): Uint8Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -2383,7 +2383,7 @@ interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array<ArrayBufferLike>;
     new (length: number): Uint8Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint8Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint8Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8Array<ArrayBuffer>;
 
     /**
@@ -2417,7 +2417,7 @@ declare var Uint8Array: Uint8ArrayConstructor;
  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
  * If the requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -2426,7 +2426,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -2643,7 +2643,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Uint8ClampedArray<Buffer>;
+    subarray(begin?: number, end?: number): Uint8ClampedArray<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -2664,7 +2664,7 @@ interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray<ArrayBufferLike>;
     new (length: number): Uint8ClampedArray<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint8ClampedArray<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8ClampedArray<ArrayBuffer>;
 
     /**
@@ -2698,7 +2698,7 @@ declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Int16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -2707,7 +2707,7 @@ interface Int16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -2923,7 +2923,7 @@ interface Int16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Int16Array<Buffer>;
+    subarray(begin?: number, end?: number): Int16Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -2944,7 +2944,7 @@ interface Int16ArrayConstructor {
     readonly prototype: Int16Array<ArrayBufferLike>;
     new (length: number): Int16Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int16Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int16Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int16Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int16Array<ArrayBuffer>;
 
     /**
@@ -2978,7 +2978,7 @@ declare var Int16Array: Int16ArrayConstructor;
  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -2987,7 +2987,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -3204,7 +3204,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Uint16Array<Buffer>;
+    subarray(begin?: number, end?: number): Uint16Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -3225,7 +3225,7 @@ interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array<ArrayBufferLike>;
     new (length: number): Uint16Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint16Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint16Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint16Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint16Array<ArrayBuffer>;
 
     /**
@@ -3258,7 +3258,7 @@ declare var Uint16Array: Uint16ArrayConstructor;
  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Int32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -3267,7 +3267,7 @@ interface Int32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -3484,7 +3484,7 @@ interface Int32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Int32Array<Buffer>;
+    subarray(begin?: number, end?: number): Int32Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -3505,7 +3505,7 @@ interface Int32ArrayConstructor {
     readonly prototype: Int32Array<ArrayBufferLike>;
     new (length: number): Int32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int32Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Int32Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int32Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int32Array<ArrayBuffer>;
 
     /**
@@ -3539,7 +3539,7 @@ declare var Int32Array: Int32ArrayConstructor;
  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -3548,7 +3548,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -3764,7 +3764,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Uint32Array<Buffer>;
+    subarray(begin?: number, end?: number): Uint32Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -3785,7 +3785,7 @@ interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array<ArrayBufferLike>;
     new (length: number): Uint32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint32Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Uint32Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint32Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint32Array<ArrayBuffer>;
 
     /**
@@ -3819,7 +3819,7 @@ declare var Uint32Array: Uint32ArrayConstructor;
  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
  * of bytes could not be allocated an exception is raised.
  */
-interface Float32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -3828,7 +3828,7 @@ interface Float32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -4045,7 +4045,7 @@ interface Float32Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Float32Array<Buffer>;
+    subarray(begin?: number, end?: number): Float32Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -4066,7 +4066,7 @@ interface Float32ArrayConstructor {
     readonly prototype: Float32Array<ArrayBufferLike>;
     new (length: number): Float32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Float32Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Float32Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float32Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float32Array<ArrayBuffer>;
 
     /**
@@ -4100,7 +4100,7 @@ declare var Float32Array: Float32ArrayConstructor;
  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
  * number of bytes could not be allocated an exception is raised.
  */
-interface Float64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -4109,7 +4109,7 @@ interface Float64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    readonly buffer: Buffer;
+    readonly buffer: TArrayBuffer;
 
     /**
      * The length in bytes of the array.
@@ -4326,7 +4326,7 @@ interface Float64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): Float64Array<Buffer>;
+    subarray(begin?: number, end?: number): Float64Array<TArrayBuffer>;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -4347,7 +4347,7 @@ interface Float64ArrayConstructor {
     readonly prototype: Float64Array<ArrayBufferLike>;
     new (length: number): Float64Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Float64Array<ArrayBuffer>;
-    new <Buffer extends ArrayBufferLike = ArrayBuffer>(buffer: Buffer, byteOffset?: number, length?: number): Float64Array<Buffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float64Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float64Array<ArrayBuffer>;
 
     /**
