@@ -12,6 +12,7 @@ import {
     Bundle,
     CallExpression,
     CaseBlock,
+    changeExtension,
     childIsDecorated,
     ClassDeclaration,
     ClassElement,
@@ -55,6 +56,7 @@ import {
     getInitializedVariables,
     getIsolatedModules,
     getOriginalNode,
+    getOutputExtension,
     getParseTreeNode,
     getProperties,
     getStrictOptionValue,
@@ -81,6 +83,7 @@ import {
     isClassElement,
     isClassLike,
     isComputedPropertyName,
+    isDeclarationFileName,
     isDecorator,
     isElementAccessExpression,
     isEntityName,
@@ -122,6 +125,7 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isStringLiteral,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -155,6 +159,7 @@ import {
     parameterIsThisKeyword,
     ParameterPropertyDeclaration,
     ParenthesizedExpression,
+    pathIsRelative,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
@@ -2269,10 +2274,20 @@ export function transformTypeScript(context: TransformationContext) {
                 node,
                 /*modifiers*/ undefined,
                 importClause,
-                node.moduleSpecifier,
+                rewriteModuleSpecifier(node.moduleSpecifier),
                 node.attributes,
             )
             : undefined;
+    }
+
+    function rewriteModuleSpecifier(node: Expression): Expression;
+    function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined;
+    function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined {
+        if (!node || !compilerOptions.rewriteRelativeImportExtensions || !isStringLiteral(node) || !pathIsRelative(node.text) || isDeclarationFileName(node.text)) {
+            return node;
+        }
+        const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));
+        return updatedText !== node.text ? setOriginalNode(setTextRange(factory.createStringLiteral(updatedText, node.singleQuote), node), node) : node;
     }
 
     /**
@@ -2342,7 +2357,14 @@ export function transformTypeScript(context: TransformationContext) {
             // never elide `export <whatever> from <whereever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
-            return node;
+            return factory.updateExportDeclaration(
+                node,
+                node.modifiers,
+                node.isTypeOnly,
+                node.exportClause,
+                rewriteModuleSpecifier(node.moduleSpecifier),
+                node.attributes,
+            );
         }
 
         // Elide the export declaration if all of its named exports are elided.
@@ -2359,7 +2381,7 @@ export function transformTypeScript(context: TransformationContext) {
                 /*modifiers*/ undefined,
                 node.isTypeOnly,
                 exportClause,
-                node.moduleSpecifier,
+                rewriteModuleSpecifier(node.moduleSpecifier),
                 node.attributes,
             )
             : undefined;
@@ -2421,8 +2443,24 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
-            const isReferenced = shouldEmitAliasDeclaration(node);
-            return isReferenced ? visitEachChild(node, visitor, context) : undefined;
+            if (!shouldEmitAliasDeclaration(node)) {
+                return undefined;
+            }
+            const updatedModuleSpecifier = rewriteModuleSpecifier(node.moduleReference.expression);
+            if (updatedModuleSpecifier !== node.moduleReference.expression) {
+                return visitEachChild(
+                    factory.updateImportEqualsDeclaration(
+                        node,
+                        node.modifiers,
+                        node.isTypeOnly,
+                        node.name,
+                        factory.updateExternalModuleReference(node.moduleReference, updatedModuleSpecifier),
+                    ),
+                    visitor,
+                    context,
+                );
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         if (!shouldEmitImportEqualsDeclaration(node)) {

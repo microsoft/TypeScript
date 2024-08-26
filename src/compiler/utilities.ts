@@ -8821,6 +8821,12 @@ function createComputedCompilerOptions<T extends Record<string, CompilerOptionKe
 
 /** @internal */
 export const computedOptions = createComputedCompilerOptions({
+    allowImportingTsExtensions: {
+        dependencies: ["rewriteRelativeImportExtensions"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.allowImportingTsExtensions || compilerOptions.rewriteRelativeImportExtensions);
+        },
+    },
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
@@ -9046,6 +9052,8 @@ export const computedOptions = createComputedCompilerOptions({
     },
 });
 
+/** @internal */
+export const getAllowImportingTsExtensions = computedOptions.allowImportingTsExtensions.computeValue;
 /** @internal */
 export const getEmitScriptTarget = computedOptions.target.computeValue;
 /** @internal */

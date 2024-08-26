@@ -5934,6 +5934,10 @@
         "category": "Message",
         "code": 6420
     },
+    "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.": {
+        "category": "Message",
+        "code": 6421
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

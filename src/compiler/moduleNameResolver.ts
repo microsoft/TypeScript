@@ -36,6 +36,7 @@ import {
     forEach,
     forEachAncestorDirectory,
     formatMessage,
+    getAllowImportingTsExtensions,
     getAllowJSCompilerOption,
     getAnyExtensionFromPath,
     getBaseFileName,
@@ -3333,7 +3334,7 @@ function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
 // so this function doesn't check them to avoid propagating errors.
 /** @internal */
 export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
-    return !!compilerOptions.allowImportingTsExtensions || fromFileName && isDeclarationFileName(fromFileName);
+    return getAllowImportingTsExtensions(compilerOptions) || fromFileName && isDeclarationFileName(fromFileName);
 }
 
 /**
