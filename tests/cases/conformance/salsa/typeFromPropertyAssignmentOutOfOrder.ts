@@ -1,7 +1,7 @@
 // @noEmit: true
 // @allowJs: true
 // @checkJs: true
-// @target: es3
+// @target: es5
 // @filename: index.js
 First.Item = class I {}
 Common.Object = class extends First.Item {}

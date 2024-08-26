@@ -79,24 +79,24 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [other.js]
 // esm format file
-export var a = await import("package/cjs");
-export var b = await import("package/mjs");
-export var c = await import("package");
-export var f = await import("inner");
+export const a = await import("package/cjs");
+export const b = await import("package/mjs");
+export const c = await import("package");
+export const f = await import("inner");
 //// [other2.js]
 // esm format file
-export var d = await import("inner/cjs");
-export var e = await import("inner/mjs");
+export const d = await import("inner/cjs");
+export const e = await import("inner/mjs");
 //// [other.mjs]
 // esm format file
-export var a = await import("package/cjs");
-export var b = await import("package/mjs");
-export var c = await import("package");
-export var f = await import("inner");
+export const a = await import("package/cjs");
+export const b = await import("package/mjs");
+export const c = await import("package");
+export const f = await import("inner");
 //// [other2.mjs]
 // esm format file
-export var d = await import("inner/cjs");
-export var e = await import("inner/mjs");
+export const d = await import("inner/cjs");
+export const e = await import("inner/mjs");
 //// [other.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -157,8 +157,8 @@ export declare const e: typeof import("inner/mjs");
 export declare const a: Promise<{
     default: typeof import("./index.cjs");
 }>;
-export declare const b: Promise<typeof import("./index.mjs", { with: { "resolution-mode": "import" } })>;
-export declare const c: Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>;
+export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>;
+export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;
 export declare const f: Promise<{
     default: typeof import("inner");
     cjsMain: true;

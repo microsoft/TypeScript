@@ -2,7 +2,7 @@
 
 // @BaselineFile: getEmitOutputWithSemanticErrorsForMultipleFiles2.baseline
 // @declaration: true
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true

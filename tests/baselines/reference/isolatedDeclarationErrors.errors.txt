@@ -1,0 +1,21 @@
+isolatedDeclarationErrors.ts(2,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+isolatedDeclarationErrors.ts(5,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+isolatedDeclarationErrors.ts(8,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+
+
+==== isolatedDeclarationErrors.ts (3 errors) ====
+    function errorOnAssignmentBelowDecl(): void {}
+    errorOnAssignmentBelowDecl.a = "";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    
+    const errorOnAssignmentBelow = (): void => {}
+    errorOnAssignmentBelow.a = "";
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    
+    const errorOnMissingReturn = () => {}
+    errorOnMissingReturn.a = "";
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    

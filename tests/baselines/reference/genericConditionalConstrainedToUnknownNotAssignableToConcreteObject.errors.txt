@@ -4,7 +4,7 @@ genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts(13,5): er
       Type 'ReturnType<T[string]> | ReturnType<T[number]> | ReturnType<T[symbol]>' is not assignable to type 'A'.
         Type 'ReturnType<T[string]>' is not assignable to type 'A'.
           Type 'ReturnType<FunctionsObj<T>[string]>' is not assignable to type 'A'.
-            Type 'unknown' is not assignable to type 'A'.
+            Property 'x' is missing in type '{}' but required in type 'A'.
 
 
 ==== genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts (1 errors) ====
@@ -28,7 +28,8 @@ genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts(13,5): er
 !!! error TS2322:       Type 'ReturnType<T[string]> | ReturnType<T[number]> | ReturnType<T[symbol]>' is not assignable to type 'A'.
 !!! error TS2322:         Type 'ReturnType<T[string]>' is not assignable to type 'A'.
 !!! error TS2322:           Type 'ReturnType<FunctionsObj<T>[string]>' is not assignable to type 'A'.
-!!! error TS2322:             Type 'unknown' is not assignable to type 'A'.
+!!! error TS2322:             Property 'x' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts:1:15: 'x' is declared here.
     }
     
     // Original CFA report of the above issue

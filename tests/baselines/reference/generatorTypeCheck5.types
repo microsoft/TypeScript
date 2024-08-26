@@ -3,4 +3,5 @@
 === generatorTypeCheck5.ts ===
 function* g1(): any { }
 >g1 : () => any
+>   : ^^^^^^   
 

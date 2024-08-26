@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 function editFlat(position: number, deletedLength: number, newText: string, source: string) {
     return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);

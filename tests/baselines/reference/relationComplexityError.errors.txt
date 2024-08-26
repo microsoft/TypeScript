@@ -1,4 +1,4 @@
-relationComplexityError.ts(12,5): error TS2322: Type 'T1 & T2' is not assignable to type 'T1 | null'.
+relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 
 
@@ -16,7 +16,7 @@ relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing t
     function f2(x: T1 | null, y: T1 & T2) {
         x = y;  // Complexity error
         ~
-!!! error TS2322: Type 'T1 & T2' is not assignable to type 'T1 | null'.
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
         ~~~~~
 !!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
     }

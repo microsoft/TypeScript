@@ -3,7 +3,11 @@
 === functionExpressionReturningItself.ts ===
 var x = function somefn() { return somefn; };
 >x : () => any
+>  : ^^^^^^^^^
 >function somefn() { return somefn; } : () => any
+>                                     : ^^^^^^^^^
 >somefn : () => any
+>       : ^^^^^^^^^
 >somefn : () => any
+>       : ^^^^^^^^^
 

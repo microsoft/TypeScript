@@ -3,7 +3,11 @@
 === classExtendsInterface_not.ts ===
 class C extends "".bogus {}
 >C : C
+>  : ^
 >"".bogus : any
+>         : ^^^
 >"" : ""
+>   : ^^
 >bogus : any
+>      : ^^^
 

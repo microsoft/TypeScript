@@ -3,4 +3,5 @@
 === es6modulekindExportClassNameWithObject.ts ===
 export class Object {}
 >Object : Object
+>       : ^^^^^^
 

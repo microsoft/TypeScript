@@ -3,11 +3,17 @@
 === symbolDeclarationEmit9.ts ===
 var obj = {
 >obj : { [Symbol.isConcatSpreadable](): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable](): void; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.isConcatSpreadable]() { }
 >[Symbol.isConcatSpreadable] : () => void
+>                            : ^^^^^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 }

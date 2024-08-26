@@ -29,7 +29,7 @@ export const x: () => Thing;
 }
 
 //// [index.js]
-export var a = (await import("inner/index.js")).x();
+export const a = (await import("inner/index.js")).x();
 
 
 //// [index.d.ts]

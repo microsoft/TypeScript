@@ -1,4 +1,10 @@
 import {
+    createCodeFixActionMaybeFixAll,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     Diagnostics,
     factory,
@@ -13,13 +19,7 @@ import {
     textChanges,
     Token,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionMaybeFixAll,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixConvertConstToLet";
 const errorCodes = [Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];

@@ -13,9 +13,14 @@
 //// var foo3 = require(".//*require1*/
 
 // @Filename: /repo/src2/dir/test2.ts
-//// import * as foo1 from ".//*import_as2*/
-//// import foo2 = require(".//*import_equals2*/
-//// var foo3 = require(".//*require2*/
+//// import * as foo1 from "..//*import_as2*/
+//// import foo2 = require("..//*import_equals2*/
+//// var foo3 = require("..//*require2*/
+
+// @Filename: /repo/src2/index.ts
+//// import * as foo1 from ".//*import_as3*/
+//// import foo2 = require(".//*import_equals3*/
+//// var foo3 = require(".//*require3*/
 
 // @Filename: /repo/generated1/dir/f1.ts
 //// /*f1*/
@@ -31,7 +36,12 @@ verify.completions(
     },
     {
         marker: ["import_as2", "import_equals2", "require2"],
-        unsorted: ["f1", "f2", "test1"],
+        unsorted: ["dir", "index"],
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: ["import_as3", "import_equals3", "require3"],
+        unsorted: ["dir"],
         isNewIdentifierLocation: true,
     }
 );

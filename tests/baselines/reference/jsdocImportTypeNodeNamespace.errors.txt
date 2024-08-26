@@ -2,8 +2,6 @@ Main.js(2,21): error TS2352: Conversion of type 'string' to type 'typeof _defaul
 
 
 ==== GeometryType.d.ts (0 errors) ====
-    // #40767
-    
     declare namespace _default {
       export const POINT: string;
     }

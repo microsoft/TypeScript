@@ -19,7 +19,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: ^ScriptDocument1 file1.ts WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	^ScriptDocument1 file1.ts Text-1 ""
@@ -66,10 +66,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -77,7 +85,17 @@ PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
-/^scriptdocument1 file1.ts isDynamic:: true
+Projects::
+^ScriptDocument1 file1.ts (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+^ScriptDocument1 file1.ts (Dynamic) *new*
+    version: Text-1
+    containingProjects: 1
+        ^ScriptDocument1 file1.ts
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -95,7 +113,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	^ScriptDocument1 file1.ts SVC-2-0 "let x =1;"
@@ -111,6 +129,21 @@ Info seq  [hh:mm:ss:mss] 		Projects: ^ScriptDocument1 file1.ts
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Projects::
+^ScriptDocument1 file1.ts (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+^ScriptDocument1 file1.ts (Dynamic) (Open) *changed*
+    open: true *changed*
+    version: SVC-2-0 *changed*
+    containingProjects: 1
+        ^ScriptDocument1 file1.ts *default*

@@ -32,9 +32,9 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -42,6 +42,14 @@ Output::
 var x = 1;
 
 
+
+PolledWatches::
+/a/b/node_modules/@types/node/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/app.ts: *new*

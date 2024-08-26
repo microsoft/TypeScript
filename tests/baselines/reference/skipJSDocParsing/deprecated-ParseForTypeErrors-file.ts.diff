@@ -11,7 +11,7 @@
              "transformFlags": 4194304,
              "name": {
                  "kind": "Identifier",
-@@ -40,43 +39,9 @@
+@@ -39,42 +38,9 @@
                      "hasTrailingComma": false,
                      "transformFlags": 0
                  },
@@ -38,7 +38,6 @@
 -                                "pos": 6,
 -                                "end": 16,
 -                                "flags": "JSDoc",
--                                "modifierFlagsCache": 0,
 -                                "transformFlags": 0,
 -                                "escapedText": "deprecated"
 -                            }
@@ -56,7 +55,7 @@
          "1": {
              "kind": "ExpressionStatement",
              "pos": 46,
-@@ -237,6 +202,6 @@
+@@ -230,6 +196,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

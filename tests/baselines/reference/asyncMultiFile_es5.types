@@ -3,8 +3,10 @@
 === a.ts ===
 async function f() {}
 >f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
 
 === b.ts ===
 function g() { }
 >g : () => void
+>  : ^^^^^^^^^^
 

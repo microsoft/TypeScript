@@ -4,9 +4,11 @@
 /// <reference no-default-lib="true"/>
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     public: string;
 >public : string
+>       : ^^^^^^
 }
 interface Array<T> {}
 interface Boolean {}

@@ -5,7 +5,9 @@
 
 var app = function() {
 >app : () => void
+>    : ^^^^^^^^^^
 >function() {    var _this = this;    _this.swap = function() { }} : () => void
+>                                                                  : ^^^^^^^^^^
 
     var _this = this;
 >_this : any
@@ -13,15 +15,20 @@ var app = function() {
 
     _this.swap = function() { }
 >_this.swap = function() { } : () => void
+>                            : ^^^^^^^^^^
 >_this.swap : any
 >_this : any
+>      : ^^^
 >swap : any
+>     : ^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 }
 var a = new app()
 >a : any
 >new app() : any
 >app : () => void
+>    : ^^^^^^^^^^
 
 a
 >a : any

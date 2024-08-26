@@ -9,8 +9,6 @@
     export class A extends Foo { }
     
 ==== /node_modules/foo/index.js (0 errors) ====
-    // Test that extending an untyped module is an error, unlike extending unknownSymbol.
-    
     This file is not read.
     
 ==== /node_modules/bar/index.js (0 errors) ====

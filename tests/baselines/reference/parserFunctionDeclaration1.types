@@ -3,7 +3,9 @@
 === parserFunctionDeclaration1.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   declare function F();
 >F : () => any
+>  : ^^^^^^^^^
 }

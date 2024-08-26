@@ -5,7 +5,7 @@ module M {
         decorator(target: Object, key: string): void { }
     }
     class C extends S {
-        @super.decorator
+        @(super.decorator)
         method() { }
     }
 }

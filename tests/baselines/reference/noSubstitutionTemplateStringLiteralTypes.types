@@ -3,5 +3,7 @@
 === noSubstitutionTemplateStringLiteralTypes.ts ===
 const x: `foo` = "foo";
 >x : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 

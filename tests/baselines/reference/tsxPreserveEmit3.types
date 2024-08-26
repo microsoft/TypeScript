@@ -6,6 +6,7 @@ declare module JSX {
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 
@@ -17,4 +18,5 @@ export var React;
 // This import should be elided
 import {React} from "./test";
 >React : any
+>      : ^^^
 

@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/unicodeEscapesInNames02.ts] ////
 
 //// [extendedEscapesForAstralsInVarsAndClasses.ts]
-// Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
-// Astral characters should be accepted in ES2015
-
 // U+102A7 CARIAN LETTER A2
 var 𐊧: string;
 var \u{102A7}: string;
@@ -34,8 +31,6 @@ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClass
 
 
 //// [extendedEscapesForAstralsInVarsAndClasses.js]
-// Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
-// Astral characters should be accepted in ES2015
 // U+102A7 CARIAN LETTER A2
 var string;
 var u, A7 = (void 0)[102];

@@ -3,8 +3,10 @@
 === YieldExpression7_es6.ts ===
 function* foo() {
 >foo : () => Generator<typeof foo, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield foo
 >yield foo : any
 >foo : () => Generator<typeof foo, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -3,72 +3,112 @@
 === computedPropertyNamesWithStaticProperty.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     static staticProp = 10;
 >staticProp : number
+>           : ^^^^^^
 >10 : 10
+>   : ^^
 
     get [C1.staticProp]() {
 >[C1.staticProp] : string
+>                : ^^^^^^
 >C1.staticProp : number
+>              : ^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 
         return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     set [C1.staticProp](x: string) {
 >[C1.staticProp] : string
+>                : ^^^^^^
 >C1.staticProp : number
+>              : ^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 >x : string
+>  : ^^^^^^
 
         var y = x;
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
     }
     [C1.staticProp]() { }
 >[C1.staticProp] : () => void
+>                : ^^^^^^^^^^
 >C1.staticProp : number
+>              : ^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 }
 
 (class C2 {
 >(class C2 {    static staticProp = 10;    get [C2.staticProp]() {        return "hello";    }    set [C2.staticProp](x: string) {        var y = x;    }    [C2.staticProp]() { }}) : typeof C2
+>                                                                                                                                                                                    : ^^^^^^^^^
 >class C2 {    static staticProp = 10;    get [C2.staticProp]() {        return "hello";    }    set [C2.staticProp](x: string) {        var y = x;    }    [C2.staticProp]() { }} : typeof C2
+>                                                                                                                                                                                  : ^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     static staticProp = 10;
 >staticProp : number
+>           : ^^^^^^
 >10 : 10
+>   : ^^
 
     get [C2.staticProp]() {
 >[C2.staticProp] : string
+>                : ^^^^^^
 >C2.staticProp : number
+>              : ^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 
         return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     set [C2.staticProp](x: string) {
 >[C2.staticProp] : string
+>                : ^^^^^^
 >C2.staticProp : number
+>              : ^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 >x : string
+>  : ^^^^^^
 
         var y = x;
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
     }
     [C2.staticProp]() { }
 >[C2.staticProp] : () => void
+>                : ^^^^^^^^^^
 >C2.staticProp : number
+>              : ^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >staticProp : number
+>           : ^^^^^^
 
 })
 

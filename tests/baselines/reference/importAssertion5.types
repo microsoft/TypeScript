@@ -3,4 +3,5 @@
 === importAssertion5.ts ===
 import * as f from "./first" assert {
 >f : any
+>  : ^^^
 

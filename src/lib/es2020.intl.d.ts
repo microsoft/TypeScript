@@ -223,24 +223,49 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    interface NumberFormatOptionsStyleRegistry {
+        unit: never;
+    }
+
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        narrowSymbol: never;
+    }
+
+    interface NumberFormatOptionsSignDisplayRegistry {
+        auto: never;
+        never: never;
+        always: never;
+        exceptZero: never;
+    }
+
+    type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
+
     interface NumberFormatOptions {
+        numberingSystem?: string | undefined;
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
-        signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
+        signDisplay?: NumberFormatOptionsSignDisplay | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
-        currencyDisplay?: string | undefined;
-        currencySign?: string | undefined;
+        currencySign?: "standard" | "accounting" | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
         compactDisplay?: "short" | "long";
-        notation?: "standard" | "scientific" | "engineering" | "compact";
-        signDisplay?: "auto" | "never" | "always" | "exceptZero";
+        notation: "standard" | "scientific" | "engineering" | "compact";
+        signDisplay: NumberFormatOptionsSignDisplay;
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
-        currencyDisplay?: string;
-        currencySign?: string;
+        currencySign?: "standard" | "accounting";
+    }
+
+    interface NumberFormatPartTypeRegistry {
+        compact: never;
+        exponentInteger: never;
+        exponentMinusSign: never;
+        exponentSeparator: never;
+        unit: never;
+        unknown: never;
     }
 
     interface DateTimeFormatOptions {
