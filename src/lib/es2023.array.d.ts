@@ -159,12 +159,12 @@ interface Int8Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Int8Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
     findLast(
-        predicate: (value: number, index: number, array: Int8Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -178,14 +178,14 @@ interface Int8Array<Buffer extends ArrayBufferLike> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        predicate: (value: number, index: number, array: Int8Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Int8Array<Buffer>;
+    toReversed(): Int8Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -197,7 +197,7 @@ interface Int8Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Int8Array<Buffer>(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Int8Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Int8Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -206,7 +206,7 @@ interface Int8Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Int8Array<Buffer>;
+    with(index: number, value: number): Int8Array<ArrayBuffer>;
 }
 
 interface Uint8Array<Buffer extends ArrayBufferLike> {
@@ -223,12 +223,12 @@ interface Uint8Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint8Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
     findLast(
-        predicate: (value: number, index: number, array: Uint8Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -242,14 +242,14 @@ interface Uint8Array<Buffer extends ArrayBufferLike> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        predicate: (value: number, index: number, array: Uint8Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Uint8Array<Buffer>;
+    toReversed(): Uint8Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -261,7 +261,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Uint8Array<Buffer>(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Uint8Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Uint8Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -270,7 +270,7 @@ interface Uint8Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Uint8Array<Buffer>;
+    with(index: number, value: number): Uint8Array<ArrayBuffer>;
 }
 
 interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
@@ -287,7 +287,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint8ClampedArray<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -295,7 +295,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint8ClampedArray<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number | undefined;
@@ -313,7 +313,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint8ClampedArray<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -321,7 +321,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Uint8ClampedArray<Buffer>;
+    toReversed(): Uint8ClampedArray<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -333,7 +333,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray<Buffer>(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Uint8ClampedArray<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Uint8ClampedArray<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -342,7 +342,7 @@ interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Uint8ClampedArray<Buffer>;
+    with(index: number, value: number): Uint8ClampedArray<ArrayBuffer>;
 }
 
 interface Int16Array<Buffer extends ArrayBufferLike> {
@@ -359,12 +359,12 @@ interface Int16Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Int16Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
     findLast(
-        predicate: (value: number, index: number, array: Int16Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -378,14 +378,14 @@ interface Int16Array<Buffer extends ArrayBufferLike> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        predicate: (value: number, index: number, array: Int16Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Int16Array<Buffer>;
+    toReversed(): Int16Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -397,7 +397,7 @@ interface Int16Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Int16Array<Buffer>(4) [-22, 1, 2, 11]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Int16Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Int16Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -406,7 +406,7 @@ interface Int16Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Int16Array<Buffer>;
+    with(index: number, value: number): Int16Array<ArrayBuffer>;
 }
 
 interface Uint16Array<Buffer extends ArrayBufferLike> {
@@ -423,7 +423,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint16Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -431,7 +431,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint16Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number | undefined;
@@ -449,7 +449,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint16Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -457,7 +457,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Uint16Array<Buffer>;
+    toReversed(): Uint16Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -469,7 +469,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Uint16Array<Buffer>(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Uint16Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Uint16Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -478,7 +478,7 @@ interface Uint16Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Uint16Array<Buffer>;
+    with(index: number, value: number): Uint16Array<ArrayBuffer>;
 }
 
 interface Int32Array<Buffer extends ArrayBufferLike> {
@@ -495,12 +495,12 @@ interface Int32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Int32Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
     findLast(
-        predicate: (value: number, index: number, array: Int32Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -514,14 +514,14 @@ interface Int32Array<Buffer extends ArrayBufferLike> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        predicate: (value: number, index: number, array: Int32Array<Buffer>) => unknown,
+        predicate: (value: number, index: number, array: this) => unknown,
         thisArg?: any,
     ): number;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Int32Array<Buffer>;
+    toReversed(): Int32Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -533,7 +533,7 @@ interface Int32Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Int32Array<Buffer>(4) [-22, 1, 2, 11]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Int32Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Int32Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -542,7 +542,7 @@ interface Int32Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Int32Array<Buffer>;
+    with(index: number, value: number): Int32Array<ArrayBuffer>;
 }
 
 interface Uint32Array<Buffer extends ArrayBufferLike> {
@@ -559,7 +559,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint32Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -567,7 +567,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint32Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number | undefined;
@@ -585,7 +585,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Uint32Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -593,7 +593,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Uint32Array<Buffer>;
+    toReversed(): Uint32Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -605,7 +605,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Uint32Array<Buffer>(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Uint32Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Uint32Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -614,7 +614,7 @@ interface Uint32Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Uint32Array<Buffer>;
+    with(index: number, value: number): Uint32Array<ArrayBuffer>;
 }
 
 interface Float32Array<Buffer extends ArrayBufferLike> {
@@ -631,7 +631,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float32Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -639,7 +639,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float32Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number | undefined;
@@ -657,7 +657,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float32Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -665,7 +665,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Float32Array<Buffer>;
+    toReversed(): Float32Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -677,7 +677,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Float32Array<Buffer>(4) [-22.5, 1, 2, 11.5]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Float32Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Float32Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -686,7 +686,7 @@ interface Float32Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Float32Array<Buffer>;
+    with(index: number, value: number): Float32Array<ArrayBuffer>;
 }
 
 interface Float64Array<Buffer extends ArrayBufferLike> {
@@ -703,7 +703,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float64Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -711,7 +711,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number | undefined;
@@ -729,7 +729,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: number,
             index: number,
-            array: Float64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -737,7 +737,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): Float64Array<Buffer>;
+    toReversed(): Float64Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -749,7 +749,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => a - b) // Float64Array<Buffer>(4) [-22.5, 1, 2, 11.5]
      * ```
      */
-    toSorted(compareFn?: (a: number, b: number) => number): Float64Array<Buffer>;
+    toSorted(compareFn?: (a: number, b: number) => number): Float64Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -758,7 +758,7 @@ interface Float64Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: number): Float64Array<Buffer>;
+    with(index: number, value: number): Float64Array<ArrayBuffer>;
 }
 
 interface BigInt64Array<Buffer extends ArrayBufferLike> {
@@ -775,7 +775,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigInt64Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -783,7 +783,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigInt64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): bigint | undefined;
@@ -801,7 +801,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigInt64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -809,7 +809,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): BigInt64Array<Buffer>;
+    toReversed(): BigInt64Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -821,7 +821,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array<Buffer>(4) [-22n, 1n, 2n, 11n]
      * ```
      */
-    toSorted(compareFn?: (a: bigint, b: bigint) => number): BigInt64Array<Buffer>;
+    toSorted(compareFn?: (a: bigint, b: bigint) => number): BigInt64Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
@@ -830,7 +830,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: bigint): BigInt64Array<Buffer>;
+    with(index: number, value: bigint): BigInt64Array<ArrayBuffer>;
 }
 
 interface BigUint64Array<Buffer extends ArrayBufferLike> {
@@ -847,7 +847,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigUint64Array<Buffer>,
+            array: this,
         ) => value is S,
         thisArg?: any,
     ): S | undefined;
@@ -855,7 +855,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigUint64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): bigint | undefined;
@@ -873,7 +873,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
         predicate: (
             value: bigint,
             index: number,
-            array: BigUint64Array<Buffer>,
+            array: this,
         ) => unknown,
         thisArg?: any,
     ): number;
@@ -881,7 +881,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
     /**
      * Copies the array and returns the copy with the elements in reverse order.
      */
-    toReversed(): BigUint64Array<Buffer>;
+    toReversed(): BigUint64Array<ArrayBuffer>;
 
     /**
      * Copies and sorts the array.
@@ -893,7 +893,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
      * myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array<Buffer>(4) [1n, 2n, 11n, 22n]
      * ```
      */
-    toSorted(compareFn?: (a: bigint, b: bigint) => number): BigUint64Array<Buffer>;
+    toSorted(compareFn?: (a: bigint, b: bigint) => number): BigUint64Array<ArrayBuffer>;
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
@@ -902,5 +902,5 @@ interface BigUint64Array<Buffer extends ArrayBufferLike> {
      * @param value The value to insert into the copied array.
      * @returns A copy of the original array with the inserted value.
      */
-    with(index: number, value: bigint): BigUint64Array<Buffer>;
+    with(index: number, value: bigint): BigUint64Array<ArrayBuffer>;
 }
