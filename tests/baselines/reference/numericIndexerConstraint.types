@@ -3,10 +3,13 @@
 === numericIndexerConstraint.ts ===
 class C {
 >C : C
+>  : ^
 
     0: number;
 >0 : number
+>  : ^^^^^^
 
     [x: number]: RegExp;
 >x : number
+>  : ^^^^^^
 }

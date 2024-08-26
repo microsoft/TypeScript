@@ -1,0 +1,111 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findReferencesSeeTagInTs.ts ===
+// <|function [|{| isWriteAccess: true, isDefinition: true |}doStuffWithStuff|]/*FIND ALL REFS*/(stuff: { quantity: number }) {}|>
+// 
+// declare const stuff: { quantity: number };
+// /** @see {[|doStuffWithStuff|]} */
+// if (stuff.quantity) {}
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findReferencesSeeTagInTs.ts ===
+  // <|function [|doStuffWithStuff|]/*FIND ALL REFS*/(stuff: { quantity: number }) {}|>
+  // 
+  // declare const stuff: { quantity: number };
+  // /** @see {doStuffWithStuff} */
+  // if (stuff.quantity) {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function doStuffWithStuff(stuff: {\n    quantity: number;\n}): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "doStuffWithStuff",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "stuff",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "quantity",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

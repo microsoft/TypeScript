@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/es6ImportWithJsDocTags.ts] ////
+
+=== ./a.js ===
+export const foo = 1;
+>foo : 1
+>    : ^
+>1 : 1
+>  : ^
+
+=== ./b.js ===
+'use strict';
+>'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
+
+/** @private */
+
+import { foo } from './a.js';
+>foo : 1
+>    : ^
+
+console.log(foo);
+>console.log(foo) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>foo : 1
+>    : ^
+

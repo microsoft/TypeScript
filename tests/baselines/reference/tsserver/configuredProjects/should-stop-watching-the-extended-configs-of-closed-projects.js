@@ -47,8 +47,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a/a.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -204,7 +203,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -228,6 +234,7 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open) *new*
@@ -246,8 +253,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/b/b.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -409,7 +415,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/b/b.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -439,9 +452,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -464,8 +479,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dummy
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dummy/dummy.ts :: Config file name: /user/username/projects/myproject/dummy/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dummy/dummy.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dummy/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/dummy/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -634,7 +648,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dummy/dumm
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -672,12 +693,15 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -724,7 +748,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dummy/dumm
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -764,13 +792,16 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -816,7 +847,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/a.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 5,
+      "success": true
     }
 After request
 
@@ -858,14 +893,17 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -894,8 +932,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dummy/dummy.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dummy
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dummy/dummy.ts :: Config file name: /user/username/projects/myproject/dummy/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dummy/dummy.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -931,7 +968,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dummy/dumm
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 6,
+      "success": true
     }
 After request
 
@@ -977,15 +1018,18 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/myproject/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -1027,7 +1071,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dummy/dumm
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 7,
+      "success": true
     }
 After request
 
@@ -1062,9 +1110,11 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *changed*
@@ -1100,7 +1150,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 8,
+      "success": true
     }
 After request
 
@@ -1137,10 +1191,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts
@@ -1165,8 +1221,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dummy/dummy.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dummy
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dummy/dummy.ts :: Config file name: /user/username/projects/myproject/dummy/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dummy/dummy.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1196,7 +1251,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dummy/dumm
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dummy/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 9,
+      "success": true
     }
 After request
 
@@ -1238,10 +1297,12 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *deleted*

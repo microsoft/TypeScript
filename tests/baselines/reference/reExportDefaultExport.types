@@ -3,23 +3,31 @@
 === m1.ts ===
 export default function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 }
 export {f};
 >f : () => void
+>  : ^^^^^^^^^^
 
 
 === m2.ts ===
 import foo from "./m1";
 >foo : () => void
+>    : ^^^^^^^^^^
 
 import {f} from "./m1";
 >f : () => void
+>  : ^^^^^^^^^^
 
 f();
 >f() : void
+>    : ^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

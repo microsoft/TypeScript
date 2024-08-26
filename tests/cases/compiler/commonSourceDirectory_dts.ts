@@ -7,7 +7,7 @@
 declare const y: number;
 
 // @filename: /app/src/index.ts
-/// <reference path="../lib/bar.d.ts" />
+/// <reference path="../lib/bar.d.ts" preserve="true" />
 export const x = y;
 
 // @filename: /app/tsconfig.json

@@ -28,9 +28,9 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
 >const : Symbol(const)
 
     fruit.kind
->fruit.kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 22), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 41))
+>fruit.kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 22), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 41), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 62))
 >fruit : Symbol(fruit, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 13))
->kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 22), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 41))
+>kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 22), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 41), Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 62))
 
     fruit
 >fruit : Symbol(fruit, Decl(typePredicatesCanNarrowByDiscriminant.ts, 1, 13))
@@ -54,9 +54,9 @@ if (isOneOf(kind, ['apple', 'banana'] as const)) {
 >const : Symbol(const)
 
     fruit2.kind
->fruit2.kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 23), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 42))
+>fruit2.kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 23), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 42), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 63))
 >fruit2 : Symbol(fruit2, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 13))
->kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 23), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 42))
+>kind : Symbol(kind, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 23), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 42), Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 63))
 
     fruit2
 >fruit2 : Symbol(fruit2, Decl(typePredicatesCanNarrowByDiscriminant.ts, 9, 13))

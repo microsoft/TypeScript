@@ -25,7 +25,6 @@
                 "pos": 5,
                 "end": 12,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1
             }
         },

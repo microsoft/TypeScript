@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -157,7 +156,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -183,6 +189,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -216,6 +223,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -228,8 +236,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/sub
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/src/sub/fooBar.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -261,15 +271,29 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/sub/fo
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *deleted*
+2: *ensureProjectForOpenFiles* *deleted*
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -304,23 +328,19 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne
 
-Invoking Timeout callback:: timeoutId:: 3:: checkOne
+Invoking Timeout callback:: timeoutId:: 5:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -370,16 +390,16 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne
 
-Invoking Timeout callback:: timeoutId:: 4:: checkOne
+Invoking Timeout callback:: timeoutId:: 6:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -432,7 +452,23 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/foo.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/sub/fooBar.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0

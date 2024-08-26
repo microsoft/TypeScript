@@ -1,16 +1,14 @@
-import {
-    protocol,
-} from "../../_namespaces/ts.server";
+import { protocol } from "../../_namespaces/ts.server.js";
 import {
     baselineTsserverLogs,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: services:: goToDefinition", () => {
+describe("unittests:: tsserver:: services:: goToDefinition", () => {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {

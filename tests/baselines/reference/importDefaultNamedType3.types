@@ -3,8 +3,10 @@
 === /b.ts ===
 import type from = require('./a');
 >from : typeof from
+>     : ^^^^^^^^^^^
 
 === /a.ts ===
 export class A {}
 >A : A
+>  : ^
 

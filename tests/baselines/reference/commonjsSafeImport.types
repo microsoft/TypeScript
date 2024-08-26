@@ -3,12 +3,16 @@
 === 10_lib.ts ===
 export function Foo() {}
 >Foo : () => void
+>    : ^^^^^^^^^^
 
 === main.ts ===
 import { Foo } from './10_lib';
 >Foo : () => void
+>    : ^^^^^^^^^^
 
 Foo();
 >Foo() : void
+>      : ^^^^
 >Foo : () => void
+>    : ^^^^^^^^^^
 

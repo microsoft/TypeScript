@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.ts] ////
+
+=== eslint.config.js ===
+const eslintReact = require('./eslint-plugin-react.js');
+>eslintReact : Symbol(eslintReact, Decl(eslint.config.js, 0, 5))
+>require : Symbol(require)
+>'./eslint-plugin-react.js' : Symbol("eslint-plugin-react", Decl(eslint-plugin-react.js, 0, 0))
+
+const tseslint = require('./typescript-eslint.js');
+>tseslint : Symbol(tseslint, Decl(eslint.config.js, 1, 5))
+>require : Symbol(require)
+>'./typescript-eslint.js' : Symbol(tseslint, Decl(typescript-eslint.js, 0, 0))
+
+tseslint.config(eslintReact)
+>tseslint.config : Symbol(tseslint.config, Decl(typescript-eslint.js, 13, 18))
+>tseslint : Symbol(tseslint, Decl(eslint.config.js, 1, 5))
+>config : Symbol(tseslint.config, Decl(typescript-eslint.js, 13, 18))
+>eslintReact : Symbol(eslintReact, Decl(eslint.config.js, 0, 5))
+
+=== eslint-plugin-react.js ===
+const deprecatedRules = {
+>deprecatedRules : Symbol(deprecatedRules, Decl(eslint-plugin-react.js, 0, 5))
+
+  "jsx-sort-default-props": true
+>"jsx-sort-default-props" : Symbol("jsx-sort-default-props", Decl(eslint-plugin-react.js, 0, 25))
+}
+
+const allRules = {
+>allRules : Symbol(allRules, Decl(eslint-plugin-react.js, 4, 5))
+
+  'no-unsafe': true
+>'no-unsafe' : Symbol('no-unsafe', Decl(eslint-plugin-react.js, 4, 18))
+}
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(eslint-plugin-react.js, 0, 0))
+>module : Symbol(export=, Decl(eslint-plugin-react.js, 6, 1))
+>exports : Symbol(export=, Decl(eslint-plugin-react.js, 6, 1))
+
+  plugins: {
+>plugins : Symbol(plugins, Decl(eslint-plugin-react.js, 8, 18))
+
+    react: {
+>react : Symbol(react, Decl(eslint-plugin-react.js, 9, 12))
+
+      deprecatedRules,
+>deprecatedRules : Symbol(deprecatedRules, Decl(eslint-plugin-react.js, 10, 12))
+
+      rules: allRules,
+>rules : Symbol(rules, Decl(eslint-plugin-react.js, 11, 22))
+>allRules : Symbol(allRules, Decl(eslint-plugin-react.js, 4, 5))
+
+    },
+  },
+};
+
+=== typescript-eslint.js ===
+/**
+ * @typedef {{ rules: Record<string, boolean> }} Plugin
+ */
+
+/**
+ * @typedef {{ plugins: Record<string, Plugin> }} Config
+ */
+
+/**
+ * @type {(...configs: Config[]) => void}
+ */
+function config(...configs) { }
+>config : Symbol(config, Decl(typescript-eslint.js, 0, 0))
+>configs : Symbol(configs, Decl(typescript-eslint.js, 11, 16))
+
+module.exports = { config };
+>module.exports : Symbol(module.exports, Decl(typescript-eslint.js, 0, 0))
+>module : Symbol(module, Decl(typescript-eslint.js, 11, 31))
+>exports : Symbol(module.exports, Decl(typescript-eslint.js, 0, 0))
+>config : Symbol(config, Decl(typescript-eslint.js, 13, 18))
+

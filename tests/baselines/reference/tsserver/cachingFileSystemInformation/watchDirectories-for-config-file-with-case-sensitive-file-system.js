@@ -68,8 +68,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
-Info seq  [hh:mm:ss:mss] For info: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined:: Result: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/tsconfig.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -281,7 +280,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/s
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -307,6 +313,7 @@ Projects::
 /Users/someuser/work/applications/frontend/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts *new*
@@ -342,6 +349,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
@@ -421,6 +429,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
@@ -472,8 +481,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
-Info seq  [hh:mm:ss:mss] For info: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts ProjectRootPath: undefined:: Result: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -485,7 +493,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/s
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 

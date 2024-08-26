@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/duplicateErrorAssignability.ts] ////
+
+=== duplicateErrorAssignability.ts ===
+interface A {
+    x: number;
+>x : number
+>  : ^^^^^^
+}
+interface B {
+    y: string;
+>y : string
+>  : ^^^^^^
+}
+
+declare let b: B;
+>b : B
+>  : ^
+
+declare let a: A;
+>a : A
+>  : ^
+
+const x = a = b;
+>x : B
+>  : ^
+>a = b : B
+>      : ^
+>a : A
+>  : ^
+>b : B
+>  : ^
+
+let obj: { 3: string } = { 3: "three" };
+>obj : { 3: string; }
+>    : ^^^^^      ^^^
+>3 : string
+>  : ^^^^^^
+>{ 3: "three" } : { 3: string; }
+>               : ^^^^^^^^^^^^^^
+>3 : string
+>  : ^^^^^^
+>"three" : "three"
+>        : ^^^^^^^
+
+obj[x];
+>obj[x] : any
+>       : ^^^
+>obj : { 3: string; }
+>    : ^^^^^      ^^^
+>x : B
+>  : ^
+

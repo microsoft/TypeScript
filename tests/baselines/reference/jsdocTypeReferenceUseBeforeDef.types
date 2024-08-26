@@ -4,8 +4,10 @@
 /** @type {C | null} */
 const c = null
 >c : C
+>  : ^
 
 class C {
 >C : C
+>  : ^
 }
 

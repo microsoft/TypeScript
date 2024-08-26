@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyName1.ts] ////
+
+=== declarationEmitComputedPropertyName1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59107
+
+declare function create<T extends {}>(): T;
+>create : <T extends {}>() => T
+>       : ^ ^^^^^^^^^  ^^^^^^^ 
+
+export const c = create<{
+>c : { data: { ["a_b_c"]: string; ["sss"]: string; s_d: string; queryData?: string; ["foo bar"]: string; }; a_b_c: string; }
+>  : ^^^^^^^^                                                                                             ^^^^^^^^^      ^^^
+>create<{  data: {    ["a_b_c"]: string;    ["sss"]: string;    s_d: string;    queryData?: string;    ["foo bar"]: string;  };  ["a_b_c"]: string;}>() : { data: { ["a_b_c"]: string; ["sss"]: string; s_d: string; queryData?: string; ["foo bar"]: string; }; a_b_c: string; }
+>                                                                                                                                                       : ^^^^^^^^                                                                                             ^^^^^^^^^      ^^^
+>create : <T extends {}>() => T
+>       : ^ ^^^^^^^^^  ^^^^^^^ 
+
+  data: {
+>data : { a_b_c: string; sss: string; s_d: string; queryData?: string; "foo bar": string; }
+>     : ^^^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
+
+    ["a_b_c"]: string;
+>["a_b_c"] : string
+>          : ^^^^^^
+>"a_b_c" : "a_b_c"
+>        : ^^^^^^^
+
+    ["sss"]: string;
+>["sss"] : string
+>        : ^^^^^^
+>"sss" : "sss"
+>      : ^^^^^
+
+    s_d: string;
+>s_d : string
+>    : ^^^^^^
+
+    queryData?: string;
+>queryData : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+
+    ["foo bar"]: string;
+>["foo bar"] : string
+>            : ^^^^^^
+>"foo bar" : "foo bar"
+>          : ^^^^^^^^^
+
+  };
+  ["a_b_c"]: string;
+>["a_b_c"] : string
+>          : ^^^^^^
+>"a_b_c" : "a_b_c"
+>        : ^^^^^^^
+
+}>();
+
+export interface IData {
+  ["a_b_c"]: string;
+>["a_b_c"] : string
+>          : ^^^^^^
+>"a_b_c" : "a_b_c"
+>        : ^^^^^^^
+
+  nested: {
+>nested : { d_e_f: string; value: string; "qwe rty": string; }
+>       : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
+
+    ["d_e_f"]: string;
+>["d_e_f"] : string
+>          : ^^^^^^
+>"d_e_f" : "d_e_f"
+>        : ^^^^^^^
+
+    value: string;
+>value : string
+>      : ^^^^^^
+
+    ["qwe rty"]: string;
+>["qwe rty"] : string
+>            : ^^^^^^
+>"qwe rty" : "qwe rty"
+>          : ^^^^^^^^^
+
+  };
+}
+

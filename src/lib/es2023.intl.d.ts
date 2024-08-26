@@ -27,8 +27,12 @@ declare namespace Intl {
         source: "startRange" | "endRange" | "shared";
     }
 
+    type StringNumericLiteral = `${number}` | "Infinity" | "-Infinity" | "+Infinity";
+
     interface NumberFormat {
-        formatRange(start: number | bigint, end: number | bigint): string;
-        formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+        format(value: number | bigint | StringNumericLiteral): string;
+        formatToParts(value: number | bigint | StringNumericLiteral): NumberFormatPart[];
+        formatRange(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): string;
+        formatRangeToParts(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): NumberRangeFormatPart[];
     }
 }

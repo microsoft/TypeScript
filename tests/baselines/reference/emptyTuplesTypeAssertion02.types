@@ -3,12 +3,19 @@
 === emptyTuplesTypeAssertion02.ts ===
 let x = [] as [];
 >x : []
+>  : ^^
 >[] as [] : []
+>         : ^^
 >[] : []
+>   : ^^
 
 let y = x[0];
 >y : undefined
+>  : ^^^^^^^^^
 >x[0] : undefined
+>     : ^^^^^^^^^
 >x : []
+>  : ^^
 >0 : 0
+>  : ^
 

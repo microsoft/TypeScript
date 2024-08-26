@@ -3,32 +3,52 @@
 === index.js ===
 const m = require("./exporter");
 >m : typeof m
+>  : ^^^^^^^^
 >require("./exporter") : typeof m
+>                      : ^^^^^^^^
 >require : any
+>        : ^^^
 >"./exporter" : "./exporter"
+>             : ^^^^^^^^^^^^
 
 module.exports = m.default;
 >module.exports = m.default : typeof m.default
+>                           : ^^^^^^^^^^^^^^^^
 >module.exports : typeof m.default
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: typeof m.default; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof m.default
+>        : ^^^^^^^^^^^^^^^^
 >m.default : { (): void; memberName: "thing"; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >default : { (): void; memberName: "thing"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 module.exports.memberName = "thing";
 >module.exports.memberName = "thing" : "thing"
+>                                    : ^^^^^^^
 >module.exports.memberName : "thing"
+>                          : ^^^^^^^
 >module.exports : typeof m.default
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: typeof m.default; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof m.default
+>        : ^^^^^^^^^^^^^^^^
 >memberName : "thing"
+>           : ^^^^^^^
 >"thing" : "thing"
+>        : ^^^^^^^
 
 === exporter.js ===
 function validate() {}
 >validate : typeof validate
+>         : ^^^^^^^^^^^^^^^
 
 export default validate;
 >validate : typeof validate
+>         : ^^^^^^^^^^^^^^^
 

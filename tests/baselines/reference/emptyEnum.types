@@ -3,4 +3,5 @@
 === emptyEnum.ts ===
 enum E {
 >E : E
+>  : ^
 }

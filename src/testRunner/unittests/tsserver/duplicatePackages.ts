@@ -1,18 +1,16 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: duplicate packages", () => {
+describe("unittests:: tsserver:: duplicatePackages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
     it("works with import fixes", () => {
         const packageContent = "export const foo: number;";

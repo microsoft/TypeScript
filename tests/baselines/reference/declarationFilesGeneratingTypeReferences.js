@@ -6,21 +6,21 @@ interface JQuery {
 }
 
 //// [app.ts]
-/// <reference types="jquery"/>
+/// <reference types="jquery" preserve="true" />
 namespace Test {
     export var x: JQuery;
 }
 
 
 //// [out.js]
-/// <reference types="jquery"/>
+/// <reference types="jquery" preserve="true" />
 var Test;
 (function (Test) {
 })(Test || (Test = {}));
 
 
 //// [out.d.ts]
-/// <reference types="jquery" />
+/// <reference types="jquery" preserve="true" />
 declare namespace Test {
     var x: JQuery;
 }
@@ -38,7 +38,7 @@ out.d.ts(1,23): error TS2688: Cannot find type definition file for 'jquery'.
     }
     
 ==== out.d.ts (1 errors) ====
-    /// <reference types="jquery" />
+    /// <reference types="jquery" preserve="true" />
                           ~~~~~~
 !!! error TS2688: Cannot find type definition file for 'jquery'.
     declare namespace Test {

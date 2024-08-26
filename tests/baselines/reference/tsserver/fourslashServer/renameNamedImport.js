@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /lib
-Info seq  [hh:mm:ss:mss] For info: /lib/tsconfig.json :: Config file name: /lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/tsconfig.json ProjectRootPath: undefined:: Result: /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/tsconfig.json 2000 undefined Project: /lib/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -135,6 +134,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /lib/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -156,6 +166,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -196,8 +207,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /lib/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /lib
-Info seq  [hh:mm:ss:mss] For info: /lib/index.ts :: Config file name: /lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/index.ts ProjectRootPath: undefined:: Result: /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -211,6 +221,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /lib/tsconfig.json ProjectRootPath: undefine
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /lib/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -234,6 +252,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /lib/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -274,8 +293,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/index.ts :: Config file name: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/index.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -360,6 +378,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /lib/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /lib/tsconfig.json,/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -383,12 +412,14 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *changed*

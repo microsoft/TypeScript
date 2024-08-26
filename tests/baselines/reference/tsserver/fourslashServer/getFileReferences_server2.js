@@ -43,8 +43,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -144,6 +143,17 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -199,6 +209,28 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/packages/server/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/packages/server/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/packages/server/index.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          },
+          {
+            "text": "Cannot write file '/packages/server/router.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -237,6 +269,17 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/shared/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/packages/shared/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/client/tsconfig.json
@@ -281,50 +324,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/client/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/packages/server/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "Cannot write file '/packages/server/index.js' because it would overwrite input file.",
-            "code": 5055,
-            "category": "error"
-          },
-          {
-            "text": "Cannot write file '/packages/server/router.js' because it would overwrite input file.",
-            "code": 5055,
-            "category": "error"
-          }
-        ]
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/packages/shared/tsconfig.json",
-        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -381,6 +380,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -420,6 +430,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /packages/client/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

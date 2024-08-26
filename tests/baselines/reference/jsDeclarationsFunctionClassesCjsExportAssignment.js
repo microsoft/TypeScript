@@ -222,13 +222,6 @@ declare namespace Context {
     export { Timer, Hook, HookHandler, Input, State };
 }
 /**
- * Input type definition
- */
-type Input = {
-    timer: Timer;
-    hook: Hook;
-};
-/**
  * Imports
  */
 type Timer = import("./timer");
@@ -240,6 +233,13 @@ type Hook = import("./hook");
  * Imports
  */
 type HookHandler = import("./hook").HookHandler;
+/**
+ * Input type definition
+ */
+type Input = {
+    timer: Timer;
+    hook: Hook;
+};
 /**
  * State type definition
  */

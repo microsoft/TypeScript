@@ -1,20 +1,20 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/username/project/src/index.ts]
+//// [/a/username/project/src/index.ts] Inode:: 5
 import {} from "./"
 
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/project/src/file1.ts] Inode:: 6
 
 
-//// [/a/username/project/tsconfig.json]
+//// [/a/username/project/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "synchronousWatchDirectory": true
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 9
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -37,8 +37,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/username/project/src
-Info seq  [hh:mm:ss:mss] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/username/project/src/index.ts ProjectRootPath: undefined:: Result: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -161,17 +160,24 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/username/project/src/index.ts ProjectRoot
 Info seq  [hh:mm:ss:mss] 		Projects: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /a/username/project/tsconfig.json: *new*
-  {}
+  {"inode":7}
 
 Timeout callback:: count: 1
 1: pollPollingIntervalQueue *new*
@@ -180,6 +186,7 @@ Projects::
 /a/username/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -221,7 +228,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -229,13 +237,16 @@ After request
 
 Before running Timeout callback:: count: 1
 1: pollPollingIntervalQueue
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/project/src/file2.ts] Inode:: 10
 
 
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /a/username/project/src/file1.ts:: 1
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
@@ -243,17 +254,33 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 After running Timeout callback:: count: 5
 
 Timeout callback:: count: 5
-2: /a/username/project/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
-5: pollLowPollingIntervalQueue *new*
-6: pollPollingIntervalQueue *new*
+4: /a/username/project/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+7: pollLowPollingIntervalQueue *new*
+8: pollPollingIntervalQueue *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Before request
 
@@ -310,43 +337,49 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts:
-  {}
+  {"inode":6}
 /a/username/project/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /a/username/project/tsconfig.json:
-  {}
+  {"inode":7}
 
 Timeout callback:: count: 4
-3: *ensureProjectForOpenFiles* *deleted*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-2: /a/username/project/tsconfig.json
-5: pollLowPollingIntervalQueue
-6: pollPollingIntervalQueue
-7: *ensureProjectForOpenFiles* *new*
+5: *ensureProjectForOpenFiles* *deleted*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+4: /a/username/project/tsconfig.json
+7: pollLowPollingIntervalQueue
+8: pollPollingIntervalQueue
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/username/project/src/file1.ts
+/a/username/project/src/file1.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file2.ts *new*

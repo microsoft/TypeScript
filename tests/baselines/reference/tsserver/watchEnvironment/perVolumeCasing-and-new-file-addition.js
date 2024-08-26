@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Volumes/git/projects/project
-Info seq  [hh:mm:ss:mss] For info: /Volumes/git/projects/project/foo.ts :: Config file name: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Volumes/git/projects/project/foo.ts ProjectRootPath: undefined:: Result: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/tsconfig.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -150,7 +149,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Volumes/git/projects/project/foo.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -176,6 +182,7 @@ Projects::
 /Volumes/git/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /Volumes/git/projects/project/foo.ts (Open) *new*
@@ -207,6 +214,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/Bar.ts 500 undefined WatchType: Closed Script info
@@ -283,6 +291,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /Volumes/git/projects/project/Bar.ts *new*

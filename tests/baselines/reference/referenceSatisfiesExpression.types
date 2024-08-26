@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
+
+=== referenceSatisfiesExpression.ts ===
+let a = 10;
+>a : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+--(a satisfies number);
+>--(a satisfies number) : number
+>                       : ^^^^^^
+>(a satisfies number) : number
+>                     : ^^^^^^
+>a satisfies number : number
+>                   : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+++(a satisfies number);
+>++(a satisfies number) : number
+>                       : ^^^^^^
+>(a satisfies number) : number
+>                     : ^^^^^^
+>a satisfies number : number
+>                   : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+(a satisfies number)++;
+>(a satisfies number)++ : number
+>                       : ^^^^^^
+>(a satisfies number) : number
+>                     : ^^^^^^
+>a satisfies number : number
+>                   : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+(a satisfies number)--;
+>(a satisfies number)-- : number
+>                       : ^^^^^^
+>(a satisfies number) : number
+>                     : ^^^^^^
+>a satisfies number : number
+>                   : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+let b: number;
+>b : number
+>  : ^^^^^^
+
+(b satisfies number) = 10;
+>(b satisfies number) = 10 : 10
+>                          : ^^
+>(b satisfies number) : number
+>                     : ^^^^^^
+>b satisfies number : number
+>                   : ^^^^^^
+>b : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+let c: number;
+>c : number
+>  : ^^^^^^
+
+[(c satisfies number)] = [10];
+>[(c satisfies number)] = [10] : [number]
+>                              : ^^^^^^^^
+>[(c satisfies number)] : [number]
+>                       : ^^^^^^^^
+>(c satisfies number) : number
+>                     : ^^^^^^
+>c satisfies number : number
+>                   : ^^^^^^
+>c : number
+>  : ^^^^^^
+>[10] : [number]
+>     : ^^^^^^^^
+>10 : 10
+>   : ^^
+
+let d: number, e = 1;
+>d : number
+>  : ^^^^^^
+>e : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+({ d: (e satisfies number) } = { d: 10 });
+>({ d: (e satisfies number) } = { d: 10 }) : { d: number; }
+>                                          : ^^^^^^^^^^^^^^
+>{ d: (e satisfies number) } = { d: 10 } : { d: number; }
+>                                        : ^^^^^^^^^^^^^^
+>{ d: (e satisfies number) } : { d: number; }
+>                            : ^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+>(e satisfies number) : number
+>                     : ^^^^^^
+>e satisfies number : number
+>                   : ^^^^^^
+>e : number
+>  : ^^^^^^
+>{ d: 10 } : { d: number; }
+>          : ^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+let g = 1
+>g : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+for ((g satisfies number) of [10]) {
+>(g satisfies number) : number
+>                     : ^^^^^^
+>g satisfies number : number
+>                   : ^^^^^^
+>g : number
+>  : ^^^^^^
+>[10] : number[]
+>     : ^^^^^^^^
+>10 : 10
+>   : ^^
+
+  console.log(g)
+>console.log(g) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>g : number
+>  : ^^^^^^
+}
+
+let x: string = "hello"
+>x : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+for ((x satisfies string) in { a: 10 }) {
+>(x satisfies string) : string
+>                     : ^^^^^^
+>x satisfies string : string
+>                   : ^^^^^^
+>x : string
+>  : ^^^^^^
+>{ a: 10 } : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+  console.log(x)
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : string
+>  : ^^^^^^
+}
+

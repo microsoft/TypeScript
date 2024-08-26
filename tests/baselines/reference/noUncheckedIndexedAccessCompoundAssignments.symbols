@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/noUncheckedIndexedAccessCompoundAssignments.ts] ////
+
+=== noUncheckedIndexedAccessCompoundAssignments.ts ===
+// Each line should have one error
+// for a total of 12 errors
+stringMap.foo++;
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+
+--stringMap.foo;
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+
+stringMap.foo += 1;
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+
+stringMap.foo *= 1;
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+
+++stringMap['foo'];
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+
+stringMap['foo']--;
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+
+++stringMap[s];
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 16, 13))
+
+stringMap[s]--;
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 16, 13))
+
+numberMap[32]++;
+>numberMap : Symbol(numberMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 13))
+
+numberMap[32] += 1;
+>numberMap : Symbol(numberMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 13))
+
+numberMap[n]++;
+>numberMap : Symbol(numberMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 13))
+>n : Symbol(n, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 18, 13))
+
+numberMap[n] += 1;
+>numberMap : Symbol(numberMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 13))
+>n : Symbol(n, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 18, 13))
+
+declare const stringMap: { [s: string]: number };
+>stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 28))
+
+declare const s: string;
+>s : Symbol(s, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 16, 13))
+
+declare const numberMap: { [n: number]: number };
+>numberMap : Symbol(numberMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 13))
+>n : Symbol(n, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 17, 28))
+
+declare const n: number;
+>n : Symbol(n, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 18, 13))
+

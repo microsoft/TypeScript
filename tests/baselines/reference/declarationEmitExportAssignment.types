@@ -3,16 +3,20 @@
 === utils.ts ===
 export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export function bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
 export interface Buzz { }
 
 === index.ts ===
 import {foo} from "./utils";
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export = foo;
 >foo : () => void
+>    : ^^^^^^^^^^
 

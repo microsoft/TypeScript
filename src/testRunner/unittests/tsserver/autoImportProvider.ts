@@ -1,17 +1,15 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 const angularFormsDts: File = {
     path: "/node_modules/@angular/forms/forms.d.ts",
@@ -116,6 +114,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
 
         host.writeFile(packageJson.path, packageJson.content);
         session.host.baselineHost("Before getAutoImportProvider");
+        host.runQueuedTimeoutCallbacks();
         assert.ok(session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         session.host.baselineHost("After getAutoImportProvider");
         baselineTsserverLogs("autoImportProvider", "Responds to package_json changes", session);
@@ -274,7 +273,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         ];
 
         const packages = [];
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 10; i++) {
             packages.push(createPackage(i));
         }
 
@@ -395,6 +394,15 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 function setup(files: File[]) {
     const host = createServerHost(files);
     const session = new TestSession(host);
+    session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+        command: ts.server.protocol.CommandTypes.Configure,
+        arguments: {
+            preferences: {
+                includePackageJsonAutoImports: "auto",
+                includeCompletionsForModuleExports: true,
+            },
+        },
+    });
     return {
         host,
         session,
@@ -429,16 +437,12 @@ function setup(files: File[]) {
     }
 
     function triggerCompletions(file: string, line: number, offset: number) {
-        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
-            file,
-            line,
-            offset,
-        };
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
-                ...requestLocation,
-                includeExternalModuleExports: true,
+                file,
+                line,
+                offset,
             },
         });
     }

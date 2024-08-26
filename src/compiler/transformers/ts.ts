@@ -60,7 +60,6 @@ import {
     getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
-    hasStaticModifier,
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
@@ -118,11 +117,11 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyName,
+    isSatisfiesExpression,
     isShorthandPropertyAssignment,
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
-    isSyntacticallyString,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -201,7 +200,7 @@ import {
     visitNodes,
     visitParameterList,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Indicates whether to emit type metadata in the new format.
@@ -209,6 +208,7 @@ import {
 const USE_NEW_TYPE_METADATA_FORMAT = false;
 
 const enum TypeScriptSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
     /* Enables substitutions for unqualified enum members */
@@ -266,13 +266,12 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
     let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
-    let currentClassHasParameterProperties: boolean | undefined;
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions = TypeScriptSubstitutionFlags.None;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing
@@ -323,7 +322,6 @@ export function transformTypeScript(context: TransformationContext) {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
-        const savedCurrentClassHasParameterProperties = currentClassHasParameterProperties;
 
         // Handle state changes before visiting a node.
         onBeforeVisitNode(node);
@@ -336,7 +334,6 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         currentLexicalScope = savedCurrentScope;
-        currentClassHasParameterProperties = savedCurrentClassHasParameterProperties;
         return visited;
     }
 
@@ -1122,7 +1119,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1141,7 +1138,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1239,10 +1236,8 @@ export function transformTypeScript(context: TransformationContext) {
     function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
         const name = member.name!;
         // Computed property names need to be transformed into a hoisted variable when they are used more than once.
-        // The names are used more than once when:
-        //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
-        //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        // The names are used more than once when the property has a decorator.
+        if (legacyDecorators && isComputedPropertyName(name) && hasDecorators(member)) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -1689,8 +1684,8 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-        const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
-        if (isAssertionExpression(innerExpression)) {
+        const innerExpression = skipOuterExpressions(node.expression, ~(OuterExpressionKinds.Assertions | OuterExpressionKinds.ExpressionsWithTypeArguments));
+        if (isAssertionExpression(innerExpression) || isSatisfiesExpression(innerExpression)) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
@@ -1915,7 +1910,8 @@ export function transformTypeScript(context: TransformationContext) {
         // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
         // old emitter always generate 'expression' part of the name as-is.
         const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
-        const valueExpression = transformEnumMemberDeclarationValue(member);
+        const evaluated = resolver.getEnumMemberValue(member);
+        const valueExpression = transformEnumMemberDeclarationValue(member, evaluated?.value);
         const innerAssignment = factory.createAssignment(
             factory.createElementAccessExpression(
                 currentNamespaceContainerName,
@@ -1923,7 +1919,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = isSyntacticallyString(valueExpression) ?
+        const outerAssignment = typeof evaluated?.value === "string" || evaluated?.isSyntacticallyString ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
@@ -1948,12 +1944,11 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param member The enum member node.
      */
-    function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-        const value = resolver.getConstantValue(member);
-        if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
-                factory.createNumericLiteral(value);
+    function transformEnumMemberDeclarationValue(member: EnumMember, constantValue: string | number | undefined): Expression {
+        if (constantValue !== undefined) {
+            return typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
+                factory.createNumericLiteral(constantValue);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();

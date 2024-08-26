@@ -4,23 +4,29 @@
 // esm format file
 import * as type from "#type";
 >type : any
+>     : ^^^
 
 type;
 >type : any
+>     : ^^^
 
 === index.mts ===
 // esm format file
 import * as type from "#type";
 >type : any
+>     : ^^^
 
 type;
 >type : any
+>     : ^^^
 
 === index.cts ===
 // esm format file
 import * as type from "#type";
 >type : any
+>     : ^^^
 
 type;
 >type : any
+>     : ^^^
 

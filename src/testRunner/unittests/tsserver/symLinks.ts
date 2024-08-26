@@ -1,27 +1,25 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { forEachMonorepoSymlinkScenario } from "../helpers/monorepoSymlinkedSiblingPackages.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
+    forEachTscWatchEdit,
     openFilesForSession,
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: symLinks", () => {
+describe("unittests:: tsserver:: symLinks::", () => {
     it("rename in common file renames all project", () => {
         const folderA = `/users/username/projects/a`;
         const aFile: File = {
@@ -267,5 +265,19 @@ new C();`,
         // When we open this file, we will update InferredProject2 which contains this file and the follow-redirect will be resolved again
         openFilesForSession(["c:/temp/replay/axios-src/lib/core/settle.js"], session);
         baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
+    });
+
+    forEachMonorepoSymlinkScenario(/*forTsserver*/ true, (scenario, getHost, edits, project) => {
+        [undefined, true].forEach(canUseWatchEvents => {
+            it(`${scenario}${canUseWatchEvents ? " canUseWatchEvents" : ""}`, () => {
+                const host = getHost();
+                const indexFile = ts.normalizePath(ts.combinePaths(host.getCurrentDirectory(), project, "src/index.ts"));
+                const session = new TestSession({ host, canUseWatchEvents });
+                openFilesForSession([indexFile], session);
+                verifyGetErrRequest({ session, files: [indexFile] });
+                forEachTscWatchEdit(session, edits(), () => verifyGetErrRequest({ session, files: [indexFile] }));
+                baselineTsserverLogs("symLinks", `${scenario}${canUseWatchEvents ? " canUseWatchEvents" : ""}`, session);
+            });
+        });
     });
 });
