@@ -351,7 +351,7 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
-const jsDocSeeOrLink = /@(?:see|link)/i;
+const jsDocNeededInTypeScriptFile = /@(?:see|link|internal)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -2396,7 +2396,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             return false;
         }
 
-        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
+        return jsDocNeededInTypeScriptFile.test(text.slice(fullStartPos, pos));
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {

@@ -21,4 +21,5 @@ var C = /** @class */ (function () {
 //// [stripInternal1.d.ts]
 declare class C {
     foo(): void;
+    bar(): void;
 }
