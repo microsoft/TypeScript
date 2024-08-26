@@ -70,3 +70,12 @@ console.log((cond || undefined) && 1 / cond);
 >undefined : Symbol(undefined)
 >cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
 
+function foo(this: Object | undefined) {
+>foo : Symbol(foo, Decl(predicateSemantics.ts, 38, 45))
+>this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    // Should be OK
+    return this ?? 0;
+>this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
+}
