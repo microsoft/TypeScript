@@ -48352,8 +48352,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const enclosingFile = getSourceFileOfNode(node);
         const links = getNodeLinks(enclosingFile);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-            links.deferredNodes ||= new Set();
-            links.deferredNodes.add(node);
+            links.deferredNodes ??= {
+                order: [],
+                set: [],
+            };
+            const { order, set } = links.deferredNodes;
+            const nodeId = getNodeId(node);
+            if (set[nodeId] === undefined) {
+                order.push(nodeId);
+                set[nodeId] = node;
+            }
         }
         else {
             Debug.assert(!links.deferredNodes, "A type-checked file should have no deferred nodes.");
@@ -48363,7 +48371,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkDeferredNodes(context: SourceFile) {
         const links = getNodeLinks(context);
         if (links.deferredNodes) {
-            links.deferredNodes.forEach(checkDeferredNode);
+            const { order, set } = links.deferredNodes;
+            for (const nodeId of order) {
+                checkDeferredNode(set[nodeId]);
+            }
         }
         links.deferredNodes = undefined;
     }
