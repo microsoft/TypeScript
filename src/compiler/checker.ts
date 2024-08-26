@@ -120,6 +120,7 @@ import {
     createModuleNotFoundChain,
     createMultiMap,
     createNameResolver,
+    createPrefixSuffixTrie,
     createPrinterWithDefaults,
     createPrinterWithRemoveComments,
     createPrinterWithRemoveCommentsNeverAsciiEscape,
@@ -17677,38 +17678,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (estimatedCount > 0) {
             // To remove string literals already covered by template literals, we may potentially
             // check every string literal against every template literal, leading to a combinatoric
-            // explosion. This is made even worse if the strings all share common prefixes, making
-            // the "fast path" of a prefix check in inferFromLiteralPartsToTemplateLiteral not actually
+            // explosion. This is made even worse if the strings all share common prefixes or suffixes,
+            // making the "fast path" of a prefix check in inferFromLiteralPartsToTemplateLiteral not actually
             // very fast as we'll repeatedly scan the strings much farther than just a few characters.
             //
-            // To reduce the amount of work we need to do, we can build a prefix tree (trie) out
-            // of our template literals, then check each string literal against that trie. This
-            // greatly reduces the number of template literals we need to check against.
+            // To reduce the amount of work we need to do, we can build a two-way trie out of the
+            // template literals, only checking those which can be satisfied by a given string.
 
-            // TODO(jakebailey): What if suffixes are the expensive thing?
-
-            interface Trie {
-                children: Record<string, Trie | undefined> | undefined;
-                templates: TemplateLiteralType[] | undefined;
-            }
-
-            function createTrie(): Trie {
-                return {
-                    children: undefined,
-                    templates: undefined,
-                };
-            }
-
-            const root = createTrie();
+            const trie = createPrefixSuffixTrie<TemplateLiteralType[]>();
 
             forEach(templateLiterals, t => {
-                const text = t.texts[0];
-                let node = root;
-                for (let i = 0; i < text.length; i++) {
-                    const children = node.children ??= {};
-                    node = children[text[i]] ??= createTrie();
-                }
-                node.templates = append(node.templates, t);
+                const prefix = t.texts[0];
+                const suffix = t.texts[t.texts.length - 1];
+                trie.set(prefix, suffix, templates => append(templates, t));
             });
 
             let i = types.length;
@@ -17718,18 +17700,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(t.flags & TypeFlags.StringLiteral)) continue;
                 const text = (t as StringLiteralType).value;
 
-                let node = root;
-                for (let j = -1; j < text.length; j++) {
-                    if (some(node.templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
+                for (const templates of trie.iterateAllMatches(text)) {
+                    if (some(templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
                         orderedRemoveItemAt(types, i);
                         continue outer;
                     }
-
-                    if (j === -1) continue;
-
-                    const next = node.children?.[text[j]];
-                    if (!next) continue outer;
-                    node = next;
                 }
             }
 
