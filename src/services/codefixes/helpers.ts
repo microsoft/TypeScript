@@ -105,7 +105,7 @@ import {
     UserPreferences,
     visitEachChild,
     visitNode,
-    visitNodes
+    visitNodes,
 } from "../_namespaces/ts.js";
 
 /**

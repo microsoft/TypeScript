@@ -393,7 +393,7 @@ import {
     UnionType,
     UserPreferences,
     VariableDeclaration,
-    walkUpParenthesizedExpressions
+    walkUpParenthesizedExpressions,
 } from "./_namespaces/ts.js";
 
 // Exported only for tests
