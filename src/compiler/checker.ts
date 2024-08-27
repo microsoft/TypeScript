@@ -22057,7 +22057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
 
-            if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+            if (isLiteralType(source) && (!typeCouldHaveTopLevelSingletonTypes(target) && !(target.flags & TypeFlags.Never))) {
                 generalizedSource = getBaseTypeOfLiteralType(source);
                 Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
                 generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
