@@ -1,0 +1,39 @@
+coAndContraVariantInferences12.ts(18,19): error TS2353: Object literal may only specify known properties, and 'age' does not exist in type '{ name?: string | undefined; } & ElementAttributes'.
+coAndContraVariantInferences12.ts(21,18): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ name: string; } & ElementAttributes'.
+  Property 'name' is missing in type '{}' but required in type '{ name: string; }'.
+
+
+==== coAndContraVariantInferences12.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59765
+    
+    type FunctionComponent<P = any> = (props: P) => Element | null;
+    
+    interface ElementAttributes {
+      idomKey?: string | null | number;
+      children?: unknown;
+      skip?: boolean;
+    }
+    
+    declare function element<P>(
+      tag: FunctionComponent<P & ElementAttributes>,
+      attributes: P & ElementAttributes,
+    ): Element;
+    
+    declare function ElName(props: { name?: string }): Element;
+    element(ElName, {}); // ok
+    element(ElName, { age: 42 }); // error
+                      ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'age' does not exist in type '{ name?: string | undefined; } & ElementAttributes'.
+    
+    declare function ElName2(props: { name: string }): Element;
+    element(ElName2, {}); // error
+                     ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ name: string; } & ElementAttributes'.
+!!! error TS2345:   Property 'name' is missing in type '{}' but required in type '{ name: string; }'.
+!!! related TS2728 coAndContraVariantInferences12.ts:20:35: 'name' is declared here.
+    
+    declare function ElEmpty(props: {}): Element;
+    element(ElEmpty, { name: "Trevor" }); // ok
+    declare const withOptionalName: { name?: string };
+    element(ElEmpty, withOptionalName); // ok
+    

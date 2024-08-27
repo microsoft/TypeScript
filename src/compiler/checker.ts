@@ -26989,7 +26989,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Similarly ignore co-variant `any` inference when both are available as almost everything is assignable to it
                     // and it would spoil the overall inference.
                     const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
-                        !(inferredCovariantType.flags & (TypeFlags.Never | TypeFlags.Any)) &&
+                        !(inferredCovariantType.flags & (TypeFlags.Never | TypeFlags.Any) || isEmptyAnonymousObjectType(inferredCovariantType) && isWeakType(inferredContravariantType)) &&
                             some(inference.contraCandidates, t => isTypeAssignableTo(inferredCovariantType, t)) &&
                             every(context.inferences, other =>
                                 other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
