@@ -1,13 +1,13 @@
-import { incrementalVerifier } from "../../../../harness/incrementalUtils";
-import { createHasErrorMessageLogger } from "../../../../harness/tsserverLogger";
-import * as Harness from "../../../_namespaces/Harness";
-import * as ts from "../../../_namespaces/ts";
-import { customTypesMap } from "../../helpers/typingsInstaller";
+import { incrementalVerifier } from "../../../../harness/incrementalUtils.js";
+import { createHasErrorMessageLogger } from "../../../../harness/tsserverLogger.js";
+import * as Harness from "../../../_namespaces/Harness.js";
+import * as ts from "../../../_namespaces/ts.js";
+import { customTypesMap } from "../../helpers/typingsInstaller.js";
 import {
     createServerHost,
     libFile,
     TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     host: TestServerHost;

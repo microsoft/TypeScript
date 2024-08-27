@@ -36,7 +36,7 @@ function fn3(arg) {
 /** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
 const obj1 = { type: "foo", prop: 10 };
 >obj1 : ({ type: "foo"; } | { type: "bar"; }) & { prop: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^      ^^^
 >{ type: "foo", prop: 10 } : { type: "foo"; prop: number; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "foo"
@@ -51,7 +51,7 @@ const obj1 = { type: "foo", prop: 10 };
 /** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
 const obj2 = { type: "other", prop: 10 };
 >obj2 : ({ type: "foo"; } | { type: "bar"; }) & { prop: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^      ^^^
 >{ type: "other", prop: 10 } : { type: "other"; prop: number; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "other"

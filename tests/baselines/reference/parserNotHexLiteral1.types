@@ -19,11 +19,11 @@ console.info (x.x0);
 >console.info (x.x0) : void
 >                    : ^^^^
 >console.info : (...data: any[]) => void
->             : ^^^^    ^^     ^^^^^^^^^
+>             : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >info : (...data: any[]) => void
->     : ^^^^    ^^     ^^^^^^^^^
+>     : ^^^^    ^^     ^^^^^    
 >x.x0 : string
 >     : ^^^^^^
 >x : { e0: string; x0: string; }
@@ -37,11 +37,11 @@ console.info (x.e0);
 >console.info (x.e0) : void
 >                    : ^^^^
 >console.info : (...data: any[]) => void
->             : ^^^^    ^^     ^^^^^^^^^
+>             : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >info : (...data: any[]) => void
->     : ^^^^    ^^     ^^^^^^^^^
+>     : ^^^^    ^^     ^^^^^    
 >x.e0 : string
 >     : ^^^^^^
 >x : { e0: string; x0: string; }

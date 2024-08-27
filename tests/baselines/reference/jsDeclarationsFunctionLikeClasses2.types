@@ -208,11 +208,11 @@ Vec.prototype = {
 >Math.sqrt(sum) : number
 >               : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >sum : number
 >    : ^^^^^^
     }
@@ -255,11 +255,11 @@ export function Point2D(x, y) {
     Vec.call(this, 2);
 >Vec.call(this, 2) : any
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->         : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>         : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >Vec : typeof Vec
 >    : ^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
 >     : ^^^^
 >2 : 2

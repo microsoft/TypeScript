@@ -63,7 +63,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /c/d/f0.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -75,6 +82,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /c/d/f0.ts (Open) *new*
@@ -249,10 +257,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
   {
     "key": "/c/d/f1.d.ts",
     "count": 1
-  },
-  {
-    "key": "/c/f1.ts",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] directoryExists:: [
@@ -286,6 +290,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3 *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /c/d/f0.ts (Open) *changed*
@@ -351,10 +356,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
   },
   {
     "key": "/c/d/f1.d.ts",
-    "count": 1
-  },
-  {
-    "key": "/c/f1.ts",
     "count": 1
   }
 ]

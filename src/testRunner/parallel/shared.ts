@@ -1,5 +1,5 @@
-import { TestRunnerKind } from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import { TestRunnerKind } from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 export interface RunnerTask {
     runner: TestRunnerKind;

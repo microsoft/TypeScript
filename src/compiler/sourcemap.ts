@@ -24,8 +24,8 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {
@@ -360,9 +360,9 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
 /** @internal */
-export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 /** @internal */
-export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 
 /** @internal */
 export const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
@@ -405,8 +405,7 @@ function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
-/** @internal */
-export function isRawSourceMap(x: any): x is RawSourceMap {
+function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
         && x.version === 3

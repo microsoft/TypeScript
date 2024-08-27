@@ -1,6 +1,6 @@
-import { jsonToReadableText } from "../helpers";
-import { verifyTsc } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeFs() {

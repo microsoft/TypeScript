@@ -1,22 +1,24 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getFsContentsForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
+    protocolFileLocationFromSubstring,
     protocolTextSpanFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
+describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
     it("works when extends is specified with a case insensitive file system", () => {
         const rootPath = "/Users/username/dev/project";
         const file1: File = {
@@ -327,5 +329,64 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         verifyDirSymlink("when import matches disk but directory symlink target does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./Xy`);
         verifyDirSymlink("when import and directory symlink target agree but do not match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./Xy`);
         verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./xY`);
+    });
+
+    it("when file is included from multiple places with different casing", () => {
+        const host = createServerHost(getFsContentsForMultipleErrorsForceConsistentCasingInFileNames());
+        const session = new TestSession(host);
+        const file = "/home/src/projects/project/src/struct.d.ts";
+        let fileText = host.readFile(file)!;
+        openFilesForSession([{ file, projectRootPath: "/home/src/projects/project" }], session);
+        verifyGetErrRequest({ session, files: [file] });
+
+        // Update file without import but dont get errors:
+        updateFile(fileText + "\nexport const y = 10;");
+        goToDef();
+
+        // Update file without import and get errors:
+        updateFile(fileText + "\nexport const yy = 10;");
+        verifyGetErrRequest({ session, files: [file] });
+
+        // Remove one import, dont get errors
+        updateFile(dedent`
+            import * as xs1 from "fp-ts/lib/Struct";
+            import * as xs2 from "fp-ts/lib/struct";
+            import * as xs3 from "./Struct";
+        `);
+        goToDef();
+
+        // Remove import, get errors
+        updateFile(dedent`
+            import * as xs1 from "fp-ts/lib/Struct";
+            import * as xs3 from "./struct";
+        `);
+        verifyGetErrRequest({ session, files: [file] });
+        baselineTsserverLogs("forceConsistentCasingInFileNames", "when file is included from multiple places with different casing", session);
+
+        function updateFile(newText: string) {
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: file,
+                        textChanges: [{
+                            newText,
+                            ...protocolTextSpanFromSubstring(
+                                fileText,
+                                fileText,
+                            ),
+                        }],
+                    }],
+                },
+            });
+            fileText = newText;
+        }
+
+        function goToDef() {
+            session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
+                command: ts.server.protocol.CommandTypes.Definition,
+                arguments: protocolFileLocationFromSubstring({ path: file, content: fileText }, `"fp-ts/lib/Struct"`),
+            });
+        }
     });
 });

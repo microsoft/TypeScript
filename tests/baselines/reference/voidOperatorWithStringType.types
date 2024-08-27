@@ -151,7 +151,7 @@ var ResultIsAny9 = void foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsAny10 = void A.foo();
 >ResultIsAny10 : any
@@ -186,11 +186,11 @@ var ResultIsAny12 = void STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -246,7 +246,7 @@ void foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 void objA.a,M.n;
 >void objA.a,M.n : string

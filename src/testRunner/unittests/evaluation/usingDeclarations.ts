@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 function FakeSuppressedError(error: any, suppressed: any) {
     return { error, suppressed };
@@ -351,8 +351,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
-        assert.strictEqual(output[4].error, "dispose error");
-        assert.strictEqual(output[4].suppressed, "body error");
+        assert.strictEqual((output[4] as any).error, "dispose error");
+        assert.strictEqual((output[4] as any).suppressed, "body error");
         assert.deepEqual(output.slice(5), [
             "after try",
         ]);
@@ -1809,5 +1809,50 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter",
             "exit",
         ]);
+    });
+
+    it("'using' with downlevel generators", () => {
+        abstract class Iterator {
+            return?(): void;
+            [evaluator.FakeSymbol.iterator]() {
+                return this;
+            }
+            [evaluator.FakeSymbol.dispose]() {
+                this.return?.();
+            }
+        }
+
+        const { main } = evaluator.evaluateTypeScript(
+            `
+            let exited = false;
+
+            function * f() {
+                try {
+                    yield;
+                }
+                finally {
+                    exited = true;
+                }
+            }
+
+            export function main() {
+                {
+                    using g = f();
+                    g.next();
+                }
+
+                return exited;
+            }
+        `,
+            {
+                target: ts.ScriptTarget.ES5,
+            },
+            {
+                Iterator,
+            },
+        );
+
+        const exited = main();
+        assert.isTrue(exited, "Expected 'using' to dispose generator");
     });
 });

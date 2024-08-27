@@ -1,0 +1,50 @@
+templateLiteralTypes5.ts(10,7): error TS2322: Type '<T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]' is not assignable to type 'F2'.
+  Type 'TypeMap[T2]' is not assignable to type 'TypeMap[`${T2}`]'.
+    Type 'T2' is not assignable to type '`${T2}`'.
+      Type '"a" | "b"' is not assignable to type '`${T2}`'.
+        Type '"a"' is not assignable to type '`${T2}`'.
+templateLiteralTypes5.ts(13,11): error TS2322: Type 'T3' is not assignable to type '`${T3}`'.
+  Type '"a" | "b"' is not assignable to type '`${T3}`'.
+    Type '"a"' is not assignable to type '`${T3}`'.
+templateLiteralTypes5.ts(14,11): error TS2322: Type '`${T3}`' is not assignable to type 'T3'.
+  '`${T3}`' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+    Type '"a" | "b"' is not assignable to type 'T3'.
+      '"a" | "b"' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+        Type '"a"' is not assignable to type 'T3'.
+          '"a"' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+
+
+==== templateLiteralTypes5.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55364
+    interface TypeMap {
+      a: "A";
+      b: "B";
+    }
+    declare const f: <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0];
+    type F1 = <T1 extends "a" | "b">(x: `${T1}`) => TypeMap[T1];
+    const f1: F1 = f; 
+    type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
+    const f2: F2 = f
+          ~~
+!!! error TS2322: Type '<T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]' is not assignable to type 'F2'.
+!!! error TS2322:   Type 'TypeMap[T2]' is not assignable to type 'TypeMap[`${T2}`]'.
+!!! error TS2322:     Type 'T2' is not assignable to type '`${T2}`'.
+!!! error TS2322:       Type '"a" | "b"' is not assignable to type '`${T2}`'.
+!!! error TS2322:         Type '"a"' is not assignable to type '`${T2}`'.
+    
+    function f3<T3 extends "a" | "b">(x: T3) {
+        const test1: `${T3}` = x    
+              ~~~~~
+!!! error TS2322: Type 'T3' is not assignable to type '`${T3}`'.
+!!! error TS2322:   Type '"a" | "b"' is not assignable to type '`${T3}`'.
+!!! error TS2322:     Type '"a"' is not assignable to type '`${T3}`'.
+        const test2: T3 = "" as `${T3}`;    
+              ~~~~~
+!!! error TS2322: Type '`${T3}`' is not assignable to type 'T3'.
+!!! error TS2322:   '`${T3}`' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+!!! error TS2322:     Type '"a" | "b"' is not assignable to type 'T3'.
+!!! error TS2322:       '"a" | "b"' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+!!! error TS2322:         Type '"a"' is not assignable to type 'T3'.
+!!! error TS2322:           '"a"' is assignable to the constraint of type 'T3', but 'T3' could be instantiated with a different subtype of constraint '"a" | "b"'.
+    }
+    

@@ -118,6 +118,7 @@ Before running Timeout callback:: count: 3
 4: pollLowPollingIntervalQueue
 5: pollPollingIntervalQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 3
 Output::
 >> Screen clear

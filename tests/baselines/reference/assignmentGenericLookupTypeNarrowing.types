@@ -27,21 +27,21 @@ declare function foo<T>(x: T): null | T;
 
 function bar<K extends "foo">(key: K) {
 >bar : <K extends "foo">(key: K) => void
->    : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^^^^
 >key : K
 >    : ^
 
   const element = foo(mappedObject[key]);
 >element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^      ^^^^^^^^^
 >foo(mappedObject[key]) : { foo: { x: string; }; }[K]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^^
+>                       : ^^^^^^^^^^^^      ^^^^^^^^^
+>foo : <T>(x: T) => null | T
+>    : ^ ^^ ^^ ^^^^^        
 >mappedObject[key] : { foo: { x: string; }; }[K]
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^      ^^^^^^^^^
 >mappedObject : { foo: { x: string; }; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^      ^^^^^^
 >key : K
 >    : ^
 
@@ -49,7 +49,7 @@ function bar<K extends "foo">(key: K) {
 >element == null : boolean
 >                : ^^^^^^^
 >element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^      ^^^^^^^^^
 
     return;
   const x = element.x;
@@ -58,7 +58,7 @@ function bar<K extends "foo">(key: K) {
 >element.x : string
 >          : ^^^^^^
 >element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }

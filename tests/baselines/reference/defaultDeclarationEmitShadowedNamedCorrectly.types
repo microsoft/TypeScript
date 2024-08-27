@@ -52,8 +52,8 @@ export namespace Something {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >make(me.default) : me.Things<me.Props, me.default>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => me.Things<P, CTor>
->     : ^ ^^    ^^ ^^                                 ^^^^^^^^^^^^^^^^^^^^^^^
+>make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
+>     : ^ ^^    ^^ ^^                                 ^^^^^               
 >me.default : typeof me.default
 >           : ^^^^^^^^^^^^^^^^^
 >me : typeof me

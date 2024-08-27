@@ -41,11 +41,11 @@ module.exports = function (x, k) { return k(x) }
 >x : T
 >  : ^
 >k : (t: T) => void
->  : ^ ^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^    
 >k(x) : void
 >     : ^^^^
 >k : (t: T) => void
->  : ^ ^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^    
 >x : T
 >  : ^
 

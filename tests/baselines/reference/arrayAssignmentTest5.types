@@ -69,11 +69,11 @@ module Test {
 >this.tokenize(line, state, true) : ILineTokens
 >                                 : ^^^^^^^^^^^
 >this.tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->              : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^^^^^^^^^^^^
+>              : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >this : this
 >     : ^^^^
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -107,11 +107,11 @@ module Test {
 >this.onEnter(line, tokens, offset) : IAction
 >                                   : ^^^^^^^
 >this.onEnter : (line: string, state: IState, offset: number) => IAction
->             : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^^^^^^^^
+>             : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >this : this
 >     : ^^^^
 >onEnter : (line: string, state: IState, offset: number) => IAction
->        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^^^^^^^^
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
 >     : ^^^^^^
 >tokens : IStateToken[]

@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/narrowingPastLastAssignment.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === narrowingPastLastAssignment.ts ===
 function action(f: Function) {}
 >action : (f: Function) => void
@@ -189,7 +193,7 @@ function f4(cond: () => boolean) {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = "abc";
 >x = "abc" : "abc"
@@ -250,7 +254,7 @@ function f5(x: string | number, cond: () => boolean) {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = 1;
 >x = 1 : 1
@@ -706,11 +710,11 @@ function f12() {
 >values.forEach(v => foo.push(v)) : void
 >                                 : ^^^^
 >values.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >values : number[]
 >       : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >v => foo.push(v) : (v: number) => number
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -718,12 +722,44 @@ function f12() {
 >foo.push(v) : number
 >            : ^^^^^^
 >foo.push : (...items: number[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^      
 >foo : number[]
 >    : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >v : number
 >  : ^^^^^^
 }
 
+function f13() {
+>f13 : () => () => void
+>    : ^^^^^^^^^^^^^^^^
+
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+    foo = '';
+>foo = '' : ""
+>         : ^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+    return () => {
+>() => {        foo.toLocaleLowerCase();    } : () => void
+>                                             : ^^^^^^^^^^
+
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase() : string
+>                        : ^^^^^^
+>foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+    }
+}

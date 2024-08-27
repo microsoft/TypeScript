@@ -39,7 +39,7 @@ interface I<T, U, V> {
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
->    : ^ ^^^^^^^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 >x : W
 >  : ^
 }
@@ -59,7 +59,7 @@ interface I2<V, T, U> {
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
->    : ^ ^^^^^^^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 >x : W
 >  : ^
 }

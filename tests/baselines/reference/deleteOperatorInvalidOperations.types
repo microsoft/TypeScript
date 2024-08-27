@@ -39,6 +39,6 @@ class testADelx {
 >delete s : boolean
 >         : ^^^^^^^
 >s : () => {}
->  : ^^^^^^^^
+>  : ^^^^^^  
     }
 }

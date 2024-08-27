@@ -7,11 +7,11 @@ var s = Symbol.for("multiply");
 >Symbol.for("multiply") : symbol
 >                       : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"multiply" : "multiply"
 >           : ^^^^^^^^^^
 

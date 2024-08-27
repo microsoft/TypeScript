@@ -15,9 +15,9 @@ y.toLowerCase(); // strictNullChecks error
 >y.toLowerCase() : string
 >                : ^^^^^^
 >y.toLowerCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >y : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

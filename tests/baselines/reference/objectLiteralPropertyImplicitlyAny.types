@@ -7,11 +7,11 @@ const foo = Symbol.for("foo");
 >Symbol.for("foo") : unique symbol
 >                  : ^^^^^^^^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"foo" : "foo"
 >      : ^^^^^
 

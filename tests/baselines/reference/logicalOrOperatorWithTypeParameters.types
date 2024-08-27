@@ -116,7 +116,7 @@ function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
 
 function fn3<T extends { a: string; b: string }, U extends { a: string; b: number }>(t: T, u: U) {
 >fn3 : <T extends { a: string; b: string; }, U extends { a: string; b: number; }>(t: T, u: U) => void
->    : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^                         ^^ ^^ ^^ ^^ ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string

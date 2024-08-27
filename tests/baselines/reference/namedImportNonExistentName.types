@@ -33,7 +33,7 @@ let x: { a: string; c: string; } | { b: number; c: number; };
 
 export = x
 >x : { a: string; c: string; } | { b: number; c: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
 === bar.ts ===
 import { Bar, toString, foo } from './foo';

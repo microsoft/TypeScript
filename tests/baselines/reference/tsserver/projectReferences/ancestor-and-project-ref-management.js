@@ -115,49 +115,33 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-14968179652-namespace container {\n    export const myConst = 30;\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../lib/index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "../../lib/index.ts": {
-        "original": {
-          "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../../lib/index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outFile": "./lib.js"
-    },
-    "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-    "latestChangedDtsFile": "./lib.d.ts"
+  "fileNames": [
+    "../../../../../../a/lib/lib.d.ts",
+    "../../lib/index.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
   },
+  "root": [
+    [
+      2,
+      "../../lib/index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outFile": "./lib.js"
+  },
+  "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+  "latestChangedDtsFile": "./lib.d.ts",
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 753
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -169,6 +153,18 @@ var container;
     container.getMyConst = getMyConst;
 })(container || (container = {}));
 
+
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo]
+{"root":["../../exec/index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../../exec/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 58
+}
 
 //// [/user/username/projects/container/built/local/compositeExec.js]
 var container;
@@ -190,58 +186,35 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","impliedFormat":1},{"version":"-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../a/lib/lib.d.ts",
-      "./lib.d.ts",
-      "../../compositeexec/index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./lib.d.ts": {
-        "original": {
-          "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-        "impliedFormat": "commonjs"
-      },
-      "../../compositeexec/index.ts": {
-        "original": {
-          "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "../../compositeexec/index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outFile": "./compositeExec.js"
-    },
-    "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
-    "latestChangedDtsFile": "./compositeExec.d.ts"
+  "fileNames": [
+    "../../../../../../a/lib/lib.d.ts",
+    "./lib.d.ts",
+    "../../compositeexec/index.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+    "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
   },
+  "root": [
+    [
+      3,
+      "../../compositeexec/index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outFile": "./compositeExec.js"
+  },
+  "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
+  "latestChangedDtsFile": "./compositeExec.d.ts",
   "version": "FakeTSVersion",
-  "size": 1017
+  "size": 915
 }
 
 
@@ -403,7 +376,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/container/compositeE
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -431,6 +411,7 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -501,7 +482,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/temp/temp.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -535,9 +523,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -661,7 +651,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
+        "configFile": "/user/username/projects/container/lib/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -862,6 +862,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/exec/tsconfig.json",
+        "configFile": "/user/username/projects/container/exec/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -939,7 +950,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -981,9 +995,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/container/lib/tsconfig.json *new*
         /user/username/projects/container/compositeexec/tsconfig.json *new*
@@ -1068,7 +1084,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/container/compositeE
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -1116,9 +1136,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1209,7 +1231,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/temp/temp.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1257,9 +1286,11 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1342,7 +1373,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/temp/temp.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 6,
+      "success": true
     }
 After request
 
@@ -1390,6 +1425,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1475,7 +1511,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 7,
+      "success": true
     }
 After request
 
@@ -1529,6 +1569,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1685,7 +1726,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/temp/temp.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 8,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1742,6 +1790,7 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json

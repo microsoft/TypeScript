@@ -1,3 +1,4 @@
+import { StringCompletions } from "./_namespaces/ts.Completions.js";
 import {
     __String,
     addToSeen,
@@ -6,6 +7,7 @@ import {
     BindingElement,
     BindingPattern,
     BreakOrContinueStatement,
+    CallExpression,
     CancellationToken,
     canHaveDecorators,
     canUsePropertyAccess,
@@ -83,7 +85,6 @@ import {
     getEffectiveBaseTypeNode,
     getEffectiveModifierFlags,
     getEffectiveTypeAnnotationNode,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxAttributeName,
@@ -105,6 +106,7 @@ import {
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
+    getResolvePackageJsonExports,
     getRootDeclaration,
     getSourceFileOfModule,
     getSymbolId,
@@ -168,8 +170,10 @@ import {
     isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isIdentifierText,
-    isImportableFile,
+    isImportable,
     isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -268,7 +272,6 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
-    JsTyping,
     JsxAttribute,
     JsxAttributes,
     JsxClosingElement,
@@ -295,10 +298,11 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
-    moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
     newCaseClauseTracker,
+    NewExpression,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -331,13 +335,13 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
     setEmitFlags,
     setSnippetElement,
-    shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
     SignatureKind,
     singleElementArray,
@@ -347,7 +351,6 @@ import {
     SortedArray,
     SourceFile,
     SpreadAssignment,
-    stableSort,
     startsWith,
     stringToToken,
     stripQuotes,
@@ -369,6 +372,7 @@ import {
     Token,
     TokenSyntaxKind,
     tokenToString,
+    toSorted,
     tryCast,
     tryGetImportFromModuleSpecifier,
     tryGetTextOfPropertyName,
@@ -388,13 +392,12 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-} from "./_namespaces/ts";
-import { StringCompletions } from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */
@@ -428,6 +431,12 @@ export const SortText = {
         return sortText + "1" as SortText;
     },
 };
+
+/** All commit characters, valid when `isNewIdentifierLocation` is false. */
+const allCommitCharacters = [".", ",", ";"];
+
+/** Commit characters valid at expression positions where we could be inside a parameter list. */
+const noCommaCommitCharacters = [".", ";"];
 
 /**
  * Special values for `CompletionInfo['source']` used to disambiguate
@@ -625,12 +634,16 @@ function resolvingModuleSpecifiers<TReturn>(
     cb: (context: ModuleSpecifierResolutionContext) => TReturn,
 ): TReturn {
     const start = timestamp();
-    // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
+    // Under `--moduleResolution nodenext` or `bundler`, we have to resolve module specifiers up front, because
     // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    // Finally, `autoImportSpecifierExcludeRegexes` necessitates eagerly resolving module specifiers
+    // because completion items are being explcitly filtered out by module specifier.
+    const needsFullResolution = isForImportStatementCompletion
+        || getResolvePackageJsonExports(program.getCompilerOptions())
+        || preferences.autoImportSpecifierExcludeRegexes?.length;
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;
@@ -679,6 +692,14 @@ function resolvingModuleSpecifiers<TReturn>(
 }
 
 /** @internal */
+export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): string[] {
+    if (isNewIdentifierLocation) {
+        return [];
+    }
+    return allCommitCharacters;
+}
+
+/** @internal */
 export function getCompletionsAtPosition(
     host: LanguageServiceHost,
     program: Program,
@@ -700,7 +721,14 @@ export function getCompletionsAtPosition(
     if (triggerCharacter === " ") {
         // `isValidTrigger` ensures we are at `import |`
         if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
-            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            return {
+                isGlobalCompletion: true,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: true,
+                isIncomplete: true,
+                entries: [],
+                defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
+            };
         }
         return undefined;
     }
@@ -883,7 +911,13 @@ function continuePreviousIncompleteResponse(
 }
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+    return {
+        isGlobalCompletion: false,
+        isMemberCompletion: false,
+        isNewIdentifierLocation: false,
+        entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+    };
 }
 
 function getJSDocParameterCompletions(
@@ -1208,6 +1242,7 @@ function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNe
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries: entries.slice(),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1265,6 +1300,7 @@ function completionInfoFromData(
         insideJsDocTagTypeExpression,
         symbolToSortTextMap,
         hasUnresolvedAutoImports,
+        defaultCommitCharacters,
     } = completionData;
     let literals = completionData.literals;
 
@@ -1383,6 +1419,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
+        defaultCommitCharacters: defaultCommitCharacters ?? getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1592,7 +1629,14 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
             kindModifiers: undefined,
             sortText: SortText.LocationPriority,
         };
-        return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: true,
+            isNewIdentifierLocation: false,
+            optionalReplacementSpan: replacementSpan,
+            entries: [entry],
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
     return;
 }
@@ -1618,6 +1662,7 @@ function getJSCompletionEntries(
                 kindModifiers: "",
                 sortText: SortText.JavascriptIdentifiers,
                 isFromUncheckedFile: true,
+                commitCharacters: [],
             }, compareCompletionEntries);
         }
     });
@@ -1629,7 +1674,13 @@ function completionNameForLiteral(sourceFile: SourceFile, preferences: UserPrefe
 }
 
 function createCompletionEntryForLiteral(sourceFile: SourceFile, preferences: UserPreferences, literal: string | number | PseudoBigInt): CompletionEntry {
-    return { name: completionNameForLiteral(sourceFile, preferences, literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+    return {
+        name: completionNameForLiteral(sourceFile, preferences, literal),
+        kind: ScriptElementKind.string,
+        kindModifiers: ScriptElementKindModifier.none,
+        sortText: SortText.LocationPriority,
+        commitCharacters: [],
+    };
 }
 
 function createCompletionEntry(
@@ -1660,7 +1711,7 @@ function createCompletionEntry(
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let filterText: string | undefined;
-    let replacementSpan = getReplacementSpanForContextToken(replacementToken);
+    let replacementSpan = getReplacementSpanForContextToken(replacementToken, position);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
     let source = getSourceFromOrigin(origin);
@@ -1835,10 +1886,26 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = quotePropertyName(sourceFile, preferences, name);
+
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                // check if it is import { ^here as name } from '...'
+                // we have to access the scanner here to check if it is { ^here as name } or { ^here, as, name }.
+                scanner.setText(sourceFile.text);
+                scanner.resetTokenState(position);
+                if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
+                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                }
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -1850,9 +1917,11 @@ function createCompletionEntry(
 
     // Use a 'sortText' of 0' so that all symbol completion entries come before any other
     // entries (like JavaScript identifier entries).
+    const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+    const commitCharacters = (kind === ScriptElementKind.warning || kind === ScriptElementKind.string) ? [] : undefined;
     return {
         name,
-        kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
+        kind,
         kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
         sortText,
         source,
@@ -1867,8 +1936,32 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        commitCharacters,
         ...includeSymbol ? { symbol } : undefined,
     };
+}
+
+function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number | undefined;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
+        ch = text.codePointAt(i);
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -2248,7 +2341,7 @@ function createObjectLiteralMethod(
                 // We don't support overloads in object literals.
                 return undefined;
             }
-            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, /*internalFlags*/ undefined, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
             if (!typeNode || !isFunctionTypeNode(typeNode)) {
                 return undefined;
             }
@@ -2383,7 +2476,7 @@ function createSnippetPrinter(
         });
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2430,7 +2523,7 @@ function createSnippetPrinter(
         );
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2718,7 +2811,13 @@ export function getCompletionEntriesFromSymbols(
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
     const entries = getLabelStatementCompletions(node);
     if (entries.length) {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries,
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
 }
 
@@ -3112,6 +3211,7 @@ interface CompletionData {
     readonly importStatementCompletion?: ImportStatementCompletionInfo;
     readonly hasUnresolvedAutoImports?: boolean;
     readonly flags: CompletionInfoFlags;
+    readonly defaultCommitCharacters: string[] | undefined;
 }
 type Request =
     | { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag; }
@@ -3305,6 +3405,7 @@ function getCompletionData(
     let keywordFilters = KeywordCompletionFilters.None;
     let isNewIdentifierLocation = false;
     let flags = CompletionInfoFlags.None;
+    let defaultCommitCharacters: string[] | undefined;
 
     if (contextToken) {
         const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken, sourceFile);
@@ -3331,7 +3432,7 @@ function getCompletionData(
         if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
-                ? keywordCompletionData(keywordFilters, isJsOnlyLocation, isNewIdentifierDefinitionLocation())
+                ? keywordCompletionData(keywordFilters, isJsOnlyLocation, computeCommitCharactersAndIsNewIdentifier().isNewIdentifierLocation)
                 : undefined;
         }
 
@@ -3548,6 +3649,7 @@ function getCompletionData(
         importStatementCompletion,
         hasUnresolvedAutoImports,
         flags,
+        defaultCommitCharacters,
     };
 
     type JSDocTagWithTypeExpression =
@@ -3600,7 +3702,10 @@ function getCompletionData(
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
         if (isEntityName(node) || isImportType || isPropertyAccessExpression(node)) {
             const isNamespaceName = isModuleDeclaration(node.parent);
-            if (isNamespaceName) isNewIdentifierLocation = true;
+            if (isNamespaceName) {
+                isNewIdentifierLocation = true;
+                defaultCommitCharacters = [];
+            }
             let symbol = typeChecker.getSymbolAtLocation(node);
             if (symbol) {
                 symbol = skipAlias(symbol, typeChecker);
@@ -3682,9 +3787,13 @@ function getCompletionData(
     }
 
     function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
-        isNewIdentifierLocation = !!type.getStringIndexType();
+        if (type.getStringIndexType()) {
+            isNewIdentifierLocation = true;
+            defaultCommitCharacters = [];
+        }
         if (isRightOfQuestionDot && some(type.getCallSignatures())) {
             isNewIdentifierLocation = true;
+            defaultCommitCharacters ??= allCommitCharacters; // Only invalid commit character here would be `(`.
         }
 
         const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
@@ -3859,7 +3968,7 @@ function getCompletionData(
 
         // Get all entities in the current scope.
         completionKind = CompletionKind.Global;
-        isNewIdentifierLocation = isNewIdentifierDefinitionLocation();
+        ({ isNewIdentifierLocation, defaultCommitCharacters } = computeCommitCharactersAndIsNewIdentifier());
 
         if (previousToken !== contextToken) {
             Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
@@ -4116,20 +4225,11 @@ function getCompletionData(
         );
 
         function isImportableExportInfo(info: SymbolExportInfo) {
-            const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
-            if (!moduleFile) {
-                const moduleName = stripQuotes(info.moduleSymbol.name);
-                if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
-                    return false;
-                }
-                return packageJsonFilter
-                    ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
-                    : true;
-            }
-            return isImportableFile(
+            return isImportable(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                 sourceFile,
-                moduleFile,
+                tryCast(info.moduleSymbol.valueDeclaration, isSourceFile),
+                info.moduleSymbol,
                 preferences,
                 packageJsonFilter,
                 getModuleSpecifierResolutionHost(info.isFromPackageJson),
@@ -4259,7 +4359,7 @@ function getCompletionData(
         return false;
     }
 
-    function isNewIdentifierDefinitionLocation(): boolean {
+    function computeCommitCharactersAndIsNewIdentifier(): { defaultCommitCharacters: string[]; isNewIdentifierLocation: boolean; } {
         if (contextToken) {
             const containingNodeKind = contextToken.parent.kind;
             const tokenKind = keywordForNode(contextToken);
@@ -4267,62 +4367,118 @@ function getCompletionData(
             // dprint-ignore
             switch (tokenKind) {
                 case SyntaxKind.CommaToken:
-                    return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
-                        || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
-                        || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
-                        || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
-                        || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
-                        || containingNodeKind === SyntaxKind.FunctionType                 // var x: (s: string, list|
-                        || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { x, |
-
+                    switch (containingNodeKind) {
+                        case SyntaxKind.CallExpression:                                               // func( a, |
+                        case SyntaxKind.NewExpression: {                                              // new C(a, |
+                            const expression = (contextToken.parent as CallExpression | NewExpression).expression;
+                            if (getLineAndCharacterOfPosition(sourceFile, expression.end).line !==
+                                getLineAndCharacterOfPosition(sourceFile, position).line) {           // func\n(a, |
+                                return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                            }
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        }
+                        case SyntaxKind.BinaryExpression:                                             // const x = (a, |
+                            return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                                                  // constructor( a, | /* public, protected, private keywords are allowed here, so show completion */
+                        case SyntaxKind.FunctionType:                                                 // var x: (s: string, list|
+                        case SyntaxKind.ObjectLiteralExpression:                                      // const obj = { x, |
+                        return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        case SyntaxKind.ArrayLiteralExpression:                                       // [a, |
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
                 case SyntaxKind.OpenParenToken:
-                    return containingNodeKind === SyntaxKind.CallExpression               // func( |
-                        || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
-                        || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                        || containingNodeKind === SyntaxKind.ParenthesizedExpression      // const x = (a|
-                        || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
-
+                    switch (containingNodeKind) {
+                        case SyntaxKind.CallExpression:                                               // func( |
+                        case SyntaxKind.NewExpression: {                                              // new C(a|
+                            const expression = (contextToken.parent as CallExpression | NewExpression).expression;
+                            if (getLineAndCharacterOfPosition(sourceFile, expression.end).line !==
+                                getLineAndCharacterOfPosition(sourceFile, position).line) {           // func\n( |
+                                return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                            }
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        }
+                        case SyntaxKind.ParenthesizedExpression:                                      // const x = (a|
+                            return { defaultCommitCharacters: noCommaCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                                                  // constructor( |
+                        case SyntaxKind.ParenthesizedType:                                            // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
                 case SyntaxKind.OpenBracketToken:
-                    return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |
-                        || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
-                        || containingNodeKind === SyntaxKind.ComputedPropertyName;         // [ |    /* this can become an index signature */
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ArrayLiteralExpression:                                       // [ |
+                        case SyntaxKind.IndexSignature:                                               // [ | : string ]
+                        case SyntaxKind.TupleType:                                                    // [ | : string ]
+                        case SyntaxKind.ComputedPropertyName:                                         // [ |    /* this can become an index signature */
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
-                case SyntaxKind.ModuleKeyword:                                            // module |
-                case SyntaxKind.NamespaceKeyword:                                         // namespace |
-                case SyntaxKind.ImportKeyword:                                            // import |
-                    return true;
+                case SyntaxKind.ModuleKeyword:                                                        // module |
+                case SyntaxKind.NamespaceKeyword:                                                     // namespace |
+                case SyntaxKind.ImportKeyword:                                                        // import |
+                    return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
 
                 case SyntaxKind.DotToken:
-                    return containingNodeKind === SyntaxKind.ModuleDeclaration;           // module A.|
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ModuleDeclaration:                                            // module A.|
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.OpenBraceToken:
-                    return containingNodeKind === SyntaxKind.ClassDeclaration             // class A { |
-                        || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { |
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ClassDeclaration:                                             // class A { |
+                        case SyntaxKind.ObjectLiteralExpression:                                      // const obj = { |
+                            return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.EqualsToken:
-                    return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
-                        || containingNodeKind === SyntaxKind.BinaryExpression;            // x = a|
+                    switch (containingNodeKind) {
+                        case SyntaxKind.VariableDeclaration:                                          // const x = a|
+                        case SyntaxKind.BinaryExpression:                                             // x = a|
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
 
                 case SyntaxKind.TemplateHead:
-                    return containingNodeKind === SyntaxKind.TemplateExpression;          // `aa ${|
+                    return {
+                        defaultCommitCharacters: allCommitCharacters,
+                        isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
+                    };
 
                 case SyntaxKind.TemplateMiddle:
-                    return containingNodeKind === SyntaxKind.TemplateSpan;                // `aa ${10} dd ${|
+                    return  {
+                        defaultCommitCharacters: allCommitCharacters,
+                        isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateSpan       // `aa ${10} dd ${|
+                    };
 
                 case SyntaxKind.AsyncKeyword:
-                    return containingNodeKind === SyntaxKind.MethodDeclaration            // const obj = { async c|()
-                        || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment; // const obj = { async c|
+                    return (containingNodeKind === SyntaxKind.MethodDeclaration                       // const obj = { async c|()
+                        || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment)             // const obj = { async c|
+                        ? { defaultCommitCharacters: [], isNewIdentifierLocation: true }
+                        : { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
 
                 case SyntaxKind.AsteriskToken:
-                    return containingNodeKind === SyntaxKind.MethodDeclaration;           // const obj = { * c|
+                    return containingNodeKind === SyntaxKind.MethodDeclaration                        // const obj = { * c|
+                        ? { defaultCommitCharacters: [], isNewIdentifierLocation: true }
+                        : { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
             }
 
             if (isClassMemberCompletionKeyword(tokenKind)) {
-                return true;
+                return { defaultCommitCharacters: [], isNewIdentifierLocation: true };
             }
         }
 
-        return false;
+        return { defaultCommitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
     }
 
     function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
@@ -4496,7 +4652,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -4799,7 +4955,10 @@ function getCompletionData(
                 return !isFromObjectTypeDeclaration(contextToken);
 
             case SyntaxKind.Identifier: {
-                if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                if ((
+                    containingNodeKind === SyntaxKind.ImportSpecifier ||
+                    containingNodeKind === SyntaxKind.ExportSpecifier
+                ) &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
                 ) {
@@ -5249,6 +5408,10 @@ function getCompletionEntryDisplayNameForSymbol(
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
     }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
+    }
     switch (kind) {
         case CompletionKind.MemberLike:
             return originIsComputedPropertyName(origin) ? { name: origin.symbolName, needsConvertPropertyAccess: false } : undefined;
@@ -5438,9 +5601,17 @@ function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefin
 /** @internal */
 export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
     const hasCompletionsType = completionsType && completionsType !== contextualType;
+    const promiseFilteredContextualType = checker.getUnionType(
+        filter(
+            contextualType.flags & TypeFlags.Union ?
+                (contextualType as UnionType).types :
+                [contextualType],
+            t => !checker.getPromisedTypeOfPromise(t),
+        ),
+    );
     const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
-        ? checker.getUnionType([contextualType, completionsType])
-        : contextualType;
+        ? checker.getUnionType([promiseFilteredContextualType, completionsType])
+        : promiseFilteredContextualType;
 
     const properties = getApparentProperties(type, obj, checker);
     return type.isClass() && containsNonPublicProperties(properties) ? [] :

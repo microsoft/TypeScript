@@ -21,19 +21,19 @@ function f3(x: number): number { return null; }
 
 function f4(x: string): string;
 >f4 : { (x: string): string; (x: number): number; }
->   : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
 function f4(x: number): number;
 >f4 : { (x: string): string; (x: number): number; }
->   : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
 function f4(x: any): any { return undefined; }
 >f4 : { (x: string): string; (x: number): number; }
->   : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
 >  : ^^^
 >undefined : undefined
@@ -47,35 +47,35 @@ var g: (s1: string) => number;
 
 g = f1; // OK 
 >g = f1 : (x: string) => number
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
->  : ^  ^^      ^^^^^^^^^^^
+>  : ^  ^^      ^^^^^      
 >f1 : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 g = f2; // Error
 >g = f2 : (x: string) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
->  : ^  ^^      ^^^^^^^^^^^
+>  : ^  ^^      ^^^^^      
 >f2 : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 g = f3; // Error
 >g = f3 : (x: number) => number
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
->  : ^  ^^      ^^^^^^^^^^^
+>  : ^  ^^      ^^^^^      
 >f3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 g = f4; // Error
 >g = f4 : { (x: string): string; (x: number): number; }
->       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >g : (s1: string) => number
->  : ^  ^^      ^^^^^^^^^^^
+>  : ^  ^^      ^^^^^      
 >f4 : { (x: string): string; (x: number): number; }
->   : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
 class C {
 >C : C
@@ -100,7 +100,7 @@ d = C; // Error
 >d = C : typeof C
 >      : ^^^^^^^^
 >d : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >C : typeof C
 >  : ^^^^^^^^
 

@@ -222,7 +222,10 @@ Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -242,6 +245,7 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *new*

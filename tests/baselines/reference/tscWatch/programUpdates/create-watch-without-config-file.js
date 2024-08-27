@@ -50,10 +50,6 @@ console.log(module_1.f);
 
 
 
-PolledWatches::
-/a/b/c/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/b/c/app.ts: *new*
   {}

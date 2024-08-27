@@ -58,7 +58,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -70,6 +77,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open) *new*
@@ -149,3 +157,13 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Debug Failure. False expression: Found script Info still attached to project
+Verbose Debug Information: /dev/null/inferredProject1*: ScriptInfos still attached: [
+ {
+  "fileName": "/a/b/commonFile2.ts",
+  "projects": [
+   "/dev/null/inferredProject1*"
+  ],
+  "hasMixedContent": false
+ }
+]

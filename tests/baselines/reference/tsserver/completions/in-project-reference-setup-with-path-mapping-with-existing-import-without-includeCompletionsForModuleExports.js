@@ -113,10 +113,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -207,10 +203,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/src/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
@@ -350,7 +342,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/app/src/index.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -359,12 +358,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/app/src/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/shared/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/app/package.json: *new*
@@ -372,8 +367,6 @@ FsWatches::
 /user/username/projects/app/tsconfig.json: *new*
   {}
 /user/username/projects/mylib/tsconfig.json: *new*
-  {}
-/user/username/projects/shared/package.json: *new*
   {}
 /user/username/projects/shared/src/index.ts: *new*
   {}
@@ -392,6 +385,7 @@ Projects::
 /user/username/projects/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/app/src/index.ts (Open) *new*
@@ -842,14 +836,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -874,6 +873,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1320,17 +1320,25 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1339,6 +1347,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/mylib/src/otherlib.ts :: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/tsconfig.json, Cancelled earlier one
@@ -1360,6 +1369,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1806,17 +1816,25 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1825,6 +1843,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before request
 
@@ -1847,16 +1866,15 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 6,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
+
+Projects::
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3
+    autoImportProviderHost: undefined *changed*
 
 Before request
 
@@ -1878,8 +1896,6 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 0 depe
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/other.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -2314,17 +2330,26 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 
@@ -2333,12 +2358,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/app/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/shared/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/app/package.json:
@@ -2346,8 +2367,6 @@ FsWatches::
 /user/username/projects/app/tsconfig.json:
   {}
 /user/username/projects/mylib/tsconfig.json:
-  {}
-/user/username/projects/shared/package.json:
   {}
 /user/username/projects/shared/src/helper.ts: *new*
   {}

@@ -15,9 +15,9 @@
  */
 const foo = (a) => {
 >foo : (a: A) => asserts a is B
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^              
 >(a) => {    if (/** @type { B } */ (a).y !== 0) throw TypeError();    return undefined;} : (a: A) => asserts a is B
->                                                                                         : ^ ^^ ^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^ ^^ ^^^^^              
 >a : A
 >  : ^
 
@@ -66,7 +66,7 @@ export const main = () => {
 >foo(a) : void
 >       : ^^^^
 >foo : (a: A) => asserts a is B
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^              
 >a : A
 >  : ^
 

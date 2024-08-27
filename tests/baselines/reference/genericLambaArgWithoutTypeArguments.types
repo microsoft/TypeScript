@@ -19,8 +19,8 @@ foo((arg: Foo) => { return arg.x; });
 >                                     : ^^^
 >foo : (a: any) => any
 >    : ^ ^^^^^^^^^^^^^
->(arg: Foo) => { return arg.x; } : (arg: any) => any
->                                : ^   ^^^^^^^^^^^^^
+>(arg: Foo) => { return arg.x; } : (arg: Foo) => any
+>                                : ^   ^^   ^^^^^^^^
 >arg : any
 >    : ^^^
 >arg.x : any

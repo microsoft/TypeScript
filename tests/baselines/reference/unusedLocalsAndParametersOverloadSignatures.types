@@ -13,7 +13,7 @@ export function func(details: number, message: string, ...args: any[]): void;
 
 export function func(details: number, message: string): any {
 >func : (details: number, message: string, ...args: any[]) => void
->     : ^       ^^      ^^       ^^      ^^^^^    ^^     ^^^^^^^^^
+>     : ^       ^^      ^^       ^^      ^^^^^    ^^     ^^^^^    
 >details : number
 >        : ^^^^^^
 >message : string
@@ -67,7 +67,7 @@ export class C {
 
     method(details: number, message: string): any {
 >method : (details: number, message: string, ...args: any[]) => void
->       : ^       ^^      ^^       ^^      ^^^^^    ^^     ^^^^^^^^^
+>       : ^       ^^      ^^       ^^      ^^^^^    ^^     ^^^^^    
 >details : number
 >        : ^^^^^^
 >message : string
@@ -96,7 +96,7 @@ export function genericFunc<T>(details: number, message: T, ...args: any[]): voi
 
 export function genericFunc(details: number, message: any): any {
 >genericFunc : <T>(details: number, message: T, ...args: any[]) => void
->            : ^ ^^       ^^      ^^       ^^ ^^^^^    ^^     ^^^^^^^^^
+>            : ^ ^^       ^^      ^^       ^^ ^^^^^    ^^     ^^^^^    
 >details : number
 >        : ^^^^^^
 >message : any

@@ -18,7 +18,7 @@ declare module "./missingFunctionImplementation2_b" {
 === missingFunctionImplementation2_b.ts ===
 export function f(a?, b?);
 >f : { (a?: any, b?: any): any; (a: any, b: any): void; }
->  : ^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 >b : any

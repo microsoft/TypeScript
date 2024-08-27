@@ -9,7 +9,8 @@ import {
     isString,
     noop,
     SourceMapper,
-} from "./_namespaces/ts";
+    toSorted,
+} from "./_namespaces/ts.js";
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
@@ -23,8 +24,8 @@ import {
     ScriptInfo,
     SourceMapFileWatcher,
     TextStorage,
-} from "./_namespaces/ts.server";
-import { LoggerWithInMemoryLogs } from "./tsserverLogger";
+} from "./_namespaces/ts.server.js";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 interface ProjectData {
     projectStateVersion: Project["projectStateVersion"];
@@ -93,7 +94,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function sendLogsToLogger(title: string, logs: StateItemLog[] | undefined) {
         if (!logs) return;
         logger.log(title);
-        logs.sort((a, b) => compareStringsCaseSensitive(a[0], b[0]))
+        toSorted(logs, (a, b) => compareStringsCaseSensitive(a[0], b[0]))
             .forEach(([title, propertyLogs]) => {
                 logger.log(title);
                 propertyLogs.forEach(p => isString(p) ? logger.log(p) : p.forEach(s => logger.log(s)));
@@ -104,7 +105,11 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
-        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(/*toRetainConfiguredProjects*/ undefined);
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(
+            /*toRetainConfiguredProjects*/ undefined,
+            /*openFilesWithRetainedConfiguredProject*/ undefined,
+            /*externalProjectsRetainingConfiguredProjects*/ undefined,
+        );
         const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],

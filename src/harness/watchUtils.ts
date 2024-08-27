@@ -10,7 +10,7 @@ import {
     MultiMap,
     PollingInterval,
     System,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TestFileWatcher {
     cb: FileWatcherCallback;

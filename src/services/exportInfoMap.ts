@@ -1,25 +1,23 @@
 import {
     __String,
     addToSeen,
+    append,
     arrayIsEqualTo,
     CancellationToken,
-    CompilerOptions,
     consumesNodeCoreModules,
     createMultiMap,
     Debug,
     emptyArray,
     ensureTrailingDirectorySeparator,
     findIndex,
-    firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
     FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
+    getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
     getLocalSymbolForExportDefault,
-    getNameForExportedSymbol,
-    getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
     getRegexFromPattern,
@@ -28,12 +26,9 @@ import {
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     InternalSymbolName,
-    isExportAssignment,
-    isExportSpecifier,
     isExternalModuleNameRelative,
     isExternalModuleSymbol,
     isExternalOrCommonJsModule,
-    isIdentifier,
     isKnownSymbol,
     isNonGlobalAmbientModule,
     isPrivateIdentifierSymbol,
@@ -42,13 +37,16 @@ import {
     ModuleSpecifierCache,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
+    moduleSymbolToValidIdentifier,
+    nodeCoreModules,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
     Program,
+    ScriptTarget,
+    shouldUseUriStyleNodeCoreModules,
     skipAlias,
-    skipOuterExpressions,
     SourceFile,
     startsWith,
     Statement,
@@ -56,12 +54,11 @@ import {
     Symbol,
     SymbolFlags,
     timestamp,
-    tryCast,
     TypeChecker,
     unescapeLeadingUnderscores,
     unmangleScopedPackageName,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const enum ImportKind {
@@ -201,7 +198,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             //    get a better name.
             const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                 ? unescapeLeadingUnderscores(symbolTableKey)
-                : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                : getNamesForExportedSymbol(namedSymbol, checker, /*scriptTarget*/ undefined);
 
             const symbolName = typeof names === "string" ? names : names[0];
             const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
@@ -367,44 +364,62 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 }
 
 /** @internal */
-export function isImportableFile(
+export function isImportable(
     program: Program,
-    from: SourceFile,
-    to: SourceFile,
+    fromFile: SourceFile,
+    toFile: SourceFile | undefined,
+    toModule: Symbol,
     preferences: UserPreferences,
     packageJsonFilter: PackageJsonImportFilter | undefined,
     moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
     moduleSpecifierCache: ModuleSpecifierCache | undefined,
 ): boolean {
-    if (from === to) return false;
-    const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
+    if (!toFile) {
+        // Ambient module
+        let useNodePrefix;
+        const moduleName = stripQuotes(toModule.name);
+        if (nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+            return useNodePrefix === startsWith(moduleName, "node:");
+        }
+        return !packageJsonFilter
+            || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)
+            || fileContainsPackageImport(fromFile, moduleName);
+    }
+
+    Debug.assertIsDefined(toFile);
+    if (fromFile === toFile) return false;
+    const cachedResult = moduleSpecifierCache?.get(fromFile.path, toFile.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies;
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(fromFile, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
     const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-        from.fileName,
-        to.fileName,
+        fromFile.fileName,
+        toFile.fileName,
         moduleSpecifierResolutionHost,
         /*preferSymlinks*/ false,
         toPath => {
-            const toFile = program.getSourceFile(toPath);
+            const file = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === to || !toFile) &&
-                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (file === toFile || !file) &&
+                isImportablePath(fromFile.fileName, toPath, getCanonicalFileName, globalTypingsCache);
         },
     );
 
     if (packageJsonFilter) {
-        const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
-        return isAutoImportable;
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(toFile, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(fromFile.path, toFile.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || hasImportablePath && !!importInfo?.packageName && fileContainsPackageImport(fromFile, importInfo.packageName);
     }
 
     return hasImportablePath;
+}
+
+function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+    return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
 /**
@@ -429,12 +444,7 @@ export function forEachExternalModuleToImportFrom(
     cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
 ) {
     const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
-    const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
-        // The client is expected to send rooted path specs since we don't know
-        // what directory a relative path is relative to.
-        const pattern = getSubPatternFromSpec(spec, "", "exclude");
-        return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
-    });
+    const excludePatterns = preferences.autoImportFileExcludePatterns && getIsExcludedPatterns(preferences, useCaseSensitiveFileNames);
 
     forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, host, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
     const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
@@ -454,9 +464,33 @@ export function forEachExternalModuleToImportFrom(
     }
 }
 
+function getIsExcludedPatterns(preferences: UserPreferences, useCaseSensitiveFileNames: boolean) {
+    return mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+        // The client is expected to send rooted path specs since we don't know
+        // what directory a relative path is relative to.
+        const pattern = getSubPatternFromSpec(spec, "", "exclude");
+        return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+    });
+}
+
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, host: LanguageServiceHost, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    const isExcluded = excludePatterns && getIsExcluded(excludePatterns, host);
+
+    for (const ambient of checker.getAmbientModules()) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
+            cb(ambient, /*sourceFile*/ undefined);
+        }
+    }
+    for (const sourceFile of allSourceFiles) {
+        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
+            cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
+        }
+    }
+}
+
+function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageServiceHost) {
     const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
-    const isExcluded = excludePatterns && (({ fileName, path }: SourceFile) => {
+    return (({ fileName, path }: SourceFile) => {
         if (excludePatterns.some(p => p.test(fileName))) return true;
         if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
             let dir = getDirectoryPath(fileName);
@@ -470,17 +504,12 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
         }
         return false;
     });
+}
 
-    for (const ambient of checker.getAmbientModules()) {
-        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
-            cb(ambient, /*sourceFile*/ undefined);
-        }
-    }
-    for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
-            cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
-        }
-    }
+/** @internal */
+export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences) {
+    if (!preferences.autoImportFileExcludePatterns) return () => false;
+    return getIsExcluded(getIsExcludedPatterns(preferences, hostUsesCaseSensitiveFileNames(host)), host);
 }
 
 /** @internal */
@@ -502,14 +531,13 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
     }
 
     host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
-    const compilerOptions = program.getCompilerOptions();
     let moduleCount = 0;
     try {
         forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
             const seenExports = new Map<__String, true>();
             const checker = program.getTypeChecker();
-            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'
             if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
@@ -551,61 +579,63 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
 }
 
 /** @internal */
-export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions) {
-    const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
-    if (!exported) return undefined;
-    const { symbol, exportKind } = exported;
-    const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
-    return info && { symbol, exportKind, ...info };
-}
-
-function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
-    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
-}
-
-function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol; readonly exportKind: ExportKind; } | undefined {
+export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker) {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
     if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
 
-/** @internal */
-export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol; readonly name: string; } | undefined {
-    const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-    if (localSymbol) return { resolvedSymbol: localSymbol, name: localSymbol.name };
-
-    const name = getNameForExportDefault(defaultExport);
-    if (name !== undefined) return { resolvedSymbol: defaultExport, name };
-
-    if (defaultExport.flags & SymbolFlags.Alias) {
-        const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-        if (aliased && aliased.parent) {
-            // - `aliased` will be undefined if the module is exporting an unresolvable name,
-            //    but we can still offer completions for it.
-            // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
-            //    or another expression that resolves to a global.
-            return getDefaultExportInfoWorker(aliased, checker, compilerOptions);
-        }
-    }
-
-    if (
-        defaultExport.escapedName !== InternalSymbolName.Default &&
-        defaultExport.escapedName !== InternalSymbolName.ExportEquals
-    ) {
-        return { resolvedSymbol: defaultExport, name: defaultExport.getName() };
-    }
-    return { resolvedSymbol: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
+function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
+    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
-function getNameForExportDefault(symbol: Symbol): string | undefined {
-    return symbol.declarations && firstDefined(symbol.declarations, declaration => {
-        if (isExportAssignment(declaration)) {
-            return tryCast(skipOuterExpressions(declaration.expression), isIdentifier)?.text;
-        }
-        else if (isExportSpecifier(declaration)) {
-            Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");
-            return declaration.propertyName && declaration.propertyName.text;
-        }
+function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined) {
+    let names: string | string[] | undefined;
+    forEachNameOfDefaultExport(defaultExport, checker, scriptTarget, (name, capitalizedName) => {
+        names = capitalizedName ? [name, capitalizedName] : name;
+        return true;
     });
+    return Debug.checkDefined(names);
+}
+
+/**
+ * @internal
+ * May call `cb` multiple times with the same name.
+ * Terminates when `cb` returns a truthy value.
+ */
+export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
+    let chain: Symbol[] | undefined;
+    let current: Symbol | undefined = defaultExport;
+    const seen = new Map<Symbol, true>();
+
+    while (current) {
+        // The predecessor to this function also looked for a name on the `localSymbol`
+        // of default exports, but I think `getDefaultLikeExportNameFromDeclaration`
+        // accomplishes the same thing via syntax - no tests failed when I removed it.
+        const fromDeclaration = getDefaultLikeExportNameFromDeclaration(current);
+        if (fromDeclaration) {
+            const final = cb(fromDeclaration);
+            if (final) return final;
+        }
+
+        if (current.escapedName !== InternalSymbolName.Default && current.escapedName !== InternalSymbolName.ExportEquals) {
+            const final = cb(current.name);
+            if (final) return final;
+        }
+
+        chain = append(chain, current);
+        if (!addToSeen(seen, current)) break;
+        current = current.flags & SymbolFlags.Alias ? checker.getImmediateAliasedSymbol(current) : undefined;
+    }
+
+    for (const symbol of chain ?? emptyArray) {
+        if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
+            const final = cb(
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ false),
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ true),
+            );
+            if (final) return final;
+        }
+    }
 }

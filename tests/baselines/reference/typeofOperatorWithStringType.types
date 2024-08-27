@@ -160,7 +160,7 @@ var ResultIsString9 = typeof foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsString10 = typeof A.foo();
 >ResultIsString10 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -198,11 +198,11 @@ var ResultIsString12 = typeof STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -260,7 +260,7 @@ typeof foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 typeof objA.a, M.n;
 >typeof objA.a, M.n : string
@@ -315,7 +315,7 @@ r: typeof foo;
 >typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var y = { a: "", b: "" };
 >y : { a: string; b: string; }

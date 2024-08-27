@@ -126,17 +126,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 >a : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 >a : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -166,19 +166,19 @@ function foo4(x: any) { }
 
 function foo8(x: B<string>): string;
 >foo8 : { (x: B<string>): string; (x: I<string>): number; }
->     : ^^^ ^^         ^^^      ^^^ ^^         ^^^^^^^^^^^^
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : B<string>
 >  : ^^^^^^^^^
 
 function foo8(x: I<string>): number; // BUG 832086
 >foo8 : { (x: B<string>): string; (x: I<string>): number; }
->     : ^^^ ^^         ^^^^^^^^^^^^ ^^         ^^^      ^^^
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : I<string>
 >  : ^^^^^^^^^
 
 function foo8(x: any): any { }
 >foo8 : { (x: B<string>): string; (x: I<string>): number; }
->     : ^^^ ^^         ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : any
 
 function foo9(x: B<string>);
@@ -208,9 +208,9 @@ function foo10(x: typeof a); // BUG 832086
 >foo10 : { (x: B<string>): any; (x: typeof a): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 >a : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 
 function foo10(x: any) { }
 >foo10 : { (x: B<string>): any; (x: typeof a): any; }
@@ -280,9 +280,9 @@ function foo13(x: typeof a); // BUG 832086
 >foo13 : { (x: I<string>): any; (x: typeof a): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 >a : new <T>(x: T, y?: T) => B<T>
->  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
+>  : ^^^^^ ^^ ^^ ^^ ^^^ ^^^^^    
 
 function foo13(x: any) { }
 >foo13 : { (x: I<string>): any; (x: typeof a): any; }

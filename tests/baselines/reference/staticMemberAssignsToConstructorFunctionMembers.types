@@ -32,11 +32,11 @@ class C {
 >C.bar = () => { } : () => void
 >                  : ^^^^^^^^^^
 >C.bar : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >C : typeof C
 >  : ^^^^^^^^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >() => { } : () => void
 >          : ^^^^^^^^^^
 
@@ -44,11 +44,11 @@ class C {
 >C.bar = (x) => x : (x: number) => number
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >C.bar : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >C : typeof C
 >  : ^^^^^^^^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >(x) => x : (x: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -60,11 +60,11 @@ class C {
 >C.bar = (x: number) => 1 : (x: number) => number
 >                         : ^ ^^      ^^^^^^^^^^^
 >C.bar : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >C : typeof C
 >  : ^^^^^^^^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number

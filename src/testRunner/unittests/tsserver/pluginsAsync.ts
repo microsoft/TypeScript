@@ -1,18 +1,18 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
     Deferred,
-} from "../../_namespaces/Utils";
+} from "../../_namespaces/Utils.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
     function setup(globalPlugins: string[]) {

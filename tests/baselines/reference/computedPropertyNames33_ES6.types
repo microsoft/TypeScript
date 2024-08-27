@@ -3,7 +3,7 @@
 === computedPropertyNames33_ES6.ts ===
 function foo<T>() { return '' }
 >foo : <T>() => string
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 

@@ -1032,7 +1032,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1733,7 +1733,7 @@
         "category": "Error",
         "code": 1519
     },
-    "Expected a class set oprand.": {
+    "Expected a class set operand.": {
         "category": "Error",
         "code": 1520
     },
@@ -1789,13 +1789,42 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
     "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
+    },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
+    },
+    "Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1538
+    },
+    "A 'bigint' literal cannot be used as a property name.": {
+        "category": "Error",
+        "code": 1539
+    },
+    "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.": {
+        "category": "Suggestion",
+        "code": 1540,
+        "reportsDeprecated": true
+    },
+    "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1541
+    },
+    "Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1542
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2675,10 +2704,6 @@
     "'await' expressions cannot be used in a parameter initializer.": {
         "category": "Error",
         "code": 2524
-    },
-    "Initializer provides no value for this binding element and the binding element has no default value.": {
-        "category": "Error",
-        "code": 2525
     },
     "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
@@ -3903,7 +3928,26 @@
         "category": "Error",
         "code": 2868
     },
-
+    "Right operand of ?? is unreachable because the left operand is never nullish.": {
+        "category": "Error",
+        "code": 2869
+    },
+    "This binary expression is never nullish. Are you missing parentheses?": {
+        "category": "Error",
+        "code": 2870
+    },
+    "This expression is always nullish.": {
+        "category": "Error",
+        "code": 2871
+    },
+    "This kind of expression is always truthy.": {
+        "category": "Error",
+        "code": 2872
+    },
+    "This kind of expression is always falsy.": {
+        "category": "Error",
+        "code": 2873
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4200,10 +4244,6 @@
         "category": "Error",
         "code": 4085
     },
-    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Error",
-        "code": 4090
-    },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4091
@@ -4212,7 +4252,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -4360,10 +4400,6 @@
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
-    },
-    "Failed to parse file '{0}': {1}.": {
-        "category": "Error",
-        "code": 5014
     },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
@@ -4612,6 +4648,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5112,10 +5152,6 @@
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
-    },
-    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
-        "category": "Message",
-        "code": 6145
     },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
@@ -5890,6 +5926,14 @@
         "category": "Message",
         "code": 6418
     },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors.": {
+        "category": "Message",
+        "code": 6419
+    },
+    "Project '{0}' is out of date because {1}.": {
+        "category": "Message",
+        "code": 6420
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -6074,6 +6118,10 @@
     "Allow importing helper functions from tslib once per project, instead of including them per-file.": {
         "category": "Message",
         "code": 6639
+    },
+    "Skip building downstream projects on error in upstream project.": {
+        "category": "Message",
+        "code": 6640
     },
     "Specify a list of glob patterns that match files to be included in compilation.": {
         "category": "Message",
@@ -6380,6 +6428,10 @@
         "code": 6719
     },
 
+    "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
+        "category": "Message",
+        "code": 6720
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
@@ -6391,6 +6443,14 @@
     "Disable full type checking (only critical parse and emit errors will be reported).": {
         "category": "Message",
         "code": 6805
+    },
+    "Check side effect imports.": {
+        "category": "Message",
+        "code": 6806
+    },
+    "This operation can be simplified. This shift is identical to `{0} {1} {2}`.": {
+        "category": "Error",
+        "code": 6807
     },
 
     "one of:": {
@@ -7018,6 +7078,14 @@
         "category": "Error",
         "code": 9037
     },
+    "Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9038
+    },
+    "Type containing private name '{0}' can't be used with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9039
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -7335,6 +7403,46 @@
     "Update modifiers of '{0}'": {
         "category": "Message",
         "code": 90061
+    },
+    "Add annotation of type '{0}'": {
+        "category": "Message",
+        "code": 90062
+    },
+    "Add return type '{0}'": {
+        "category": "Message",
+        "code": 90063
+    },
+    "Extract base class to variable": {
+        "category": "Message",
+        "code": 90064
+    },
+    "Extract default export to variable": {
+        "category": "Message",
+        "code": 90065
+    },
+    "Extract binding expressions to variable": {
+        "category": "Message",
+        "code": 90066
+    },
+    "Add all missing type annotations": {
+        "category": "Message",
+        "code": 90067
+    },
+    "Add satisfies and an inline type assertion with '{0}'": {
+        "category": "Message",
+        "code": 90068
+    },
+    "Extract to variable and replace with '{0} as typeof {0}'": {
+        "category": "Message",
+        "code": 90069
+    },
+    "Mark array literal as const": {
+        "category": "Message",
+        "code": 90070
+    },
+    "Annotate types of properties expando function in a namespace": {
+        "category": "Message",
+        "code": 90071
     },
 
     "Convert function to an ES2015 class": {
@@ -8097,6 +8205,14 @@
         "category": "Message",
         "code": 95195
     },
+    "Add 'resolution-mode' import attribute": {
+        "category": "Message",
+        "code": 95196
+    },
+    "Add 'resolution-mode' import attribute to all type-only imports that need it": {
+        "category": "Message",
+        "code": 95197
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -8273,5 +8389,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
+        "category": "Error",
+        "code": 18057
     }
 }

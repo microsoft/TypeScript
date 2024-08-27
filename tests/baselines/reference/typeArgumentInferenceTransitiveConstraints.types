@@ -3,7 +3,7 @@
 === typeArgumentInferenceTransitiveConstraints.ts ===
 function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
 >fn : <A extends Date, B extends A, C extends B>(a: A, b: B, c: C) => A[]
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >a : A
 >  : ^
 >b : B
@@ -28,7 +28,7 @@ var d = fn(new Date(), new Date(), new Date());
 >fn(new Date(), new Date(), new Date()) : Date[]
 >                                       : ^^^^^^
 >fn : <A extends Date, B extends A, C extends B>(a: A, b: B, c: C) => A[]
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor

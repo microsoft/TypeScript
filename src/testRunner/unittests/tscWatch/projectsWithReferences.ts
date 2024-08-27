@@ -1,23 +1,23 @@
-import { noop } from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { getProjectConfigWithNodeNext } from "../helpers/contents";
-import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences";
+import { noop } from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getProjectConfigWithNodeNext } from "../helpers/contents.js";
+import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
 import {
     createSolutionBuilder,
     solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+} from "../helpers/solutionBuilder.js";
 import {
     getFsContentsForTransitiveReferences,
     getFsContentsForTransitiveReferencesAConfig,
     getFsContentsForTransitiveReferencesBConfig,
     getFsContentsForTransitiveReferencesRefsAdts,
-} from "../helpers/transitiveReferences";
-import { verifyTscWatch } from "../helpers/tscWatch";
+} from "../helpers/transitiveReferences.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     function verifySampleProject(withNodeNext: boolean) {

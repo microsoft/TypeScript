@@ -108,13 +108,13 @@ async function f2() {
 
 declare function foo(x: string): Promise<number>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^ ^^      ^^^               ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string
 >  : ^^^^^^
 
 declare function foo(x: number): Promise<string>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^               ^^^
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : number
 >  : ^^^^^^
 
@@ -148,7 +148,7 @@ async function g1() {
 >foo(x) : Promise<number> & Promise<string>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -195,7 +195,7 @@ async function g2() {
 >foo(x) : Promise<number> & Promise<string>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
     }
@@ -289,7 +289,7 @@ async function h2() {
 >asNumber(x) : Promise<number>
 >            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
->         : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^               
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >1 : 1
@@ -329,7 +329,7 @@ async function h3() {
 >asNumber(x) : Promise<number>
 >            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
->         : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^               
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -383,7 +383,7 @@ async function h4() {
 >asNumber(x) : Promise<number>
 >            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
->         : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^               
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -499,7 +499,7 @@ async () => {
 >foox(bar) : Promise<string>
 >          : ^^^^^^^^^^^^^^^
 >foox : (x: string | undefined) => Promise<string>
->     : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                  ^^^^^               
 >bar : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -546,11 +546,11 @@ async function myFunc(): Promise<void> {
 >entities : number[]
 >         : ^^^^^^^^
 >await myQuery({        lastId,    }) : { entities: number[]; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^^^^^^^^^^^^        ^^^
 >myQuery({        lastId,    }) : Promise<{ entities: number[]; }>
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^^^^^^^^^^^^^^^^^^^        ^^^^
 >myQuery : (input: { lastId: number | undefined; }) => Promise<{ entities: number[]; }>
->        : ^     ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                               ^^^^^                                
 >{        lastId,    } : { lastId: number | undefined; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

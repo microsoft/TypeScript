@@ -44,30 +44,30 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
 
     public fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     public fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     public fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -114,29 +114,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: number): number;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: any): any {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -183,29 +183,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: number): number;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: any): any {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -252,29 +252,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: number): number;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: any): any {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -310,13 +310,13 @@ export interface I1 {
 
     fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 }
@@ -365,30 +365,30 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
 
     public fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     public fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     public fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -435,29 +435,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: number): number;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: any): any {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -504,29 +504,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: number): number;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: any): any {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -573,29 +573,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: number): number;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: any): any {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : any
 
         return a;
@@ -631,13 +631,13 @@ interface I2 {
 
     fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : string
 >  : ^^^^^^
 
     fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 }

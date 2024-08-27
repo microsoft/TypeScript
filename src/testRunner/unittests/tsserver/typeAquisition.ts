@@ -1,12 +1,12 @@
-import { jsonToReadableText } from "../helpers";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
     openFilesForSession,
     TestSession,
     toExternalFile,
-} from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {

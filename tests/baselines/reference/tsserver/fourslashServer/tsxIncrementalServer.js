@@ -63,6 +63,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/tsxIncrementalServer.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -90,6 +101,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -123,12 +135,21 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts
@@ -161,6 +182,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "<"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 2,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -216,6 +245,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 4,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -248,6 +285,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 5,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -303,6 +348,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -356,6 +409,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "v"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -411,6 +472,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -443,6 +512,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 12,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -498,6 +575,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 14,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -530,6 +615,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 15,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -585,6 +678,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 17,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -638,6 +739,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -693,6 +802,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 21,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -725,6 +842,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "="
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 22,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -780,6 +905,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 24,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -812,6 +945,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "\""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 25,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -867,6 +1008,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 27,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -920,6 +1069,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "o"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 29,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -975,6 +1132,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 31,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -1029,6 +1194,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 33,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -1061,6 +1234,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "\""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 34,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1116,6 +1297,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 36,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -1148,6 +1337,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ">"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 37,
+      "success": true
     }
 After Request
 ScriptInfos::

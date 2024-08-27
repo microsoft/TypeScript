@@ -15,7 +15,7 @@ foo()(1 as number).toString();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >1 as number : number
 >            : ^^^^^^
 >1 : 1
@@ -33,7 +33,7 @@ foo()   (1 as number).toString();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >1 as number : number
 >            : ^^^^^^
 >1 : 1
@@ -51,7 +51,7 @@ foo()
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 (1 as number).toString();
 >1 as number : number
@@ -71,7 +71,7 @@ foo()
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     (1 + 2).toString();
 >1 + 2 : number
@@ -93,7 +93,7 @@ foo()
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     (<number>1).toString();
 ><number>1 : number

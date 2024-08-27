@@ -69,7 +69,7 @@ async function func(): Promise<void> {
 >before() : void
 >         : ^^^^
 >before : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
     var b = (await pfn)(a, a, a);
 >b : void
@@ -77,11 +77,11 @@ async function func(): Promise<void> {
 >(await pfn)(a, a, a) : void
 >                     : ^^^^
 >(await pfn) : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->            : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^^^^^
+>            : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >await pfn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->          : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^^^^^
+>          : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
->    : ^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^^^^^^^^
+>    : ^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^^^    ^
 >a : boolean
 >  : ^^^^^^^
 >a : boolean
@@ -93,5 +93,5 @@ async function func(): Promise<void> {
 >after() : void
 >        : ^^^^
 >after : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 }

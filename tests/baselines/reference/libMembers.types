@@ -11,11 +11,11 @@ s.substring(0);
 >s.substring(0) : string
 >               : ^^^^^^
 >s.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -23,11 +23,11 @@ s.substring(3,4);
 >s.substring(3,4) : string
 >                 : ^^^^^^
 >s.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >3 : 3
 >  : ^
 >4 : 4
@@ -49,11 +49,11 @@ String.fromCharCode(12);
 >String.fromCharCode(12) : string
 >                        : ^^^^^^
 >String.fromCharCode : (...codes: number[]) => string
->                    : ^^^^     ^^        ^^^^^^^^^^^
+>                    : ^^^^     ^^        ^^^^^      
 >String : StringConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
->             : ^^^^     ^^        ^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^      
 >12 : 12
 >   : ^^
 

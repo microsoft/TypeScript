@@ -19,21 +19,21 @@ function bigInt64ArraySubarray() {
 >arr.subarray() : BigInt64Array
 >               : ^^^^^^^^^^^^^
 >arr.subarray : (begin?: number, end?: number) => BigInt64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^   ^^^      ^^^^^             
 >arr : BigInt64Array
 >    : ^^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => BigInt64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^   ^^^      ^^^^^             
 
     arr.subarray(0);
 >arr.subarray(0) : BigInt64Array
 >                : ^^^^^^^^^^^^^
 >arr.subarray : (begin?: number, end?: number) => BigInt64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^   ^^^      ^^^^^             
 >arr : BigInt64Array
 >    : ^^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => BigInt64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^   ^^^      ^^^^^             
 >0 : 0
 >  : ^
 
@@ -41,11 +41,11 @@ function bigInt64ArraySubarray() {
 >arr.subarray(0, 10) : BigInt64Array
 >                    : ^^^^^^^^^^^^^
 >arr.subarray : (begin?: number, end?: number) => BigInt64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^   ^^^      ^^^^^             
 >arr : BigInt64Array
 >    : ^^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => BigInt64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^   ^^^      ^^^^^             
 >0 : 0
 >  : ^
 >10 : 10

@@ -187,7 +187,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /classes.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -209,6 +216,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open) *new*
@@ -241,16 +249,15 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 2,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: undefined *changed*
 
 Before request
 
@@ -297,10 +304,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render(): Element {\n}",
-            "filterText": "render",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render(): Element {\n}",
+            "filterText": "render"
           },
           {
             "name": "abstract",
@@ -380,11 +387,18 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false *changed*
 
 Before request
 
@@ -419,7 +433,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /utils.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -443,6 +464,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open)
@@ -495,6 +517,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /classes.ts (Open) *changed*
@@ -565,10 +588,10 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
-            "insertText": "render2(): Element {\n}",
-            "filterText": "render2",
+            "source": "ClassMemberSnippet/",
             "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "insertText": "render2(): Element {\n}",
+            "filterText": "render2"
           },
           {
             "name": "abstract",
@@ -648,9 +671,13 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -659,3 +686,4 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false

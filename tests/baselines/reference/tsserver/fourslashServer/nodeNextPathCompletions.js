@@ -86,6 +86,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/dependency/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -266,6 +277,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/dependency/package.json Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /src/foo.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -358,7 +381,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       }
     }
 Info seq  [hh:mm:ss:mss] request:
@@ -412,6 +436,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 4,
+      "success": true
     }
 After Request
 Projects::
@@ -470,6 +502,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 5,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -537,6 +577,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -602,6 +650,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "p"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -669,6 +725,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -734,6 +798,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 13,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -801,6 +873,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 15,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -866,6 +946,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "e"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 17,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -933,6 +1021,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -998,6 +1094,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "c"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 21,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1065,6 +1169,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 23,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -1130,6 +1242,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "/"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 25,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1259,7 +1379,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       }
     }
 After Request
@@ -1343,6 +1464,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 29,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
@@ -1402,6 +1531,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "l"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 30,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1522,7 +1659,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       }
     }
 After Request

@@ -39,25 +39,25 @@ var bar3: { x : number; }
 
 foo1 = bar1; // should be an error
 >foo1 = bar1 : { x: number; }
->            : ^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^
 >foo1 : new () => any
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^^^^^   
 >bar1 : { x: number; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 
 foo2 = bar2; 
 >foo2 = bar2 : { x: number; }
->            : ^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^
 >foo2 : {}
 >     : ^^
 >bar2 : { x: number; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 
 foo3 = bar3; // should be an error
 >foo3 = bar3 : { x: number; }
->            : ^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^
 >foo3 : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >bar3 : { x: number; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 

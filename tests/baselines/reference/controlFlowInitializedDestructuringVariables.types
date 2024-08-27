@@ -25,6 +25,6 @@ const {
 >  : ^^^^^^
 
 } = obj;
->obj : { a?: string | undefined; b?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; b?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
 
