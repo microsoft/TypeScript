@@ -141,6 +141,7 @@ import {
     supportedTSImplementationExtensions,
     Symbol,
     SyntaxKind,
+    TemplateLiteralType,
     textPart,
     TextSpan,
     tryAndIgnoreErrors,
@@ -276,7 +277,7 @@ function convertStringLiteralCompletions(
                 ? CharacterCodes.singleQuote
                 : CharacterCodes.doubleQuote;
             const entries = completion.types.map(type => ({
-                name: escapeString(type.value, quoteChar),
+                name: escapeString(type.isStringLiteral() ? type.value : type.texts[0], quoteChar), // TODO support matching in the middle
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
@@ -315,7 +316,7 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
             return match && createCompletionDetailsForSymbol(match, match.name, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
-            return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
+            return find(completion.types, t => t.isStringLiteral() && t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
         default:
             return Debug.assertNever(completion);
     }
@@ -378,9 +379,10 @@ interface StringLiteralCompletionsFromProperties {
     readonly symbols: readonly Symbol[];
     readonly hasIndexSignature: boolean;
 }
+type StringLiteralLikeType = StringLiteralType | TemplateLiteralType
 interface StringLiteralCompletionsFromTypes {
     readonly kind: StringLiteralCompletionKind.Types;
-    readonly types: readonly StringLiteralType[];
+    readonly types: readonly (StringLiteralLikeType)[];
     readonly isNewIdentifier: boolean;
 }
 type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
@@ -456,7 +458,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             if (!contextualTypes) {
                 return;
             }
-            const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
+            const literals = contextualTypes.types.filter(literal => literal.isStringLiteral() && !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
 
         case SyntaxKind.ImportSpecifier:
@@ -486,7 +488,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             case SyntaxKind.TypeReference: {
                 const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
                 if (typeArgument) {
-                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralLikeTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
                 }
                 return undefined;
             }
@@ -511,7 +513,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 if (result.kind === StringLiteralCompletionKind.Properties) {
                     return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
                 }
-                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
+                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => t.isStringLiteral() && !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
             }
             default:
                 return undefined;
@@ -521,7 +523,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
+        const types = getStringLiteralLikeTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
         if (!types.length) {
             return;
         }
@@ -559,7 +561,7 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
             }
         }
         isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
-        return getStringLiteralTypes(type, uniques);
+        return getStringLiteralLikeTypes(type, uniques);
     });
     return length(types) ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier } : undefined;
 }
@@ -591,11 +593,11 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     };
 }
 
-function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
+function getStringLiteralLikeTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralLikeType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
-    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    return type.isUnion() ? flatMap(type.types, t => getStringLiteralLikeTypes(t, uniques)) :
+        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) || (type.flags & TypeFlags.TemplateLiteral) ? [type as StringLiteralLikeType] : emptyArray;
 }
 
 interface NameAndKind {
