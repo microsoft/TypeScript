@@ -7,12 +7,11 @@ import {
     Block,
     CallExpression,
     CharacterCodes,
-    CheckFlags,
     ClassLikeDeclaration,
     CodeFixContextBase,
     combine,
+    createDeclarationName,
     Debug,
-    Declaration,
     Diagnostics,
     emptyArray,
     EntityName,
@@ -25,14 +24,11 @@ import {
     FunctionExpression,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
-    getCheckFlags,
     getEffectiveModifierFlags,
     getEmitScriptTarget,
     getFirstIdentifier,
     getModuleSpecifierResolverHost,
     getNameForExportedSymbol,
-    getNameOfDeclaration,
-    getPropertyNameFromType,
     getQuotePreference,
     getSetAccessorValueParameter,
     getSynthesizedDeepClone,
@@ -59,7 +55,6 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isTypeNode,
-    isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
     length,
@@ -98,7 +93,6 @@ import {
     textChanges,
     TextSpan,
     textSpanEnd,
-    TransientSymbol,
     tryCast,
     TsConfigSourceFile,
     Type,
@@ -107,12 +101,11 @@ import {
     TypeNode,
     TypeParameterDeclaration,
     TypePredicate,
-    unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
     visitEachChild,
     visitNode,
-    visitNodes,
+    visitNodes
 } from "../_namespaces/ts.js";
 
 /**
@@ -358,16 +351,6 @@ export function addNewNodeForMemberSymbol(
 
     function createTypeNode(typeNode: TypeNode | undefined) {
         return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
-    }
-
-    function createDeclarationName(symbol: Symbol, declaration: Declaration | undefined): PropertyName {
-        if (getCheckFlags(symbol) & CheckFlags.Mapped) {
-            const nameType = (symbol as TransientSymbol).links.nameType;
-            if (nameType && isTypeUsableAsPropertyName(nameType)) {
-                return factory.createIdentifier(unescapeLeadingUnderscores(getPropertyNameFromType(nameType)));
-            }
-        }
-        return getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     }
 }
 

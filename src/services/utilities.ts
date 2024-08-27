@@ -17,6 +17,7 @@ import {
     cast,
     CatchClause,
     CharacterCodes,
+    CheckFlags,
     ClassDeclaration,
     ClassExpression,
     clone,
@@ -90,6 +91,7 @@ import {
     FutureSourceFile,
     getAssignmentDeclarationKind,
     getBaseFileName,
+    getCheckFlags,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
     getEmitModuleKind,
@@ -110,6 +112,7 @@ import {
     getOriginalNode,
     getPackageNameFromTypesPackageName,
     getPathComponents,
+    getPropertyNameFromType,
     getRootDeclaration,
     getSourceFileOfNode,
     getSpanOfTokenAtPosition,
@@ -258,6 +261,7 @@ import {
     isTypeOperatorNode,
     isTypeParameterDeclaration,
     isTypeReferenceNode,
+    isTypeUsableAsPropertyName,
     isVarConst,
     isVariableDeclarationList,
     isVoidExpression,
@@ -372,6 +376,7 @@ import {
     tokenToString,
     toPath,
     toSorted,
+    TransientSymbol,
     tryCast,
     tryParseJson,
     Type,
@@ -4316,4 +4321,17 @@ export function createFutureSourceFile(fileName: string, syntaxModuleIndicator: 
         statements: emptyArray,
         imports: emptyArray,
     };
+}
+
+/**
+ * @internal
+ */
+export function createDeclarationName(symbol: Symbol, declaration: Declaration | undefined): PropertyName {
+    if (getCheckFlags(symbol) & CheckFlags.Mapped) {
+        const nameType = (symbol as TransientSymbol).links.nameType;
+        if (nameType && isTypeUsableAsPropertyName(nameType)) {
+            return factory.createIdentifier(unescapeLeadingUnderscores(getPropertyNameFromType(nameType)));
+        }
+    }
+    return getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
 }

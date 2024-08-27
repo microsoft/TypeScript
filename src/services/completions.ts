@@ -38,6 +38,7 @@ import {
     ConstructorDeclaration,
     ContextFlags,
     countWhere,
+    createDeclarationName,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -112,7 +113,6 @@ import {
     getSourceFileOfModule,
     getSwitchedType,
     getSymbolId,
-    getSynthesizedDeepClone,
     getTokenAtPosition,
     getTouchingPropertyName,
     hasDocComment,
@@ -328,7 +328,6 @@ import {
     programContainsModules,
     PropertyAccessExpression,
     PropertyDeclaration,
-    PropertyName,
     PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
@@ -394,7 +393,7 @@ import {
     UnionType,
     UserPreferences,
     VariableDeclaration,
-    walkUpParenthesizedExpressions,
+    walkUpParenthesizedExpressions
 } from "./_namespaces/ts.js";
 
 // Exported only for tests
@@ -2309,7 +2308,7 @@ function createObjectLiteralMethod(
     }
     const checker = program.getTypeChecker();
     const declaration = declarations[0];
-    const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+    const name = createDeclarationName(symbol, declaration);
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const builderFlags = NodeBuilderFlags.OmitThisParameter | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
@@ -4371,7 +4370,7 @@ function getCompletionData(
             // dprint-ignore
             switch (tokenKind) {
                 case SyntaxKind.CommaToken:
-                    switch (containingNodeKind) {    
+                    switch (containingNodeKind) {
                         case SyntaxKind.CallExpression:                                               // func( a, |
                         case SyntaxKind.NewExpression: {                                              // new C(a, |
                             const expression = (contextToken.parent as CallExpression | NewExpression).expression;
@@ -4454,7 +4453,7 @@ function getCompletionData(
                     }
 
                 case SyntaxKind.TemplateHead:
-                    return { 
+                    return {
                         defaultCommitCharacters: allCommitCharacters,
                         isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
                     };
