@@ -56,32 +56,75 @@ element(ElName, { age: 42 }); // error
 >ElName : Symbol(ElName, Decl(coAndContraVariantInferences12.ts, 13, 11))
 >age : Symbol(age, Decl(coAndContraVariantInferences12.ts, 17, 17))
 
+element(ElName, { idomKey: null }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElName : Symbol(ElName, Decl(coAndContraVariantInferences12.ts, 13, 11))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 18, 17))
+
+element(ElName, { idomKey: null, name: "Trevor" }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElName : Symbol(ElName, Decl(coAndContraVariantInferences12.ts, 13, 11))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 19, 17))
+>name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 19, 32))
+
 declare function ElName2(props: { name: string }): Element;
->ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 17, 29))
->props : Symbol(props, Decl(coAndContraVariantInferences12.ts, 19, 25))
->name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 19, 33))
+>ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 19, 51))
+>props : Symbol(props, Decl(coAndContraVariantInferences12.ts, 21, 25))
+>name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 21, 33))
 >Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 element(ElName2, {}); // error
 >element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
->ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 17, 29))
+>ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 19, 51))
+
+element(ElName2, { age: 42 }); // error
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 19, 51))
+>age : Symbol(age, Decl(coAndContraVariantInferences12.ts, 23, 18))
+
+element(ElName2, { idomKey: null }); // error
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElName2 : Symbol(ElName2, Decl(coAndContraVariantInferences12.ts, 19, 51))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 24, 18))
 
 declare function ElEmpty(props: {}): Element;
->ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 20, 21))
->props : Symbol(props, Decl(coAndContraVariantInferences12.ts, 22, 25))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>props : Symbol(props, Decl(coAndContraVariantInferences12.ts, 26, 25))
 >Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 element(ElEmpty, { name: "Trevor" }); // ok
 >element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
->ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 20, 21))
->name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 23, 18))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 27, 18))
+
+element(ElEmpty, { age: 42 }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>age : Symbol(age, Decl(coAndContraVariantInferences12.ts, 28, 18))
+
+element(ElEmpty, { idomKey: null }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 29, 18))
+
+element(ElEmpty, { idomKey: null, name: "Trevor" }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 30, 18))
+>name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 30, 33))
 
 declare const withOptionalName: { name?: string };
->withOptionalName : Symbol(withOptionalName, Decl(coAndContraVariantInferences12.ts, 24, 13))
->name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 24, 33))
+>withOptionalName : Symbol(withOptionalName, Decl(coAndContraVariantInferences12.ts, 31, 13))
+>name : Symbol(name, Decl(coAndContraVariantInferences12.ts, 31, 33))
 
 element(ElEmpty, withOptionalName); // ok
 >element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
->ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 20, 21))
->withOptionalName : Symbol(withOptionalName, Decl(coAndContraVariantInferences12.ts, 24, 13))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>withOptionalName : Symbol(withOptionalName, Decl(coAndContraVariantInferences12.ts, 31, 13))
+
+element(ElEmpty, { ...withOptionalName, idomKey: null }); // ok
+>element : Symbol(element, Decl(coAndContraVariantInferences12.ts, 8, 1))
+>ElEmpty : Symbol(ElEmpty, Decl(coAndContraVariantInferences12.ts, 24, 36))
+>withOptionalName : Symbol(withOptionalName, Decl(coAndContraVariantInferences12.ts, 31, 13))
+>idomKey : Symbol(idomKey, Decl(coAndContraVariantInferences12.ts, 33, 39))
 

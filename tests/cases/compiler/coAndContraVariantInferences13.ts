@@ -6,7 +6,7 @@
 type FunctionComponent<P = any> = (props: P) => Element | null;
 
 interface ElementAttributes {
-  idomKey?: string | null | number;
+  idomKey: string | null | number;
   children?: unknown;
   skip?: boolean;
 }
@@ -17,7 +17,7 @@ declare function element<P>(
 ): Element;
 
 declare function ElName(props: { name?: string }): Element;
-element(ElName, {}); // ok
+element(ElName, {}); // error
 element(ElName, { age: 42 }); // error
 element(ElName, { idomKey: null }); // ok
 element(ElName, { idomKey: null, name: "Trevor" }); // ok
@@ -28,10 +28,10 @@ element(ElName2, { age: 42 }); // error
 element(ElName2, { idomKey: null }); // error
 
 declare function ElEmpty(props: {}): Element;
-element(ElEmpty, { name: "Trevor" }); // ok
-element(ElEmpty, { age: 42 }); // ok
+element(ElEmpty, { name: "Trevor" }); // error
+element(ElEmpty, { age: 42 }); // error
 element(ElEmpty, { idomKey: null }); // ok
 element(ElEmpty, { idomKey: null, name: "Trevor" }); // ok
 declare const withOptionalName: { name?: string };
-element(ElEmpty, withOptionalName); // ok
+element(ElEmpty, withOptionalName); // error
 element(ElEmpty, { ...withOptionalName, idomKey: null }); // ok

@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/coAndContraVariantInferences12.ts] ////
+//// [tests/cases/compiler/coAndContraVariantInferences13.ts] ////
 
-=== coAndContraVariantInferences12.ts ===
+=== coAndContraVariantInferences13.ts ===
 // https://github.com/microsoft/TypeScript/issues/59765
 
 type FunctionComponent<P = any> = (props: P) => Element | null;
@@ -10,9 +10,9 @@ type FunctionComponent<P = any> = (props: P) => Element | null;
 >      : ^
 
 interface ElementAttributes {
-  idomKey?: string | null | number;
->idomKey : string | number | null | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  idomKey: string | null | number;
+>idomKey : string | number | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
   children?: unknown;
 >children : unknown
@@ -45,7 +45,7 @@ declare function ElName(props: { name?: string }): Element;
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 
-element(ElName, {}); // ok
+element(ElName, {}); // error
 >element(ElName, {}) : Element
 >                    : ^^^^^^^
 >element : <P>(tag: FunctionComponent<P & ElementAttributes>, attributes: P & ElementAttributes) => Element
@@ -147,7 +147,7 @@ declare function ElEmpty(props: {}): Element;
 >props : {}
 >      : ^^
 
-element(ElEmpty, { name: "Trevor" }); // ok
+element(ElEmpty, { name: "Trevor" }); // error
 >element(ElEmpty, { name: "Trevor" }) : Element
 >                                     : ^^^^^^^
 >element : <P>(tag: FunctionComponent<P & ElementAttributes>, attributes: P & ElementAttributes) => Element
@@ -161,7 +161,7 @@ element(ElEmpty, { name: "Trevor" }); // ok
 >"Trevor" : "Trevor"
 >         : ^^^^^^^^
 
-element(ElEmpty, { age: 42 }); // ok
+element(ElEmpty, { age: 42 }); // error
 >element(ElEmpty, { age: 42 }) : Element
 >                              : ^^^^^^^
 >element : <P>(tag: FunctionComponent<P & ElementAttributes>, attributes: P & ElementAttributes) => Element
@@ -209,7 +209,7 @@ declare const withOptionalName: { name?: string };
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 
-element(ElEmpty, withOptionalName); // ok
+element(ElEmpty, withOptionalName); // error
 >element(ElEmpty, withOptionalName) : Element
 >                                   : ^^^^^^^
 >element : <P>(tag: FunctionComponent<P & ElementAttributes>, attributes: P & ElementAttributes) => Element
