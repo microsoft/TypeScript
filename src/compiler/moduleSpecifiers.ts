@@ -435,6 +435,7 @@ export function getLocalModuleSpecifierBetweenFileNames(
     targetFileName: string,
     compilerOptions: CompilerOptions,
     host: ModuleSpecifierResolutionHost,
+    preferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): string {
     const info = getInfo(importingFile.fileName, host);
@@ -445,7 +446,7 @@ export function getLocalModuleSpecifierBetweenFileNames(
         compilerOptions,
         host,
         importMode,
-        getModuleSpecifierPreferences({}, host, compilerOptions, importingFile),
+        getModuleSpecifierPreferences(preferences, host, compilerOptions, importingFile),
     );
 }
 
