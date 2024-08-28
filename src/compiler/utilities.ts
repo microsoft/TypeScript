@@ -10082,7 +10082,6 @@ export const emptyFileSystemEntries: FileSystemEntries = {
 export function matchPatternOrExact(parsedPatterns: ParsedPatterns, candidate: string): string | Pattern | undefined {
     const { matchableStringSet, patterns } = parsedPatterns;
 
-
     if (matchableStringSet?.has(candidate)) {
         return candidate;
     }
