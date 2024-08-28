@@ -21,6 +21,8 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.js ProjectRoo
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/node_modules/fooo/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -38,6 +40,10 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+/a/b/node_modules/fooo/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
@@ -189,6 +195,10 @@ After request
 PolledWatches::
 /a/b/bower_components: *new*
   {"pollingInterval":500}
+/a/b/node_modules/fooo/package.json:
+  {"pollingInterval":2000}
+/a/b/node_modules/package.json:
+  {"pollingInterval":2000}
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 
@@ -205,6 +215,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] Resolution from : /a/b/app.js for "fooo" goes to: {
   "resolvedFileName": "/a/b/node_modules/fooo/index.d.ts",
@@ -316,6 +327,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
@@ -323,6 +335,7 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/node_modules/foo/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -432,6 +445,22 @@ Info seq  [hh:mm:ss:mss] event:
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
 
+PolledWatches::
+/a/b/bower_components:
+  {"pollingInterval":500}
+/a/b/node_modules/fooo/package.json:
+  {"pollingInterval":2000}
+/a/b/node_modules/package.json:
+  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/tmp/node_modules/foo/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatchesRecursive::
+/a/b/node_modules:
+  {}
+
 Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles* *deleted*
 3: /dev/null/inferredProject1* *new*
@@ -442,6 +471,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2 *changed*
     dirty: true
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/b/app.js (Open)

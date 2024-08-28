@@ -59,11 +59,11 @@ p = v.reverse();
 >v.reverse() : Math2d.Point
 >            : ^^^^^^^^^^^^
 >v.reverse : () => Math2d.Point
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^            
 >v : Math2d.Vector
 >  : ^^^^^^^^^^^^^
 >reverse : () => Math2d.Point
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^            
 
 var t = p.x;
 >t : number

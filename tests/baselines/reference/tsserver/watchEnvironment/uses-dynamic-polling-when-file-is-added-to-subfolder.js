@@ -186,6 +186,7 @@ Projects::
 /a/username/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -227,7 +228,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -240,8 +242,11 @@ Before running Timeout callback:: count: 1
 
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /a/username/project/src/file1.ts:: 1
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
@@ -249,17 +254,33 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 After running Timeout callback:: count: 5
 
 Timeout callback:: count: 5
-2: /a/username/project/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
-5: pollLowPollingIntervalQueue *new*
-6: pollPollingIntervalQueue *new*
+4: /a/username/project/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+7: pollLowPollingIntervalQueue *new*
+8: pollPollingIntervalQueue *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Before request
 
@@ -316,7 +337,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true,
       "performanceData": {
@@ -336,26 +358,28 @@ FsWatches::
   {"inode":7}
 
 Timeout callback:: count: 4
-3: *ensureProjectForOpenFiles* *deleted*
-4: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-2: /a/username/project/tsconfig.json
-5: pollLowPollingIntervalQueue
-6: pollPollingIntervalQueue
-7: *ensureProjectForOpenFiles* *new*
+5: *ensureProjectForOpenFiles* *deleted*
+6: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+4: /a/username/project/tsconfig.json
+7: pollLowPollingIntervalQueue
+8: pollPollingIntervalQueue
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/username/project/src/file1.ts
+/a/username/project/src/file1.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file2.ts *new*

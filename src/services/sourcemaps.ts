@@ -27,7 +27,7 @@ import {
     tryParseRawSourceMap,
 } from "./_namespaces/ts.js";
 
-const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+/=]+)$)?/;
+const base64UrlRegExp = /^data:(?:application\/json;charset=[uU][tT][fF]-8;base64,([A-Za-z0-9+/=]+)$)?/;
 
 /** @internal */
 export interface SourceMapper {
@@ -117,7 +117,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
 
         const declarationPath = outPath ?
             removeFileExtension(outPath) + Extension.Dts :
-            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), program);
         if (declarationPath === undefined) return undefined;
 
         const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);

@@ -80,11 +80,11 @@ function TodoList({ todos }: TodoListProps) {
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
 >                                                          : ^^^^^^^^^^^^^
 >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->          : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
 >                                               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >todo : TodoProp

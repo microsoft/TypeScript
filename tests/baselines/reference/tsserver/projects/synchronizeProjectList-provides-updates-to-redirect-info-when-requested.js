@@ -205,6 +205,7 @@ Projects::
 /users/username/projects/project/A/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -405,9 +406,11 @@ Projects::
 /users/username/projects/project/A/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /users/username/projects/project/B/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -622,10 +625,12 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: undefined *changed*
 /users/username/projects/project/B/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -717,31 +722,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/project/A/tsconfig.json",
         "configFile": "/users/username/projects/project/A/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/users/username/projects/project/B/b2.ts' is not under 'rootDir' '/users/username/projects/project/A'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern '../B/b2.ts' in '/users/username/projects/project/A/tsconfig.json'",
-            "code": 6059,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 8,
-                    "offset": 7
-                  },
-                  "end": {
-                    "line": 8,
-                    "offset": 19
-                  },
-                  "file": "/users/username/projects/project/A/tsconfig.json"
-                },
-                "message": "File is matched by include pattern specified here.",
-                "category": "message",
-                "code": 1408
-              }
-            ]
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/B/tsconfig.json
@@ -825,6 +806,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts

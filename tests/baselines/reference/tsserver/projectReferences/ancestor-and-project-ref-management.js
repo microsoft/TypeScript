@@ -411,6 +411,7 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -522,9 +523,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -992,9 +995,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/container/lib/tsconfig.json *new*
         /user/username/projects/container/compositeexec/tsconfig.json *new*
@@ -1131,9 +1136,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: false
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1279,9 +1286,11 @@ Projects::
     projectProgramVersion: 1
     dirty: false *changed*
     isOrphan: false *changed*
+    autoImportProviderHost: undefined *changed*
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1416,6 +1425,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1559,6 +1569,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
+    autoImportProviderHost: false
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -1779,6 +1790,7 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
+    autoImportProviderHost: undefined *changed*
     originalConfiguredProjects: 2
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json

@@ -4,7 +4,6 @@ import {
     append,
     arrayIsEqualTo,
     CancellationToken,
-    CompilerOptions,
     consumesNodeCoreModules,
     createMultiMap,
     Debug,
@@ -18,9 +17,7 @@ import {
     GetCanonicalFileName,
     getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
-    getEmitScriptTarget,
     getLocalSymbolForExportDefault,
-    getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
     getRegexFromPattern,
@@ -41,11 +38,14 @@ import {
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
     moduleSymbolToValidIdentifier,
+    nodeCoreModules,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
     Program,
+    ScriptTarget,
+    shouldUseUriStyleNodeCoreModules,
     skipAlias,
     SourceFile,
     startsWith,
@@ -198,7 +198,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             //    get a better name.
             const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                 ? unescapeLeadingUnderscores(symbolTableKey)
-                : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                : getNamesForExportedSymbol(namedSymbol, checker, /*scriptTarget*/ undefined);
 
             const symbolName = typeof names === "string" ? names : names[0];
             const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
@@ -364,44 +364,62 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 }
 
 /** @internal */
-export function isImportableFile(
+export function isImportable(
     program: Program,
-    from: SourceFile,
-    to: SourceFile,
+    fromFile: SourceFile,
+    toFile: SourceFile | undefined,
+    toModule: Symbol,
     preferences: UserPreferences,
     packageJsonFilter: PackageJsonImportFilter | undefined,
     moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
     moduleSpecifierCache: ModuleSpecifierCache | undefined,
 ): boolean {
-    if (from === to) return false;
-    const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
+    if (!toFile) {
+        // Ambient module
+        let useNodePrefix;
+        const moduleName = stripQuotes(toModule.name);
+        if (nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+            return useNodePrefix === startsWith(moduleName, "node:");
+        }
+        return !packageJsonFilter
+            || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)
+            || fileContainsPackageImport(fromFile, moduleName);
+    }
+
+    Debug.assertIsDefined(toFile);
+    if (fromFile === toFile) return false;
+    const cachedResult = moduleSpecifierCache?.get(fromFile.path, toFile.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies;
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(fromFile, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
     const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-        from.fileName,
-        to.fileName,
+        fromFile.fileName,
+        toFile.fileName,
         moduleSpecifierResolutionHost,
         /*preferSymlinks*/ false,
         toPath => {
-            const toFile = program.getSourceFile(toPath);
+            const file = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === to || !toFile) &&
-                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (file === toFile || !file) &&
+                isImportablePath(fromFile.fileName, toPath, getCanonicalFileName, globalTypingsCache);
         },
     );
 
     if (packageJsonFilter) {
-        const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
-        return isAutoImportable;
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(toFile, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(fromFile.path, toFile.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || hasImportablePath && !!importInfo?.packageName && fileContainsPackageImport(fromFile, importInfo.packageName);
     }
 
     return hasImportablePath;
+}
+
+function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+    return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
 /**
@@ -572,14 +590,24 @@ function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
     return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
+function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined) {
+    let names: string | string[] | undefined;
+    forEachNameOfDefaultExport(defaultExport, checker, scriptTarget, (name, capitalizedName) => {
+        names = capitalizedName ? [name, capitalizedName] : name;
+        return true;
+    });
+    return Debug.checkDefined(names);
+}
+
 /**
  * @internal
  * May call `cb` multiple times with the same name.
  * Terminates when `cb` returns a truthy value.
  */
-export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions, preferCapitalizedNames: boolean, cb: (name: string) => T | undefined): T | undefined {
+export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
+    const seen = new Map<Symbol, true>();
 
     while (current) {
         // The predecessor to this function also looked for a name on the `localSymbol`
@@ -597,12 +625,16 @@ export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: Ty
         }
 
         chain = append(chain, current);
+        if (!addToSeen(seen, current)) break;
         current = current.flags & SymbolFlags.Alias ? checker.getImmediateAliasedSymbol(current) : undefined;
     }
 
     for (const symbol of chain ?? emptyArray) {
         if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
-            const final = cb(moduleSymbolToValidIdentifier(symbol.parent, getEmitScriptTarget(compilerOptions), preferCapitalizedNames));
+            const final = cb(
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ false),
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ true),
+            );
             if (final) return final;
         }
     }

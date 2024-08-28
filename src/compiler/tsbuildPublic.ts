@@ -66,7 +66,7 @@ import {
     getNonIncrementalBuildInfoRoots,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
-    getPendingEmitKind,
+    getPendingEmitKindWithSeen,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
     getWatchErrorSummaryDiagnosticMessage,
@@ -135,6 +135,7 @@ export interface BuildOptions {
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
+    stopBuildOnErrors?: boolean;
 
     /** @internal */ clean?: boolean;
     /** @internal */ watch?: boolean;
@@ -198,10 +199,8 @@ function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap
 
 /**
  * Helper to use now method instead of current date for testing purposes to get consistent baselines
- *
- * @internal
  */
-export function getCurrentTime(host: { now?(): Date; }) {
+function getCurrentTime(host: { now?(): Date; }) {
     return host.now ? host.now() : new Date();
 }
 
@@ -1256,6 +1255,23 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             }
         }
 
+        if (status.type === UpToDateStatusType.UpstreamBlocked) {
+            verboseReportProjectStatus(state, project, status);
+            reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
+            projectPendingBuild.delete(projectPath);
+            if (options.verbose) {
+                reportStatus(
+                    state,
+                    status.upstreamProjectBlocked ?
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                    project,
+                    status.upstreamProjectName,
+                );
+            }
+            continue;
+        }
+
         if (status.type === UpToDateStatusType.ContainerOnly) {
             verboseReportProjectStatus(state, project, status);
             reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
@@ -1457,6 +1473,20 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 continue;
             }
 
+            // An upstream project is blocked
+            if (
+                state.options.stopBuildOnErrors && (
+                    refStatus.type === UpToDateStatusType.Unbuildable ||
+                    refStatus.type === UpToDateStatusType.UpstreamBlocked
+                )
+            ) {
+                return {
+                    type: UpToDateStatusType.UpstreamBlocked,
+                    upstreamProjectName: ref.path,
+                    upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked,
+                };
+            }
+
             if (!force) (referenceStatuses ||= []).push({ ref, refStatus, resolvedRefPath, resolvedConfig });
         }
     }
@@ -1513,8 +1543,14 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are errors, we need to build project again to report it
         if (
             !project.options.noCheck &&
-            (incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
-                (!project.options.noEmit && getEmitDeclarations(project.options) && incrementalBuildInfo.emitDiagnosticsPerFile?.length))
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
+                (
+                    getEmitDeclarations(project.options) &&
+                    incrementalBuildInfo.emitDiagnosticsPerFile?.length
+                )
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithErrors,
@@ -1525,8 +1561,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are pending changes that are not emitted, project is out of date
         if (
             !project.options.noEmit &&
-            ((incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined)
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                (incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
+                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithPendingEmit,
@@ -1535,7 +1574,18 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         }
 
         // Has not emitted some of the files, project is out of date
-        if (!project.options.noEmit && getPendingEmitKind(project.options, incrementalBuildInfo.options || {})) {
+        if (
+            (
+                !project.options.noEmit ||
+                (project.options.noEmit && getEmitDeclarations(project.options))
+            ) &&
+            getPendingEmitKindWithSeen(
+                project.options,
+                incrementalBuildInfo.options || {},
+                /*emitOnlyDtsFiles*/ undefined,
+                !!project.options.noEmit,
+            )
+        ) {
             return {
                 type: UpToDateStatusType.OutOfDateOptions,
                 buildInfoFile: buildInfoPath,
@@ -1830,6 +1880,8 @@ function queueReferencingProjects<T extends BuilderProgram>(
     buildOrder: readonly ResolvedConfigFileName[],
     buildResult: BuildResultFlags,
 ) {
+    // Queue only if there are no errors
+    if (state.options.stopBuildOnErrors && (buildResult & BuildResultFlags.AnyErrors)) return;
     // Only composite projects can be referenced by other projects
     if (!config.options.composite) return;
     // Always use build order to queue projects
@@ -1863,6 +1915,12 @@ function queueReferencingProjects<T extends BuilderProgram>(
                                 outOfDateOutputFileName: status.oldestOutputFileName,
                                 newerProjectName: project,
                             });
+                        }
+                        break;
+
+                    case UpToDateStatusType.UpstreamBlocked:
+                        if (toResolvedConfigFilePath(state, resolveProjectName(state, status.upstreamProjectName)) === projectPath) {
+                            clearProjectStatus(state, nextProjectPath);
                         }
                         break;
                 }
@@ -2365,6 +2423,15 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
             return reportStatus(
                 state,
                 Diagnostics.Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date,
+                relName(state, configFileName),
+                relName(state, status.upstreamProjectName),
+            );
+        case UpToDateStatusType.UpstreamBlocked:
+            return reportStatus(
+                state,
+                status.upstreamProjectBlocked ?
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                 relName(state, configFileName),
                 relName(state, status.upstreamProjectName),
             );

@@ -258,6 +258,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.mts (Open) *new*
@@ -378,6 +379,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /node_modules/left-pad/index.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::

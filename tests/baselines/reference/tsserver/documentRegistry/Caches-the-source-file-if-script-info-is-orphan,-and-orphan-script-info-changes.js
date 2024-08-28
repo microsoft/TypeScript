@@ -184,6 +184,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -200,7 +201,7 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1
     /a/lib/lib.d.ts: TS 1
@@ -235,6 +236,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -265,7 +267,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /a/lib/lib.d.ts: TS 1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/module1.d.ts 1:: WatchInfo: /user/username/projects/myproject/module1.d.ts 500 undefined WatchType: Closed Script info
@@ -281,6 +283,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -359,7 +362,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /a/lib/lib.d.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1

@@ -189,6 +189,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 typeAcquisition : setting to undefined
 typeAcquisition should be inferred for inferred projects: {

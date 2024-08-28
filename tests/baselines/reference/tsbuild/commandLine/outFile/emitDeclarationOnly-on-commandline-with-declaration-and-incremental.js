@@ -260,23 +260,23 @@ declare module "g" {
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../project1/outfile.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -676,23 +676,23 @@ declare module "d" {
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../project1/outfile.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -918,23 +918,23 @@ define("g", ["require", "exports", "b"], function (require, exports, b_1) {
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../project1/outfile.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1503,23 +1503,23 @@ declare module "d" {
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../project1/outfile.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1756,23 +1756,23 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../project1/outfile.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",

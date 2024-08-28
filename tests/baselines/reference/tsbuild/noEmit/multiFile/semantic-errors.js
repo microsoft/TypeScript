@@ -1,5 +1,13 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
+//// [/home/src/projects/project/a.ts]
+const a: number = "hello"
+
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {}
+}
+
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,28 +23,18 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/a.ts]
-const a: number = "hello"
-
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "noEmit": true
-  }
-}
-
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
 [7m [0m [91m      ~[0m
@@ -46,31 +44,31 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
-  "/src/a.ts"
+  "/home/src/projects/project/a.ts"
 ]
 Program options: {
   "noEmit": true,
   "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/home/src/projects/project/a.ts (used version)
 
 
-//// [/src/tsconfig.tsbuildinfo]
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
 {"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./a.ts"
@@ -87,15 +85,15 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m const a: number = "hello"
 [7m [0m [91m      ~[0m
@@ -105,74 +103,74 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
-  "/src/a.ts"
+  "/home/src/projects/project/a.ts"
 ]
 Program options: {
   "noEmit": true,
   "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/home/src/projects/project/a.ts (used version)
 
 
-//// [/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
 Input::
-//// [/src/a.ts]
-const a = "hello"
+//// [/home/src/projects/project/a.ts]
+const a = "hello";
 
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
-  "/src/a.ts"
+  "/home/src/projects/project/a.ts"
 ]
 Program options: {
   "noEmit": true,
   "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/home/src/projects/project/a.ts (used version)
 
 
-//// [/src/tsconfig.tsbuildinfo]
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
 {"root":["./a.ts"],"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./a.ts"
@@ -188,36 +186,253 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
-  "/src/a.ts"
+  "/home/src/projects/project/a.ts"
 ]
 Program options: {
   "noEmit": true,
   "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
-/src/a.ts
+/home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/home/src/projects/project/a.ts (used version)
 
 
-//// [/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+
+Change:: Emit after fixing error
+Input::
+
+
+Output::
+/lib/tsc --b --v /home/src/projects/project
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/a.js' does not exist
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+
+//// [/home/src/projects/project/a.js]
+var a = "hello";
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b --v /home/src/projects/project --noEmit
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/project/a.js'
+
+exitCode:: ExitStatus.Success
+
+
+
+
+Change:: Introduce error
+Input::
+//// [/home/src/projects/project/a.ts]
+const a: number = "hello"
+
+
+
+Output::
+/lib/tsc --b --v /home/src/projects/project --noEmit
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 59
+}
+
+
+
+Change:: Emit when error
+Input::
+
+
+Output::
+/lib/tsc --b --v /home/src/projects/project
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+
+//// [/home/src/projects/project/a.js] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b --v /home/src/projects/project --noEmit
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * home/src/projects/project/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/home/src/projects/project/a.ts (used version)
+
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

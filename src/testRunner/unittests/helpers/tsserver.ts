@@ -10,6 +10,7 @@ import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
 import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { ensureErrorFreeBuild } from "./solutionBuilder.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
@@ -629,4 +630,18 @@ export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLin
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;
+}
+
+export function forEachTscWatchEdit(
+    session: TestSession,
+    edits: readonly TscWatchCompileChange[],
+    action: () => void,
+) {
+    edits.forEach(edit => {
+        session.logger.log(edit.caption);
+        edit.edit(session.host);
+        if (session.watchChanges.size) session.invokeWatchChanges();
+        edit.timeouts(session.host, undefined!, undefined!);
+        action();
+    });
 }

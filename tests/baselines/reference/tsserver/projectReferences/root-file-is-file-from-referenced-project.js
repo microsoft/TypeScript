@@ -471,6 +471,7 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -696,10 +697,12 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -851,9 +854,11 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json *new*
         /user/username/projects/project/src/tsconfig.json *new*

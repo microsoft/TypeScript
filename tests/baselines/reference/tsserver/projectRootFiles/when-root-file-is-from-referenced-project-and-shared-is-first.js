@@ -319,6 +319,7 @@ Projects::
 /home/src/workspaces/projects/server/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /home/src/workspaces/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -369,6 +370,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /home/src/workspaces/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -453,6 +455,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 /home/src/workspaces/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -505,6 +508,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 /home/src/workspaces/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -600,6 +604,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 /home/src/workspaces/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0

@@ -379,6 +379,7 @@ Projects::
 /user/username/projects/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /user/username/projects/app/src/index.ts (Open) *new*
@@ -820,6 +821,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -844,6 +850,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1284,6 +1291,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1298,6 +1310,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/mylib/src/otherlib.ts :: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/tsconfig.json, Cancelled earlier one
@@ -1319,6 +1332,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1759,6 +1773,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1773,6 +1792,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before request
 
@@ -1798,6 +1818,12 @@ Info seq  [hh:mm:ss:mss] response:
       "success": true
     }
 After request
+
+Projects::
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3
+    autoImportProviderHost: undefined *changed*
 
 Before request
 
@@ -2259,8 +2285,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyClass",
@@ -2274,8 +2300,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/helper",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
@@ -2289,8 +2315,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/other",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
@@ -2299,6 +2325,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

@@ -21,12 +21,12 @@ function* b(): IterableIterator<number> {
 >  : ^^^^^^                        
 
     yield;
->yield : undefined
->      : ^^^^^^^^^
+>yield : any
+>      : ^^^
 
     yield 0;
->yield 0 : undefined
->        : ^^^^^^^^^
+>yield 0 : any
+>        : ^^^
 >0 : 0
 >  : ^
 }

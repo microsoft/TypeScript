@@ -191,6 +191,7 @@ Projects::
 /a/username/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -232,37 +233,57 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
 After request
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /a/username/project/src/file1.ts:: 1
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-1: /a/username/project/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: /a/username/project/tsconfig.jsonFailedLookupInvalidation
+3: /a/username/project/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 //// [/a/username/project/src/file2.ts] Inode:: 10
 
 
 
 Timeout callback:: count: 3
-1: /a/username/project/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
-3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+3: /a/username/project/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+5: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Running: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -309,23 +330,25 @@ FsWatches::
   {"inode":7}
 
 Timeout callback:: count: 1
-2: *ensureProjectForOpenFiles* *deleted*
-3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
-4: *ensureProjectForOpenFiles* *new*
+4: *ensureProjectForOpenFiles* *deleted*
+5: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/username/project/src/file1.ts
+/a/username/project/src/file1.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file2.ts *new*
@@ -369,7 +392,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }

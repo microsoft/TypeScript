@@ -172,6 +172,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -395,9 +396,11 @@ Projects::
     dirty: true *changed*
     isClosed: true *changed*
     isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
 /tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *changed*
@@ -516,6 +519,7 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /tests/cases/fourslash/server/baseclass/source.d.ts: DocumentPositionMapper1 *new*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts

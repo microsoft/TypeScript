@@ -61,12 +61,6 @@ Before request
 //// [/node_modules/package9/index.d.ts]
 
 
-//// [/node_modules/package10/package.json]
-{ "name": "package10" }
-
-//// [/node_modules/package10/index.d.ts]
-
-
 //// [/index.ts]
 
 
@@ -84,8 +78,7 @@ Before request
   "package6": "*",
   "package7": "*",
   "package8": "*",
-  "package9": "*",
-  "package10": "*"
+  "package9": "*"
 }
 
 
@@ -306,6 +299,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /index.ts (Open) *new*

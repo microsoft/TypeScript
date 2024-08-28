@@ -72,8 +72,8 @@ export class SourceMap {
     public readonly mappings: readonly Mapping[] = [];
     public readonly names: readonly string[] | undefined;
 
-    private static readonly _mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;
-    private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/mig;
+    private static readonly _mappingRegExp = /([A-Z0-9+/]+),?|(;)|./gi;
+    private static readonly _sourceMappingURLRegExp = /^\/\/[#@]\s*sourceMappingURL\s*=\s*(.*?)\s*$/gim;
     private static readonly _dataURLRegExp = /^data:application\/json;base64,([a-z0-9+/=]+)$/i;
     private static readonly _base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

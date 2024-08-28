@@ -126,6 +126,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -246,24 +247,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/target.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 4,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 4,
-                  "offset": 1
-                },
-                "newText": "console.log(k);"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }
@@ -273,6 +257,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
 /lib.d.ts

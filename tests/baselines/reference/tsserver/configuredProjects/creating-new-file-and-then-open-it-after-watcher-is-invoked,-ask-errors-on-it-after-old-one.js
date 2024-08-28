@@ -189,6 +189,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -222,6 +223,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -234,6 +236,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/myproject/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/myproject/src/sub/fooBar.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -277,11 +282,18 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *deleted*
+2: *ensureProjectForOpenFiles* *deleted*
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -319,16 +331,16 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-3: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne
 
-Invoking Timeout callback:: timeoutId:: 3:: checkOne
+Invoking Timeout callback:: timeoutId:: 5:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -336,8 +348,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/foo.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 2
@@ -355,8 +366,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/foo.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -374,23 +384,22 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/foo.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
 
 Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne *new*
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne *new*
 
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: checkOne
+3: /user/username/projects/myproject/tsconfig.json
+4: *ensureProjectForOpenFiles*
+6: checkOne
 
-Invoking Timeout callback:: timeoutId:: 4:: checkOne
+Invoking Timeout callback:: timeoutId:: 6:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -398,8 +407,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/sub/fooBar.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 2
@@ -417,8 +425,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/sub/fooBar.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -436,8 +443,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/sub/fooBar.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -446,7 +452,23 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/foo.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/sub/fooBar.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
