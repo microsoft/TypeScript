@@ -155,7 +155,7 @@ verify.currentLineContentIs("        else");
 goTo.marker("61");
 verify.currentLineContentIs("            x += 2");
 goTo.marker("62");
-verify.currentLineContentIs("            ;");
+verify.currentLineContentIs("                ;");
 goTo.marker("63");
 verify.currentLineContentIs("do do do do");
 goTo.marker("64");

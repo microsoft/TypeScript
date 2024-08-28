@@ -29,7 +29,7 @@ verify.indentationIs(4);
 verify.currentLineContentIs("    += 22");
 goTo.marker("nextlineSemicolon");
 verify.indentationIs(4);
-verify.currentLineContentIs(";");
+verify.currentLineContentIs("    ;");
 goTo.marker("chained");
 verify.indentationIs(4);
 verify.currentLineContentIs("    = t + 4;");

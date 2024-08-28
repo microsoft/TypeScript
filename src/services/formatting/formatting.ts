@@ -67,6 +67,7 @@ import {
     rangeContainsStartEnd,
     rangeOverlapsWithStartEnd,
     repeatString,
+    SemicolonPreference,
     SourceFile,
     SourceFileLike,
     startEndContainsRange,
@@ -980,7 +981,7 @@ function formatSpanWorker(
 
             const lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
             let indentToken = false;
-            let isNewlineSemicolon = false;
+            let unindentToken = false;
 
             if (currentTokenInfo.leadingTrivia) {
                 processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, dynamicIndentation);
@@ -1002,7 +1003,7 @@ function formatSpanWorker(
                         const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
                         indentToken = lastTriviaWasNewLine && tokenStart.line !== prevEndLine;
 
-                        isNewlineSemicolon = currentTokenInfo.token.kind === SyntaxKind.SemicolonToken;
+                        unindentToken = currentTokenInfo.token.kind === SyntaxKind.SemicolonToken && formattingContext.options.semicolons === SemicolonPreference.Remove;
                     }
                     else {
                         indentToken = lineAction === LineAction.LineAdded;
@@ -1017,7 +1018,7 @@ function formatSpanWorker(
 
             if (indentToken) {
                 const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
-                    dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken || isNewlineSemicolon) :
+                    dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken || unindentToken) :
                     Constants.Unknown;
 
                 let indentNextTokenOrTrivia = true;

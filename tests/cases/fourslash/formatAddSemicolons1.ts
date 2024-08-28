@@ -42,7 +42,7 @@ class C {
     three: string;
     m() { }
     ;["three"] = {}
-    ;["four"];
+        ;["four"];
 }
 enum E {
     C
