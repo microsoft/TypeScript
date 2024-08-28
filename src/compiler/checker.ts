@@ -7091,7 +7091,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
                         if (context.flags & NodeBuilderFlags.NoTruncation) {
                             const typeElement = typeElements.pop()!;
-                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more ...`));
+                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
                         }
                         else {
                             typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
