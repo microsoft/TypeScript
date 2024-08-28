@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/coAndContraVariantInferences14.ts] ////
+
+=== coAndContraVariantInferences14.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(coAndContraVariantInferences14.ts, 0, 0))
+
+  type: "foo";
+>type : Symbol(Foo.type, Decl(coAndContraVariantInferences14.ts, 0, 15))
+
+  optionalProp?: boolean;
+>optionalProp : Symbol(Foo.optionalProp, Decl(coAndContraVariantInferences14.ts, 1, 14))
+}
+
+type Consumer<T> = (arg: T) => void;
+>Consumer : Symbol(Consumer, Decl(coAndContraVariantInferences14.ts, 3, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 5, 14))
+>arg : Symbol(arg, Decl(coAndContraVariantInferences14.ts, 5, 20))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 5, 14))
+
+declare function someFunc<T extends Foo>(consumer: Consumer<T>, defaultT: T): T;
+>someFunc : Symbol(someFunc, Decl(coAndContraVariantInferences14.ts, 5, 36))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 7, 26))
+>Foo : Symbol(Foo, Decl(coAndContraVariantInferences14.ts, 0, 0))
+>consumer : Symbol(consumer, Decl(coAndContraVariantInferences14.ts, 7, 41))
+>Consumer : Symbol(Consumer, Decl(coAndContraVariantInferences14.ts, 3, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 7, 26))
+>defaultT : Symbol(defaultT, Decl(coAndContraVariantInferences14.ts, 7, 63))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 7, 26))
+>T : Symbol(T, Decl(coAndContraVariantInferences14.ts, 7, 26))
+
+declare const fooConsumer: Consumer<Foo>;
+>fooConsumer : Symbol(fooConsumer, Decl(coAndContraVariantInferences14.ts, 9, 13))
+>Consumer : Symbol(Consumer, Decl(coAndContraVariantInferences14.ts, 3, 1))
+>Foo : Symbol(Foo, Decl(coAndContraVariantInferences14.ts, 0, 0))
+
+const result = someFunc(fooConsumer, { type: "foo", extra: "bar" });
+>result : Symbol(result, Decl(coAndContraVariantInferences14.ts, 11, 5))
+>someFunc : Symbol(someFunc, Decl(coAndContraVariantInferences14.ts, 5, 36))
+>fooConsumer : Symbol(fooConsumer, Decl(coAndContraVariantInferences14.ts, 9, 13))
+>type : Symbol(type, Decl(coAndContraVariantInferences14.ts, 11, 38))
+>extra : Symbol(extra, Decl(coAndContraVariantInferences14.ts, 11, 51))
+
+result.extra;
+>result.extra : Symbol(extra, Decl(coAndContraVariantInferences14.ts, 11, 51))
+>result : Symbol(result, Decl(coAndContraVariantInferences14.ts, 11, 5))
+>extra : Symbol(extra, Decl(coAndContraVariantInferences14.ts, 11, 51))
+

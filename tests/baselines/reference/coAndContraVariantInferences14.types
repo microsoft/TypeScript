@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/coAndContraVariantInferences14.ts] ////
+
+=== coAndContraVariantInferences14.ts ===
+interface Foo {
+  type: "foo";
+>type : "foo"
+>     : ^^^^^
+
+  optionalProp?: boolean;
+>optionalProp : boolean | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+}
+
+type Consumer<T> = (arg: T) => void;
+>Consumer : Consumer<T>
+>         : ^^^^^^^^^^^
+>arg : T
+>    : ^
+
+declare function someFunc<T extends Foo>(consumer: Consumer<T>, defaultT: T): T;
+>someFunc : <T extends Foo>(consumer: Consumer<T>, defaultT: T) => T
+>         : ^ ^^^^^^^^^   ^^        ^^           ^^        ^^ ^^^^^ 
+>consumer : Consumer<T>
+>         : ^^^^^^^^^^^
+>defaultT : T
+>         : ^
+
+declare const fooConsumer: Consumer<Foo>;
+>fooConsumer : Consumer<Foo>
+>            : ^^^^^^^^^^^^^
+
+const result = someFunc(fooConsumer, { type: "foo", extra: "bar" });
+>result : { type: "foo"; extra: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someFunc(fooConsumer, { type: "foo", extra: "bar" }) : { type: "foo"; extra: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someFunc : <T extends Foo>(consumer: Consumer<T>, defaultT: T) => T
+>         : ^ ^^^^^^^^^   ^^        ^^           ^^        ^^ ^^^^^ 
+>fooConsumer : Consumer<Foo>
+>            : ^^^^^^^^^^^^^
+>{ type: "foo", extra: "bar" } : { type: "foo"; extra: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "foo"
+>     : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>extra : string
+>      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+result.extra;
+>result.extra : string
+>             : ^^^^^^
+>result : { type: "foo"; extra: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extra : string
+>      : ^^^^^^
+
