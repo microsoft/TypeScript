@@ -1071,6 +1071,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.clearGeneratedFileWatch();
         this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
+
+        this.error("Project service was disabled for exceeding memory limit. See disableSizeLimit config option.");
     }
 
     getProjectName() {
