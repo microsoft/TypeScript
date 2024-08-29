@@ -32149,6 +32149,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 if (node === (parent as CallExpression | NewExpression).expression) {
+                    if (getImmediatelyInvokedFunctionExpression(skipParentheses(node))) {
+                        // iifes themselves can't be contextually-typed (unlike their parameters)
+                        return undefined;
+                    }
                     return getContextualType(parent as CallExpression | NewExpression, contextFlags);
                 }
                 return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
