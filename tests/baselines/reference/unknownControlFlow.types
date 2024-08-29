@@ -380,8 +380,8 @@ function f22<T extends {} | undefined>(x: T) {
     if (x !== undefined) {
 >x !== undefined : boolean
 >                : ^^^^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -397,8 +397,8 @@ function f22<T extends {} | undefined>(x: T) {
     if (x !== null) {
 >x !== null : boolean
 >           : ^^^^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
         x;  // T
 >x : T
@@ -414,14 +414,14 @@ function f22<T extends {} | undefined>(x: T) {
 >                              : ^^^^^^^
 >x !== undefined : boolean
 >                : ^^^^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 >x !== null : boolean
 >           : ^^^^^^^
->x : {}
->  : ^^
+>x : T & {}
+>  : ^^^^^^
 
         x;  // T & {}
 >x : T & {}
@@ -435,8 +435,8 @@ function f22<T extends {} | undefined>(x: T) {
     if (x != undefined) {
 >x != undefined : boolean
 >               : ^^^^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -452,8 +452,8 @@ function f22<T extends {} | undefined>(x: T) {
     if (x != null) {
 >x != null : boolean
 >          : ^^^^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
         x;  // T & {}
 >x : NonNullable<T>
@@ -1255,8 +1255,8 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
     if (value === 42) {
 >value === 42 : boolean
 >             : ^^^^^^^
->value : {}
->      : ^^
+>value : T & {}
+>      : ^^^^^^
 >42 : 42
 >   : ^^
 
@@ -1280,8 +1280,8 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
     if (value === 42) {
 >value === 42 : boolean
 >             : ^^^^^^^
->value : {} | null
->      : ^^^^^^^^^
+>value : T
+>      : ^
 >42 : 42
 >   : ^^
 
@@ -1305,8 +1305,8 @@ function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
     if (value === 42) {
 >value === 42 : boolean
 >             : ^^^^^^^
->value : {} | null
->      : ^^^^^^^^^
+>value : T & ({} | null)
+>      : ^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 

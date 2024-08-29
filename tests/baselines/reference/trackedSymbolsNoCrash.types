@@ -1054,7 +1054,7 @@ export const isNodeOfType =
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : ast.SyntaxKind | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->nodeType : ast.SyntaxKind
->         : ^^^^^^^^^^^^^^
+>nodeType : NodeType
+>         : ^^^^^^^^
 
 

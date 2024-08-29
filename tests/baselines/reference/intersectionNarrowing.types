@@ -110,8 +110,8 @@ function f5<T extends string | number>(x: T & number) {
 >   : ^^^^^^^
 >x === "hello" : boolean
 >              : ^^^^^^^
->x : number
->  : ^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 }

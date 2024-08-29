@@ -78,7 +78,6 @@ import {
     ContainerFlags,
     contains,
     containsPath,
-    ContextFlags,
     createGetCanonicalFileName,
     createMultiMap,
     createScanner,
@@ -119,7 +118,6 @@ import {
     EntityNameOrEntityNameExpression,
     EnumDeclaration,
     EqualityComparer,
-    EqualityOperator,
     equalOwnProperties,
     EqualsToken,
     equateValues,
@@ -11878,27 +11876,3 @@ export const nodeCoreModules = new Set([
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,
 ]);
-
-/** @internal */
-export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
-    switch (kind) {
-        case SyntaxKind.EqualsEqualsEqualsToken:
-        case SyntaxKind.EqualsEqualsToken:
-        case SyntaxKind.ExclamationEqualsEqualsToken:
-        case SyntaxKind.ExclamationEqualsToken:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @internal */
-export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const parent = walkUpParenthesizedExpressions(node.parent);
-    switch (parent.kind) {
-        case SyntaxKind.CaseClause:
-            return checker.getTypeAtLocation((parent as CaseClause).parent.parent.expression);
-        default:
-            return checker.getContextualType(node, contextFlags);
-    }
-}

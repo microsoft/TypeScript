@@ -4,9 +4,10 @@ unknownControlFlow.ts(290,11): error TS2345: Argument of type 'string' is not as
 unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(293,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(323,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
+unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
 
 
-==== unknownControlFlow.ts (6 errors) ====
+==== unknownControlFlow.ts (7 errors) ====
     type T01 = {} & string;  // {} & string
     type T02 = {} & 'a';  // 'a'
     type T03 = {} & object;  // object
@@ -360,6 +361,8 @@ unknownControlFlow.ts(323,9): error TS2367: This comparison appears to be uninte
     
     function fx4<T extends {} | null>(value: T & ({} | null)) {
         if (value === 42) {
+            ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
             value;  // T & {}
         }
         else {

@@ -6,7 +6,6 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
-    addToSeen,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -265,7 +264,6 @@ import {
     getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
-    getContextualTypeFromParent,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
     getDeclarationsOfKind,
@@ -1755,7 +1753,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getTypeOfPropertyOfContextualType,
         getFullyQualifiedName,
         getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
-        getContextualStringLiteralCompletionTypes,
         getCandidateSignaturesForStringLiteralCompletions,
         getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) => runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
@@ -1930,23 +1927,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
     };
-
-    function getContextualStringLiteralCompletionTypes(expression: Expression) {
-        const seen = new Map<string, true>();
-
-        return [
-            ...getStringLiteralTypes(getContextualTypeFromParent(expression, checker, ContextFlags.None), seen),
-            ...getStringLiteralTypes(getContextualTypeFromParent(expression, checker, ContextFlags.Completions), seen),
-        ];
-    }
-
-    function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
-        if (!type) return emptyArray;
-        // skip constraint
-        type = type.flags & TypeFlags.TypeParameter ? getBaseConstraintOfType(type) || type : type;
-        return type.flags & TypeFlags.Union ? flatMap((type as UnionType).types, t => getStringLiteralTypes(t, uniques)) :
-            type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value) ? [type as StringLiteralType] : emptyArray;
-    }
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();
@@ -31565,11 +31545,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.CommaToken:
                 return node === right ? getContextualType(binaryExpression, contextFlags) : undefined;
-            case SyntaxKind.EqualsEqualsEqualsToken:
-            case SyntaxKind.EqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsToken:
-                return getTypeOfExpression(node === right ? left : right);
             default:
                 return undefined;
         }
@@ -32153,13 +32128,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if (node === (parent as CallExpression | NewExpression).expression) {
-                    if (getImmediatelyInvokedFunctionExpression(skipParentheses(node))) {
-                        // iifes themselves can't be contextually-typed (unlike their parameters)
-                        return undefined;
-                    }
-                    return getContextualType(parent as CallExpression | NewExpression, contextFlags);
-                }
                 return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
             case SyntaxKind.Decorator:
                 return getContextualTypeForDecorator(parent as Decorator);

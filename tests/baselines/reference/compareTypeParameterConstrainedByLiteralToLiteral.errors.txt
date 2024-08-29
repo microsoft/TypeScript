@@ -1,4 +1,4 @@
-compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This comparison appears to be unintentional because the types '"a" | "b"' and '"x"' have no overlap.
+compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
 
 
 ==== compareTypeParameterConstrainedByLiteralToLiteral.ts (1 errors) ====
@@ -8,6 +8,6 @@ compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This co
         t === "a";  // Should be allowed
         t === "x";  // Should be error
         ~~~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types '"a" | "b"' and '"x"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
     }
     

@@ -27,6 +27,7 @@ import {
     CompletionEntry,
     CompletionEntryDetails,
     CompletionInfo,
+    concatenate,
     contains,
     containsPath,
     ContextFlags,
@@ -83,6 +84,7 @@ import {
     isApplicableVersionedTypesKey,
     isArray,
     isCallExpression,
+    isCallLikeExpression,
     isIdentifier,
     isIdentifierText,
     isImportCall,
@@ -411,7 +413,15 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return toStringLiteralCompletionsFromTypes(typeChecker.getContextualStringLiteralCompletionTypes(node));
+            if (findAncestor(parent.parent, isCallLikeExpression)) {
+                const uniques = new Map<string, true>();
+                const stringLiteralTypes = concatenate(
+                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.None), uniques),
+                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.Completions), uniques),
+                );
+                return toStringLiteralCompletionsFromTypes(stringLiteralTypes);
+            }
+            return fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -477,7 +487,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
 
         default:
-            return toStringLiteralCompletionsFromTypes(typeChecker.getContextualStringLiteralCompletionTypes(node));
+            return fromContextualType() || fromContextualType(ContextFlags.None);
     }
 
     function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
