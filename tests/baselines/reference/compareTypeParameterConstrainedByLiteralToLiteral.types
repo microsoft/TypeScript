@@ -12,16 +12,16 @@ function foo<T extends "a" | "b">(t: T) {
     t === "a";  // Should be allowed
 >t === "a" : boolean
 >          : ^^^^^^^
->t : T
->  : ^
+>t : "a" | "b"
+>  : ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
     t === "x";  // Should be error
 >t === "x" : boolean
 >          : ^^^^^^^
->t : T
->  : ^
+>t : "a" | "b"
+>  : ^^^^^^^^^
 >"x" : "x"
 >    : ^^^
 }

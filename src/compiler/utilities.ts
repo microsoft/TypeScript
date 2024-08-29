@@ -11896,12 +11896,6 @@ export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperat
 export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
     const parent = walkUpParenthesizedExpressions(node.parent);
     switch (parent.kind) {
-        case SyntaxKind.BinaryExpression: {
-            const { left, operatorToken, right } = parent as BinaryExpression;
-            return isEqualityOperatorKind(operatorToken.kind)
-                ? checker.getTypeAtLocation(node === right ? left : right)
-                : checker.getContextualType(node, contextFlags);
-        }
         case SyntaxKind.CaseClause:
             return checker.getTypeAtLocation((parent as CaseClause).parent.parent.expression);
         default:

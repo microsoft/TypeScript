@@ -66,8 +66,8 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (arg == null) {
 >arg == null : boolean
 >            : ^^^^^^^
->arg : ClassNameArg<S>
->    : ^^^^^^^^^^^^^^^
+>arg : string | number | symbol | ClassNameObjectMap<S>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       return null;
     }

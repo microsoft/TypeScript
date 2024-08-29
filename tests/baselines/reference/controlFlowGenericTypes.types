@@ -266,8 +266,8 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
     if (value === 'A') {
 >value === 'A' : boolean
 >              : ^^^^^^^
->value : AB
->      : ^^
+>value : "A" | "B"
+>      : ^^^^^^^^^
 >'A' : "A"
 >    : ^^^
 
@@ -517,8 +517,8 @@ function get<K extends keyof A>(key: K, obj: A): number {
     if (value !== null) {
 >value !== null : boolean
 >               : ^^^^^^^
->value : A[K]
->      : ^^^^
+>value : number | null
+>      : ^^^^^^^^^^^^^
 
         return value;
 >value : number
@@ -729,8 +729,8 @@ class TableBaseEnum<
         if (iSpec === undefined) {
 >iSpec === undefined : boolean
 >                    : ^^^^^^^
->iSpec : InternalSpec
->      : ^^^^^^^^^^^^
+>iSpec : Record<keyof PublicSpec, any> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -852,8 +852,8 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
     if (control !== undefined) {
 >control !== undefined : boolean
 >                      : ^^^^^^^
->control : T | undefined
->        : ^^^^^^^^^^^^^
+>control : Control | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

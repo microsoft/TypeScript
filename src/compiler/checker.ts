@@ -31565,6 +31565,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.CommaToken:
                 return node === right ? getContextualType(binaryExpression, contextFlags) : undefined;
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+                return getTypeOfExpression(node === right ? left : right);
             default:
                 return undefined;
         }
