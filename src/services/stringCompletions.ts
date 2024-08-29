@@ -276,7 +276,7 @@ function convertStringLiteralCompletions(
             const textOfNode = getTextOfNode(contextToken);
             const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? CharacterCodes.backtick
-                : startsWith(textOfNode, "'")
+                : textOfNode.charCodeAt(0) === CharacterCodes.singleQuote
                 ? CharacterCodes.singleQuote
                 : CharacterCodes.doubleQuote;
             let tokenTextContent = textOfNode;
@@ -284,7 +284,9 @@ function convertStringLiteralCompletions(
             if (tokenTextContent.charCodeAt(tokenTextContent.length - 1) === quoteChar) tokenTextContent = tokenTextContent.slice(0, tokenTextContent.length - 1);
             const uniques = new Map<string, true>();
             const entries = mapDefined(completion.types, type => {
-                const name = type.isStringLiteral() ? escapeString(type.value, quoteChar) : getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type, tokenTextContent, quoteChar);
+                const name = type.isStringLiteral()
+                    ? escapeString(type.value, quoteChar)
+                    : getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type, tokenTextContent, quoteChar);
                 return addToSeen(uniques, name) ? {
                     name,
                     kindModifiers: ScriptElementKindModifier.none,
