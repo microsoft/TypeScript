@@ -622,14 +622,12 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     Debug.assert(type.typeArguments);
     const fullTypeArguments = type.typeArguments;
     const target = type.target;
-    next_cutoff: for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
+    for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
         const typeArguments = fullTypeArguments.slice(0, cutoff);
         const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
-        for (let i = 0; i < filledIn.length; i++) {
-            // If they don't match, then we haven't yet reached the right cutoff
-            if (filledIn[i] !== fullTypeArguments[i]) continue next_cutoff;
+        if (filledIn.every((fill, i) => fill === fullTypeArguments[i])) {
+            return cutoff;
         }
-        return cutoff;
     }
     // If we make it all the way here, all the type arguments are required.
     return fullTypeArguments.length;
