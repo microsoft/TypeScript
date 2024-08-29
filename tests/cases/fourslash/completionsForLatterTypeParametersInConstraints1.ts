@@ -5,11 +5,11 @@
 //// type A1<K extends /*2*/, L> = K
 
 verify.completions({
-    marker: ["1"],
-    includes: ["First", "Second"],
-})
+  marker: ["1"],
+  includes: ["Second"],
+});
 
 verify.completions({
-    marker: ["2"],
-    includes: ["K", "L"],
-})
+  marker: ["2"],
+  includes: ["L"],
+});

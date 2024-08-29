@@ -2760,14 +2760,17 @@ export function getCompletionEntriesFromSymbols(
                         return false;
                     }
                 }
-                else if (
-                    isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)
-                    && isInTypeParameterDefault(contextToken)
-                    && !isInferTypeNode(closestSymbolDeclaration.parent)
-                ) {
-                    const typeParameters = closestSymbolDeclaration.parent.typeParameters;
-                    if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
+                else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
+                    if (closestSymbolDeclaration === symbolDeclaration && location === symbolDeclaration.constraint) {
+                        // filter out the directly self-recursive type parameters
+                        // `type A<K extends /* no 'K' here*/> = K`
                         return false;
+                    }
+                    if (isInTypeParameterDefault(contextToken) && !isInferTypeNode(closestSymbolDeclaration.parent)) {
+                        const typeParameters = closestSymbolDeclaration.parent.typeParameters;
+                        if (typeParameters && symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < typeParameters.end) {
+                            return false;
+                        }
                     }
                 }
             }
