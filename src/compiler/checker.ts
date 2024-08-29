@@ -32148,7 +32148,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return getContextualTypeForArgument(parent as CallExpression | NewExpression | Decorator, node);
+                if (node === (parent as CallExpression | NewExpression).expression) {
+                    return getContextualType(parent as CallExpression | NewExpression, contextFlags);
+                }
+                return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
             case SyntaxKind.Decorator:
                 return getContextualTypeForDecorator(parent as Decorator);
             case SyntaxKind.TypeAssertionExpression:
