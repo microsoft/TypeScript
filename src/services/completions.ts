@@ -2761,7 +2761,7 @@ export function getCompletionEntriesFromSymbols(
                     }
                 }
                 else if (isTypeParameterDeclaration(closestSymbolDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) {
-                    if (closestSymbolDeclaration === symbolDeclaration && location === symbolDeclaration.constraint) {
+                    if (closestSymbolDeclaration === symbolDeclaration && contextToken?.kind === SyntaxKind.ExtendsKeyword) {
                         // filter out the directly self-recursive type parameters
                         // `type A<K extends /* no 'K' here*/> = K`
                         return false;

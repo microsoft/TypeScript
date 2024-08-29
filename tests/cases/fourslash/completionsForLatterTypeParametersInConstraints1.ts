@@ -7,9 +7,11 @@
 verify.completions({
   marker: ["1"],
   includes: ["Second"],
+  excludes: ["First"],
 });
 
 verify.completions({
   marker: ["2"],
   includes: ["L"],
+  excludes: ["K"],
 });
