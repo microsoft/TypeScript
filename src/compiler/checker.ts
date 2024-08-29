@@ -22056,8 +22056,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
-
-            if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+            
+            // Don't generalize on 'never' - we really want the original type
+            // to be displayed for use-cases like 'assertNever'.
+            if (!(target.flags & TypeFlags.Never) && isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                 generalizedSource = getBaseTypeOfLiteralType(source);
                 Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
                 generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);

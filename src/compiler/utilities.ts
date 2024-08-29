@@ -9972,8 +9972,51 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
 }
 
 /** @internal */
-export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
-    return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
+export interface ParsedPatterns {
+    matchableStringSet: ReadonlySet<string> | undefined;
+    patterns: (readonly Pattern[]) | undefined;
+}
+
+const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
+
+/**
+ * Divides patterns into a set of exact specifiers and patterns.
+ * NOTE that this function caches the result based on object identity.
+ *
+ * @internal
+ */
+export function tryParsePatterns(paths: MapLike<string[]>): ParsedPatterns {
+    let result = parsedPatternsCache.get(paths);
+    if (result !== undefined) {
+        return result;
+    }
+
+    let matchableStringSet: Set<string> | undefined;
+    let patterns: Pattern[] | undefined;
+
+    const pathList = getOwnKeys(paths);
+    for (const path of pathList) {
+        const patternOrStr = tryParsePattern(path);
+        if (patternOrStr === undefined) {
+            continue;
+        }
+        else if (typeof patternOrStr === "string") {
+            (matchableStringSet ??= new Set()).add(patternOrStr);
+        }
+        else {
+            (patterns ??= []).push(patternOrStr);
+        }
+    }
+
+    parsedPatternsCache.set(
+        paths,
+        result = {
+            matchableStringSet,
+            patterns,
+        },
+    );
+
+    return result;
 }
 
 /** @internal */
@@ -10030,22 +10073,21 @@ export const emptyFileSystemEntries: FileSystemEntries = {
 };
 
 /**
- * patternOrStrings contains both patterns (containing "*") and regular strings.
+ * `parsedPatterns` contains both patterns (containing "*") and regular strings.
  * Return an exact match if possible, or a pattern match, or undefined.
  * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
  *
  * @internal
  */
-export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
-    const patterns: Pattern[] = [];
-    for (const patternOrString of patternOrStrings) {
-        if (patternOrString === candidate) {
-            return candidate;
-        }
+export function matchPatternOrExact(parsedPatterns: ParsedPatterns, candidate: string): string | Pattern | undefined {
+    const { matchableStringSet, patterns } = parsedPatterns;
 
-        if (!isString(patternOrString)) {
-            patterns.push(patternOrString);
-        }
+    if (matchableStringSet?.has(candidate)) {
+        return candidate;
+    }
+
+    if (patterns === undefined || patterns.length === 0) {
+        return undefined;
     }
 
     return findBestPatternMatch(patterns, _ => _, candidate);

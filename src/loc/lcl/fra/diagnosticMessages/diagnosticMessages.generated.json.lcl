@@ -1680,6 +1680,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_resolution_mode_import_attribute_95196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'resolution-mode' import attribute]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter l'attribut d'importation « mode de résolution »]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'resolution-mode' import attribute to all type-only imports that need it]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajoutez l'attribut d'importation « mode de résolution » à toutes les importations de type uniquement qui en ont besoin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_return_type_0_90063" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add return type '{0}']]></Val>
@@ -16134,6 +16152,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribute_1542" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L'importation de type d'un module ECMAScript à partir d'un module CommonJS doit avoir un attribut « resolution-mode ».]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_instantiation_is_excessively_deep_and_possibly_infinite_2589" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type instantiation is excessively deep and possibly infinite.]]></Val>
@@ -16220,6 +16247,15 @@
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le type d'un opérande 'yield' dans un générateur asynchrone doit être une promesse valide ou ne doit contenir aucun membre 'then' pouvant être appelé.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_only_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribut_1541" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L'importation de type uniquement d'un module ECMAScript à partir d'un module CommonJS doit avoir un attribut « mode de résolution ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
