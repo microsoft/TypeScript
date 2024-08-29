@@ -23,12 +23,8 @@ describe("unittests:: Public APIs", () => {
         });
     }
 
-    describe("for the language service and compiler", () => {
+    describe("for typescript.d.ts", () => {
         verifyApi("typescript.d.ts");
-    });
-
-    describe("for the language server", () => {
-        verifyApi("tsserverlibrary.d.ts");
     });
 });
 

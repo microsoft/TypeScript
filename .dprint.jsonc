@@ -29,15 +29,9 @@
         "exportDeclaration.sortNamedExports": "caseInsensitive",
         "importDeclaration.sortNamedImports": "caseInsensitive"
     },
-    "prettier": {
-        "newLineKind": "lf",
-        "associations": [
-            "**/*.{yaml,yml}"
-        ],
-        "yml.tabWidth": 2,
-        "yaml.tabWidth": 2,
-        "yml.singleQuote": true,
-        "yaml.singleQuote": true
+    "yaml": {
+        "indentWidth": 2,
+        "quotes": "preferSingle"
     },
     "json": {
         // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
@@ -61,6 +55,6 @@
     "plugins": [
         "https://plugins.dprint.dev/typescript-0.91.6.wasm",
         "https://plugins.dprint.dev/json-0.19.3.wasm",
-        "https://plugins.dprint.dev/prettier-0.46.1.json@e5bd083088a8dfc6e5ce2d3c9bee81489b065bd5345ef55b59f5d96627928b7a"
+        "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm"
     ]
 }

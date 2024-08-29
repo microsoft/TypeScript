@@ -19,6 +19,7 @@ import {
     hasJSFileExtension,
     mapDefined,
     MapLike,
+    nodeCoreModules,
     normalizePath,
     Path,
     readConfigFile,
@@ -60,64 +61,6 @@ export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVers
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
-
-const unprefixedNodeCoreModuleList = [
-    "assert",
-    "assert/strict",
-    "async_hooks",
-    "buffer",
-    "child_process",
-    "cluster",
-    "console",
-    "constants",
-    "crypto",
-    "dgram",
-    "diagnostics_channel",
-    "dns",
-    "dns/promises",
-    "domain",
-    "events",
-    "fs",
-    "fs/promises",
-    "http",
-    "https",
-    "http2",
-    "inspector",
-    "module",
-    "net",
-    "os",
-    "path",
-    "perf_hooks",
-    "process",
-    "punycode",
-    "querystring",
-    "readline",
-    "repl",
-    "stream",
-    "stream/promises",
-    "string_decoder",
-    "timers",
-    "timers/promises",
-    "tls",
-    "trace_events",
-    "tty",
-    "url",
-    "util",
-    "util/types",
-    "v8",
-    "vm",
-    "wasi",
-    "worker_threads",
-    "zlib",
-];
-
-const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
-
-/** @internal */
-export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
-
-/** @internal */
-export const nodeCoreModules = new Set(nodeCoreModuleList);
 
 /** @internal */
 export function nonRelativeModuleNameForTypingCache(moduleName: string) {

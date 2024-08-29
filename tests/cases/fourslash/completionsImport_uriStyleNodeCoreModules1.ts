@@ -20,7 +20,17 @@ verify.completions({
     sortText: completion.SortText.AutoImportSuggestions
   }, {
     name: "writeFile",
+    source: "node:fs",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
     source: "fs/promises",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
+    source: "node:fs/promises",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
   }]),
