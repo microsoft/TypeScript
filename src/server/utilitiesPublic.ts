@@ -56,7 +56,7 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
 
 export namespace Errors {
     export function ThrowNoProject(): never {
-        throw new Error("No Project.");
+        throw new Error("No Project. This is likely a symptom of a previous error.");
     }
     export function ThrowProjectLanguageServiceDisabled(): never {
         throw new Error("The project's language service is disabled.");
