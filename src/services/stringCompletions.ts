@@ -158,6 +158,7 @@ import {
     UnionTypeNode,
     unmangleScopedPackageName,
     UserPreferences,
+    walkUpOuterExpressions,
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
 } from "./_namespaces/ts.js";
@@ -386,7 +387,7 @@ interface StringLiteralCompletionsFromTypes {
 type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
 function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, program: Program, host: LanguageServiceHost, preferences: UserPreferences): StringLiteralCompletion | undefined {
     const typeChecker = program.getTypeChecker();
-    const parent = walkUpParentheses(node.parent);
+    const parent = walkUpOuterExpressions(node);
     switch (parent.kind) {
         case SyntaxKind.LiteralType: {
             const grandParent = walkUpParentheses(parent.parent);

@@ -338,7 +338,6 @@ import {
     singleOrUndefined,
     skipAlias,
     skipOuterExpressions,
-    skipParentheses,
     some,
     SourceFile,
     SourceFileLike,
@@ -387,7 +386,7 @@ import {
     VariableDeclaration,
     visitEachChild,
     VoidExpression,
-    walkUpParenthesizedExpressions,
+    walkUpOuterExpressions,
     YieldExpression,
 } from "./_namespaces/ts.js";
 
@@ -3373,7 +3372,7 @@ export function needsParentheses(expression: Expression): boolean {
 
 /** @internal */
 export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const parent = walkUpParenthesizedExpressions(node.parent);
+    const parent = walkUpOuterExpressions(node);
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
             return checker.getContextualType(parent as NewExpression, contextFlags);
@@ -4191,7 +4190,7 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
 
     for (const clause of clauses) {
         if (!isDefaultClause(clause)) {
-            const expression = skipParentheses(clause.expression);
+            const expression = skipOuterExpressions(clause.expression);
             if (isLiteralExpression(expression)) {
                 switch (expression.kind) {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
