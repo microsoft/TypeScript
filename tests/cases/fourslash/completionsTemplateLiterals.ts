@@ -2,9 +2,10 @@
 
 // @Filename: file1.ts
 ////declare let x: `${"prefix1"|"prefix2"}${string}${"middle1"|"middle2"}${string}${"suffix1"|"suffix2"}`;
-//// //x = /*1*/
-////x = "/*2a*/
-////x = "/*2b*/"
+////x = "/*1a*/
+////x = "/*1b*/"
+////x = "wrong/*2a*/
+////x = "wrong/*2b*/"
 ////x = "pre/*3a*/
 ////x = "pre/*3b*/"
 ////x = "prefix1_/*4a*/
@@ -19,6 +20,12 @@
 ////y = "/*7b*/"
 ////y = '/*8a*/
 ////y = '/*8b*/'
-
+////y = '"\'\\\"\\/*9*/
+////
+////declare let z: `${string}suffix`;
+////z = "/*10a*/
+////z = "/*10b*/"
+////z = '/*11a*/
+////z = '/*11b*/'
 
 verify.baselineCompletions()

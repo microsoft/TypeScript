@@ -273,16 +273,16 @@ function convertStringLiteralCompletions(
             };
         }
         case StringLiteralCompletionKind.Types: {
-            const textOfNode = getTextOfNode(contextToken)
+            const textOfNode = getTextOfNode(contextToken);
             const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? CharacterCodes.backtick
                 : startsWith(textOfNode, "'")
                 ? CharacterCodes.singleQuote
                 : CharacterCodes.doubleQuote;
-            let tokenTextContent = textOfNode
-            if (tokenTextContent) tokenTextContent = tokenTextContent.slice(1)
-            if (tokenTextContent.charCodeAt(tokenTextContent.length - 1) === quoteChar) tokenTextContent = tokenTextContent.slice(0, tokenTextContent.length - 1)
-            const uniques = new Map<string, true>()
+            let tokenTextContent = textOfNode;
+            if (tokenTextContent) tokenTextContent = tokenTextContent.slice(1);
+            if (tokenTextContent.charCodeAt(tokenTextContent.length - 1) === quoteChar) tokenTextContent = tokenTextContent.slice(0, tokenTextContent.length - 1);
+            const uniques = new Map<string, true>();
             const entries = mapDefined(completion.types, type => {
                 const name = type.isStringLiteral() ? escapeString(type.value, quoteChar) : getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type, tokenTextContent, quoteChar);
                 return addToSeen(uniques, name) ? {
@@ -292,7 +292,7 @@ function convertStringLiteralCompletions(
                     sortText: SortText.LocationPriority,
                     replacementSpan: getReplacementSpanForContextToken(contextToken, position),
                     commitCharacters: [],
-                } : undefined
+                } : undefined;
             });
             return {
                 isGlobalCompletion: false,
@@ -309,19 +309,19 @@ function convertStringLiteralCompletions(
 }
 
 function getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type: TemplateLiteralType, tokenTextContent: string, quoteChar: CharacterCodes.backtick | CharacterCodes.singleQuote | CharacterCodes.doubleQuote) {
-    let firstUnusedCharacterIndex = 0
-    let textIndex = 0
-    for (;textIndex < type.texts.length - 1 && firstUnusedCharacterIndex < tokenTextContent.length; textIndex++) {
-        const escapedText = escapeString(type.texts[textIndex], quoteChar)
-        const match = tokenTextContent.indexOf(escapedText, firstUnusedCharacterIndex)
+    let firstUnusedCharacterIndex = 0;
+    let textIndex = 0;
+    for (; textIndex < type.texts.length - 1; textIndex++) {
+        const escapedText = escapeString(type.texts[textIndex], quoteChar);
+        const match = tokenTextContent.indexOf(escapedText, firstUnusedCharacterIndex);
         if (match < 0) {
             // The current text was not matched so we suggest appending it or replacing if we aren't passed the first ${string}.
-            return textIndex === 0 ? escapedText : tokenTextContent + escapedText
+            return textIndex === 0 ? escapedText : tokenTextContent + escapedText;
         }
-        firstUnusedCharacterIndex = match + escapedText.length
+        firstUnusedCharacterIndex = match + escapedText.length;
     }
     // We can always suggest appending the last text, since if it is already present, it can be part of the last ${string}.
-    return tokenTextContent + escapeString(type.texts[type.texts.length - 1], quoteChar)
+    return tokenTextContent + escapeString(type.texts[textIndex], quoteChar);
 }
 
 /** @internal */
@@ -405,7 +405,7 @@ interface StringLiteralCompletionsFromProperties {
     readonly symbols: readonly Symbol[];
     readonly hasIndexSignature: boolean;
 }
-type StringLiteralLikeType = StringLiteralType | TemplateLiteralType
+type StringLiteralLikeType = StringLiteralType | TemplateLiteralType;
 interface StringLiteralCompletionsFromTypes {
     readonly kind: StringLiteralCompletionKind.Types;
     readonly types: readonly (StringLiteralLikeType)[];
@@ -624,7 +624,7 @@ function getStringLiteralLikeTypes(type: Type | undefined, uniques = new Map<str
     type = skipConstraint(type);
     return type.isUnion() ? flatMap(type.types, t => getStringLiteralLikeTypes(t, uniques)) :
         type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
-        || (type.flags & TypeFlags.TemplateLiteral && every((type as TemplateLiteralType).types, t => !!(TypeFlags.String & t.flags))) ? [type as StringLiteralLikeType] : emptyArray;
+            || (type.flags & TypeFlags.TemplateLiteral && every((type as TemplateLiteralType).types, t => !!(TypeFlags.String & t.flags))) ? [type as StringLiteralLikeType] : emptyArray;
 }
 
 interface NameAndKind {

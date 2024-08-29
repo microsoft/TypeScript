@@ -1,0 +1,1049 @@
+// === Completions ===
+=== /tests/cases/fourslash/file1.ts ===
+// declare let x: `${"prefix1"|"prefix2"}${string}${"middle1"|"middle2"}${string}${"suffix1"|"suffix2"}`;
+// x = "
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = ""
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "wrong
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "wrong"
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "pre
+//      ^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "pre"
+//      ^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1
+// | (string) prefix1_middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_"
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1
+// | (string) prefix1_middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_middle1_
+//      ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1_suffix1
+// | (string) prefix1_middle1_suffix2
+// | (string) prefix1_middle1_middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_middle1_"
+//      ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1_suffix1
+// | (string) prefix1_middle1_suffix2
+// | (string) prefix1_middle1_middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_middle1_suffix1
+//      ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1_suffix1suffix1
+// | (string) prefix1_middle1_suffix1suffix2
+// | (string) prefix1_middle1_suffix1middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// x = "prefix1_middle1_suffix1"
+//      ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) prefix1_middle1_suffix1suffix1
+// | (string) prefix1_middle1_suffix1suffix2
+// | (string) prefix1_middle1_suffix1middle2
+// | (string) prefix2
+// | ----------------------------------------------------------------------
+// 
+// declare let y: `"'${string}'"`;
+// y = "
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) \"'
+// | ----------------------------------------------------------------------
+// y = ""
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) \"'
+// | ----------------------------------------------------------------------
+// y = '
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) "\'
+// | ----------------------------------------------------------------------
+// y = ''
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) "\'
+// | ----------------------------------------------------------------------
+// y = '"\'\\\"\\
+//      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (string) "\'\\\"\\\'"
+// | ----------------------------------------------------------------------
+// 
+// declare let z: `${string}suffix`;
+// z = "
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) suffix
+// | ----------------------------------------------------------------------
+// z = ""
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) suffix
+// | ----------------------------------------------------------------------
+// z = '
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) suffix
+// | ----------------------------------------------------------------------
+// z = ''
+//      ^
+// | ----------------------------------------------------------------------
+// | (string) suffix
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 108,
+      "name": "1a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 114,
+      "name": "1b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 114,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 114,
+            "length": 0
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 114,
+            "length": 0
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 126,
+      "name": "2a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 121,
+        "length": 5
+      },
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 121,
+            "length": 5
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 121,
+            "length": 5
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 137,
+      "name": "2b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 132,
+        "length": 5
+      },
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 132,
+            "length": 5
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 132,
+            "length": 5
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 147,
+      "name": "3a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 144,
+        "length": 3
+      },
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 144,
+            "length": 3
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 144,
+            "length": 3
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 156,
+      "name": "3b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 153,
+        "length": 3
+      },
+      "entries": [
+        {
+          "name": "prefix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 153,
+            "length": 3
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 153,
+            "length": 3
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 171,
+      "name": "4a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 163,
+        "length": 8
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 163,
+            "length": 8
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 163,
+            "length": 8
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 163,
+            "length": 8
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 185,
+      "name": "4b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 177,
+        "length": 8
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 177,
+            "length": 8
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 177,
+            "length": 8
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 177,
+            "length": 8
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 208,
+      "name": "5a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 192,
+        "length": 16
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1_suffix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 192,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 192,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 192,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 192,
+            "length": 16
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 230,
+      "name": "5b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 214,
+        "length": 16
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1_suffix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 214,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 214,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 214,
+            "length": 16
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 214,
+            "length": 16
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 260,
+      "name": "6a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 237,
+        "length": 23
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1_suffix1suffix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 237,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix1suffix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 237,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix1middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 237,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 237,
+            "length": 23
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 289,
+      "name": "6b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 266,
+        "length": 23
+      },
+      "entries": [
+        {
+          "name": "prefix1_middle1_suffix1suffix1",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 266,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix1suffix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 266,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix1_middle1_suffix1middle2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 266,
+            "length": 23
+          },
+          "commitCharacters": []
+        },
+        {
+          "name": "prefix2",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 266,
+            "length": 23
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 329,
+      "name": "7a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "\\\"'",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 335,
+      "name": "7b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 335,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "\\\"'",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 335,
+            "length": 0
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 342,
+      "name": "8a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "\"\\'",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 348,
+      "name": "8b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 348,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "\"\\'",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 348,
+            "length": 0
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 364,
+      "name": "9"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 355,
+        "length": 9
+      },
+      "entries": [
+        {
+          "name": "\"\\'\\\\\\\"\\\\\\'\"",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 355,
+            "length": 9
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 405,
+      "name": "10a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "suffix",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 411,
+      "name": "10b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 411,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "suffix",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 411,
+            "length": 0
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 418,
+      "name": "11a"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "suffix",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/file1.ts",
+      "position": 424,
+      "name": "11b"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 424,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "suffix",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 424,
+            "length": 0
+          },
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]
