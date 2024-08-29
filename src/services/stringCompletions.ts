@@ -105,7 +105,6 @@ import {
     length,
     LiteralExpression,
     LiteralTypeNode,
-    map,
     mapDefined,
     MapLike,
     moduleExportNameTextEscaped,
@@ -135,6 +134,7 @@ import {
     singleElementArray,
     skipConstraint,
     skipParentheses,
+    some,
     SourceFile,
     startsWith,
     StringLiteralLike,
@@ -441,7 +441,11 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+            const fromContextualTypeWithCompletionFlag = fromContextualType();
+            if (fromContextualTypeWithCompletionFlag && some(fromContextualTypeWithCompletionFlag.types, t => t.isStringLiteral())) {
+                return fromContextualTypeWithCompletionFlag;
+            }
+            return fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -506,8 +510,13 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
 
-        default:
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+        default: {
+            const fromContextualTypeWithCompletionFlag = fromContextualType();
+            if (fromContextualTypeWithCompletionFlag && some(fromContextualTypeWithCompletionFlag.types, t => t.isStringLiteral())) {
+                return fromContextualTypeWithCompletionFlag;
+            }
+            return fromContextualType(ContextFlags.None);
+        }
     }
 
     function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {

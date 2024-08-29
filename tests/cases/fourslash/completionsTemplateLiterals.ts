@@ -27,5 +27,8 @@
 ////z = "/*10b*/"
 ////z = '/*11a*/
 ////z = '/*11b*/'
+////
+////declare let w: `prefix${number}suffix`;
+////w = "prefix/*12*/
 
 verify.baselineCompletions()
