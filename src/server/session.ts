@@ -2089,7 +2089,12 @@ export class Session<TMessage = string> implements EventSender {
         projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
         if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
             this.projectService.logErrorForScriptInfoNotFound(args.file ?? args.projectFileName);
-            Errors.ThrowNoProject();
+            if (some(projects, p => !p.languageServiceEnabled)) {
+                Errors.ThrowProjectLanguageServiceDisabled();
+            }
+            else {
+                Errors.ThrowNoProject();
+            }
         }
         return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
     }
