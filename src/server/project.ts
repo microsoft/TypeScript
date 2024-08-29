@@ -1053,7 +1053,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    disableLanguageService(lastFileExceededProgramSize?: string) {
+    disableLanguageService(lastFileExceededProgramSize: string) {
         if (!this.languageServiceEnabled) {
             return;
         }
