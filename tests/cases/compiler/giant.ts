@@ -14,6 +14,7 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
 var V;
 function F() { };
 class C {

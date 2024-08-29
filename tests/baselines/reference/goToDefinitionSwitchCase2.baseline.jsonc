@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase2.ts ===
+// <|[|switch|] (null)|> {
+//   /*GOTO DEF*/default: break;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "keyword",
+    "name": "switch",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

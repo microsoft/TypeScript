@@ -26,7 +26,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w /a/b/c/app.ts
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"./module"' has no exported member 'f'.
 
@@ -38,7 +38,7 @@ Output::
 [7m3[0m                 console.log(f)
 [7m [0m [91m                ~~~~~~~[0m
 
-[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 

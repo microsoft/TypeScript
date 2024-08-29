@@ -3,6 +3,7 @@
 === tryStatements.ts ===
 function fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
     try { } catch { }
 

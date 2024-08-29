@@ -41,7 +41,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js --w --p src --extendedDiagnostics -traceResolution --explainFiles
 Output::
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined Config file
@@ -93,7 +93,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -110,7 +110,7 @@ const fileB_mjs_1 = require("./fileB.mjs");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -126,7 +126,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject/src/filea.ts: *new*
+/user/username/projects/myproject/src/fileA.ts: *new*
   {}
 /user/username/projects/myproject/src/tsconfig.json: *new*
   {}
@@ -187,6 +187,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -199,10 +200,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -239,7 +241,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/mypr
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -260,7 +262,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 
 FsWatches::
@@ -270,7 +272,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -329,6 +331,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -341,10 +344,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -386,7 +390,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -401,7 +405,7 @@ const fileB_mjs_1 = require("./fileB.mjs");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -417,7 +421,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -471,6 +475,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -483,10 +488,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -521,7 +527,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -529,7 +535,7 @@ src/fileA.ts
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -547,7 +553,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -605,6 +611,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -617,10 +624,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -658,7 +666,7 @@ FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -679,7 +687,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
@@ -691,7 +699,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -745,6 +753,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -757,10 +766,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -811,7 +821,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:01:11 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -826,7 +836,7 @@ const fileB_mjs_1 = require("./fileB.mjs");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -844,7 +854,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}

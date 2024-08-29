@@ -1,4 +1,4 @@
-/tsconfig.json(4,25): error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+/tsconfig.json(4,25): error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 
 
 ==== /tsconfig.json (1 errors) ====
@@ -7,7 +7,7 @@
         "module": "commonjs",
         "moduleResolution": "bundler",
                             ~~~~~~~~~
-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
         "noEmit": true
       }
     }

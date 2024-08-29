@@ -28,29 +28,23 @@ export {require, exports, Object};
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Object = exports.exports = exports.require = exports.__esModule = void 0;
+exports.Object = exports.exports = exports.__esModule = void 0;
+exports.require = require;
 // cjs format file
 function require() { }
-exports.require = require;
-var exports = {};
+const exports = {};
 exports.exports = exports;
-var Object = /** @class */ (function () {
-    function Object() {
-    }
-    return Object;
-}());
+class Object {
+}
 exports.Object = Object;
 exports.__esModule = false;
 //// [index.js]
 // esm format file
 function require() { }
-var exports = {};
-var Object = /** @class */ (function () {
-    function Object() {
-    }
-    return Object;
-}());
-export var __esModule = false;
+const exports = {};
+class Object {
+}
+export const __esModule = false;
 export { require, exports, Object };
 
 

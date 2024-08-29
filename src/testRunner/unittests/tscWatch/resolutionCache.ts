@@ -1,23 +1,19 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
@@ -306,10 +302,6 @@ declare module "fs" {
 `,
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                // This is currently issue with ambient modules in same file not leading to resolution watching
-                // In this case initially resolution is watched and will continued to be watched but
-                // incremental check will determine that the resolution should not be watched as thats what would have happened if we had started tsc --watch at this state.
-                skipStructureCheck: true,
             },
         ],
     });

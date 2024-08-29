@@ -9,5 +9,5 @@ declare namespace Intl {
      * @param locale A list of String values for which to get the canonical locale names
      * @returns An array containing the canonical and validated locale names.
      */
-    function getCanonicalLocales(locale?: string | string[]): string[];
+    function getCanonicalLocales(locale?: string | readonly string[]): string[];
 }

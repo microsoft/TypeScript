@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/app.js :: Config file name: /a/jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.js ProjectRootPath: undefined:: Result: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -81,7 +80,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/extremlylarge.d.ts 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -182,7 +181,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -195,6 +201,29 @@ FsWatches::
   {}
 /a/lib/lib.d.ts: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/jsconfig.json *default*
+/a/extremlylarge.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+/a/largefile.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
 
 Info seq  [hh:mm:ss:mss] languageServiceEnabled: false
 Info seq  [hh:mm:ss:mss] lastFileExceededProgramSize: /a/largefile.js

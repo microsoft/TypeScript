@@ -1,11 +1,7 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -14,12 +10,12 @@ import {
     TestSession,
     toExternalFiles,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {
@@ -553,6 +549,8 @@ export const x = 10;`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
+                host.writeFile("/user/username/projects/myproject/src/somefolder/module1.js", "export const x = 10;");
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", scenario, session);
             });
         }

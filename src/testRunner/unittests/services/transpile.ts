@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: services:: Transpile", () => {
     interface TranspileTestSettings {
@@ -20,7 +20,7 @@ describe("unittests:: services:: Transpile", () => {
                     transpileOptions.compilerOptions = {};
                 }
                 if (transpileOptions.compilerOptions.target === undefined) {
-                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
+                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES5;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -40,7 +40,7 @@ describe("unittests:: services:: Transpile", () => {
 
                 transpileOptions.reportDiagnostics = true;
 
-                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/gi, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
                 const toBeCompiled = [{
                     unitName,
                     content: input,
@@ -62,7 +62,7 @@ describe("unittests:: services:: Transpile", () => {
                     oldTranspileDiagnostics = undefined!;
                 });
 
-                /* eslint-disable no-null/no-null */
+                /* eslint-disable no-restricted-syntax */
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
                 });
@@ -72,7 +72,7 @@ describe("unittests:: services:: Transpile", () => {
                         Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                     });
                 }
-                /* eslint-enable no-null/no-null */
+                /* eslint-enable no-restricted-syntax */
 
                 it("Correct output for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);
@@ -291,6 +291,11 @@ var x = 0;`,
 
     transpilesCorrectly("Supports setting 'declaration'", "x;", {
         options: { compilerOptions: { declaration: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true,
+    });
+
+    transpilesCorrectly("Supports setting 'declarationMap'", "x;", {
+        options: { compilerOptions: { declarationMap: true }, fileName: "input.js", reportDiagnostics: true },
         testVerbatimModuleSyntax: true,
     });
 
@@ -671,6 +676,15 @@ export * as alias from './file';`,
         `,
         {
             options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+        },
+    );
+
+    transpilesCorrectly(
+        "Syntactically string but non-evaluatable enum members do not get reverse mapping",
+        // eslint-disable-next-line no-template-curly-in-string
+        "import { BAR } from './bar'; enum Foo { A = `${BAR}` }",
+        {
+            options: { compilerOptions: { target: ts.ScriptTarget.ESNext } },
         },
     );
 });

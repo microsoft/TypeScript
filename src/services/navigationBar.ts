@@ -84,6 +84,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isStringOrNumericLiteralLike,
+    isTemplateLiteral,
     isToken,
     isVariableDeclaration,
     lastOrUndefined,
@@ -110,7 +111,7 @@ import {
     TypeElement,
     unescapeLeadingUnderscores,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Matches all whitespace characters in a string. Eg:
@@ -1057,7 +1058,7 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
                 return `${name} callback`;
             }
 
-            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", "));
+            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "));
             return `${name}(${args}) callback`;
         }
     }
@@ -1099,5 +1100,5 @@ function cleanText(text: string): string {
     // \r - Carriage Return
     // \u2028 - Line separator
     // \u2029 - Paragraph separator
-    return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
+    return text.replace(/\\?(?:\r?\n|[\r\u2028\u2029])/g, "");
 }

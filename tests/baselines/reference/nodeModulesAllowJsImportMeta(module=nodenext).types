@@ -4,23 +4,35 @@
 // cjs format file
 const x = import.meta.url;
 >x : string
+>  : ^^^^^^
 >import.meta.url : string
+>                : ^^^^^^
 >import.meta : ImportMeta
+>            : ^^^^^^^^^^
 >meta : ImportMeta
+>     : ^^^^^^^^^^
 >url : string
+>    : ^^^^^^
 
 export {x};
 >x : string
+>  : ^^^^^^
 
 === index.js ===
 // esm format file
 const x = import.meta.url;
 >x : string
+>  : ^^^^^^
 >import.meta.url : string
+>                : ^^^^^^
 >import.meta : ImportMeta
+>            : ^^^^^^^^^^
 >meta : ImportMeta
+>     : ^^^^^^^^^^
 >url : string
+>    : ^^^^^^
 
 export {x};
 >x : string
+>  : ^^^^^^
 

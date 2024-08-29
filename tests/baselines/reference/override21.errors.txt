@@ -1,0 +1,13 @@
+override21.ts(5,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A'.
+
+
+==== override21.ts (1 errors) ====
+    const foo = Symbol();
+    class A { }
+    
+    class B extends A {
+        override [foo]() { }
+                 ~~~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A'.
+    }
+    

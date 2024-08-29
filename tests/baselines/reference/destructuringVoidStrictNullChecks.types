@@ -3,7 +3,9 @@
 === destructuringVoidStrictNullChecks.ts ===
 declare const v: void;
 >v : void
+>  : ^^^^
 
 const {} = v;
 >v : void
+>  : ^^^^
 

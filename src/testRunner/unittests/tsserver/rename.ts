@@ -1,24 +1,18 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: rename", () => {
     it("works with fileToRename", () => {
@@ -192,5 +186,24 @@ describe("unittests:: tsserver:: rename", () => {
             arguments: protocolFileLocationFromSubstring(file, "myFunc"),
         });
         baselineTsserverLogs("rename", "with symlinks and case difference", session);
+    });
+
+    it("rename TS file with js extension", () => {
+        const aTs: File = { path: "/a.ts", content: "export const a = 1;" };
+        const bTs: File = { path: "/b.ts", content: `import * as foo from './a.js';` };
+
+        const host = createServerHost([aTs, bTs]);
+        const session = new TestSession(host);
+        openFilesForSession([aTs, bTs], session);
+
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { allowRenameOfImportPath: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, "a.js"),
+        });
+        baselineTsserverLogs("rename", "rename TS file with js extension", session);
     });
 });

@@ -20,19 +20,19 @@ declare global {
     interface RequireInterface {}
 }
 //// [index.ts]
-/// <reference types="pkg" resolution-mode="import"/>
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export interface LocalInterface extends ImportInterface, RequireInterface {}
 
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="pkg" resolution-mode="import"/>
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 
 
 //// [index.d.ts]
-/// <reference types="pkg" resolution-mode="import"/>
-/// <reference types="pkg" />
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export interface LocalInterface extends ImportInterface, RequireInterface {
 }

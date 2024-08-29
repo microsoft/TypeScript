@@ -19,9 +19,11 @@ export module publicModule {
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
 >privateModule : any
+>              : ^^^
     }
 
     export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
@@ -47,9 +49,11 @@ module privateModule {
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
     }
 }
 
@@ -71,9 +75,11 @@ export interface publicInterfaceImplementingPrivateInterface extends privateInte
 
 interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 >privateModule : any
+>              : ^^^
 }
 export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
 >privateModule : any
+>              : ^^^
 }
 
 === privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===

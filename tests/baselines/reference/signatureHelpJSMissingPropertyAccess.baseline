@@ -226,7 +226,7 @@
                 },
                 {
                   "text": "value",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

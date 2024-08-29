@@ -10,6 +10,6 @@ spreadOfParamsFromGeneratorMakesRequiredParams.ts(6,1): error TS2554: Expected 2
     ): any;
     
     call(function* (a: 'a') { }); // error, 2nd argument required
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6236 spreadOfParamsFromGeneratorMakesRequiredParams.ts:3:5: Arguments for the rest parameter 'args' were not provided.

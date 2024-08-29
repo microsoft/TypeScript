@@ -1,4 +1,5 @@
 // @module: node16,nodenext
+// @target: es5
 // @declaration: true
 // @importHelpers: true
 // @filename: subfolder/index.ts

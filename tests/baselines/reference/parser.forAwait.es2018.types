@@ -3,121 +3,165 @@
 === topLevelWithDeclIsError.ts ===
 for await (const x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 === topLevelWithExprIsError.ts ===
 for await (x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 === forAwaitInWithDeclIsError.ts ===
 for await (const x in y) {
 >x : string
+>  : ^^^^^^
 >y : any
+>  : ^^^
 }
 === forAwaitInWithExprIsError.ts ===
 for await (x in y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 === inFunctionDeclWithDeclIsError.ts ===
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     let y: any;
 >y : any
+>  : ^^^
 
     for await (const x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inFunctionDeclWithExprIsError.ts ===
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     for await (x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inAsyncFunctionWithDeclIsOk.ts ===
 async function f7() {
 >f7 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
+>  : ^^^
 
     for await (const x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inAsyncFunctionWithExprIsOk.ts ===
 async function f8() {
 >f8 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     for await (x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inAsyncGeneratorWithDeclIsOk.ts ===
 async function* f9() {
 >f9 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
+>  : ^^^
 
     for await (const x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inAsyncGeneratorWithExpressionIsOk.ts ===
 async function* f10() {
 >f10 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     for await (x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inGeneratorWithDeclIsError.ts ===
 function* f11() {
 >f11 : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
+>  : ^^^
 
     for await (const x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 === inGeneratorWithExprIsError.ts ===
 function* f12() {
 >f12 : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     for await (x of y) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
     }
 }
 

@@ -3,4 +3,5 @@
 === ambientExternalModuleInsideNonAmbientExternalModule.ts ===
 export declare module "M" { }
 >"M" : any
+>    : ^^^
 

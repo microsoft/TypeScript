@@ -1,4 +1,4 @@
-// @out: a.js
+// @outFile: a.js
 // @module: amd
 // @filename: a.ts
 export class c {

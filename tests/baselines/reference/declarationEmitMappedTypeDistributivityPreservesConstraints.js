@@ -49,13 +49,13 @@ export default _default;
 //// [reexport.d.ts]
 declare const _default: {
     test: {
-        fn: <T_1 extends {
-            x: T_1["x"] extends infer T extends {
+        fn: <T extends {
+            x: T["x"] extends infer T_1 extends {
                 [x: string]: (...params: unknown[]) => unknown;
-            } ? { [K in keyof T]: T_1["x"][K]; } : never;
-        }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends {
+            } ? { [K in keyof T_1]: T["x"][K]; } : never;
+        }>(sliceIndex: T) => T["x"] extends infer T_2 extends {
             [x: string]: (...params: unknown[]) => unknown;
-        } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never;
+        } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never;
     };
 };
 export default _default;

@@ -29,7 +29,7 @@ verify.signatureHelp(
     },
     {
         marker: "3",
-        text: "complex(item: string, another: string, rest_0: (err: Error) => void, ...rest_1: object[]): void",
+        text: "complex(item: string, another: string, rest_0: (err: Error) => void, ...rest: object[]): void",
         overloadsCount: 3,
         isVariadic: true,
     },

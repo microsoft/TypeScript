@@ -592,38 +592,6 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
-        "https",
-        "somename"
-      ],
-      "typesRegistry": {},
-      "compilerOptions": {}
-    }
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "node",
-        "somename"
-      ],
-      "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
-      ]
-    }
-
-ts.JsTyping.discoverTypings::
-    {
-      "fileNames": [
-        "/a/b/app.js"
-      ],
-      "projectRootPath": "/a/b",
-      "safeList": {},
-      "packageNameToTypingLocation": {},
-      "typeAcquisition": {
-        "enable": true
-      },
-      "unresolvedImports": [
         "http2",
         "somename"
       ],
@@ -656,7 +624,71 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "https",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "inspector",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "inspector/promises",
         "somename"
       ],
       "typesRegistry": {},
@@ -785,6 +817,70 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [
         "path",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "path/posix",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "path/win32",
         "somename"
       ],
       "typesRegistry": {},
@@ -976,6 +1072,38 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "readline/promises",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "repl",
         "somename"
       ],
@@ -1040,6 +1168,38 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "stream/consumers",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "stream/promises",
         "somename"
       ],
@@ -1072,7 +1232,103 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "stream/web",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "string_decoder",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "sys",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "test/mock_loader",
         "somename"
       ],
       "typesRegistry": {},
@@ -2096,38 +2352,6 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
-        "node:https",
-        "somename"
-      ],
-      "typesRegistry": {},
-      "compilerOptions": {}
-    }
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "node",
-        "somename"
-      ],
-      "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
-      ]
-    }
-
-ts.JsTyping.discoverTypings::
-    {
-      "fileNames": [
-        "/a/b/app.js"
-      ],
-      "projectRootPath": "/a/b",
-      "safeList": {},
-      "packageNameToTypingLocation": {},
-      "typeAcquisition": {
-        "enable": true
-      },
-      "unresolvedImports": [
         "node:http2",
         "somename"
       ],
@@ -2160,7 +2384,71 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "node:https",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "node:inspector",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:inspector/promises",
         "somename"
       ],
       "typesRegistry": {},
@@ -2289,6 +2577,70 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [
         "node:path",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:path/posix",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:path/win32",
         "somename"
       ],
       "typesRegistry": {},
@@ -2480,6 +2832,38 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "node:readline/promises",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "node:repl",
         "somename"
       ],
@@ -2544,6 +2928,38 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "node:stream/consumers",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "node:stream/promises",
         "somename"
       ],
@@ -2576,7 +2992,103 @@ ts.JsTyping.discoverTypings::
         "enable": true
       },
       "unresolvedImports": [
+        "node:stream/web",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
         "node:string_decoder",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:sys",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:test/mock_loader",
         "somename"
       ],
       "typesRegistry": {},
@@ -2993,6 +3505,134 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [
         "node:zlib",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:sea",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:sqlite",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:test",
+        "somename"
+      ],
+      "typesRegistry": {},
+      "compilerOptions": {}
+    }
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node",
+        "somename"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
+
+ts.JsTyping.discoverTypings::
+    {
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "projectRootPath": "/a/b",
+      "safeList": {},
+      "packageNameToTypingLocation": {},
+      "typeAcquisition": {
+        "enable": true
+      },
+      "unresolvedImports": [
+        "node:test/reporters",
         "somename"
       ],
       "typesRegistry": {},

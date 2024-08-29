@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: convertToBase64", () => {
     function runTest(input: string): void {

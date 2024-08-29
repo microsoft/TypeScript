@@ -3,9 +3,13 @@
 === vs/foo_0.ts ===
 var x = "filename";
 >x : string
+>  : ^^^^^^
 >"filename" : "filename"
+>           : ^^^^^^^^^^
 
 import foo = require(x); // invalid
 >foo : any
+>    : ^^^
 >x : any
+>  : ^^^
 

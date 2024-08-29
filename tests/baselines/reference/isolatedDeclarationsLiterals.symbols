@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/isolatedDeclarationsLiterals.ts] ////
+
+=== file1.ts ===
+export const constObject = {
+>constObject : Symbol(constObject, Decl(file1.ts, 0, 12))
+
+    /** Value Of 1 */
+    one: 1,
+>one : Symbol(one, Decl(file1.ts, 0, 28))
+
+    /** Value Of 0o1 */
+    oneOctal: 0o1,
+>oneOctal : Symbol(oneOctal, Decl(file1.ts, 2, 11))
+
+    /** Value Of 0x1 */
+    oneHex: 0x1,
+>oneHex : Symbol(oneHex, Decl(file1.ts, 4, 18))
+
+    /** Value Of +1 */
+    pOne: +1,
+>pOne : Symbol(pOne, Decl(file1.ts, 6, 16))
+
+    /** Value Of -1 */
+    mOne: -1,
+>mOne : Symbol(mOne, Decl(file1.ts, 8, 13))
+
+    array: [1, -1, 1n, -1n],
+>array : Symbol(array, Decl(file1.ts, 10, 13))
+
+    /** Value Of 1n */
+    onen: 1n,
+>onen : Symbol(onen, Decl(file1.ts, 11, 28))
+
+    /** Value Of -1n */
+    mOnen: -1n,
+>mOnen : Symbol(mOnen, Decl(file1.ts, 13, 13))
+
+    /** Value Of "1" */
+    oneStrDoubleQuote: "1",
+>oneStrDoubleQuote : Symbol(oneStrDoubleQuote, Decl(file1.ts, 15, 15))
+
+    /** Value Of '1' */
+    oneStrSingleQuote: '1',
+>oneStrSingleQuote : Symbol(oneStrSingleQuote, Decl(file1.ts, 18, 27))
+
+    /** Value Of `1` */
+    oneStrTemplate: `1`,
+>oneStrTemplate : Symbol(oneStrTemplate, Decl(file1.ts, 20, 27))
+
+    /** A method */
+    method(): void {
+>method : Symbol(method, Decl(file1.ts, 22, 24))
+
+    },
+} as const;
+>const : Symbol(const)
+
+export const one = 1;
+>one : Symbol(one, Decl(file1.ts, 29, 12))
+
+export const oneOctal = 0o1;
+>oneOctal : Symbol(oneOctal, Decl(file1.ts, 30, 12))
+
+export const oneHex = 0x1;
+>oneHex : Symbol(oneHex, Decl(file1.ts, 31, 12))
+
+export const pOne = +1;
+>pOne : Symbol(pOne, Decl(file1.ts, 32, 12))
+
+export const mOne = -1;
+>mOne : Symbol(mOne, Decl(file1.ts, 33, 12))
+
+export const onen = 1n;
+>onen : Symbol(onen, Decl(file1.ts, 34, 12))
+
+export const mOnen = -1n;
+>mOnen : Symbol(mOnen, Decl(file1.ts, 35, 12))
+
+export const oneStrDoubleQuote = "1";
+>oneStrDoubleQuote : Symbol(oneStrDoubleQuote, Decl(file1.ts, 36, 12))
+
+export const oneStrSingleQuote = '1';
+>oneStrSingleQuote : Symbol(oneStrSingleQuote, Decl(file1.ts, 37, 12))
+
+export const oneStrTemplate = `1`;
+>oneStrTemplate : Symbol(oneStrTemplate, Decl(file1.ts, 38, 12))
+
+export const mutableObject = {
+>mutableObject : Symbol(mutableObject, Decl(file1.ts, 40, 12))
+
+    /** Value Of 1 */
+    one: 1,
+>one : Symbol(one, Decl(file1.ts, 40, 30))
+
+    /** Value Of 0o1 */
+    oneOctal: 0o1,
+>oneOctal : Symbol(oneOctal, Decl(file1.ts, 42, 11))
+
+    /** Value Of 0x1 */
+    oneHex: 0x1,
+>oneHex : Symbol(oneHex, Decl(file1.ts, 44, 18))
+
+    /** Value Of +1 */
+    pOne: +1,
+>pOne : Symbol(pOne, Decl(file1.ts, 46, 16))
+
+    /** Value Of -1 */
+    mOne: -1,
+>mOne : Symbol(mOne, Decl(file1.ts, 48, 13))
+
+    /** Value Of 1n */
+    onen: 1n,
+>onen : Symbol(onen, Decl(file1.ts, 50, 13))
+
+    /** Value Of -1n */
+    mOnen: -1n,
+>mOnen : Symbol(mOnen, Decl(file1.ts, 52, 13))
+
+    /** A method */
+    method(): void {
+>method : Symbol(method, Decl(file1.ts, 54, 15))
+
+    },
+};
+
+
+

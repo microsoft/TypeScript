@@ -1,24 +1,20 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
-} from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
+    getProjectConfigWithNodeNext,
+} from "./contents.js";
+import { loadProjectFromFiles } from "./vfs.js";
 import {
     createServerHost,
     createWatchedSystem,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForSampleProjectReferencesLogicConfig() {
+export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({
         compilerOptions: {
+            ...getProjectConfigWithNodeNext(withNodeNext),
             composite: true,
             declaration: true,
             sourceMap: true,
@@ -30,11 +26,12 @@ export function getFsContentsForSampleProjectReferencesLogicConfig() {
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(): FsContents {
+export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean): FsContents {
     return {
         [libFile.path]: libFile.content,
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 declarationMap: true,
@@ -48,7 +45,7 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
         `,
         "/user/username/projects/sample1/core/some_decl.d.ts": `declare const dts: any;`,
         "/user/username/projects/sample1/core/anotherModule.ts": `export const World = "hello";`,
-        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(),
+        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext),
         "/user/username/projects/sample1/logic/index.ts": dedent`
             import * as c from '../core/index';
             export function getSecondsInDay() {
@@ -58,12 +55,17 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
             export const m = mod;
         `,
         "/user/username/projects/sample1/tests/tsconfig.json": jsonToReadableText({
-            references: [
-                { path: "../core" },
-                { path: "../logic" },
-            ],
+            references: !skipReferenceCoreFromTest ?
+                [
+                    { path: "../core" },
+                    { path: "../logic" },
+                ] :
+                [
+                    { path: "../logic" },
+                ],
             files: ["index.ts"],
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 forceConsistentCasingInFileNames: true,
@@ -83,9 +85,9 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
     };
 }
 
-export function getFsForSampleProjectReferences() {
+export function getFsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
     return loadProjectFromFiles(
-        getFsContentsForSampleProjectReferences(),
+        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
         {
             cwd: "/user/username/projects/sample1",
             executingFilePath: libFile.path,
@@ -93,9 +95,9 @@ export function getFsForSampleProjectReferences() {
     );
 }
 
-export function getSysForSampleProjectReferences() {
+export function getSysForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
     return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(),
+        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
         {
             currentDirectory: "/user/username/projects/sample1",
         },

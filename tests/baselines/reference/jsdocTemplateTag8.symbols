@@ -1,0 +1,99 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag8.ts] ////
+
+=== a.js ===
+/**
+ * @template out T
+ * @typedef {Object} Covariant
+ * @property {T} x
+ */
+
+/**
+ * @type {Covariant<unknown>}
+ */
+let super_covariant = { x: 1 };
+>super_covariant : Symbol(super_covariant, Decl(a.js, 9, 3))
+>x : Symbol(x, Decl(a.js, 9, 23))
+
+/**
+ * @type {Covariant<string>}
+ */
+let sub_covariant = { x: '' };
+>sub_covariant : Symbol(sub_covariant, Decl(a.js, 14, 3))
+>x : Symbol(x, Decl(a.js, 14, 21))
+
+super_covariant = sub_covariant;
+>super_covariant : Symbol(super_covariant, Decl(a.js, 9, 3))
+>sub_covariant : Symbol(sub_covariant, Decl(a.js, 14, 3))
+
+sub_covariant   = super_covariant; // Error
+>sub_covariant : Symbol(sub_covariant, Decl(a.js, 14, 3))
+>super_covariant : Symbol(super_covariant, Decl(a.js, 9, 3))
+
+/**
+ * @template in T
+ * @typedef {Object} Contravariant
+ * @property {(x: T) => void} f
+ */
+
+/**
+ * @type {Contravariant<unknown>}
+ */
+let super_contravariant = { f: (x) => {} };
+>super_contravariant : Symbol(super_contravariant, Decl(a.js, 28, 3))
+>f : Symbol(f, Decl(a.js, 28, 27))
+>x : Symbol(x, Decl(a.js, 28, 32))
+
+/**
+ * @type {Contravariant<string>}
+ */
+let sub_contravariant = { f: (x) => {} };
+>sub_contravariant : Symbol(sub_contravariant, Decl(a.js, 33, 3))
+>f : Symbol(f, Decl(a.js, 33, 25))
+>x : Symbol(x, Decl(a.js, 33, 30))
+
+super_contravariant = sub_contravariant;  // Error
+>super_contravariant : Symbol(super_contravariant, Decl(a.js, 28, 3))
+>sub_contravariant : Symbol(sub_contravariant, Decl(a.js, 33, 3))
+
+sub_contravariant = super_contravariant;
+>sub_contravariant : Symbol(sub_contravariant, Decl(a.js, 33, 3))
+>super_contravariant : Symbol(super_contravariant, Decl(a.js, 28, 3))
+
+/**
+ * @template in out T
+ * @typedef {Object} Invariant
+ * @property {(x: T) => T} f
+ */
+
+/**
+ * @type {Invariant<unknown>}
+ */
+let super_invariant = { f: (x) => {} };
+>super_invariant : Symbol(super_invariant, Decl(a.js, 47, 3))
+>f : Symbol(f, Decl(a.js, 47, 23))
+>x : Symbol(x, Decl(a.js, 47, 28))
+
+/**
+ * @type {Invariant<string>}
+ */
+let sub_invariant = { f: (x) => { return "" } };
+>sub_invariant : Symbol(sub_invariant, Decl(a.js, 52, 3))
+>f : Symbol(f, Decl(a.js, 52, 21))
+>x : Symbol(x, Decl(a.js, 52, 26))
+
+super_invariant = sub_invariant;  // Error
+>super_invariant : Symbol(super_invariant, Decl(a.js, 47, 3))
+>sub_invariant : Symbol(sub_invariant, Decl(a.js, 52, 3))
+
+sub_invariant = super_invariant;  // Error
+>sub_invariant : Symbol(sub_invariant, Decl(a.js, 52, 3))
+>super_invariant : Symbol(super_invariant, Decl(a.js, 47, 3))
+
+/**
+ * @template in T
+ * @param {T} x
+ */
+function f(x) {}
+>f : Symbol(f, Decl(a.js, 55, 32))
+>x : Symbol(x, Decl(a.js, 61, 11))
+

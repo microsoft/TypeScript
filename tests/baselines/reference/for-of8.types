@@ -3,9 +3,13 @@
 === for-of8.ts ===
 v;
 >v : number
+>  : ^^^^^^
 
 for (var v of [0]) { }
 >v : number
+>  : ^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 
