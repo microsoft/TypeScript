@@ -769,6 +769,7 @@ import {
     isTypeReferenceType,
     isTypeUsableAsPropertyName,
     isUMDExportSymbol,
+    isUnaryTupleTypeNode,
     isValidBigIntString,
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
@@ -16709,17 +16710,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isNoInferType(substitutionType) ? substitutionType.baseType : getIntersectionType([substitutionType.constraint, substitutionType.baseType]);
     }
 
-    function isUnaryTupleTypeNode(node: TypeNode) {
-        return node.kind === SyntaxKind.TupleType && (node as TupleTypeNode).elements.length === 1;
-    }
-
     function getImpliedConstraint(type: Type, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
         return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(type, (checkNode as TupleTypeNode).elements[0], (extendsNode as TupleTypeNode).elements[0]) :
             getActualTypeVariable(getTypeFromTypeNode(checkNode)) === getActualTypeVariable(type) ? getTypeFromTypeNode(extendsNode) :
             undefined;
     }
 
-    function getConditionalFlowTypeOfType(type: Type, node: Node) {
+    function getFlowTypeOfType(type: Type, node: Node) {
         let constraints: Type[] | undefined;
         let covariant = true;
         while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDoc) {
@@ -19893,7 +19890,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromTypeNode(node: TypeNode): Type {
-        return getConditionalFlowTypeOfType(getTypeFromTypeNodeWorker(node), node);
+        return getFlowTypeOfType(getTypeFromTypeNodeWorker(node), node);
     }
 
     function getTypeFromTypeNodeWorker(node: TypeNode): Type {

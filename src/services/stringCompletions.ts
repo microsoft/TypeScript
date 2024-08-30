@@ -11,6 +11,7 @@ import {
 import {
     addToSeen,
     altDirectorySeparator,
+    append,
     arrayFrom,
     CallLikeExpression,
     CancellationToken,
@@ -27,6 +28,8 @@ import {
     CompletionEntry,
     CompletionEntryDetails,
     CompletionInfo,
+    concatenate,
+    ConditionalTypeNode,
     contains,
     containsPath,
     ContextFlags,
@@ -41,6 +44,7 @@ import {
     endsWith,
     ensureTrailingDirectorySeparator,
     equateStringsCaseSensitive,
+    escapeLeadingUnderscores,
     escapeString,
     Extension,
     fileExtensionIsOneOf,
@@ -95,9 +99,11 @@ import {
     isPatternMatch,
     isPrivateIdentifierClassElementDeclaration,
     isRootedDiskPath,
+    isStatement,
     isString,
     isStringLiteral,
     isStringLiteralLike,
+    isUnaryTupleTypeNode,
     isUrl,
     JsxAttribute,
     LanguageServiceHost,
@@ -140,6 +146,7 @@ import {
     stripQuotes,
     supportedTSImplementationExtensions,
     Symbol,
+    SymbolFlags,
     SyntaxKind,
     textPart,
     TextSpan,
@@ -152,9 +159,11 @@ import {
     tryReadDirectory,
     tryRemoveDirectoryPrefix,
     tryRemovePrefix,
+    TupleTypeNode,
     Type,
     TypeChecker,
     TypeFlags,
+    TypeNode,
     UnionTypeNode,
     unmangleScopedPackageName,
     UserPreferences,
@@ -497,11 +506,31 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //          bar: string;
                 //      }
                 //      let x: Foo["/*completion position*/"]
-                const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
-                if (!rangeContainsPosition(indexType, position)) {
+                if (!rangeContainsPosition((grandParent as IndexedAccessTypeNode).indexType, position)) {
                     return undefined;
                 }
-                return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
+                const objectType = typeChecker.getTypeFromTypeNode((grandParent as IndexedAccessTypeNode).objectType);
+                const completions = stringLiteralCompletionsFromProperties(objectType);
+                const flowPropertyNames = getFlowPropertyNamesOfType(typeChecker, objectType, (grandParent as IndexedAccessTypeNode).objectType);
+                if (flowPropertyNames) {
+                    const existing = new Set(completions.symbols.map(s => s.escapedName));
+                    let extraSymbols: Symbol[] | undefined;
+                    for (const name of flowPropertyNames) {
+                        const escapedName = escapeLeadingUnderscores(name);
+                        if (!existing.has(escapedName)) {
+                            existing.add(escapedName);
+                            const symbol = typeChecker.createSymbol(SymbolFlags.Property, escapedName);
+                            symbol.links.type = typeChecker.getAnyType();
+                            extraSymbols = append(extraSymbols, symbol);
+                        }
+                    }
+                    return {
+                        kind: StringLiteralCompletionKind.Properties,
+                        symbols: concatenate(completions.symbols, extraSymbols),
+                        hasIndexSignature: completions.hasIndexSignature,
+                    };
+                }
+                return completions;
             case SyntaxKind.UnionType: {
                 const result = fromUnionableLiteralType(walkUpParentheses(grandParent.parent));
                 if (!result) {
@@ -526,6 +555,48 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return;
         }
         return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
+    }
+}
+
+// this is a reverse of `getFlowTypeOfType` from the checker
+function getFlowPropertyNamesOfType(typeChecker: TypeChecker, type: Type, node: Node) {
+    const indexType = typeChecker.getIndexType(type);
+
+    if (!indexType.isIndexType()) {
+        // if the index type is not deferred then there is no reason to check for flow property names
+        // as accessing such properties resuls in an error anyway:
+        //
+        // type A = { foo: string };
+        // type B = "bar" extends keyof A ? A["bar"]/*error*/ : never;
+        return;
+    }
+
+    let flowPropertyNames: string[] | undefined;
+
+    while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDoc) {
+        const parent = node.parent;
+        if (parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType) {
+            const propertyName = getImpliedPropertyName((parent as ConditionalTypeNode).checkType, (parent as ConditionalTypeNode).extendsType);
+            flowPropertyNames = append(flowPropertyNames, propertyName);
+        }
+        node = parent;
+    }
+
+    return flowPropertyNames;
+
+    function getImpliedPropertyName(checkNode: TypeNode, extendsNode: TypeNode) {
+        if (isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode)) {
+            return getImpliedPropertyName((checkNode as TupleTypeNode).elements[0], (extendsNode as TupleTypeNode).elements[0]);
+        }
+        const checkType = typeChecker.getTypeFromTypeNode(checkNode);
+        if (!checkType.isStringLiteral()) {
+            return;
+        }
+        const extendsType = typeChecker.getTypeFromTypeNode(extendsNode);
+        if (!typeChecker.isTypeAssignableTo(extendsType, indexType)) {
+            return;
+        }
+        return checkType.value;
     }
 }
 
@@ -564,8 +635,8 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
     return length(types) ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier } : undefined;
 }
 
-function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
-    return type && {
+function stringLiteralCompletionsFromProperties(type: Type): StringLiteralCompletionsFromProperties {
+    return {
         kind: StringLiteralCompletionKind.Properties,
         symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration))),
         hasIndexSignature: hasIndexSignature(type),

@@ -11918,3 +11918,8 @@ export const nodeCoreModules = new Set([
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,
 ]);
+
+/** @internal */
+export function isUnaryTupleTypeNode(node: TypeNode) {
+    return node.kind === SyntaxKind.TupleType && (node as TupleTypeNode).elements.length === 1;
+}
