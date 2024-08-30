@@ -6034,7 +6034,7 @@ function isInTypeParameterDefault(contextToken: Node | undefined) {
     let parent = contextToken.parent;
     while (parent) {
         if (isTypeParameterDeclaration(parent)) {
-            return parent.default === node;
+            return parent.default === node || node.kind === SyntaxKind.EqualsToken;
         }
         node = parent;
         parent = parent.parent;
