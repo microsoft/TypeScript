@@ -45,6 +45,7 @@ import {
     JSDocPropertyTag,
     JSDocReturnTag,
     JSDocSeeTag,
+    JSDocSpecializeTag,
     JSDocTemplateTag,
     JSDocThisTag,
     JSDocThrowsTag,
@@ -846,6 +847,11 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         const param = tag as JSDocParameterTag;
                         processJSDocParameterTag(param);
                         commentStart = param.isNameFirst && param.typeExpression?.end || param.name.end;
+                        break;
+                    case SyntaxKind.JSDocSpecializeTag:
+                        const typeArguments = (tag as JSDocSpecializeTag).typeArguments;
+                        typeArguments.forEach(processElement);
+                        commentStart = typeArguments.end;
                         break;
                     case SyntaxKind.JSDocPropertyTag:
                         const prop = tag as JSDocPropertyTag;

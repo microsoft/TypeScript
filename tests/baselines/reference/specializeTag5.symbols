@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/specializeTag5.ts] ////
+
+=== specializeTag5.js ===
+const fileInput1 =
+>fileInput1 : Symbol(fileInput1, Decl(specializeTag5.js, 0, 5))
+
+    /** @specialize {HTMLInputElement} */
+    (document.querySelector("input[type=file]"))
+>document.querySelector : Symbol(ParentNode.querySelector, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>querySelector : Symbol(ParentNode.querySelector, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+/** @specialize {HTMLInputElement} */
+const fileInput2 =
+>fileInput2 : Symbol(fileInput2, Decl(specializeTag5.js, 5, 5))
+
+    document.querySelector("input[type=file]")
+>document.querySelector : Symbol(ParentNode.querySelector, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>querySelector : Symbol(ParentNode.querySelector, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

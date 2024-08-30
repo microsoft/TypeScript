@@ -250,6 +250,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
+    JSDocSpecializeTag,
     JSDocTag,
     JSDocTemplateTag,
     JSDocText,
@@ -861,6 +862,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocSeeTag,
         createJSDocImportTag,
         updateJSDocImportTag,
+        createJSDocSpecializeTag,
+        updateJSDocSpecializeTag,
         createJSDocNameReference,
         updateJSDocNameReference,
         createJSDocMemberName,
@@ -5553,6 +5556,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
+    function createJSDocSpecializeTag(tagName: Identifier | undefined, typeArguments: readonly TypeNode[], comment: string | NodeArray<JSDocComment> | undefined): JSDocSpecializeTag {
+        const node = createBaseJSDocTag<JSDocSpecializeTag>(SyntaxKind.JSDocSpecializeTag, tagName ?? createIdentifier("specialize"), /*comment*/ undefined);
+        node.typeArguments = asNodeArray(typeArguments);
+        node.comment = comment;
+        return node;
+    }
+
+    function updateJSDocSpecializeTag(node: JSDocSpecializeTag, tagName: Identifier | undefined, typeArguments: readonly TypeNode[], comment: string | NodeArray<JSDocComment> | undefined): JSDocSpecializeTag {
+        return node.tagName !== tagName
+                || node.typeArguments !== typeArguments
+                || node.comment !== comment
+            ? update(createJSDocSpecializeTag(tagName, typeArguments, comment), node)
+            : node;
+    }
+
+    // @api
     function createJSDocText(text: string): JSDocText {
         const node = createBaseNode<JSDocText>(SyntaxKind.JSDocText);
         node.text = text;
@@ -7212,6 +7231,8 @@ function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
             return "implements";
         case SyntaxKind.JSDocImportTag:
             return "import";
+        case SyntaxKind.JSDocSpecializeTag:
+            return "specialize";
         default:
             return Debug.fail(`Unsupported kind: ${Debug.formatSyntaxKind(kind)}`);
     }

@@ -320,6 +320,7 @@ import {
     getJSDocParameterTags,
     getJSDocRoot,
     getJSDocSatisfiesExpressionType,
+    getJSDocSpecializeTag,
     getJSDocTags,
     getJSDocThisTag,
     getJSDocType,
@@ -828,7 +829,6 @@ import {
     JsxFlags,
     JsxFragment,
     JsxNamespacedName,
-    JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
     JsxReferenceKind,
@@ -34838,15 +34838,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
     }
 
-    function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
+    function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningLikeElement {
         return isCallOrNewExpression(node) || isTaggedTemplateExpression(node) || isJsxOpeningLikeElement(node);
+    }
+
+    function getTypeArgumentsForCallLikeExpression(node: CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningLikeElement) {
+        if (isSuperCall(node)) {
+            return undefined;
+        }
+        if (isInJSFile(node)) {
+            let { parent } = node;
+            if (isJsxElement(parent)) {
+                parent = parent.parent;
+            }
+            if (canHaveJSDoc(parent)) {
+                const specializeTag = getJSDocSpecializeTag(parent);
+                if (specializeTag) {
+                    return specializeTag.typeArguments;
+                }
+            }
+        }
+        return node.typeArguments;
     }
 
     function resolveUntypedCall(node: CallLikeExpression): Signature {
         if (callLikeExpressionMayHaveTypeArguments(node)) {
             // Check type arguments even though we will give an error that untyped calls may not accept type arguments.
             // This gets us diagnostics for the type arguments and marks them as referenced.
-            forEach(node.typeArguments, checkSourceElement);
+            forEach(getTypeArgumentsForCallLikeExpression(node), checkSourceElement);
         }
 
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -35797,21 +35816,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
-        const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
-        const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
         const isInstanceof = node.kind === SyntaxKind.BinaryExpression;
         const reportErrors = !isInferencePartiallyBlocked && !candidatesOutArray;
 
         let typeArguments: NodeArray<TypeNode> | undefined;
 
-        if (!isDecorator && !isInstanceof && !isSuperCall(node)) {
-            typeArguments = (node as CallExpression).typeArguments;
-
-            // We already perform checking on the type arguments on the class declaration itself.
-            if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || (node as CallExpression).expression.kind !== SyntaxKind.SuperKeyword) {
-                forEach(typeArguments, checkSourceElement);
-            }
+        if (callLikeExpressionMayHaveTypeArguments(node)) {
+            typeArguments = getTypeArgumentsForCallLikeExpression(node);
+            forEach(typeArguments, checkSourceElement);
         }
 
         const candidates = candidatesOutArray || [];
@@ -35983,7 +35996,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
             }
             else if (candidateForTypeArgumentError) {
-                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
+                checkTypeArguments(candidateForTypeArgumentError, typeArguments!, /*reportErrors*/ true, headMessage);
             }
             else {
                 const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
@@ -36197,7 +36210,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return candidate;
         }
 
-        const typeArgumentNodes: readonly TypeNode[] | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
+        const typeArgumentNodes: readonly TypeNode[] | undefined = callLikeExpressionMayHaveTypeArguments(node) ? getTypeArgumentsForCallLikeExpression(node) : undefined;
         const instantiated = typeArgumentNodes
             ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJSFile(node)))
             : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args, checkMode);
@@ -36297,6 +36310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // that the user will not add any.
         const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
         const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
+        const typeArguments = getTypeArgumentsForCallLikeExpression(node);
 
         // TS 1.0 Spec: 4.12
         // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
@@ -36304,7 +36318,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, numConstructSignatures)) {
             // The unknownType indicates that an error already occurred (and was reported).  No
             // need to report another error in this case.
-            if (!isErrorType(funcType) && node.typeArguments) {
+            if (!isErrorType(funcType) && typeArguments) {
                 error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
             }
             return resolveUntypedCall(node);
@@ -36340,7 +36354,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
+        if (checkMode & CheckMode.SkipGenericFunctions && !typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
@@ -36385,11 +36399,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
+        const typeArguments = getTypeArgumentsForCallLikeExpression(node);
         // TS 1.0 spec: 4.11
         // If expressionType is of type Any, Args can be any argument
         // list and the result of the operation is of type Any.
         if (isTypeAny(expressionType)) {
-            if (node.typeArguments) {
+            if (typeArguments) {
                 error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
             }
             return resolveUntypedCall(node);
@@ -36754,9 +36769,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             const fakeSignature = createSignatureForJSXIntrinsic(node, result);
             checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*inferenceContext*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
-            if (length(node.typeArguments)) {
-                forEach(node.typeArguments, checkSourceElement);
-                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), node.typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(node.typeArguments)));
+            const typeArguments = getTypeArgumentsForCallLikeExpression(node);
+            if (length(typeArguments)) {
+                forEach(typeArguments, checkSourceElement);
+                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(typeArguments)));
             }
             return fakeSignature;
         }
@@ -37012,7 +37028,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @returns On success, the expression's signature's return type. On failure, anyType.
      */
     function checkCallExpression(node: CallExpression | NewExpression, checkMode?: CheckMode): Type {
-        checkGrammarTypeArguments(node, node.typeArguments);
+        checkGrammarTypeArguments(node, getTypeArgumentsForCallLikeExpression(node));
 
         const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
         if (signature === resolvingSignature) {
@@ -37251,7 +37267,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
-        if (!checkGrammarTaggedTemplateChain(node)) checkGrammarTypeArguments(node, node.typeArguments);
+        if (!checkGrammarTaggedTemplateChain(node)) {
+            checkGrammarTypeArguments(node, getTypeArgumentsForCallLikeExpression(node));
+        }
         if (languageVersion < LanguageFeatureMinimumTarget.TaggedTemplates) {
             checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
         }
@@ -41815,7 +41833,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkDecorators(node);
     }
 
-    function getEffectiveTypeArgumentAtIndex(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[], index: number): Type {
+    function getEffectiveTypeArgumentAtIndex(node: TypeReferenceNode, typeParameters: readonly TypeParameter[], index: number): Type {
         if (node.typeArguments && index < node.typeArguments.length) {
             return getTypeFromTypeNode(node.typeArguments[index]);
         }
@@ -41823,7 +41841,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): Type[] {
-        return fillMissingTypeArguments(map(node.typeArguments!, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(node));
+        return fillMissingTypeArguments(map(node.typeArguments || [], getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(node));
     }
 
     function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): boolean {
@@ -51596,7 +51614,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
         checkGrammarJsxName(node.tagName);
-        checkGrammarTypeArguments(node, node.typeArguments);
+        checkGrammarTypeArguments(node, getTypeArgumentsForCallLikeExpression(node));
         const seen = new Map<__String, boolean>();
 
         for (const attr of node.attributes.properties) {

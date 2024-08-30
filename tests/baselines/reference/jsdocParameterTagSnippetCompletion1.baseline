@@ -74,6 +74,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -171,6 +172,7 @@
 // | @satisfies
 // | @see
 // | @since
+// | @specialize
 // | @static
 // | @summary
 // | @template
@@ -265,6 +267,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -364,6 +367,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -465,6 +469,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -561,6 +566,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -658,6 +664,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -755,6 +762,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -851,6 +859,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -948,6 +957,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1042,6 +1052,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1137,6 +1148,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1232,6 +1244,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1326,6 +1339,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1422,6 +1436,7 @@
 // | @satisfies
 // | @see
 // | @since
+// | @specialize
 // | @static
 // | @summary
 // | @template
@@ -1516,6 +1531,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -1612,6 +1628,7 @@
 // | satisfies
 // | see
 // | since
+// | specialize
 // | static
 // | summary
 // | template
@@ -2550,6 +2567,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -3693,6 +3723,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -4830,6 +4873,19 @@
           "documentation": []
         },
         {
+          "name": "@specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@static",
           "kind": "",
           "kindModifiers": "",
@@ -5948,6 +6004,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -7078,6 +7147,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -8196,6 +8278,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -9339,6 +9434,19 @@
           "documentation": []
         },
         {
+          "name": "@specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@static",
           "kind": "",
           "kindModifiers": "",
@@ -10457,6 +10565,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -11587,6 +11708,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -12705,6 +12839,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -13835,6 +13982,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -14953,6 +15113,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -16083,6 +16256,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -17201,6 +17387,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],
@@ -18344,6 +18543,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -19468,6 +19680,19 @@
           "documentation": []
         },
         {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "static",
           "kind": "",
           "kindModifiers": "",
@@ -20586,6 +20811,19 @@
           "displayParts": [
             {
               "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "specialize",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "specialize",
               "kind": "text"
             }
           ],

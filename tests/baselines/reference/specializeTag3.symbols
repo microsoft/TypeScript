@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/jsdoc/specializeTag3.ts] ////
+
+=== specializeTag3.js ===
+/**
+ * @template T
+ */
+class JsonSchemaValidator {
+>JsonSchemaValidator : Symbol(JsonSchemaValidator, Decl(specializeTag3.js, 0, 0))
+
+    /**
+     * @param {object} jsonSchema
+     */
+    constructor(jsonSchema) {
+>jsonSchema : Symbol(jsonSchema, Decl(specializeTag3.js, 7, 16))
+
+        /** @type {object} */
+        this.jsonSchema = jsonSchema;
+>this.jsonSchema : Symbol(JsonSchemaValidator.jsonSchema, Decl(specializeTag3.js, 7, 29))
+>this : Symbol(JsonSchemaValidator, Decl(specializeTag3.js, 0, 0))
+>jsonSchema : Symbol(JsonSchemaValidator.jsonSchema, Decl(specializeTag3.js, 7, 29))
+>jsonSchema : Symbol(jsonSchema, Decl(specializeTag3.js, 7, 16))
+    }
+
+    /**
+     * @param {unknown} _value 
+     * @returns {_value is T}
+     */
+    isValid(_value) {
+>isValid : Symbol(JsonSchemaValidator.isValid, Decl(specializeTag3.js, 10, 5))
+>_value : Symbol(_value, Decl(specializeTag3.js, 16, 12))
+
+        return true;
+    }
+}
+
+const number = /** @specialize {number} */(
+>number : Symbol(number, Decl(specializeTag3.js, 21, 5))
+
+    new JsonSchemaValidator({ type: 'number' })
+>JsonSchemaValidator : Symbol(JsonSchemaValidator, Decl(specializeTag3.js, 0, 0))
+>type : Symbol(type, Decl(specializeTag3.js, 22, 29))
+
+);
+
+/** @specialize {number[]} */
+const arrayOfNumbers = new JsonSchemaValidator({
+>arrayOfNumbers : Symbol(arrayOfNumbers, Decl(specializeTag3.js, 26, 5))
+>JsonSchemaValidator : Symbol(JsonSchemaValidator, Decl(specializeTag3.js, 0, 0))
+
+    type: 'array',
+>type : Symbol(type, Decl(specializeTag3.js, 26, 48))
+
+    items: { type: 'number' },
+>items : Symbol(items, Decl(specializeTag3.js, 27, 18))
+>type : Symbol(type, Decl(specializeTag3.js, 28, 12))
+
+});
+

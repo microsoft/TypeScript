@@ -1,0 +1,131 @@
+// === findAllReferences ===
+// === /a.js ===
+// --- (line: 3) skipped ---
+// class Collection {}
+// 
+// /**
+//  * <|@typedef {object} [|{| isWriteAccess: true, isDefinition: true |}U/*FIND ALL REFS*/serData|]
+//  * @property {string} id
+//  * @property {string} name
+//  |>*/
+// 
+// /** @specialize <[|UserData|]> */
+// const users = new Collection('users');
+
+  // === Definitions ===
+  // === /a.js ===
+  // --- (line: 3) skipped ---
+  // class Collection {}
+  // 
+  // /**
+  //  * <|@typedef {object} [|U/*FIND ALL REFS*/serData|]
+  //  * @property {string} id
+  //  * @property {string} name
+  //  |>*/
+  // 
+  // /** @specialize <UserData> */
+  // const users = new Collection('users');
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type UserData = {\n    id: string;\n    name: string;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "UserData",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "id",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "name",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
