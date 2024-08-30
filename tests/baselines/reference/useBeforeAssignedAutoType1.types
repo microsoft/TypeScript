@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/useBeforeAssignedAutoType1.ts] ////
+
+=== useBeforeAssignedAutoType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59804
+
+let test1 = undefined;
+>test1 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+test1 = '' as string | undefined;
+>test1 = '' as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test1 : any
+>'' as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+test1?.length;
+>test1?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test1 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test2 = null;
+>test2 : any
+
+test2 = '' as string | undefined;
+>test2 = '' as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test2 : any
+>'' as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+test2?.length;
+>test2?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test2 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test3;
+>test3 : any
+
+test3 = '' as string | undefined;
+>test3 = '' as string | undefined : string | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^
+>test3 : any
+>'' as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+test3?.length;
+>test3?.length : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>test3 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+let test4 = undefined;
+>test4 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other1 = test4;
+>other1 : undefined
+>       : ^^^^^^^^^
+>test4 : undefined
+>      : ^^^^^^^^^
+
+let test5 = null;
+>test5 : any
+
+let other2 = test5;
+>other2 : null
+>       : ^^^^
+>test5 : null
+>      : ^^^^
+
+let test6;
+>test6 : any
+
+test6 = undefined;
+>test6 = undefined : undefined
+>                  : ^^^^^^^^^
+>test6 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other3 = test6;
+>other3 : undefined
+>       : ^^^^^^^^^
+>test6 : undefined
+>      : ^^^^^^^^^
+
+let test7 = undefined;
+>test7 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+test7 = undefined;
+>test7 = undefined : undefined
+>                  : ^^^^^^^^^
+>test7 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other4 = test7;
+>other4 : undefined
+>       : ^^^^^^^^^
+>test7 : undefined
+>      : ^^^^^^^^^
+
+let test8 = null;
+>test8 : any
+
+test8 = undefined;
+>test8 = undefined : undefined
+>                  : ^^^^^^^^^
+>test8 : any
+>undefined : undefined
+>          : ^^^^^^^^^
+
+let other5 = test8;
+>other5 : undefined
+>       : ^^^^^^^^^
+>test8 : undefined
+>      : ^^^^^^^^^
+
+let test9;
+>test9 : any
+
+let other6 = test9;
+>other6 : undefined
+>       : ^^^^^^^^^
+>test9 : undefined
+>      : ^^^^^^^^^
+
