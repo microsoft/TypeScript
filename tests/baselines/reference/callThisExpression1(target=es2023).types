@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/esnext/callThisExpression/callThisExpression1.ts] ////
+
+=== callThisExpression1.ts ===
+declare const receiver: number;
+>receiver : number
+>         : ^^^^^^
+
+declare const fn: (this: number, arg: boolean) => string;
+>fn : (this: number, arg: boolean) => string
+>   : ^    ^^      ^^   ^^       ^^^^^      
+>this : number
+>     : ^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+
+const ok = receiver~>fn(true);
+>ok : string
+>   : ^^^^^^
+>receiver~>fn(true) : string
+>                   : ^^^^^^
+>receiver : number
+>         : ^^^^^^
+>fn : (this: number, arg: boolean) => string
+>   : ^    ^^      ^^   ^^       ^^^^^      
+>true : true
+>     : ^^^^
+
+

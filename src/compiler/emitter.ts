@@ -20,6 +20,7 @@ import {
     Bundle,
     CallExpression,
     CallSignatureDeclaration,
+    CallThisExpression,
     canHaveLocals,
     canIncludeBindAndCheckDiagnostics,
     CaseBlock,
@@ -1926,6 +1927,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitCallExpression(node as CallExpression);
                 case SyntaxKind.NewExpression:
                     return emitNewExpression(node as NewExpression);
+                case SyntaxKind.CallThisExpression:
+                    return emitCallThisExpression(node as CallThisExpression);
                 case SyntaxKind.TaggedTemplateExpression:
                     return emitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.TypeAssertionExpression:
@@ -2693,6 +2696,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfNew);
         emitTypeArguments(node, node.typeArguments);
         emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
+    }
+
+    function emitCallThisExpression(node: CallThisExpression) {
+        emitExpression(node.receiver, parenthesizer.parenthesizeLeftSideOfAccess);
+        emitTokenWithComment(SyntaxKind.TildeGreaterThanToken, node.receiver.end, writePunctuation, node);
+        emitExpression(node.expression, expr => parenthesizer.parenthesizeRightSideOfBinary(SyntaxKind.TildeGreaterThanToken, node.receiver, expr));
+        emitTypeArguments(node, node.typeArguments);
+        emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
     }
 
     function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {

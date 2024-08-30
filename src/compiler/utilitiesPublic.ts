@@ -1978,6 +1978,7 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.ElementAccessExpression:
         case SyntaxKind.NewExpression:
         case SyntaxKind.CallExpression:
+        case SyntaxKind.CallThisExpression:
         case SyntaxKind.JsxElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxFragment:

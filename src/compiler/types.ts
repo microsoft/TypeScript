@@ -101,6 +101,7 @@ export const enum SyntaxKind {
     CaretToken,
     ExclamationToken,
     TildeToken,
+    TildeGreaterThanToken,
     AmpersandAmpersandToken,
     BarBarToken,
     QuestionToken,
@@ -280,6 +281,7 @@ export const enum SyntaxKind {
     ElementAccessExpression,
     CallExpression,
     NewExpression,
+    CallThisExpression,
     TaggedTemplateExpression,
     TypeAssertionExpression,
     ParenthesizedExpression,
@@ -1103,6 +1105,7 @@ export type HasChildren =
     | ElementAccessExpression
     | CallExpression
     | NewExpression
+    | CallThisExpression
     | TaggedTemplateExpression
     | TypeAssertion
     | ParenthesizedExpression
@@ -3042,6 +3045,14 @@ export type OptionalChainRoot =
     | ElementAccessChainRoot
     | CallChainRoot;
 
+export interface CallThisExpression extends MemberExpression, LeftHandSideExpression, Declaration {
+    readonly kind: SyntaxKind.CallThisExpression;
+    readonly receiver: LeftHandSideExpression;
+    readonly expression: Expression;
+    readonly typeArguments?: NodeArray<TypeNode>;
+    readonly arguments: NodeArray<Expression>;
+}
+
 /** @internal */
 export type BindableObjectDefinePropertyCall = CallExpression & {
     readonly arguments: readonly [BindableStaticNameExpression, StringLiteralLike | NumericLiteral, ObjectLiteralExpression] & Readonly<TextRange>;
@@ -3123,6 +3134,7 @@ export interface InstanceofExpression extends BinaryExpression {
 export type CallLikeExpression =
     | CallExpression
     | NewExpression
+    | CallThisExpression
     | TaggedTemplateExpression
     | Decorator
     | JsxOpeningLikeElement
@@ -8824,6 +8836,8 @@ export interface NodeFactory {
     updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallChain;
     createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
     updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
+    createCallThisExpression(receiver: Expression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallThisExpression;
+    updateCallThisExpression(node: CallThisExpression, receiver: Expression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallThisExpression;
     createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
