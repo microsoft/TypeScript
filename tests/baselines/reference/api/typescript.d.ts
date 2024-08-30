@@ -3983,10 +3983,11 @@ declare namespace ts {
         JSDocImportTag = 351,
         SyntaxList = 352,
         NotEmittedStatement = 353,
-        PartiallyEmittedExpression = 354,
-        CommaListExpression = 355,
-        SyntheticReferenceExpression = 356,
-        Count = 357,
+        NotEmittedTypeElement = 354,
+        PartiallyEmittedExpression = 355,
+        CommaListExpression = 356,
+        SyntheticReferenceExpression = 357,
+        Count = 358,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -5211,6 +5212,9 @@ declare namespace ts {
     }
     interface NotEmittedStatement extends Statement {
         readonly kind: SyntaxKind.NotEmittedStatement;
+    }
+    interface NotEmittedTypeElement extends TypeElement {
+        readonly kind: SyntaxKind.NotEmittedTypeElement;
     }
     /**
      * A list of comma-separated expressions. This node is only created by transformations.
@@ -7813,6 +7817,7 @@ declare namespace ts {
         createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile;
         updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
         createNotEmittedStatement(original: Node): NotEmittedStatement;
+        createNotEmittedTypeElement(): NotEmittedTypeElement;
         createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
         updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;

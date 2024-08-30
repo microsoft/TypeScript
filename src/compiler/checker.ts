@@ -6,6 +6,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -7054,6 +7055,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    if (context.flags & NodeBuilderFlags.NoTruncation) {
+                        return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                    }
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
                 const typeElements: TypeElement[] = [];
@@ -7085,7 +7089,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                        typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        if (context.flags & NodeBuilderFlags.NoTruncation) {
+                            const typeElement = typeElements.pop()!;
+                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
+                        }
+                        else {
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        }
                         addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                         break;
                     }
@@ -7100,7 +7110,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
                 return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
             }
-            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided");
         }
 
         function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
@@ -7260,12 +7270,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
                     if (!isBareList) {
-                        return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                        return [
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")
+                                : factory.createTypeReferenceNode("...", /*typeArguments*/ undefined),
+                        ];
                     }
                     else if (types.length > 2) {
                         return [
                             typeToTypeNodeHelper(types[0], context),
-                            factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - 2} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                             typeToTypeNodeHelper(types[types.length - 1], context),
                         ];
                     }
@@ -7278,7 +7294,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                        result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                        result.push(
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined),
+                        );
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                         if (typeNode) {
                             result.push(typeNode);

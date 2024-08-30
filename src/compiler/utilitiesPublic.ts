@@ -1767,7 +1767,8 @@ export function isTypeElement(node: Node): node is TypeElement {
         || kind === SyntaxKind.MethodSignature
         || kind === SyntaxKind.IndexSignature
         || kind === SyntaxKind.GetAccessor
-        || kind === SyntaxKind.SetAccessor;
+        || kind === SyntaxKind.SetAccessor
+        || kind === SyntaxKind.NotEmittedTypeElement;
 }
 
 export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
