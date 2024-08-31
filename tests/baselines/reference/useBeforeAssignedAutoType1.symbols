@@ -7,7 +7,7 @@ let test1 = undefined;
 >test1 : Symbol(test1, Decl(useBeforeAssignedAutoType1.ts, 2, 3))
 >undefined : Symbol(undefined)
 
-test1 = '' as string | undefined;
+test1 = "" as string | undefined;
 >test1 : Symbol(test1, Decl(useBeforeAssignedAutoType1.ts, 2, 3))
 
 test1?.length;
@@ -18,7 +18,7 @@ test1?.length;
 let test2 = null;
 >test2 : Symbol(test2, Decl(useBeforeAssignedAutoType1.ts, 6, 3))
 
-test2 = '' as string | undefined;
+test2 = "" as string | undefined;
 >test2 : Symbol(test2, Decl(useBeforeAssignedAutoType1.ts, 6, 3))
 
 test2?.length;
@@ -29,7 +29,7 @@ test2?.length;
 let test3;
 >test3 : Symbol(test3, Decl(useBeforeAssignedAutoType1.ts, 10, 3))
 
-test3 = '' as string | undefined;
+test3 = "" as string | undefined;
 >test3 : Symbol(test3, Decl(useBeforeAssignedAutoType1.ts, 10, 3))
 
 test3?.length;
@@ -92,4 +92,89 @@ let test9;
 let other6 = test9;
 >other6 : Symbol(other6, Decl(useBeforeAssignedAutoType1.ts, 33, 3))
 >test9 : Symbol(test9, Decl(useBeforeAssignedAutoType1.ts, 32, 3))
+
+let test10 = undefined;
+>test10 : Symbol(test10, Decl(useBeforeAssignedAutoType1.ts, 35, 3))
+>undefined : Symbol(undefined)
+
+test10 = "" as string | undefined;
+>test10 : Symbol(test10, Decl(useBeforeAssignedAutoType1.ts, 35, 3))
+
+test10?.charAt(0);
+>test10?.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>test10 : Symbol(test10, Decl(useBeforeAssignedAutoType1.ts, 35, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+let test11 = null;
+>test11 : Symbol(test11, Decl(useBeforeAssignedAutoType1.ts, 39, 3))
+
+test11 = "" as string | undefined;
+>test11 : Symbol(test11, Decl(useBeforeAssignedAutoType1.ts, 39, 3))
+
+test11?.charAt(0);
+>test11?.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>test11 : Symbol(test11, Decl(useBeforeAssignedAutoType1.ts, 39, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+let test12;
+>test12 : Symbol(test12, Decl(useBeforeAssignedAutoType1.ts, 43, 3))
+
+test12 = "" as string | undefined;
+>test12 : Symbol(test12, Decl(useBeforeAssignedAutoType1.ts, 43, 3))
+
+test12?.charAt(0);
+>test12?.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>test12 : Symbol(test12, Decl(useBeforeAssignedAutoType1.ts, 43, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+let test13;
+>test13 : Symbol(test13, Decl(useBeforeAssignedAutoType1.ts, 47, 3))
+
+test13.length;
+>test13 : Symbol(test13, Decl(useBeforeAssignedAutoType1.ts, 47, 3))
+
+function fn1() {
+>fn1 : Symbol(fn1, Decl(useBeforeAssignedAutoType1.ts, 48, 14))
+
+  return { length: test13.length };
+>length : Symbol(length, Decl(useBeforeAssignedAutoType1.ts, 50, 10))
+>test13 : Symbol(test13, Decl(useBeforeAssignedAutoType1.ts, 47, 3))
+}
+
+let test14 = [];
+>test14 : Symbol(test14, Decl(useBeforeAssignedAutoType1.ts, 53, 3))
+
+test14.length;
+>test14.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>test14 : Symbol(test14, Decl(useBeforeAssignedAutoType1.ts, 53, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+function fn2() {
+>fn2 : Symbol(fn2, Decl(useBeforeAssignedAutoType1.ts, 54, 14))
+
+  return { length: test14.length };
+>length : Symbol(length, Decl(useBeforeAssignedAutoType1.ts, 56, 10))
+>test14.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>test14 : Symbol(test14, Decl(useBeforeAssignedAutoType1.ts, 53, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+
+let test15;
+>test15 : Symbol(test15, Decl(useBeforeAssignedAutoType1.ts, 59, 3))
+
+test15 = [];
+>test15 : Symbol(test15, Decl(useBeforeAssignedAutoType1.ts, 59, 3))
+
+test15.length;
+>test15.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>test15 : Symbol(test15, Decl(useBeforeAssignedAutoType1.ts, 59, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+function fn3() {
+>fn3 : Symbol(fn3, Decl(useBeforeAssignedAutoType1.ts, 61, 14))
+
+  return { length: test15.length };
+>length : Symbol(length, Decl(useBeforeAssignedAutoType1.ts, 63, 10))
+>test15 : Symbol(test15, Decl(useBeforeAssignedAutoType1.ts, 59, 3))
+}
 

@@ -1,0 +1,84 @@
+useBeforeAssignedAutoType1.ts(48,5): error TS7034: Variable 'test13' implicitly has type 'any' in some locations where its type cannot be determined.
+useBeforeAssignedAutoType1.ts(49,1): error TS18048: 'test13' is possibly 'undefined'.
+useBeforeAssignedAutoType1.ts(51,20): error TS7005: Variable 'test13' implicitly has an 'any' type.
+useBeforeAssignedAutoType1.ts(60,5): error TS7034: Variable 'test15' implicitly has type 'any' in some locations where its type cannot be determined.
+useBeforeAssignedAutoType1.ts(64,20): error TS7005: Variable 'test15' implicitly has an 'any' type.
+
+
+==== useBeforeAssignedAutoType1.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59804
+    
+    let test1 = undefined;
+    test1 = "" as string | undefined;
+    test1?.length;
+    
+    let test2 = null;
+    test2 = "" as string | undefined;
+    test2?.length;
+    
+    let test3;
+    test3 = "" as string | undefined;
+    test3?.length;
+    
+    let test4 = undefined;
+    let other1 = test4;
+    
+    let test5 = null;
+    let other2 = test5;
+    
+    let test6;
+    test6 = undefined;
+    let other3 = test6;
+    
+    let test7 = undefined;
+    test7 = undefined;
+    let other4 = test7;
+    
+    let test8 = null;
+    test8 = undefined;
+    let other5 = test8;
+    
+    let test9;
+    let other6 = test9;
+    
+    let test10 = undefined;
+    test10 = "" as string | undefined;
+    test10?.charAt(0);
+    
+    let test11 = null;
+    test11 = "" as string | undefined;
+    test11?.charAt(0);
+    
+    let test12;
+    test12 = "" as string | undefined;
+    test12?.charAt(0);
+    
+    let test13;
+        ~~~~~~
+!!! error TS7034: Variable 'test13' implicitly has type 'any' in some locations where its type cannot be determined.
+    test13.length;
+    ~~~~~~
+!!! error TS18048: 'test13' is possibly 'undefined'.
+    function fn1() {
+      return { length: test13.length };
+                       ~~~~~~
+!!! error TS7005: Variable 'test13' implicitly has an 'any' type.
+    }
+    
+    let test14 = [];
+    test14.length;
+    function fn2() {
+      return { length: test14.length };
+    }
+    
+    let test15;
+        ~~~~~~
+!!! error TS7034: Variable 'test15' implicitly has type 'any' in some locations where its type cannot be determined.
+    test15 = [];
+    test15.length;
+    function fn3() {
+      return { length: test15.length };
+                       ~~~~~~
+!!! error TS7005: Variable 'test15' implicitly has an 'any' type.
+    }
+    
