@@ -1891,15 +1891,11 @@ namespace Parser {
                     }
 
                     if (pos >= 0) {
-                        let nonAwaitStatement = sourceFile.statements[pos];
                         // skip all statements in range already completely consumed by the reparsed statement
-                        for (let i = pos + 1; i < sourceFile.statements.length; i++) {
-                            if (nonAwaitStatement.end >= statement.end) {
-                                break;
-                            }
-                            pos = i;
-                            nonAwaitStatement = sourceFile.statements[pos];
+                        while (sourceFile.statements[pos].end < statement.end) {
+                            pos++;
                         }
+                        const nonAwaitStatement = sourceFile.statements[pos];
                         if (statement.end === nonAwaitStatement.pos) {
                             // done reparsing this section
                             break;
