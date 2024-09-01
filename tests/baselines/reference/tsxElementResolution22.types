@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution22.tsx] ////
+
+=== tsxElementResolution22.tsx ===
+function createElement(name: string) {
+>createElement : (name: string) => string
+>              : ^    ^^      ^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+
+    return name;
+>name : string
+>     : ^^^^^^
+}
+namespace createElement.JSX {
+    type Element = string;
+>Element : string
+>        : ^^^^^^
+
+    type ElementType = string;
+>ElementType : string
+>            : ^^^^^^
+
+    type IntrinsicElements = { div: {} };
+>IntrinsicElements : IntrinsicElements
+>                  : ^^^^^^^^^^^^^^^^^
+>div : {}
+>    : ^^
+}
+
+const d = <div/> // JSX namespace is not correctly defined here
+>d : any
+>  : ^^^
+><div/> : any
+>       : ^^^
+>div : any
+>    : ^^^
+

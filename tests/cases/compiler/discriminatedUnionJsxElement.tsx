@@ -4,6 +4,10 @@
 
 // Repro from #46021
 
+declare namespace JSX {
+  interface Element<P, T> { props: P; type: T; }
+}
+
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
     menuItemsVariant?: MenuItemVariant;
 }

@@ -5,6 +5,12 @@ declare namespace JSX {
     interface ElementAttributesProperty { props: {}; }
 >props : {}
 >      : ^^
+
+    interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 declare class Component<P> {
@@ -43,8 +49,10 @@ const y = new C({foobar: "example"});
 >          : ^^^^^^^^^
 
 const x = <C foobar="example" />
->x : error
-><C foobar="example" /> : error
+>x : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+><C foobar="example" /> : JSX.Element<P, T>
+>                       : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >foobar : string

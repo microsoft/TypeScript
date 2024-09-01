@@ -9,6 +9,7 @@ declare namespace JSX {
     "ns:NamespacedUpcaseAlsoIntrinsic": any,
     "NS:NamespacedUpcaseAlsoIntrinsic": any
   }
+  interface Element<P, T> { props: P; type: T; }
 }
 
 const valid = <ns:element ns:attribute="yep" />;

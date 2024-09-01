@@ -6,6 +6,7 @@ declare module JSX {
     interface IntrinsicElements {
         ["package"]: any;
     }
+    interface Element<P, T> { props: P; type: T; }
 }
 
 function A() {

@@ -1,11 +1,12 @@
-a.tsx(9,21): error TS2698: Spread types may only be created from object types.
 a.tsx(10,21): error TS2698: Spread types may only be created from object types.
 a.tsx(11,21): error TS2698: Spread types may only be created from object types.
+a.tsx(12,21): error TS2698: Spread types may only be created from object types.
 
 
 ==== a.tsx (3 errors) ====
     namespace JSX {
         export interface IntrinsicElements { [key: string]: any }
+        export interface Element<P, T> { props: P; type: T; }
     }
     
     const a = {} as never;

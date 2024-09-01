@@ -7,6 +7,7 @@ declare namespace JSX {
     interface IntrinsicElements {
         [k: string]: any
     }
+    interface Element<P, T> { props: P; type: T; }
 }
 
 const a = (

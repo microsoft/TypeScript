@@ -5,6 +5,12 @@ namespace JSX {
     export interface IntrinsicElements { [key: string]: any }
 >key : string
 >    : ^^^^^^
+
+    export interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 const a = {} as never;
@@ -26,30 +32,30 @@ const c = undefined;
 >          : ^^^^^^^^^
 
 const d = <div { ...a } />
->d : any
->  : ^^^
-><div { ...a } /> : any
->                 : ^^^
+>d : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+><div { ...a } /> : JSX.Element<P, T>
+>                 : ^^^^^^^^^^^^^^^^^
 >div : any
 >    : ^^^
 >a : never
 >  : ^^^^^
 
 const e = <div { ...b } />
->e : any
->  : ^^^
-><div { ...b } /> : any
->                 : ^^^
+>e : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+><div { ...b } /> : JSX.Element<P, T>
+>                 : ^^^^^^^^^^^^^^^^^
 >div : any
 >    : ^^^
 >b : null
 >  : ^^^^
 
 const f = <div { ...c } />
->f : any
->  : ^^^
-><div { ...c } /> : any
->                 : ^^^
+>f : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+><div { ...c } /> : JSX.Element<P, T>
+>                 : ^^^^^^^^^^^^^^^^^
 >div : any
 >    : ^^^
 >c : undefined

@@ -1,3 +1,4 @@
+/index.tsx(1,27): error TS2602: JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.
 /index.tsx(1,27): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 /index.tsx(1,32): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
@@ -100,8 +101,10 @@
         // @ts-ignore
         export import JSX = NotFound;
     }
-==== /index.tsx (2 errors) ====
+==== /index.tsx (3 errors) ====
     export const Comp = () => <div></div>;
+                              ~~~~~
+!!! error TS2602: JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.
                               ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~~~~~~

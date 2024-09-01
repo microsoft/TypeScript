@@ -1,70 +1,83 @@
 //// [tests/cases/compiler/contextuallyTypedJsxAttribute.ts] ////
 
 === index.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+
+  interface Element<P, T> { props: P; type: T; }
+>Element : Symbol(Element, Decl(index.tsx, 0, 23))
+>P : Symbol(P, Decl(index.tsx, 1, 20))
+>T : Symbol(T, Decl(index.tsx, 1, 22))
+>props : Symbol(Element.props, Decl(index.tsx, 1, 27))
+>P : Symbol(P, Decl(index.tsx, 1, 20))
+>type : Symbol(Element.type, Decl(index.tsx, 1, 37))
+>T : Symbol(T, Decl(index.tsx, 1, 22))
+}
+
 interface Elements {
->Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+>Elements : Symbol(Elements, Decl(index.tsx, 2, 1))
 
   foo: { callback?: (value: number) => void };
->foo : Symbol(Elements.foo, Decl(index.tsx, 0, 20))
->callback : Symbol(callback, Decl(index.tsx, 1, 8))
->value : Symbol(value, Decl(index.tsx, 1, 21))
+>foo : Symbol(Elements.foo, Decl(index.tsx, 4, 20))
+>callback : Symbol(callback, Decl(index.tsx, 5, 8))
+>value : Symbol(value, Decl(index.tsx, 5, 21))
 
   bar: { callback?: (value: string) => void };
->bar : Symbol(Elements.bar, Decl(index.tsx, 1, 46))
->callback : Symbol(callback, Decl(index.tsx, 2, 8))
->value : Symbol(value, Decl(index.tsx, 2, 21))
+>bar : Symbol(Elements.bar, Decl(index.tsx, 5, 46))
+>callback : Symbol(callback, Decl(index.tsx, 6, 8))
+>value : Symbol(value, Decl(index.tsx, 6, 21))
 }
 
 type Props<C extends keyof Elements> = { as?: C } & Elements[C];
->Props : Symbol(Props, Decl(index.tsx, 3, 1))
->C : Symbol(C, Decl(index.tsx, 5, 11))
->Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
->as : Symbol(as, Decl(index.tsx, 5, 40))
->C : Symbol(C, Decl(index.tsx, 5, 11))
->Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
->C : Symbol(C, Decl(index.tsx, 5, 11))
+>Props : Symbol(Props, Decl(index.tsx, 7, 1))
+>C : Symbol(C, Decl(index.tsx, 9, 11))
+>Elements : Symbol(Elements, Decl(index.tsx, 2, 1))
+>as : Symbol(as, Decl(index.tsx, 9, 40))
+>C : Symbol(C, Decl(index.tsx, 9, 11))
+>Elements : Symbol(Elements, Decl(index.tsx, 2, 1))
+>C : Symbol(C, Decl(index.tsx, 9, 11))
 
 declare function Test<C extends keyof Elements>(props: Props<C>): null;
->Test : Symbol(Test, Decl(index.tsx, 5, 64))
->C : Symbol(C, Decl(index.tsx, 6, 22))
->Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
->props : Symbol(props, Decl(index.tsx, 6, 48))
->Props : Symbol(Props, Decl(index.tsx, 3, 1))
->C : Symbol(C, Decl(index.tsx, 6, 22))
+>Test : Symbol(Test, Decl(index.tsx, 9, 64))
+>C : Symbol(C, Decl(index.tsx, 10, 22))
+>Elements : Symbol(Elements, Decl(index.tsx, 2, 1))
+>props : Symbol(props, Decl(index.tsx, 10, 48))
+>Props : Symbol(Props, Decl(index.tsx, 7, 1))
+>C : Symbol(C, Decl(index.tsx, 10, 22))
 
 <Test
->Test : Symbol(Test, Decl(index.tsx, 5, 64))
+>Test : Symbol(Test, Decl(index.tsx, 9, 64))
 
   as="bar"
->as : Symbol(as, Decl(index.tsx, 8, 5))
+>as : Symbol(as, Decl(index.tsx, 12, 5))
 
   callback={(value) => {}}
->callback : Symbol(callback, Decl(index.tsx, 9, 10))
->value : Symbol(value, Decl(index.tsx, 10, 13))
+>callback : Symbol(callback, Decl(index.tsx, 13, 10))
+>value : Symbol(value, Decl(index.tsx, 14, 13))
 
 />;
 
 Test({
->Test : Symbol(Test, Decl(index.tsx, 5, 64))
+>Test : Symbol(Test, Decl(index.tsx, 9, 64))
 
   as: "bar",
->as : Symbol(as, Decl(index.tsx, 13, 6))
+>as : Symbol(as, Decl(index.tsx, 17, 6))
 
   callback: (value) => {},
->callback : Symbol(callback, Decl(index.tsx, 14, 12))
->value : Symbol(value, Decl(index.tsx, 15, 13))
+>callback : Symbol(callback, Decl(index.tsx, 18, 12))
+>value : Symbol(value, Decl(index.tsx, 19, 13))
 
 });
 
 <Test<'bar'>
->Test : Symbol(Test, Decl(index.tsx, 5, 64))
+>Test : Symbol(Test, Decl(index.tsx, 9, 64))
 
   as="bar"
->as : Symbol(as, Decl(index.tsx, 18, 12))
+>as : Symbol(as, Decl(index.tsx, 22, 12))
 
   callback={(value) => {}}
->callback : Symbol(callback, Decl(index.tsx, 19, 10))
->value : Symbol(value, Decl(index.tsx, 20, 13))
+>callback : Symbol(callback, Decl(index.tsx, 23, 10))
+>value : Symbol(value, Decl(index.tsx, 24, 13))
 
 />;
 

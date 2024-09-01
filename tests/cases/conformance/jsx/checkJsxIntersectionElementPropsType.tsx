@@ -2,6 +2,7 @@
 // @strict: true
 declare namespace JSX {
     interface ElementAttributesProperty { props: {}; }
+    interface Element<P, T> { props: P; type: T; }
 }
 
 declare class Component<P> {

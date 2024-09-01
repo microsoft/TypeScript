@@ -287,6 +287,7 @@ declare global {
                     declare namespace JSX {
                         interface ElementChildrenAttribute { children: {}; }
                         interface IntrinsicElements { div: {} }
+                        interface Element<P, T> { props: P; type: T; }
                     }
 
                     declare var React: any;

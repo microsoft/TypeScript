@@ -5,6 +5,7 @@ namespace JSX {
   export interface ElementChildrenAttribute {
     children: {};
   }
+  export interface Element<P, T> { props: P; type: T; }
 }
 
 interface Props {

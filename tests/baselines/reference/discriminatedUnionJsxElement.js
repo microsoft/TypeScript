@@ -3,6 +3,10 @@
 //// [discriminatedUnionJsxElement.tsx]
 // Repro from #46021
 
+declare namespace JSX {
+  interface Element<P, T> { props: P; type: T; }
+}
+
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
     menuItemsVariant?: MenuItemVariant;
 }
@@ -43,10 +47,16 @@ function ListItem(_data) {
 
 
 //// [discriminatedUnionJsxElement.d.ts]
+declare namespace JSX {
+    interface Element<P, T> {
+        props: P;
+        type: T;
+    }
+}
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
     menuItemsVariant?: MenuItemVariant;
 }
-declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): any;
+declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): JSX.Element<P, T>;
 type IListItemData = {
     variant: ListItemVariant.Avatar;
 } | {
@@ -57,3 +67,38 @@ declare enum ListItemVariant {
     Avatar = 1
 }
 declare function ListItem(_data: IListItemData): null;
+
+
+//// [DtsFileErrors]
+
+
+discriminatedUnionJsxElement.d.ts(10,133): error TS2304: Cannot find name 'P'.
+discriminatedUnionJsxElement.d.ts(10,136): error TS2304: Cannot find name 'T'.
+
+
+==== discriminatedUnionJsxElement.d.ts (2 errors) ====
+    declare namespace JSX {
+        interface Element<P, T> {
+            props: P;
+            type: T;
+        }
+    }
+    interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
+        menuItemsVariant?: MenuItemVariant;
+    }
+    declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): JSX.Element<P, T>;
+                                                                                                                                        ~
+!!! error TS2304: Cannot find name 'P'.
+                                                                                                                                           ~
+!!! error TS2304: Cannot find name 'T'.
+    type IListItemData = {
+        variant: ListItemVariant.Avatar;
+    } | {
+        variant: ListItemVariant.OneLine;
+    };
+    declare enum ListItemVariant {
+        OneLine = 0,
+        Avatar = 1
+    }
+    declare function ListItem(_data: IListItemData): null;
+    
