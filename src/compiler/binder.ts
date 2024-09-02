@@ -142,6 +142,7 @@ import {
     isBlock,
     isBlockOrCatchScoped,
     IsBlockScopedContainer,
+    isBlockScopedOrTopLevelContainer,
     isBooleanLiteral,
     isCallExpression,
     isClassStaticBlockDeclaration,
@@ -2667,11 +2668,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
         if (languageVersion < ScriptTarget.ES2015) {
             // Report error if function is not top level function declaration
-            if (
-                blockScopeContainer.kind !== SyntaxKind.SourceFile &&
-                blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
-                !isFunctionLikeOrClassStaticBlockDeclaration(blockScopeContainer)
-            ) {
+            if (!isBlockScopedOrTopLevelContainer(blockScopeContainer)) {
                 // We check first if the name is inside class declaration or class expression; if so give explicit message
                 // otherwise report generic error message.
                 const errorSpan = getErrorSpanForNode(file, node);
