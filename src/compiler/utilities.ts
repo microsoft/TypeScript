@@ -3004,7 +3004,7 @@ export function getContainingClassStaticBlock(node: Node): Node | undefined {
 }
 
 /** @internal */
-export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
+export function getContainingFunctionOrClassStaticBlock(node: Node): FunctionLikeDeclaration | ClassStaticBlockDeclaration | undefined {
     return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
 }
 

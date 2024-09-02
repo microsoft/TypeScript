@@ -1657,7 +1657,7 @@ export function isFunctionLike(node: Node | undefined): node is SignatureDeclara
 }
 
 /** @internal */
-export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
+export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is FunctionLikeDeclaration | ClassStaticBlockDeclaration {
     return !!node && (isFunctionLikeDeclaration(node) || isClassStaticBlockDeclaration(node));
 }
 
