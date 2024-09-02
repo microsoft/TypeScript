@@ -1966,7 +1966,7 @@ function isShorthandAmbientModule(node: Node | undefined): boolean {
 }
 
 /** @internal */
-export function isBlockScopedContainerTopLevel(node: Node): boolean {
+export function isBlockScopedOrTopLevelContainer(node: Node): boolean {
     return node.kind === SyntaxKind.SourceFile ||
         node.kind === SyntaxKind.ModuleDeclaration ||
         isFunctionLikeOrClassStaticBlockDeclaration(node);

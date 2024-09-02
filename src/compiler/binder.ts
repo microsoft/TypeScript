@@ -3391,7 +3391,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
         // Class declarations in Typescript do not allow property declarations
-        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) || lookupSymbolForPropertyAccess(node.left.expression, container);
+        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression);
         if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
             return;
         }
@@ -3442,8 +3442,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     return symbol;
                 }
                 else {
-                    const table = parent ? parent.exports! :
-                        file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                    const table = parent ? parent.exports! : (file.jsGlobalAugmentations ??= createSymbolTable());
                     return declareSymbol(table, parent, id, flags, excludeFlags);
                 }
             });
@@ -3467,7 +3466,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         let includes = SymbolFlags.None;
         let excludes = SymbolFlags.None;
         // Method-like
-        if (isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration)!)) {
+        if (isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration))) {
             includes = SymbolFlags.Method;
             excludes = SymbolFlags.MethodExcludes;
         }
@@ -3510,7 +3509,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-        let namespaceSymbol = lookupSymbolForPropertyAccess(name, blockScopeContainer) || lookupSymbolForPropertyAccess(name, container);
+        let namespaceSymbol = lookupSymbolForPropertyAccess(name);
         const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
         namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
         bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3554,13 +3553,26 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return expr.parent;
     }
 
-    function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: IsContainer | IsBlockScopedContainer | EntityNameExpression = container): Symbol | undefined {
-        if (isIdentifier(node)) {
-            return lookupSymbolForName(lookupContainer, node.escapedText);
-        }
-        else {
+    function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: IsContainer | IsBlockScopedContainer | EntityNameExpression = blockScopeContainer): Symbol | undefined {
+        if (!isIdentifier(node)) {
             const symbol = lookupSymbolForPropertyAccess(node.expression);
             return symbol && symbol.exports && symbol.exports.get(getElementOrPropertyAccessName(node));
+        }
+
+        let parent: Node = lookupContainer;
+
+        while (parent) {
+            const containerFlags = getContainerFlags(parent);
+            if (containerFlags & ContainerFlags.HasLocals) {
+                const symbol = lookupSymbolForName(parent, node.escapedText);
+                if (symbol) {
+                    return symbol;
+                }
+            }
+            if (containerFlags & ContainerFlags.IsContainer) {
+                return;
+            }
+            parent = parent.parent;
         }
     }
 

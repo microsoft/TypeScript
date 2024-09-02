@@ -1,0 +1,41 @@
+src/index.js(4,43): error TS2339: Property 'test' does not exist on type 'X'.
+src/index.js(12,43): error TS2339: Property 'test' does not exist on type 'Y'.
+src/index.js(15,9): error TS2322: Type 'Y' is not assignable to type '{ test: string; }'.
+  Types of property 'test' are incompatible.
+    Type 'string | number | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/index.js(17,9): error TS2741: Property 'test' is missing in type 'Y' but required in type '{ test: number; }'.
+
+
+==== src/index.js (4 errors) ====
+    export function X() { };
+    if (Math.random()) {
+      const X = function () { };
+      X.prototype.method = function () { this.test = 1 };
+                                              ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'X'.
+    }
+    
+    export function Y() { };
+    Y.prototype.method = function () { this.test = "foo" };
+    const AliasTopY = Y;
+    if (Math.random()) {
+      const Y = function () { };
+      Y.prototype.method = function () { this.test = 42 };
+                                              ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Y'.
+    
+      /** @type {{ test: string }} */
+      const topYcheck = new AliasTopY();
+            ~~~~~~~~~
+!!! error TS2322: Type 'Y' is not assignable to type '{ test: string; }'.
+!!! error TS2322:   Types of property 'test' are incompatible.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+      /** @type {{ test: number }} */
+      const blockYcheck = new Y();
+            ~~~~~~~~~~~
+!!! error TS2741: Property 'test' is missing in type 'Y' but required in type '{ test: number; }'.
+!!! related TS2728 src/index.js:16:16: 'test' is declared here.
+    }
+    
