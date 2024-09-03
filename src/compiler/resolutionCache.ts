@@ -293,7 +293,18 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     }
 
     // Paths like: c:/users/username or /home/username
-    return indexAfterOsRoot + 2;
+    indexAfterOsRoot += 2;
+
+    // Paths like /Users/username/Library/Caches
+    if (
+        !isDosStyle &&
+        pathComponents[indexAfterOsRoot] === "Library" &&
+        pathComponents[indexAfterOsRoot + 1] === "Caches"
+    ) {
+        return indexAfterOsRoot + 2;
+    }
+
+    return indexAfterOsRoot;
 }
 
 /**
