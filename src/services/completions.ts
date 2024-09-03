@@ -5803,6 +5803,9 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
         case "<":
             // Opening JSX tag
             return !!contextToken && contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
+        case ">":
+            // Call-this operator
+            return !!contextToken && contextToken.kind === SyntaxKind.TildeGreaterThanToken;
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)

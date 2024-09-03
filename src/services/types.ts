@@ -744,7 +744,7 @@ export interface OrganizeImportsArgs extends CombinedCodeFixScope {
     mode?: OrganizeImportsMode;
 }
 
-export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | ">" | "#" | " ";
 
 export const enum CompletionTriggerKind {
     /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
