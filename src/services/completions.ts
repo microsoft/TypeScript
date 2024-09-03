@@ -8,6 +8,7 @@ import {
     BindingPattern,
     BreakOrContinueStatement,
     CallExpression,
+    CallThisExpression,
     CancellationToken,
     canHaveDecorators,
     canUsePropertyAccess,
@@ -3217,6 +3218,7 @@ export const enum CompletionKind {
     Global,
     PropertyAccess,
     MemberLike,
+    CallThis,
     String,
     None,
 }
@@ -3389,6 +3391,7 @@ function getCompletionData(
     let propertyAccessToConvert: PropertyAccessExpression | undefined;
     let isRightOfDot = false;
     let isRightOfQuestionDot = false;
+    let isRightOfTildeGreaterThan = false;
     let isRightOfOpenTag = false;
     let isStartingCloseTag = false;
     let isJsxInitializer: IsJsxInitializer = false;
@@ -3470,6 +3473,14 @@ function getCompletionData(
                     // or leading into a '...' token. Just bail out instead.
                     return undefined;
             }
+        }
+        else if (contextToken.kind === SyntaxKind.TildeGreaterThanToken) {
+            isRightOfTildeGreaterThan = true;
+            if (parent.kind !== SyntaxKind.CallThisExpression) {
+                return undefined;
+            }
+            node = (parent as CallThisExpression).receiver;
+
         }
         else if (!importStatementCompletion) {
             // <UI.Test /* completion position */ />
@@ -3579,6 +3590,9 @@ function getCompletionData(
     if (isRightOfDot || isRightOfQuestionDot) {
         getTypeScriptMemberSymbols();
     }
+    else if (isRightOfTildeGreaterThan) {
+        getCallThisSymbols();
+    }
     else if (isRightOfOpenTag) {
         symbols = typeChecker.getJsxIntrinsicTagNamesAt(location);
         Debug.assertEachIsDefined(symbols, "getJsxIntrinsicTagNames() should all be defined");
@@ -3677,10 +3691,18 @@ function getCompletionData(
             const typeExpression = isJSDocTemplateTag(tag) ? tag.constraint : tag.typeExpression;
             return typeExpression && typeExpression.kind === SyntaxKind.JSDocTypeExpression ? typeExpression : undefined;
         }
+
         if (isJSDocAugmentsTag(tag) || isJSDocImplementsTag(tag)) {
             return tag.class;
         }
         return undefined;
+    }
+    
+    function getCallThisSymbols(): void {
+        completionKind = CompletionKind.CallThis;
+
+        const completions = typeChecker.getCallThisFunctionsForCompletion(node.parent);
+        symbols.push(...completions);
     }
 
     function getTypeScriptMemberSymbols(): void {
@@ -5409,6 +5431,7 @@ function getCompletionEntryDisplayNameForSymbol(
             // TODO: GH#18169
             return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
         case CompletionKind.PropertyAccess:
+        case CompletionKind.CallThis:
         case CompletionKind.Global: // For a 'this.' completion it will be in a global context, but may have a non-identifier name.
             // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
             return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };

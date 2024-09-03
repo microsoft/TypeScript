@@ -5132,6 +5132,8 @@ export interface TypeChecker {
     /** Note that the resulting nodes cannot be checked. */
     typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
 
+    getCallThisFunctionsForCompletion(location: Node): Symbol[];
+
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
     /** @internal */ getIndexInfosAtLocation(node: Node): readonly IndexInfo[] | undefined;

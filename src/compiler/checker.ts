@@ -1666,6 +1666,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
         symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
         typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
+        getCallThisFunctionsForCompletion: (locationIn) => {
+            const location = getParseTreeNode(locationIn);
+            return location ? getCallThisFunctionsForCompletion(location) : [];
+        },
         getSymbolsInScope: (locationIn, meaning) => {
             const location = getParseTreeNode(locationIn);
             return location ? getSymbolsInScope(location, meaning) : [];
@@ -48738,6 +48742,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // Language service support
+
+    function getCallThisFunctionsForCompletion(location: Node): Symbol[]   {
+        if (!isCallThisExpression(location)) {
+            return [];
+        }
+
+        const receiverType = getTypeOfExpression(location.receiver);
+        const symbols = getSymbolsInScope(location, SymbolFlags.None | SymbolFlags.Value);
+        return filter(symbols, (symbol) => {
+            const decl = symbol.declarations?.find(d => isFunctionDeclaration(d));
+            if (!decl) {
+                return false;
+            }
+
+            const thisType = getThisTypeOfDeclaration(decl);
+            return thisType ? isTypeRelatedTo(receiverType, thisType, assignableRelation) : false;
+        })
+    }
 
     function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
         if (location.flags & NodeFlags.InWithStatement) {
