@@ -11,5 +11,6 @@ describe("unittests:: resolution cache ", () => {
         assert.isUndefined(osRootBase("/Users/username/Library"));
         assert.isUndefined(osRootBase("/Users/username/Library/Caches"));
         assert.strictEqual(osRootBase("/Users/username/Library/Caches/typescript/5.5/package.json"), "typescript");
+        assert.strictEqual(osRootBase("/home/user/Caches"), "Caches");
     });
 });
