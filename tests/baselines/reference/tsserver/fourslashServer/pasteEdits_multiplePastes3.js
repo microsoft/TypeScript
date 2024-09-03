@@ -300,6 +300,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -313,22 +314,6 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/file1.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 3,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 3,
-                  "offset": 1
-                },
-                "newText": "export "
-              }
-            ]
-          },
-          {
             "fileName": "/target.ts",
             "textChanges": [
               {
@@ -341,17 +326,6 @@ Info seq  [hh:mm:ss:mss] response:
                   "offset": 10
                 },
                 "newText": "m, "
-              },
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 11
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 11
-                },
-                "newText": ", s"
               },
               {
                 "start": {

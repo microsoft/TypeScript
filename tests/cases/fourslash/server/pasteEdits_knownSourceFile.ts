@@ -26,15 +26,8 @@ const t = 9;`],
     copiedFrom: { file: "file2.ts", range: [ranges[1]] },
     },
     newFileContents: {
-        "/file2.ts":
-`import { b } from './file1';
-export const a = 1;
-const c = a + b;
-const t = 9;`,
-
         "/target.ts": 
 `import { b } from './file1';
-import { a } from './file2';
 
 export const tt = 2;
 const c = a + b;

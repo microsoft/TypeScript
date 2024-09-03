@@ -33,15 +33,8 @@ const u = 1;`, `export const k = r + m;`],
     copiedFrom: { file: "file1.ts", range: [ranges[2], ranges[3]] },
     },
     newFileContents: {
-        "/file1.ts":`import { aa, bb } from "./other";
-export const r = 10;
-export const s = 12;
-export const m = 10;
-export const t = aa + bb + r + s;
-const u = 1;
-export const k = r + m;`,
         "/target.ts":
-`import { m, r, s } from "./file1";
+`import { m, r } from "./file1";
 import { aa, bb } from "./other";
 const a = r;
 export const t = aa + bb + r + s;
