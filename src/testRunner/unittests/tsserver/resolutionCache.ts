@@ -16,7 +16,10 @@ import {
 } from "../helpers/tsserver.js";
 import {
     File,
+    FileOrFolderOrSymLink,
+    FileOrFolderOrSymLinkMap,
     TestServerHost,
+    TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
@@ -571,7 +574,7 @@ export const x = 10;`,
             path: `/user/username/projects/myproject/node_modules/somemodule/index.d.ts`,
             content: `export const x = 10;`,
         };
-        it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
+        it("when watching node_modules in inferred project for failed lookup closed script infos", () => {
             const files = [file1, file2];
             const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
@@ -579,7 +582,7 @@ export const x = 10;`,
 
             host.ensureFileOrFolder(npmCacheFile);
             session.host.baselineHost("After npm cache update");
-            baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", session);
+            baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup closed script infos", session);
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
             const config: File = {
@@ -686,4 +689,63 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
         openFilesForSession(["/users/username/projects/app/appB.ts"], session);
         baselineTsserverLogs("resolutionCache", "not sharing across references", session);
     });
+});
+
+describe("unittests:: tsserver:: resolutionCache:: global typings and inferred project watching", () => {
+    verify("when resolution is succeeds in global typings location with import from the cache file", () => ({
+        [`${getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/node/index.d.ts")}`]: dedent`
+            import { x } from "undici-types";
+            export const y = x;
+        `,
+        [`${getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/undici-types/index.d.ts")}`]: dedent`
+            export const x = 10;
+        `,
+    }));
+    verify("when resolution is succeeds in global typings location with import from the cache file failing", () => ({
+        [`${getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/node/index.d.ts")}`]: dedent`
+            import { x } from "undici-types";
+            export const y = x;
+        `,
+    }));
+    verify("when resolution is succeeds in global typings location with relative import from the cache file", () => ({
+        [`${getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/node/index.d.ts")}`]: dedent`
+            import { x } from "./x";
+            export const y = x;
+        `,
+        [`${getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/node/x.d.ts")}`]: dedent`
+            export const x = 10;
+        `,
+    }));
+    verify("when resolution fails in global typings location", () => ts.emptyArray);
+    function verify(scenario: string, files: () => FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
+        [undefined, "/"].forEach(overrideCurrentDirectory =>
+            it(`${scenario}${overrideCurrentDirectory ? " with currentDirectory at root" : ""}`, () => {
+                const host = TestServerHost.createServerHost(
+                    files(),
+                    {
+                        osFlavor: TestServerHostOsFlavor.MacOs,
+                        overrideCurrentDirectory,
+                    },
+                );
+                const session = new TestSession(host);
+                session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
+                    command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
+                    arguments: {
+                        options: {
+                            module: ts.ModuleKind.ESNext,
+                            moduleResolution: ts.ModuleResolutionKind.Bundler,
+                            target: ts.ScriptTarget.ES2020,
+                            traceResolution: true,
+                        },
+                    },
+                });
+                openFilesForSession([{
+                    file: "^/aichat-code-block-anysphere/ocjahtkquh/",
+                    content: `// worker.js\nconst { parentPort } = require('worker_threads');\nparentPort.postMessage('Hello, world!');\n`,
+                    scriptKindName: "JS",
+                }], session);
+                baselineTsserverLogs("resolutionCache", `${scenario}${overrideCurrentDirectory ? " with currentDirectory at root" : ""}`, session);
+            })
+        );
+    }
 });

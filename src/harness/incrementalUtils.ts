@@ -499,6 +499,24 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         if (fileSize > ts.server.maxFileSize) return "";
         return text !== undefined ? text || undefined : readFile(fileName);
     };
+    const getSourceFile = compilerHost.getSourceFile;
+    compilerHost.getSourceFile = (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
+        const projectScriptKind = project.getScriptKind(fileName);
+        const scriptKind = ts.ensureScriptKind(fileName, /*scriptKind*/ undefined);
+        if (scriptKind === projectScriptKind) return getSourceFile(fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+
+        let text: string | undefined;
+        try {
+            text = compilerHost.readFile(fileName);
+        }
+        catch (e) {
+            onError?.(e.message);
+            text = "";
+        }
+        return text !== undefined ?
+            ts.createSourceFile(fileName, text, languageVersionOrOptions, /*setParentNodes*/ undefined, projectScriptKind) :
+            undefined;
+    };
     const resolutionHostCacheHost: ts.ResolutionCacheHost = {
         ...compilerHost,
 
