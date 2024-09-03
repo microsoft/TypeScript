@@ -299,7 +299,6 @@ export function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPa
     // Paths like /Users/username/Library
     if (
         !isDosStyle &&
-        length > indexAfterOsRoot &&
         pathComponents[indexAfterOsRoot] === "Library"
     ) {
         indexAfterOsRoot += 1;
@@ -308,7 +307,6 @@ export function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPa
     // Paths like /Users/username/Library/Caches
     if (
         !isDosStyle &&
-        length > indexAfterOsRoot &&
         pathComponents[indexAfterOsRoot] === "Caches"
     ) {
         indexAfterOsRoot += 1;
