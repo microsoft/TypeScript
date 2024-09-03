@@ -263,7 +263,8 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         path;
 }
 
-function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>, length: number) {
+/** @internal */
+export function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>, length: number) {
     // Ignore "/", "c:/"
     if (length <= 1) return 1;
     let indexAfterOsRoot = 1;
@@ -295,13 +296,22 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     // Paths like: c:/users/username or /home/username
     indexAfterOsRoot += 2;
 
+    // Paths like /Users/username/Library
+    if (
+        !isDosStyle &&
+        length > indexAfterOsRoot &&
+        pathComponents[indexAfterOsRoot] === "Library"
+    ) {
+        indexAfterOsRoot += 1;
+    }
+
     // Paths like /Users/username/Library/Caches
     if (
         !isDosStyle &&
-        pathComponents[indexAfterOsRoot] === "Library" &&
-        pathComponents[indexAfterOsRoot + 1] === "Caches"
+        length > indexAfterOsRoot &&
+        pathComponents[indexAfterOsRoot] === "Caches"
     ) {
-        return indexAfterOsRoot + 2;
+        indexAfterOsRoot += 1;
     }
 
     return indexAfterOsRoot;

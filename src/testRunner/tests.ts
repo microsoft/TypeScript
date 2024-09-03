@@ -48,6 +48,7 @@ export * from "./unittests/printer.js";
 export * from "./unittests/programApi.js";
 export * from "./unittests/publicApi.js";
 export * from "./unittests/regExpScannerRecovery.js";
+export * from "./unittests/resolutionCache.js";
 export * from "./unittests/reuseProgramStructure.js";
 export * from "./unittests/semver.js";
 export * from "./unittests/services/cancellableLanguageServiceOperations.js";
