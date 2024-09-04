@@ -1336,6 +1336,10 @@ export class ProjectService {
             : undefined;
         this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
+        this.logger.info(`currentDirectory:: ${this.host.getCurrentDirectory()} useCaseSensitiveFileNames:: ${this.host.useCaseSensitiveFileNames}`);
+        this.logger.info(`libs Location:: ${getDirectoryPath(this.host.getExecutingFilePath())}`);
+        this.logger.info(`globalTypingsCacheLocation:: ${this.typingsInstaller.globalTypingsCacheLocation}`);
+
         if (this.typesMapLocation) {
             this.loadTypesMap();
         }

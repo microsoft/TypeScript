@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject/main useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject/main useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/main/index.ts]
 import { Foo } from '@scoped/linked-package'

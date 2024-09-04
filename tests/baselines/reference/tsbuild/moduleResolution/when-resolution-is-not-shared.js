@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/project/packages/a/index.js]
 export const a = 'a';

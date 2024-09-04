@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/workspaces/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspaces/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/workspaces/projects/myproject/a.ts]
 import { x } from "../b";

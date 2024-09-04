@@ -1,4 +1,6 @@
-currentDirectory:: C:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: C:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: C:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: undefined
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [C:/temp/replay/axios-src/lib/core/AxiosHeaders.js]

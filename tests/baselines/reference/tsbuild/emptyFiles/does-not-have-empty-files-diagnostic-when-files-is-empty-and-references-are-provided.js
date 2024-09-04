@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/solution/core/index.ts]
 export function multiply(a: number, b: number) { return a * b; }

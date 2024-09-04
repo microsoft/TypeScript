@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/a/b/f1.ts]
 export function Foo() { return 10; }

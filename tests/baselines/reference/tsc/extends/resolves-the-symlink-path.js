@@ -1,4 +1,4 @@
-currentDirectory:: /users/user/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /users/user/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json]
 {

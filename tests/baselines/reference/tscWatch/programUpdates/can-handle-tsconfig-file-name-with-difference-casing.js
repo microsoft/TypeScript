@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/workspace/solution useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/workspace/solution/projects/project/app.ts]
 let x = 1

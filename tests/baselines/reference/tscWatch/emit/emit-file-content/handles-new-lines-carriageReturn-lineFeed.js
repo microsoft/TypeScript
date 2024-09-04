@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/a useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/a/app.ts]
 var x = 1;

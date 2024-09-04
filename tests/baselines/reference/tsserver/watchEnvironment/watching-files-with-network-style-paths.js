@@ -1,5 +1,7 @@
 Info seq  [hh:mm:ss:mss] For files of style c:/myprojects/project/x.js
-currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\home\src\Library\Caches\typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [c:/myprojects/project/x.js]
@@ -242,7 +244,9 @@ Projects::
     autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
@@ -461,7 +465,9 @@ Projects::
     autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
@@ -704,7 +710,9 @@ Projects::
     autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project/x.js
-currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\home\src\Library\Caches\typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [c:/users/username/myprojects/project/x.js]
@@ -947,7 +955,9 @@ Projects::
     autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]

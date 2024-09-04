@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/reexport useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/reexport useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/reexport/src/tsconfig.json]
 {

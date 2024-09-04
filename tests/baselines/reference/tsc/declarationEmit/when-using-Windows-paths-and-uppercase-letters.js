@@ -1,4 +1,4 @@
-currentDirectory:: D:\Work\pkg1 useCaseSensitiveFileNames: false
+currentDirectory:: D:\Work\pkg1 useCaseSensitiveFileNames:: false
 Input::
 //// [D:/Work/pkg1/package.json]
 {

@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/demo/animals/animal.ts]
 export type Size = "small" | "medium" | "large";

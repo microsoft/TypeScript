@@ -1,4 +1,4 @@
-currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts]
 export function __assign(...args: any[]): any;

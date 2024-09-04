@@ -1,4 +1,4 @@
-currentDirectory:: /a/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /a/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/a/username/projects/project/typescript.ts]
 var z = 10;

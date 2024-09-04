@@ -203,7 +203,6 @@ describe("unittests:: tsserver:: watchEnvironment:: networkStylePaths", () => {
             );
             logger.host = host;
             logger.info(`For files of style ${path}`);
-            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
             const session = new TestSession({ host, logger });
             openFilesForSession([file], session);
         }

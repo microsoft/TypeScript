@@ -1,4 +1,4 @@
-currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts]
 export namespace JSX {

@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/soltion useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/soltion useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/soltion/app/file3.ts]
 export const z = 30;

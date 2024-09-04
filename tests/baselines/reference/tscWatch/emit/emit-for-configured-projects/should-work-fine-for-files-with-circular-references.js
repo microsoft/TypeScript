@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/a/b/file1.ts]
 /// <reference path="./file2.ts" />

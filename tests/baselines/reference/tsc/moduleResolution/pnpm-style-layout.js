@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/component-type-checker/packages/app useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/component-type-checker/packages/app useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts]
 export interface Button {

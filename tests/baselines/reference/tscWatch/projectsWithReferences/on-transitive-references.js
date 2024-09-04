@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/transitiveReferences useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/transitiveReferences useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/transitiveReferences/refs/a.d.ts]
 export class X {}

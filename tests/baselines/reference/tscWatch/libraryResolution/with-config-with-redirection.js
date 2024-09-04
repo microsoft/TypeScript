@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspace/projects useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspace/projects useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspace/projects/project1/utils.d.ts]
 export const y = 10;

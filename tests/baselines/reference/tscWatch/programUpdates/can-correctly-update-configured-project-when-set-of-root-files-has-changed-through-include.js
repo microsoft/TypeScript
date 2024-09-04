@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject/Project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject/Project useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/Project/file1.ts]
 export const x = 10;

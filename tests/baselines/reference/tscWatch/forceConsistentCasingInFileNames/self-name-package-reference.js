@@ -1,4 +1,4 @@
-currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames:: false
 Input::
 //// [/Users/name/projects/web/package.json]
 {

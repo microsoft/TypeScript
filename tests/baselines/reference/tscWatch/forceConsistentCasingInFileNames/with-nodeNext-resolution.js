@@ -1,4 +1,4 @@
-currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames:: false
 Input::
 //// [/Users/name/projects/web/src/bin.ts]
 import { foo } from "yargs";

@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/workspace/solution/projects/project/a.ts]
 label: while (1) {}

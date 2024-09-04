@@ -1,4 +1,4 @@
-currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
+currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames:: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
 {

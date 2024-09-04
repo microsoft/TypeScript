@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/solution/project/src/main.tsx]
 export const x = 10;

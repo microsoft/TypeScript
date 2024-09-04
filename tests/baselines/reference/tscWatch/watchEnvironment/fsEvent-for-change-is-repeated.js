@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/project/main.ts]
 let a: string = "Hello"

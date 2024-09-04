@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspace/packageC useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspace/packageC useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspace/packageA/index.d.ts]
 export declare class Foo {

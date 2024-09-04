@@ -1,4 +1,6 @@
-currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\typescript
 Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [e:/solution/myproject/src/app.js]

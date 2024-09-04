@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/packages useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/packages useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/packages/src-types/index.ts]
 export * from './dogconfig.js';

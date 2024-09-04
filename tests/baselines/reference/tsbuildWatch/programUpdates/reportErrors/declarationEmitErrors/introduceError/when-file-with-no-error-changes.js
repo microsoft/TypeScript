@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/solution useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/solution useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/solution/app/fileWithError.ts]
 export var myClassWithError = class {

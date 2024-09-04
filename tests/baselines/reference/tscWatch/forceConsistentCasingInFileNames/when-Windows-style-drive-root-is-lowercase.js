@@ -1,4 +1,4 @@
-currentDirectory:: c:\workspaces\solution useCaseSensitiveFileNames: false
+currentDirectory:: c:\workspaces\solution useCaseSensitiveFileNames:: false
 Input::
 //// [c:/workspaces/solution/project/a.ts]
 

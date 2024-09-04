@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/c/3/c-impl/c/src/c.ts] Inode:: 9
 export const c: string = 'test';

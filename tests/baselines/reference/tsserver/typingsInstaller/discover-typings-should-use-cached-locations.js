@@ -1,4 +1,3 @@
-currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
 
 //// [/home/src/projects/project/app.js]
 

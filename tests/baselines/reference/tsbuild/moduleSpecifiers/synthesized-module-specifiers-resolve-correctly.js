@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/packages useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/packages useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/packages/solution/common/nominal.ts]
 export declare type Nominal<T, Name extends string> = T & {

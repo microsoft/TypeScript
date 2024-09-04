@@ -1,4 +1,4 @@
-currentDirectory:: /home/user/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/user/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/home/user/projects/myproject/src/file.ts] Inode:: 6
 import * as a from "a"

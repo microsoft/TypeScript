@@ -733,7 +733,6 @@ describe("unittests:: tsserver:: projects::", () => {
 
         function verfiy(config: File, host: TestServerHost) {
             logger.host = host;
-            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
             const session = new TestSession({ host, logger });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,

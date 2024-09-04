@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/a/b/project useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a/b/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/a/b/output/AnotherDependency/file1.d.ts]
 declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }

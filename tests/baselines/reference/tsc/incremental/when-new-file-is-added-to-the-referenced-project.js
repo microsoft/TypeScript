@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/workspaces/projects useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/projects useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/workspaces/projects/project1/tsconfig.json]
 {
