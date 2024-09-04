@@ -1122,6 +1122,7 @@ import {
     WithStatement,
     YieldExpression,
     isIndexSignatureDeclaration,
+    MutableNodeArray,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -50495,6 +50496,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             isImportRequiredByAugmentation,
             isDefinitelyReferenceToGlobalSymbolObject,
+            createLateBoundIndexSignatures: (cls, enclosing, flags, internalFlags, tracker) => {
+                const sym = cls.symbol;
+                const staticInfos = getIndexInfosOfType(getTypeOfSymbol(sym));
+                const instanceIndexSymbol = getIndexSymbol(sym);
+                const instanceInfos = instanceIndexSymbol && getIndexInfosOfIndexSymbol(instanceIndexSymbol);
+                let result;
+                for (const infoList of [staticInfos, instanceInfos]) {
+                    if (!length(infoList)) continue;
+                    result ||= [];
+                    for (const info of infoList!) {
+                        const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
+                        if (node && infoList === staticInfos) {
+                            (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
+                        }
+                        if (node) {
+                            result.push(node);
+                        }
+                    }
+                }
+                return result;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
