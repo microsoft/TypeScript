@@ -44,6 +44,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (52428800). Largest files: /user/username/projects/project/f1.js:52428800, /user/username/projects/project/f2.js:100
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: proj1, currentDirectory: 
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

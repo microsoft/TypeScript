@@ -2688,7 +2688,6 @@ export class ProjectService {
     /** @internal */
     createConfiguredProject(configFileName: NormalizedPath, reason: string) {
         tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { configFilePath: configFileName });
-        this.logger.info(`Creating configuration project ${configFileName}`);
         const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
         let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         // We could be in this scenario if project is the configured project tracked by external project

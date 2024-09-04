@@ -54,7 +54,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/packages/app/package.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/packages/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/project/packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/app/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -190,7 +190,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/project/packages/dep/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/dep/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/dep
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -265,6 +265,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/packages/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -725,6 +726,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "getCodeFixes"
     }
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project/packages/app
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations

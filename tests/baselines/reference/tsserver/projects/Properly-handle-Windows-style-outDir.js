@@ -42,7 +42,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: C:/projects/a/f1.ts ProjectRootPath: undefined:: Result: C:/projects/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project C:/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: C:/projects/a/tsconfig.json, currentDirectory: C:/projects/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/projects/a/tsconfig.json 2000 undefined Project: C:/projects/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

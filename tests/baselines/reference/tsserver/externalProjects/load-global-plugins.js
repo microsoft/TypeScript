@@ -41,6 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/a/proj1.csproj, currentDirectory: /home/src/projects/project/a
 Info seq  [hh:mm:ss:mss] Loading global plugin myplugin
 Info seq  [hh:mm:ss:mss] Enabling plugin myplugin from candidate paths: /home/src/tslibs/TS/Lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Loading myplugin from /home/src/tslibs/TS/Lib/tsc.js/../../.. (resolved to /home/src/tslibs/TS/Lib/tsc.js/../../../node_modules)

@@ -39,7 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /workspaces/somerepo/src/main.ts ProjectRootPath: undefined:: Result: /workspaces/somerepo/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /workspaces/somerepo/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /workspaces/somerepo/src/tsconfig.json, currentDirectory: /workspaces/somerepo/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/tsconfig.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

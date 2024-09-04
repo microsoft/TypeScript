@@ -41,7 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/workspace/projects/config/file.ts ProjectRootPath: undefined:: Result: /a/b/workspace/projects/config/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/workspace/projects/config/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /a/b/workspace/projects/config/tsconfig.json, currentDirectory: /a/b/workspace/projects/config
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/workspace/projects/config/tsconfig.json 2000 undefined Project: /a/b/workspace/projects/config/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -361,6 +361,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/workspace/projects/files/file2.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /a/b/workspace/projects/files
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/workspace/projects/files/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/workspace/projects/files/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/workspace/projects/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -524,6 +525,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/workspace/projects/files/file1.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/workspace/projects/files/file2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: /a/b/workspace/projects/files
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/workspace/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/workspace/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots

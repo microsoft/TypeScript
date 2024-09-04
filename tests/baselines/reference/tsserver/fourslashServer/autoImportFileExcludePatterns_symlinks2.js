@@ -45,6 +45,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -190,6 +191,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/workspaces/project/index.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: c:/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
@@ -222,6 +224,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 2 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: c:/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/project/node_modules/@remix-run/server-runtime/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*

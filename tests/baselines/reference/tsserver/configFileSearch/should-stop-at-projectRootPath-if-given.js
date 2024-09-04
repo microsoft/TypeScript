@@ -36,6 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/project/project/a/file1.ts ProjectRootPath: /home/src/project/project/a:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/project/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -192,7 +193,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/project/project/a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/project/project/a/file1.ts ProjectRootPath: undefined:: Result: /home/src/project/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/project/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/project/project/tsconfig.json, currentDirectory: /home/src/project/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/tsconfig.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

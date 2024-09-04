@@ -41,6 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj, currentDirectory: /home/src/root/TypeScriptProject3/TypeScriptProject3
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/TypeScriptProject3/Foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info

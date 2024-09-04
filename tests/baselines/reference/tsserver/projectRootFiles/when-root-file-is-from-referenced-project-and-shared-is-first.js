@@ -99,7 +99,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/solution/projects/server/src/server.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/solution/projects/server/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/solution/projects/server/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/solution/projects/server/tsconfig.json, currentDirectory: /home/src/workspaces/solution/projects/server
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/server/tsconfig.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -262,7 +262,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/solution/projects/server/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/solution/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/solution/tsconfig.json, currentDirectory: /home/src/workspaces/solution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/tsconfig.json 2000 undefined Project: /home/src/workspaces/solution/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/solution/projects/server/tsconfig.json' (Configured)

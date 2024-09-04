@@ -214,7 +214,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/main/tsconfig.json, currentDirectory: /user/username/projects/myproject/main
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -644,7 +644,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/core/tsconfig.json, currentDirectory: /user/username/projects/myproject/core
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -868,7 +868,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/indirect/tsconfig.json, currentDirectory: /user/username/projects/myproject/indirect
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -963,7 +963,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/coreRef1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/coreRef1/tsconfig.json, currentDirectory: /user/username/projects/myproject/coreRef1
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1058,7 +1058,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json, currentDirectory: /user/username/projects/myproject/indirectDisabledChildLoad1
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1154,7 +1154,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json, currentDirectory: /user/username/projects/myproject/indirectDisabledChildLoad2
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1250,7 +1250,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/refToCoreRef3/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/refToCoreRef3/tsconfig.json, currentDirectory: /user/username/projects/myproject/refToCoreRef3
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1345,7 +1345,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/coreRef3/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/coreRef3/tsconfig.json, currentDirectory: /user/username/projects/myproject/coreRef3
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

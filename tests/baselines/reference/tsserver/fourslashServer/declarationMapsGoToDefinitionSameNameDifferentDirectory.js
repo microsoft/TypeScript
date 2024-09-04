@@ -82,6 +82,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/BaseClass/Source.d.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /tests/cases/fourslash/server/BaseClass
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -204,7 +205,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/buttonClass/Source.ts ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/buttonClass/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tests/cases/fourslash/server/buttonClass/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /tests/cases/fourslash/server/buttonClass/tsconfig.json, currentDirectory: /tests/cases/fourslash/server/buttonClass
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/buttonClass/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

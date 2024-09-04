@@ -48,6 +48,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: externalproject, currentDirectory: 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalproject
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: false Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before

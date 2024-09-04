@@ -93,6 +93,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project//lodash.js' because it matched lodash from the legacy safelist
 Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project//commander.js' because it matched commander from the legacy safelist
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/test.csproj, currentDirectory: /user/username/projects/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info

@@ -57,7 +57,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/common/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/project/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/common/tsconfig.json, currentDirectory: /home/src/workspaces/project/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/common/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/common/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -138,6 +138,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/common/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -281,7 +282,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/web/src/Helper.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/web/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspaces/project/web/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/web/tsconfig.json, currentDirectory: /home/src/workspaces/project/web
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/web/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/web/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

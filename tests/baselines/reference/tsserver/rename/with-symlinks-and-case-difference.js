@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/index.ts ProjectRootPath: undefined:: Result: c:/temp/test/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/project1/tsconfig.json, currentDirectory: c:/temp/test/project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/tsconfig.json 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -190,7 +190,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/tsconfig.json ProjectRootPath: undefined:: Result: c:/temp/test/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/tsconfig.json, currentDirectory: c:/temp/test
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/tsconfig.json 2000 undefined Project: c:/temp/test/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project1/tsconfig.json' (Configured)
@@ -387,7 +387,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/project2/tsconfig.json, currentDirectory: c:/temp/test/project2
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

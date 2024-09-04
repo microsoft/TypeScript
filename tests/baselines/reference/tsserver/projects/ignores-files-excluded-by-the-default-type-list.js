@@ -76,6 +76,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Excluding files based on rule Kendo matching file '/user/username/projects/project/q/lib/kendo/kendo.all.min.js'
 Info seq  [hh:mm:ss:mss] Excluding files based on rule Kendo matching file '/user/username/projects/project/q/lib/kendo-ui/kendo.all.js'
 Info seq  [hh:mm:ss:mss] Excluding files based on rule Office Nuget matching file '/user/username/projects/project/scripts/Office/1/excel-15.debug.js'
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: project, currentDirectory: 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/f1.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info

@@ -46,6 +46,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/projects/project/a/app/test.csproj, currentDirectory: /home/src/projects/project/a/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/app/test.csproj
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/app/node_modules 1 undefined Project: /home/src/projects/project/a/app/test.csproj WatchType: Failed Lookup Locations

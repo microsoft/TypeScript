@@ -93,7 +93,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/compiler/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/solution/compiler/tsconfig.json, currentDirectory: /user/username/projects/solution/compiler
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/tsconfig.json 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -206,7 +206,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/solution/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/solution/tsconfig.json, currentDirectory: /user/username/projects/solution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
@@ -463,7 +463,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/services/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/solution/services/tsconfig.json, currentDirectory: /user/username/projects/solution/services
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

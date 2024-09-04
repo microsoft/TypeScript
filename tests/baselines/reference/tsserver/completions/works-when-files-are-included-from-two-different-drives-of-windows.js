@@ -140,6 +140,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: e:/solution/myproject/src/app.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: e:/solution/myproject/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root

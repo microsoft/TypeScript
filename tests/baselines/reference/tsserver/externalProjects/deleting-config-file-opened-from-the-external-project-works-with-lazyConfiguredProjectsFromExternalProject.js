@@ -75,7 +75,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/someuser/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/someuser/projects/project/tsconfig.json, currentDirectory: /user/someuser/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
@@ -192,6 +192,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/someuser/projects/project/WebApplication6.csproj, currentDirectory: /user/someuser/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js/site.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/projects/project/WebApplication6.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info

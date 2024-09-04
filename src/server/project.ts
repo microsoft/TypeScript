@@ -573,6 +573,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         directoryStructureHost: DirectoryStructureHost,
         currentDirectory: string,
     ) {
+        projectService.logger.info(`Creating ${ProjectKind[projectKind]}Project: ${projectName}, currentDirectory: ${currentDirectory}`);
         this.projectName = projectName;
         this.directoryStructureHost = directoryStructureHost;
         this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);

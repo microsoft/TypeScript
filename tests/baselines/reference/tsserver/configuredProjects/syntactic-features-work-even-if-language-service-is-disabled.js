@@ -38,7 +38,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/app.js ProjectRootPath: undefined:: Result: /user/username/projects/project/a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/a/jsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/jsconfig.json, currentDirectory: /user/username/projects/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/jsconfig.json 2000 undefined Project: /user/username/projects/project/a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {

@@ -43,6 +43,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: proj1, currentDirectory: 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/f1.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj1
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/project/f1.js for info /user/username/projects/project/f1.js: fileSize: 10485760
@@ -314,6 +315,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: proj2, currentDirectory: 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/f2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj2
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/project/f2.js for info /user/username/projects/project/f2.js: fileSize: 6291456
@@ -558,6 +560,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (6291456). Largest files: /user/username/projects/project/f3.js:6291456
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: proj3, currentDirectory: 
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

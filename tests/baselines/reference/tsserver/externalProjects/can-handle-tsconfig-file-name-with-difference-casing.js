@@ -68,7 +68,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json, currentDirectory: /HOME/SRC/PROJECTS/PROJECT/A/B
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json 2000 undefined Project: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -230,6 +230,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/projects/project/a/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root

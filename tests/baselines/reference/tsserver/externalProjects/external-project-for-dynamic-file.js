@@ -34,6 +34,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: ^ScriptDocument1 file1.ts, currentDirectory: 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: ^ScriptDocument1 file1.ts WatchType: Type roots

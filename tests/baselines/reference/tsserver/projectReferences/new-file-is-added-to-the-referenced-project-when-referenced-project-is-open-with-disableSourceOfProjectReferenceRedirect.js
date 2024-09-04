@@ -63,7 +63,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/projects/project2/tsconfig.json, currentDirectory: /user/username/projects/myproject/projects/project2
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -278,7 +278,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project1/class1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/projects/project1/tsconfig.json, currentDirectory: /user/username/projects/myproject/projects/project1
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
