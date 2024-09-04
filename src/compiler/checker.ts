@@ -50506,6 +50506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!length(infoList)) continue;
                     result ||= [];
                     for (const info of infoList!) {
+                        if (info.declaration) continue;
                         const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
                         if (node && infoList === staticInfos) {
                             (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
