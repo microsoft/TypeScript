@@ -1121,6 +1121,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isIndexSignatureDeclaration,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -13344,12 +13345,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
      */
     function isLateBindableName(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableIndexSignature(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsIndexSignature(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableAST(node: DeclarationName) {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr)
-            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
+        return isEntityNameExpression(expr);
+    }
+
+    function isTypeUsableAsIndexSignature(type: Type): boolean {
+        return isTypeAssignableTo(type, stringNumberSymbolType);
     }
 
     function isLateBoundName(name: __String): boolean {
@@ -13364,6 +13378,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
         const name = getNameOfDeclaration(node);
         return !!name && isLateBindableName(name);
+    }
+
+    function hasLateBindableIndexSignature(node: Declaration) {
+        const name = getNameOfDeclaration(node);
+        return !!name && isLateBindableIndexSignature(name);
     }
 
     /**
@@ -13473,6 +13492,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedSymbol;
     }
 
+    function lateBindIndexSignature(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+        // First, late bind the index symbol itself, if needed
+        let indexSymbol = lateSymbols.get(InternalSymbolName.Index);
+        if (!indexSymbol) {
+            const early = earlySymbols?.get(InternalSymbolName.Index);
+            if (!early) {
+                indexSymbol = createSymbol(SymbolFlags.None, InternalSymbolName.Index, CheckFlags.Late);
+            }
+            else {
+                indexSymbol = cloneSymbol(early);
+                indexSymbol.links.checkFlags |= CheckFlags.Late;
+            }
+            lateSymbols.set(InternalSymbolName.Index, indexSymbol);
+        }
+        // Then just add the computed name as a late bound declaration
+        // (note: unlike `addDeclarationToLateBoundSymbol` we do not set up a `.lateSymbol` on `decl`'s links,
+        // since that would point at an index symbol and not a single property symbol, like most consumers would expect)
+        if (!indexSymbol.declarations) {
+            indexSymbol.declarations = [decl];
+        }
+        else if (!decl.symbol.isReplaceableByMethod) {
+            indexSymbol.declarations.push(decl);
+        }
+    }
+
     function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): Map<__String, Symbol> {
         const links = getSymbolLinks(symbol);
         if (!links[resolutionKind]) {
@@ -13495,6 +13539,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isStatic === hasStaticModifier(member)) {
                             if (hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            }
+                            else if (hasLateBindableIndexSignature(member)) {
+                                lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member as Node as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration);
                             }
                         }
                     }
@@ -16191,7 +16238,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIndexSymbol(symbol: Symbol): Symbol | undefined {
-        return symbol.members ? getIndexSymbolFromSymbolTable(symbol.members) : undefined;
+        return symbol.members ? getIndexSymbolFromSymbolTable(getMembersOfSymbol(symbol)) : undefined;
     }
 
     function getIndexSymbolFromSymbolTable(symbolTable: SymbolTable): Symbol | undefined {
@@ -16210,16 +16257,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIndexInfosOfIndexSymbol(indexSymbol: Symbol): IndexInfo[] {
         if (indexSymbol.declarations) {
             const indexInfos: IndexInfo[] = [];
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
-                if (declaration.parameters.length === 1) {
-                    const parameter = declaration.parameters[0];
-                    if (parameter.type) {
-                        forEachType(getTypeFromTypeNode(parameter.type), keyType => {
-                            if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
-                                indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
-                            }
-                        });
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
+                    if (declaration.parameters.length === 1) {
+                        const parameter = declaration.parameters[0];
+                        if (parameter.type) {
+                            forEachType(getTypeFromTypeNode(parameter.type), keyType => {
+                                if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
+                                    indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
+                                }
+                            });
+                        }
                     }
+                }
+                else if (hasLateBindableIndexSignature(declaration)) {
+                    // TODO: Combine index signatures inferred for each member? Or make an index info for each?
+                    // Combined?
+                    // Pros: Easily made, definite compatability with all relevant signatures.
+                    // Cons: Unspecific. Can't make the signature until all declarations are processed
+                    // Individual?
+                    // Pros: Can inject one at a time. Accurate read types via index info applicability filtering.
+                    // Cons: Can't tell at-a-glance which signatures apply? Potentially lots of signatures to track?
+                    // Individual probably better, so is what we do here.
+
+                    const declName = isBinaryExpression(declaration) ? declaration.left as ElementAccessExpression : (declaration as LateBoundDeclaration).name;
+                    const keyType = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
+                    forEachType(keyType, keyType => {
+                        // First-in-wins on multiple declarations right now - combine? leave as multiple, but with compatability error?
+                        if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
+                            indexInfos.push(createIndexInfo(keyType, getTypeOfVariableOrParameterOrProperty(declaration.symbol), hasEffectiveModifier(declaration, ModifierFlags.Readonly)));
+                        }
+                    });
                 }
             }
             return indexInfos;
@@ -41566,18 +41634,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const indexSymbol = getIndexSymbol(getSymbolOfDeclaration(node));
         if (indexSymbol?.declarations) {
             const indexSignatureMap = new Map<TypeId, { type: Type; declarations: IndexSignatureDeclaration[]; }>();
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
-                if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                    forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
-                        const entry = indexSignatureMap.get(getTypeId(type));
-                        if (entry) {
-                            entry.declarations.push(declaration);
-                        }
-                        else {
-                            indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
-                        }
-                    });
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
+                    if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
+                        forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
+                            const entry = indexSignatureMap.get(getTypeId(type));
+                            if (entry) {
+                                entry.declarations.push(declaration);
+                            }
+                            else {
+                                indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
+                            }
+                        });
+                    }
                 }
+                // Do nothing for late-bound index signatures: allow these to duplicate one another and explicit indexes
             }
             indexSignatureMap.forEach(entry => {
                 if (entry.declarations.length > 1) {
