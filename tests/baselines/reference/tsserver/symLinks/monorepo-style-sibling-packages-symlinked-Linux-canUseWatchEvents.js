@@ -68,7 +68,7 @@ type MyBarType = BarType;
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1) Inode:: 17
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 21
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 24
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -506,7 +506,7 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 30
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 33
 
 
 PolledWatches::
@@ -705,20 +705,20 @@ Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/p
 Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt created
 Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 113
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 116
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 114
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 117
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 115
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 118
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 116
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 119
 {
   "root": [
     "./src/index.ts"
@@ -1468,14 +1468,14 @@ Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/p
 Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo updated
 Custom watchDirectory:: Triggered Ignored:: {"id":8,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 115
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 116
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 118
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 118
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 119
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 121
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 119
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 122
 export type FooType = "foo";
 export type BarType = "bar";
 

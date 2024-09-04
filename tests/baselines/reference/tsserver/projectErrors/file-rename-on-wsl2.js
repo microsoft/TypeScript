@@ -17,7 +17,7 @@ export const b = 10;
   ]
 }
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 16
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -182,7 +182,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":13}
+  {"inode":16}
 /home/username/workspaces/project/src: *new*
   {"inode":5}
 /home/username/workspaces/project/src/b.ts: *new*
@@ -215,7 +215,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/username/workspaces/project/tsconfig.j
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/username/workspaces/project/src/b.ts 2:: WatchInfo: /home/username/workspaces/project/src/b.ts 500 undefined WatchType: Closed Script info
 Before request
-//// [/home/username/workspaces/project/src/c.ts] Inode:: 104
+//// [/home/username/workspaces/project/src/c.ts] Inode:: 107
 export const b = 10;
 
 //// [/home/username/workspaces/project/src/b.ts] deleted
@@ -230,7 +230,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+  {"inode":16}
 /home/username/workspaces/project/src:
   {"inode":5}
 /home/username/workspaces/project/tsconfig.json:
@@ -335,7 +335,7 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+  {"inode":16}
 /home/username/workspaces/project/src:
   {"inode":5}
 /home/username/workspaces/project/tsconfig.json:
@@ -489,11 +489,11 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+  {"inode":16}
 /home/username/workspaces/project/src:
   {"inode":5}
 /home/username/workspaces/project/src/c.ts: *new*
-  {"inode":104}
+  {"inode":107}
 /home/username/workspaces/project/tsconfig.json:
   {"inode":8}
 

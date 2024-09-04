@@ -14,7 +14,7 @@ import {} from "./"
   }
 }
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 14
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 17
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -191,7 +191,7 @@ FsWatches::
 /a/username/workspace/project/tsconfig.json: *new*
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":14}
+  {"inode":17}
 
 Projects::
 /a/username/workspace/project/tsconfig.json (Configured) *new*
@@ -260,7 +260,7 @@ Before running Timeout callback:: count: 3
 3: /a/username/workspace/project/tsconfig.json
 4: *ensureProjectForOpenFiles*
 5: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
-//// [/a/username/workspace/project/src/file2.ts] Inode:: 105
+//// [/a/username/workspace/project/src/file2.ts] Inode:: 108
 
 
 
@@ -331,11 +331,11 @@ FsWatches::
 /a/username/workspace/project/src/file1.ts:
   {"inode":7}
 /a/username/workspace/project/src/file2.ts: *new*
-  {"inode":105}
+  {"inode":108}
 /a/username/workspace/project/tsconfig.json:
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":14}
+  {"inode":17}
 
 Timeout callback:: count: 1
 4: *ensureProjectForOpenFiles* *deleted*

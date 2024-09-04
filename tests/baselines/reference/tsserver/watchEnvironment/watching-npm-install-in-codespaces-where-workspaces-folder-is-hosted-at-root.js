@@ -11,7 +11,7 @@ randomSeed();
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 9
 export function randomSeed(): string;
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 18
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -189,7 +189,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/node_modules: *new*
   {"inode":6}
 /workspaces/somerepo/node_modules/@types: *new*
@@ -362,7 +362,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -486,7 +486,7 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -652,7 +652,7 @@ Projects::
     dirty: true *changed*
 
 Before request
-//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 109
+//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 112
 export function randomSeed(): string;
 
 
@@ -670,11 +670,11 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/node_modules: *new*
-  {"inode":106}
+  {"inode":109}
 /workspaces/somerepo/node_modules/@types: *new*
-  {"inode":107}
+  {"inode":110}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -766,11 +766,11 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/node_modules:
-  {"inode":106}
+  {"inode":109}
 /workspaces/somerepo/node_modules/@types:
-  {"inode":107}
+  {"inode":110}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -898,13 +898,13 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":15}
+  {"inode":18}
 /workspaces/somerepo/node_modules:
-  {"inode":106}
+  {"inode":109}
 /workspaces/somerepo/node_modules/@types:
-  {"inode":107}
+  {"inode":110}
 /workspaces/somerepo/node_modules/@types/random-seed: *new*
-  {"inode":108}
+  {"inode":111}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:

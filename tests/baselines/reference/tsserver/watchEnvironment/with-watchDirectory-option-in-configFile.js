@@ -14,7 +14,7 @@ let y = 1
 //// [/user/username/projects/project/commonFile1.ts] Inode:: 7
 let x = 1
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 16
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -181,7 +181,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":13}
+  {"inode":16}
 /user/username/projects/project: *new*
   {"inode":4}
 /user/username/projects/project/commonFile2.ts: *new*

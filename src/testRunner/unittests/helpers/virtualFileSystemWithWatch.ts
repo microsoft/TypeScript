@@ -485,6 +485,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.watchDirectory = watchDirectory;
         this.reloadFS(fileOrFolderorSymLinkList);
 
+        // Ensure current directory exists
+        this.ensureFileOrFolder({ path: this.currentDirectory });
+
         // Ensure libs
         this.ensureFileOrFolder({
             path: combinePaths(getDirectoryPath(this.executingFilePath), "lib.d.ts"),
