@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "esnext",       // or es2022, system, nodenext
+        "module": "es2022",       // or es2022, system, nodenext
         "target": "es2017"        // or es2018, es2019, es2020, etc.
     },
     "files": [],
