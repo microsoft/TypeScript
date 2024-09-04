@@ -179,7 +179,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                 assert.equal(builderProgram.state.changedFilesSet!.size, 0, "changes");
 
                 assert.equal(builderProgram.state.fileInfos.size, 3, "FileInfo size");
-                assert.deepEqual(builderProgram.state.fileInfos.get(libFile.path as ts.Path), {
+                assert.deepEqual(builderProgram.state.fileInfos.get(ts.toFileNameLowerCase(libFile.path) as ts.Path), {
                     version: system.createHash(libFile.content),
                     signature: system.createHash(libFile.content),
                     affectsGlobalScope: true,
@@ -207,7 +207,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                 assert.equal(ts.arrayFrom(builderProgram.state.referencedMap!.keys()).length, 0);
 
                 assert.equal(builderProgram.state.semanticDiagnosticsPerFile.size, 3);
-                assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(libFile.path as ts.Path), ts.emptyArray);
+                assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(ts.toFileNameLowerCase(libFile.path) as ts.Path), ts.emptyArray);
                 assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(file1.path as ts.Path), ts.emptyArray);
                 assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(file2.path as ts.Path), [{
                     file: builderProgram.state.program!.getSourceFileByPath(file2.path as ts.Path)!,
