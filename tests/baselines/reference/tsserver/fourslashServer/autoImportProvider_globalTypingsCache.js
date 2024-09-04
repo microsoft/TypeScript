@@ -1,19 +1,19 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-lib.d.ts-Text
-
-//// [/home/src/tslibs/ts/lib/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts]
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts]
 export class BrowserRouterFromDts {}
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json]
 { "name": "@types/react-router-dom", "version": "16.8.4", "types": "index.d.ts" }
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+lib.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
+lib.decorators.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
+lib.decorators.legacy.d.ts-Text
 
 //// [/home/src/workspaces/project/index.js]
 BrowserRouter
@@ -40,58 +40,58 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json"
+        "file": "/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json SVC-1-0 "{ \"name\": \"@types/react-router-dom\", \"version\": \"16.8.4\", \"types\": \"index.d.ts\" }"
-	/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts Text-1 "export class BrowserRouterFromDts {}"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json SVC-1-0 "{ \"name\": \"@types/react-router-dom\", \"version\": \"16.8.4\", \"types\": \"index.d.ts\" }"
+	/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "export class BrowserRouterFromDts {}"
 
 
-	../../../../../../tslibs/ts/lib/lib.d.ts
+	../../../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../../../../../tslibs/ts/lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../../../tslibs/ts/lib/lib.d.ts'
-	../../../../../../tslibs/ts/lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../../../tslibs/ts/lib/lib.d.ts'
+	../../../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../../../tslibs/TS/Lib/lib.d.ts'
 	package.json
 	  Root file specified for compilation
 	index.d.ts
@@ -103,7 +103,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -118,47 +118,47 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/tsconfig.json: *new*
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/typinginstaller/globalcache/data/node_modules: *new*
+/home/src/Library/Caches/node_modules: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types: *new*
+/home/src/Library/Caches/node_modules/@types: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/node_modules/@types: *new*
+/home/src/Library/Caches/typescript/node_modules: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules: *new*
+/home/src/Library/Caches/typescript/node_modules/@types: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules/@types: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/node_modules/@types: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/node_modules/@types: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules: *new*
   {}
-/home/src/typinginstaller/globalcache/node_modules: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types: *new*
   {}
-/home/src/typinginstaller/globalcache/node_modules/@types: *new*
+/home/src/Library/Caches/typescript/node_modules/node_modules/@types: *new*
   {}
-/home/src/typinginstaller/node_modules: *new*
+/home/src/Library/node_modules: *new*
   {}
-/home/src/typinginstaller/node_modules/@types: *new*
+/home/src/Library/node_modules/@types: *new*
   {}
 
 Projects::
@@ -167,26 +167,26 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts *new*
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json (Open) *new*
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -236,18 +236,18 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/index.js SVC-1-0 "BrowserRouter"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../tslibs/ts/lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../tslibs/ts/lib/lib.d.ts'
-	../../tslibs/ts/lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../tslibs/ts/lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	index.js
 	  Matched by default include pattern '**/*'
 
@@ -255,14 +255,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts Text-1 "export class BrowserRouterFromDts {}"
+	/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "export class BrowserRouterFromDts {}"
 
 
-	../../typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts
+	../../Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -305,7 +305,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/index.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
@@ -323,52 +323,52 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/jsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/@types/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/jsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":2000} *new*
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/tsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/tsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/@types/tsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/jsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/tsconfig.json:
+/home/src/Library/Caches/typescript/node_modules/tsconfig.json:
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
 /home/src/workspaces/project/package.json: *new*
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/typinginstaller/globalcache/data/node_modules:
+/home/src/Library/Caches/node_modules:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types:
+/home/src/Library/Caches/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules:
+/home/src/Library/Caches/typescript/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/@types/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules:
   {}
-/home/src/typinginstaller/globalcache/node_modules:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/node_modules/@types:
   {}
-/home/src/typinginstaller/node_modules:
+/home/src/Library/node_modules:
   {}
-/home/src/typinginstaller/node_modules/@types:
+/home/src/Library/node_modules/@types:
   {}
 /home/src/workspaces/node_modules: *new*
   {}
@@ -394,30 +394,30 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /home/src/workspaces/project/tsconfig.json *new*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /home/src/workspaces/project/tsconfig.json *new*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /home/src/workspaces/project/tsconfig.json *new*
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts *changed*
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/autoImportProviderProject1* *new*
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json (Open)
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.json *new*
 /home/src/workspaces/project/index.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -478,8 +478,8 @@ Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
@@ -1045,7 +1045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "BrowserRouterFromDts",
               "exportMapKey": "20 * BrowserRouterFromDts ",
               "moduleSpecifier": "react-router-dom",
-              "fileName": "/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts",
+              "fileName": "/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts",
               "isPackageJsonImport": true
             }
           },
@@ -1071,53 +1071,53 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/Library/Caches/typescript/node_modules/@types/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/tsconfig.json:
-  {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
   {"pollingInterval":250}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/typinginstaller/globalcache/data/node_modules:
+/home/src/Library/Caches/node_modules:
+  {}
+/home/src/Library/Caches/node_modules/@types:
+  {}
+/home/src/Library/Caches/typescript/node_modules:
   {}
   {} *new*
-/home/src/typinginstaller/globalcache/data/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/@types/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/data/node_modules/node_modules/@types:
+/home/src/Library/Caches/typescript/node_modules/node_modules/@types:
   {}
-/home/src/typinginstaller/globalcache/node_modules:
+/home/src/Library/node_modules:
   {}
-/home/src/typinginstaller/globalcache/node_modules/@types:
-  {}
-/home/src/typinginstaller/node_modules:
-  {}
-/home/src/typinginstaller/node_modules/@types:
+/home/src/Library/node_modules/@types:
   {}
 /home/src/workspaces/node_modules:
   {}

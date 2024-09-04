@@ -1,6 +1,6 @@
 currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -16,7 +16,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 declare const eval: any
 
-//// [/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts]
 declare class Promise<T> {}
 
 //// [/home/src/projects/project/app.ts]
@@ -35,7 +35,7 @@ var x: Promise<string>;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -51,7 +51,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -85,7 +85,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -108,11 +108,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
 /home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
 /home/src/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
@@ -172,9 +172,9 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json:
   {}
-/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -199,13 +199,13 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
 /home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
 /home/src/projects/project/app.ts
 
 Shape signatures in builder refreshed for::

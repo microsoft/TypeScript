@@ -60,7 +60,7 @@ export const a: Unrestricted = 1;
 //// [/home/src/workspaces/solution/webpack/index.ts]
 export const b: Unrestricted = 1;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -76,7 +76,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --v --listFiles
+/home/src/tslibs/TS/Lib/tsc.js --b --v --listFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * shared/tsconfig.json
@@ -87,14 +87,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/shared/tsconfig.json'...
 
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/shared/index.ts
 /home/src/workspaces/solution/shared/typings-base/globals.d.ts
 [[90mHH:MM:SS AM[0m] Project 'webpack/tsconfig.json' is out of date because output file 'target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/webpack/tsconfig.json'...
 
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/webpack/index.ts
 /home/src/workspaces/solution/shared/typings-base/globals.d.ts
 

@@ -10,7 +10,7 @@ Input::
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -26,7 +26,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -44,7 +44,7 @@ FsWatches::
   {"inode":6}
 /a/username/projects/project/tsconfig.json: *new*
   {"inode":7}
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":13}
 
 Timeout callback:: count: 1
@@ -59,11 +59,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file1.ts
 
 Shape signatures in builder refreshed for::
@@ -91,7 +91,7 @@ PolledWatches::
 FsWatches::
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":13}
 
 FsWatches *deleted*::
@@ -142,7 +142,7 @@ FsWatches::
   {"inode":105}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":13}
 
 Timeout callback:: count: 3
@@ -160,7 +160,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /a/username/projects/project/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::

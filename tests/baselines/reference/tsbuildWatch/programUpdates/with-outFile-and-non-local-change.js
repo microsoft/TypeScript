@@ -29,7 +29,7 @@ function foo() { return 10; }
 //// [/user/username/workspaces/solution/sample1/logic/index.ts]
 function bar() { return foo() + 1 };
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -45,7 +45,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -w sample1/logic
+/home/src/tslibs/TS/Lib/tsc.js -b -w sample1/logic
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -163,11 +163,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 No shapes updated in the builder::
@@ -185,12 +185,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
@@ -278,11 +278,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 No shapes updated in the builder::
@@ -351,12 +351,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.d.ts
 /user/username/workspaces/solution/sample1/logic/index.ts
 
@@ -439,11 +439,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspaces/solution/sample1/core/index.ts
 
 No shapes updated in the builder::

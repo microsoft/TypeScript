@@ -1,5 +1,5 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/app.js]
 
@@ -11,7 +11,7 @@ Before request
 //// [/home/src/projects/project/node_modules/fooo/index.d.ts]
 export var x: string;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -42,7 +42,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -58,12 +58,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
@@ -94,7 +94,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -115,25 +115,25 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
-TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/typinginstaller/globalcache/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {
     "foo": {
@@ -155,7 +155,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
@@ -177,7 +177,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "/home/src/projects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
@@ -207,7 +207,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["foo"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
@@ -224,7 +224,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 1
       }
     }
-TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/typinginstaller/globalcache/data arguments: [
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/foo@tsFakeMajor.Minor"
 ]
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -270,7 +270,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -302,21 +302,21 @@ Before running PendingInstalls callback:: count: 1
 TI:: Installation #1 with arguments:: [
   "@types/foo@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts]
 export function aa(): void;
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts]
 export function a (): void;
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts]
 export function b (): void;
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts]
 export function c (): void;
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/foo@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -334,7 +334,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [
-        "/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"
       ],
       "unresolvedImports": [
         "foo"
@@ -364,7 +364,7 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [
-          "/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"
         ],
         "unresolvedImports": [
           "foo"
@@ -415,37 +415,37 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/foo/a/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/foo/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/foo/a/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/foo/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts Text-1 "export function aa(): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts Text-1 "export function aa(): void;"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/a.d.ts
 	  Imported via "foo/a/a" from file 'app.js'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/b.d.ts
 	  Imported via "foo/a/b" from file 'app.js'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/c.d.ts
 	  Imported via "foo/a/c" from file 'app.js'
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
 	app.js
 	  Root file specified for compilation
-	../../typinginstaller/globalcache/data/node_modules/foo/index.d.ts
+	../../Library/Caches/typescript/node_modules/foo/index.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -453,9 +453,9 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/home/src/projects/project/app.js",
-        "/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"
       ],
       "compilerOptions": {
         "target": 1,
@@ -543,6 +543,12 @@ TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discove
 After running Timeout callback:: count: 2
 
 PolledWatches::
+/home/src/Library/Caches/typescript/node_modules/foo/a/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/foo/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
@@ -563,23 +569,17 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json:
   {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/foo/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/typinginstaller/globalcache/data/node_modules/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/Library/Caches/typescript/package.json: *new*
   {}
-/home/src/typinginstaller/globalcache/data/package.json: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules:
+/home/src/Library/Caches/typescript/node_modules: *new*
   {}
-/home/src/typinginstaller/globalcache/data/node_modules: *new*
+/home/src/projects/project/node_modules:
   {}
 
 Timeout callback:: count: 2
@@ -595,6 +595,21 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -603,45 +618,30 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts *new*
-    version: Text-1
-    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/a.d.ts
 	  Imported via "foo/a/a" from file 'app.js'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/b.d.ts
 	  Imported via "foo/a/b" from file 'app.js'
-	../../typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts
+	../../Library/Caches/typescript/node_modules/foo/a/c.d.ts
 	  Imported via "foo/a/c" from file 'app.js'
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
@@ -653,7 +653,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
@@ -787,6 +787,21 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 0
 /home/src/projects/project/app.js (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
@@ -795,25 +810,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/typinginstaller/globalcache/data/node_modules/foo/index.d.ts
-    version: Text-1
-    containingProjects: 0
 
 Before running Timeout callback:: count: 2
 3: /dev/null/inferredProject1*
@@ -824,10 +824,10 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
-	/home/src/typinginstaller/globalcache/data/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-1 "import * as bar from \"bar\";\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
 
@@ -836,7 +836,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {

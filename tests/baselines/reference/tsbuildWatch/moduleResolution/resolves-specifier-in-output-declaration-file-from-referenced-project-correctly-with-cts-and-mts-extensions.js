@@ -50,7 +50,7 @@ export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -66,7 +66,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -87,8 +87,8 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -129,8 +129,8 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -139,7 +139,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs]
 "use strict";
@@ -253,11 +253,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/package.json: *new*
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 /package.json: *new*
   {"pollingInterval":2000}
@@ -301,12 +301,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
@@ -328,13 +328,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -410,8 +410,8 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -461,7 +461,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -534,8 +534,8 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -575,7 +575,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -651,8 +651,8 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -702,7 +702,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -754,8 +754,8 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -850,11 +850,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/package.json:
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /package.json:
   {"pollingInterval":2000}
@@ -932,8 +932,8 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -972,7 +972,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.cts
 
@@ -995,7 +995,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.cts
 /user/username/projects/myproject/packages/pkg1/index.ts

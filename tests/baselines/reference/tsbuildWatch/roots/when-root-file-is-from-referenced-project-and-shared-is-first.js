@@ -70,7 +70,7 @@ console.log('Hello, world!');
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -86,7 +86,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -w -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -w -v --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -99,7 +99,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -121,7 +121,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -411,13 +411,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/src/logging.ts
 /home/src/workspaces/solution/projects/shared/src/myClass.ts
 /home/src/workspaces/solution/projects/shared/src/random.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/src/logging.ts
 /home/src/workspaces/solution/projects/shared/src/myClass.ts
 /home/src/workspaces/solution/projects/shared/src/random.ts
@@ -453,14 +453,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/random.d.ts
 /home/src/workspaces/solution/projects/server/src/server.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/random.d.ts
@@ -508,7 +508,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -626,7 +626,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -774,7 +774,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/src/logging.ts
 /home/src/workspaces/solution/projects/shared/src/myClass.ts
 /home/src/workspaces/solution/projects/shared/src/random.ts
@@ -810,7 +810,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/random.d.ts
@@ -852,7 +852,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -964,7 +964,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -1091,7 +1091,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/src/logging.ts
 /home/src/workspaces/solution/projects/shared/src/myClass.ts
 
@@ -1123,7 +1123,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/solution/projects/server/src/server.ts

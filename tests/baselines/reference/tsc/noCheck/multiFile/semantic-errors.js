@@ -13,7 +13,7 @@ export const b = 10;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,7 +29,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -67,7 +67,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -77,7 +77,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -97,7 +97,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -110,7 +110,7 @@ Input::
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -133,7 +133,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -143,7 +143,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -163,7 +163,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -173,7 +173,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -192,7 +192,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -202,7 +202,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -221,7 +221,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -231,7 +231,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -251,7 +251,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -264,7 +264,7 @@ Input::
 export const a: number = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -287,7 +287,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -297,7 +297,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -317,7 +317,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -327,7 +327,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
@@ -354,7 +354,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -367,7 +367,7 @@ Input::
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -390,7 +390,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -400,7 +400,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -419,7 +419,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -432,7 +432,7 @@ Input::
 export const c: number = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
@@ -471,7 +471,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -485,7 +485,7 @@ Input::
 export const a: number = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -511,7 +511,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -525,7 +525,7 @@ Input::
 export const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -551,7 +551,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -562,7 +562,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
@@ -592,7 +592,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -603,7 +603,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noCheck
+/home/src/tslibs/TS/Lib/tsc.js --noCheck
 Output::
 
 
@@ -626,7 +626,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -637,7 +637,7 @@ Change:: No Change run with checking
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
@@ -667,7 +667,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts

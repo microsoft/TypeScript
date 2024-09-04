@@ -36,7 +36,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,7 +52,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
@@ -183,7 +183,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -194,7 +194,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -210,7 +210,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -362,7 +362,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
@@ -444,7 +444,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
@@ -463,7 +463,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -474,7 +474,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -485,7 +485,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
@@ -509,7 +509,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -708,7 +708,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -751,7 +751,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -788,7 +788,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -825,7 +825,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
@@ -873,7 +873,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -950,7 +950,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
@@ -1081,7 +1081,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -1092,7 +1092,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js --p . --noEmit
 Output::
 
 
@@ -1103,7 +1103,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --p .
+/home/src/tslibs/TS/Lib/tsc.js --p .
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 

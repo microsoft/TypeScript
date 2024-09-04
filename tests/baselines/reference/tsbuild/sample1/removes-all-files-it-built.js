@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -385,7 +385,7 @@ export declare const m: typeof mod;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --clean
+/home/src/tslibs/TS/Lib/tsc.js --b tests --clean
 //// [/user/username/projects/sample1/core/anotherModule.js] deleted
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map] deleted
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] deleted
@@ -407,6 +407,6 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --clean
+/home/src/tslibs/TS/Lib/tsc.js --b tests --clean
 
 exitCode:: ExitStatus.Success

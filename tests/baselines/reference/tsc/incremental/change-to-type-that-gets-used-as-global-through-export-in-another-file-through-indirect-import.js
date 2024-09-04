@@ -20,7 +20,7 @@ export { default as ConstantNumber } from "./constants"
 //// [/home/src/workspaces/project/types.d.ts]
 type MagicNumber = typeof import('./reexport').ConstantNumber
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -36,7 +36,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -178,7 +178,7 @@ Input::
 export default 2;
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mclass1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '1' is not assignable to type '2'.
 

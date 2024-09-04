@@ -6,7 +6,7 @@ interface Document {
 }
 var y: number;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -25,12 +25,12 @@ interface Document {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -w /user/username/projects/myproject/a.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /user/username/projects/myproject/a.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96m../../../../home/src/tslibs/ts/lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m15[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
@@ -56,7 +56,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -69,11 +69,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
@@ -121,11 +121,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
@@ -155,7 +155,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../home/src/tslibs/ts/lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+[96m../../../../home/src/tslibs/TS/Lib/lib.d.ts[0m:[93m15[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m15[0m     readonly fullscreen: boolean;
 [7m  [0m [91m             ~~~~~~~~~~[0m
@@ -183,11 +183,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::

@@ -13,7 +13,7 @@ export const x = 10;
 //// [/user/username/projects/myproject/other.ts]
 export const y = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -112,7 +112,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
@@ -136,12 +136,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
@@ -259,7 +259,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
   {} *new*
@@ -269,7 +269,7 @@ FsWatches::
   {} *new*
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -296,7 +296,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
@@ -328,7 +328,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -422,7 +422,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
@@ -446,7 +446,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
@@ -551,7 +551,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
   {} *new*
@@ -561,7 +561,7 @@ FsWatches::
   {} *new*
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -588,7 +588,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
@@ -621,7 +621,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
@@ -716,7 +716,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
@@ -739,7 +739,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 

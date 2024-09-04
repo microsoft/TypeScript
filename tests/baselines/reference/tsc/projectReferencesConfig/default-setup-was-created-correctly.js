@@ -28,7 +28,7 @@ export { };
 //// [/home/src/workspaces/project/secondary/b.ts]
 import * as mod_0 from "../primary/a"
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,7 +44,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p primary/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p primary/tsconfig.json
 Output::
 
 

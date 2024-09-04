@@ -28,7 +28,7 @@ declare const ky: KyInstance;
 export default ky;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,7 +44,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --explainFiles --listEmittedFiles
 Output::
 [96msrc/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/ky" but cannot be named.
 
@@ -53,7 +53,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
@@ -126,14 +126,14 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --explainFiles --listEmittedFiles
 Output::
 [96msrc/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
@@ -151,7 +151,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles -v
+/home/src/tslibs/TS/Lib/tsc.js -b --explainFiles --listEmittedFiles -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -165,7 +165,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'

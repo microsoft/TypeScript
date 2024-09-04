@@ -125,7 +125,7 @@ export function createZoo(): Array<Dog> {
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -141,7 +141,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -w -verbose
+/home/src/tslibs/TS/Lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -719,14 +719,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/dog.ts
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/core/utilities.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/dog.ts
 /user/username/projects/demo/animals/index.ts
@@ -762,14 +762,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/lib/core/utilities.d.ts
 /user/username/projects/demo/animals/dog.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/lib/core/utilities.d.ts
@@ -803,14 +803,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/lib/animals/animal.d.ts
 /user/username/projects/demo/lib/animals/dog.d.ts
 /user/username/projects/demo/lib/animals/index.d.ts
 /user/username/projects/demo/zoo/zoo.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/lib/animals/animal.d.ts
 /user/username/projects/demo/lib/animals/dog.d.ts
 /user/username/projects/demo/lib/animals/index.d.ts
@@ -1058,7 +1058,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/dog.ts
 /user/username/projects/demo/animals/index.ts

@@ -91,13 +91,13 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.dom.d.ts]
 interface DOMInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
@@ -142,7 +142,7 @@ interface WebWorkerInterface { }
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts]
 interface ScriptHostInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -158,7 +158,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b project1 project2 project3 project4 --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -b project1 project2 project3 project4 --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json

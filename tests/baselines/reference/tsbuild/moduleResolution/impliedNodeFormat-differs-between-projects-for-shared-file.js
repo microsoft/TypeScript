@@ -38,7 +38,7 @@ export function foo(): void;
   "types": "index.d.ts"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -54,7 +54,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b a b --verbose --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -b a b --verbose --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * a/tsconfig.json
@@ -75,7 +75,7 @@ File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - u
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/src/index.ts
   Matched by default include pattern '**/*'
@@ -112,13 +112,13 @@ File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists a
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../tslibs/ts/lib/lib.es2022.full.d.ts
+../../tslibs/TS/Lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 node_modules/@types/pg/index.d.ts
   Imported via "pg" from file 'b/src/index.ts'
@@ -129,7 +129,7 @@ b/src/index.ts
   File is ECMAScript module because 'b/package.json' has field "type" with value "module"
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/a/src/index.js]
 "use strict";
@@ -171,7 +171,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b a b --verbose --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -b a b --verbose --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * a/tsconfig.json

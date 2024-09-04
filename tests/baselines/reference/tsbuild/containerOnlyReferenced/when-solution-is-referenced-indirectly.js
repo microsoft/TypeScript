@@ -52,7 +52,7 @@ export const c = 10;
 //// [/home/src/workspaces/solution/project4/src/d.ts]
 export const d = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -68,7 +68,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project4 --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project4 --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json
@@ -80,7 +80,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project2/src/b.ts
   Matched by default include pattern '**/*'
@@ -88,7 +88,7 @@ project2/src/b.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project3/src/c.ts
   Matched by default include pattern '**/*'
@@ -96,7 +96,7 @@ project3/src/c.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project4/src/d.ts
   Matched by default include pattern '**/*'
@@ -271,7 +271,7 @@ Input::
 export const cc = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project4 --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project4 --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json
@@ -285,7 +285,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project3/src/c.ts
   Matched by default include pattern '**/*'
@@ -293,7 +293,7 @@ project3/src/c.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project4/src/d.ts
   Matched by default include pattern '**/*'

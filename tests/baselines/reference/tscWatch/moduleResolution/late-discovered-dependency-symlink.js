@@ -47,7 +47,7 @@ export const a = pkg.invoke();
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -63,7 +63,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --traceResolution --explainFiles --watch
+/home/src/tslibs/TS/Lib/tsc.js --traceResolution --explainFiles --watch
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -114,7 +114,7 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
@@ -146,7 +146,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /home/src/workspace/packageA/index.d.ts: *new*
   {}
@@ -183,13 +183,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts
@@ -253,7 +253,7 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.tsx' does not ex
 File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
@@ -291,7 +291,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspace/packageA/index.d.ts
 /home/src/workspace/packageB/index.d.ts
 /home/src/workspace/packageC/index.ts

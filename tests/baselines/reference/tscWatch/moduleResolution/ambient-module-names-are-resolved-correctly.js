@@ -45,7 +45,7 @@ promisify();
 promisify2();
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,7 +61,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -150,7 +150,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
@@ -171,7 +171,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
@@ -215,7 +215,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /home/src/workspaces/project/tsconfig.json: *new*
   {}
@@ -250,14 +250,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts
@@ -450,7 +450,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
@@ -496,7 +496,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /home/src/workspaces/project/tsconfig.json:
   {}
@@ -536,14 +536,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts

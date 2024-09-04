@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -95,7 +95,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --explainFiles --v
+/home/src/tslibs/TS/Lib/tsc.js --b tests --explainFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -106,7 +106,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
@@ -118,7 +118,7 @@ core/some_decl.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
@@ -132,7 +132,7 @@ logic/index.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -452,7 +452,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --explainFiles --v
+/home/src/tslibs/TS/Lib/tsc.js --b tests --explainFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -463,7 +463,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
@@ -475,7 +475,7 @@ core/some_decl.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
@@ -489,7 +489,7 @@ logic/index.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -768,7 +768,7 @@ export class someClass { }
 class someClass2 { }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --explainFiles --v
+/home/src/tslibs/TS/Lib/tsc.js --b tests --explainFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -779,7 +779,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
@@ -900,7 +900,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --explainFiles --v
+/home/src/tslibs/TS/Lib/tsc.js --b tests --explainFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json

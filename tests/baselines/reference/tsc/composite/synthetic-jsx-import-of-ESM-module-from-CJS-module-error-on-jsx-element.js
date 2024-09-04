@@ -25,7 +25,7 @@ export namespace JSX {
 }
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -41,7 +41,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/main.tsx[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("solid-js/jsx-runtime")' call instead.
   To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.
@@ -54,7 +54,7 @@ Found 1 error in src/main.tsx[90m:1[0m
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/home/src/projects/project/src/main.js]
 "use strict";

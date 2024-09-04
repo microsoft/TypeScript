@@ -1,12 +1,12 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 lib.d.ts-Text
 
-//// [/home/src/tslibs/ts/lib/lib.decorators.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
 lib.decorators.d.ts-Text
 
-//// [/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
 //// [/home/src/workspaces/project/packages/app/package.json]
@@ -128,7 +128,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src/sub/folder/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
@@ -137,8 +137,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Type roots
@@ -150,9 +150,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/packages/dep/src/sub/folder/index.ts Text-1 "export const dep2 = 0;"
 	/home/src/workspaces/project/packages/dep/src/main.ts Text-1 "import \"./sub/folder\";\nexport const dep1 = 0;"
 	/home/src/workspaces/project/packages/app/src/a.ts Text-1 "import \"dep\";"
@@ -160,12 +160,12 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	/home/src/workspaces/project/packages/app/src/utils.ts Text-1 "dep2;"
 
 
-	../../../../tslibs/ts/lib/lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../../../tslibs/ts/lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../tslibs/ts/lib/lib.d.ts'
-	../../../../tslibs/ts/lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/ts/lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
 	../dep/src/sub/folder/index.ts
 	  Imported via "./sub/folder" from file '../dep/src/main.ts'
 	../dep/src/main.ts
@@ -260,19 +260,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/dep/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/dep/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/packages/dep/src/sub/folder/index.ts Text-1 "export const dep2 = 0;"
 	/home/src/workspaces/project/packages/dep/src/main.ts Text-1 "import \"./sub/folder\";\nexport const dep1 = 0;"
 
 
-	../../../../tslibs/ts/lib/lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../../../tslibs/ts/lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../tslibs/ts/lib/lib.d.ts'
-	../../../../tslibs/ts/lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/ts/lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
 	src/sub/folder/index.ts
 	  Imported via "./sub/folder" from file 'src/main.ts'
 	  Matched by default include pattern '**/*'
@@ -325,18 +325,18 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/packages/app/package.json SVC-1-0 "{ \"name\": \"app\", \"dependencies\": { \"dep\": \"*\" } }"
 
 
-	../../../../tslibs/ts/lib/lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../../../../tslibs/ts/lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../tslibs/ts/lib/lib.d.ts'
-	../../../../tslibs/ts/lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/ts/lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
 	package.json
 	  Root file specified for compilation
 
@@ -370,11 +370,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -461,19 +461,19 @@ Projects::
     noOpenRef: true
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -544,11 +544,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
@@ -637,19 +637,19 @@ Projects::
     noOpenRef: false *changed*
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -873,19 +873,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -942,19 +942,19 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -1002,9 +1002,9 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspac
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 lib.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/packages/dep/src/sub/folder/index.ts Text-1 "export const dep2 = 0;"
 	/home/src/workspaces/project/packages/dep/src/main.ts Text-1 "import \"./sub/folder\";\nexport const dep1 = 0;"
 	/home/src/workspaces/project/packages/app/src/a.ts Text-1 "import \"dep\";"
@@ -1044,11 +1044,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
@@ -1135,19 +1135,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -1357,19 +1357,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
@@ -1426,19 +1426,19 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json
         /home/src/workspaces/project/packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-/home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 3
         /home/src/workspaces/project/packages/app/tsconfig.json

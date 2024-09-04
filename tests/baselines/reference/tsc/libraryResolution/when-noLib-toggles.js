@@ -17,7 +17,7 @@ const b = 10;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -33,11 +33,11 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2015.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/b.js]
 var b = 10;
@@ -119,12 +119,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/workspaces/project/a.d.ts
 /home/src/workspaces/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/workspaces/project/a.d.ts
 /home/src/workspaces/project/b.ts
 
@@ -139,7 +139,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --noLib
+/home/src/tslibs/TS/Lib/tsc.js --noLib
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 

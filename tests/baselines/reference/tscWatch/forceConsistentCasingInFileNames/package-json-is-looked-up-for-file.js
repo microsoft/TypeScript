@@ -26,7 +26,7 @@ import { thing } from 'lib-boilerplate'
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -42,7 +42,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -61,13 +61,13 @@ File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a na
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../../../home/src/tslibs/ts/lib/lib.es2021.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
   Default library for target 'es2021'
 src/index.ts
   Matched by default include pattern '**/*'
@@ -80,7 +80,7 @@ test/basic.spec.ts
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2021.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts] *Lib*
 
 //// [/Users/name/projects/lib-boilerplate/src/index.js]
 export function thing() { }
@@ -100,11 +100,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /Users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -116,7 +116,7 @@ FsWatches::
   {}
 /Users/name/projects/lib-boilerplate/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es2021.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -140,12 +140,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2021.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
 /Users/name/projects/lib-boilerplate/src/index.ts
 /Users/name/projects/lib-boilerplate/test/basic.spec.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2021.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
 /Users/name/projects/lib-boilerplate/src/index.ts
 /Users/name/projects/lib-boilerplate/test/basic.spec.ts
 

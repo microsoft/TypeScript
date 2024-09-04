@@ -25,7 +25,7 @@ declare function Component(props: { children?: number }): any;
     <div />
 </Component>)
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -42,7 +42,7 @@ declare const console: { log(msg: any): void; };
 interface ReadonlyArray<T> { readonly length: number }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mindex.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2746: [0mThis JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 
@@ -170,7 +170,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96mindex.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2746: [0mThis JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 

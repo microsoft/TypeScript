@@ -38,7 +38,7 @@ export { C } from "./c";
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -54,7 +54,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -i
+/home/src/tslibs/TS/Lib/tsc.js -i
 Output::
 
 
@@ -197,14 +197,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts
 /users/username/projects/project/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts
@@ -357,7 +357,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts

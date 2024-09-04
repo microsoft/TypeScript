@@ -137,7 +137,7 @@ import { bar2 } from "bar2";
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -153,7 +153,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -328,8 +328,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -457,7 +457,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -477,7 +477,7 @@ Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -664,8 +664,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -694,7 +694,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -710,7 +710,7 @@ Change:: delete the ndoe10Result in package/types
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -910,8 +910,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -940,7 +940,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -958,7 +958,7 @@ Input::
 export declare const bar: number;
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1146,8 +1146,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -1176,7 +1176,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1194,7 +1194,7 @@ Input::
 export declare const foo: number;
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1369,8 +1369,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -1399,7 +1399,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1427,7 +1427,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1561,8 +1561,8 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -1703,7 +1703,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
@@ -1736,7 +1736,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1842,8 +1842,8 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -2000,7 +2000,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
@@ -2031,7 +2031,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2178,8 +2178,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -2320,7 +2320,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
@@ -2351,7 +2351,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2526,8 +2526,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -2652,7 +2652,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2669,7 +2669,7 @@ Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2856,8 +2856,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -2886,7 +2886,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2902,7 +2902,7 @@ Change:: delete the ndoe10Result in package/types
 Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3102,8 +3102,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -3132,7 +3132,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3150,7 +3150,7 @@ Input::
 export declare const bar2: number;
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3338,8 +3338,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -3368,7 +3368,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3386,7 +3386,7 @@ Input::
 export declare const foo2: number;
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3561,8 +3561,8 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -3591,7 +3591,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts

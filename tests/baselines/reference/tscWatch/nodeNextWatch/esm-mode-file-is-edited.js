@@ -28,7 +28,7 @@ declare module "thing";
   "main": "index.js"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,7 +44,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -53,7 +53,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2020.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib*
 
 //// [/home/src/projects/dist/index.js]
 import * as Thing from "thing";
@@ -72,11 +72,11 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/src/package.json: *new*
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -88,7 +88,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es2020.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -112,12 +112,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2020.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts
 /home/src/projects/project/src/deps.d.ts
 /home/src/projects/project/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2020.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts
 /home/src/projects/project/src/deps.d.ts
 /home/src/projects/project/src/index.ts
 
@@ -170,7 +170,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.es2020.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts
 /home/src/projects/project/src/deps.d.ts
 /home/src/projects/project/src/index.ts
 

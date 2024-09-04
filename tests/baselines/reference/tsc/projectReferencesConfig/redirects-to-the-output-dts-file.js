@@ -31,7 +31,7 @@ export { };
 //// [/home/src/workspaces/project/beta/b.ts]
 import { m } from '../alpha/a'
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -47,14 +47,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p beta/tsconfig.json --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --p beta/tsconfig.json --explainFiles
 Output::
 [96mbeta/b.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../alpha/a"' has no exported member 'm'.
 
 [7m1[0m import { m } from '../alpha/a'
 [7m [0m [91m         ~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 alpha/bin/a.d.ts
   Imported via '../alpha/a' from file 'beta/b.ts'

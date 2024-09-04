@@ -11,7 +11,7 @@ declare const y: c;
 //// [/user/username/projects/myproject/tsconfig.json]
 { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -27,7 +27,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p /user/username/projects/myproject --explainFiles --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js -p /user/username/projects/myproject --explainFiles --traceResolution
 Output::
 ======== Resolving type reference directive './fileOne.d.ts', containing file '/user/username/projects/myproject/src/file2.d.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
@@ -42,7 +42,7 @@ File name '/user/username/projects/myproject/src/fileOne.d.ts' has a '.d.ts' ext
 File '/user/username/projects/myproject/src/fileOne.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/src/fileOne.d.ts', result '/user/username/projects/myproject/src/fileOne.d.ts'.
 ======== Type reference directive './fileOne.d.ts' was successfully resolved to '/user/username/projects/myproject/src/fileOne.d.ts', primary: false. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 src/fileOne.d.ts
   Type library referenced via './fileOne.d.ts' from file 'src/file2.d.ts'

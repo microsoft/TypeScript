@@ -85,7 +85,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -484,7 +484,7 @@ export declare const m: typeof mod;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p tests --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w -p tests --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -535,13 +535,13 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -565,11 +565,11 @@ tests/index.ts
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -589,7 +589,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/sample1/core/anotherModule.d.ts: *new*
   {}
@@ -630,7 +630,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
@@ -641,8 +641,8 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/index.d.ts
@@ -957,8 +957,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -988,7 +988,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -1131,7 +1131,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
@@ -1146,8 +1146,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/index.d.ts
@@ -1358,13 +1358,13 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -1489,11 +1489,11 @@ tests/index.ts
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -1515,7 +1515,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/sample1/core/anotherModule.d.ts:
   {}
@@ -1561,7 +1561,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/decls/index.d.ts
@@ -1576,8 +1576,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/decls/index.d.ts

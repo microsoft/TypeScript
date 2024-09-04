@@ -36,7 +36,7 @@ export const App = () => <div propA={true}></div>;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,7 +52,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -67,7 +67,7 @@ Output::
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/react/Jsx-Runtime/index.d.ts
   Part of 'files' list in tsconfig.json
@@ -97,7 +97,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/index.tsx: *new*
   {}
@@ -127,7 +127,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts
 /user/username/projects/myproject/index.tsx
 

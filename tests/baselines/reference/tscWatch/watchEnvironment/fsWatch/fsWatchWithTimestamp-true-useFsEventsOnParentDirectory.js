@@ -10,7 +10,7 @@ export const x = 10;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 12
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 12
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -26,7 +26,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics --watchFile useFsEventsOnParentDirectory
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics --watchFile useFsEventsOnParentDirectory
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -37,7 +37,7 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 250 {"watchFile":5} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"watchFile":5} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":5} Type roots
@@ -61,7 +61,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib: *new*
+/home/src/tslibs/TS/Lib: *new*
   {"inode":11}
 /user/username/projects/myproject: *new*
   {"inode":4}
@@ -76,11 +76,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
@@ -152,7 +152,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::

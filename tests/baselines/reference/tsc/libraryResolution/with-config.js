@@ -91,19 +91,19 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.dom.d.ts]
 interface DOMInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
 export const unrelated = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -119,7 +119,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p project1 --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -p project1 --explainFiles
 Output::
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -244,14 +244,14 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
   Matched by default include pattern '**/*'
@@ -268,7 +268,7 @@ project1/typeroot1/sometype/index.d.ts
   Entry point for implicit type library 'sometype'
 
 
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -441,10 +441,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
@@ -453,10 +453,10 @@ Program files::
 /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts

@@ -1,9 +1,9 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/package.json
+// @Filename: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json
 //// { "name": "@types/react-router-dom", "version": "16.8.4", "types": "index.d.ts" }
 
-// @Filename: /home/src/typinginstaller/globalcache/data/node_modules/@types/react-router-dom/index.d.ts
+// @Filename: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts
 //// export class BrowserRouterFromDts {}
 
 // @Filename: /home/src/workspaces/project/package.json

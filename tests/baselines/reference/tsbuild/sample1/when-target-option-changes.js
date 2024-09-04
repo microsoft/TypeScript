@@ -79,16 +79,16 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 
 
-/home/src/tslibs/ts/lib/tsc.js --b core --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b core --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -100,14 +100,14 @@ Output::
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-/home/src/tslibs/ts/lib/lib.esnext.d.ts
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
 
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.esnext.d.ts] *Lib*
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 export const World = "hello";
@@ -200,7 +200,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b core --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b core --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -212,8 +212,8 @@ Output::
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.esnext.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts

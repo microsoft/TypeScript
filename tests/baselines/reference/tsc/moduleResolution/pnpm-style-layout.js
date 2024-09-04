@@ -139,7 +139,7 @@ const button: Button = createButton();
 
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk] symlink(/home/src/projects/component-type-checker/packages/sdk)
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -155,7 +155,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --traceResolution --explainFiles
 Output::
 ======== Resolving module '@component-type-checker/sdk' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -331,7 +331,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
-../../../../tslibs/ts/lib/lib.es5.d.ts
+../../../../tslibs/TS/Lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
   Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.1'
@@ -348,7 +348,7 @@ src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
 
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";

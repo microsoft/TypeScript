@@ -28,7 +28,7 @@ export const m: number = 3;
 //// [/home/src/workspaces/project/beta/b.ts]
 import { m } from '../alpha/a'
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,7 +44,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p beta/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p beta/tsconfig.json
 Output::
 [96mbeta/b.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6305: [0mOutput file '/home/src/workspaces/project/alpha/bin/a.d.ts' has not been built from source file '/home/src/workspaces/project/alpha/a.ts'.
 

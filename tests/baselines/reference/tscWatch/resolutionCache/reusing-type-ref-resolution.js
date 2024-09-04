@@ -27,7 +27,7 @@ export {}
 //// [/users/username/projects/project/node_modules/pkg2/index.d.ts]
 interface Import2 {}
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -139,7 +139,7 @@ File '/users/username/package.json' does not exist according to earlier cached l
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined File location affecting resolution
@@ -164,7 +164,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/nod
 [7m3[0m interface LocalInterface extends Import2, Import3 {}
 [7m [0m [91m                                          ~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
@@ -344,7 +344,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/fileWithImports.ts: *new*
   {}
@@ -378,14 +378,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/node_modules/pkg0/index.d.ts
 /users/username/projects/project/fileWithImports.ts
 /users/username/projects/project/node_modules/pkg2/index.d.ts
 /users/username/projects/project/fileWithTypeRefs.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/node_modules/pkg0/index.d.ts
 /users/username/projects/project/fileWithImports.ts
 /users/username/projects/project/node_modules/pkg2/index.d.ts
@@ -517,7 +517,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m3[0m interface LocalInterface extends Import2, Import3 {}
 [7m [0m [91m                                          ~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
@@ -680,7 +680,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project/fileWithImports.ts:
   {}
@@ -717,7 +717,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/node_modules/pkg0/index.d.ts
 /users/username/projects/project/node_modules/pkg1/index.d.ts
 /users/username/projects/project/fileWithImports.ts
@@ -861,7 +861,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m3[0m interface LocalInterface extends Import2, Import3 {}
 [7m [0m [91m                                          ~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
@@ -1040,7 +1040,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project/fileWithImports.ts:
   {}
@@ -1079,7 +1079,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/node_modules/pkg0/index.d.ts
 /users/username/projects/project/node_modules/pkg1/index.d.ts
 /users/username/projects/project/fileWithImports.ts

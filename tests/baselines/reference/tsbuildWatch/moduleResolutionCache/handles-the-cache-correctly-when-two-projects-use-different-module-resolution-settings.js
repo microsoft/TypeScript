@@ -59,7 +59,7 @@ export const bar = 10;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -75,7 +75,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b -w -v
+/home/src/tslibs/TS/Lib/tsc.js --b -w -v
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -318,14 +318,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/project1/node_modules/file/index.d.ts
 /user/username/projects/myproject/project1/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/project1/node_modules/file/index.d.ts
 /user/username/projects/myproject/project1/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
@@ -353,13 +353,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/project2/file.d.ts
 /user/username/projects/myproject/project2/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/project2/file.d.ts
 /user/username/projects/myproject/project2/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
@@ -504,7 +504,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/project1/node_modules/file/index.d.ts
 /user/username/projects/myproject/project1/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts

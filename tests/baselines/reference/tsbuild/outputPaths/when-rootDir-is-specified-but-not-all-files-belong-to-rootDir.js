@@ -14,7 +14,7 @@ export type t = string;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,7 +30,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b -v
+/home/src/tslibs/TS/Lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -81,7 +81,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b -v
+/home/src/tslibs/TS/Lib/tsc.js --b -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -110,7 +110,7 @@ Change:: Normal build without change, that does not block emit on error to show 
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -p /home/src/workspaces/project/tsconfig.json
 Output::
 [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/types/type.ts' is not under 'rootDir' '/home/src/workspaces/project/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:

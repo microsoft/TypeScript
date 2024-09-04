@@ -37,7 +37,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -53,7 +53,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -212,7 +212,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -230,7 +230,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -253,7 +253,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -410,7 +410,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -501,7 +501,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -527,7 +527,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -545,7 +545,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -563,7 +563,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -594,7 +594,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -817,7 +817,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -863,7 +863,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -904,7 +904,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -945,7 +945,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -996,7 +996,7 @@ export class classC {
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1081,7 +1081,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1240,7 +1240,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1258,7 +1258,7 @@ Change:: No Change run with noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b -v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1276,7 +1276,7 @@ Change:: No Change run with emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b -v .
+/home/src/tslibs/TS/Lib/tsc.js -b -v .
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -95,7 +95,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b tests --listEmittedFiles
 Output::
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts
@@ -417,7 +417,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b tests --listEmittedFiles
 Output::
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/index.d.ts
@@ -693,7 +693,7 @@ export class someClass { }
 class someClass2 { }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b tests --listEmittedFiles
 Output::
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/index.d.ts.map
@@ -803,7 +803,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b tests --listEmittedFiles
 Output::
 
 

@@ -15,7 +15,7 @@ describe("unittests:: tsserver:: languageService::", () => {
             content: "let x = 1;",
         };
         const host = TestServerHost.createServerHost([f], {
-            executingFilePath: tscTypeScriptTestLocation.replace("/lib/", "/Lib/"),
+            executingFilePath: tscTypeScriptTestLocation.replace("/Lib/", "/lib/"),
             useCaseSensitiveFileNames: true,
         });
         const session = new TestSession(host);

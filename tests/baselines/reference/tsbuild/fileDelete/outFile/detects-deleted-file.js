@@ -42,7 +42,7 @@ export function main() {
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -58,7 +58,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b main/tsconfig.json -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b main/tsconfig.json -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * child/tsconfig.json
@@ -72,7 +72,7 @@ Output::
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
@@ -123,7 +123,7 @@ File '/home/child.jsx' does not exist.
 File '/child.js' does not exist.
 File '/child.jsx' does not exist.
 ======== Module name 'child' was not resolved. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified
@@ -251,7 +251,7 @@ Change:: delete child2 file
 Input::
 //// [/home/src/workspaces/solution/child/child2.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js --b main/tsconfig.json -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b main/tsconfig.json -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * child/tsconfig.json
@@ -274,7 +274,7 @@ File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 [7m1[0m import { child2 } from "../child/child2";
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 child/child.ts
   Matched by default include pattern '**/*'
@@ -322,7 +322,7 @@ File '/home/child.jsx' does not exist.
 File '/child.js' does not exist.
 File '/child.jsx' does not exist.
 ======== Module name 'child' was not resolved. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified

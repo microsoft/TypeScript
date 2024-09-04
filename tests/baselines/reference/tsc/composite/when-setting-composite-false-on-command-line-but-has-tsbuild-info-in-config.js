@@ -16,7 +16,7 @@ export const x = 10;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -32,7 +32,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --composite false
+/home/src/tslibs/TS/Lib/tsc.js --composite false
 Output::
 [96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5111: [0mOption 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
 

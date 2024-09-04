@@ -70,7 +70,7 @@ console.log('Hello, world!');
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -86,7 +86,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
@@ -96,7 +96,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -118,7 +118,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
@@ -374,7 +374,7 @@ Change:: No change
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
@@ -399,7 +399,7 @@ export function log(str: string) {
 export const x = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
@@ -409,7 +409,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -431,7 +431,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
@@ -650,7 +650,7 @@ Change:: No change
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
@@ -670,7 +670,7 @@ Change:: delete random file
 Input::
 //// [/home/src/workspaces/solution/projects/shared/src/random.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
@@ -680,7 +680,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -700,7 +700,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/solution/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/solution/projects/shared/src/myClass.ts'. ========
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
@@ -871,7 +871,7 @@ Change:: No change
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b projects/server -v --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b projects/server -v --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json

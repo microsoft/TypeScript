@@ -14,7 +14,7 @@ export class  C { }
 //// [/home/src/workspaces/project/file2.ts]
 export class D { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,7 +30,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -132,7 +132,7 @@ Change:: delete file with imports
 Input::
 //// [/home/src/workspaces/project/file2.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 

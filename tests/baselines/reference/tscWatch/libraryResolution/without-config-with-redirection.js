@@ -91,13 +91,13 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.dom.d.ts]
 interface DOMInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
@@ -142,7 +142,7 @@ interface WebWorkerInterface { }
 //// [/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts]
 interface ScriptHostInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -158,7 +158,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -543,9 +543,9 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -599,7 +599,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
   {}
@@ -649,7 +649,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -660,7 +660,7 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -738,7 +738,7 @@ Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspa
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -790,7 +790,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -892,7 +892,7 @@ FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -939,7 +939,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts:
+/home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts:
   {}
@@ -984,7 +984,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -1113,7 +1113,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
@@ -1193,7 +1193,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.dom.d.ts:
+/home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1317,7 +1317,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
@@ -1350,7 +1350,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@type
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
@@ -1404,7 +1404,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.webworker.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts:
   {}
@@ -1452,7 +1452,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
@@ -1587,7 +1587,7 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
@@ -1667,7 +1667,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.webworker.d.ts:
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 
 FsWatchesRecursive::

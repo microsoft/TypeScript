@@ -11,7 +11,7 @@ Input::
 //// [/home/src/workspaces/project/class1.ts]
 export class class1 {}
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -27,7 +27,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -noEmit
+/home/src/tslibs/TS/Lib/tsc.js -noEmit
 Output::
 
 
@@ -86,11 +86,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/class1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/class1.ts
 
 Shape signatures in builder refreshed for::
@@ -103,7 +103,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -noEmit
+/home/src/tslibs/TS/Lib/tsc.js -noEmit
 Output::
 
 
@@ -119,7 +119,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/class1.ts
 
 Semantic diagnostics in builder refreshed for::

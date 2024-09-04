@@ -102,7 +102,7 @@ export function getVar() {
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -127,7 +127,7 @@ interface Symbol {
 
 
 
-/home/src/tslibs/ts/lib/tsc.js -b
+/home/src/tslibs/TS/Lib/tsc.js -b
 Output::
 [96msub-project/index.js[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18042: [0m'Nominal' is a type and cannot be imported in JavaScript files. Use 'import("../common/nominal").Nominal' in a JSDoc type annotation.
 

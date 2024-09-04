@@ -72,7 +72,7 @@ X;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -238,7 +238,7 @@ a_1.X;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p tsconfig.c.json --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w -p tsconfig.c.json --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -263,7 +263,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -288,7 +288,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -328,14 +328,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -349,8 +349,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -464,7 +464,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -502,7 +502,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -517,8 +517,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -599,7 +599,7 @@ File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -624,7 +624,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts:
   {}
@@ -673,7 +673,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
@@ -688,8 +688,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
@@ -765,7 +765,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -790,7 +790,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts:
   {}
@@ -839,7 +839,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -854,8 +854,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -918,7 +918,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -941,7 +941,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.d.ts:
   {}
@@ -988,7 +988,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1005,8 +1005,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1069,7 +1069,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -1091,7 +1091,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.d.ts:
   {}
@@ -1138,7 +1138,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/c.ts
@@ -1150,8 +1150,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b.d.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/c.ts
@@ -1206,7 +1206,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 [7m16[0m     }
 [7m  [0m [91m~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.ts'
@@ -1229,7 +1229,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.ts: *new*
   {}
@@ -1272,7 +1272,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b.ts
 /user/username/projects/transitiveReferences/c.ts
@@ -1286,8 +1286,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.ts
   /user/username/projects/transitiveReferences/c.ts
@@ -1346,7 +1346,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -1371,7 +1371,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -1416,7 +1416,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1433,8 +1433,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1483,7 +1483,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m17[0m     }
 [7m  [0m [91m~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -1507,7 +1507,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.ts: *new*
   {}
@@ -1552,7 +1552,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1569,8 +1569,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1619,7 +1619,7 @@ Output::
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
@@ -1643,7 +1643,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -1688,7 +1688,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1705,8 +1705,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts

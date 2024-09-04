@@ -22,7 +22,7 @@ export {};
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -38,11 +38,11 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --rootDir src
+/home/src/tslibs/TS/Lib/tsc.js --rootDir src
 Output::
 
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.esnext.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/dist/main.js]
 /// <reference no-default-lib="true"/>

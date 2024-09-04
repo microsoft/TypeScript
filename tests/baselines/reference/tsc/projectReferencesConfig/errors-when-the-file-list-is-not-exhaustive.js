@@ -18,7 +18,7 @@ import * as b from './b'
 //// [/home/src/workspaces/project/primary/b.ts]
 export {}
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -34,7 +34,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p primary/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p primary/tsconfig.json
 Output::
 [96mprimary/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/primary/b.ts' is not listed within the file list of project '/home/src/workspaces/project/primary/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 

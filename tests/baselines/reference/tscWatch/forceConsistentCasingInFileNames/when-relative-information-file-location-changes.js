@@ -16,7 +16,7 @@ export const x = 10;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -32,7 +32,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -65,7 +65,7 @@ Output::
     [7m [0m [96m                   ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
@@ -104,7 +104,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/ModuleC.ts: *new*
   {}
@@ -133,13 +133,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
@@ -200,7 +200,7 @@ Output::
     [7m [0m [96m                                       ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
@@ -231,7 +231,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts

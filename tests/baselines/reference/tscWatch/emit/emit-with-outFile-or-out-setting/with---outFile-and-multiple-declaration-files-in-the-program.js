@@ -26,7 +26,7 @@ namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; ex
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -42,7 +42,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -94,7 +94,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 Program root files: [
@@ -111,14 +111,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/output/AnotherDependency/file1.d.ts
 /home/src/projects/a/b/dependencies/file2.d.ts
 /home/src/projects/a/b/project/src/main.ts
 /home/src/projects/a/b/project/src/main2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/b/output/AnotherDependency/file1.d.ts
 /home/src/projects/a/b/dependencies/file2.d.ts
 /home/src/projects/a/b/project/src/main.ts

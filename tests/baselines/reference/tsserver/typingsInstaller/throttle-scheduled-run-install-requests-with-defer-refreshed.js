@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
 Before request
 //// [/user/username/projects/project/lodash.js]
 
@@ -9,7 +9,7 @@ Before request
 //// [/user/username/projects/project/file3.d.ts]
 
 
-//// [/home/src/tslibs/ts/lib/typesMap.json]
+//// [/home/src/tslibs/TS/Lib/typesMap.json]
 {
   "typesMap": {
     "jquery": {
@@ -35,7 +35,7 @@ Before request
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/commander.js' because it matched commander from the legacy safelist
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test1.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
@@ -89,11 +89,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../project/file3.d.ts
 	  Root file specified for compilation
@@ -103,7 +103,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -189,7 +189,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/project/file3.d.ts: *new*
   {}
@@ -203,7 +203,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/test1.csproj
@@ -248,11 +248,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../../../../../home/src/tslibs/ts/lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../file3.d.ts
 	  Root file specified for compilation
@@ -262,7 +262,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/project/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
@@ -354,7 +354,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
   {}
@@ -368,7 +368,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/ts/lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/app/test1.csproj
@@ -416,7 +416,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/project/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],
@@ -474,7 +474,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -499,20 +499,20 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     }
 TI:: Creating typing installer
 
-TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/home/src/tslibs/ts/lib/typingSafeList.json', types map path /home/src/tslibs/ts/lib/typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
-TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/typinginstaller/globalcache/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {
     "commander": {
@@ -589,7 +589,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -612,7 +612,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/ts/lib/typesMap.json'
+TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","cordova","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -662,7 +662,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery","cordova","commander"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
@@ -686,7 +686,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 1
       }
     }
-TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/typinginstaller/globalcache/data arguments: [
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/cordova@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor"
@@ -712,7 +712,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
   {}
@@ -736,18 +736,18 @@ TI:: Installation #1 with arguments:: [
   "@types/cordova@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts]
 declare const commander: { x: number }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/jquery/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts]
 declare const jquery: { x: number }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/cordova/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts]
 declare const cordova: { x: number }
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/cordova@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/typinginstaller/globalcache/data/node_modules/@types/jquery/index.d.ts","/home/src/typinginstaller/globalcache/data/node_modules/@types/cordova/index.d.ts","/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/app/test1.csproj",
@@ -767,9 +767,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/jquery/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/cordova/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -793,9 +793,9 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/jquery/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/cordova/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -826,9 +826,9 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/jquery/index.d.ts",
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/cordova/index.d.ts",
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -899,7 +899,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
       "projectName": "/user/username/projects/project/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],
@@ -926,7 +926,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],
@@ -998,7 +998,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/app/node_modules 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/app/node_modules 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["grunt","gulp","lodash"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
@@ -1022,7 +1022,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 2
       }
     }
-TI:: [hh:mm:ss:mss] #2 with cwd: /home/src/typinginstaller/globalcache/data arguments: [
+TI:: [hh:mm:ss:mss] #2 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/grunt@tsFakeMajor.Minor",
   "@types/gulp@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor"
@@ -1052,7 +1052,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
   {}
@@ -1076,18 +1076,18 @@ TI:: Installation #2 with arguments:: [
   "@types/gulp@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/lodash/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts]
 declare const lodash: { x: number }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/grunt/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts]
 declare const grunt: { x: number }
 
-//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/gulp/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts]
 declare const gulp: { x: number }
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/typinginstaller/globalcache/data/node_modules/@types/grunt/index.d.ts","/home/src/typinginstaller/globalcache/data/node_modules/@types/gulp/index.d.ts","/home/src/typinginstaller/globalcache/data/node_modules/@types/lodash/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/user/username/projects/project/app/test2.csproj",
@@ -1107,9 +1107,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/grunt/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/gulp/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/lodash/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -1133,9 +1133,9 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/grunt/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/gulp/index.d.ts",
-        "/home/src/typinginstaller/globalcache/data/node_modules/@types/lodash/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
@@ -1164,9 +1164,9 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/grunt/index.d.ts",
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/gulp/index.d.ts",
-          "/home/src/typinginstaller/globalcache/data/node_modules/@types/lodash/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"

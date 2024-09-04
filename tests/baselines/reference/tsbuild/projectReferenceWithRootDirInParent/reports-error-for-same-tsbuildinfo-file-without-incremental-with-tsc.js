@@ -47,7 +47,7 @@ export const Other = 0;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -63,7 +63,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b src/other --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b src/other --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/other/tsconfig.json
@@ -135,7 +135,7 @@ Change:: Running tsc on main
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p src/main
+/home/src/tslibs/TS/Lib/tsc.js -p src/main
 Output::
 
 

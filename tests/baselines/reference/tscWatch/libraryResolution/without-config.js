@@ -91,19 +91,19 @@ export const z = 10
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.dom.d.ts]
 interface DOMInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
 //// [/home/src/workspace/projects/node_modules/@typescript/unlreated/index.d.ts]
 export const unrelated = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -119,7 +119,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -163,7 +163,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -190,7 +190,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-scripthost' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.scripthost.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -217,7 +217,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es5.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -244,19 +244,19 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
   Root file specified for compilation
@@ -272,7 +272,7 @@ project1/file2.ts
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
 "use strict";
@@ -304,13 +304,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/core.d.ts: *new*
   {}
@@ -346,10 +346,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
 project1/utils.d.ts
 project1/file.ts
@@ -357,10 +357,10 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/core.d.ts
 project1/utils.d.ts
 project1/file.ts
@@ -449,18 +449,18 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/package.json 2000 undefined File location affecting resolution
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 node_modules/@typescript/lib-dom/index.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
@@ -501,11 +501,11 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts:
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
   {}
@@ -521,7 +521,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.dom.d.ts:
+/home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -548,9 +548,9 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 project1/core.d.ts
 project1/utils.d.ts
@@ -559,9 +559,9 @@ project1/index.ts
 project1/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 project1/core.d.ts
 project1/utils.d.ts
@@ -621,12 +621,12 @@ Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspa
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 node_modules/@typescript/lib-dom/index.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
@@ -673,9 +673,9 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 project1/core.d.ts
 project1/utils.d.ts
@@ -743,12 +743,12 @@ FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 node_modules/@typescript/lib-dom/index.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
@@ -786,11 +786,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts:
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts:
   {}
@@ -831,9 +831,9 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts
 project1/utils.d.ts
 project1/file.ts
@@ -922,7 +922,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.dom.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined File location affecting resolution
@@ -932,14 +932,14 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/package.json 2000 undefined
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/utils.d.ts
   Root file specified for compilation
@@ -980,13 +980,13 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts:
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 /home/src/workspace/projects/project1/file.ts:
   {}
@@ -1028,10 +1028,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/utils.d.ts
 project1/file.ts
 project1/index.ts
@@ -1119,7 +1119,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@type
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined File location affecting resolution
@@ -1129,12 +1129,12 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/package.json 2000 undefined
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
@@ -1175,11 +1175,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts:
+/home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
   {}
@@ -1193,7 +1193,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/home/src/tslibs/ts/lib/lib.webworker.d.ts:
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1220,9 +1220,9 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts
 project1/utils.d.ts
 project1/file.ts
@@ -1314,7 +1314,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
@@ -1327,14 +1327,14 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/package.json 2000 undefined
   The file is in the program because:
     Root file specified for compilation
 
-../../tslibs/ts/lib/lib.es5.d.ts
+../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.dom.d.ts
+../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/utils.d.ts
   Root file specified for compilation
@@ -1375,13 +1375,13 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.dom.d.ts:
+/home/src/tslibs/TS/Lib/lib.dom.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/file.ts:
   {}
@@ -1423,10 +1423,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es5.d.ts
-/home/src/tslibs/ts/lib/lib.dom.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.dom.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 project1/utils.d.ts
 project1/file.ts
 project1/index.ts

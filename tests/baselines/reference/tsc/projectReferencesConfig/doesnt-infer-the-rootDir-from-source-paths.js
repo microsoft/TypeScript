@@ -12,7 +12,7 @@ Input::
 //// [/home/src/workspaces/project/alpha/src/a.ts]
 export const m: number = 3;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,7 +28,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p alpha/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p alpha/tsconfig.json
 Output::
 
 

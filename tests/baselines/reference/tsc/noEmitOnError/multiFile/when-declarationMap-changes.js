@@ -15,7 +15,7 @@ const x = 10;
 //// [/home/src/workspaces/project/b.ts]
 const y = 10;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -31,7 +31,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -122,7 +122,7 @@ Input::
 const x: 20 = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --declarationMap
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type '20'.
 
@@ -242,7 +242,7 @@ Input::
 const x = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --declarationMap
 Output::
 
 

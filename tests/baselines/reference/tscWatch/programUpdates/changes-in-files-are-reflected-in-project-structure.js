@@ -9,7 +9,7 @@ export let x = 1
 //// [/user/username/workspace/solution/projects/projectc/f3.ts]
 export let y = 1;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -25,12 +25,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w /user/username/workspace/solution/projects/project/f1.ts --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w /user/username/workspace/solution/projects/project/f1.ts --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/f2.ts
   Imported via "./f2" from file 'project/f1.ts'
@@ -77,7 +77,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
@@ -93,12 +93,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
@@ -128,7 +128,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 projectc/f3.ts
   Imported via "../projectc/f3" from file 'project/f2.ts'
@@ -178,7 +178,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/workspace/solution/projects/project/f1.ts:
   {}
@@ -197,7 +197,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/workspace/solution/projects/projectc/f3.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts

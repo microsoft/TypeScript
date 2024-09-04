@@ -250,7 +250,7 @@ export abstract class LanguageServiceAdapterHost {
 }
 
 /** TypeScript Typings Installer global cache location for the tests */
-export const harnessTypingInstallerCacheLocation = "/home/src/typinginstaller/globalcache/data";
+export const harnessTypingInstallerCacheLocation = "/home/src/Library/Caches/typescript";
 /// Native adapter
 class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
     isKnownTypesPackageName(name: string): boolean {
@@ -354,7 +354,7 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
  * This is set to vscode so that in tsserver tests its what is expected
  * and is unrelated and is error to not specify for tsc tests
  */
-export const harnessSessionCurrentDirectory = "/home/src/vscode/projects/bin";
+export const harnessSessionCurrentDirectory = "/home/src/Vscode/Projects/bin";
 // Server adapter
 class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
     private client!: ts.server.SessionClient;
@@ -395,7 +395,7 @@ interface ServerHostDirectoryWatcher {
 }
 
 /** Default typescript and lib installs location for tests */
-export const harnessSessionLibLocation = "/home/src/tslibs/ts/lib";
+export const harnessSessionLibLocation = "/home/src/tslibs/TS/Lib";
 class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;

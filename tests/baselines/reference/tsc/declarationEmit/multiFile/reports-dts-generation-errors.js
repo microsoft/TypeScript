@@ -36,7 +36,7 @@ export default ky;
   "main": "./distribution/index.js"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,7 +52,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --explainFiles --listEmittedFiles
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -60,7 +60,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
-../../tslibs/ts/lib/lib.esnext.full.d.ts
+../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
@@ -73,7 +73,7 @@ Found 1 error in index.ts[90m:2[0m
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/index.js]
 import ky from 'ky';
@@ -87,7 +87,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --explainFiles --listEmittedFiles
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -95,7 +95,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
-../../tslibs/ts/lib/lib.esnext.full.d.ts
+../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
@@ -116,7 +116,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles -v
+/home/src/tslibs/TS/Lib/tsc.js -b --explainFiles --listEmittedFiles -v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -132,7 +132,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/ts/lib/lib.esnext.full.d.ts
+../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'

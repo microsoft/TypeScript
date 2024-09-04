@@ -26,13 +26,13 @@ export const x = "type1";
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -48,7 +48,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p project1 --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -p project1 --explainFiles
 Output::
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -85,9 +85,9 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m2[0m /// <reference lib="unknownlib"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
   Matched by default include pattern '**/*'
@@ -242,8 +242,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
@@ -251,8 +251,8 @@ Program files::
 /home/src/workspace/projects/project1/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts

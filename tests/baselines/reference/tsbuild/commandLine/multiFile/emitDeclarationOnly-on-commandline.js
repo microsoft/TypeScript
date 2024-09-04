@@ -40,7 +40,7 @@ import { a } from "../../project1/src/a"; export const f = a;
 //// [/home/src/workspaces/solution/project2/src/g.ts]
 import { b } from "../../project1/src/b"; export const g = b;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -56,7 +56,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -304,14 +304,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -337,7 +337,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -345,7 +345,7 @@ Program files::
 /home/src/workspaces/solution/project2/src/g.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -366,7 +366,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -388,7 +388,7 @@ Input::
 export const a = 10;const aLocal = 10;const aa = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -514,7 +514,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -535,7 +535,7 @@ Input::
 export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -760,7 +760,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -787,7 +787,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -808,7 +808,7 @@ Change:: emit js files
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1082,7 +1082,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -1104,7 +1104,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -1121,7 +1121,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1143,7 +1143,7 @@ Input::
 export const b = 10;const bLocal = 10;const alocal = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1276,7 +1276,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -1297,7 +1297,7 @@ Input::
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1423,7 +1423,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -1444,7 +1444,7 @@ Input::
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1669,7 +1669,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -1696,7 +1696,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -1720,7 +1720,7 @@ Input::
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project2/src --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
@@ -1961,7 +1961,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
@@ -1987,7 +1987,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project1/src/a.d.ts
 /home/src/workspaces/solution/project2/src/f.ts

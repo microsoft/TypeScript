@@ -31,7 +31,7 @@ Input::
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -47,7 +47,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/foobar.json'.
 

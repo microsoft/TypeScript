@@ -14,7 +14,7 @@ export const x = 10;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,7 +30,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project -v --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project -v --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
@@ -39,7 +39,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
@@ -75,7 +75,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project -v --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project -v --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
@@ -91,7 +91,7 @@ Change:: clean build
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b project --clean
+/home/src/tslibs/TS/Lib/tsc.js -b project --clean
 //// [/home/src/workspaces/solution/project/src/main.js] deleted
 //// [/home/src/workspaces/solution/project/src/main.d.ts] deleted
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo] deleted

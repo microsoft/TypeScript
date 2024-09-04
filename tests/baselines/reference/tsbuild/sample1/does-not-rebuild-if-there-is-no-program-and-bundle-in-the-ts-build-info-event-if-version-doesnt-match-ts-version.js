@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -177,7 +177,7 @@ export declare const m: typeof mod;
 {"version":"FakeTSVersion"}
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json

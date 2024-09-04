@@ -24,7 +24,7 @@ export const enum AWorker {
 }
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -40,7 +40,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
+/home/src/tslibs/TS/Lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
 Output::
 
 
@@ -133,7 +133,7 @@ export { AWorker as A };
 
 
 
-/home/src/tslibs/ts/lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
+/home/src/tslibs/TS/Lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
 Output::
 
 
@@ -234,7 +234,7 @@ export { AWorker as A };
 
 
 
-/home/src/tslibs/ts/lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
+/home/src/tslibs/TS/Lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
 Output::
 
 
@@ -331,7 +331,7 @@ export { AWorker as A };
 export const randomThing = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
+/home/src/tslibs/TS/Lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
 Output::
 
 
@@ -418,7 +418,7 @@ export { AWorker as A };
 export const randomThing = 10;export const randomThing2 = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
+/home/src/tslibs/TS/Lib/tsc.js -i a.ts --tsbuildinfofile a.tsbuildinfo
 Output::
 
 

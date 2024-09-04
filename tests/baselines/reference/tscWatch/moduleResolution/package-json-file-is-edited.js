@@ -25,7 +25,7 @@ export function foo() {
   "version": "1.0.0"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -41,7 +41,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --w --p src --extendedDiagnostics -traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p src --extendedDiagnostics -traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -73,15 +73,15 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/file
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
@@ -96,7 +96,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -107,7 +107,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out/fileA.js]
 "use strict";
@@ -118,11 +118,11 @@ const fileB_mjs_1 = require("./fileB.mjs");
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -136,7 +136,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
   {}
 /user/username/projects/myproject/package.json: *new*
   {}
@@ -167,11 +167,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
@@ -225,8 +225,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -245,8 +245,8 @@ File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -258,7 +258,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/mypr
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -274,11 +274,11 @@ foo();
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
@@ -294,7 +294,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
   {}
@@ -326,7 +326,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -381,8 +381,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -408,8 +408,8 @@ Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skip
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -419,7 +419,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -437,11 +437,11 @@ const fileB_mjs_1 = require("./fileB.mjs");
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
@@ -455,7 +455,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
   {}
@@ -487,7 +487,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -537,8 +537,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -556,8 +556,8 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was not resolved.
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -568,7 +568,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -579,11 +579,11 @@ src/fileA.ts
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
@@ -599,7 +599,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
   {}
@@ -631,7 +631,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -685,8 +685,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -705,8 +705,8 @@ File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -719,7 +719,7 @@ FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -735,11 +735,11 @@ foo();
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
@@ -757,7 +757,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
   {}
@@ -789,7 +789,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -839,8 +839,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -874,8 +874,8 @@ Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skip
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -886,7 +886,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
@@ -904,11 +904,11 @@ const fileB_mjs_1 = require("./fileB.mjs");
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json:
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
@@ -924,7 +924,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
   {}
@@ -956,7 +956,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts
 /user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::

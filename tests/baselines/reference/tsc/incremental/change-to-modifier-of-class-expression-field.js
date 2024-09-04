@@ -23,7 +23,7 @@ const wrapper = () => Messageable();
 type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -40,7 +40,7 @@ declare const console: { log(msg: any): void; };type ReturnType<T extends (...ar
 type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
 
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 
 
@@ -129,7 +129,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 
 
@@ -150,7 +150,7 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 [96mmain.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
@@ -249,7 +249,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 [96mmain.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
 
@@ -278,7 +278,7 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 
 
@@ -355,7 +355,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --incremental
+/home/src/tslibs/TS/Lib/tsc.js --incremental
 Output::
 
 

@@ -113,7 +113,7 @@ c.doSomething();
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -129,7 +129,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b third --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b third --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * first/tsconfig.json
@@ -140,7 +140,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 first/first_PART1.ts
   Part of 'files' list in tsconfig.json
@@ -152,7 +152,7 @@ first/first_part3.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/second/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 second/second_part1.ts
   Matched by default include pattern '**/*'
@@ -162,7 +162,7 @@ second/second_part2.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/third/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 first/bin/first-output.d.ts
   Output from referenced project 'first/tsconfig.json' included because '--outFile' specified
@@ -1129,7 +1129,7 @@ console.log(s);
 
 
 
-/home/src/tslibs/ts/lib/tsc.js --b third --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b third --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * first/tsconfig.json
@@ -1140,7 +1140,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 first/first_PART1.ts
   Part of 'files' list in tsconfig.json
@@ -1154,7 +1154,7 @@ first/first_part3.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/third/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 first/bin/first-output.d.ts
   Output from referenced project 'first/tsconfig.json' included because '--outFile' specified
@@ -1590,7 +1590,7 @@ console.log(s);
 console.log(s);
 
 
-/home/src/tslibs/ts/lib/tsc.js --b third --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b third --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * first/tsconfig.json
@@ -1601,7 +1601,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 first/first_PART1.ts
   Part of 'files' list in tsconfig.json

@@ -9,7 +9,7 @@ import { E1 } from "./file1"; export const enum E2 { V = E1.V }
 //// [/user/someone/projects/myproject/file3.ts]
 import { E2 } from "./file2"; const v: E2 = E2.V;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -25,7 +25,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w /user/someone/projects/myproject/file3.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /user/someone/projects/myproject/file3.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -58,7 +58,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/someone/projects/myproject/file1.ts: *new*
   {}
@@ -75,13 +75,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
@@ -134,7 +134,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts

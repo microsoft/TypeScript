@@ -10,7 +10,7 @@ export const a = class { private p = 10; };
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,7 +29,7 @@ declare const console: { log(msg: any): void; };
 export const b = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -106,12 +106,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -126,7 +126,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -142,7 +142,7 @@ Change:: With declaration enabled noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -265,7 +265,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -279,7 +279,7 @@ Change:: With declaration and declarationMap noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -368,7 +368,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -382,7 +382,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -398,7 +398,7 @@ Change:: Dts Emit with error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --declaration
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -531,7 +531,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -548,7 +548,7 @@ Input::
 export const a = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -629,7 +629,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -645,7 +645,7 @@ Change:: With declaration enabled noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -740,7 +740,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -754,7 +754,7 @@ Change:: With declaration and declarationMap noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --v . --noEmit --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js -b --v . --noEmit --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

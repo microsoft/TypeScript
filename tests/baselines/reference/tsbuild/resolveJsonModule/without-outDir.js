@@ -27,7 +27,7 @@ export default hello.hello
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
@@ -55,7 +55,7 @@ Output::
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/src/index.d.ts
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
@@ -151,7 +151,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project --v --explainFiles --listEmittedFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json

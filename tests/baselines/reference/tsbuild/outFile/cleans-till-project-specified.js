@@ -113,7 +113,7 @@ c.doSomething();
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -332,7 +332,7 @@ declare var c: C;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --build --clean second/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --build --clean second/tsconfig.json
 //// [/home/src/workspaces/solution/2/second-output.js.map] deleted
 //// [/home/src/workspaces/solution/2/second-output.js] deleted
 //// [/home/src/workspaces/solution/2/second-output.d.ts.map] deleted

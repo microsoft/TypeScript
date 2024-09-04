@@ -105,7 +105,7 @@ export function getVar(): keyof typeof variable {
   "include": []
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -130,7 +130,7 @@ interface Symbol {
 
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --verbose
+/home/src/tslibs/TS/Lib/tsc.js -b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * solution/common/tsconfig.json

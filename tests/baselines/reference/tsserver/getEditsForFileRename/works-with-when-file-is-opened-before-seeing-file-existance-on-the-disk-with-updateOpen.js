@@ -1,5 +1,5 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/myproject/src/index.ts]
 import {} from '@/old';
@@ -18,7 +18,7 @@ export const x = 10;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -107,7 +107,7 @@ Info seq  [hh:mm:ss:mss] event:
 Custom watchDirectory:: Added:: {"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -115,10 +115,10 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 3,
-        "path": "/home/src/tslibs/ts/lib/lib.d.ts"
+        "path": "/home/src/tslibs/TS/Lib/lib.d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":3,"path":"/home/src/tslibs/ts/lib/lib.d.ts"}
+Custom watchFile:: Added:: {"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -152,12 +152,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/myproject/src/old.ts SVC-1-0 "export const x = 10;"
 	/home/src/projects/myproject/src/index.ts SVC-1-0 "import {} from '@/old';"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	src/old.ts
 	  Imported via '@/old' from file 'src/index.ts'
@@ -252,8 +252,8 @@ After request
 PolledWatches::
 /home/src/projects/myproject/tsconfig.json: *new*
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"event":{"id":3,"path":"/home/src/tslibs/ts/lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject: *new*
@@ -278,7 +278,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json *default*
-/home/src/tslibs/ts/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
@@ -364,12 +364,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/myproject/src/index.ts SVC-1-0 "import {} from '@/old';"
 	/home/src/projects/myproject/src/new.ts SVC-1-0 "export const x = 10;"
 
 
-	../../tslibs/ts/lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	src/index.ts
 	  Matched by default include pattern '**/*'
@@ -399,8 +399,8 @@ After request
 PolledWatches::
 /home/src/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"event":{"id":3,"path":"/home/src/tslibs/ts/lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
@@ -440,7 +440,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /home/src/projects/myproject/tsconfig.json *deleted*
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
@@ -497,7 +497,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json *default*
-/home/src/tslibs/ts/lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
     sourceMapFilePath: false *changed*
     containingProjects: 1
@@ -584,8 +584,8 @@ PolledWatches::
   {"event":{"id":9,"path":"/home/src/projects/myproject/src/new.ts"}}
 /home/src/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"event":{"id":3,"path":"/home/src/tslibs/ts/lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
@@ -612,7 +612,7 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     sourceMapFilePath: false
     containingProjects: 1
@@ -708,7 +708,7 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     sourceMapFilePath: false
     containingProjects: 1

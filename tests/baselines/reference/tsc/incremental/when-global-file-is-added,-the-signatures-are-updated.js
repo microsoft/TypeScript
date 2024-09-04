@@ -25,7 +25,7 @@ function something() { return 10; }
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -41,7 +41,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/fileNotFound.ts' not found.
 
@@ -192,13 +192,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/main.ts
@@ -215,7 +215,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/fileNotFound.ts' not found.
 
@@ -247,7 +247,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/main.ts
@@ -268,7 +268,7 @@ function main() { }
 something();
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/fileNotFound.ts' not found.
 
@@ -398,7 +398,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/main.ts
@@ -421,7 +421,7 @@ function main() { }
 something();something();
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/fileNotFound.ts' not found.
 
@@ -552,7 +552,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/main.ts
@@ -579,7 +579,7 @@ something();something();foo();
 function foo() { return 20; }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/fileNotFound.ts' not found.
 
@@ -741,14 +741,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/newFile.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 /home/src/workspaces/project/src/newFile.ts
@@ -769,7 +769,7 @@ Input::
 function something2() { return 20; }
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -918,7 +918,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/fileNotFound.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
@@ -926,7 +926,7 @@ Program files::
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/fileNotFound.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
@@ -953,7 +953,7 @@ function main() { }
 something();something();foo();something();
 
 
-/home/src/tslibs/ts/lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
 
 
@@ -1101,7 +1101,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/src/filePresent.ts
 /home/src/workspaces/project/src/fileNotFound.ts
 /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts

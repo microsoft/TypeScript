@@ -42,7 +42,7 @@ export const Other = 0;
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -58,7 +58,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b src/main /home/src/workspaces/solution/src/other
+/home/src/tslibs/TS/Lib/tsc.js --b src/main /home/src/workspaces/solution/src/other
 Output::
 
 

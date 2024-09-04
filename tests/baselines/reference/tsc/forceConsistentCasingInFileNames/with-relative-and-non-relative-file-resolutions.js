@@ -10,7 +10,7 @@ import * as xs4 from "./struct";
 //// [/user/username/projects/myproject/node_modules/fp-ts/lib/struct.d.ts]
 export function foo(): void
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -26,7 +26,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js /user/username/projects/myproject/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js /user/username/projects/myproject/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
 Output::
 [96msrc/struct.d.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/user/username/projects/myproject/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
@@ -55,7 +55,7 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/struct.d.ts'

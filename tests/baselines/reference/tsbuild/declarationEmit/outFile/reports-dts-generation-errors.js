@@ -27,7 +27,7 @@ declare const ky: KyInstance;
 export default ky;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles --v
+/home/src/tslibs/TS/Lib/tsc.js -b --explainFiles --listEmittedFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -59,7 +59,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
@@ -101,7 +101,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -b --explainFiles --listEmittedFiles --v
+/home/src/tslibs/TS/Lib/tsc.js -b --explainFiles --listEmittedFiles --v
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -117,7 +117,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'

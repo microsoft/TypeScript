@@ -99,7 +99,7 @@ export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
 
 //// [/home/src/workspaces/packages/src-dogs/node_modules] symlink(/home/src/workspaces/packages)
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -115,7 +115,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b src-types src-dogs --verbose
+/home/src/tslibs/TS/Lib/tsc.js -b src-types src-dogs --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src-types/tsconfig.json
@@ -131,7 +131,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/packages/src-types/dogconfig.js]
 export {};

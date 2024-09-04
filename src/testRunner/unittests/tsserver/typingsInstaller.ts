@@ -289,15 +289,15 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         // 2. loose files names are matched against safe list for typings if
         //    this is a JS project (only js, jsx, d.ts files are present)
         const lodashJs = {
-            path: "/user/username/projects/project//lodash.js",
+            path: "/user/username/projects/project/lodash.js",
             content: "",
         };
         const file2Jsx = {
-            path: "/user/username/projects/project//file2.jsx",
+            path: "/user/username/projects/project/file2.jsx",
             content: "",
         };
         const file3dts = {
-            path: "/user/username/projects/project//file3.d.ts",
+            path: "/user/username/projects/project/file3.d.ts",
             content: "",
         };
         const reactDts = {

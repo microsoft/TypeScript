@@ -32,7 +32,7 @@ export function foo() {}
   "version": "1.0.0"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -48,7 +48,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -p src --explainFiles --extendedDiagnostics
 Output::
 File '/home/src/workspaces/project/src/package.json' does not exist.
 Found 'package.json' at '/home/src/workspaces/project/package.json'.
@@ -61,8 +61,8 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
@@ -73,7 +73,7 @@ File '/package.json' does not exist.
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.es2016.full.d.ts
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/main.ts
   Part of 'files' list in tsconfig.json
@@ -89,7 +89,7 @@ Found 1 error in src/fileA.ts[90m:1[0m
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
@@ -239,7 +239,7 @@ Change:: Delete package.json
 Input::
 //// [/home/src/workspaces/project/package.json] deleted
 
-/home/src/tslibs/ts/lib/tsc.js -p src --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -p src --explainFiles --extendedDiagnostics
 Output::
 File '/home/src/workspaces/project/src/package.json' does not exist.
 File '/home/src/workspaces/project/package.json' does not exist.
@@ -260,8 +260,8 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
@@ -272,7 +272,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.es2016.full.d.ts
+../../tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 src/main.ts
   Part of 'files' list in tsconfig.json

@@ -58,7 +58,7 @@ export { a } from 'a';
 
 //// [/home/src/workspaces/project/node_modules/a] symlink(/home/src/workspaces/project/packages/a)
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -74,7 +74,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -b packages/b --verbose --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -b packages/b --verbose --traceResolution --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
@@ -105,13 +105,13 @@ Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/packages/a/index.js', result '/home/src/workspaces/project/packages/a/index.js'.
 ======== Module name 'a' was successfully resolved to '/home/src/workspaces/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../tslibs/ts/lib/lib.esnext.full.d.ts
+../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 packages/a/index.js
   Matched by default include pattern '**/*'
@@ -135,13 +135,13 @@ Resolution for module 'a' was found in cache from location '/home/src/workspaces
 ======== Module name 'a' was successfully resolved to '/home/src/workspaces/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
 File '/home/src/workspaces/project/packages/a/types/package.json' does not exist.
 File '/home/src/workspaces/project/packages/a/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/ts/lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/ts/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../tslibs/ts/lib/lib.esnext.full.d.ts
+../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 packages/a/types/index.d.ts
   Imported via 'a' from file 'packages/b/index.js' with packageId 'a/index.js@0.0.0'
@@ -152,7 +152,7 @@ packages/b/index.js
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/packages/a/types/index.d.ts]
 export const a: "a";

@@ -8,7 +8,7 @@ const a = class { private p = 10; };
   "compilerOptions": {}
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,7 +24,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -39,7 +39,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -48,7 +48,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -63,7 +63,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -75,7 +75,7 @@ Input::
 const a = "hello";
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -90,7 +90,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -99,7 +99,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -114,7 +114,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -123,7 +123,7 @@ Change:: Emit after fixing error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p .
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
 
 
@@ -141,7 +141,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -150,7 +150,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -165,7 +165,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -177,7 +177,7 @@ Input::
 const a = class { private p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -192,7 +192,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -201,7 +201,7 @@ Change:: Emit when error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p .
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
 
 
@@ -224,7 +224,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -233,7 +233,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -248,7 +248,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success

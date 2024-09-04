@@ -19,7 +19,7 @@ export const b = 10;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -35,9 +35,9 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -i --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -i --explainFiles
 Output::
-../../tslibs/ts/lib/lib.es2015.d.ts
+../../tslibs/TS/Lib/lib.es2015.d.ts
   Library referenced via 'es6' from file 'a.d.ts'
 a.d.ts
   Matched by default include pattern '**/*'
@@ -45,7 +45,7 @@ b.d.ts
   Matched by default include pattern '**/*'
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2015.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
 {"fileNames":["../../tslibs/ts/lib/lib.es2015.d.ts","./a.d.ts","./b.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"10808475215-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es6\"/>\ndeclare const a = \"hello\";\n","affectsGlobalScope":true},"-13368947479-export const b = 10;"],"root":[2,3],"version":"FakeTSVersion"}
@@ -111,12 +111,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/workspaces/project/a.d.ts
 /home/src/workspaces/project/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2015.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.d.ts
 /home/src/workspaces/project/a.d.ts
 /home/src/workspaces/project/b.d.ts
 

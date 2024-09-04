@@ -20,7 +20,7 @@ export function bar() { }
     ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -36,7 +36,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 [96mtsconfig.json[0m:[93m10[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -131,7 +131,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -153,7 +153,7 @@ Input::
 export function foo() { }export function fooBar() { }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -237,7 +237,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 [96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -270,7 +270,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
 
 

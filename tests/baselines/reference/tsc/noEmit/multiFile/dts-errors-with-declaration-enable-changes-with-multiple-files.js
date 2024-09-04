@@ -19,7 +19,7 @@ export const d = class { private p = 10; };
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -35,7 +35,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -129,14 +129,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
 /home/src/projects/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -155,7 +155,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -174,7 +174,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -190,7 +190,7 @@ Change:: With declaration enabled noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit --declaration
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -402,7 +402,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -418,7 +418,7 @@ Change:: With declaration and declarationMap noEmit - Should report errors
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
 
 
@@ -530,7 +530,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -546,7 +546,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -565,7 +565,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -581,7 +581,7 @@ Change:: Dts Emit with error
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --declaration
+/home/src/tslibs/TS/Lib/tsc.js -p . --declaration
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -813,7 +813,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -832,7 +832,7 @@ Input::
 export const a = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
 
 
@@ -966,7 +966,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -984,7 +984,7 @@ Change:: With declaration enabled noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit --declaration
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -1172,7 +1172,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -1188,7 +1188,7 @@ Change:: With declaration and declarationMap noEmit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
 
 
@@ -1308,7 +1308,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts
@@ -1327,7 +1327,7 @@ Input::
 export const c = class { public p = 10; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -p . --noEmit --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit --declaration --declarationMap
 Output::
 
 
@@ -1451,7 +1451,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 /home/src/projects/project/c.ts

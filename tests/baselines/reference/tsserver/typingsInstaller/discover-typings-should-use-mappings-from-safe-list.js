@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
 
 //// [/home/src/projects/project/app.js]
 
@@ -9,7 +9,7 @@ currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: fals
 //// [/home/src/projects/project/chroma.min.js]
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

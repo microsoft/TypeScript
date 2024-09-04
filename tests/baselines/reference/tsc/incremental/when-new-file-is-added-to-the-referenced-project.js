@@ -33,7 +33,7 @@ declare class class1 {}
 //// [/home/src/workspaces/projects/project2/class2.ts]
 class class2 {}
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -49,7 +49,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 
 
@@ -131,7 +131,7 @@ Input::
 class class3 {}
 
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/projects/project1/class3.d.ts' not found.
   The file is in the program because:
@@ -217,7 +217,7 @@ Input::
 declare class class3 {}
 
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 
 
@@ -297,7 +297,7 @@ Input::
 declare class file {}
 
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 
 
@@ -309,7 +309,7 @@ Change:: Delete output for class3
 Input::
 //// [/home/src/workspaces/projects/project1/class3.d.ts] deleted
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/projects/project1/class3.d.ts' not found.
   The file is in the program because:
@@ -405,7 +405,7 @@ Input::
 declare class class3 {}
 
 
-/home/src/tslibs/ts/lib/tsc.js -i -p project2
+/home/src/tslibs/TS/Lib/tsc.js -i -p project2
 Output::
 
 

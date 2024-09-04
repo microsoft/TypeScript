@@ -19,7 +19,7 @@ import { a } from "./a";export const c = a;
 //// [/home/src/workspaces/project/d.ts]
 import { b } from "./b";export const d = b;
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -35,7 +35,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -165,14 +165,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
 /home/src/workspaces/project/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -191,7 +191,7 @@ Change:: with sourceMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --sourceMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --sourceMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -337,7 +337,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -353,7 +353,7 @@ Change:: should re-emit only js so they dont contain sourcemap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -483,7 +483,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -499,7 +499,7 @@ Change:: with declaration, emit Dts and should not emit js
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --declaration
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --declaration
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -633,7 +633,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -649,7 +649,7 @@ Change:: with declaration and declarationMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -797,7 +797,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -813,7 +813,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -832,7 +832,7 @@ Input::
 export const a = 10;const aLocal = 100;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -954,7 +954,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -972,7 +972,7 @@ Change:: with declaration and declarationMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1100,7 +1100,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1116,7 +1116,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1132,7 +1132,7 @@ Change:: with inlineSourceMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --inlineSourceMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --inlineSourceMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1282,7 +1282,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1298,7 +1298,7 @@ Change:: with sourceMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --sourceMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --sourceMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1454,7 +1454,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1470,7 +1470,7 @@ Change:: emit js files
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1616,7 +1616,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1632,7 +1632,7 @@ Change:: with declaration and declarationMap
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1760,7 +1760,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1776,7 +1776,7 @@ Change:: with declaration and declarationMap, should not re-emit
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b --verbose --declaration --declarationMap
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose --declaration --declarationMap
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -385,7 +385,7 @@ export declare const m: typeof mod;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p tests --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w -p tests --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -409,7 +409,7 @@ File '/user/username/projects/sample1/core/anotherModule.ts' exists - use it as 
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -437,7 +437,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/sample1/core/anotherModule.d.ts: *new*
   {}
@@ -476,7 +476,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
@@ -487,8 +487,8 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/index.d.ts
@@ -726,7 +726,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -842,7 +842,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
@@ -857,8 +857,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/index.d.ts
@@ -1003,7 +1003,7 @@ Reusing resolution of module '../core/anotherModule' from '/user/username/projec
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
-../../../../home/src/tslibs/ts/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
@@ -1111,7 +1111,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/sample1/core/anotherModule.d.ts:
   {}
@@ -1155,7 +1155,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/decls/index.d.ts
@@ -1170,8 +1170,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  /home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  /home/src/tslibs/TS/Lib/lib.d.ts
   /user/username/projects/sample1/core/index.d.ts
   /user/username/projects/sample1/core/anotherModule.d.ts
   /user/username/projects/sample1/logic/decls/index.d.ts

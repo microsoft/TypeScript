@@ -103,7 +103,7 @@ export function getVar() {
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -128,7 +128,7 @@ interface Symbol {
 
 
 
-/home/src/tslibs/ts/lib/tsc.js -b
+/home/src/tslibs/TS/Lib/tsc.js -b
 Output::
 
 

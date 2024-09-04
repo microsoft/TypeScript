@@ -27,7 +27,7 @@ export function thing(): void {}
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -57,13 +57,13 @@ Using 'exports' subpath '.' with target './dist/index.js'.
 File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========
-File '/home/src/tslibs/ts/lib/package.json' does not exist.
-File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 index.ts
   Matched by default include pattern '**/*'
@@ -73,7 +73,7 @@ index.ts
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/Users/name/projects/web/dist/index.js]
 import * as me from "@this/package";
@@ -150,11 +150,11 @@ PolledWatches::
   {"pollingInterval":500}
 /Users/name/projects/web/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/tslibs/ts/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -164,7 +164,7 @@ FsWatches::
   {}
 /Users/name/projects/web/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -187,11 +187,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /Users/name/projects/web/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /Users/name/projects/web/index.ts
 
 Shape signatures in builder refreshed for::

@@ -54,7 +54,7 @@ console.log(foo);
   "files": []
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -70,7 +70,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b project --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/strings/tsconfig.json
@@ -81,7 +81,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/strings/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/strings/foo.json
   Matched by include pattern 'foo.json' in 'project/strings/tsconfig.json'
@@ -89,7 +89,7 @@ project/strings/foo.json
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/main/tsconfig.json'...
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/strings/foo.json
   Imported via '../strings/foo.json' from file 'project/main/index.ts'
@@ -219,7 +219,7 @@ Change:: no-change-run
 
 Input::
 
-/home/src/tslibs/ts/lib/tsc.js --b project --verbose --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --b project --verbose --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/strings/tsconfig.json

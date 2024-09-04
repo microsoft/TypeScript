@@ -1,10 +1,10 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/ts/lib/typesMap.json" doesn't exist
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts]
 declare const eval: any
 
-//// [/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts]
 declare class Promise<T> {}
 
 //// [/home/src/projects/project/src/app.ts]
@@ -23,7 +23,7 @@ var x: Promise<string>;
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -85,7 +85,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/src/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/src/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/src/tsconfig.json WatchType: Type roots
@@ -95,11 +95,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/ts/lib/lib.es5.d.ts Text-1 "declare const eval: any"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "declare const eval: any"
 	/home/src/projects/project/src/app.ts SVC-1-0 "var x: Promise<string>;"
 
 
-	../../../tslibs/ts/lib/lib.es5.d.ts
+	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library 'lib.es5.d.ts' specified in compilerOptions
 	app.ts
 	  Matched by default include pattern '**/*'
@@ -252,7 +252,7 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/src/tsconfig.json: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -270,7 +270,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json *default*
-/home/src/tslibs/ts/lib/lib.es5.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json
@@ -337,18 +337,18 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/src/tsconfig.json : 
  }
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2015.promise.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/ts/lib/lib.es5.d.ts Text-1 "declare const eval: any"
-	/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts Text-1 "declare class Promise<T> {}"
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 "declare const eval: any"
+	/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts Text-1 "declare class Promise<T> {}"
 	/home/src/projects/project/src/app.ts SVC-1-0 "var x: Promise<string>;"
 
 
-	../../../tslibs/ts/lib/lib.es5.d.ts
+	../../../tslibs/TS/Lib/lib.es5.d.ts
 	  Library 'lib.es5.d.ts' specified in compilerOptions
-	../../../tslibs/ts/lib/lib.es2015.promise.d.ts
+	../../../tslibs/TS/Lib/lib.es2015.promise.d.ts
 	  Library 'lib.es2015.promise.d.ts' specified in compilerOptions
 	app.ts
 	  Matched by default include pattern '**/*'
@@ -463,9 +463,9 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/src/tsconfig.json:
   {}
-/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.es5.d.ts:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -483,11 +483,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json *default*
-/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json
-/home/src/tslibs/ts/lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/src/tsconfig.json

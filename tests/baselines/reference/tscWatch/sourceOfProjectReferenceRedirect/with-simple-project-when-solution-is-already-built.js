@@ -124,7 +124,7 @@ export function createZoo(): Array<Dog> {
   ]
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -363,7 +363,7 @@ export declare function createDog(): Dog;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --w --p /user/username/projects/demo/animals/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w --p /user/username/projects/demo/animals/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -486,7 +486,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/demo/animals: *new*
   {}
@@ -532,7 +532,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/core/utilities.ts

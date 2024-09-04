@@ -16,7 +16,7 @@ Input::
 //// [/home/src/workspaces/project/primary/a.ts]
 export { };
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -32,7 +32,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p primary/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p primary/tsconfig.json
 Output::
 [96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/foo' not found.
 

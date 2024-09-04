@@ -1,9 +1,9 @@
-currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames: false
 
 //// [/home/src/projects/project/app.js]
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,7 +28,7 @@ ts.JsTyping.discoverTypings::
       "safeList": {},
       "packageNameToTypingLocation": {
         "node": {
-          "typingLocation": "/home/src/typinginstaller/globalcache/data/node_modules/@types/node/index.d.ts",
+          "typingLocation": "/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts",
           "version": {
             "major": 1,
             "minor": 3,
@@ -41,7 +41,7 @@ ts.JsTyping.discoverTypings::
           }
         },
         "commander": {
-          "typingLocation": "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts",
+          "typingLocation": "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
           "version": {
             "major": 1,
             "minor": 3,

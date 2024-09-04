@@ -29,7 +29,7 @@ export function multiply(a: number, b: number) { return a * b; }
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -45,7 +45,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --b with-references
+/home/src/tslibs/TS/Lib/tsc.js --b with-references
 Output::
 
 

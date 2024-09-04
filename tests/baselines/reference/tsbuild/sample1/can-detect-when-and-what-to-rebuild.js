@@ -79,7 +79,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -385,7 +385,7 @@ export declare const m: typeof mod;
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -410,7 +410,7 @@ Input::
 const m = 10;
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -494,7 +494,7 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -630,7 +630,7 @@ Input::
 }
 
 
-/home/src/tslibs/ts/lib/tsc.js --b tests --verbose
+/home/src/tslibs/TS/Lib/tsc.js --b tests --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -647,7 +647,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2020.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib*
 
 //// [/user/username/projects/sample1/tests/index.js]
 const m = 10;

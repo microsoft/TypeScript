@@ -21,7 +21,7 @@ a;b;
   }
 }
 
-//// [c:/home/src/tslibs/ts/lib/lib.d.ts]
+//// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -37,12 +37,12 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-c:\home\src\tslibs\ts\lib\tsc.js --w --p c:/workspaces/solution/project --explainFiles
+c:\home\src\tslibs\TS\Lib\tsc.js --w --p c:/workspaces/solution/project --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../home/src/tslibs/ts/lib/lib.d.ts
+../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
@@ -81,7 +81,7 @@ c:/workspaces/solution/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/home/src/tslibs/ts/lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 c:/workspaces/solution/project/a.ts: *new*
   {}
@@ -107,12 +107,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-c:/home/src/tslibs/ts/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-c:/home/src/tslibs/ts/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 
@@ -146,7 +146,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../home/src/tslibs/ts/lib/lib.d.ts
+../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
@@ -183,7 +183,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-c:/home/src/tslibs/ts/lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.d.ts
 c:/workspaces/solution/project/a.ts
 c:/workspaces/solution/project/b.ts
 

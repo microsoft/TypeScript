@@ -26,13 +26,13 @@ export const x = "type1";
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.webworker.d.ts]
 interface WebWorkerInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.scripthost.d.ts]
 interface ScriptHostInterface { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -48,7 +48,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js -w -p project1 --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w -p project1 --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -92,10 +92,10 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.scripthost.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
@@ -112,9 +112,9 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_mod
 [7m2[0m /// <reference lib="unknownlib"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
   Matched by default include pattern '**/*'
@@ -269,9 +269,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/core.d.ts: *new*
   {}
@@ -308,8 +308,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
@@ -317,8 +317,8 @@ Program files::
 /home/src/workspace/projects/project1/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
@@ -375,9 +375,9 @@ Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/worksp
 [7m2[0m /// <reference lib="unknownlib"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
   Matched by default include pattern '**/*'
@@ -516,8 +516,8 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/core.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
@@ -574,9 +574,9 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/core.d.ts
 [7m2[0m /// <reference lib="unknownlib"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/file.ts
   Matched by default include pattern '**/*'
@@ -690,9 +690,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
 /home/src/workspace/projects/project1/file.ts:
   {}
@@ -731,8 +731,8 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
 /home/src/workspace/projects/project1/index.ts
@@ -780,9 +780,9 @@ Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/worksp
 [7m1[0m /// <reference lib="webworker2"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/file.ts
   Matched by default include pattern '**/*'
@@ -904,8 +904,8 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
 /home/src/workspace/projects/project1/index.ts
@@ -974,13 +974,13 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.webworker.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
-../../tslibs/ts/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-../../tslibs/ts/lib/lib.webworker.d.ts
+../../tslibs/TS/Lib/lib.webworker.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
-../../tslibs/ts/lib/lib.scripthost.d.ts
+../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/file.ts
   Matched by default include pattern '**/*'
@@ -1110,11 +1110,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts:
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts:
   {}
-/home/src/tslibs/ts/lib/lib.webworker.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
   {}
 /home/src/workspace/projects/project1/file.ts:
   {}
@@ -1149,18 +1149,18 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
 /home/src/workspace/projects/project1/index.ts
 /home/src/workspace/projects/project1/utils.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts
-/home/src/tslibs/ts/lib/lib.webworker.d.ts
-/home/src/tslibs/ts/lib/lib.scripthost.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.webworker.d.ts
+/home/src/tslibs/TS/Lib/lib.scripthost.d.ts
 /home/src/workspace/projects/project1/file.ts
 /home/src/workspace/projects/project1/file2.ts
 /home/src/workspace/projects/project1/index.ts

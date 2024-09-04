@@ -15,7 +15,7 @@ import * as b from '../../beta/b'
 //// [/home/src/workspaces/project/beta/b.ts]
 export { }
 
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -31,7 +31,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/ts/lib/tsc.js --p alpha/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --p alpha/tsconfig.json
 Output::
 [96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/beta/b.ts' is not under 'rootDir' '/home/src/workspaces/project/alpha'. 'rootDir' is expected to contain all source files.
 
