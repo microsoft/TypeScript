@@ -583,6 +583,7 @@ import {
     isImportTypeNode,
     isInCompoundLikeAssignment,
     isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
     isInExpressionContext,
     isInfinityOrNaNString,
     isInitializedProperty,
@@ -878,6 +879,7 @@ import {
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     Mutable,
+    MutableNodeArray,
     NamedDeclaration,
     NamedExports,
     NamedImportsOrExports,
@@ -1121,8 +1123,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isIndexSignatureDeclaration,
-    MutableNodeArray,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
