@@ -343,6 +343,7 @@ export function getDirectoryToWatchFailedLookupLocation(
     rootDir: string,
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
+    isRootWatchable: boolean,
     getCurrentDirectory: () => string | undefined,
     preferNonRecursiveWatch: boolean | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
@@ -356,7 +357,7 @@ export function getDirectoryToWatchFailedLookupLocation(
     const nodeModulesIndex = failedLookupPathComponents.indexOf("node_modules" as Path);
     if (nodeModulesIndex !== -1 && nodeModulesIndex + 1 <= perceivedOsRootLength + 1) return undefined; // node_modules not at position where it can be watched
     const lastNodeModulesIndex = failedLookupPathComponents.lastIndexOf("node_modules" as Path);
-    if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
+    if (isRootWatchable && isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
         if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
             return getDirectoryOfFailedLookupWatch(
@@ -461,12 +462,13 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     typeRootPath: Path,
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
+    isRootWatchable: boolean,
     getCurrentDirectory: () => string | undefined,
     preferNonRecursiveWatch: boolean | undefined,
     filterCustomPath: (path: Path) => boolean, // Return true if this path can be used
 ): Path | undefined {
     const typeRootPathComponents = getPathComponents(typeRootPath);
-    if (isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
+    if (isRootWatchable && isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
         // Because this is called when we are watching typeRoot, we dont need additional check whether typeRoot is not say c:/users/node_modules/@types when root is c:/
         return rootPath;
     }
@@ -620,6 +622,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
     const rootPath = resolutionHost.toPath(rootDir);
     const rootPathComponents = getPathComponents(rootPath);
+    const isRootWatchable = canWatchDirectoryOrFile(rootPathComponents);
 
     const isSymlinkCache = new Map<Path, boolean>();
     const packageDirWatchers = new Map<Path, PackageDirWatcher>(); // Watching packageDir if symlink otherwise watching dirPath
@@ -1118,6 +1121,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootDir,
             rootPath,
             rootPathComponents,
+            isRootWatchable,
             getCurrentDirectory,
             resolutionHost.preferNonRecursiveWatch,
         );
@@ -1328,6 +1332,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootDir,
             rootPath,
             rootPathComponents,
+            isRootWatchable,
             getCurrentDirectory,
             resolutionHost.preferNonRecursiveWatch,
         );
@@ -1629,6 +1634,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     resolutionHost.toPath(typeRoot),
                     rootPath,
                     rootPathComponents,
+                    isRootWatchable,
                     getCurrentDirectory,
                     resolutionHost.preferNonRecursiveWatch,
                     dirPath => directoryWatchesOfFailedLookups.has(dirPath) || dirPathToSymlinkPackageRefCount.has(dirPath),
