@@ -1,15 +1,8 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FsContents,
-    getProjectConfigWithNodeNext,
-} from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createServerHost,
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { getProjectConfigWithNodeNext } from "./contents.js";
+import { solutionBuildWithBaseline } from "./solutionBuilder.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({
@@ -26,9 +19,13 @@ export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean): FsContents {
-    return {
-        [libFile.path]: libFile.content,
+
+export function getSysForSampleProjectReferences(
+    withNodeNext?: boolean,
+    skipReferenceCoreFromTest?: boolean,
+    forTsserver?: boolean,
+) {
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 ...getProjectConfigWithNodeNext(withNodeNext),
@@ -82,33 +79,12 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean, 
             import * as mod from '../core/anotherModule';
             export const m = mod;
         `,
-    };
+    }, { currentDirectory: "/user/username/projects/sample1" });
 }
 
-export function getFsForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
-    return loadProjectFromFiles(
-        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
-        {
-            cwd: "/user/username/projects/sample1",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForSampleProjectReferences(withNodeNext?: boolean, skipReferenceCoreFromTest?: boolean) {
-    return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(withNodeNext, skipReferenceCoreFromTest),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
-    );
-}
-
-export function getServerHostForSampleProjectReferences() {
-    return createServerHost(
-        getFsContentsForSampleProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
+export function getSysForSampleProjectReferencesBuilt(withNodeNext?: boolean) {
+    return solutionBuildWithBaseline(
+        getSysForSampleProjectReferences(withNodeNext),
+        ["tests"],
     );
 }

@@ -1,5 +1,6 @@
 import {
     arrayFrom,
+    canWatchDirectoryOrFile,
     compareStringsCaseSensitive,
     contains,
     createMultiMap,
@@ -7,10 +8,19 @@ import {
     FileWatcher,
     FileWatcherCallback,
     GetCanonicalFileName,
+    getPathComponents,
     MultiMap,
+    Path,
     PollingInterval,
     System,
 } from "./_namespaces/ts.js";
+
+export function ensureWatchablePath(path: string, locationType: string) {
+    Debug.assert(
+        canWatchDirectoryOrFile(getPathComponents(path as Path)),
+        `Not a watchable location: ${locationType} like "/home/src/workspaces/project" or refer canWatchDirectoryOrFile for more allowed locations`,
+    );
+}
 
 export interface TestFileWatcher {
     cb: FileWatcherCallback;

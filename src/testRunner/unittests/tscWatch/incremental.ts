@@ -1,22 +1,22 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { CommandLineProgram } from "../helpers/baseline.js";
-import { libContent } from "../helpers/contents.js";
 import {
     applyEdit,
+    CommandLineProgram,
     createBaseline,
+} from "../helpers/baseline.js";
+import {
     verifyTscWatch,
     watchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
     libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: emit file --incremental", () => {
+describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
 
     const configFile: File = {
@@ -45,7 +45,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+        const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
+            files(),
+            { currentDirectory: project },
+        ));
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || ts.emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
@@ -57,7 +60,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             build();
         }
 
-        Harness.Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
+        Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
         function build() {
             const closer = ts.executeCommandLine(
@@ -88,7 +91,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             function verify(subScenario: string, optionsToExtend?: readonly string[]) {
                 const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
                 verifyIncrementalWatchEmit({
-                    files: () => [libFile, file1, file2, configFile],
+                    files: () => [file1, file2, configFile],
                     optionsToExtend,
                     subScenario: `own file emit without errors/${subScenario}`,
                     modifyFs: host => host.writeFile(file2.path, modifiedFile2Content),
@@ -99,7 +102,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         });
 
         verifyIncrementalWatchEmit({
-            files: () => [libFile, file1, configFile, {
+            files: () => [file1, configFile, {
                 path: file2.path,
                 content: `const y: string = 20;`,
             }],
@@ -108,7 +111,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         });
 
         verifyIncrementalWatchEmit({
-            files: () => [libFile, file1, file2, {
+            files: () => [file1, file2, {
                 path: configFile.path,
                 content: jsonToReadableText({ compilerOptions: { incremental: true, outFile: "out.js" } }),
             }],
@@ -131,7 +134,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         };
 
         verifyIncrementalWatchEmit({
-            files: () => [libFile, file1, file2, config],
+            files: () => [file1, file2, config],
             subScenario: "module compilation/own file emit without errors",
             modifyFs: host => host.writeFile(file2.path, file2.content.replace("y", "z").replace("20", "10")),
         });
@@ -143,13 +146,16 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             };
 
             verifyIncrementalWatchEmit({
-                files: () => [libFile, file1, fileModified, config],
+                files: () => [file1, fileModified, config],
                 subScenario: "module compilation/own file emit with errors",
                 modifyFs: host => host.writeFile(file1.path, file1.content.replace("x = 10", "z = 10")),
             });
 
             it("verify that state is read correctly", () => {
-                const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
+                const system = TestServerHost.createWatchedSystem(
+                    [file1, fileModified, config],
+                    { currentDirectory: project },
+                );
                 const reportDiagnostic = ts.createDiagnosticReporter(system);
                 const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
                 ts.performIncrementalCompilation({
@@ -173,7 +179,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 assert.equal(builderProgram.state.changedFilesSet!.size, 0, "changes");
 
                 assert.equal(builderProgram.state.fileInfos.size, 3, "FileInfo size");
-                assert.deepEqual(builderProgram.state.fileInfos.get(libFile.path as ts.Path), {
+                assert.deepEqual(builderProgram.state.fileInfos.get(ts.toFileNameLowerCase(libFile.path) as ts.Path), {
                     version: system.createHash(libFile.content),
                     signature: system.createHash(libFile.content),
                     affectsGlobalScope: true,
@@ -201,7 +207,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 assert.equal(ts.arrayFrom(builderProgram.state.referencedMap!.keys()).length, 0);
 
                 assert.equal(builderProgram.state.semanticDiagnosticsPerFile.size, 3);
-                assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(libFile.path as ts.Path), ts.emptyArray);
+                assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(ts.toFileNameLowerCase(libFile.path) as ts.Path), ts.emptyArray);
                 assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(file1.path as ts.Path), ts.emptyArray);
                 assert.deepEqual(builderProgram.state.semanticDiagnosticsPerFile.get(file2.path as ts.Path), [{
                     file: builderProgram.state.program!.getSourceFileByPath(file2.path as ts.Path)!,
@@ -220,7 +226,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         });
 
         verifyIncrementalWatchEmit({
-            files: () => [libFile, file1, file2, {
+            files: () => [file1, file2, {
                 path: configFile.path,
                 content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
             }],
@@ -273,7 +279,7 @@ export { B } from "./b";
 export { C } from "./c";
 `,
             };
-            return [libFile, aTs, bTs, cTs, indexTs, config];
+            return [aTs, bTs, cTs, indexTs, config];
         },
         subScenario: "incremental with circular references",
         modifyFs: host =>
@@ -291,7 +297,6 @@ export interface A {
     verifyIncrementalWatchEmit({
         subScenario: "when file with ambient global declaration file is deleted",
         files: () => [
-            { path: libFile.path, content: libContent },
             { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
             { path: `${project}/index.ts`, content: `console.log(Config.value);` },
             { path: configFile.path, content: jsonToReadableText({ compilerOptions: { incremental: true } }) },
@@ -317,7 +322,6 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource option changed",
             files: () => [
-                { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
                 { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
@@ -332,7 +336,6 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource backing types added",
             files: () => [
-                { path: libFile.path, content: libContent },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
@@ -348,7 +351,6 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource backing types removed",
             files: () => [
-                { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
                 { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
@@ -363,7 +365,6 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "importHelpers backing types removed",
             files: () => [
-                { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
                 { path: `${project}/node_modules/tslib/package.json`, content: jsonToReadableText({ name: "tslib", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
@@ -380,7 +381,6 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "editing module augmentation",
             files: () => [
-                { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
                 { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
                 { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
@@ -397,12 +397,11 @@ export const Fragment: unique symbol;
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
         sys: () =>
-            createWatchedSystem({
-                "/src/project/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": "{}",
-                "/src/project/tsconfig.tsbuildinfo": "Some random string",
-                [libFile.path]: libFile.content,
-            }),
-        commandLineArgs: ["--p", "src/project", "-i", "-w"],
+            TestServerHost.createWatchedSystem({
+                "/home/src/projects/project/main.ts": "export const x = 10;",
+                "/home/src/projects/project/tsconfig.json": "{}",
+                "/home/src/projects/project/tsconfig.tsbuildinfo": "Some random string",
+            }, { currentDirectory: "/home/src/projects/project" }),
+        commandLineArgs: ["-i", "-w"],
     });
 });

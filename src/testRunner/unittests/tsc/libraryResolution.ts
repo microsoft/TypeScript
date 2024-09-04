@@ -1,36 +1,35 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import {
+    forEachLibResolutionScenario,
     getCommandLineArgsForLibResolution,
-    getFsForLibResolution,
-    getFsForLibResolutionUnknown,
+    getSysForLibResolutionUnknown,
 } from "../helpers/libraryResolution.js";
 import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
-    function verify(libRedirection?: true, withoutConfig?: true) {
-        verifyTsc({
-            scenario: "libraryResolution",
-            subScenario: `${withoutConfig ? "without" : "with"} config${libRedirection ? " with redirection" : ""}`,
-            fs: () => getFsForLibResolution(libRedirection),
-            commandLineArgs: getCommandLineArgsForLibResolution(withoutConfig),
-            baselinePrograms: true,
-        });
+    function verify(withoutConfig?: true) {
+        forEachLibResolutionScenario(/*forTsserver*/ false, withoutConfig, (subScenario, sys) =>
+            verifyTsc({
+                scenario: "libraryResolution",
+                subScenario,
+                sys,
+                commandLineArgs: getCommandLineArgsForLibResolution(withoutConfig),
+                baselinePrograms: true,
+            }));
     }
     verify();
-    verify(/*libRedirection*/ true);
-    verify(/*libRedirection*/ undefined, /*withoutConfig*/ true);
-    verify(/*libRedirection*/ true, /*withoutConfig*/ true);
+    verify(/*withoutConfig*/ true);
 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "unknown lib",
-        fs: () => getFsForLibResolutionUnknown(),
+        sys: getSysForLibResolutionUnknown,
         commandLineArgs: getCommandLineArgsForLibResolution(/*withoutConfig*/ undefined),
         baselinePrograms: true,
     });
@@ -38,24 +37,23 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "when noLib toggles",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/a.d.ts": `declare const a = "hello";`,
-                "/src/b.ts": `const b = 10;`,
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/a.d.ts": `declare const a = "hello";`,
+                "/home/src/workspaces/project/b.ts": `const b = 10;`,
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         declaration: true,
                         incremental: true,
                         lib: ["es6"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libContent,
-            }),
-        commandLineArgs: ["-p", "/src/tsconfig.json"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: emptyArray,
         edits: [
             {
                 ...noChangeRun,
-                commandLineArgs: ["-p", "/src/tsconfig.json", "--noLib"],
+                commandLineArgs: ["--noLib"],
             },
         ],
         baselinePrograms: true,
@@ -64,22 +62,21 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verifyTsc({
         scenario: "libraryResolution",
         subScenario: "when one of the file skips default lib inclusion",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/a.d.ts": dedent`
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/a.d.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="es6"/>
                     declare const a = "hello";
                 `,
-                "/src/b.d.ts": `export const b = 10;`,
-                "/src/tsconfig.json": jsonToReadableText({
+                "/home/src/workspaces/project/b.d.ts": `export const b = 10;`,
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         lib: ["es6", "dom"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libContent,
-            }),
-        commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/project" }),
+        commandLineArgs: ["-i", "--explainFiles"],
         baselinePrograms: true,
     });
 });

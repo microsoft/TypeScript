@@ -4,8 +4,7 @@ import * as Harness from "../_namespaces/Harness.js";
 import * as ts from "../_namespaces/ts.js";
 import * as vfs from "../_namespaces/vfs.js";
 import { jsonToReadableText } from "./helpers.js";
-import { libContent } from "./helpers/contents.js";
-import { loadProjectFromFiles } from "./helpers/vfs.js";
+import { TestServerHost } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -264,10 +263,10 @@ class C {
 
 describe("unittests:: Public APIs:: createProgram", () => {
     function verifyAPI(useJsonParsingApi: boolean) {
-        const fs = loadProjectFromFiles({
-            "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
-            "/src/projects/project/packages/a/test/index.js": `import 'a';`,
-            "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+        const sys = TestServerHost.createWatchedSystem({
+            "/home/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/home/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/home/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     checkJs: true,
                     composite: true,
@@ -277,7 +276,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     outDir: "types",
                 },
             }),
-            "/src/projects/project/packages/a/package.json": jsonToReadableText({
+            "/home/src/projects/project/packages/a/package.json": jsonToReadableText({
                 name: "a",
                 version: "0.0.0",
                 type: "module",
@@ -288,11 +287,9 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     },
                 },
             }),
-            "/lib/lib.esnext.full.d.ts": libContent,
-        }, { cwd: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
+        }, { currentDirectory: "/home/src/projects/project" });
         const commandLine = ts.getParsedCommandLineOfConfigFile(
-            "/src/projects/project/packages/a/tsconfig.json",
+            "/home/src/projects/project/packages/a/tsconfig.json",
             /*optionsToExtend*/ undefined,
             {
                 fileExists: sys.fileExists.bind(sys),
@@ -306,7 +303,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                 realpath: sys.realpath.bind(sys),
             },
         )!;
-        const config = !useJsonParsingApi ? JSON.parse(fs.readFileSync("/src/projects/project/packages/a/tsconfig.json", "utf-8")) : undefined;
+        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/home/src/projects/project/packages/a/tsconfig.json")!) : undefined;
         // This is really createCompilerHost but we want to use our own sys so simple usage
         const host = ts.createCompilerHostWorker(
             useJsonParsingApi ? commandLine.options : config.compilerOptions,

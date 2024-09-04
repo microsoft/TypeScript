@@ -1,14 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/tsconfig.json]
+//// [/user/username/workspace/projects/tsconfig.json]
 {
   "include": [
     "**/*"
   ]
 }
 
-//// [/a/tsconfig.json]
+//// [/user/username/workspace/projects/project/tsconfig.json]
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
@@ -16,82 +18,104 @@ Before request
   }
 }
 
-//// [/a/type.ts]
+//// [/user/username/workspace/projects/project/type.ts]
 
 export type Foo {
     bar: number;
 };
 
-//// [/a/file1.ts]
+//// [/user/username/workspace/projects/project/file1.ts]
 
 import { Foo } from "./type";
 const a: Foo = { bar : 1 };
 a.bar;
 
-//// [/a/file2.ts]
+//// [/user/username/workspace/projects/project/file2.ts]
 
 import { Foo } from "./type";
 const a: Foo = { bar : 2 };
 a.bar;
 
-//// [/file3.js]
+//// [/user/username/workspace/projects/file3.js]
 console.log('noop');
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/file3.js"
+        "file": "/user/username/workspace/projects/file3.js"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /file3.js ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/workspace/projects/file3.js ProjectRootPath: undefined:: Result: /user/username/workspace/projects/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/workspace/projects/tsconfig.json, currentDirectory: /user/username/workspace/projects
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/tsconfig.json 2000 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /file3.js to open"
+        "projectName": "/user/username/workspace/projects/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/workspace/projects/file3.js to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/workspace/projects/tsconfig.json : {
  "rootNames": [
-  "/a/file1.ts",
-  "/a/file2.ts",
-  "/a/type.ts"
+  "/user/username/workspace/projects/project/file1.ts",
+  "/user/username/workspace/projects/project/file2.ts",
+  "/user/username/workspace/projects/project/type.ts"
  ],
  "options": {
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/workspace/projects/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/type.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
-	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
-	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/type.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/workspace/projects/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/workspace/projects/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/workspace/projects/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/workspace/projects/project/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
+	/user/username/workspace/projects/project/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
+	/user/username/workspace/projects/project/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
 
 
-	a/type.ts
-	  Imported via "./type" from file 'a/file1.ts'
-	  Imported via "./type" from file 'a/file2.ts'
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	project/type.ts
+	  Imported via "./type" from file 'project/file1.ts'
+	  Imported via "./type" from file 'project/file2.ts'
 	  Matched by include pattern '**/*' in 'tsconfig.json'
-	a/file1.ts
+	project/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
-	a/file2.ts
+	project/file2.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -101,7 +125,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/user/username/workspace/projects/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -112,7 +136,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "63321821a44120b7e9b36bb15dc7f2f73cc88fc4ee4b7b33d1a4a6b1af5b6e3c",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -122,8 +146,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 168,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -151,65 +175,27 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/file3.js",
-        "configFile": "/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/user/username/workspace/projects/file3.js",
+        "configFile": "/user/username/workspace/projects/tsconfig.json",
+        "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /user/username/workspace/projects
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/file3.js SVC-1-0 "console.log('noop');"
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/workspace/projects/file3.js SVC-1-0 "console.log('noop');"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	file3.js
 	  Root file specified for compilation
 
@@ -217,128 +203,86 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/projects/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspace/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/file2.ts: *new*
+/user/username/workspace/projects/project/file1.ts: *new*
   {}
-/a/type.ts: *new*
+/user/username/workspace/projects/project/file2.ts: *new*
   {}
-/tsconfig.json: *new*
+/user/username/workspace/projects/project/type.ts: *new*
+  {}
+/user/username/workspace/projects/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/workspace/projects: *new*
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
-/tsconfig.json (Configured) *new*
+/user/username/workspace/projects/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
 
 ScriptInfos::
-/a/file1.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/a/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/a/type.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/file3.js (Open) *new*
+    containingProjects: 2
+        /user/username/workspace/projects/tsconfig.json
+        /dev/null/inferredProject1*
+/user/username/workspace/projects/file3.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/user/username/workspace/projects/project/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/workspace/projects/tsconfig.json
+/user/username/workspace/projects/project/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/workspace/projects/tsconfig.json
+/user/username/workspace/projects/project/type.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/workspace/projects/tsconfig.json
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: /a/data/package.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/package.json
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/node_modules/types-registry/index.json
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
 
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/data/package.json: *new*
-  {}
-/a/file1.ts:
-  {}
-/a/file2.ts:
-  {}
-/a/type.ts:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
-Timeout callback:: count: 2
-5: /tsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 0
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-    noOpenRef: false *changed*
-
 TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/file3.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/workspace/projects/file3.js"
       ],
       "compilerOptions": {
         "target": 1,
@@ -354,10 +298,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": []
       },
       "unresolvedImports": [],
-      "projectRootPath": "/",
+      "projectRootPath": "/user/username/workspace/projects",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -365,8 +309,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "cachedTypingPaths": [],
       "newTypingNames": [],
       "filesToWatch": [
-        "/bower_components",
-        "/node_modules"
+        "/user/username/workspace/projects/bower_components",
+        "/user/username/workspace/projects/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -374,14 +318,14 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::watchTypingLocations",
       "projectName": "/dev/null/inferredProject1*",
       "files": [
-        "/bower_components",
-        "/node_modules"
+        "/user/username/workspace/projects/bower_components",
+        "/user/username/workspace/projects/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -428,16 +372,16 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/user/username/workspace/projects/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /file3.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/workspace/projects/file3.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -453,27 +397,31 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/bower_components: *new*
+/user/username/workspace/projects/bower_components: *new*
   {"pollingInterval":500}
-/node_modules: *new*
+/user/username/workspace/projects/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/workspace/projects/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/data/package.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a/file1.ts:
+/user/username/workspace/projects/project/file1.ts:
   {}
-/a/file2.ts:
+/user/username/workspace/projects/project/file2.ts:
   {}
-/a/type.ts:
+/user/username/workspace/projects/project/type.ts:
   {}
-/tsconfig.json:
+/user/username/workspace/projects/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/:
+/user/username/workspace/projects:
   {}
 
 Projects::
@@ -481,10 +429,10 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     autoImportProviderHost: false *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 2
+/user/username/workspace/projects/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
-    dirty: true
+    noOpenRef: true
 
 Before request
 
@@ -492,49 +440,63 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/file1.ts"
+        "file": "/user/username/workspace/projects/project/file1.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspace/projects/project/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/workspace/projects/project/file1.ts ProjectRootPath: undefined:: Result: /user/username/workspace/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/workspace/projects/project/tsconfig.json, currentDirectory: /user/username/workspace/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/tsconfig.json 2000 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/tsconfig.json",
-        "reason": "Creating possible configured project for /a/file1.ts to open"
+        "projectName": "/user/username/workspace/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/workspace/projects/project/file1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/workspace/projects/project/tsconfig.json : {
  "rootNames": [
-  "/a/file1.ts",
-  "/a/file2.ts",
-  "/a/type.ts"
+  "/user/username/workspace/projects/project/file1.ts",
+  "/user/username/workspace/projects/project/file2.ts",
+  "/user/username/workspace/projects/project/type.ts"
  ],
  "options": {
   "importHelpers": true,
-  "configFilePath": "/a/tsconfig.json"
+  "configFilePath": "/user/username/workspace/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Config: /a/tsconfig.json WatchType: Extended config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
-	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
-	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/tsconfig.json 2000 undefined Config: /user/username/workspace/projects/project/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/workspace/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/workspace/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/workspace/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/workspace/projects/project/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
+	/user/username/workspace/projects/project/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
+	/user/username/workspace/projects/project/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
 
 
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	type.ts
 	  Imported via "./type" from file 'file1.ts'
 	  Imported via "./type" from file 'file2.ts'
@@ -551,7 +513,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/tsconfig.json"
+        "projectName": "/user/username/workspace/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -562,7 +524,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "bcbb3eb9a7f46ab3b8f574ad3733f3e5a7ce50557c14c0c6192f1203aedcacca",
+          "projectId": "cf7a03727cde5623dddf8c4ece4c949af329f99691dfe7c82fdc6b9a0d6063ae",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -572,8 +534,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 168,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -603,77 +565,51 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/file1.ts",
-        "configFile": "/a/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/user/username/workspace/projects/project/file1.ts",
+        "configFile": "/user/username/workspace/projects/project/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] `remove Project::
+Info seq  [hh:mm:ss:mss] Project '/user/username/workspace/projects/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts
+	/user/username/workspace/projects/project/type.ts
+	/user/username/workspace/projects/project/file1.ts
+	/user/username/workspace/projects/project/file2.ts
+
+
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	project/type.ts
+	  Imported via "./type" from file 'project/file1.ts'
+	  Imported via "./type" from file 'project/file2.ts'
+	  Matched by include pattern '**/*' in 'tsconfig.json'
+	project/file1.ts
+	  Matched by include pattern '**/*' in 'tsconfig.json'
+	project/file2.ts
+	  Matched by include pattern '**/*' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/projects 1 undefined Config: /user/username/workspace/projects/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/projects/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/workspace/node_modules/@types 1 undefined Project: /user/username/workspace/projects/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Project '/user/username/workspace/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /file3.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/workspace/projects/file3.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json,/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/workspace/projects/project/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/workspace/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -688,68 +624,85 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/user/username/workspace/node_modules: *new*
   {"pollingInterval":500}
-/bower_components:
+/user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
-/node_modules:
+/user/username/workspace/projects/bower_components:
+  {"pollingInterval":500}
+/user/username/workspace/projects/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/workspace/projects/node_modules:
+  {"pollingInterval":500}
+/user/username/workspace/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/workspace/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/data/package.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a/file2.ts:
+/user/username/workspace/projects/project/file2.ts:
   {}
-/a/tsconfig.json: *new*
+/user/username/workspace/projects/project/tsconfig.json: *new*
   {}
-/a/type.ts:
+/user/username/workspace/projects/project/type.ts:
   {}
-/tsconfig.json:
+/user/username/workspace/projects/tsconfig.json:
   {}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/user/username/workspace/projects/project/file1.ts:
   {}
 
 FsWatchesRecursive::
-/:
+/user/username/workspace/projects:
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
+/user/username/workspace/projects/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
-    dirty: false *changed*
+    autoImportProviderHost: false
+/user/username/workspace/projects/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
-/a/file1.ts (Open) *changed*
-    open: true *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /tsconfig.json
-        /a/tsconfig.json *default* *new*
-/a/file2.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /tsconfig.json
-        /a/tsconfig.json *new*
-/a/type.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /tsconfig.json
-        /a/tsconfig.json *new*
-/file3.js (Open)
+        /dev/null/inferredProject1*
+        /user/username/workspace/projects/project/tsconfig.json *new*
+        /user/username/workspace/projects/tsconfig.json *deleted*
+/user/username/workspace/projects/file3.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/user/username/workspace/projects/project/file1.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/workspace/projects/project/tsconfig.json *default* *new*
+        /user/username/workspace/projects/tsconfig.json *deleted*
+/user/username/workspace/projects/project/file2.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/workspace/projects/project/tsconfig.json *new*
+        /user/username/workspace/projects/tsconfig.json *deleted*
+/user/username/workspace/projects/project/type.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/workspace/projects/project/tsconfig.json *new*
+        /user/username/workspace/projects/tsconfig.json *deleted*
 
 Before request
 
@@ -757,22 +710,21 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "references",
       "arguments": {
-        "file": "/a/file1.ts",
+        "file": "/user/username/workspace/projects/project/file1.ts",
         "line": 4,
         "offset": 3
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Finding references to /a/file1.ts position 61 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finding references to /a/file1.ts position 61 in project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/type.d.ts 2000 undefined Project: /a/tsconfig.json WatchType: Missing generated file
+Info seq  [hh:mm:ss:mss] Finding references to /user/username/workspace/projects/project/file1.ts position 61 in project /user/username/workspace/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/workspace/projects/project/type.d.ts 2000 undefined Project: /user/username/workspace/projects/project/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "refs": [
           {
-            "file": "/a/type.ts",
+            "file": "/user/username/workspace/projects/project/type.ts",
             "start": {
               "line": 3,
               "offset": 5
@@ -793,7 +745,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isWriteAccess": false
           },
           {
-            "file": "/a/file1.ts",
+            "file": "/user/username/workspace/projects/project/file1.ts",
             "start": {
               "line": 3,
               "offset": 18
@@ -814,7 +766,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isWriteAccess": true
           },
           {
-            "file": "/a/file1.ts",
+            "file": "/user/username/workspace/projects/project/file1.ts",
             "start": {
               "line": 4,
               "offset": 3
@@ -827,7 +779,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isWriteAccess": false
           },
           {
-            "file": "/a/file2.ts",
+            "file": "/user/username/workspace/projects/project/file2.ts",
             "start": {
               "line": 3,
               "offset": 18
@@ -848,7 +800,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isWriteAccess": true
           },
           {
-            "file": "/a/file2.ts",
+            "file": "/user/username/workspace/projects/project/file2.ts",
             "start": {
               "line": 4,
               "offset": 3
@@ -870,42 +822,49 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/user/username/workspace/node_modules:
   {"pollingInterval":500}
-/a/type.d.ts: *new*
+/user/username/workspace/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/projects/bower_components:
+  {"pollingInterval":500}
+/user/username/workspace/projects/jsconfig.json:
   {"pollingInterval":2000}
-/bower_components:
+/user/username/workspace/projects/node_modules:
   {"pollingInterval":500}
-/node_modules:
+/user/username/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/projects/project/node_modules:
+  {"pollingInterval":500}
+/user/username/workspace/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/projects/project/type.d.ts: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/data/package.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a/file2.ts:
+/user/username/workspace/projects/project/file2.ts:
   {}
-/a/tsconfig.json:
+/user/username/workspace/projects/project/tsconfig.json:
   {}
-/a/type.ts:
+/user/username/workspace/projects/project/type.ts:
   {}
-/tsconfig.json:
+/user/username/workspace/projects/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/:
+/user/username/workspace/projects:
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    documentPositionMappers: 1 *changed*
-        /a/type.d.ts: identitySourceMapConsumer *new*
-    autoImportProviderHost: false
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/tsconfig.json (Configured)
-    projectStateVersion: 2
+/user/username/workspace/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/workspace/projects/project/type.d.ts: identitySourceMapConsumer *new*
+    autoImportProviderHost: false

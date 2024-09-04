@@ -1,7 +1,10 @@
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import {
+    compilerOptionsToConfigJson,
+    getPathForTypeScriptTypingInstallerCacheTest,
+} from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -12,26 +15,26 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {
         const file1 = {
-            path: "/a/b/app.js",
+            path: "/user/username/projects/project/app.js",
             content: `var x = require("lib")`,
         };
         const lib = {
-            path: "/a/cache/node_modules/@types/lib/index.d.ts",
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/lib/index.d.ts"),
             content: "export let x = 1",
         };
-        const host = createServerHost([file1, lib]);
-        const session = new TestSession({ host, globalTypingsCacheLocation: "/a/cache" });
+        const host = TestServerHost.createServerHost([file1, lib]);
+        const session = new TestSession(host);
 
         setCompilerOptionsForInferredProjectsRequestForSession({ traceResolution: true, allowJs: true }, session);
         openFilesForSession([file1], session);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("resolutionCache", "can load typings that are proper modules", session);
     });
 });
@@ -57,7 +60,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
                 exclude: ["node_modules"],
             }),
         };
-        const host = createServerHost([f1, t1, tsconfig]);
+        const host = TestServerHost.createServerHost([f1, t1, tsconfig]);
         const session = new TestSession(host);
 
         openFilesForSession([f1], session);
@@ -86,7 +89,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             path: "/users/username/projects/project/file1.ts",
             content: "import * as T from './moduleFile'; T.bar();",
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -117,7 +120,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             path: `${folderPath}/a.ts`,
             content: 'import f = require("pad"); f;',
         };
-        const host = createServerHost([file1, libFile]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
@@ -145,11 +148,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("suggestion diagnostics", () => {
         const file: File = {
-            path: "/a.js",
+            path: "/user/username/projects/project/a.js",
             content: "function f(p) {}",
         };
 
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -163,11 +166,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("disable suggestion diagnostics", () => {
         const file: File = {
-            path: "/a.js",
+            path: "/user/username/projects/project/a.js",
             content: 'require("b")',
         };
 
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -188,11 +191,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("suppressed diagnostic events", () => {
         const file: File = {
-            path: "/a.ts",
+            path: "/user/username/projects/project/a.ts",
             content: "1 = 2;",
         };
 
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession({ host, suppressDiagnosticEvents: true });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -230,7 +233,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             path: "/users/username/projects/project/file1.ts",
             content: "import * as T from './moduleFile'; T.bar();",
         };
-        const host = createServerHost([moduleFile, file1]);
+        const host = TestServerHost.createServerHost([moduleFile, file1]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -277,7 +280,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             path: "/users/username/projects/project/tsconfig.json",
             content: `{}`,
         };
-        const host = createServerHost([moduleFile, file1, configFile]);
+        const host = TestServerHost.createServerHost([moduleFile, file1, configFile]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -305,15 +308,15 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
 
     it("should property handle missing config files", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/user/username/projects/project/app.ts",
             content: "let x = 1",
         };
         const config = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: "{}",
         };
         const projectFileName = "project1";
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: toExternalFiles([f1.path, config.path]),
@@ -336,21 +339,18 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         function verifyTypesLoad(subScenario: string, includeTypeRoots: boolean) {
             it(subScenario, () => {
                 const f1 = {
-                    path: "/a/b/app.ts",
+                    path: "/user/username/projects/project/app.ts",
                     content: "let x = 1",
                 };
                 const config = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                 };
                 const node = {
-                    path: "/a/b/node_modules/@types/node/index.d.ts",
+                    path: "/user/username/projects/project/node_modules/@types/node/index.d.ts",
                     content: "declare var process: any",
                 };
-                const cwd = {
-                    path: "/a/c",
-                };
-                const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+                const host = TestServerHost.createServerHost([f1, config, node]);
                 const session = new TestSession(host);
                 openFilesForSession([f1], session);
                 baselineTsserverLogs("resolutionCache", subScenario, session);
@@ -396,8 +396,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent = `import { module1 } from "./module1";import { module2 } from "../module2";`;
             const { file1, file2 } = getFiles(fileContent);
             const { module1, module2 } = getModules(`/user/username/projects/myproject/src/module1.ts`, `/user/username/projects/myproject/module2.ts`);
-            const files = [module1, module2, file1, file2, configFile, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, file2, configFile];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -411,8 +411,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const { file1, file2 } = getFiles(fileContent);
             const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
-            const files = [module1, module2, file1, file2, configFile, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, file2, configFile];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -450,8 +450,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent4 = `import { module1 } from "../src/module1}";import { module2 } from "../module2";`;
             const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
             const { module1, module2 } = getModules(`/user/username/projects/myproject/product/src/module1.ts`, `/user/username/projects/myproject/product/module2.ts`);
-            const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, file2, file3, file4, configFile];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -466,8 +466,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const { file1, file2, file3, file4 } = getFiles(fileContent);
             const { module1, module2 } = getModules(`/user/username/projects/myproject/product/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
-            const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, file2, file3, file4, configFile];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -487,8 +487,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
             const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
             const { module1, module2 } = getModules(`/user/username/projects/myproject/product/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
-            const files = [module1, module2, file1, file2, file3, file4, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, file2, file3, file4];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             setCompilerOptionsForInferredProjectsRequestForSession({ traceResolution: true }, session);
             openFilesForSession([file1], session);
@@ -545,8 +545,8 @@ export const x = 10;`,
                     }),
                 };
 
-                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
-                const host = createServerHost(files);
+                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile];
+                const host = TestServerHost.createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
                 host.writeFile("/user/username/projects/myproject/src/somefolder/module1.js", "export const x = 10;");
@@ -572,8 +572,8 @@ export const x = 10;`,
             content: `export const x = 10;`,
         };
         it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
-            const files = [libFile, file1, file2];
-            const host = createServerHost(files);
+            const files = [file1, file2];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -586,8 +586,8 @@ export const x = 10;`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            const files = [libFile, file1, file2, config];
-            const host = createServerHost(files);
+            const files = [file1, file2, config];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -605,8 +605,8 @@ export const x = 10;`,
                 content: fileContent,
             };
             const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
-            const files = [module1, module2, file1, configFile, libFile];
-            const host = createServerHost(files);
+            const files = [module1, module2, file1, configFile];
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -620,7 +620,7 @@ export const x = 10;`,
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with project references", () => {
     it("sharing across references", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
             "/users/username/projects/common/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson({
@@ -629,7 +629,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 }),
             }),
             "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleB.ts": dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
@@ -640,11 +640,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 }),
                 references: [{ path: "../common" }],
             }),
-            "/users/username/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/users/username/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,
@@ -655,13 +655,13 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
     });
 
     it("not sharing across references", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
             "/users/username/projects/common/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true, traceResolution: true },
             }),
             "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": Utils.dedent`
+            "/users/username/projects/common/moduleB.ts": dedent`
                 import { x } from "moduleX";
                 export const b = x;
             `,
@@ -673,11 +673,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 },
                 references: [{ path: "../common" }],
             }),
-            "/users/username/projects/app/appA.ts": Utils.dedent`
+            "/users/username/projects/app/appA.ts": dedent`
                 import { x } from "moduleX";
                 export const y = x;
             `,
-            "/users/username/projects/app/appB.ts": Utils.dedent`
+            "/users/username/projects/app/appB.ts": dedent`
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,

@@ -1,11 +1,11 @@
 0:: Add class3 to project1 and build it
 Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
 But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
-TsBuild info text without affectedFilesPendingEmit:: /src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "fileInfos": {
-    "../../../lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -34,7 +34,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../../lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },

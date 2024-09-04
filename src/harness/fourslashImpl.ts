@@ -9,6 +9,11 @@ import * as vpath from "./_namespaces/vpath.js";
 import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import {
+    harnessSessionLibLocation,
+    harnessTypingInstallerCacheLocation,
+} from "./harnessLanguageService.js";
+import { ensureWatchablePath } from "./watchUtils.js";
 
 export const enum FourSlashTestType {
     Native,
@@ -318,7 +323,17 @@ export class TestState {
         let startResolveFileRef: FourSlashFile | undefined;
 
         let configFileName: string | undefined;
+        if (testData.symlinks && this.testType === FourSlashTestType.Server) {
+            for (const symlink of ts.getOwnKeys(testData.symlinks)) {
+                ensureWatchablePath(ts.getDirectoryPath(symlink), `Directory of input link: ${symlink}`);
+                const target = (testData.symlinks[symlink] as vfs.Symlink).symlink;
+                ensureWatchablePath(ts.getDirectoryPath(target), `Directory of target link: ${target} for symlink ${symlink}`);
+            }
+        }
         for (const file of testData.files) {
+            if (this.testType === FourSlashTestType.Server) {
+                ensureWatchablePath(ts.getDirectoryPath(file.fileName), `Directory of input file: ${file.fileName}`);
+            }
             // Create map between fileName and its content for easily looking up when resolveReference flag is specified
             this.inputFiles.set(file.fileName, file.content);
             if (isConfig(file)) {
@@ -347,6 +362,11 @@ export class TestState {
                 throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
             }
         }
+
+        const libName = (name: string) =>
+            this.testType !== FourSlashTestType.Server ?
+                name :
+                `${harnessSessionLibLocation}/${name}`;
 
         let configParseResult: ts.ParsedCommandLine | undefined;
         if (configFileName) {
@@ -401,13 +421,21 @@ export class TestState {
 
             // Check if no-default-lib flag is false and if so add default library
             if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+                this.languageServiceAdapterHost.addScript(
+                    libName(Harness.Compiler.defaultLibFileName),
+                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
+                    /*isRootFile*/ false,
+                );
 
                 compilationOptions.lib?.forEach(fileName => {
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
                     if (libFile) {
-                        this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        this.languageServiceAdapterHost.addScript(
+                            libName(fileName),
+                            libFile.text,
+                            /*isRootFile*/ false,
+                        );
                     }
                 });
             }
@@ -419,7 +447,7 @@ export class TestState {
                     // all files if config file not specified, otherwise root files from the config and typings cache files are root files
                     const isRootFile = !configParseResult ||
                         ts.contains(configParseResult.fileNames, fileName) ||
-                        (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
+                        (ts.isDeclarationFileName(fileName) && ts.containsPath(harnessTypingInstallerCacheLocation, fileName));
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
@@ -431,7 +459,7 @@ export class TestState {
                     seen.add(fileName);
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                    this.languageServiceAdapterHost.addScript(libName(fileName), libFile.text, /*isRootFile*/ false);
                     if (!ts.some(libFile.libReferenceDirectives)) return;
                     for (const directive of libFile.libReferenceDirectives) {
                         addSourceFile(`lib.${directive.fileName}.d.ts`);

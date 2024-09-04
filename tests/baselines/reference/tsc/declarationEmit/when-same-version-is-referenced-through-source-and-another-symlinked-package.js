@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/plugin-two/index.d.ts]
 declare const _default: {
@@ -84,7 +84,8 @@ export declare function actionCreatorFactory(prefix?: string | null): ActionCrea
 export default actionCreatorFactory;
 
 //// [/user/username/projects/myproject/plugin-one/node_modules/plugin-two] symlink(/user/username/projects/myproject/plugin-two)
-//// [/a/lib/lib.d.ts]
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -96,9 +97,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p plugin-one --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -p plugin-one --explainFiles
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -151,7 +154,7 @@ File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/i
 Resolving real path for '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 plugin-one/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
@@ -193,26 +196,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export {};
 
 
-
-Program root files: [
-  "/user/username/projects/myproject/plugin-one/action.ts",
-  "/user/username/projects/myproject/plugin-one/index.ts"
-]
-Program options: {
-  "target": 1,
-  "declaration": true,
-  "traceResolution": true,
-  "project": "/user/username/projects/myproject/plugin-one",
-  "explainFiles": true,
-  "configFilePath": "/user/username/projects/myproject/plugin-one/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-one/action.ts
-/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-two/index.d.ts
-/user/username/projects/myproject/plugin-one/index.ts
 
 exitCode:: ExitStatus.Success

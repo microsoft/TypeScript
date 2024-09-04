@@ -1,34 +1,29 @@
 import { noop } from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { getProjectConfigWithNodeNext } from "../helpers/contents.js";
-import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
+import {
+    getSysForSampleProjectReferences,
+    getSysForSampleProjectReferencesBuilt,
+} from "../helpers/sampleProjectReferences.js";
 import {
     createSolutionBuilder,
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder.js";
 import {
-    getFsContentsForTransitiveReferences,
     getFsContentsForTransitiveReferencesAConfig,
     getFsContentsForTransitiveReferencesBConfig,
     getFsContentsForTransitiveReferencesRefsAdts,
+    getSysForTransitiveReferences,
 } from "../helpers/transitiveReferences.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-    TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
+describe("unittests:: tscWatch:: projectsWithReferences:: invoking when references are already built", () => {
     function verifySampleProject(withNodeNext: boolean) {
         verifyTscWatch({
             scenario: "projectsWithReferences",
             subScenario: `on sample project${withNodeNext ? " with nodenext" : ""}`,
-            sys: () =>
-                solutionBuildWithBaseline(
-                    getSysForSampleProjectReferences(withNodeNext),
-                    ["tests"],
-                ),
+            sys: () => getSysForSampleProjectReferencesBuilt(withNodeNext),
             commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
             edits: [
                 {
@@ -90,10 +85,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             subScenario: `on transitive references${withNodeNext ? " with nodenext" : ""}`,
             sys: () =>
                 solutionBuildWithBaseline(
-                    createWatchedSystem(
-                        getFsContentsForTransitiveReferences(withNodeNext),
-                        { currentDirectory: `/user/username/projects/transitiveReferences` },
-                    ),
+                    getSysForTransitiveReferences(withNodeNext),
                     ["tsconfig.c.json"],
                 ),
             commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
@@ -163,22 +155,19 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "when referenced project uses different module resolution",
-        sys: () =>
-            solutionBuildWithBaseline(
-                createWatchedSystem(
-                    {
-                        ...getFsContentsForTransitiveReferences(),
-                        "/user/username/projects/transitiveReferences/tsconfig.b.json": jsonToReadableText({
-                            compilerOptions: { composite: true, moduleResolution: "classic" },
-                            files: ["b.ts"],
-                            references: [{ path: "tsconfig.a.json" }],
-                        }),
-                        "/user/username/projects/transitiveReferences/b.ts": `import {A} from "a";export const b = new A();`,
-                    },
-                    { currentDirectory: `/user/username/projects/transitiveReferences` },
-                ),
-                ["tsconfig.c.json"],
-            ),
+        sys: () => {
+            const sys = getSysForTransitiveReferences();
+            sys.writeFile(
+                "/user/username/projects/transitiveReferences/tsconfig.b.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, moduleResolution: "classic" },
+                    files: ["b.ts"],
+                    references: [{ path: "tsconfig.a.json" }],
+                }),
+            );
+            sys.writeFile("/user/username/projects/transitiveReferences/b.ts", `import {A} from "a";export const b = new A();`);
+            return solutionBuildWithBaseline(sys, ["tsconfig.c.json"]);
+        },
         commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
         baselineDependencies: true,
     });
@@ -188,9 +177,8 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
         subScenario: "on transitive references in different folders",
         sys: () =>
             solutionBuildWithBaseline(
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true },
                             files: ["index.ts"],
@@ -299,9 +287,8 @@ X;`,
         subScenario: "on transitive references in different folders with no files clause",
         sys: () =>
             solutionBuildWithBaseline(
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                         "/user/username/projects/transitiveReferences/b/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },

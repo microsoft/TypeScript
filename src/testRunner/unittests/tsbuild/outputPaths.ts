@@ -1,40 +1,44 @@
-import * as fakes from "../../_namespaces/fakes.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeRun,
     TestTscEdit,
-    TscCompileSystem,
     verifyTsc,
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild - output file paths", () => {
+describe("unittests:: tsbuild:: outputPaths::", () => {
     const noChangeProject: TestTscEdit = {
         edit: ts.noop,
         caption: "Normal build without change, that does not block emit on error to show files that get emitted",
-        commandLineArgs: ["-p", "/src/tsconfig.json"],
+        commandLineArgs: ["-p", "/home/src/workspaces/project/tsconfig.json"],
     };
     const edits: TestTscEdit[] = [
         noChangeRun,
         noChangeProject,
     ];
 
-    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
+    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "sys" | "edits">, expectedOuptutNames: readonly string[]) {
         verifyTsc({
             scenario: "outputPaths",
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
+            commandLineArgs: ["--b", "-v"],
             ...input,
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
-
+            const sys = input.sys();
             assert.deepEqual(
                 ts.getOutputFileNames(
-                    ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
-                    "/src/src/index.ts",
+                    ts.parseConfigFileWithSystem(
+                        "/home/src/workspaces/project/tsconfig.json",
+                        {},
+                        /*extendedConfigCache*/ undefined,
+                        {},
+                        sys,
+                        ts.noop,
+                    )!,
+                    "/home/src/workspaces/project/src/index.ts",
                     /*ignoreCase*/ false,
                 ),
                 expectedOuptutNames,
@@ -44,78 +48,78 @@ describe("unittests:: tsbuild - output file paths", () => {
 
     verify({
         subScenario: "when rootDir is not specified",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/index.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits,
-    }, ["/src/dist/index.js"]);
+    }, ["/home/src/workspaces/project/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is not specified and is composite",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/index.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         composite: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits,
-    }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
+    }, ["/home/src/workspaces/project/dist/src/index.js", "/home/src/workspaces/project/dist/src/index.d.ts"]);
 
     verify({
         subScenario: "when rootDir is specified",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/index.ts": "export const x = 10;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits,
-    }, ["/src/dist/index.js"]);
+    }, ["/home/src/workspaces/project/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/src/index.ts": "export const x = 10;",
-                "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/index.ts": "export const x = 10;",
+                "/home/src/workspaces/project/types/type.ts": "export type t = string;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
                     },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits,
-    }, ["/src/dist/index.js"]);
+    }, ["/home/src/workspaces/project/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir and is composite",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/src/index.ts": "export const x = 10;",
-                "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/index.ts": "export const x = 10;",
+                "/home/src/workspaces/project/types/type.ts": "export type t = string;",
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
                         composite: true,
                     },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits,
-    }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
+    }, ["/home/src/workspaces/project/dist/index.js", "/home/src/workspaces/project/dist/index.d.ts"]);
 });

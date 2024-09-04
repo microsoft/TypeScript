@@ -1,91 +1,34 @@
 import {
+    emptyArray,
     ModuleKind,
     ScriptTarget,
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    getFsConentsForAlternateResultAtTypesPackageJson,
-    getFsContentsForAlternateResult,
-    getFsContentsForAlternateResultDts,
-    getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult.js";
-import {
-    compilerOptionsToConfigJson,
-    libContent,
-} from "../helpers/contents.js";
+import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { verifyTscWatch } from "../helpers/tscWatch.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
-    verifyTsc({
-        scenario: "moduleResolution",
-        subScenario: "alternateResult",
-        fs: () => loadProjectFromFiles(getFsContentsForAlternateResult()),
-        commandLineArgs: ["-p", "/home/src/projects/project"],
-        baselinePrograms: true,
-        edits: [
-            {
-                caption: "delete the alternateResult in @types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/foo/index.d.ts"),
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
-            },
-            {
-                caption: "update package.json from @types so error is fixed",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
-            },
-            {
-                caption: "update package.json so error is fixed",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
-            },
-            {
-                caption: "update package.json from @types so error is introduced",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
-            },
-            {
-                caption: "update package.json so error is introduced",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
-            },
-            {
-                caption: "delete the alternateResult in @types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: fs => fs.unlinkSync("/home/src/projects/project/node_modules/foo2/index.d.ts"),
-            },
-            {
-                caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
-            },
-        ],
-    });
+    verifyAlternateResultScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits) =>
+            verifyTsc({
+                scenario: "moduleResolution",
+                subScenario,
+                sys,
+                commandLineArgs: emptyArray,
+                baselinePrograms: true,
+                edits: edits(),
+            }),
+    );
 
-    verifyTscWatch({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: "pnpm style layout",
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 // button@0.0.1
                 "/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts": dedent`
                     export interface Button {
@@ -219,75 +162,16 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 "/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk": {
                     symLink: "/home/src/projects/component-type-checker/packages/sdk",
                 },
-                "/a/lib/lib.es5.d.ts": libContent,
             }, { currentDirectory: "/home/src/projects/component-type-checker/packages/app" }),
         commandLineArgs: ["--traceResolution", "--explainFiles"],
-    });
-
-    verifyTscWatch({
-        scenario: "moduleResolution",
-        subScenario: "late discovered dependency symlink",
-        sys: () =>
-            createWatchedSystem({
-                "/workspace/packageA/index.d.ts": dedent`
-            export declare class Foo {
-                private f: any;
-            }`,
-                "/workspace/packageB/package.json": dedent`
-            {
-                "private": true,
-                "dependencies": {
-                    "package-a": "file:../packageA"
-                }
-            }`,
-                "/workspace/packageB/index.d.ts": dedent`
-            import { Foo } from "package-a";
-            export declare function invoke(): Foo;`,
-                "/workspace/packageC/package.json": dedent`
-            {
-                "private": true,
-                "dependencies": {
-                    "package-b": "file:../packageB",
-                    "package-a": "file:../packageA"
-                }
-            }`,
-                "/workspace/packageC/index.ts": dedent`
-            import * as pkg from "package-b";
-
-            export const a = pkg.invoke();`,
-                "/workspace/packageC/node_modules/package-a": { symLink: "/workspace/packageA" },
-                "/workspace/packageB/node_modules/package-a": { symLink: "/workspace/packageA" },
-                "/workspace/packageC/node_modules/package-b": { symLink: "/workspace/packageB" },
-                "/a/lib/lib.d.ts": libContent,
-                "/workspace/packageC/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        declaration: true,
-                    },
-                }),
-            }, { currentDirectory: "/workspace/packageC" }),
-        commandLineArgs: ["--traceResolution", "--explainFiles", "--watch"],
-        edits: [
-            {
-                caption: "change index.ts",
-                edit: fs =>
-                    fs.writeFile(
-                        "/workspace/packageC/index.ts",
-                        dedent`
-                import * as pkg from "package-b";
-    
-                export const aa = pkg.invoke();`,
-                    ),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-        ],
     });
 
     verifyTsc({
         scenario: "moduleResolution",
         subScenario: "package json scope",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/projects/project/src/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson({
                         target: ScriptTarget.ES2016,
                         composite: true,
@@ -300,20 +184,19 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                         "fileB.mts",
                     ],
                 }),
-                "/src/projects/project/src/main.ts": "export const x = 10;",
-                "/src/projects/project/src/fileA.ts": dedent`
+                "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
+                "/home/src/workspaces/project/src/fileA.ts": dedent`
                     import { foo } from "./fileB.mjs";
                     foo();
                 `,
-                "/src/projects/project/src/fileB.mts": "export function foo() {}",
-                "/src/projects/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
-                "/lib/lib.es2016.full.d.ts": libFile.content,
-            }, { cwd: "/src/projects/project" }),
+                "/home/src/workspaces/project/src/fileB.mts": "export function foo() {}",
+                "/home/src/workspaces/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {
                 caption: "Delete package.json",
-                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                edit: sys => sys.deleteFile("/home/src/workspaces/project/package.json"),
             },
         ],
     });

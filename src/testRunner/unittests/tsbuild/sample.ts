@@ -1,69 +1,38 @@
-import * as fakes from "../../_namespaces/fakes.js";
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
-import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
+import { patchHostForBuildInfoReadWrite } from "../helpers/baseline.js";
+import { getTypeScriptLibTestLocation } from "../helpers/contents.js";
 import {
-    libContent,
-    libPath,
-} from "../helpers/contents.js";
-import {
-    getFsForSampleProjectReferences,
     getSysForSampleProjectReferences,
+    getSysForSampleProjectReferencesBuilt,
 } from "../helpers/sampleProjectReferences.js";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
+import {
+    createSolutionBuilderHostForBaseline,
+    verifySolutionBuilderWithDifferentTsVersion,
+} from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
-    testTscCompileLike,
     TestTscEdit,
-    TscCompileSystem,
     verifyTsc,
-    verifyTscCompileLike,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-    prependText,
-    replaceText,
-} from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
     libFile,
     SerializeOutputOrder,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
-    let projFs: vfs.FileSystem;
-    let projFsWithBuild: vfs.FileSystem;
-    before(() => {
-        projFs = getFsForSampleProjectReferences();
-    });
-
-    after(() => {
-        projFs = undefined!; // Release the contents
-        projFsWithBuild = undefined!;
-    });
-
-    function getSampleFsAfterBuild() {
-        if (projFsWithBuild) return projFsWithBuild;
-        const fs = projFs.shadow();
-        const sys = new fakes.System(fs, { executingFilePath: libFile.path });
-        const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
-        const builder = ts.createSolutionBuilder(host, ["tests"], {});
-        builder.build();
-        fs.makeReadonly();
-        return projFsWithBuild = fs;
-    }
-
     describe("sanity check of clean build of 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "builds correctly when outDir is specified",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests"],
-            modifyFs: fs =>
-                fs.writeFileSync(
+            modifySystem: sys =>
+                sys.writeFile(
                     "logic/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
@@ -75,10 +44,10 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "builds correctly when declarationDir is specified",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests"],
-            modifyFs: fs =>
-                fs.writeFileSync(
+            modifySystem: sys =>
+                sys.writeFile(
                     "logic/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
@@ -90,9 +59,9 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "builds correctly when project is not composite or doesnt have any references",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "core", "--verbose"],
-            modifyFs: fs => replaceText(fs, "core/tsconfig.json", `"composite": true,`, ""),
+            modifySystem: sys => sys.replaceFileText("core/tsconfig.json", `"composite": true,`, ""),
         });
     });
 
@@ -100,7 +69,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "does not write any files in a dry build",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--dry"],
         });
     });
@@ -109,32 +78,34 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "removes all files it built",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "tests", "--clean"],
             edits: noChangeOnlyRuns,
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "cleans till project specified",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "logic", "--clean"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["third/tsconfig.json"], {});
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.clean("logic"));
+                return buildHost.getPrograms;
             },
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "cleaning project in not build order doesnt throw error",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "logic2", "--clean"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["third/tsconfig.json"], {});
+                const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.clean("logic2"));
+                return buildHost.getPrograms;
             },
         });
     });
@@ -143,7 +114,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "always builds under with force option",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--force"],
             edits: noChangeOnlyRuns,
         });
@@ -153,25 +124,22 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "can detect when and what to rebuild",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "tests", "--verbose"],
             edits: [
                 // Update a file in the leaf node (tests), only it should rebuild the last one
                 {
                     caption: "Only builds the leaf node project",
-                    edit: fs => fs.writeFileSync("tests/index.ts", "const m = 10;"),
+                    edit: sys => sys.writeFile("tests/index.ts", "const m = 10;"),
                 },
                 // Update a file in the parent (without affecting types), should get fast downstream builds
                 {
                     caption: "Detects type-only changes in upstream projects",
-                    edit: fs => replaceText(fs, "core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
+                    edit: sys => sys.replaceFileText("core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
                 },
                 {
                     caption: "rebuilds when tsconfig changes",
-                    edit: fs => {
-                        replaceText(fs, "tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
-                        fs.writeFileSync(libPath("es2020.full"), libContent);
-                    },
+                    edit: sys => sys.replaceFileText("tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`),
                 },
             ],
         });
@@ -179,32 +147,27 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "when input file text does not change but its modified time changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--verbose"],
-            edits: [
-                {
-                    caption: "upstream project changes without changing file text",
-                    edit: fs => {
-                        const time = new Date(fs.time());
-                        fs.utimesSync("core/index.ts", time, time);
-                    },
-                },
-            ],
+            edits: [{
+                caption: "upstream project changes without changing file text",
+                edit: sys => sys.setModifiedTime("core/index.ts", sys.now()),
+            }],
         });
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "when declarationMap changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--verbose"],
             edits: [
                 {
                     caption: "Disable declarationMap",
-                    edit: fs => replaceText(fs, "core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                    edit: sys => sys.replaceFileText("core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
                 },
                 {
                     caption: "Enable declarationMap",
-                    edit: fs => replaceText(fs, "core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                    edit: sys => sys.replaceFileText("core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
                 },
             ],
         });
@@ -212,109 +175,105 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "indicates that it would skip builds during a dry build",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "tests", "--dry"],
         });
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "rebuilds from start if force option is set",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "tests", "--verbose", "--force"],
         });
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "tsbuildinfo has error",
-            fs: () =>
-                loadProjectFromFiles({
-                    "/src/project/main.ts": "export const x = 10;",
-                    "/src/project/tsconfig.json": "{}",
-                    "/src/project/tsconfig.tsbuildinfo": "Some random string",
-                }),
-            commandLineArgs: ["--b", "src/project", "-i", "-v"],
+            sys: () =>
+                TestServerHost.createWatchedSystem({
+                    "/home/src/workspaces/project/main.ts": "export const x = 10;",
+                    "/home/src/workspaces/project/tsconfig.json": "{}",
+                    "/home/src/workspaces/project/tsconfig.tsbuildinfo": "Some random string",
+                }, { currentDirectory: "/home/src/workspaces/project" }),
+            commandLineArgs: ["--b", "-i", "-v"],
             edits: [{
                 caption: "tsbuildinfo written has error",
-                edit: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+                edit: sys => sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string"),
             }],
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifySolutionBuilderWithDifferentTsVersion({
             scenario: "sample1",
             subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
-            fs: getSampleFsAfterBuild,
+            sys: getSysForSampleProjectReferencesBuilt,
             commandLineArgs: ["--b", "tests", "--verbose"],
-            compile: sys => {
-                // Buildinfo will have version which does not match with current ts version
-                const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-                const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
-                sys.exit(builder.build());
-            },
-        });
+        }, ["tests"]);
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifySolutionBuilderWithDifferentTsVersion({
             scenario: "sample1",
             subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
-            fs: () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, ts.createAbstractBuilder);
+            sys: () => {
+                const sys = getSysForSampleProjectReferences();
+                patchHostForBuildInfoReadWrite(sys);
+                const host = ts.createSolutionBuilderHost(
+                    sys,
+                    ts.createAbstractBuilder,
+                    ts.createDiagnosticReporter(sys, /*pretty*/ true),
+                    ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+                );
                 const builder = ts.createSolutionBuilder(host, ["tests"], { verbose: true });
                 builder.build();
-                fs.makeReadonly();
-                return fs;
+                sys.clearOutput();
+                return sys;
             },
             commandLineArgs: ["--b", "tests", "--verbose"],
-            compile: sys => {
-                // Buildinfo will have version which does not match with current ts version
-                const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-                const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
-                sys.exit(builder.build());
-            },
-        });
+        }, ["tests"]);
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "rebuilds when extended config file changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--verbose"],
-            modifyFs: fs => {
-                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
-                replaceText(fs, "tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
+            modifySystem: sys => {
+                sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
+                sys.replaceFileText("tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: {} })),
+                edit: sys => sys.writeFile("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: {} })),
             }],
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "builds till project specified",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--build", "logic/tsconfig.json"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.build("logic/tsconfig.json"));
+                return buildHost.getPrograms;
             },
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "building project in not build order doesnt throw error",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--build", "logic2/tsconfig.json"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], {});
                 sys.exit(builder.build("logic2/tsconfig.json"));
+                return buildHost.getPrograms;
             },
         });
 
         it("building using getNextInvalidatedProject", () => {
             const baseline: string[] = [];
             const system = changeToHostTrackingWrittenFiles(
-                fakes.patchHostForBuildInfoReadWrite(
+                patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
                 ),
             );
@@ -327,7 +286,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             verifyBuildNextResult(); // logic
             verifyBuildNextResult(); // tests
             verifyBuildNextResult(); // All Done
-            Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
+            Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
 
             function verifyBuildNextResult() {
                 const project = builder.getNextInvalidatedProject();
@@ -337,15 +296,16 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             }
         });
 
-        verifyTscCompileLike(testTscCompileLike, {
+        verifyTsc({
             scenario: "sample1",
             subScenario: "building using buildReferencedProject",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--build", "logic2/tsconfig.json"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["tests"], { verbose: true });
                 sys.exit(builder.buildReferences("tests"));
+                return buildHost.getPrograms;
             },
         });
     });
@@ -354,9 +314,9 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         verifyTsc({
             scenario: "sample1",
             subScenario: "builds downstream projects even if upstream projects have errors",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--verbose"],
-            modifyFs: fs => replaceText(fs, "logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
+            modifySystem: sys => sys.replaceFileText("logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
             edits: noChangeOnlyRuns,
         });
 
@@ -364,14 +324,14 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             verifyTsc({
                 scenario: "sample1",
                 subScenario: `skips builds downstream projects if upstream projects have errors with stopBuildOnErrors${skipReferenceCoreFromTest ? " when test does not reference core" : ""}`,
-                fs: () => getFsForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest),
+                sys: () => getSysForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest),
                 commandLineArgs: ["--b", "tests", "--verbose", "--stopBuildOnErrors"],
-                modifyFs: fs => appendText(fs, "core/index.ts", `multiply();`),
+                modifySystem: sys => sys.appendFile("core/index.ts", `multiply();`),
                 edits: [
                     noChangeRun,
                     {
                         caption: "fix error",
-                        edit: fs => replaceText(fs, "core/index.ts", "multiply();", ""),
+                        edit: sys => sys.replaceFileText("core/index.ts", "multiply();", ""),
                     },
                 ],
             })
@@ -382,7 +342,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
         it("invalidates projects correctly", () => {
             const baseline: string[] = [];
             const system = changeToHostTrackingWrittenFiles(
-                fakes.patchHostForBuildInfoReadWrite(
+                patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
                 ),
             );
@@ -403,7 +363,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             // Rebuild this project
             system.appendFile("logic/index.ts", `export class cNew {}`);
             verifyInvalidation("Dts change to Logic");
-            Harness.Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
+            Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
 
             function verifyInvalidation(heading: string) {
                 // Rebuild this project
@@ -426,9 +386,8 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     const coreChanges: TestTscEdit[] = [
         {
             caption: "incremental-declaration-changes",
-            edit: fs =>
-                appendText(
-                    fs,
+            edit: sys =>
+                sys.appendFile(
                     "core/index.ts",
                     `
 export class someClass { }`,
@@ -436,9 +395,8 @@ export class someClass { }`,
         },
         {
             caption: "incremental-declaration-doesnt-change",
-            edit: fs =>
-                appendText(
-                    fs,
+            edit: sys =>
+                sys.appendFile(
                     "core/index.ts",
                     `
 class someClass2 { }`,
@@ -451,21 +409,21 @@ class someClass2 { }`,
         verifyTsc({
             scenario: "sample1",
             subScenario: "listFiles",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--listFiles"],
             edits: coreChanges,
         });
         verifyTsc({
             scenario: "sample1",
             subScenario: "listEmittedFiles",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--listEmittedFiles"],
             edits: coreChanges,
         });
         verifyTsc({
             scenario: "sample1",
             subScenario: "explainFiles",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--explainFiles", "--v"],
             edits: coreChanges,
         });
@@ -474,7 +432,7 @@ class someClass2 { }`,
     describe("emit output", () => {
         verifyTsc({
             subScenario: "sample",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             scenario: "sample1",
             commandLineArgs: ["--b", "tests", "--verbose"],
             baselineSourceMap: true,
@@ -483,9 +441,8 @@ class someClass2 { }`,
                 ...coreChanges,
                 {
                     caption: "when logic config changes declaration dir",
-                    edit: fs =>
-                        replaceText(
-                            fs,
+                    edit: sys =>
+                        sys.replaceFileText(
                             "logic/tsconfig.json",
                             `"declaration": true,`,
                             `"declaration": true,
@@ -499,10 +456,9 @@ class someClass2 { }`,
         verifyTsc({
             scenario: "sample1",
             subScenario: "when logic specifies tsBuildInfoFile",
-            fs: () => projFs,
-            modifyFs: fs =>
-                replaceText(
-                    fs,
+            sys: getSysForSampleProjectReferences,
+            modifySystem: sys =>
+                sys.replaceFileText(
                     "logic/tsconfig.json",
                     `"composite": true,`,
                     `"composite": true,
@@ -515,11 +471,11 @@ class someClass2 { }`,
 
         verifyTsc({
             subScenario: "when declaration option changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             scenario: "sample1",
             commandLineArgs: ["--b", "core", "--verbose"],
-            modifyFs: fs =>
-                fs.writeFileSync(
+            modifySystem: sys =>
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: {
@@ -530,28 +486,27 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+                edit: sys => sys.replaceFileText("core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
             }],
         });
 
         verifyTsc({
             subScenario: "when target option changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             scenario: "sample1",
             commandLineArgs: ["--b", "core", "--verbose"],
-            modifyFs: fs => {
-                fs.writeFileSync(
-                    libPath("esnext.full"),
+            modifySystem: sys => {
+                sys.writeFile(
+                    getTypeScriptLibTestLocation("esnext.full"),
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );
-                fs.writeFileSync(libPath("esnext"), libContent);
-                fs.writeFileSync(
+                sys.writeFile(
                     libFile.path,
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );
-                fs.writeFileSync(
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: {
@@ -565,17 +520,17 @@ class someClass2 { }`,
             },
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "core/tsconfig.json", "esnext", "es5"),
+                edit: sys => sys.replaceFileText("core/tsconfig.json", "esnext", "es5"),
             }],
         });
 
         verifyTsc({
             subScenario: "when module option changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             scenario: "sample1",
             commandLineArgs: ["--b", "core", "--verbose"],
-            modifyFs: fs =>
-                fs.writeFileSync(
+            modifySystem: sys =>
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: {
@@ -586,17 +541,17 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
+                edit: sys => sys.replaceFileText("core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
             }],
         });
 
         verifyTsc({
             subScenario: "when esModuleInterop option changes",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             scenario: "sample1",
             commandLineArgs: ["--b", "tests", "--verbose"],
-            modifyFs: fs =>
-                fs.writeFileSync(
+            modifySystem: sys =>
+                sys.writeFile(
                     "tests/tsconfig.json",
                     jsonToReadableText({
                         references: [
@@ -615,41 +570,41 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
+                edit: sys => sys.replaceFileText("tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
             }],
         });
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "reports error if input file is missing",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--v"],
-            modifyFs: fs => {
-                fs.writeFileSync(
+            modifySystem: sys => {
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: { composite: true },
                         files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
                     }),
                 );
-                fs.unlinkSync("core/anotherModule.ts");
+                sys.deleteFile("core/anotherModule.ts");
             },
         });
 
         verifyTsc({
             scenario: "sample1",
             subScenario: "reports error if input file is missing with force",
-            fs: () => projFs,
+            sys: getSysForSampleProjectReferences,
             commandLineArgs: ["--b", "tests", "--v", "--f"],
-            modifyFs: fs => {
-                fs.writeFileSync(
+            modifySystem: sys => {
+                sys.writeFile(
                     "core/tsconfig.json",
                     jsonToReadableText({
                         compilerOptions: { composite: true },
                         files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
                     }),
                 );
-                fs.unlinkSync("core/anotherModule.ts");
+                sys.deleteFile("core/anotherModule.ts");
             },
         });
     });

@@ -1,12 +1,13 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { verifyTsc } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 // https://github.com/microsoft/TypeScript/issues/33849
 describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
     verifyTsc({
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
-        fs: () => loadProjectFromFiles({}),
+        sys: () => TestServerHost.createWatchedSystem(emptyArray, { currentDirectory: "/home/src/workspaces/project" }),
         commandLineArgs: ["-b", "bogus.json"],
     });
 });

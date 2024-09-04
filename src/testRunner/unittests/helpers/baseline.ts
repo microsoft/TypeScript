@@ -1,15 +1,13 @@
-import * as fakes from "../../_namespaces/fakes.js";
-import * as Harness from "../../_namespaces/Harness.js";
+import { SourceMapRecorder } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { TscCompileSystem } from "./tsc.js";
-import { TestServerHost } from "./virtualFileSystemWithWatch.js";
-
-export function sanitizeSysOutput(output: string) {
-    return output
-        .replace(/Elapsed::\s\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-        .replace(/\d\d:\d\d:\d\d\s(?:A|P)M/g, "HH:MM:SS AM");
-}
+import {
+    changeToHostTrackingWrittenFiles,
+    SerializeOutputOrder,
+    StateLogger,
+    TestServerHost,
+    TestServerHostTrackingWrittenFiles,
+} from "./virtualFileSystemWithWatch.js";
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {
@@ -21,7 +19,7 @@ function isAnyProgram(program: ts.Program | ts.BuilderProgram | ts.ParsedCommand
     return !!(program as ts.Program | ts.BuilderProgram).getCompilerOptions;
 }
 export function commandLineCallbacks(
-    sys: TscCompileSystem | TestServerHost,
+    sys: TestServerHost,
     originalReadCall?: ts.System["readFile"],
 ): CommandLineCallbacks {
     let programs: CommandLineProgram[] | undefined;
@@ -48,7 +46,12 @@ export function commandLineCallbacks(
     };
 }
 
-export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
+function baselinePrograms(
+    baseline: string[],
+    programs: readonly CommandLineProgram[],
+    oldPrograms: readonly (CommandLineProgram | undefined)[],
+    baselineDependencies: boolean | undefined,
+) {
     for (let i = 0; i < programs.length; i++) {
         baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
     }
@@ -127,10 +130,10 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
     baseline.push("");
 }
 
-export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
+function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
     for (const mapFile of mapFileNames) {
-        const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
+        const text = SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
         sys.writeFile(`${mapFile}.baseline.txt`, text);
     }
 }
@@ -228,7 +231,7 @@ export interface ReadableBuildInfo extends ts.BuildInfo {
 function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
     let fileIdsList: string[][] | undefined;
     let result;
-    const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
+    const version = buildInfo.version === ts.version ? fakeTsVersion : buildInfo.version;
     if (!ts.isIncrementalBuildInfo(buildInfo)) {
         result = {
             ...buildInfo,
@@ -396,7 +399,7 @@ export function toPathWithSystem(sys: ts.System, fileName: string): ts.Path {
 
 export function baselineBuildInfo(
     options: ts.CompilerOptions,
-    sys: TscCompileSystem | TestServerHost,
+    sys: TestServerHost,
     originalReadCall?: ts.System["readFile"],
 ) {
     const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(options);
@@ -408,6 +411,119 @@ export function baselineBuildInfo(
     generateBuildInfoBaseline(sys, buildInfoPath, buildInfo);
 }
 
-export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], isWatch?: boolean, suffix?: string) {
-    return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${suffix ? suffix : ""}.js`;
+export function isWatch(commandLineArgs: readonly string[]) {
+    return ts.forEach(commandLineArgs, arg => {
+        if (arg.charCodeAt(0) !== ts.CharacterCodes.minus) return false;
+        const option = arg.slice(arg.charCodeAt(1) === ts.CharacterCodes.minus ? 2 : 1).toLowerCase();
+        return option === "watch" || option === "w";
+    });
+}
+
+export type TscWatchSystem = TestServerHostTrackingWrittenFiles;
+
+function changeToTestServerHostWithTimeoutLogging(host: TestServerHostTrackingWrittenFiles, baseline: string[]): TscWatchSystem {
+    const logger: StateLogger = {
+        log: s => baseline.push(s),
+        logs: baseline,
+    };
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
+    return host;
+}
+
+export interface BaselineBase {
+    baseline: string[];
+    sys: TscWatchSystem;
+}
+
+export interface Baseline extends BaselineBase, CommandLineCallbacks {
+}
+
+export const fakeTsVersion = "FakeTSVersion";
+
+export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
+    const originalReadFile = sys.readFile;
+    sys.readFile = (path, encoding) => {
+        const value = originalReadFile.call(sys, path, encoding);
+        if (!value || !ts.isBuildInfoFile(path)) return value;
+        const buildInfo = ts.getBuildInfo(path, value);
+        if (!buildInfo) return value;
+        ts.Debug.assert(buildInfo.version === fakeTsVersion);
+        buildInfo.version = ts.version;
+        return ts.getBuildInfoText(buildInfo);
+    };
+    return patchHostForBuildInfoWrite(sys, fakeTsVersion);
+}
+
+export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
+    const originalWrite = sys.write;
+    sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
+    const originalWriteFile = sys.writeFile;
+    sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
+        if (ts.isBuildInfoFile(fileName)) {
+            const buildInfo = ts.getBuildInfo(fileName, content);
+            if (buildInfo) {
+                buildInfo.version = version;
+                return originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+            }
+        }
+        return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
+    };
+    return sys;
+}
+
+export function createBaseline(
+    system: TestServerHost,
+    modifySystem?: (sys: TestServerHost, originalRead: TestServerHost["readFile"]) => void,
+): Baseline {
+    const originalRead = system.readFile;
+    const initialSys = patchHostForBuildInfoReadWrite(system);
+    modifySystem?.(initialSys, originalRead);
+    const baseline: string[] = [];
+    const sys = changeToTestServerHostWithTimeoutLogging(changeToHostTrackingWrittenFiles(initialSys), baseline);
+    baseline.push(`currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames:: ${sys.useCaseSensitiveFileNames}`);
+    baseline.push("Input::");
+    sys.serializeState(baseline, SerializeOutputOrder.None);
+    const { cb, getPrograms } = commandLineCallbacks(sys);
+    return { sys, baseline, cb, getPrograms };
+}
+
+export function applyEdit(
+    sys: BaselineBase["sys"],
+    baseline: BaselineBase["baseline"],
+    edit: (sys: TscWatchSystem) => void,
+    caption?: string,
+) {
+    baseline.push(`Change::${caption ? " " + caption : ""}`, "");
+    edit(sys);
+    baseline.push("Input::");
+    sys.serializeState(baseline, SerializeOutputOrder.AfterDiff);
+}
+
+export function baselineAfterTscCompile(
+    sys: BaselineBase["sys"],
+    baseline: BaselineBase["baseline"],
+    getPrograms: CommandLineCallbacks["getPrograms"],
+    oldPrograms: readonly (CommandLineProgram | undefined)[],
+    baselineSourceMap: boolean | undefined,
+    shouldBaselinePrograms: boolean | undefined,
+    baselineDependencies: boolean | undefined,
+) {
+    if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+    const programs = getPrograms();
+    sys.writtenFiles.forEach((value, key) => {
+        // When buildinfo is same for two projects,
+        // it gives error and doesnt write buildinfo but because buildInfo is written for one project,
+        // readable baseline will be written two times for those two projects with same contents and is ok
+        ts.Debug.assert(value === 1 || ts.endsWith(key, "baseline.txt"), `Expected to write file ${key} only once`);
+    });
+    sys.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
+    if (shouldBaselinePrograms) {
+        baselinePrograms(baseline, programs, oldPrograms, baselineDependencies);
+    }
+    baseline.push(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}`, "");
+    return programs;
+}
+
+export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], suffix?: string) {
+    return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${suffix ? suffix : ""}.js`;
 }

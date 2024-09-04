@@ -8,7 +8,7 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: noEmit::", () => {
     forEachNoEmitChanges(["--p"]);
@@ -16,17 +16,17 @@ describe("unittests:: tsc:: noEmit::", () => {
     verifyTsc({
         scenario: "noEmit",
         subScenario: "when project has strict true",
-        commandLineArgs: ["-noEmit", "-p", `src/project`],
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
+        commandLineArgs: ["-noEmit"],
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         strict: true,
                     },
                 }),
-                "/src/project/class1.ts": `export class class1 {}`,
-            }),
+                "/home/src/workspaces/project/class1.ts": `export class class1 {}`,
+            }, { currentDirectory: "/home/src/workspaces/project" }),
         edits: noChangeOnlyRuns,
         baselinePrograms: true,
     });
