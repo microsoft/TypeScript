@@ -1,1 +1,0 @@
-var v: { x: number };

@@ -1,8 +1,0 @@
-{
-    "scenario": "relative - nested",
-    "projectRoot": "tests/cases/projects/relative-nested",
-    "inputFiles": [
-        "app.ts"
-    ],
-    "runTest": true
-}

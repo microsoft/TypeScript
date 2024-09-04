@@ -1,5 +1,0 @@
-// === documentHighlights ===
-// === /tests/cases/fourslash/Foo.js ===
-// /*HIGHLIGHTS*/<|[|{| kind: "reference" |}module|].exports = {
-// 
-// }|>

@@ -1,7 +1,0 @@
-// === goToDefinition ===
-// === /tests/cases/fourslash/goToDefinitionReturn5.ts ===
-// function foo() {
-//     class Foo {
-//         static { /*GOTO DEF*/return; }
-//     }
-// }

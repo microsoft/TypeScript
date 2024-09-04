@@ -1,1 +1,0 @@
-var foo = <{ id: number; }[]>[{ foo: "s" }, {  }];

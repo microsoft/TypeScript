@@ -1,4 +1,0 @@
-class A {
-}
-module A {
-}

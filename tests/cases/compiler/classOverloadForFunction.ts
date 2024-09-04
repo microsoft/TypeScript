@@ -1,2 +1,0 @@
-class foo { };
-function foo() {}

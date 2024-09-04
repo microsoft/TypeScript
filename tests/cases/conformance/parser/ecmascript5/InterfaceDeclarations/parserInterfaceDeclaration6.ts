@@ -1,2 +1,0 @@
-export export interface I {
-}

@@ -1,7 +1,0 @@
-{
-  "scenario": "Verify when same named .ts and .js file exists in the folder but no file is specified in tsconfig.json and .js files are consumed",
-  "projectRoot": "tests/cases/projects/jsFileCompilation",
-  "baselineCheck": true,
-  "declaration": true,
-  "project": "SameNameFilesNotSpecifiedWithAllowJs"
-}

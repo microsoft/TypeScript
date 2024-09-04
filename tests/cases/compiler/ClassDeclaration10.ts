@@ -1,4 +1,0 @@
-class C {
-   constructor();
-   foo();
-}

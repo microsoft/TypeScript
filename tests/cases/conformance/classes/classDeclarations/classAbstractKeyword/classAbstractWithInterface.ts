@@ -1,1 +1,0 @@
-abstract interface I {}

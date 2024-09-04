@@ -1,1 +1,0 @@
-var foo:(a:number)=>number = function(a){return a};

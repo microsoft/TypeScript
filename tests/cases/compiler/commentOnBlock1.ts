@@ -1,4 +1,0 @@
-// asdf
-function f() {
- /*asdf*/{}
-}

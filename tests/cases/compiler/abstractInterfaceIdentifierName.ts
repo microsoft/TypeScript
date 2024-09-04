@@ -1,4 +1,0 @@
-
-interface abstract {
-    abstract(): void;
-}

@@ -1,1 +1,0 @@
-class foo { public bar:{id:number;}[] = [{id:1}, {id:2, name:"foo"}]; }

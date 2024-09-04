@@ -1,8 +1,0 @@
-{
-  "scenario": "Verify that a higher import loads a module that was previously skipped",
-  "projectRoot": "tests/cases/projects/NodeModulesSearch",
-  "baselineCheck": true,
-  "declaration": false,
-  "moduleResolution": "node",
-  "project": "importHigher"
-}

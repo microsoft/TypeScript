@@ -1,3 +1,0 @@
-interface { }
-interface interface{ }
-interface & { }

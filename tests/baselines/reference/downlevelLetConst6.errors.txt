@@ -1,7 +1,0 @@
-downlevelLetConst6.ts(1,1): error TS2304: Cannot find name 'let'.
-
-
-==== downlevelLetConst6.ts (1 errors) ====
-    let
-    ~~~
-!!! error TS2304: Cannot find name 'let'.

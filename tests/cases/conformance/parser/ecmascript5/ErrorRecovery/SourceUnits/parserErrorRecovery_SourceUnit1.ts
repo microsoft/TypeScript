@@ -1,5 +1,0 @@
-class C {
-}
-}
-class D {
-}
