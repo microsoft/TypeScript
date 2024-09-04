@@ -762,6 +762,28 @@ Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts
 		/home/src/projects/project/demos/tsconfig.json
 	findDefaultConfiguredProject:
 		/home/src/projects/project/demos/tsconfig.json
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/app/tsconfig.json 1:: WatchInfo: /home/src/projects/project/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
@@ -950,11 +972,33 @@ Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/home/src/projects/random/random.ts"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/random/random.ts ProjectRootPath: undefined:: Result: /home/src/projects/random/tsconfig.json
@@ -1085,7 +1129,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 2,
+      "request_seq": 4,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1184,7 +1228,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/projects/random/random.ts"
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/random/random.ts 500 undefined WatchType: Closed Script info
@@ -1212,7 +1256,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 3,
+      "request_seq": 5,
       "success": true
     }
 After request
@@ -1309,3 +1353,24 @@ Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts
 		/home/src/projects/project/demos/tsconfig.json
 	findDefaultConfiguredProject:
 		/home/src/projects/project/demos/tsconfig.json
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request

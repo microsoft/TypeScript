@@ -7,6 +7,7 @@ import {
     closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
+    projectInfoForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
     TestSession,
@@ -23,7 +24,10 @@ function logDefaultProjectAndDefaultConfiguredProject(session: TestSession, file
     const defaultProject = session.getProjectService().tryGetDefaultProjectForFile(file.path as ts.server.NormalizedPath);
     const defaultConfiguredProject = info && session.getProjectService().findDefaultConfiguredProject(info);
     session.logger.info(`File: ${file.path}:\n\tgetDefaultProjectForFile:\n\t\t${defaultProject?.projectName}\n\tfindDefaultConfiguredProject:\n\t\t${defaultConfiguredProject?.projectName}`);
-    return { defaultProject, defaultConfiguredProject };
+    if (info) {
+        const projectInfo = projectInfoForSession(session, file);
+        return session.getProjectService().findProject(projectInfo.configFileName);
+    }
 }
 
 describe("unittests:: tsserver:: with projectReferences:: and tsbuild", () => {
@@ -1080,7 +1084,7 @@ export function bar() {}`,
 
         function verifySolutionScenario(input: Setup) {
             const { session, host } = setup(input);
-            const { defaultProject } = logDefaultProjectAndDefaultConfiguredProject(session, main);
+            const defaultProject = logDefaultProjectAndDefaultConfiguredProject(session, main);
 
             // Verify errors
             verifyGetErrRequest({ session, files: [main] });

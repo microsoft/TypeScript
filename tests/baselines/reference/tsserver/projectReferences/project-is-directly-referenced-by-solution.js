@@ -313,6 +313,28 @@ Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "needFileNameList": false
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/user/username/projects/myproject/tsconfig-src.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "geterr",
       "arguments": {
         "delay": 0,
@@ -320,7 +342,7 @@ Info seq  [hh:mm:ss:mss] request:
           "/user/username/projects/myproject/src/main.ts"
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 After request
@@ -383,7 +405,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2,
+        "request_seq": 3,
         "performanceData": {
           "diagnosticsDuration": [
             {
@@ -406,7 +428,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/workspaces/dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
@@ -453,7 +475,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -531,7 +553,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -555,7 +577,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true
     }
 After request
@@ -635,7 +657,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -659,7 +681,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true
     }
 After request
@@ -745,7 +767,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 6,
+      "seq": 7,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/dummy.ts 500 undefined WatchType: Closed Script info
@@ -799,7 +821,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -892,7 +914,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 7,
+      "seq": 8,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
@@ -1001,7 +1023,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1078,7 +1100,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 8,
+      "seq": 9,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -1104,7 +1126,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 8,
+      "request_seq": 9,
       "success": true
     }
 After request
@@ -1185,7 +1207,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 9,
+      "seq": 10,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/dummy.ts 500 undefined WatchType: Closed Script info
@@ -1217,7 +1239,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 9,
+      "request_seq": 10,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1301,7 +1323,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 10,
+      "seq": 11,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -1327,7 +1349,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 10,
+      "request_seq": 11,
       "success": true
     }
 After request
@@ -1887,7 +1909,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 11,
+      "seq": 12,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/dummy.ts 500 undefined WatchType: Closed Script info
@@ -1943,7 +1965,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 11,
+      "request_seq": 12,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -2186,7 +2208,7 @@ Before request
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "reloadProjects",
-      "seq": 12,
+      "seq": 13,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] reload projects.
@@ -2358,7 +2380,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "reloadProjects",
-      "request_seq": 12,
+      "request_seq": 13,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -2429,7 +2451,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 2,
         "offset": 10
       },
-      "seq": 13,
+      "seq": 14,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
@@ -2686,7 +2708,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 14,
+      "seq": 15,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -2710,7 +2732,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 14,
+      "request_seq": 15,
       "success": true
     }
 After request
@@ -2801,7 +2823,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 15,
+      "seq": 16,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -2825,7 +2847,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 15,
+      "request_seq": 16,
       "success": true
     }
 After request
@@ -2922,7 +2944,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/indirect3/main.ts"
       },
-      "seq": 16,
+      "seq": 17,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/indirect3/tsconfig.json
@@ -3108,7 +3130,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 16,
+      "request_seq": 17,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -3237,7 +3259,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 1,
         "offset": 10
       },
-      "seq": 17,
+      "seq": 18,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json

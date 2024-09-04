@@ -330,11 +330,33 @@ Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "needFileNameList": false
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/user/username/projects/myproject/tsconfig.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/workspaces/dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
@@ -377,7 +399,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -456,7 +478,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -476,7 +498,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true
     }
 After request
@@ -556,7 +578,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -576,7 +598,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true
     }
 After request
@@ -662,7 +684,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/dummy.ts 500 undefined WatchType: Closed Script info
@@ -714,7 +736,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -806,7 +828,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 6,
+      "seq": 7,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
@@ -919,7 +941,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -994,7 +1016,7 @@ Before request
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "reloadProjects",
-      "seq": 7,
+      "seq": 8,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] reload projects.
@@ -1164,7 +1186,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "reloadProjects",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *

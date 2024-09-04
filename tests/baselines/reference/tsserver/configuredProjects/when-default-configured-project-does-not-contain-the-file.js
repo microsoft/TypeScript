@@ -1029,4 +1029,24 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Default project for file: /user/username/projects/myproject/foo/lib/index.d.ts: /user/username/projects/myproject/bar/tsconfig.json
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/user/username/projects/myproject/foo/lib/index.d.ts",
+        "needFileNameList": false
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/user/username/projects/myproject/bar/tsconfig.json",
+        "languageServiceDisabled": false
+      },
+      "responseRequired": true
+    }
+After request
