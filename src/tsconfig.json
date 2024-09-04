@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "esnext",       // or es2022, system, nodenext
+        "target": "es2017"        // or es2018, es2019, es2020, etc.
+    },
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./cancellationToken" },
+        { "path": "./compiler" },
+        { "path": "./deprecatedCompat" },
+        { "path": "./harness" },
+        { "path": "./jsTyping" },
+        { "path": "./server" },
+        { "path": "./services" },
+        { "path": "./testRunner" },
+        { "path": "./tsc" },
+        { "path": "./tsserver" },
+        { "path": "./typescript" },
+        { "path": "./typingsInstaller" },
+        { "path": "./typingsInstallerCore" },
+        { "path": "./watchGuard" }
+    ]
+}
