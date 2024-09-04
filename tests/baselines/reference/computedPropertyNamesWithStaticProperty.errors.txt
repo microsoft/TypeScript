@@ -1,12 +1,14 @@
 computedPropertyNamesWithStaticProperty.ts(3,10): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(6,10): error TS2449: Class 'C1' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(9,5): error TS2411: Property '[C1.staticProp]' of type '() => void' is not assignable to 'number' index type 'string'.
 computedPropertyNamesWithStaticProperty.ts(9,6): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(14,10): error TS2449: Class 'C2' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(17,10): error TS2449: Class 'C2' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(20,5): error TS2411: Property '[C2.staticProp]' of type '() => void' is not assignable to 'number' index type 'string'.
 computedPropertyNamesWithStaticProperty.ts(20,6): error TS2449: Class 'C2' used before its declaration.
 
 
-==== computedPropertyNamesWithStaticProperty.ts (6 errors) ====
+==== computedPropertyNamesWithStaticProperty.ts (8 errors) ====
     class C1 {
         static staticProp = 10;
         get [C1.staticProp]() {
@@ -22,6 +24,8 @@ computedPropertyNamesWithStaticProperty.ts(20,6): error TS2449: Class 'C2' used 
             var y = x;
         }
         [C1.staticProp]() { }
+        ~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[C1.staticProp]' of type '() => void' is not assignable to 'number' index type 'string'.
          ~~
 !!! error TS2449: Class 'C1' used before its declaration.
 !!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C1' is declared here.
@@ -42,6 +46,8 @@ computedPropertyNamesWithStaticProperty.ts(20,6): error TS2449: Class 'C2' used 
             var y = x;
         }
         [C2.staticProp]() { }
+        ~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[C2.staticProp]' of type '() => void' is not assignable to 'number' index type 'string'.
          ~~
 !!! error TS2449: Class 'C2' used before its declaration.
 !!! related TS2728 computedPropertyNamesWithStaticProperty.ts:12:8: 'C2' is declared here.

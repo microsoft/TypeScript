@@ -1,8 +1,9 @@
 computedPropertyNames2_ES6.ts(6,9): error TS2378: A 'get' accessor must return a value.
+computedPropertyNames2_ES6.ts(6,9): error TS2411: Property '[accessorName]' of type 'void' is not assignable to 'string' index type '() => void'.
 computedPropertyNames2_ES6.ts(8,16): error TS2378: A 'get' accessor must return a value.
 
 
-==== computedPropertyNames2_ES6.ts (2 errors) ====
+==== computedPropertyNames2_ES6.ts (3 errors) ====
     var methodName = "method";
     var accessorName = "accessor";
     class C {
@@ -11,6 +12,8 @@ computedPropertyNames2_ES6.ts(8,16): error TS2378: A 'get' accessor must return 
         get [accessorName]() { }
             ~~~~~~~~~~~~~~
 !!! error TS2378: A 'get' accessor must return a value.
+            ~~~~~~~~~~~~~~
+!!! error TS2411: Property '[accessorName]' of type 'void' is not assignable to 'string' index type '() => void'.
         set [accessorName](v) { }
         static get [accessorName]() { }
                    ~~~~~~~~~~~~~~
