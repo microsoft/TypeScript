@@ -405,4 +405,41 @@ X;`,
         ],
         baselineDependencies: true,
     });
+
+    verifyTscWatch({
+        scenario: "projectsWithReferences",
+        subScenario: "watch options differing between projects",
+        sys: () =>
+            solutionBuildWithBaseline(
+                TestServerHost.createWatchedSystem({
+                    "/user/username/workspace/project/tsconfig.base.json": jsonToReadableText({
+                        watchOptions: {
+                            excludeDirectories: ["**/node_modules"],
+                        },
+                    }),
+                    "/user/username/workspace/project/tsconfig.A.json": jsonToReadableText({
+                        extends: "./tsconfig.base.json",
+                        compilerOptions: { composite: true },
+                        include: ["src/a/**/*.ts"],
+                        watchOptions: {
+                            excludeDirectories: ["**/excludes_by_A"],
+                        },
+                    }),
+                    "/user/username/workspace/project/src/a/a.ts": "export const a = 10;",
+                    "/user/username/workspace/project/tsconfig.B.json": jsonToReadableText({
+                        extends: "./tsconfig.base.json",
+                        include: ["src/b/**/*.ts"],
+                        references: [
+                            { path: "./tsconfig.A.json" },
+                        ],
+                    }),
+                    "/user/username/workspace/project/src/b/b.ts": "export const b = 10;",
+                }, {
+                    currentDirectory: "/user/username/workspace/project",
+                    useCaseSensitiveFileNames: false,
+                }),
+                ["tsconfig.A.json"],
+            ),
+        commandLineArgs: ["-w", "-p", "tsconfig.B.json", "--traceResolution", "--extendedDiagnostics"],
+    });
 });

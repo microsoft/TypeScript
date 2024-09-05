@@ -72,7 +72,6 @@ CreatingProgramWith::
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
@@ -84,6 +83,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: Watc
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
 
 
 //// [/user/username/projects/project/app.js]
