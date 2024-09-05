@@ -13,7 +13,7 @@ describe("unittests:: canWatch::", () => {
             paths.forEach(path => baselineCanWatchDirectoryOrFile(combinePaths(path, "package.json"), maxLengths));
             baseline.push("", "");
             function baselineCanWatchDirectoryOrFile(path: ts.Path, maxLengths: readonly number[]) {
-                pushRow(baseline, [path, `${ts.canWatchDirectoryOrFile(ts.getPathComponents(path))}`], maxLengths);
+                pushRow(baseline, [path, `${ts.canWatchDirectoryOrFilePath(path)}`], maxLengths);
             }
         },
     );

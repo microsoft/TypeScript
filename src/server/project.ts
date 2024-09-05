@@ -8,6 +8,7 @@ import {
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
+    canWatchDirectoryOrFilePath,
     changeExtension,
     changesAffectModuleResolution,
     clearMap,
@@ -140,6 +141,7 @@ import {
     emptyArray,
     Errors,
     FileStats,
+    getDetailWatchInfo,
     LogLevel,
     ModuleImportResult,
     Msg,
@@ -1545,33 +1547,38 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const canonicalPath = this.toPath(path);
             toRemove.delete(canonicalPath);
             if (!this.typingWatchers!.has(canonicalPath)) {
+                const watchType = typingsWatcherType === TypingWatcherType.FileWatcher ?
+                    WatchType.TypingInstallerLocationFile :
+                    WatchType.TypingInstallerLocationDirectory;
                 this.typingWatchers!.set(
                     canonicalPath,
-                    typingsWatcherType === TypingWatcherType.FileWatcher ?
-                        this.projectService.watchFactory.watchFile(
-                            path,
-                            () =>
-                                !this.typingWatchers!.isInvoked ?
-                                    this.onTypingInstallerWatchInvoke() :
-                                    this.writeLog(`TypingWatchers already invoked`),
-                            PollingInterval.High,
-                            this.projectService.getWatchOptions(this),
-                            WatchType.TypingInstallerLocationFile,
-                            this,
-                        ) :
-                        this.projectService.watchFactory.watchDirectory(
-                            path,
-                            f => {
-                                if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
-                                if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
-                                if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
-                                this.onTypingInstallerWatchInvoke();
-                            },
-                            WatchDirectoryFlags.Recursive,
-                            this.projectService.getWatchOptions(this),
-                            WatchType.TypingInstallerLocationDirectory,
-                            this,
-                        ),
+                    canWatchDirectoryOrFilePath(canonicalPath) ?
+                        typingsWatcherType === TypingWatcherType.FileWatcher ?
+                            this.projectService.watchFactory.watchFile(
+                                path,
+                                () =>
+                                    !this.typingWatchers!.isInvoked ?
+                                        this.onTypingInstallerWatchInvoke() :
+                                        this.writeLog(`TypingWatchers already invoked`),
+                                PollingInterval.High,
+                                this.projectService.getWatchOptions(this),
+                                watchType,
+                                this,
+                            ) :
+                            this.projectService.watchFactory.watchDirectory(
+                                path,
+                                f => {
+                                    if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
+                                    if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
+                                    if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
+                                    this.onTypingInstallerWatchInvoke();
+                                },
+                                WatchDirectoryFlags.Recursive,
+                                this.projectService.getWatchOptions(this),
+                                watchType,
+                                this,
+                            ) :
+                        (this.writeLog(`Skipping watcher creation at ${path}:: ${getDetailWatchInfo(watchType, this)}`), noopFileWatcher),
                 );
             }
         };

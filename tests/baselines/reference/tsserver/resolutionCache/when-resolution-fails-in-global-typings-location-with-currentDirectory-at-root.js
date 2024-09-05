@@ -179,10 +179,8 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Skipping watcher creation at /bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Skipping watcher creation at /node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["node"]
 TI:: [hh:mm:ss:mss] 'node':: Entry for package 'node' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
@@ -258,16 +256,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/bower_components: *new*
-  {"pollingInterval":500}
-/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
-  {"inode":11}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*

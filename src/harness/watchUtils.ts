@@ -1,6 +1,6 @@
 import {
     arrayFrom,
-    canWatchDirectoryOrFile,
+    canWatchDirectoryOrFilePath,
     compareStringsCaseSensitive,
     contains,
     createMultiMap,
@@ -8,7 +8,6 @@ import {
     FileWatcher,
     FileWatcherCallback,
     GetCanonicalFileName,
-    getPathComponents,
     MultiMap,
     Path,
     PollingInterval,
@@ -17,7 +16,7 @@ import {
 
 export function ensureWatchablePath(path: string, locationType: string) {
     Debug.assert(
-        canWatchDirectoryOrFile(getPathComponents(path as Path)),
+        canWatchDirectoryOrFilePath(path as Path),
         `Not a watchable location: ${locationType} like "/home/src/workspaces/project" or refer canWatchDirectoryOrFile for more allowed locations`,
     );
 }

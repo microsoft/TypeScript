@@ -314,6 +314,11 @@ export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathCompone
 }
 
 /** @internal */
+export function canWatchDirectoryOrFilePath(path: Path) {
+    return canWatchDirectoryOrFile(getPathComponents(path));
+}
+
+/** @internal */
 export function canWatchAtTypes(atTypes: Path) {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
     return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(getDirectoryPath(atTypes));
@@ -328,7 +333,7 @@ function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDi
 }
 
 function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
-    return canWatchDirectoryOrFile(getPathComponents(fileOrDirPath));
+    return canWatchDirectoryOrFilePath(fileOrDirPath);
 }
 
 /** @internal */
