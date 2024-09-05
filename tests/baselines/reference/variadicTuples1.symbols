@@ -1419,3 +1419,23 @@ type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 type AnyArr = [...any];
 >AnyArr : Symbol(AnyArr, Decl(variadicTuples1.ts, 419, 62))
 
+type NeverSpread1 = [...never];
+>NeverSpread1 : Symbol(NeverSpread1, Decl(variadicTuples1.ts, 421, 23))
+
+type IdentitySpread<T extends readonly unknown[]> = [...T];
+>IdentitySpread : Symbol(IdentitySpread, Decl(variadicTuples1.ts, 423, 31))
+>T : Symbol(T, Decl(variadicTuples1.ts, 424, 20))
+>T : Symbol(T, Decl(variadicTuples1.ts, 424, 20))
+
+type NeverSpread2 = IdentitySpread<never>;
+>NeverSpread2 : Symbol(NeverSpread2, Decl(variadicTuples1.ts, 424, 59))
+>IdentitySpread : Symbol(IdentitySpread, Decl(variadicTuples1.ts, 423, 31))
+
+type ReducedNeverSpread1 = IdentitySpread<[] & [string]>;
+>ReducedNeverSpread1 : Symbol(ReducedNeverSpread1, Decl(variadicTuples1.ts, 425, 42))
+>IdentitySpread : Symbol(IdentitySpread, Decl(variadicTuples1.ts, 423, 31))
+
+type ReducedNeverSpread2 = IdentitySpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
+>ReducedNeverSpread2 : Symbol(ReducedNeverSpread2, Decl(variadicTuples1.ts, 426, 57))
+>IdentitySpread : Symbol(IdentitySpread, Decl(variadicTuples1.ts, 423, 31))
+

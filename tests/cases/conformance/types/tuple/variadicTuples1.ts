@@ -423,3 +423,9 @@ type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 
 type AnyArr = [...any];
+
+type NeverSpread1 = [...never];
+type IdentitySpread<T extends readonly unknown[]> = [...T];
+type NeverSpread2 = IdentitySpread<never>;
+type ReducedNeverSpread1 = IdentitySpread<[] & [string]>;
+type ReducedNeverSpread2 = IdentitySpread<[string | boolean, boolean, ...number[]] & ['foo', string, 44]>;
