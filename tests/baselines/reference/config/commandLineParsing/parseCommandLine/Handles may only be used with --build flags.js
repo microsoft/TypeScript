@@ -1,6 +1,8 @@
---clean --dry --force --verbose
+--build --clean --dry --force --verbose
 CompilerOptions::
-{}
+{
+  "build": true
+}
 WatchOptions::
 
 FileNames::

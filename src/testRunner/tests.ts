@@ -128,7 +128,7 @@ export * from "./unittests/tsc/noEmitOnError.js";
 export * from "./unittests/tsc/projectReferences.js";
 export * from "./unittests/tsc/projectReferencesConfig.js";
 export * from "./unittests/tsc/redirect.js";
-export * from "./unittests/tsc/runWithoutArgs.js";
+export * from "./unittests/tsc/commandLine.js";
 export * from "./unittests/tscWatch/consoleClearing.js";
 export * from "./unittests/tscWatch/emit.js";
 export * from "./unittests/tscWatch/emitAndErrorUpdates.js";
