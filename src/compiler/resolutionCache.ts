@@ -193,7 +193,6 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     scheduleInvalidateResolutionsOfFailedLookupLocations(): void;
     getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
     projectName?: string;
-    getGlobalCache?(): string | undefined;
     globalCacheResolutionModuleName?(externalModuleName: string): string;
     writeLog(s: string): void;
     getCurrentProgram(): Program | undefined;
@@ -538,12 +537,12 @@ function resolveModuleNameUsingGlobalCache(
     const host = getModuleResolutionHost(resolutionHost);
     const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
     // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
-    if (!resolutionHost.getGlobalCache) {
+    if (!resolutionHost.getGlobalTypingsCacheLocation) {
         return primaryResult;
     }
 
     // otherwise try to load typings from @types
-    const globalCache = resolutionHost.getGlobalCache();
+    const globalCache = resolutionHost.getGlobalTypingsCacheLocation();
     if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
         // create different collection of failed lookup locations for second pass
         // if it will fail and we've already found something during the first pass - we don't want to pollute its results

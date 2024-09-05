@@ -647,7 +647,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getGlobalTypingsCacheLocation() {
-        return this.getGlobalCache();
+        return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
     }
 
     /** @internal */
@@ -901,11 +901,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     onChangedAutomaticTypeDirectiveNames() {
         this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
-    }
-
-    /** @internal */
-    getGlobalCache() {
-        return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
     }
 
     /** @internal */
@@ -2194,7 +2189,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
-        return this.projectService.getNearestAncestorDirectoryWithPackageJson(fileName);
+        return this.projectService.getNearestAncestorDirectoryWithPackageJson(fileName, this);
     }
 
     /** @internal */

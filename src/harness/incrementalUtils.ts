@@ -524,7 +524,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         toPath: project.toPath.bind(project),
         getCompilationSettings: project.getCompilationSettings.bind(project),
         projectName: project.projectName,
-        getGlobalCache: project.getGlobalCache.bind(project),
+        getGlobalTypingsCacheLocation: project.getGlobalTypingsCacheLocation.bind(project),
         globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
@@ -558,6 +558,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
                     moduleResolutionCache,
                 ),
         );
+    compilerHost.getGlobalTypingsCacheLocation = resolutionHostCacheHost.getGlobalTypingsCacheLocation;
     verifyProgramStructure(
         ts.createProgram({
             rootNames: project.getScriptFileNames(),

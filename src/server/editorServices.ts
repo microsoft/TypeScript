@@ -42,7 +42,7 @@ import {
     FileWatcherEventKind,
     find,
     forEach,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachEntry,
     forEachKey,
     forEachResolvedProjectReference,
@@ -5158,7 +5158,7 @@ export class ProjectService {
             switch (packageJsonCache.directoryHasPackageJson(directory)) {
                 // Sync and check same directory again
                 case Ternary.Maybe:
-                    packageJsonCache.searchDirectoryAndAncestors(directory);
+                    packageJsonCache.searchDirectoryAndAncestors(directory, project);
                     return processDirectory(directory);
                 // Check package.json
                 case Ternary.True:
@@ -5172,24 +5172,32 @@ export class ProjectService {
             }
         };
 
-        forEachAncestorDirectory(getDirectoryPath(fileName), processDirectory);
+        forEachAncestorDirectoryStoppingAtGlobalCache(
+            project,
+            getDirectoryPath(fileName),
+            processDirectory,
+        );
         return result;
     }
 
     /** @internal */
-    getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
-        return forEachAncestorDirectory(fileName, directory => {
-            switch (this.packageJsonCache.directoryHasPackageJson(directory)) {
-                case Ternary.True:
-                    return directory;
-                case Ternary.False:
-                    return undefined;
-                case Ternary.Maybe:
-                    return this.host.fileExists(combinePaths(directory, "package.json"))
-                        ? directory
-                        : undefined;
-            }
-        });
+    getNearestAncestorDirectoryWithPackageJson(fileName: string, project: Project): string | undefined {
+        return forEachAncestorDirectoryStoppingAtGlobalCache(
+            project,
+            fileName,
+            directory => {
+                switch (this.packageJsonCache.directoryHasPackageJson(directory)) {
+                    case Ternary.True:
+                        return directory;
+                    case Ternary.False:
+                        return undefined;
+                    case Ternary.Maybe:
+                        return this.host.fileExists(combinePaths(directory, "package.json"))
+                            ? directory
+                            : undefined;
+                }
+            },
+        );
     }
 
     private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {

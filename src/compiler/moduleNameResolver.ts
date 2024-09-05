@@ -74,6 +74,7 @@ import {
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
     moduleResolutionSupportsPackageJsonExportsAndImports,
+    ModuleSpecifierResolutionHost,
     noop,
     normalizePath,
     normalizeSlashes,
@@ -788,7 +789,7 @@ export function resolvePackageNameToPackageJson(
 ): PackageJsonInfo | undefined {
     const moduleResolutionState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
 
-    return forEachAncestorDirectory(containingDirectory, ancestorDirectory => {
+    return forEachAncestorDirectoryStoppingAtGlobalCache(host, containingDirectory, ancestorDirectory => {
         if (getBaseFileName(ancestorDirectory) !== "node_modules") {
             const nodeModulesFolder = combinePaths(ancestorDirectory, "node_modules");
             const candidate = combinePaths(nodeModulesFolder, packageName);
@@ -2383,7 +2384,8 @@ export interface PackageJsonInfoContents {
  * @internal
  */
 export function getPackageScopeForPath(directory: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
-    return forEachAncestorDirectory(
+    return forEachAncestorDirectoryStoppingAtGlobalCache(
+        state.host,
         directory,
         dir => getPackageJsonInfo(dir, /*onlyRecordFailures*/ false, state),
     );
@@ -3003,16 +3005,39 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions,
     }
 
     function lookup(extensions: Extensions) {
-        return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
-            if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
-                if (resolutionFromCache) {
-                    return resolutionFromCache;
+        return forEachAncestorDirectoryStoppingAtGlobalCache(
+            state.host,
+            normalizeSlashes(directory),
+            ancestorDirectory => {
+                // Dont go past global cache location
+                if (getBaseFileName(ancestorDirectory) !== "node_modules") {
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
+                    if (resolutionFromCache) {
+                        return resolutionFromCache;
+                    }
+                    return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
                 }
-                return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
-            }
-        });
+            },
+        );
     }
+}
+
+/**
+ * Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result.
+ * Stops at global cache location
+ * @internal
+ */
+export function forEachAncestorDirectoryStoppingAtGlobalCache<T, P extends string>(
+    host: ModuleResolutionHost | ModuleSpecifierResolutionHost,
+    directory: P,
+    callback: (directory: P) => T | undefined,
+): T | undefined {
+    const globalCache = host?.getGlobalTypingsCacheLocation?.();
+    return forEachAncestorDirectory(directory, ancestorDirectory => {
+        const result = callback(ancestorDirectory as P);
+        if (result !== undefined) return result;
+        if (ancestorDirectory === globalCache) return false;
+    }) || undefined;
 }
 
 function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
@@ -3258,14 +3283,18 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 
         if (!isExternalModuleNameRelative(moduleName)) {
             // Climb up parent directories looking for a module.
-            const resolved = forEachAncestorDirectory(containingDirectory, directory => {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
-                if (resolutionFromCache) {
-                    return resolutionFromCache;
-                }
-                const searchName = normalizePath(combinePaths(directory, moduleName));
-                return toSearchResult(loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state));
-            });
+            const resolved = forEachAncestorDirectoryStoppingAtGlobalCache(
+                state.host,
+                containingDirectory,
+                directory => {
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
+                    if (resolutionFromCache) {
+                        return resolutionFromCache;
+                    }
+                    const searchName = normalizePath(combinePaths(directory, moduleName));
+                    return toSearchResult(loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state));
+                },
+            );
             if (resolved) return resolved;
             if (extensions & (Extensions.TypeScript | Extensions.Declaration)) {
                 // If we didn't find the file normally, look it up in @types.

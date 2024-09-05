@@ -53,7 +53,7 @@ import {
     firstOrUndefined,
     flatMap,
     flatten,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     getBaseFileName,
     getConditions,
     getContextualTypeFromParent,
@@ -1038,7 +1038,7 @@ function getCompletionEntriesForNonRelativeModules(
                     return nodeModulesDirectoryLookup(ancestor);
                 };
             }
-            forEachAncestorDirectory(scriptPath, ancestorLookup);
+            forEachAncestorDirectoryStoppingAtGlobalCache(host, scriptPath, ancestorLookup);
         }
     }
 
