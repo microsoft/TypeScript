@@ -1356,7 +1356,12 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
+        this.documentRegistry = createDocumentRegistryInternal(
+            this.host.useCaseSensitiveFileNames,
+            this.currentDirectory,
+            this.jsDocParsingMode,
+            this,
+        );
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -2615,7 +2620,6 @@ export class ProjectService {
         const project = new ExternalProject(
             projectFileName,
             this,
-            this.documentRegistry,
             compilerOptions,
             /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
             options.compileOnSave === undefined ? true : options.compileOnSave,
@@ -2710,7 +2714,6 @@ export class ProjectService {
             configFileName,
             canonicalConfigFilePath,
             this,
-            this.documentRegistry,
             configFileExistenceInfo.config.cachedDirectoryStructureHost,
             reason,
         );
@@ -3022,7 +3025,10 @@ export class ProjectService {
     }
 
     /** @internal */
-    setFileNamesOfAutpImportProviderOrAuxillaryProject(project: AutoImportProviderProject | AuxiliaryProject, fileNames: readonly string[]) {
+    setFileNamesOfAutoImportProviderOrAuxillaryProject(
+        project: AutoImportProviderProject | AuxiliaryProject,
+        fileNames: readonly string[],
+    ) {
         this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
     }
 
@@ -3139,7 +3145,11 @@ export class ProjectService {
         }
 
         // Single inferred project does not have a project root and hence no current directory
-        return this.createInferredProject("", /*isSingleInferredProject*/ true);
+        return this.createInferredProject(
+            this.currentDirectory,
+            /*isSingleInferredProject*/ true,
+            /*projectRootPath*/ undefined,
+        );
     }
 
     private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string): InferredProject {
@@ -3156,10 +3166,18 @@ export class ProjectService {
             }
         }
 
-        return this.createInferredProject(currentDirectory);
+        return this.createInferredProject(
+            currentDirectory,
+            /*isSingleInferredProject*/ false,
+            /*projectRootPath*/ undefined,
+        );
     }
 
-    private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
+    private createInferredProject(
+        currentDirectory: string,
+        isSingleInferredProject: boolean,
+        projectRootPath: NormalizedPath | undefined,
+    ): InferredProject {
         const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
@@ -3174,7 +3192,14 @@ export class ProjectService {
             typeAcquisition = this.typeAcquisitionForInferredProjects;
         }
         watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, typeAcquisition);
+        const project = new InferredProject(
+            this,
+            compilerOptions,
+            watchOptionsAndErrors?.watchOptions,
+            projectRootPath,
+            currentDirectory,
+            typeAcquisition,
+        );
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         if (isSingleInferredProject) {
             this.inferredProjects.unshift(project);
