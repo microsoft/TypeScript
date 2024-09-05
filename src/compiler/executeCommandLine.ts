@@ -728,8 +728,8 @@ function executeCommandLineWorker(
     }
 }
 
-/** @internal */
-export function isBuild(commandLineArgs: readonly string[]) {
+/** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
+export function isBuildCommand(commandLineArgs: readonly string[]) {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
         return firstOption === tscBuildOption.name || firstOption === tscBuildOption.shortName;
@@ -745,7 +745,7 @@ export function executeCommandLine(
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
 ): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> {
-    if (isBuild(commandLineArgs)) {
+    if (isBuildCommand(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs);
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
             system.enableCPUProfiler(buildOptions.generateCpuProfile, () =>

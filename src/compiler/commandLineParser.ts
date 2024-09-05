@@ -2062,7 +2062,7 @@ function getOptionDeclarationFromName(getOptionNameMap: () => OptionsNameMap, op
     return optionsNameMap.get(optionName);
 }
 
-/** @internal */
+/** Parsed command line for build */
 export interface ParsedBuildCommand {
     buildOptions: BuildOptions;
     watchOptions: WatchOptions | undefined;
@@ -2089,11 +2089,10 @@ const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1,
 };
 
-/** @internal */
-export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
+export function parseBuildCommand(commandLine: readonly string[]): ParsedBuildCommand {
     const { options, watchOptions, fileNames: projects, errors } = parseCommandLineWorker(
         buildOptionsDidYouMeanDiagnostics,
-        args,
+        commandLine,
     );
     const buildOptions = options as BuildOptions;
 
