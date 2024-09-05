@@ -33,7 +33,7 @@ describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the mis
                         { path: "./tsconfig.second.json" },
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--b"],
     });
 });
@@ -57,7 +57,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         "b.ts"
     ]
 }`,
-                }, { currentDirectory: "/home/src/workspaces/project" }),
+                }),
             commandLineArgs: ["--b"],
             edits: [
                 {

@@ -194,7 +194,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                     "/home/src/workspaces/project/main.ts": "export const x = 10;",
                     "/home/src/workspaces/project/tsconfig.json": "{}",
                     "/home/src/workspaces/project/tsconfig.tsbuildinfo": "Some random string",
-                }, { currentDirectory: "/home/src/workspaces/project" }),
+                }),
             commandLineArgs: ["--b", "-i", "-v"],
             edits: [{
                 caption: "tsbuildinfo written has error",

@@ -88,7 +88,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                     files: ["./pkg2_index.ts"],
                 }),
                 "/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-b", "packages/pkg1.tsconfig.json", "packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
 });
@@ -119,7 +119,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-b", "a", "b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
@@ -167,7 +167,7 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                 type: "module",
             }),
             "/home/src/workspaces/project/node_modules/a": { symLink: "/home/src/workspaces/project/packages/a" },
-        }, { currentDirectory: "/home/src/workspaces/project" });
+        });
     }
 
     verifyTsc({

@@ -11,7 +11,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         sys: () =>
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/test.ts": "export const x = 1;",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["test.ts", "--listFilesOnly"],
     });
 
@@ -22,7 +22,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/test.ts": "export const x = 1;",
                 "/home/src/workspaces/project/tsconfig.json": "{}",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--incremental", "--listFilesOnly"],
         edits: [
             {

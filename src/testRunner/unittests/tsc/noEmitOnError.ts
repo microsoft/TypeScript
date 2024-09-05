@@ -21,7 +21,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/home/src/workspaces/project/a.ts": "const x = 10;",
                 "/home/src/workspaces/project/b.ts": "const y = 10;",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: emptyArray,
         edits: [
             {
@@ -57,7 +57,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/home/src/workspaces/project/a.ts": "const x = 10;",
                 "/home/src/workspaces/project/b.ts": "const y = 10;",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: emptyArray,
         edits: [
             {
@@ -90,7 +90,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/home/src/workspaces/project/file1.ts": `export const x: 30 = "hello";`,
                 "/home/src/workspaces/project/file2.ts": `export class D { }`,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-i"],
         edits: [{
             caption: "delete file without error",
@@ -113,7 +113,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 }),
                 "/home/src/workspaces/project/file1.ts": `export const x: 30 = "hello";`,
                 "/home/src/workspaces/project/file2.ts": `export class D { }`,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-i"],
         edits: [{
             caption: "delete file without error",

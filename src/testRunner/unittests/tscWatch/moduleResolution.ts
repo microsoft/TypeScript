@@ -586,7 +586,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     promisify();
                     promisify2();
                 `,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: [
             {
                 caption: "remove a file that will remove module augmentation",

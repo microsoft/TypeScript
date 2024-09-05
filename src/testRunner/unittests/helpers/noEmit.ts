@@ -139,7 +139,7 @@ function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: Comp
             "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson(compilerOptions),
             }),
-        }, { currentDirectory: "/home/src/workspaces/project" });
+        });
     }
 }
 

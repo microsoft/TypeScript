@@ -17,7 +17,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -42,7 +42,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -69,7 +69,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["file*.ts"],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: [{
             caption: "delete file1",
             edit: sys => {
@@ -109,7 +109,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                     compilerOptions: { composite: true },
                     include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: [{
             caption: "delete file1",
             edit: sys => {

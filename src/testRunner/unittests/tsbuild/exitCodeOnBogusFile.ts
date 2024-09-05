@@ -7,7 +7,7 @@ describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
     verifyTsc({
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
-        sys: () => TestServerHost.createWatchedSystem(emptyArray, { currentDirectory: "/home/src/workspaces/project" }),
+        sys: () => TestServerHost.createWatchedSystem(emptyArray),
         commandLineArgs: ["-b", "bogus.json"],
     });
 });

@@ -124,7 +124,7 @@ export function fn4() {
                     include: ["src"],
                     references: [{ path: "../pkg1" }],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--b", "packages/pkg2/tsconfig.json", "--verbose"],
     });
 

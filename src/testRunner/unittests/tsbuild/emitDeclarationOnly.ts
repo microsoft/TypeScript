@@ -49,7 +49,7 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly:: set to tru
                     emitDeclarationOnly: true,
                 },
             }),
-        }, { currentDirectory: "/home/src/workspaces/project" });
+        });
     }
 
     function verifyEmitDeclarationOnly(disableMap?: true) {

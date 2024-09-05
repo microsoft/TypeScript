@@ -56,7 +56,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                         outDir: "dist",
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits,
     }, ["/home/src/workspaces/project/dist/index.js"]);
 
@@ -71,7 +71,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                         composite: true,
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits,
     }, ["/home/src/workspaces/project/dist/src/index.js", "/home/src/workspaces/project/dist/src/index.d.ts"]);
 
@@ -86,7 +86,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                         rootDir: "src",
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits,
     }, ["/home/src/workspaces/project/dist/index.js"]);
 
@@ -102,7 +102,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                         rootDir: "src",
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits,
     }, ["/home/src/workspaces/project/dist/index.js"]);
 
@@ -119,7 +119,7 @@ describe("unittests:: tsbuild:: outputPaths::", () => {
                         composite: true,
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits,
     }, ["/home/src/workspaces/project/dist/index.js", "/home/src/workspaces/project/dist/index.d.ts"]);
 });
