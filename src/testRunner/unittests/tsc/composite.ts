@@ -21,7 +21,7 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--composite", "false"],
     });
 
@@ -41,7 +41,7 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--composite", "null"],
     });
 
@@ -62,7 +62,7 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--composite", "false"],
     });
 
@@ -83,7 +83,7 @@ describe("unittests:: tsc:: composite::", () => {
                         "src/**/*.ts",
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--composite", "false", "--tsBuildInfoFile", "null"],
     });
 
@@ -99,7 +99,7 @@ describe("unittests:: tsc:: composite::", () => {
                         composite: true,
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: [],
         edits: [
             {

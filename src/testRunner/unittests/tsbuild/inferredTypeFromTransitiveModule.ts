@@ -56,7 +56,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
                     incremental: true,
                 },
             }),
-        }, { currentDirectory: "/home/src/workspaces/project" });
+        });
     }
 
     verifyTsc({

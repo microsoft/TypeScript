@@ -19,10 +19,7 @@ describe("unittests:: tsbuild:: graphOrdering::", () => {
     ];
 
     before(() => {
-        const sys = TestServerHost.createWatchedSystem(ts.emptyArray, {
-            useCaseSensitiveFileNames: true,
-            currentDirectory: "/home/src/workspaces/project",
-        });
+        const sys = TestServerHost.createWatchedSystem(ts.emptyArray, { useCaseSensitiveFileNames: true });
         host = ts.createSolutionBuilderHost(sys);
         writeProjects(sys, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });

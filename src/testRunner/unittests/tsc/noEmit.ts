@@ -26,7 +26,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                     },
                 }),
                 "/home/src/workspaces/project/class1.ts": `export class class1 {}`,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         edits: noChangeOnlyRuns,
         baselinePrograms: true,
     });

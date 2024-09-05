@@ -191,7 +191,7 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 `,
                 "/home/src/workspaces/project/src/fileB.mts": "export function foo() {}",
                 "/home/src/workspaces/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {

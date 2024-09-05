@@ -32,7 +32,7 @@ describe("unittests:: tsc:: redirect::", () => {
                     version: "1.0.0",
                     main: "index.js",
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: emptyArray,
     });
 });

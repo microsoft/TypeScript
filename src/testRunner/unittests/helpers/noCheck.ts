@@ -53,7 +53,7 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                                     ...options,
                                 },
                             }),
-                        }, { currentDirectory: "/home/src/workspaces/project" }),
+                        }),
                     commandLineArgs: [...commandLineArgs, "--noCheck"],
                     edits: [
                         noChangeRun, // Should be no op

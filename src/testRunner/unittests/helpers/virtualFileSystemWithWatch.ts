@@ -535,12 +535,20 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     static createWatchedSystem(
         fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
-        params:
-            & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
-            & { currentDirectory: string; },
+        params?: Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">,
     ): TestServerHost {
-        ensureWatchablePath(params.currentDirectory, `currentDirectory: ${params.currentDirectory}`);
-        return new TestServerHost(fileOrFolderList, params);
+        const useDefaultCurrentDirectory = !params?.currentDirectory;
+        if (useDefaultCurrentDirectory) (params ??= {}).currentDirectory = "/home/src/workspaces/project";
+        else ensureWatchablePath(params!.currentDirectory!, `currentDirectory: ${params!.currentDirectory}`);
+        const host = new TestServerHost(fileOrFolderList, params);
+        if (useDefaultCurrentDirectory && fileOrFolderList !== emptyArray) {
+            const folder = host.getRealFolder(host.toPath(host.currentDirectory))!;
+            Debug.assert(
+                folder.entries.length,
+                `currentDirectory: Not specified, using default as "/home/src/workspaces/project". The files specified do not belong to it.`,
+            );
+        }
+        return host;
     }
 
     static createServerHost(
