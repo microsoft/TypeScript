@@ -125,20 +125,19 @@ CreatingProgramWith::
   options: {"watch":true,"project":"/user/username/workspace/project/tsconfig.B.json","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/workspace/project/tsconfig.B.json"}
   projectReferences: [{"path":"/user/username/workspace/project/tsconfig.A.json","originalPath":"./tsconfig.A.json"}]
 Loading config file: /user/username/workspace/project/tsconfig.A.json
+FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b/b.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
+ExcludeWatcher:: Added:: WatchInfo: /user/username/workspace/project/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Wild card directory
+FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.base.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Extended config file
 FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.A.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Config file of referened project
 DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/a 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory of referenced project
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/a 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory of referenced project
-FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.base.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Extended config file of referenced project
-FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b/b.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Type roots
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
-
-DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory
 
 
 //// [/user/username/workspace/project/src/b/b.js]
@@ -151,8 +150,6 @@ exports.b = 10;
 
 PolledWatches::
 /user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

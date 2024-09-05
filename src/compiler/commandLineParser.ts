@@ -3267,6 +3267,7 @@ function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
 interface ExtendsResult {
     options: CompilerOptions;
     watchOptions?: WatchOptions;
+    watchOptionsCopied?: boolean;
     include?: string[];
     exclude?: string[];
     files?: string[];
@@ -3325,7 +3326,7 @@ function parseConfig(
 
         ownConfig.options = assign(result.options, ownConfig.options);
         ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
-            assign(result.watchOptions, ownConfig.watchOptions) :
+            assignWatchOptions(result, ownConfig.watchOptions) :
             ownConfig.watchOptions || result.watchOptions;
     }
     return ownConfig;
@@ -3355,10 +3356,16 @@ function parseConfig(
             }
             assign(result.options, extendedConfig.options);
             result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
-                assign({}, result.watchOptions, extendedConfig.watchOptions) :
+                assignWatchOptions(result, extendedConfig.watchOptions) :
                 result.watchOptions || extendedConfig.watchOptions;
             // TODO extend type typeAcquisition
         }
+    }
+
+    function assignWatchOptions(result: ExtendsResult, watchOptions: WatchOptions) {
+        if (result.watchOptionsCopied) return assign(result.watchOptions!, watchOptions);
+        result.watchOptionsCopied = true;
+        return assign({}, result.watchOptions, watchOptions);
     }
 }
 
