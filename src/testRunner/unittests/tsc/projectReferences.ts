@@ -19,7 +19,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                         { path: "../Util/Dates" },
                     ],
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: emptyArray,
     });
 
@@ -86,7 +86,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
                     import referencedSource from "../../lib/src/a"; // Error
                     import referencedDeclaration from "../../lib/dist/a"; // Error
                     import ambiguous from "ambiguous-package"; // Ok`,
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "app", "--pretty", "false"],
     });
 

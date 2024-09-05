@@ -54,7 +54,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 "/home/src/workspaces/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/home/src/workspaces/project/c.ts": `import { a } from "./a";export const c = a;`,
                 "/home/src/workspaces/project/d.ts": `import { b } from "./b";export const d = b;`,
-            }, { currentDirectory: "/home/src/workspaces/project" });
+            });
         }
         function verify(options: ts.CompilerOptions) {
             verifyTsc({
@@ -303,10 +303,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
     verifyTsc({
         scenario: "commandLine",
         subScenario: "help",
-        sys: () =>
-            TestServerHost.createWatchedSystem(ts.emptyArray, {
-                currentDirectory: "/home/src/workspaces/project",
-            }),
+        sys: () => TestServerHost.createWatchedSystem(ts.emptyArray),
         commandLineArgs: ["--build", "--help"],
     });
 });

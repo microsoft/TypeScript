@@ -48,7 +48,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6"],
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: emptyArray,
         edits: [
             {
@@ -75,7 +75,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6", "dom"],
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["-i", "--explainFiles"],
         baselinePrograms: true,
     });

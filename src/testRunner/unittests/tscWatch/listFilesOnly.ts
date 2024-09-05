@@ -8,7 +8,7 @@ describe("unittests:: tscWatch:: listFilesOnly::", () => {
         sys: () => {
             const sys = TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/test.ts": "export const x = 1;",
-            }, { currentDirectory: "/home/src/workspaces/project" });
+            });
             sys.exit = exitCode => sys.exitCode = exitCode;
             return sys;
         },

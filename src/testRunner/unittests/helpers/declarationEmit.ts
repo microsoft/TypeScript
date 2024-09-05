@@ -34,7 +34,7 @@ function getSysForDeclarationEmitWithErrors(options: CompilerOptions, incrementa
             type: "module",
             main: "./distribution/index.js",
         }),
-    }, { currentDirectory: "/home/src/workspaces/project" });
+    });
 }
 
 function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions, incremental: true | undefined) {
@@ -61,7 +61,7 @@ function getSysForDeclarationEmitWithErrorsWithOutFile(options: CompilerOptions,
             declare const ky: KyInstance;
             export default ky;
         `,
-    }, { currentDirectory: "/home/src/workspaces/project" });
+    });
 }
 
 export function forEachDeclarationEmitWithErrorsScenario(

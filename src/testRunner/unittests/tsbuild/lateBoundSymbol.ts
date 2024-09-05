@@ -34,7 +34,7 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
                         incremental: true,
                     },
                 }),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         scenario: "lateBoundSymbol",
         commandLineArgs: ["--b", "--verbose"],
         edits: [

@@ -48,7 +48,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references meta ch
                     references: ["../primary"],
                 }),
                 "/home/src/workspaces/project/secondary/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 });
@@ -68,7 +68,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
                     },
                 }),
                 "/home/src/workspaces/project/primary/a.ts": emptyModule(),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 
@@ -90,7 +90,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
                     },
                 }),
                 "/home/src/workspaces/project/reference/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "reference/tsconfig.json"],
     });
 
@@ -112,7 +112,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
                     },
                 }),
                 "/home/src/workspaces/project/reference/b.ts": moduleImporting("../primary/a"),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "reference/tsconfig.json"],
     });
 
@@ -128,7 +128,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
                 }),
                 "/home/src/workspaces/project/primary/a.ts": "import * as b from './b'",
                 "/home/src/workspaces/project/primary/b.ts": "export {}",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 
@@ -141,7 +141,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references constra
                     references: ["../foo"],
                 }),
                 "/home/src/workspaces/project/primary/a.ts": emptyModule(),
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "primary/tsconfig.json"],
     });
 });
@@ -162,7 +162,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references path ma
                     references: ["../alpha"],
                 }),
                 "/home/src/workspaces/project/beta/b.ts": "import { m } from '../alpha/a'",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "beta/tsconfig.json", "--explainFiles"],
     });
 });
@@ -179,7 +179,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
                     references: ["../alpha"],
                 }),
                 "/home/src/workspaces/project/beta/b.ts": "import { m } from '../alpha/a'",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "beta/tsconfig.json"],
     });
 
@@ -200,7 +200,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references nice-be
                     },
                 }),
                 "/home/src/workspaces/project/beta/b.ts": "import { m } from '@alpha/a'",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "beta/tsconfig.json"],
     });
 });
@@ -216,7 +216,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references behavio
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
                 "/home/src/workspaces/project/alpha/src/a.ts": "export const m: number = 3;",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "alpha/tsconfig.json"],
     });
 });
@@ -230,7 +230,7 @@ describe("unittests:: tsc:: projectReferencesConfig:: project-references errors 
                 "/home/src/workspaces/project/alpha/tsconfig.json": getConfig(),
                 "/home/src/workspaces/project/alpha/src/a.ts": "import * as b from '../../beta/b'",
                 "/home/src/workspaces/project/beta/b.ts": "export { }",
-            }, { currentDirectory: "/home/src/workspaces/project" }),
+            }),
         commandLineArgs: ["--p", "alpha/tsconfig.json"],
     });
 });
