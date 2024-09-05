@@ -7897,6 +7897,7 @@ export interface ModuleResolutionHost {
     getCurrentDirectory?(): string;
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
+    /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
 }
 
 /**

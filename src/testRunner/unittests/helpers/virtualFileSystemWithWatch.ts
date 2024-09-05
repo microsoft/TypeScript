@@ -545,9 +545,10 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     static createServerHost(
         fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
-        params?: Omit<TestServerHostCreationParameters, "currentDirectory">,
+        params?: Omit<TestServerHostCreationParameters, "currentDirectory"> & { overrideCurrentDirectory?: string; },
     ): TestServerHost {
         if ((params as TestServerHostCreationParameters)?.currentDirectory) (params as TestServerHostCreationParameters).currentDirectory = undefined;
+        if (params) (params as TestServerHostCreationParameters).currentDirectory = params?.overrideCurrentDirectory;
         const host = new TestServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);

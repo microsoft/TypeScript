@@ -2016,6 +2016,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
+        getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
     };
 
     onProgramCreateComplete();
@@ -2741,6 +2742,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createHash: maybeBind(host, host.createHash),
             getModuleResolutionCache: () => program.getModuleResolutionCache(),
             trace: maybeBind(host, host.trace),
+            getGlobalTypingsCacheLocation: program.getGlobalTypingsCacheLocation,
         };
     }
 

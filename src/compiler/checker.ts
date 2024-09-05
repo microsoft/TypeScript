@@ -52732,6 +52732,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
         getDefaultResolutionModeForFile: file => host.getDefaultResolutionModeForFile(file),
         getModeForResolutionAtIndex: (file, index) => host.getModeForResolutionAtIndex(file, index),
+        getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
     };
 }
 

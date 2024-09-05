@@ -380,10 +380,8 @@ TI:: [hh:mm:ss:mss] Sending response:
         "//vda1cs4850/myprojects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -449,16 +447,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-//vda1cs4850/myprojects/project/bower_components: *new*
-  {"pollingInterval":500}
-//vda1cs4850/myprojects/project/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
