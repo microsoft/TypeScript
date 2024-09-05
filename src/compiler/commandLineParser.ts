@@ -640,15 +640,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
     },
     {
-        name: "build",
-        type: "boolean",
-        shortName: "b",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Command_line_Options,
-        description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
-        defaultValueDescription: false,
-    },
-    {
         name: "showConfig",
         type: "boolean",
         showInSimplifiedHelpView: true,
@@ -1662,9 +1653,21 @@ function isCommandLineOptionOfCustomType(option: CommandLineOption): option is C
     return !isString(option.type);
 }
 
+/** @internal */
+export const tscBuildOption: CommandLineOption = {
+    name: "build",
+    type: "boolean",
+    shortName: "b",
+    showInSimplifiedHelpView: true,
+    category: Diagnostics.Command_line_Options,
+    description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
+    defaultValueDescription: false,
+};
+
 // Build related options
 /** @internal */
 export const optionsForBuild: CommandLineOption[] = [
+    tscBuildOption,
     {
         name: "verbose",
         shortName: "v",
@@ -1849,8 +1852,16 @@ function createUnknownOptionError(
     node?: PropertyName,
     sourceFile?: TsConfigSourceFile,
 ) {
-    if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
-        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.alternateMode.diagnostic, unknownOption);
+    const otherOption = diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.get(unknownOption.toLowerCase());
+    if (otherOption) {
+        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+            sourceFile,
+            node,
+            otherOption !== tscBuildOption ?
+                diagnostics.alternateMode!.diagnostic :
+                Diagnostics.Option_build_must_be_the_first_command_line_argument,
+            unknownOption,
+        );
     }
 
     const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);

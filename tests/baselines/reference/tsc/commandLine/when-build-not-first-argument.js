@@ -18,6 +18,7 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js --verbose --build
 Output::
+error TS5093: Compiler option '--verbose' may only be used with '--build'.
 error TS6369: Option '--build' must be the first command line argument.
 
 
