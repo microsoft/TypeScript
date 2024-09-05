@@ -3126,7 +3126,7 @@ export type CallLikeExpression =
     | NewExpression
     | TaggedTemplateExpression
     | Decorator
-    | JsxOpeningLikeElement
+    | JsxCallLike
     | InstanceofExpression;
 
 export interface AsExpression extends Expression {
@@ -3186,6 +3186,10 @@ export interface JsxElement extends PrimaryExpression {
 export type JsxOpeningLikeElement =
     | JsxSelfClosingElement
     | JsxOpeningElement;
+
+export type JsxCallLike =
+    | JsxOpeningLikeElement
+    | JsxOpeningFragment;
 
 export type JsxAttributeLike =
     | JsxAttribute

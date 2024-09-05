@@ -204,6 +204,7 @@ import {
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttributeLike,
+    JsxCallLike,
     JsxChild,
     JsxExpression,
     JsxOpeningLikeElement,
@@ -2467,6 +2468,13 @@ export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeEleme
     const kind = node.kind;
     return kind === SyntaxKind.JsxOpeningElement
         || kind === SyntaxKind.JsxSelfClosingElement;
+}
+
+export function isJsxCallLike(node: Node): node is JsxCallLike {
+    const kind = node.kind;
+    return kind === SyntaxKind.JsxOpeningElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxOpeningFragment;
 }
 
 // Clauses

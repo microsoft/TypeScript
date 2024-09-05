@@ -631,7 +631,9 @@ import {
     isJsxAttribute,
     isJsxAttributeLike,
     isJsxAttributes,
+    isJsxCallLike,
     isJsxElement,
+    isJsxFragment,
     isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
@@ -821,6 +823,7 @@ import {
     JsxAttributeName,
     JsxAttributes,
     JsxAttributeValue,
+    JsxCallLike,
     JsxChild,
     JsxClosingElement,
     JsxElement,
@@ -32267,13 +32270,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getContextualTypeForArgumentAtIndex(node, 0);
     }
 
-    function getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxOpeningLikeElement) {
-        return getJsxReferenceKind(node) !== JsxReferenceKind.Component
+    function getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxCallLike) {
+        return isJsxOpeningFragment(node) || getJsxReferenceKind(node) !== JsxReferenceKind.Component
             ? getJsxPropsTypeFromCallSignature(signature, node)
             : getJsxPropsTypeFromClassType(signature, node);
     }
 
-    function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxOpeningLikeElement) {
+    function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxCallLike) {
         let propsType = getTypeOfFirstParameterOfSignatureWithFallback(sig, unknownType);
         propsType = getJsxManagedAttributesFromLocatedAttributes(context, getJsxNamespaceAt(context), propsType);
         const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
@@ -32308,7 +32311,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
     }
 
-    function getStaticTypeOfReferencedJsxConstructor(context: JsxOpeningLikeElement) {
+    function getStaticTypeOfReferencedJsxConstructor(context: JsxCallLike) {
+        if (isJsxOpeningFragment(context)) return getJSXFragmentType(context);
         if (isJsxIntrinsicTagName(context.tagName)) {
             const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(context);
             const fakeSignature = createSignatureForJSXIntrinsic(context, result);
@@ -32326,7 +32330,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return tagType;
     }
 
-    function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
+    function getJsxManagedAttributesFromLocatedAttributes(context: JsxCallLike, ns: Symbol, attributesType: Type) {
         const managedSym = getJsxLibraryManagedAttributes(ns);
         if (managedSym) {
             const ctorType = getStaticTypeOfReferencedJsxConstructor(context);
@@ -33109,9 +33113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
      * which also calls getSpreadType.
      */
-    function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode = CheckMode.Normal) {
-        const attributes = openingLikeElement.attributes;
-        const contextualType = getContextualType(attributes, ContextFlags.None);
+    function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxCallLike, checkMode: CheckMode = CheckMode.Normal) {
         const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
         let attributesTable = createSymbolTable();
         let spread: Type = emptyJsxObjectType;
@@ -33120,72 +33122,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let explicitlySpecifyChildrenAttribute = false;
         let objectFlags: ObjectFlags = ObjectFlags.JsxAttributes;
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
+        
+        const isJsxOpenFragment = isJsxOpeningFragment(openingLikeElement);
+        
+        let attributesSymbol: Symbol | undefined;
+        let attributeParent: Node = openingLikeElement;
+        if (!isJsxOpenFragment) {
+            const attributes = openingLikeElement.attributes;
+            attributesSymbol = attributes.symbol;
+            attributeParent = attributes;
+            const contextualType = getContextualType(attributes, ContextFlags.None);
+            for (const attributeDecl of attributes.properties) {
+                const member = attributeDecl.symbol;
+                if (isJsxAttribute(attributeDecl)) {
+                    const exprType = checkJsxAttribute(attributeDecl, checkMode);
+                    objectFlags |= getObjectFlags(exprType) & ObjectFlags.PropagatingFlags;
 
-        for (const attributeDecl of attributes.properties) {
-            const member = attributeDecl.symbol;
-            if (isJsxAttribute(attributeDecl)) {
-                const exprType = checkJsxAttribute(attributeDecl, checkMode);
-                objectFlags |= getObjectFlags(exprType) & ObjectFlags.PropagatingFlags;
-
-                const attributeSymbol = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
-                attributeSymbol.declarations = member.declarations;
-                attributeSymbol.parent = member.parent;
-                if (member.valueDeclaration) {
-                    attributeSymbol.valueDeclaration = member.valueDeclaration;
-                }
-                attributeSymbol.links.type = exprType;
-                attributeSymbol.links.target = member;
-                attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
-                allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
-                if (getEscapedTextOfJsxAttributeName(attributeDecl.name) === jsxChildrenPropertyName) {
-                    explicitlySpecifyChildrenAttribute = true;
-                }
-                if (contextualType) {
-                    const prop = getPropertyOfType(contextualType, member.escapedName);
-                    if (prop && prop.declarations && isDeprecatedSymbol(prop) && isIdentifier(attributeDecl.name)) {
-                        addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
+                    const attributeSymbol = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
+                    attributeSymbol.declarations = member.declarations;
+                    attributeSymbol.parent = member.parent;
+                    if (member.valueDeclaration) {
+                        attributeSymbol.valueDeclaration = member.valueDeclaration;
                     }
-                }
-                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
-                    const inferenceContext = getInferenceContext(attributes);
-                    Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
-                    const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
-                    addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType);
-                }
-            }
-            else {
-                Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
-                if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
-                    attributesTable = createSymbolTable();
-                }
-                const exprType = getReducedType(checkExpression(attributeDecl.expression, checkMode & CheckMode.Inferential));
-                if (isTypeAny(exprType)) {
-                    hasSpreadAnyType = true;
-                }
-                if (isValidSpreadType(exprType)) {
-                    spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
-                    if (allAttributesTable) {
-                        checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
+                    attributeSymbol.links.type = exprType;
+                    attributeSymbol.links.target = member;
+                    attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
+                    allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
+                    if (getEscapedTextOfJsxAttributeName(attributeDecl.name) === jsxChildrenPropertyName) {
+                        explicitlySpecifyChildrenAttribute = true;
+                    }
+                    if (contextualType) {
+                        const prop = getPropertyOfType(contextualType, member.escapedName);
+                        if (prop && prop.declarations && isDeprecatedSymbol(prop) && isIdentifier(attributeDecl.name)) {
+                            addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
+                        }
+                    }
+                    if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
+                        const inferenceContext = getInferenceContext(attributes);
+                        Debug.assert(inferenceContext); // In CheckMode.Inferential we should always have an inference context
+                        const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
+                        addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType);
                     }
                 }
                 else {
-                    error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                    typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
+                    Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
+                    if (attributesTable.size > 0) {
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
+                        attributesTable = createSymbolTable();
+                    }
+                    const exprType = getReducedType(checkExpression(attributeDecl.expression, checkMode & CheckMode.Inferential));
+                    if (isTypeAny(exprType)) {
+                        hasSpreadAnyType = true;
+                    }
+                    if (isValidSpreadType(exprType)) {
+                        spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
+                        if (allAttributesTable) {
+                            checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
+                        }
+                    }
+                    else {
+                        error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
+                        typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
+                    }
                 }
             }
-        }
 
-        if (!hasSpreadAnyType) {
-            if (attributesTable.size > 0) {
-                spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
+            if (!hasSpreadAnyType) {
+                if (attributesTable.size > 0) {
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
+                }
             }
         }
 
         // Handle children attribute
-        const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
+        const parent = openingLikeElement.parent;
+        // .kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement 
+            // : openingLikeElement.parent.kind === SyntaxKind.JsxFragment ? openingLikeElement.parent as JsxFragment : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
-        if (parent && parent.openingElement === openingLikeElement && getSemanticJsxChildren(parent.children).length > 0) {
+        if ((isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) && 
+            getSemanticJsxChildren(parent.children).length > 0
+        ) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
@@ -33193,10 +33209,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // This is because children element will overwrite the value from attributes.
                 // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
                 if (explicitlySpecifyChildrenAttribute) {
-                    error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
+                    error(attributeParent, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                 }
 
-                const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined);
+                const contextualType = isJsxOpeningElement(openingLikeElement) ? getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined) : undefined;
                 const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                 // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                 const childrenPropSymbol = createSymbol(SymbolFlags.Property, jsxChildrenPropertyName);
@@ -33205,11 +33221,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     createArrayType(getUnionType(childrenTypes));
                 // Fake up a property declaration for the children
                 childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
-                setParent(childrenPropSymbol.valueDeclaration, attributes);
+                setParent(childrenPropSymbol.valueDeclaration, attributeParent);
                 childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                 const childPropMap = createSymbolTable();
                 childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, emptyArray), attributes.symbol, objectFlags, /*readonly*/ false);
+                spread = getSpreadType(spread, createAnonymousType(attributesSymbol, childPropMap, emptyArray, emptyArray, emptyArray), attributesSymbol, objectFlags, /*readonly*/ false);
             }
         }
 
@@ -33228,7 +33244,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          */
         function createJsxAttributesType() {
             objectFlags |= ObjectFlags.FreshLiteral;
-            const result = createAnonymousType(attributes.symbol, attributesTable, emptyArray, emptyArray, emptyArray);
+            const result = createAnonymousType(attributesSymbol, attributesTable, emptyArray, emptyArray, emptyArray);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             return result;
         }
@@ -33443,7 +33459,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace);
     }
 
-    function getUninstantiatedJsxSignaturesOfType(elementType: Type, caller: JsxOpeningLikeElement): readonly Signature[] {
+    function getUninstantiatedJsxSignaturesOfType(elementType: Type, caller: JsxCallLike): readonly Signature[] {
         if (elementType.flags & TypeFlags.String) {
             return [anySignature];
         }
@@ -33623,11 +33639,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         markJsxAliasReferenced(node);
 
+        const sig = getResolvedSignature(node);
+        checkDeprecatedSignature(sig, node);
+
         if (isNodeOpeningLikeElement) {
             const jsxOpeningLikeNode = node;
-            const sig = getResolvedSignature(jsxOpeningLikeNode);
-            checkDeprecatedSignature(sig, node);
-
             const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
             if (elementTypeConstraint !== undefined) {
                 const tagName = jsxOpeningLikeNode.tagName;
@@ -34962,6 +34978,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasCorrectArity(node: CallLikeExpression, args: readonly Expression[], signature: Signature, signatureHelpTrailingComma = false) {
+        if (isJsxOpeningFragment(node)) return true;
+
         let argCount: number;
         let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
         let effectiveParameterCount = getParameterCount(signature);
@@ -35318,8 +35336,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param signature a candidate signature we are trying whether it is a call signature
      * @param relation a relationship to check parameter and argument type
      */
-    function checkApplicableSignatureForJsxOpeningLikeElement(
-        node: JsxOpeningLikeElement,
+    function checkApplicableSignatureForJsxCallLikeElement(
+        node: JsxCallLike,
         signature: Signature,
         relation: Map<string, RelationComparisonResult>,
         checkMode: CheckMode,
@@ -35331,14 +35349,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
         // can be specified by users through attributes property.
         const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-        const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
+        const attributesType = isJsxOpeningFragment(node) ? createJsxAttributesTypeFromAttributesProperty(node) : checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
         const checkAttributesType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(attributesType) : attributesType;
         return checkTagNameDoesNotExpectTooManyArguments() && checkTypeRelatedToAndOptionallyElaborate(
             checkAttributesType,
             paramType,
             relation,
-            reportErrors ? node.tagName : undefined,
-            node.attributes,
+            reportErrors ? isJsxOpeningFragment(node) ? node : node.tagName : undefined,
+            isJsxOpeningFragment(node) ? undefined : node.attributes,
             /*headMessage*/ undefined,
             containingMessageChain,
             errorOutputContainer,
@@ -35406,10 +35424,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (reportErrors) {
-                const diag = createDiagnosticForNode(node.tagName, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, entityNameToString(node.tagName), absoluteMinArgCount, entityNameToString(factory), maxParamCount);
-                const tagNameDeclaration = getSymbolAtLocation(node.tagName)?.valueDeclaration;
+                const errorNode = isJsxOpeningFragment(node) ? node : node.tagName;
+                const errorEntityName = isJsxOpeningFragment(node) ? 'Fragment' : entityNameToString(node.tagName);
+                const diag = createDiagnosticForNode(errorNode, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, errorEntityName, absoluteMinArgCount, entityNameToString(factory), maxParamCount);
+                const tagNameDeclaration = isJsxOpeningFragment(node) ? getJSXFragmentType(node).symbol.valueDeclaration : getSymbolAtLocation(node.tagName)?.valueDeclaration;
                 if (tagNameDeclaration) {
-                    addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, entityNameToString(node.tagName)));
+                    addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, errorEntityName));
                 }
                 if (errorOutputContainer && errorOutputContainer.skipLogging) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
@@ -35438,8 +35458,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         inferenceContext: InferenceContext | undefined,
     ): readonly Diagnostic[] | undefined {
         const errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } = { errors: undefined, skipLogging: true };
-        if (isJsxOpeningLikeElement(node)) {
-            if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
+        if (isJsxCallLike(node)) {
+            if (!checkApplicableSignatureForJsxCallLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
                 Debug.assert(!reportErrors || !!errorOutputContainer.errors, "jsx should have errors when reporting errors");
                 return errorOutputContainer.errors || emptyArray;
             }
@@ -35542,6 +35562,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Returns the effective arguments for an expression that works like a function invocation.
      */
     function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
+        if (isJsxOpeningFragment(node)) return emptyArray;
+
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             const template = node.template;
             const args: Expression[] = [createSyntheticExpression(template, getGlobalTemplateStringsArrayType())];
@@ -35820,41 +35842,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
+        const isJsxOpenFragment = isJsxOpeningFragment(node);
         const isInstanceof = node.kind === SyntaxKind.BinaryExpression;
         const reportErrors = !isInferencePartiallyBlocked && !candidatesOutArray;
-
-        let typeArguments: NodeArray<TypeNode> | undefined;
-
-        if (!isDecorator && !isInstanceof && !isSuperCall(node)) {
-            typeArguments = (node as CallExpression).typeArguments;
-
-            // We already perform checking on the type arguments on the class declaration itself.
-            if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || (node as CallExpression).expression.kind !== SyntaxKind.SuperKeyword) {
-                forEach(typeArguments, checkSourceElement);
-            }
-        }
-
-        const candidates = candidatesOutArray || [];
-        // reorderCandidates fills up the candidates array directly
-        reorderCandidates(signatures, candidates, callChainFlags);
-        Debug.assert(candidates.length, "Revert #54442 and add a testcase with whatever triggered this");
-
-        const args = getEffectiveCallArguments(node);
-
-        // The excludeArgument array contains true for each context sensitive argument (an argument
-        // is context sensitive it is susceptible to a one-time permanent contextual typing).
-        //
-        // The idea is that we will perform type argument inference & assignability checking once
-        // without using the susceptible parameters that are functions, and once more for those
-        // parameters, contextually typing each as we go along.
-        //
-        // For a tagged template, then the first argument be 'undefined' if necessary because it
-        // represents a TemplateStringsArray.
-        //
-        // For a decorator, no arguments are susceptible to contextual typing due to the fact
-        // decorators are applied to a declaration by the emitter, and not to an expression.
-        const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-        let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
@@ -35881,6 +35871,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let candidateForArgumentArityError: Signature | undefined;
         let candidateForTypeArgumentError: Signature | undefined;
         let result: Signature | undefined;
+        let argCheckMode = CheckMode.Normal;
+
+        // let args : readonly Expression[];
+        let candidates: Signature[] = [];
+        let typeArguments: NodeArray<TypeNode> | undefined;
+        // if (!isJsxOpenFragment) {
+        if (!isDecorator && !isInstanceof && !isSuperCall(node) && !isJsxOpenFragment) {
+            typeArguments = (node as CallExpression).typeArguments;
+
+            // We already perform checking on the type arguments on the class declaration itself.
+            if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || (node as CallExpression).expression.kind !== SyntaxKind.SuperKeyword) {
+                forEach(typeArguments, checkSourceElement);
+            }
+        }
+
+        candidates = candidatesOutArray || [];
+        // reorderCandidates fills up the candidates array directly
+        reorderCandidates(signatures, candidates, callChainFlags);
+        if (!isJsxOpenFragment) {
+            Debug.assert(candidates.length, "Revert #54442 and add a testcase with whatever triggered this");
+        }
+        const args = getEffectiveCallArguments(node);
+
+        // The excludeArgument array contains true for each context sensitive argument (an argument
+        // is context sensitive it is susceptible to a one-time permanent contextual typing).
+        //
+        // The idea is that we will perform type argument inference & assignability checking once
+        // without using the susceptible parameters that are functions, and once more for those
+        // parameters, contextually typing each as we go along.
+        //
+        // For a tagged template, then the first argument be 'undefined' if necessary because it
+        // represents a TemplateStringsArray.
+        //
+        // For a decorator, no arguments are susceptible to contextual typing due to the fact
+        // decorators are applied to a declaration by the emitter, and not to an expression.
+        const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
+        if (!isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive)) {
+            argCheckMode = CheckMode.SkipContextSensitive;
+        }
 
         // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
         // so we will only accept overloads with arity at least 1 higher than the current number of provided arguments.
@@ -36005,7 +36034,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
             }
-            else {
+            else if (!isJsxOpenFragment) {
                 const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                 if (signaturesWithCorrectTypeArgumentArity.length === 0) {
                     diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
@@ -36747,7 +36776,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessage);
     }
 
-    function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
+    function createSignatureForJSXIntrinsic(node: JsxCallLike, result: Type): Signature {
         const namespace = getJsxNamespaceAt(node);
         const exports = namespace && getExportsOfSymbol(namespace);
         // We fake up a SFC signature for each intrinsic, however a more specific per-element signature drawn from the JSX declaration
@@ -36769,23 +36798,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
-        if (isJsxIntrinsicTagName(node.tagName)) {
-            const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
-            const fakeSignature = createSignatureForJSXIntrinsic(node, result);
-            checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*inferenceContext*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
-            if (length(node.typeArguments)) {
-                forEach(node.typeArguments, checkSourceElement);
-                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), node.typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(node.typeArguments)));
+    function getJSXFragmentType(node: Node): Type {
+        // This function
+        const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+        const jsxFactorySymbol = resolveName(node, getJsxNamespace(node), SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
+        // Debug.assert(jsxFactorySymbol);
+
+        const reactExports = jsxFactorySymbol && getExportsOfSymbol(resolveAlias(jsxFactorySymbol));
+        const typeSymbol = reactExports && getSymbol(reactExports, ReactNames.Fragment, SymbolFlags.BlockScopedVariable);
+        // Debug.assert(typeSymbol);
+
+        const type = typeSymbol && getTypeOfSymbol(typeSymbol);
+        Debug.assert(type);
+        return type;
+    }
+
+    function resolveJsxOpeningLikeElement(node: JsxCallLike, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        const isJsxOpenFragment = isJsxOpeningFragment(node);
+        let exprTypes: Type;
+        if (!isJsxOpenFragment) {
+            if (isJsxIntrinsicTagName(node.tagName)) {
+                const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
+                const fakeSignature = createSignatureForJSXIntrinsic(node, result);
+                checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*inferenceContext*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
+                if (length(node.typeArguments)) {
+                    forEach(node.typeArguments, checkSourceElement);
+                    diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), node.typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(node.typeArguments)));
+                }
+                return fakeSignature;
             }
-            return fakeSignature;
+            exprTypes = checkExpression(node.tagName);
         }
-        const exprTypes = checkExpression(node.tagName);
+        else {
+            exprTypes = getJSXFragmentType(node);
+        }
         const apparentType = getApparentType(exprTypes);
         if (isErrorType(apparentType)) {
             return resolveErrorCall(node);
         }
-
         const signatures = getUninstantiatedJsxSignaturesOfType(exprTypes, node);
         if (isUntypedFunctionCall(exprTypes, apparentType, signatures.length, /*constructSignatures*/ 0)) {
             return resolveUntypedCall(node);
@@ -36793,7 +36843,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (signatures.length === 0) {
             // We found no signatures at all, which is an error
-            error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
+            if (isJsxOpenFragment) {
+                error(node, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node));
+            }
+            else {
+                error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
+            }
             return resolveErrorCall(node);
         }
 
@@ -36855,6 +36910,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return resolveTaggedTemplateExpression(node, candidatesOutArray, checkMode);
             case SyntaxKind.Decorator:
                 return resolveDecorator(node, candidatesOutArray, checkMode);
+            case SyntaxKind.JsxOpeningFragment:
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return resolveJsxOpeningLikeElement(node, candidatesOutArray, checkMode);
@@ -52695,6 +52751,10 @@ namespace JsxNames {
     export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
     export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
     export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
+}
+
+namespace ReactNames {
+    export const Fragment = "Fragment" as __String;
 }
 
 function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) {

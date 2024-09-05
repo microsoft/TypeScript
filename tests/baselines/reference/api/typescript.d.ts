@@ -5099,7 +5099,7 @@ declare namespace ts {
     interface InstanceofExpression extends BinaryExpression {
         readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxCallLike | InstanceofExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
@@ -5135,6 +5135,7 @@ declare namespace ts {
         readonly closingElement: JsxClosingElement;
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    type JsxCallLike = JsxOpeningLikeElement | JsxOpeningFragment;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
     type JsxAttributeName = Identifier | JsxNamespacedName;
     type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
@@ -8747,6 +8748,7 @@ declare namespace ts {
     function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
     function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
+    function isJsxCallLike(node: Node): node is JsxCallLike;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
