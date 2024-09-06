@@ -16,9 +16,8 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/TS/Lib/tsc.js 
+/home/src/tslibs/TS/Lib/tsc.js --help
 Output::
-Version FakeTSVersion
 tsc: The TypeScript Compiler - Version FakeTSVersion
 
 [1mCOMMON COMMANDS[22m
@@ -65,11 +64,11 @@ Initializes a TypeScript project and creates a tsconfig.json file.
 [94m--project, -p[39m
 Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.
 
-[94m--build, -b[39m
-Build one or more projects and their dependencies, if out of date
-
 [94m--showConfig[39m
 Print the final configuration instead of building.
+
+[94m--build, -b[39m
+Build one or more projects and their dependencies, if out of date
 
 [1mCOMMON COMPILER OPTIONS[22m
 
@@ -162,4 +161,4 @@ You can learn about all of the compiler options at https://aka.ms/tsc
 
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success

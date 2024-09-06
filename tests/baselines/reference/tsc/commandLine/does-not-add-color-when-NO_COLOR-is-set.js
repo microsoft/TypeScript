@@ -65,11 +65,11 @@ Initializes a TypeScript project and creates a tsconfig.json file.
 --project, -p
 Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.
 
---build, -b
-Build one or more projects and their dependencies, if out of date
-
 --showConfig
 Print the final configuration instead of building.
+
+--build, -b
+Build one or more projects and their dependencies, if out of date
 
 COMMON COMPILER OPTIONS
 

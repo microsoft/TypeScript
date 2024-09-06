@@ -299,4 +299,11 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         verifyNonIncremental({});
         verifyNonIncremental({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
     });
+
+    verifyTsc({
+        scenario: "commandLine",
+        subScenario: "help",
+        sys: () => TestServerHost.createWatchedSystem(ts.emptyArray),
+        commandLineArgs: ["--build", "--help"],
+    });
 });
