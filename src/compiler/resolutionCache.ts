@@ -1537,6 +1537,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
                 (failedLookupChecks ||= new Set()).add(fileOrDirectoryPath);
 
+                // Also any path that starts with this path should be added just in case if this is directory notification
+                // and we dont get any notification for file
+                (startsWithPathChecks ||= new Set()).add(fileOrDirectoryPath);
+
                 // If the invalidated file is from a node_modules package, invalidate everything else
                 // in the package since we might not get notifications for other files in the package.
                 // This hardens our logic against unreliable file watchers.

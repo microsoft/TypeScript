@@ -276,6 +276,20 @@ Before running Timeout callback:: count: 2
 6: timerToInvalidateFailedLookupResolutions
 7: timerToUpdateProgram
 
+After running Timeout callback:: count: 1
+Output::
+Scheduling update
+
+
+
+Timeout callback:: count: 1
+7: timerToUpdateProgram *deleted*
+8: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
@@ -285,22 +299,26 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts","/home/src/workspaces/project/src/app/services/generated/index.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-Reusing resolution of module './app/services/generated' from '/home/src/workspaces/project/src/main.ts' of old program, it was not resolved.
+======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
+Module resolution kind is not specified, using 'Node10'.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
+File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist.
+File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
+======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 Project: /home/src/workspaces/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/workspaces/project/src/app/services/generated/index.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
-[96msrc/main.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './app/services/generated' or its corresponding type declarations.
-
-[7m1[0m import { y } from "./app/services/generated";
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
+//// [/home/src/workspaces/project/src/main.js] file written with same contents
 //// [/home/src/workspaces/project/src/app/services/generated/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -331,10 +349,6 @@ FsWatchesRecursive::
 /home/src/workspaces/project/src:
   {}
 
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
 
 Program root files: [
   "/home/src/workspaces/project/src/main.ts",
@@ -349,13 +363,15 @@ Program options: {
 Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/project/src/main.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
+/home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/workspaces/project/src/app/services/generated/index.ts
+/home/src/workspaces/project/src/main.ts
 
 Shape signatures in builder refreshed for::
 /home/src/workspaces/project/src/app/services/generated/index.ts (computed .d.ts)
+/home/src/workspaces/project/src/main.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
