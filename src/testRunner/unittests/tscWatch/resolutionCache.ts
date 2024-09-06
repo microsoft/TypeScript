@@ -720,4 +720,41 @@ declare namespace NodeJS {
             },
         ],
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when dir watcher is invoked without file change",
+        commandLineArgs: ["--w", "--traceResolution", "--extendedDiagnostics"],
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/src/main.ts": dedent`
+                        import { y } from "./app/services/generated";
+                        const x = y;
+                    `,
+                "/home/src/workspaces/project/src/app/services/generated/index.ts": "export const y = 10;",
+                "/home/src/workspaces/project/tsconfig.json": "{}",
+            }),
+        edits: [
+            {
+                caption: "delete folder",
+                edit: sys => sys.deleteFolder("/home/src/workspaces/project/src/app/services/generated", /*recursive*/ true),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "generate folder",
+                edit: sys =>
+                    sys.ensureFileOrFolder({
+                        path: "/home/src/workspaces/project/src/app/services/generated/index.ts",
+                        content: "export const y = 10;",
+                    }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+        ],
+    });
 });
