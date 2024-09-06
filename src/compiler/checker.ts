@@ -352,6 +352,7 @@ import {
     getPropertyAssignmentAliasLikeExpression,
     getPropertyNameForPropertyNameNode,
     getPropertyNameFromType,
+    getRelativePathFromFile,
     getResolutionDiagnostic,
     getResolutionModeOverride,
     getResolveJsonModule,
@@ -414,6 +415,7 @@ import {
     hasSyntacticModifiers,
     hasType,
     HeritageClause,
+    hostGetCanonicalFileName,
     Identifier,
     identifierToKeywordKind,
     IdentifierTypePredicate,
@@ -692,6 +694,7 @@ import {
     isParenthesizedTypeNode,
     isPartOfParameterDeclaration,
     isPartOfTypeNode,
+    isPartOfTypeOnlyImportOrExportDeclaration,
     isPartOfTypeQuery,
     isPlainJsFile,
     isPrefixUnaryExpression,
@@ -992,6 +995,7 @@ import {
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     shouldPreserveConstEnums,
+    shouldRewriteModuleSpecifier,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -4655,6 +4659,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
                     error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
                 }
+            }
+            else if (
+                !(location.flags & NodeFlags.Ambient)
+                && !resolvedModule.resolvedUsingTsExtension
+                && shouldRewriteModuleSpecifier(moduleReference, compilerOptions)
+                && !isLiteralImportTypeNode(location)
+                && !isPartOfTypeOnlyImportOrExportDeclaration(location)
+            ) {
+                error(
+                    errorNode,
+                    Diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
+                    getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
+                );
             }
 
             if (sourceFile.symbol) {

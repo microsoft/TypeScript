@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/externalModules/rewriteRelativeImportExtensions/cjsErrors.ts] ////
+
+=== foo.ts/index.ts ===
+
+export {};
+
+=== index.ts ===
+
+import {} from "./foo.ts";
+

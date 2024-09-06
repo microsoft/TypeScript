@@ -182,6 +182,7 @@ import {
     setTypeNode,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
+    shouldRewriteModuleSpecifier,
     skipOuterExpressions,
     skipPartiallyEmittedExpressions,
     skipTrivia,
@@ -2283,7 +2284,7 @@ export function transformTypeScript(context: TransformationContext) {
     function rewriteModuleSpecifier(node: Expression): Expression;
     function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined;
     function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined {
-        if (!node || !compilerOptions.rewriteRelativeImportExtensions || !isStringLiteral(node) || !pathIsRelative(node.text) || isDeclarationFileName(node.text)) {
+        if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
             return node;
         }
         const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));

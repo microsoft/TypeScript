@@ -1,0 +1,11 @@
+index.ts(1,16): error TS2874: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "$0".
+
+
+==== foo.ts/index.ts (0 errors) ====
+    export {};
+    
+==== index.ts (1 errors) ====
+    import {} from "./foo.ts";
+                   ~~~~~~~~~~
+!!! error TS2874: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "$0".
+    
