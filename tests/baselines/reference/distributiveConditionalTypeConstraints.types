@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/distributiveConditionalTypeConstraints.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 2,500
+
 === distributiveConditionalTypeConstraints.ts ===
 type IsArray<T> = T extends unknown[] ? true : false;
 >IsArray : IsArray<T>
@@ -236,7 +239,7 @@ function test2<T extends A>(y: T extends B ? string : number) {
 >y : T extends B ? string : number
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    newY;  // number 
+    newY;  // number
 >newY : number
 >     : ^^^^^^
 }
@@ -311,5 +314,177 @@ function test4<T extends A>(y: T extends C ? string : number) {
     newY;  // string | number
 >newY : string | number
 >     : ^^^^^^^^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/59868
+
+type IsMatchingStringTwoLevels<T extends string> = T extends `a${string}`
+>IsMatchingStringTwoLevels : IsMatchingStringTwoLevels<T>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? T extends `${string}z`
+    ? true
+>true : true
+>     : ^^^^
+
+    : false
+>false : false
+>      : ^^^^^
+
+  : false;
+>false : false
+>      : ^^^^^
+
+function f5<S extends string>(x: IsMatchingStringTwoLevels<S>) {
+>f5 : <S extends string>(x: IsMatchingStringTwoLevels<S>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                            ^^^^^^^^^
+>x : IsMatchingStringTwoLevels<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  let t: true = x; // Error
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : boolean
+>  : ^^^^^^^
+
+  let f: false = x; // Error
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : boolean
+>  : ^^^^^^^
+}
+
+type IsMatchingStringTwoLevels2<T extends string> = T extends `a${string}`
+>IsMatchingStringTwoLevels2 : IsMatchingStringTwoLevels2<T>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ? 1
+  : T extends `${string}z`
+  ? 2
+  : 3;
+
+function f6<S extends string>(x: IsMatchingStringTwoLevels2<S>) {
+>f6 : <S extends string>(x: IsMatchingStringTwoLevels2<S>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                             ^^^^^^^^^
+>x : IsMatchingStringTwoLevels2<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  let t1: 1 = x; // Error
+>t1 : 1
+>   : ^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+
+  let t2: 2 = x; // Error
+>t2 : 2
+>   : ^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+
+  let t3: 3 = x; // Error
+>t3 : 3
+>   : ^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+
+  let t12: 1 | 2 = x; // Error
+>t12 : 1 | 2
+>    : ^^^^^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+
+  let t13: 1 | 3 = x; // Error
+>t13 : 1 | 3
+>    : ^^^^^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+
+  let t23: 2 | 3 = x; // Error
+>t23 : 2 | 3
+>    : ^^^^^
+>x : 1 | 2 | 3
+>  : ^^^^^^^^^
+}
+
+type IsMatchingStringTwoLevelsNoTailRecursion<T extends string> =
+>IsMatchingStringTwoLevelsNoTailRecursion : IsMatchingStringTwoLevelsNoTailRecursion<T>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends `a${string}` ? 1 : 2 | (T extends `${string}z` ? 3 : 4);
+
+function f7<S extends string>(x: IsMatchingStringTwoLevelsNoTailRecursion<S>) {
+>f7 : <S extends string>(x: IsMatchingStringTwoLevelsNoTailRecursion<S>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                                           ^^^^^^^^^
+>x : IsMatchingStringTwoLevelsNoTailRecursion<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  let t1: 1 | 2 | 4 = x; // Error
+>t1 : 1 | 2 | 4
+>   : ^^^^^^^^^
+>x : 1 | 2 | 3 | 4
+>  : ^^^^^^^^^^^^^
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType<T extends string> =
+>IsMatchingStringInfiniteRecursionInFalseType : IsMatchingStringInfiniteRecursionInFalseType<T>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends `a${string}`
+    ? true
+>true : true
+>     : ^^^^
+
+    : IsMatchingStringInfiniteRecursionInFalseType<T>;
+
+function f8<S extends string>(
+>f8 : <S extends string>(x: IsMatchingStringInfiniteRecursionInFalseType<S>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                                               ^^^^^^^^^
+
+  x: IsMatchingStringInfiniteRecursionInFalseType<S>,
+>x : IsMatchingStringInfiniteRecursionInFalseType<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  let t1: true = x; // Error
+>t1 : true
+>   : ^^^^
+>true : true
+>     : ^^^^
+>x : IsMatchingStringInfiniteRecursionInFalseType<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType2<T extends string> =
+>IsMatchingStringInfiniteRecursionInFalseType2 : IsMatchingStringInfiniteRecursionInFalseType2<T>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends `a${string}`
+    ? 1
+    : (2 | IsMatchingStringInfiniteRecursionInFalseType2<T>);
+
+function f9<S extends string>(
+>f9 : <S extends string>(x: IsMatchingStringInfiniteRecursionInFalseType2<S>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                                                ^^^^^^^^^
+
+  x: IsMatchingStringInfiniteRecursionInFalseType2<S>,
+>x : IsMatchingStringInfiniteRecursionInFalseType2<S>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  let t1: 1 = x; // Error
+>t1 : 1
+>   : ^
+>x : 1 | 2
+>  : ^^^^^
+
+  let t2: 2 = x; // Error
+>t2 : 2
+>   : ^
+>x : 1 | 2
+>  : ^^^^^
 }
 
