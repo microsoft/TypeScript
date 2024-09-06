@@ -304,11 +304,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json *default*
 
-Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
-	getDefaultProjectForFile:
-		/user/username/projects/myproject/tsconfig-src.json
-	findDefaultConfiguredProject:
-		/user/username/projects/myproject/tsconfig-src.json
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -316,7 +311,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 2,
       "type": "request"
@@ -325,7 +321,13 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/tsconfig-src.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/user/username/projects/myproject/tsconfig.json"
+          ],
+          "defaultProject": "/user/username/projects/myproject/tsconfig-src.json"
+        }
       },
       "responseRequired": true
     }

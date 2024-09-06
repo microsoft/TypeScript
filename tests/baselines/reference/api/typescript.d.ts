@@ -363,6 +363,10 @@ declare namespace ts {
                  * Indicate if the file name list of the project is needed
                  */
                 needFileNameList: boolean;
+                /**
+                 * if true returns details about default configured project calculation
+                 */
+                needDefaultConfiguredProjectInfo?: boolean;
             }
             /**
              * A request to get the project information of the current file.
@@ -387,6 +391,17 @@ declare namespace ts {
                 projectFileName: string;
             }
             /**
+             * Details about the default project for the file if tsconfig file is found
+             */
+            export interface DefaultConfiguredProjectInfo {
+                /** List of config files looked and did not match because file was not part of root file names */
+                notMatchedByConfig?: readonly string[];
+                /** List of projects which were loaded but file was not part of the project or is file from referenced project */
+                notInProject?: readonly string[];
+                /** Configured project used as default */
+                defaultProject?: string;
+            }
+            /**
              * Response message body for "projectInfo" request
              */
             export interface ProjectInfo {
@@ -403,6 +418,10 @@ declare namespace ts {
                  * Indicates if the project has a active language service instance
                  */
                 languageServiceDisabled?: boolean;
+                /**
+                 * Information about default project
+                 */
+                configuredProjectInfo?: DefaultConfiguredProjectInfo;
             }
             /**
              * Represents diagnostic info that includes location of diagnostic in two forms
@@ -3484,6 +3503,7 @@ declare namespace ts {
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
+            private getDefaultConfiguredProjectInfo;
             private getRenameInfo;
             private getProjects;
             private getDefaultProject;

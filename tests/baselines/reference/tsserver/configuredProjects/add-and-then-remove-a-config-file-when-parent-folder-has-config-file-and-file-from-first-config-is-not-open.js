@@ -325,7 +325,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile2.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 2,
       "type": "request"
@@ -334,7 +335,13 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notInProject": [
+            "/user/username/projects/myproject/folder/tsconfig.json"
+          ],
+          "defaultProject": "/user/username/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -1959,7 +1966,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile2.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 13,
       "type": "request"
@@ -1968,7 +1976,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/user/username/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -2125,7 +2136,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile2.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 14,
       "type": "request"
@@ -2134,7 +2146,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/user/username/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }

@@ -713,6 +713,8 @@ function isAncestorConfigFileInfo(infoOrFileNameOrConfig: OpenScriptInfoOrClosed
 export enum ConfiguredProjectLoadKind {
     FindOptimized,
     Find,
+    CreateReplayOptimized,
+    CreateReplay,
     CreateOptimized,
     Create,
     ReloadOptimized,
@@ -721,11 +723,13 @@ export enum ConfiguredProjectLoadKind {
 
 type ConguredProjectLoadFindCreateOrReload =
     | ConfiguredProjectLoadKind.Find
+    | ConfiguredProjectLoadKind.CreateReplay
     | ConfiguredProjectLoadKind.Create
     | ConfiguredProjectLoadKind.Reload;
 
 type ConguredProjectLoadFindCreateOrReloadOptimized =
     | ConfiguredProjectLoadKind.FindOptimized
+    | ConfiguredProjectLoadKind.CreateReplayOptimized
     | ConfiguredProjectLoadKind.CreateOptimized
     | ConfiguredProjectLoadKind.ReloadOptimized;
 
@@ -794,8 +798,7 @@ function forEachAncestorProjectLoad<T>(
                 configFileInfo: true,
                 isForDefaultProject: !searchOnlyPotentialSolution,
             },
-            kind === ConfiguredProjectLoadKind.Find ||
-                kind === ConfiguredProjectLoadKind.FindOptimized,
+            kind <= ConfiguredProjectLoadKind.CreateReplay,
         );
         if (!configFileName) return;
 
@@ -865,7 +868,7 @@ function forEachResolvedProjectReferenceProjectLoad<T>(
                 configFileExistenceInfo?.exists || project.resolvedChildConfigs?.has(childCanonicalConfigPath) ?
                     configFileExistenceInfo!.config!.parsedCommandLine : undefined :
                 project.getParsedCommandLine(childConfigName);
-            if (childConfig && loadKind !== kind) {
+            if (childConfig && loadKind !== kind && loadKind > ConfiguredProjectLoadKind.CreateReplayOptimized) {
                 // If this was found using find: ensure this is uptodate if looking for creating or reloading
                 childConfig = project.getParsedCommandLine(childConfigName);
             }
@@ -873,13 +876,20 @@ function forEachResolvedProjectReferenceProjectLoad<T>(
 
             // Find the project
             const childProject = project.projectService.findConfiguredProjectByProjectName(childConfigName, allowDeferredClosed);
+            // Ignore if we couldnt find child project or config file existence info
+            if (
+                loadKind === ConfiguredProjectLoadKind.CreateReplayOptimized &&
+                !configFileExistenceInfo &&
+                !childProject
+            ) return undefined;
             switch (loadKind) {
                 case ConfiguredProjectLoadKind.ReloadOptimized:
                     if (childProject) childProject.projectService.reloadConfiguredProjectOptimized(childProject, reason, reloadedProjects!);
                     // falls through
                 case ConfiguredProjectLoadKind.CreateOptimized:
                     (project.resolvedChildConfigs ??= new Set()).add(childCanonicalConfigPath);
-                    // falls through
+                // falls through
+                case ConfiguredProjectLoadKind.CreateReplayOptimized:
                 case ConfiguredProjectLoadKind.FindOptimized:
                     if (childProject || loadKind !== ConfiguredProjectLoadKind.FindOptimized) {
                         const result = cb(
@@ -930,6 +940,12 @@ function updateProjectFoundUsingFind(
     // This project was found using "Find" instead of the actually specified kind of "Create" or "Reload",
     // We need to update or reload this existing project before calling callback
     switch (kind) {
+        case ConfiguredProjectLoadKind.CreateReplayOptimized:
+        case ConfiguredProjectLoadKind.CreateReplay:
+            if (useConfigFileExistenceInfoForOptimizedLoading(project)) {
+                configFileExistenceInfo = project.projectService.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!;
+            }
+            break;
         case ConfiguredProjectLoadKind.CreateOptimized:
             configFileExistenceInfo = configFileExistenceInfoForOptimizedLoading(project);
             if (configFileExistenceInfo) break;
@@ -1077,9 +1093,21 @@ function configFileExistenceInfoForOptimizedLoading(project: ConfiguredProject) 
     project.resolvedChildConfigs = undefined;
     project.updateReferences(parsedCommandLine.projectReferences);
     // Composite can determine based on files themselves, no need to load project
-    if (parsedCommandLine.options.composite) return configFileExistenceInfo;
     // If solution, no need to load it to determine if file belongs to it
-    if (isSolutionConfig(parsedCommandLine)) return configFileExistenceInfo;
+    if (useConfigFileExistenceInfoForOptimizedLoading(project)) return configFileExistenceInfo;
+}
+
+function useConfigFileExistenceInfoForOptimizedLoading(project: ConfiguredProject) {
+    return !!project.parsedCommandLine &&
+        (!!project.parsedCommandLine.options.composite ||
+            // If solution, no need to load it to determine if file belongs to it
+            !!isSolutionConfig(project.parsedCommandLine));
+}
+
+function configFileExistenceInfoForOptimizedReplay(project: ConfiguredProject) {
+    return useConfigFileExistenceInfoForOptimizedLoading(project) ?
+        project.projectService.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)! :
+        undefined;
 }
 
 function fileOpenReason(info: ScriptInfo) {
@@ -2603,11 +2631,22 @@ export class ProjectService {
 
     /** @internal */
     findDefaultConfiguredProject(info: ScriptInfo) {
+        return this.findDefaultConfiguredProjectWorker(
+            info,
+            ConfiguredProjectLoadKind.Find,
+        )?.defaultProject;
+    }
+
+    /** @internal */
+    findDefaultConfiguredProjectWorker(
+        info: ScriptInfo,
+        kind: ConfiguredProjectLoadKind.Find | ConfiguredProjectLoadKind.CreateReplay,
+    ) {
         return info.isScriptOpen() ?
             this.tryFindDefaultConfiguredProjectForOpenScriptInfo(
                 info,
-                ConfiguredProjectLoadKind.Find,
-            )?.defaultProject :
+                kind,
+            ) :
             undefined;
     }
 
@@ -4360,7 +4399,12 @@ export class ProjectService {
         switch (kind) {
             case ConfiguredProjectLoadKind.FindOptimized:
             case ConfiguredProjectLoadKind.Find:
+            case ConfiguredProjectLoadKind.CreateReplay:
                 if (!project) return;
+                break;
+            case ConfiguredProjectLoadKind.CreateReplayOptimized:
+                if (!project) return;
+                configFileExistenceInfo = configFileExistenceInfoForOptimizedReplay(project);
                 break;
             case ConfiguredProjectLoadKind.CreateOptimized:
             case ConfiguredProjectLoadKind.Create:
@@ -4414,7 +4458,7 @@ export class ProjectService {
         /** Used with ConfiguredProjectLoadKind.Reload to check if this project was already reloaded */
         reloadedProjects?: ConfiguredProjectToAnyReloadKind,
     ): DefaultConfiguredProjectResult | undefined {
-        const configFileName = this.getConfigFileNameForFile(info, kind === ConfiguredProjectLoadKind.Find);
+        const configFileName = this.getConfigFileNameForFile(info, kind <= ConfiguredProjectLoadKind.CreateReplay);
         // If no config file name, no result
         if (!configFileName) return;
 
@@ -4508,6 +4552,7 @@ export class ProjectService {
             tsconfigProject: tsconfigOfDefault ?? tsconfigOfPossiblyDefault,
             sentConfigDiag,
             seenProjects,
+            seenConfigs,
         };
 
         function tryFindDefaultConfiguredProject(result: FindCreateOrLoadConfiguredProjectResult): ConfiguredProject | undefined {
@@ -4569,7 +4614,12 @@ export class ProjectService {
                     allowDeferredClosed,
                     info.fileName,
                     reloadedProjects,
-                )!;
+                );
+            if (!result) {
+                // Did no find existing project but thats ok, we will give information based on what we find
+                Debug.assert(kind === ConfiguredProjectLoadKind.CreateReplay);
+                return undefined;
+            }
             seenProjects.set(result.project, optimizedKind);
             if (result.sentConfigFileDiag) sentConfigDiag.add(result.project);
             return isDefaultProject(result.project, tsconfigProject);
@@ -4658,7 +4708,7 @@ export class ProjectService {
     ): DefaultConfiguredProjectResult | undefined;
     private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo(
         info: ScriptInfo,
-        kind: ConguredProjectLoadFindCreateOrReload,
+        kind: ConfiguredProjectLoadKind.Find | ConfiguredProjectLoadKind.Create | ConfiguredProjectLoadKind.Reload,
         reloadedProjects?: ConfiguredProjectToAnyReloadKind,
         delayReloadedConfiguredProjects?: Set<ConfiguredProject>,
     ): DefaultConfiguredProjectResult | undefined {

@@ -228,11 +228,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
-	getDefaultProjectForFile:
-		/dev/null/inferredProject1*
-	findDefaultConfiguredProject:
-		undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -240,7 +235,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 2,
       "type": "request"
@@ -249,7 +245,12 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/dev/null/inferredProject1*",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/user/username/projects/myproject/tsconfig.json"
+          ]
+        }
       },
       "responseRequired": true
     }

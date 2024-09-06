@@ -545,11 +545,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/home/src/projects/project/demos/tsconfig.json
-	findDefaultConfiguredProject:
-		/home/src/projects/project/demos/tsconfig.json
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -557,7 +552,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/home/src/projects/project/app/Component-demos.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 3,
       "type": "request"
@@ -566,7 +562,16 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/home/src/projects/project/demos/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/home/src/projects/project/app/tsconfig.json"
+          ],
+          "notInProject": [
+            "/home/src/projects/project/tsconfig.json"
+          ],
+          "defaultProject": "/home/src/projects/project/demos/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -926,11 +931,6 @@ ScriptInfos::
         /home/src/projects/project/demos/tsconfig.json
         /home/src/projects/random/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/home/src/projects/project/demos/tsconfig.json
-	findDefaultConfiguredProject:
-		/home/src/projects/project/demos/tsconfig.json
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -938,7 +938,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/home/src/projects/project/app/Component-demos.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 6,
       "type": "request"
@@ -947,7 +948,16 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/home/src/projects/project/demos/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/home/src/projects/project/app/tsconfig.json"
+          ],
+          "notInProject": [
+            "/home/src/projects/project/tsconfig.json"
+          ],
+          "defaultProject": "/home/src/projects/project/demos/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -1082,11 +1092,6 @@ ScriptInfos::
         /home/src/projects/project/demos/tsconfig.json
         /home/src/projects/random/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/home/src/projects/project/demos/tsconfig.json
-	findDefaultConfiguredProject:
-		undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1094,7 +1099,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/home/src/projects/project/app/Component-demos.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 8,
       "type": "request"
@@ -1366,9 +1372,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/random/tsconfig.json
-
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		undefined
-	findDefaultConfiguredProject:
-		undefined

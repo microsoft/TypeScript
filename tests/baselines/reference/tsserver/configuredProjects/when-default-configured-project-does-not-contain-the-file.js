@@ -1036,7 +1036,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/foo/lib/index.d.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 6,
       "type": "request"
@@ -1045,7 +1046,12 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/bar/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notInProject": [
+            "/user/username/projects/myproject/foo/tsconfig.json"
+          ]
+        }
       },
       "responseRequired": true
     }

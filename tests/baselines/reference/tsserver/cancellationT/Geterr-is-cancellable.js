@@ -258,7 +258,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/home/src/projects/myproject/app.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 4,
       "type": "request"
@@ -269,7 +270,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/home/src/projects/myproject/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/home/src/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }

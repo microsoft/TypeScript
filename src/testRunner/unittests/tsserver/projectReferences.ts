@@ -21,9 +21,6 @@ import {
 
 function logDefaultProjectAndDefaultConfiguredProject(session: TestSession, file: File) {
     const info = session.getProjectService().getScriptInfo(file.path);
-    const defaultProject = session.getProjectService().tryGetDefaultProjectForFile(file.path as ts.server.NormalizedPath);
-    const defaultConfiguredProject = info && session.getProjectService().findDefaultConfiguredProject(info);
-    session.logger.info(`File: ${file.path}:\n\tgetDefaultProjectForFile:\n\t\t${defaultProject?.projectName}\n\tfindDefaultConfiguredProject:\n\t\t${defaultConfiguredProject?.projectName}`);
     if (info) {
         const projectInfo = projectInfoForSession(session, file);
         return session.getProjectService().findProject(projectInfo.configFileName);
@@ -1728,7 +1725,7 @@ const b: B = new B();`,
         /* eslint-enable local/argument-trivia */
     });
 
-    describe("when file is not part of first config tree found", () => {
+    describe("when file is not part of first config tree found sheetal", () => {
         it("finds default project", () => {
             const { session, appDemo, baseline, verifyProjectManagement } = setup();
             verifyGetErrRequest({

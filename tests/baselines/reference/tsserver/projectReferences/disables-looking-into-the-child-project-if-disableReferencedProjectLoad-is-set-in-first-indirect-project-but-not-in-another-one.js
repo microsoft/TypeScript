@@ -397,11 +397,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json *default*
 
-Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
-	getDefaultProjectForFile:
-		/user/username/projects/myproject/tsconfig-src.json
-	findDefaultConfiguredProject:
-		/user/username/projects/myproject/tsconfig-src.json
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -409,7 +404,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 2,
       "type": "request"
@@ -418,7 +414,15 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/tsconfig-src.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/user/username/projects/myproject/tsconfig.json",
+            "/user/username/projects/myproject/tsconfig-indirect1.json",
+            "/user/username/projects/myproject/tsconfig-indirect2.json"
+          ],
+          "defaultProject": "/user/username/projects/myproject/tsconfig-src.json"
+        }
       },
       "responseRequired": true
     }
@@ -1226,18 +1230,6 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-indi
   }
  ]
 }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-src.json : {
- "rootNames": [
-  "/user/username/projects/myproject/src/main.ts",
-  "/user/username/projects/myproject/src/helpers/functions.ts"
- ],
- "options": {
-  "composite": true,
-  "outDir": "/user/username/projects/myproject/target",
-  "baseUrl": "/user/username/projects/myproject/src",
-  "configFilePath": "/user/username/projects/myproject/tsconfig-src.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
@@ -1252,6 +1244,18 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "User requested reload projects: Creating project referenced in solution /user/username/projects/myproject/tsconfig.json to find possible configured project for /user/username/projects/myproject/src/main.ts to open"
       }
     }
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-src.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/src/main.ts",
+  "/user/username/projects/myproject/src/helpers/functions.ts"
+ ],
+ "options": {
+  "composite": true,
+  "outDir": "/user/username/projects/myproject/target",
+  "baseUrl": "/user/username/projects/myproject/src",
+  "configFilePath": "/user/username/projects/myproject/tsconfig-src.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots

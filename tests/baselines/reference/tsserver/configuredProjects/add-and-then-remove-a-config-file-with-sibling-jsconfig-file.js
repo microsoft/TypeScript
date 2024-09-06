@@ -211,7 +211,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile1.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 2,
       "type": "request"
@@ -220,7 +221,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/folder/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/user/username/projects/myproject/folder/tsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -5821,7 +5825,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile1.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 46,
       "type": "request"
@@ -5854,7 +5859,12 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/dev/null/inferredProject8*",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notInProject": [
+            "/user/username/projects/myproject/folder/jsconfig.json"
+          ]
+        }
       },
       "responseRequired": true,
       "performanceData": {
@@ -5922,7 +5932,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile2.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 47,
       "type": "request"
@@ -5931,7 +5942,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/user/username/projects/myproject/folder/jsconfig.json"
+        }
       },
       "responseRequired": true
     }
@@ -6291,7 +6305,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile1.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 48,
       "type": "request"
@@ -6300,7 +6315,12 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/dev/null/inferredProject8*",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notInProject": [
+            "/user/username/projects/myproject/folder/jsconfig.json"
+          ]
+        }
       },
       "responseRequired": true
     }
@@ -6313,7 +6333,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/folder/commonFile2.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 49,
       "type": "request"
@@ -6322,7 +6343,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/user/username/projects/myproject/folder/jsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/user/username/projects/myproject/folder/jsconfig.json"
+        }
       },
       "responseRequired": true
     }

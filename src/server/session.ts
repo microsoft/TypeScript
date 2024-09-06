@@ -143,6 +143,7 @@ import {
     CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
+    ConfiguredProjectLoadKind,
     convertFormatOptions,
     convertScriptKindName,
     convertUserPreferences,
@@ -2039,18 +2040,61 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
-        return this.getProjectInfoWorker(args.file, args.projectFileName, args.needFileNameList, /*excludeConfigFiles*/ false);
+        return this.getProjectInfoWorker(
+            args.file,
+            args.projectFileName,
+            args.needFileNameList,
+            args.needDefaultConfiguredProjectInfo,
+            /*excludeConfigFiles*/ false,
+        );
     }
 
-    private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string | undefined, needFileNameList: boolean, excludeConfigFiles: boolean) {
+    private getProjectInfoWorker(
+        uncheckedFileName: string,
+        projectFileName: string | undefined,
+        needFileNameList: boolean,
+        needDefaultConfiguredProjectInfo: boolean | undefined,
+        excludeConfigFiles: boolean,
+    ): Omit<protocol.ProjectInfo, "fileNames"> & { fileNames?: NormalizedPath[]; } {
         const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName);
         updateProjectIfDirty(project);
         const projectInfo = {
             configFileName: project.getProjectName(),
             languageServiceDisabled: !project.languageServiceEnabled,
             fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined,
+            configuredProjectInfo: needDefaultConfiguredProjectInfo ? this.getDefaultConfiguredProjectInfo(uncheckedFileName) : undefined,
         };
         return projectInfo;
+    }
+
+    private getDefaultConfiguredProjectInfo(uncheckedFileName: string): protocol.DefaultConfiguredProjectInfo | undefined {
+        const info = this.projectService.getScriptInfo(uncheckedFileName);
+        if (!info) return;
+
+        // Find default project for the info
+        const result = this.projectService.findDefaultConfiguredProjectWorker(
+            info,
+            ConfiguredProjectLoadKind.CreateReplay,
+        );
+        if (!result) return undefined;
+        let notMatchedByConfig: NormalizedPath[] | undefined;
+        let notInProject: NormalizedPath[] | undefined;
+        result.seenProjects.forEach((kind, project) => {
+            if (project !== result.defaultProject) {
+                if (kind !== ConfiguredProjectLoadKind.CreateReplay) {
+                    (notMatchedByConfig ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+                else {
+                    (notInProject ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+            }
+        });
+        result.seenConfigs?.forEach(config => (notMatchedByConfig ??= []).push(config));
+        return {
+            notMatchedByConfig,
+            notInProject,
+            defaultProject: result.defaultProject && toNormalizedPath(result.defaultProject.getConfigFilePath()),
+        };
     }
 
     private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
@@ -3094,16 +3138,19 @@ export class Session<TMessage = string> implements EventSender {
             return;
         }
 
-        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
-        if (languageServiceDisabled) {
-            return;
-        }
+        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(
+            fileName,
+            /*projectFileName*/ undefined,
+            /*needFileNameList*/ true,
+            /*needDefaultConfiguredProjectInfo*/ undefined,
+            /*excludeConfigFiles*/ true,
+        );
+
+        if (languageServiceDisabled) return;
 
         // No need to analyze lib.d.ts
         const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
-        if (fileNamesInProject.length === 0) {
-            return;
-        }
+        if (fileNamesInProject.length === 0) return;
 
         // Sort the file name list to make the recently touched files come first
         const highPriorityFiles: NormalizedPath[] = [];

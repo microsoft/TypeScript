@@ -471,6 +471,7 @@ export function projectInfoForSession(
         arguments: {
             file: ts.isString(file) ? file : file.path,
             needFileNameList: false,
+            needDefaultConfiguredProjectInfo: true,
         },
     }).response as ts.server.protocol.ProjectInfo;
 }
