@@ -1895,12 +1895,11 @@ namespace Parser {
                         while (sourceFile.statements[pos].end < statement.end) {
                             pos++;
                         }
-                        const nonAwaitStatement = sourceFile.statements[pos];
-                        if (statement.end === nonAwaitStatement.pos) {
+                        if (sourceFile.statements[pos].pos === statement.end) {
                             // done reparsing this section
                             break;
                         }
-                        if (statement.end > nonAwaitStatement.pos) {
+                        if (sourceFile.statements[pos].pos < statement.end) {
                             // we ate into the next statement, so we must reparse it.
                             pos = findNextStatementWithoutAwait(sourceFile.statements, pos + 1);
                         }
