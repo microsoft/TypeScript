@@ -1882,6 +1882,7 @@ namespace Parser {
                 scanner.resetTokenState(nextStatement.pos);
                 nextToken();
 
+                reparse:
                 while (token() !== SyntaxKind.EndOfFileToken) {
                     const startPos = scanner.getTokenFullStart();
                     const statement = parseListElement(ParsingContext.SourceElements, parseStatement);
@@ -1894,6 +1895,9 @@ namespace Parser {
                         // skip all statements in range already completely consumed by the reparsed statement
                         while (sourceFile.statements[pos].end < statement.end) {
                             pos++;
+                            if (pos >= sourceFile.statements.length) {
+                                break reparse;
+                            }
                         }
                         if (sourceFile.statements[pos].pos === statement.end) {
                             // done reparsing this section
