@@ -31,7 +31,7 @@ function f2(_c) {
     var _a = _c._a, __b = _c.__b;
 }
 function f3(_c) {
-    var _a = _c[0], __b = _c[2];
+    var _a = _c[0], __b = (_c[1], _c[2]);
 }
 function f4() {
     var arg = [];

@@ -40,7 +40,7 @@ Object.defineProperty(exports, "arr", { enumerable: true, get: function () { ret
 var baz = foo_1.foo.bar, bat = foo_1.foo.bat, _a = foo_1.foo.bam.bork, ibar = _a.bar, ibaz = _a.baz;
 exports.baz = baz;
 exports.ibaz = ibaz;
-var one = foo_1.arr[1], _b = foo_1.arr[3], bee = _b[1], _c = _b[3], sec = _c[1].sec;
+var one = (foo_1.arr[0], foo_1.arr[1]), _b = (foo_1.arr[2], foo_1.arr[3]), bee = (_b[0], _b[1]), _c = (_b[2], _b[3]), sec = (_c[0], _c[1].sec);
 exports.one = one;
 exports.bee = bee;
 exports.sec = sec;

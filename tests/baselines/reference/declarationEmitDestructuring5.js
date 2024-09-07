@@ -9,19 +9,23 @@ function bar2([,,z, , , ]) { }
 
 //// [declarationEmitDestructuring5.js]
 function baz(_a) {
-    var z = _a[1];
+    var _b;
+    var z = (_b = (_a[0], _a[1]), _a[2], _b);
 }
 function foo(_a) {
-    var b = _a[1];
+    var b = (_a[0], _a[1]);
 }
 function bar(_a) {
-    var z = _a[0];
+    var _b;
+    var z = (_b = _a[0], _a[1], _a[2], _b);
 }
 function bar1(_a) {
-    var _b = _a === void 0 ? [1, 3, 4, 6, 7] : _a, z = _b[0];
+    var _b;
+    var _c = _a === void 0 ? [1, 3, 4, 6, 7] : _a, z = (_b = _c[0], _c[1], _c[2], _b);
 }
 function bar2(_a) {
-    var z = _a[2];
+    var _b;
+    var z = (_b = (_a[0], _a[1], _a[2]), _a[3], _a[4], _b);
 }
 
 

@@ -56,7 +56,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -70,7 +70,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
 5 >Emitted(2, 17) Source(7, 66) + SourceIndex(0)
 ---
->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[1], nameA = _c === void 0 ? "noName" : _c;
+>>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = (_b[0], _b[1]), nameA = _c === void 0 ? "noName" : _c;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^
 3 >                             ^
@@ -83,12 +83,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>                                                 ^
 11>                                                  ^^^^^
 12>                                                       ^^
-13>                                                         ^^^^^^^^^^
-14>                                                                   ^^
-15>                                                                     ^^^^^
-16>                                                                          ^^^^^^^^^^^^^^^^^^^
-17>                                                                                             ^^^^^^^^
-18>                                                                                                     ^^^^^
+13>                                                         ^^^^^^^^^^^^^^^^^^^
+14>                                                                            ^^
+15>                                                                              ^^^^^
+16>                                                                                   ^^^^^^^^^^^^^^^^^^^
+17>                                                                                                      ^^^^^^^^
+18>                                                                                                              ^^^^^
 1->
 2 >        [, nameA = "noName"]: Robot = 
 3 >                             [
@@ -102,11 +102,11 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 11>                                                  
 12>                                                       
 13>                                                         nameA = "noName"
-14>                                                                   
-15>                                                                     nameA
-16>                                                                           = 
-17>                                                                                             "noName"
-18>                                                                                                     
+14>                                                                            
+15>                                                                              nameA
+16>                                                                                    = 
+17>                                                                                                      "noName"
+18>                                                                                                              
 1->Emitted(3, 9) Source(7, 15) + SourceIndex(0)
 2 >Emitted(3, 30) Source(7, 45) + SourceIndex(0)
 3 >Emitted(3, 31) Source(7, 46) + SourceIndex(0)
@@ -119,12 +119,12 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 10>Emitted(3, 51) Source(7, 66) + SourceIndex(0)
 11>Emitted(3, 56) Source(7, 66) + SourceIndex(0)
 12>Emitted(3, 58) Source(7, 18) + SourceIndex(0)
-13>Emitted(3, 68) Source(7, 34) + SourceIndex(0)
-14>Emitted(3, 70) Source(7, 18) + SourceIndex(0)
-15>Emitted(3, 75) Source(7, 23) + SourceIndex(0)
-16>Emitted(3, 94) Source(7, 26) + SourceIndex(0)
-17>Emitted(3, 102) Source(7, 34) + SourceIndex(0)
-18>Emitted(3, 107) Source(7, 34) + SourceIndex(0)
+13>Emitted(3, 77) Source(7, 34) + SourceIndex(0)
+14>Emitted(3, 79) Source(7, 18) + SourceIndex(0)
+15>Emitted(3, 84) Source(7, 23) + SourceIndex(0)
+16>Emitted(3, 103) Source(7, 26) + SourceIndex(0)
+17>Emitted(3, 111) Source(7, 34) + SourceIndex(0)
+18>Emitted(3, 116) Source(7, 34) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^

@@ -10,6 +10,6 @@ export { a, b };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 // issue: https://github.com/Microsoft/TypeScript/issues/10778
-var _a = [1, 2, 3], a = _a[0], b = _a[2];
+var _a = [1, 2, 3], a = _a[0], b = (_a[1], _a[2]);
 exports.a = a;
 exports.b = b;

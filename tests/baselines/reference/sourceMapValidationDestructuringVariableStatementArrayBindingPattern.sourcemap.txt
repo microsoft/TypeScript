@@ -90,15 +90,16 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 11>Emitted(2, 40) Source(6, 47) + SourceIndex(0)
 12>Emitted(2, 41) Source(6, 48) + SourceIndex(0)
 ---
->>>var nameA = robotA[1];
+>>>var nameA = (robotA[0], robotA[1]);
 1 >
 2 >^^^^
 3 >    ^^^^^
-4 >         ^^^
-5 >            ^^^^^^
-6 >                  ^^^
-7 >                     ^
-8 >                      ^^^->
+4 >         ^^^^
+5 >             ^^^^^^
+6 >                   ^^^^^
+7 >                        ^^^^^^
+8 >                              ^^^^
+9 >                                  ^
 1 >
   >
   >
@@ -106,19 +107,23 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 2 >
 3 >    nameA
 4 >         ] = 
-5 >            robotA
-6 >                  
-7 >                     ] = robotA;
+5 >             robotA
+6 >                   
+7 >                        robotA
+8 >                              
+9 >                                  ] = robotA;
 1 >Emitted(3, 1) Source(9, 8) + SourceIndex(0)
 2 >Emitted(3, 5) Source(9, 8) + SourceIndex(0)
 3 >Emitted(3, 10) Source(9, 13) + SourceIndex(0)
-4 >Emitted(3, 13) Source(9, 17) + SourceIndex(0)
-5 >Emitted(3, 19) Source(9, 23) + SourceIndex(0)
-6 >Emitted(3, 22) Source(9, 13) + SourceIndex(0)
-7 >Emitted(3, 23) Source(9, 24) + SourceIndex(0)
+4 >Emitted(3, 14) Source(9, 17) + SourceIndex(0)
+5 >Emitted(3, 20) Source(9, 23) + SourceIndex(0)
+6 >Emitted(3, 25) Source(9, 17) + SourceIndex(0)
+7 >Emitted(3, 31) Source(9, 23) + SourceIndex(0)
+8 >Emitted(3, 35) Source(9, 13) + SourceIndex(0)
+9 >Emitted(3, 36) Source(9, 24) + SourceIndex(0)
 ---
 >>>var numberB = robotB[0];
-1->
+1 >
 2 >^^^^
 3 >    ^^^^^^^
 4 >           ^^^
@@ -126,7 +131,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 6 >                    ^^^
 7 >                       ^
 8 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >let [
 2 >
 3 >    numberB
@@ -134,7 +139,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 5 >              robotB
 6 >                    
 7 >                       ] = robotB;
-1->Emitted(4, 1) Source(10, 6) + SourceIndex(0)
+1 >Emitted(4, 1) Source(10, 6) + SourceIndex(0)
 2 >Emitted(4, 5) Source(10, 6) + SourceIndex(0)
 3 >Emitted(4, 12) Source(10, 13) + SourceIndex(0)
 4 >Emitted(4, 15) Source(10, 17) + SourceIndex(0)

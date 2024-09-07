@@ -132,22 +132,22 @@ var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
 var numberA3, robotAInfo, multiRobotAInfo;
 var i;
-for (_a = robotA[1], nameA = _a === void 0 ? "name" : _a, i = 0; i < 1; i++) {
+for (robotA[0], _a = robotA[1], nameA = _a === void 0 ? "name" : _a, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_b = getRobot(), _c = _b[1], nameA = _c === void 0 ? "name" : _c, i = 0; i < 1; i++) {
+for (_b = getRobot(), _b[0], _c = _b[1], nameA = _c === void 0 ? "name" : _c, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_d = [2, "trimmer", "trimming"], _e = _d[1], nameA = _e === void 0 ? "name" : _e, i = 0; i < 1; i++) {
+for (_d = [2, "trimmer", "trimming"], _d[0], _e = _d[1], nameA = _e === void 0 ? "name" : _e, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_f = multiRobotA[1], _g = _f === void 0 ? ["none", "none"] : _f, _h = _g[0], primarySkillA = _h === void 0 ? "primary" : _h, _j = _g[1], secondarySkillA = _j === void 0 ? "secondary" : _j, i = 0; i < 1; i++) {
+for (multiRobotA[0], _f = multiRobotA[1], _g = _f === void 0 ? ["none", "none"] : _f, _h = _g[0], primarySkillA = _h === void 0 ? "primary" : _h, _j = _g[1], secondarySkillA = _j === void 0 ? "secondary" : _j, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (_k = getMultiRobot(), _l = _k[1], _m = _l === void 0 ? ["none", "none"] : _l, _o = _m[0], primarySkillA = _o === void 0 ? "primary" : _o, _p = _m[1], secondarySkillA = _p === void 0 ? "secondary" : _p, i = 0; i < 1; i++) {
+for (_k = getMultiRobot(), _k[0], _l = _k[1], _m = _l === void 0 ? ["none", "none"] : _l, _o = _m[0], primarySkillA = _o === void 0 ? "primary" : _o, _p = _m[1], secondarySkillA = _p === void 0 ? "secondary" : _p, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (_q = ["trimmer", ["trimming", "edging"]], _r = _q[1], _s = _r === void 0 ? ["none", "none"] : _r, _t = _s[0], primarySkillA = _t === void 0 ? "primary" : _t, _u = _s[1], secondarySkillA = _u === void 0 ? "secondary" : _u, i = 0; i < 1; i++) {
+for (_q = ["trimmer", ["trimming", "edging"]], _q[0], _r = _q[1], _s = _r === void 0 ? ["none", "none"] : _r, _t = _s[0], primarySkillA = _t === void 0 ? "primary" : _t, _u = _s[1], secondarySkillA = _u === void 0 ? "secondary" : _u, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
 for (_v = robotA[0], numberB = _v === void 0 ? -1 : _v, i = 0; i < 1; i++) {

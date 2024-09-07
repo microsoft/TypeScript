@@ -119,9 +119,9 @@ var _j = __read(__spreadArray([], __read(temp), false), 2), c0 = _j[0], c1 = _j[
 var _k = __read([], 1), c2 = _k[0];
 var _l = __read([[[]], [[[[]]]]], 2), _m = __read(_l[0], 1), _o = __read(_m[0], 1), c3 = _o[0], _p = __read(_l[1], 1), _q = __read(_p[0], 1), _r = __read(_q[0], 1), _s = __read(_r[0], 1), c4 = _s[0];
 var _t = __read([[1], true], 2), _u = __read(_t[0], 1), c5 = _u[0], c6 = _t[1];
-var _v = __read([1, 2, 3], 2), c7 = _v[1];
-var _w = __read([1, 2, 3, 4], 4), c8 = _w[3];
-var _x = __read([1, 2, 3, 4], 4), c9 = _x[3];
-var _y = __read([1, 2, 3, 4, "hello"]), c10 = _y.slice(3);
+var _v = __read([1, 2, 3], 2), c7 = (_v[0], _v[1]);
+var _w = __read([1, 2, 3, 4], 4), c8 = (_w[0], _w[1], _w[2], _w[3]);
+var _x = __read([1, 2, 3, 4], 4), c9 = (_x[0], _x[1], _x[2], _x[3]);
+var _y = __read([1, 2, 3, 4, "hello"]), c10 = (_y[0], _y[1], _y[2], _y.slice(3));
 var _z = __read([1, 2, "string"]), c11 = _z[0], c12 = _z[1], c13 = _z.slice(2);
 var _0 = __read([1, 2, "string"], 3), c14 = _0[0], c15 = _0[1], c16 = _0[2];

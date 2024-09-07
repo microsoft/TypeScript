@@ -64,7 +64,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 10>                            ^^^^^^^^^^
 11>                                      ^
 12>                                       ^
-13>                                        ^^^^^^^^^^^^^^^^^^^->
+13>                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
@@ -91,42 +91,48 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 11>Emitted(2, 40) Source(6, 47) + SourceIndex(0)
 12>Emitted(2, 41) Source(6, 48) + SourceIndex(0)
 ---
->>>var _a = robotA[1], nameA = _a === void 0 ? "noName" : _a;
+>>>var _a = (robotA[0], robotA[1]), nameA = _a === void 0 ? "noName" : _a;
 1->
 2 >^^^^
-3 >    ^^^^^
-4 >         ^^^^^^
-5 >               ^^^
-6 >                  ^^
-7 >                    ^^^^^
-8 >                         ^^^^^^^^^^^^^^^^^^^
-9 >                                            ^^^^^^^^
-10>                                                    ^^^^^
-11>                                                         ^
+3 >    ^^^^^^
+4 >          ^^^^^^
+5 >                ^^^^^
+6 >                     ^^^^^^
+7 >                           ^^^^
+8 >                               ^^
+9 >                                 ^^^^^
+10>                                      ^^^^^^^^^^^^^^^^^^^
+11>                                                         ^^^^^^^^
+12>                                                                 ^^^^^
+13>                                                                      ^
 1->
   >
   >let [, 
 2 >
 3 >    nameA = "noName"] = 
-4 >         robotA
-5 >               
-6 >                  
-7 >                    nameA
-8 >                          = 
-9 >                                            "noName"
-10>                                                    
-11>                                                         ] = robotA;
+4 >          robotA
+5 >                
+6 >                     robotA
+7 >                           
+8 >                               
+9 >                                 nameA
+10>                                       = 
+11>                                                         "noName"
+12>                                                                 
+13>                                                                      ] = robotA;
 1->Emitted(3, 1) Source(8, 8) + SourceIndex(0)
 2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
-3 >Emitted(3, 10) Source(8, 28) + SourceIndex(0)
-4 >Emitted(3, 16) Source(8, 34) + SourceIndex(0)
-5 >Emitted(3, 19) Source(8, 24) + SourceIndex(0)
-6 >Emitted(3, 21) Source(8, 8) + SourceIndex(0)
-7 >Emitted(3, 26) Source(8, 13) + SourceIndex(0)
-8 >Emitted(3, 45) Source(8, 16) + SourceIndex(0)
-9 >Emitted(3, 53) Source(8, 24) + SourceIndex(0)
-10>Emitted(3, 58) Source(8, 24) + SourceIndex(0)
-11>Emitted(3, 59) Source(8, 35) + SourceIndex(0)
+3 >Emitted(3, 11) Source(8, 28) + SourceIndex(0)
+4 >Emitted(3, 17) Source(8, 34) + SourceIndex(0)
+5 >Emitted(3, 22) Source(8, 28) + SourceIndex(0)
+6 >Emitted(3, 28) Source(8, 34) + SourceIndex(0)
+7 >Emitted(3, 32) Source(8, 24) + SourceIndex(0)
+8 >Emitted(3, 34) Source(8, 8) + SourceIndex(0)
+9 >Emitted(3, 39) Source(8, 13) + SourceIndex(0)
+10>Emitted(3, 58) Source(8, 16) + SourceIndex(0)
+11>Emitted(3, 66) Source(8, 24) + SourceIndex(0)
+12>Emitted(3, 71) Source(8, 24) + SourceIndex(0)
+13>Emitted(3, 72) Source(8, 35) + SourceIndex(0)
 ---
 >>>var _b = robotB[0], numberB = _b === void 0 ? -1 : _b;
 1 >

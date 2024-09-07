@@ -363,13 +363,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 10>Emitted(13, 65) Source(21, 31) + SourceIndex(0)
 11>Emitted(13, 66) Source(21, 32) + SourceIndex(0)
 ---
->>>    var _a = robots_1[_i], nameA = _a[1];
+>>>    var _a = robots_1[_i], nameA = (_a[0], _a[1]);
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^^^^^^^
 4 >                         ^^
 5 >                           ^^^^^
-6 >                                ^^^^^^^^
+6 >                                ^^^^^^^^^^^^^^^^^
 1 >
 2 >    
 3 >        [, nameA]
@@ -381,7 +381,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 3 >Emitted(14, 26) Source(21, 19) + SourceIndex(0)
 4 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
 5 >Emitted(14, 33) Source(21, 18) + SourceIndex(0)
-6 >Emitted(14, 41) Source(21, 18) + SourceIndex(0)
+6 >Emitted(14, 50) Source(21, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -462,13 +462,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 12>Emitted(17, 58) Source(24, 36) + SourceIndex(0)
 13>Emitted(17, 59) Source(24, 37) + SourceIndex(0)
 ---
->>>    var _d = _c[_b], nameA = _d[1];
+>>>    var _d = _c[_b], nameA = (_d[0], _d[1]);
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^
 4 >                   ^^
 5 >                     ^^^^^
-6 >                          ^^^^^^^^
+6 >                          ^^^^^^^^^^^^^^^^^
 1 >
 2 >    
 3 >        [, nameA]
@@ -480,7 +480,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 3 >Emitted(18, 20) Source(24, 19) + SourceIndex(0)
 4 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
 5 >Emitted(18, 27) Source(24, 18) + SourceIndex(0)
-6 >Emitted(18, 35) Source(24, 18) + SourceIndex(0)
+6 >Emitted(18, 44) Source(24, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -567,13 +567,13 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 14>Emitted(21, 63) Source(27, 41) + SourceIndex(0)
 15>Emitted(21, 64) Source(27, 42) + SourceIndex(0)
 ---
->>>    var _g = _f[_e], nameA = _g[1];
+>>>    var _g = _f[_e], nameA = (_g[0], _g[1]);
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^
 4 >                   ^^
 5 >                     ^^^^^
-6 >                          ^^^^^^^^
+6 >                          ^^^^^^^^^^^^^^^^^
 1 >
 2 >    
 3 >        [, nameA]
@@ -585,7 +585,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 3 >Emitted(22, 20) Source(27, 19) + SourceIndex(0)
 4 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
 5 >Emitted(22, 27) Source(27, 18) + SourceIndex(0)
-6 >Emitted(22, 35) Source(27, 18) + SourceIndex(0)
+6 >Emitted(22, 44) Source(27, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -636,7 +636,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                                                         ^^^^
 10>                                                                             ^^
 11>                                                                               ^
-12>                                                                                ^^^^^^^^^^^^->
+12>                                                                                ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -661,40 +661,40 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 10>Emitted(25, 80) Source(30, 63) + SourceIndex(0)
 11>Emitted(25, 81) Source(30, 64) + SourceIndex(0)
 ---
->>>    var _j = multiRobots_1[_h], _k = _j[1], primarySkillA = _k[0], secondarySkillA = _k[1];
+>>>    var _j = multiRobots_1[_h], _k = (_j[0], _j[1]), primarySkillA = _k[0], secondarySkillA = _k[1];
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^^^^^^^^^^^^
 4 >                              ^^
-5 >                                ^^^^^^^^^^
-6 >                                          ^^
-7 >                                            ^^^^^^^^^^^^^
-8 >                                                         ^^^^^^^^
-9 >                                                                 ^^
-10>                                                                   ^^^^^^^^^^^^^^^
-11>                                                                                  ^^^^^^^^
+5 >                                ^^^^^^^^^^^^^^^^^^^
+6 >                                                   ^^
+7 >                                                     ^^^^^^^^^^^^^
+8 >                                                                  ^^^^^^^^
+9 >                                                                          ^^
+10>                                                                            ^^^^^^^^^^^^^^^
+11>                                                                                           ^^^^^^^^
 1->
 2 >    
 3 >        [, [primarySkillA, secondarySkillA]]
 4 >                              
 5 >                                [primarySkillA, secondarySkillA]
-6 >                                          
-7 >                                            primarySkillA
-8 >                                                         
-9 >                                                                 , 
-10>                                                                   secondarySkillA
-11>                                                                                  
+6 >                                                   
+7 >                                                     primarySkillA
+8 >                                                                  
+9 >                                                                          , 
+10>                                                                            secondarySkillA
+11>                                                                                           
 1->Emitted(26, 5) Source(30, 10) + SourceIndex(0)
 2 >Emitted(26, 9) Source(30, 10) + SourceIndex(0)
 3 >Emitted(26, 31) Source(30, 46) + SourceIndex(0)
 4 >Emitted(26, 33) Source(30, 13) + SourceIndex(0)
-5 >Emitted(26, 43) Source(30, 45) + SourceIndex(0)
-6 >Emitted(26, 45) Source(30, 14) + SourceIndex(0)
-7 >Emitted(26, 58) Source(30, 27) + SourceIndex(0)
-8 >Emitted(26, 66) Source(30, 27) + SourceIndex(0)
-9 >Emitted(26, 68) Source(30, 29) + SourceIndex(0)
-10>Emitted(26, 83) Source(30, 44) + SourceIndex(0)
-11>Emitted(26, 91) Source(30, 44) + SourceIndex(0)
+5 >Emitted(26, 52) Source(30, 45) + SourceIndex(0)
+6 >Emitted(26, 54) Source(30, 14) + SourceIndex(0)
+7 >Emitted(26, 67) Source(30, 27) + SourceIndex(0)
+8 >Emitted(26, 75) Source(30, 27) + SourceIndex(0)
+9 >Emitted(26, 77) Source(30, 29) + SourceIndex(0)
+10>Emitted(26, 92) Source(30, 44) + SourceIndex(0)
+11>Emitted(26, 100) Source(30, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -747,7 +747,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                        ^^^^
 12>                                                            ^^
 13>                                                              ^
-14>                                                               ^^^^^^^^^^^^^^^^^^->
+14>                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -776,40 +776,40 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 12>Emitted(29, 63) Source(33, 68) + SourceIndex(0)
 13>Emitted(29, 64) Source(33, 69) + SourceIndex(0)
 ---
->>>    var _o = _m[_l], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1];
+>>>    var _o = _m[_l], _p = (_o[0], _o[1]), primarySkillA = _p[0], secondarySkillA = _p[1];
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^
 4 >                   ^^
-5 >                     ^^^^^^^^^^
-6 >                               ^^
-7 >                                 ^^^^^^^^^^^^^
-8 >                                              ^^^^^^^^
-9 >                                                      ^^
-10>                                                        ^^^^^^^^^^^^^^^
-11>                                                                       ^^^^^^^^
+5 >                     ^^^^^^^^^^^^^^^^^^^
+6 >                                        ^^
+7 >                                          ^^^^^^^^^^^^^
+8 >                                                       ^^^^^^^^
+9 >                                                               ^^
+10>                                                                 ^^^^^^^^^^^^^^^
+11>                                                                                ^^^^^^^^
 1->
 2 >    
 3 >        [, [primarySkillA, secondarySkillA]]
 4 >                   
 5 >                     [primarySkillA, secondarySkillA]
-6 >                               
-7 >                                 primarySkillA
-8 >                                              
-9 >                                                      , 
-10>                                                        secondarySkillA
-11>                                                                       
+6 >                                        
+7 >                                          primarySkillA
+8 >                                                       
+9 >                                                               , 
+10>                                                                 secondarySkillA
+11>                                                                                
 1->Emitted(30, 5) Source(33, 10) + SourceIndex(0)
 2 >Emitted(30, 9) Source(33, 10) + SourceIndex(0)
 3 >Emitted(30, 20) Source(33, 46) + SourceIndex(0)
 4 >Emitted(30, 22) Source(33, 13) + SourceIndex(0)
-5 >Emitted(30, 32) Source(33, 45) + SourceIndex(0)
-6 >Emitted(30, 34) Source(33, 14) + SourceIndex(0)
-7 >Emitted(30, 47) Source(33, 27) + SourceIndex(0)
-8 >Emitted(30, 55) Source(33, 27) + SourceIndex(0)
-9 >Emitted(30, 57) Source(33, 29) + SourceIndex(0)
-10>Emitted(30, 72) Source(33, 44) + SourceIndex(0)
-11>Emitted(30, 80) Source(33, 44) + SourceIndex(0)
+5 >Emitted(30, 41) Source(33, 45) + SourceIndex(0)
+6 >Emitted(30, 43) Source(33, 14) + SourceIndex(0)
+7 >Emitted(30, 56) Source(33, 27) + SourceIndex(0)
+8 >Emitted(30, 64) Source(33, 27) + SourceIndex(0)
+9 >Emitted(30, 66) Source(33, 29) + SourceIndex(0)
+10>Emitted(30, 81) Source(33, 44) + SourceIndex(0)
+11>Emitted(30, 89) Source(33, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -864,7 +864,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 13>                                                                  ^^^^
 14>                                                                      ^^
 15>                                                                        ^
-16>                                                                         ^^^^^^^^->
+16>                                                                         ^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -897,40 +897,40 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 14>Emitted(33, 73) Source(36, 78) + SourceIndex(0)
 15>Emitted(33, 74) Source(36, 79) + SourceIndex(0)
 ---
->>>    var _s = _r[_q], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
+>>>    var _s = _r[_q], _t = (_s[0], _s[1]), primarySkillA = _t[0], secondarySkillA = _t[1];
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^
 4 >                   ^^
-5 >                     ^^^^^^^^^^
-6 >                               ^^
-7 >                                 ^^^^^^^^^^^^^
-8 >                                              ^^^^^^^^
-9 >                                                      ^^
-10>                                                        ^^^^^^^^^^^^^^^
-11>                                                                       ^^^^^^^^
+5 >                     ^^^^^^^^^^^^^^^^^^^
+6 >                                        ^^
+7 >                                          ^^^^^^^^^^^^^
+8 >                                                       ^^^^^^^^
+9 >                                                               ^^
+10>                                                                 ^^^^^^^^^^^^^^^
+11>                                                                                ^^^^^^^^
 1->
 2 >    
 3 >        [, [primarySkillA, secondarySkillA]]
 4 >                   
 5 >                     [primarySkillA, secondarySkillA]
-6 >                               
-7 >                                 primarySkillA
-8 >                                              
-9 >                                                      , 
-10>                                                        secondarySkillA
-11>                                                                       
+6 >                                        
+7 >                                          primarySkillA
+8 >                                                       
+9 >                                                               , 
+10>                                                                 secondarySkillA
+11>                                                                                
 1->Emitted(34, 5) Source(36, 10) + SourceIndex(0)
 2 >Emitted(34, 9) Source(36, 10) + SourceIndex(0)
 3 >Emitted(34, 20) Source(36, 46) + SourceIndex(0)
 4 >Emitted(34, 22) Source(36, 13) + SourceIndex(0)
-5 >Emitted(34, 32) Source(36, 45) + SourceIndex(0)
-6 >Emitted(34, 34) Source(36, 14) + SourceIndex(0)
-7 >Emitted(34, 47) Source(36, 27) + SourceIndex(0)
-8 >Emitted(34, 55) Source(36, 27) + SourceIndex(0)
-9 >Emitted(34, 57) Source(36, 29) + SourceIndex(0)
-10>Emitted(34, 72) Source(36, 44) + SourceIndex(0)
-11>Emitted(34, 80) Source(36, 44) + SourceIndex(0)
+5 >Emitted(34, 41) Source(36, 45) + SourceIndex(0)
+6 >Emitted(34, 43) Source(36, 14) + SourceIndex(0)
+7 >Emitted(34, 56) Source(36, 27) + SourceIndex(0)
+8 >Emitted(34, 64) Source(36, 27) + SourceIndex(0)
+9 >Emitted(34, 66) Source(36, 29) + SourceIndex(0)
+10>Emitted(34, 81) Source(36, 44) + SourceIndex(0)
+11>Emitted(34, 89) Source(36, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^

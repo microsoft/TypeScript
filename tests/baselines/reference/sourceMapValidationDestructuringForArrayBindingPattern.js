@@ -104,22 +104,22 @@ var multiRobotB = ["trimmer", ["trimming", "edging"]];
 function getMultiRobot() {
     return multiRobotA;
 }
-for (var nameA = robotA[1], i = 0; i < 1; i++) {
+for (var nameA = (robotA[0], robotA[1]), i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _a = getRobot(), nameA = _a[1], i = 0; i < 1; i++) {
+for (var _a = getRobot(), nameA = (_a[0], _a[1]), i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _b = [2, "trimmer", "trimming"], nameA = _b[1], i = 0; i < 1; i++) {
+for (var _b = [2, "trimmer", "trimming"], nameA = (_b[0], _b[1]), i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _c = multiRobotA[1], primarySkillA = _c[0], secondarySkillA = _c[1], i = 0; i < 1; i++) {
+for (var _c = (multiRobotA[0], multiRobotA[1]), primarySkillA = _c[0], secondarySkillA = _c[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (var _d = getMultiRobot(), _e = _d[1], primarySkillA = _e[0], secondarySkillA = _e[1], i = 0; i < 1; i++) {
+for (var _d = getMultiRobot(), _e = (_d[0], _d[1]), primarySkillA = _e[0], secondarySkillA = _e[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (var _f = ["trimmer", ["trimming", "edging"]], _g = _f[1], primarySkillA = _g[0], secondarySkillA = _g[1], i = 0; i < 1; i++) {
+for (var _f = ["trimmer", ["trimming", "edging"]], _g = (_f[0], _f[1]), primarySkillA = _g[0], secondarySkillA = _g[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
 for (var numberB = robotA[0], i = 0; i < 1; i++) {

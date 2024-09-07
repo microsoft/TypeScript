@@ -102,34 +102,39 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 13>Emitted(2, 54) Source(6, 73) + SourceIndex(0)
 14>Emitted(2, 55) Source(6, 74) + SourceIndex(0)
 ---
->>>var skillA = multiRobotA[1];
+>>>var skillA = (multiRobotA[0], multiRobotA[1]);
 1 >
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^^^^^^^^^^
-6 >                        ^^^
-7 >                           ^
-8 >                            ^->
+4 >          ^^^^
+5 >              ^^^^^^^^^^^
+6 >                         ^^^^^
+7 >                              ^^^^^^^^^^^
+8 >                                         ^^^^
+9 >                                             ^
 1 >
   >
   >let [, 
 2 >
 3 >    skillA
 4 >          ] = 
-5 >             multiRobotA
-6 >                        
-7 >                           ] = multiRobotA;
+5 >              multiRobotA
+6 >                         
+7 >                              multiRobotA
+8 >                                         
+9 >                                             ] = multiRobotA;
 1 >Emitted(3, 1) Source(8, 8) + SourceIndex(0)
 2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
 3 >Emitted(3, 11) Source(8, 14) + SourceIndex(0)
-4 >Emitted(3, 14) Source(8, 18) + SourceIndex(0)
-5 >Emitted(3, 25) Source(8, 29) + SourceIndex(0)
-6 >Emitted(3, 28) Source(8, 14) + SourceIndex(0)
-7 >Emitted(3, 29) Source(8, 30) + SourceIndex(0)
+4 >Emitted(3, 15) Source(8, 18) + SourceIndex(0)
+5 >Emitted(3, 26) Source(8, 29) + SourceIndex(0)
+6 >Emitted(3, 31) Source(8, 18) + SourceIndex(0)
+7 >Emitted(3, 42) Source(8, 29) + SourceIndex(0)
+8 >Emitted(3, 46) Source(8, 14) + SourceIndex(0)
+9 >Emitted(3, 47) Source(8, 30) + SourceIndex(0)
 ---
 >>>var nameMB = multiRobotB[0];
-1->
+1 >
 2 >^^^^
 3 >    ^^^^^^
 4 >          ^^^
@@ -137,7 +142,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 6 >                        ^^^
 7 >                           ^
 8 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >let [
 2 >
 3 >    nameMB
@@ -145,7 +150,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 5 >             multiRobotB
 6 >                        
 7 >                           ] = multiRobotB;
-1->Emitted(4, 1) Source(9, 6) + SourceIndex(0)
+1 >Emitted(4, 1) Source(9, 6) + SourceIndex(0)
 2 >Emitted(4, 5) Source(9, 6) + SourceIndex(0)
 3 >Emitted(4, 11) Source(9, 12) + SourceIndex(0)
 4 >Emitted(4, 14) Source(9, 16) + SourceIndex(0)

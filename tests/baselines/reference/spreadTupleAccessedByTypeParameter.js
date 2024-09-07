@@ -15,6 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = test;
 function test(singletons, i) {
     var singleton = singletons[i];
-    var rest = singleton.slice(1);
+    var rest = (singleton[0], singleton.slice(1));
     return rest;
 }
