@@ -1,57 +1,74 @@
-currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: true
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/project/shared.ts]
+//// [/home/src/projects/project/shared.ts]
 import {foo_a} from "foo";
 
 
-//// [/project/a/tsconfig.json]
+//// [/home/src/projects/project/a/tsconfig.json]
 { "compilerOptions": { "paths": { "foo": ["./foo.d.ts"] } }, "files": ["./index.ts", "./foo.d.ts"] }
 
-//// [/project/a/foo.d.ts]
+//// [/home/src/projects/project/a/foo.d.ts]
 export const foo_a = 1;
 
 
-//// [/project/a/index.ts]
+//// [/home/src/projects/project/a/index.ts]
 import "../shared";
 
-//// [/project/b/tsconfig.json]
+//// [/home/src/projects/project/b/tsconfig.json]
 { "compilerOptions": { "paths": { "foo": ["./foo.d.ts"] } }, "files": ["./index.ts", "./foo.d.ts"] }
 
-//// [/project/b/foo.d.ts]
+//// [/home/src/projects/project/b/foo.d.ts]
 export const foo_b = 1;
 
 
-//// [/project/b/index.ts]
+//// [/home/src/projects/project/b/index.ts]
 import "../shared";
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/project/a/index.ts"
+        "file": "/home/src/projects/project/a/index.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a/index.ts ProjectRootPath: undefined:: Result: /project/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /project/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/tsconfig.json 2000 undefined Project: /project/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/a/tsconfig.json, currentDirectory: /home/src/projects/project/a
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/project/a/tsconfig.json",
-        "reason": "Creating possible configured project for /project/a/index.ts to open"
+        "projectName": "/home/src/projects/project/a/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/a/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /project/a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/tsconfig.json : {
  "rootNames": [
-  "/project/a/index.ts",
-  "/project/a/foo.d.ts"
+  "/home/src/projects/project/a/index.ts",
+  "/home/src/projects/project/a/foo.d.ts"
  ],
  "options": {
   "paths": {
@@ -59,22 +76,31 @@ Info seq  [hh:mm:ss:mss] Config: /project/a/tsconfig.json : {
     "./foo.d.ts"
    ]
   },
-  "pathsBasePath": "/project/a",
-  "configFilePath": "/project/a/tsconfig.json"
+  "pathsBasePath": "/home/src/projects/project/a",
+  "configFilePath": "/home/src/projects/project/a/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/foo.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/shared.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/lib.d.ts 500 undefined Project: /project/a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/project/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/project/a/foo.d.ts Text-1 "export const foo_a = 1;\n"
-	/project/shared.ts Text-1 "import {foo_a} from \"foo\";\n"
-	/project/a/index.ts SVC-1-0 "import \"../shared\";"
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/foo.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/shared.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/a/foo.d.ts Text-1 "export const foo_a = 1;\n"
+	/home/src/projects/project/shared.ts Text-1 "import {foo_a} from \"foo\";\n"
+	/home/src/projects/project/a/index.ts SVC-1-0 "import \"../shared\";"
 
 
+	../../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	foo.d.ts
 	  Imported via "foo" from file '../shared.ts'
 	  Part of 'files' list in tsconfig.json
@@ -90,7 +116,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/project/a/tsconfig.json"
+        "projectName": "/home/src/projects/project/a/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -101,7 +127,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "8382422079dee6b4fb34f2ab2d40007086e862bfc0a8280c00ed7422516632a7",
+          "projectId": "46252e13e72e315e6b1dedef64ce02f5003545991770234f0ee355610cb28667",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -111,8 +137,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 46,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 24,
+            "dts": 2,
+            "dtsSize": 437,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -142,64 +168,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/project/a/index.ts",
-        "configFile": "/project/a/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/project/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/home/src/projects/project/a/index.ts",
+        "configFile": "/home/src/projects/project/a/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/project/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /project/a/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -214,36 +194,46 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/project/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/project/a/foo.d.ts: *new*
+/home/src/projects/project/a/foo.d.ts: *new*
   {}
-/project/a/tsconfig.json: *new*
+/home/src/projects/project/a/tsconfig.json: *new*
   {}
-/project/shared.ts: *new*
+/home/src/projects/project/shared.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 Projects::
-/project/a/tsconfig.json (Configured) *new*
+/home/src/projects/project/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/project/a/foo.d.ts *new*
+/home/src/projects/project/a/foo.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /project/a/tsconfig.json
-/project/a/index.ts (Open) *new*
+        /home/src/projects/project/a/tsconfig.json
+/home/src/projects/project/a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/a/tsconfig.json *default*
-/project/shared.ts *new*
+        /home/src/projects/project/a/tsconfig.json *default*
+/home/src/projects/project/shared.ts *new*
     version: Text-1
     containingProjects: 1
-        /project/a/tsconfig.json
+        /home/src/projects/project/a/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/a/tsconfig.json
 
 Before request
 
@@ -251,28 +241,28 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/project/b/index.ts"
+        "file": "/home/src/projects/project/b/index.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/b/index.ts ProjectRootPath: undefined:: Result: /project/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /project/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/b/tsconfig.json 2000 undefined Project: /project/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/b/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/b/tsconfig.json, currentDirectory: /home/src/projects/project/b
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/tsconfig.json 2000 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/project/b/tsconfig.json",
-        "reason": "Creating possible configured project for /project/b/index.ts to open"
+        "projectName": "/home/src/projects/project/b/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/b/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /project/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/b/tsconfig.json : {
  "rootNames": [
-  "/project/b/index.ts",
-  "/project/b/foo.d.ts"
+  "/home/src/projects/project/b/index.ts",
+  "/home/src/projects/project/b/foo.d.ts"
  ],
  "options": {
   "paths": {
@@ -280,21 +270,29 @@ Info seq  [hh:mm:ss:mss] Config: /project/b/tsconfig.json : {
     "./foo.d.ts"
    ]
   },
-  "pathsBasePath": "/project/b",
-  "configFilePath": "/project/b/tsconfig.json"
+  "pathsBasePath": "/home/src/projects/project/b",
+  "configFilePath": "/home/src/projects/project/b/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/b/foo.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/lib.d.ts 500 undefined Project: /project/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/project/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/project/b/foo.d.ts Text-1 "export const foo_b = 1;\n"
-	/project/shared.ts Text-1 "import {foo_a} from \"foo\";\n"
-	/project/b/index.ts SVC-1-0 "import \"../shared\";"
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/foo.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/b/foo.d.ts Text-1 "export const foo_b = 1;\n"
+	/home/src/projects/project/shared.ts Text-1 "import {foo_a} from \"foo\";\n"
+	/home/src/projects/project/b/index.ts SVC-1-0 "import \"../shared\";"
 
 
+	../../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	foo.d.ts
 	  Imported via "foo" from file '../shared.ts'
 	  Part of 'files' list in tsconfig.json
@@ -310,7 +308,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/project/b/tsconfig.json"
+        "projectName": "/home/src/projects/project/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -321,7 +319,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "ff748b7ad584af8ee55c62331d5f8d69532c7d7ce4527fe99ab7f6667a690c52",
+          "projectId": "12d5481057bdbc86f3fdf4eacf0490fc5694acf3db8d1f7545c8f4d4a37f2175",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -331,8 +329,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 46,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 24,
+            "dts": 2,
+            "dtsSize": 437,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -362,70 +360,24 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/project/b/index.ts",
-        "configFile": "/project/b/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/project/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/home/src/projects/project/b/index.ts",
+        "configFile": "/home/src/projects/project/b/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/project/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/project/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /project/a/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /project/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /project/b/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/b/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -440,54 +392,67 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/project/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/project/a/foo.d.ts:
+/home/src/projects/project/a/foo.d.ts:
   {}
-/project/a/tsconfig.json:
+/home/src/projects/project/a/tsconfig.json:
   {}
-/project/b/foo.d.ts: *new*
+/home/src/projects/project/b/foo.d.ts: *new*
   {}
-/project/b/tsconfig.json: *new*
+/home/src/projects/project/b/tsconfig.json: *new*
   {}
-/project/shared.ts:
+/home/src/projects/project/shared.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 Projects::
-/project/a/tsconfig.json (Configured)
+/home/src/projects/project/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/project/b/tsconfig.json (Configured) *new*
+/home/src/projects/project/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/project/a/foo.d.ts
+/home/src/projects/project/a/foo.d.ts
     version: Text-1
     containingProjects: 1
-        /project/a/tsconfig.json
-/project/a/index.ts (Open)
+        /home/src/projects/project/a/tsconfig.json
+/home/src/projects/project/a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/a/tsconfig.json *default*
-/project/b/foo.d.ts *new*
+        /home/src/projects/project/a/tsconfig.json *default*
+/home/src/projects/project/b/foo.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /project/b/tsconfig.json
-/project/b/index.ts (Open) *new*
+        /home/src/projects/project/b/tsconfig.json
+/home/src/projects/project/b/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/b/tsconfig.json *default*
-/project/shared.ts *changed*
+        /home/src/projects/project/b/tsconfig.json *default*
+/home/src/projects/project/shared.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /project/a/tsconfig.json
-        /project/b/tsconfig.json *new*
+        /home/src/projects/project/a/tsconfig.json
+        /home/src/projects/project/b/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /home/src/projects/project/a/tsconfig.json
+        /home/src/projects/project/b/tsconfig.json *new*
 
-Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/a/tsconfig.json:: 0
-Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/b/tsconfig.json:: 1
+Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /home/src/projects/project/a/tsconfig.json:: 0
+Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /home/src/projects/project/b/tsconfig.json:: 1
 Info seq  [hh:mm:ss:mss] ../shared.ts(1,9): error TS2724: '"foo"' has no exported member named 'foo_a'. Did you mean 'foo_b'?

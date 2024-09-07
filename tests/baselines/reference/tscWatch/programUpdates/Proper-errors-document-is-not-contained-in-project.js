@@ -1,9 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/app.ts]
+//// [/user/username/workspace/solution/projects/project/app.ts]
 
 
-//// [/a/lib/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,22 +18,21 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/a/b/tsconfig.json]
-{
 
-
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96ma/b/tsconfig.json[0m:[93m1[0m:[93m2[0m - [91merror[0m[90m TS1005: [0m'}' expected.
+[96mtsconfig.json[0m:[93m1[0m:[93m2[0m - [91merror[0m[90m TS1005: [0m'}' expected.
 
 [7m1[0m {
 [7m [0m [91m [0m
 
-  [96ma/b/tsconfig.json[0m:[93m1[0m:[93m1[0m
+  [96mtsconfig.json[0m:[93m1[0m:[93m1[0m
     [7m1[0m {
     [7m [0m [96m~[0m
     The parser expected to find a '}' to match the '{' token here.
@@ -39,41 +41,50 @@ Output::
 
 
 
-//// [/a/b/app.js]
+//// [/user/username/workspace/solution/projects/project/app.js]
 
 
+
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/app.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/a/b/app.ts"
+  "/user/username/workspace/solution/projects/project/app.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/app.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/app.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

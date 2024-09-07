@@ -1,11 +1,11 @@
 2:: with declaration should not emit anything
 Clean build tsbuildinfo will have compilerOptions with composite and declaration
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -54,7 +54,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -102,11 +102,11 @@ IncrementalBuild:
 6:: with emitDeclarationOnly should not emit anything
 Clean build tsbuildinfo will have compilerOptions with composite and emitDeclarationOnly
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -155,7 +155,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -203,11 +203,11 @@ IncrementalBuild:
 9:: with declaration should not emit anything
 Clean build tsbuildinfo will have compilerOptions with composite and declaration
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -256,7 +256,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },

@@ -1880,6 +1880,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
+                case SyntaxKind.NotEmittedTypeElement:
                     return;
             }
             if (isExpression(node)) {

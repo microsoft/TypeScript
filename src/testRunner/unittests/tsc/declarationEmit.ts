@@ -1,16 +1,14 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { forEachDeclarationEmitWithErrorsScenario } from "../helpers/declarationEmit.js";
 import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLink,
     isSymLink,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: declarationEmit::", () => {
@@ -30,21 +28,21 @@ describe("unittests:: tsc:: declarationEmit::", () => {
 
         function verifyDeclarationEmit({ subScenario, files, rootProject, changeCaseFileTestPath }: VerifyDeclarationEmitInput) {
             describe(subScenario, () => {
-                verifyTscWatch({
+                verifyTsc({
                     scenario: "declarationEmit",
                     subScenario,
-                    sys: () => createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
+                    sys: () => TestServerHost.createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
                     commandLineArgs: ["-p", rootProject, "--explainFiles"],
                 });
             });
 
             const caseChangeScenario = `${subScenario} moduleCaseChange`;
             describe(caseChangeScenario, () => {
-                verifyTscWatch({
+                verifyTsc({
                     scenario: "declarationEmit",
                     subScenario: caseChangeScenario,
                     sys: () =>
-                        createWatchedSystem(
+                        TestServerHost.createWatchedSystem(
                             files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
                             { currentDirectory: "/user/username/projects/myproject" },
                         ),
@@ -67,14 +65,14 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 return `import pluginTwo from "plugin-two"; // include this to add reference to symlink`;
             }
             function pluginOneAction() {
-                return Utils.dedent`
+                return dedent`
                     import { actionCreatorFactory } from "typescript-fsa"; // Include version of shared lib
                     const action = actionCreatorFactory("somekey");
                     const featureOne = action<{ route: string }>("feature-one");
                     export const actions = { featureOne };`;
             }
             function pluginTwoDts() {
-                return Utils.dedent`
+                return dedent`
                     declare const _default: {
                         features: {
                             featureOne: {
@@ -104,7 +102,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 });
             }
             function fsaIndex() {
-                return Utils.dedent`
+                return dedent`
                     export interface Action<Payload> {
                         type: string;
                         payload: Payload;
@@ -133,7 +131,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
-                    libFile,
                 ],
                 changeCaseFileTestPath: str => str.includes("/plugin-two"),
             });
@@ -163,7 +160,6 @@ ${pluginOneAction()}`,
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                     { path: `/temp/yarn/data/link/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
-                    libFile,
                 ],
                 changeCaseFileTestPath: str => str.includes("/plugin-two"),
             });
@@ -175,12 +171,12 @@ ${pluginOneAction()}`,
             files: [
                 {
                     path: `/user/username/projects/myproject/pkg1/dist/index.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             export * from './types';`,
                 },
                 {
                     path: `/user/username/projects/myproject/pkg1/dist/types.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             export declare type A = {
                                 id: string;
                             };
@@ -206,12 +202,12 @@ ${pluginOneAction()}`,
                 },
                 {
                     path: `/user/username/projects/myproject/pkg2/dist/index.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             export * from './types';`,
                 },
                 {
                     path: `/user/username/projects/myproject/pkg2/dist/types.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             export {MetadataAccessor} from '@raymondfeng/pkg1';`,
                 },
                 {
@@ -225,12 +221,12 @@ ${pluginOneAction()}`,
                 },
                 {
                     path: `/user/username/projects/myproject/pkg3/src/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             export * from './keys';`,
                 },
                 {
                     path: `/user/username/projects/myproject/pkg3/src/keys.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                             import {MetadataAccessor} from "@raymondfeng/pkg2";
                             export const ADMIN = MetadataAccessor.create<boolean>('1');`,
                 },
@@ -256,17 +252,16 @@ ${pluginOneAction()}`,
                     path: `/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2`,
                     symLink: `/user/username/projects/myproject/pkg2`,
                 },
-                libFile,
             ],
             changeCaseFileTestPath: str => str.includes("/pkg1"),
         });
     });
 
-    verifyTscWatch({
+    verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when using Windows paths and uppercase letters",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `D:\\Work\\pkg1\\package.json`,
                     content: jsonToReadableText({
@@ -315,7 +310,7 @@ ${pluginOneAction()}`,
                 },
                 {
                     path: `D:\\Work\\pkg1\\src\\main.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     import { PartialType } from './utils';
 
                     class Common {}
@@ -327,7 +322,7 @@ ${pluginOneAction()}`,
                 },
                 {
                     path: `D:\\Work\\pkg1\\src\\utils\\index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     import { MyType, MyReturnType } from './type-helpers';
 
                     export function PartialType<T>(classRef: MyType<T>) {
@@ -341,7 +336,7 @@ ${pluginOneAction()}`,
                 },
                 {
                     path: `D:\\Work\\pkg1\\src\\utils\\type-helpers.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export type MyReturnType = {
                         new (...args: any[]): any;
                     };
@@ -351,22 +346,21 @@ ${pluginOneAction()}`,
                     }
                 `,
                 },
-                libFile,
             ], { currentDirectory: "D:\\Work\\pkg1", windowsStyleRoot: "D:/" }),
         commandLineArgs: ["-p", "D:\\Work\\pkg1", "--explainFiles"],
     });
 
-    forEachDeclarationEmitWithErrorsScenario((scenarioName, fs) => {
+    forEachDeclarationEmitWithErrorsScenario((scenarioName, sys) => {
         verifyTsc({
             scenario: "declarationEmit",
             subScenario: scenarioName("reports dts generation errors"),
-            commandLineArgs: ["-p", `/src/project`, "--explainFiles", "--listEmittedFiles"],
-            fs,
+            commandLineArgs: ["--explainFiles", "--listEmittedFiles"],
+            sys,
             edits: [
                 noChangeRun,
                 {
                     ...noChangeRun,
-                    commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
+                    commandLineArgs: ["-b", "--explainFiles", "--listEmittedFiles", "-v"],
                 },
             ],
         });

@@ -1,34 +1,51 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/node_modules/memfs/package.json]
+//// [/user/username/projects/project/node_modules/memfs/package.json]
 {
   "name": "memfs",
   "version": "1.0.0",
   "types": "lib/index.d.ts"
 }
 
-//// [/node_modules/memfs/lib/index.d.ts]
+//// [/user/username/projects/project/node_modules/memfs/lib/index.d.ts]
 /// <reference types="node" />
 export declare class Volume {}
 
-//// [/node_modules/@types/node/package.json]
+//// [/user/username/projects/project/node_modules/@types/node/package.json]
 {
   "name": "@types/node",
   "version": "1.0.0"
 }
 
-//// [/node_modules/@types/node/index.d.ts]
+//// [/user/username/projects/project/node_modules/@types/node/index.d.ts]
 export declare class Stats {}
 
-//// [/package.json]
+//// [/user/username/projects/project/package.json]
 { "dependencies": { "memfs": "*" }, "devDependencies": { "@types/node": "*" } }
 
-//// [/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 { "compilerOptions": { "types": ["node"] }
 
-//// [/index.ts]
+//// [/user/username/projects/project/index.ts]
 export {};
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -59,65 +76,70 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/user/username/projects/project/index.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/tsconfig.json, currentDirectory: /user/username/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /index.ts to open"
+        "projectName": "/user/username/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json : {
  "rootNames": [
-  "/index.ts"
+  "/user/username/projects/project/index.ts"
  ],
  "options": {
   "types": [
    "node"
   ],
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/index.ts SVC-1-0 "export {};"
-	/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types/node/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/index.ts SVC-1-0 "export {};"
+	/user/username/projects/project/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
 	node_modules/@types/node/index.d.ts
 	  Entry point of type library 'node' specified in compilerOptions with packageId '@types/node/index.d.ts@1.0.0'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /user/username/projects/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/memfs/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/memfs/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/memfs/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
-	/node_modules/memfs/lib/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport declare class Volume {}"
+	/user/username/projects/project/node_modules/@types/node/index.d.ts Text-1 "export declare class Stats {}"
+	/user/username/projects/project/node_modules/memfs/lib/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport declare class Volume {}"
 
 
 	node_modules/@types/node/index.d.ts
@@ -132,7 +154,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/user/username/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -143,7 +165,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "ff5803d884ff4e4485901596e00c181622d4efba4fec19a41fe48adf94ccdf94",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -153,8 +175,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 10,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 29,
+            "dts": 2,
+            "dtsSize": 442,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -186,54 +208,9 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/index.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/user/username/projects/project/index.ts",
+        "configFile": "/user/username/projects/project/tsconfig.json",
         "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          },
           {
             "start": {
               "line": 1,
@@ -257,20 +234,20 @@ Info seq  [hh:mm:ss:mss] event:
                     "line": 1,
                     "offset": 2
                   },
-                  "file": "/tsconfig.json"
+                  "file": "/user/username/projects/project/tsconfig.json"
                 },
                 "message": "The parser expected to find a '}' to match the '{' token here.",
                 "category": "error",
                 "code": 1007
               }
             ],
-            "fileName": "/tsconfig.json"
+            "fileName": "/user/username/projects/project/tsconfig.json"
           }
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -278,8 +255,8 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -295,45 +272,51 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/node_modules/memfs/lib/package.json: *new*
+/user/username/projects/project/node_modules/memfs/lib/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/node_modules/@types/node/package.json: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/package.json: *new*
+/user/username/projects/project/node_modules/@types/node/package.json: *new*
   {}
-/tsconfig.json: *new*
+/user/username/projects/project/node_modules/memfs/package.json: *new*
+  {}
+/user/username/projects/project/package.json: *new*
+  {}
+/user/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/projects/project: *new*
   {}
-/node_modules: *new*
+/user/username/projects/project/node_modules: *new*
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *new*
+/user/username/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/index.ts (Open) *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/tsconfig.json
+/user/username/projects/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/node_modules/@types/node/index.d.ts *new*
+        /user/username/projects/project/tsconfig.json *default*
+/user/username/projects/project/node_modules/@types/node/index.d.ts *new*
     version: Text-1
     containingProjects: 2
-        /tsconfig.json
+        /user/username/projects/project/tsconfig.json
         /dev/null/autoImportProviderProject1*
-/node_modules/memfs/lib/index.d.ts *new*
+/user/username/projects/project/node_modules/memfs/lib/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -346,7 +329,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/user/username/projects/project/index.ts",
         "line": 0,
         "offset": 0
       },
@@ -442,6 +425,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -779,12 +768,12 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/@types/node/index",
+            "source": "/user/username/projects/project/node_modules/@types/node/index",
             "hasAction": true,
             "data": {
               "exportName": "Stats",
               "exportMapKey": "5 * Stats ",
-              "fileName": "/node_modules/@types/node/index.d.ts"
+              "fileName": "/user/username/projects/project/node_modules/@types/node/index.d.ts"
             }
           },
           {
@@ -792,13 +781,13 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "source": "/node_modules/memfs/lib/index",
+            "source": "/user/username/projects/project/node_modules/memfs/lib/index",
             "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Volume",
               "exportMapKey": "6 * Volume ",
-              "fileName": "/node_modules/memfs/lib/index.d.ts",
+              "fileName": "/user/username/projects/project/node_modules/memfs/lib/index.d.ts",
               "isPackageJsonImport": true
             }
           }

@@ -1,12 +1,12 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /a.js
+// @Filename: /home/src/workspaces/project/a.js
 //// export const /*end*/a = "a";
 
-// @Filename: /a.d.ts
+// @Filename: /home/src/workspaces/project/a.d.ts
 //// export declare const a: string;
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { a } from [|"./a"/*moduleSpecifier*/|];
 //// [|a/*identifier*/|]
 

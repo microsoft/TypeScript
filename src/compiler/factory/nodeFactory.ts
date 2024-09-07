@@ -332,6 +332,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -1007,6 +1008,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -6261,6 +6263,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.expression !== expression
             ? update(createPartiallyEmittedExpression(expression, node.original), node)
             : node;
+    }
+
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {

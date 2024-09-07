@@ -1,26 +1,28 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/file1.ts]
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+lib.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
+lib.decorators.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
+lib.decorators.legacy.d.ts-Text
+
+//// [/home/src/workspaces/project/file1.ts]
 export interface Test1 {}
 export interface Test2 {}
 export interface Test3 {}
 export interface Test4 {}
 
-//// [/file2.ts]
+//// [/home/src/workspaces/project/file2.ts]
 const a = 10;
 const b = 10;
 const c = 10;
 
-//// [/lib.d.ts]
-lib.d.ts-Text
-
-//// [/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
-//// [/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 { "files": ["file1.ts", "file2.ts"] }
 
 
@@ -29,53 +31,61 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/file2.ts"
+        "file": "/home/src/workspaces/project/file2.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /file2.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/file2.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /file2.ts to open"
+        "projectName": "/home/src/workspaces/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/file2.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
-  "/file1.ts",
-  "/file2.ts"
+  "/home/src/workspaces/project/file1.ts",
+  "/home/src/workspaces/project/file2.ts"
  ],
  "options": {
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
-	/file2.ts SVC-1-0 "const a = 10;\nconst b = 10;\nconst c = 10;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
+	/home/src/workspaces/project/file2.ts SVC-1-0 "const a = 10;\nconst b = 10;\nconst c = 10;"
 
 
-	lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	lib.decorators.d.ts
-	  Library referenced via 'decorators' from file 'lib.d.ts'
-	lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	file1.ts
 	  Part of 'files' list in tsconfig.json
 	file2.ts
@@ -88,7 +98,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -97,18 +107,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/file2.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/home/src/workspaces/project/file2.ts",
+        "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /file2.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/file2.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -122,44 +132,54 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/file1.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts: *new*
+/home/src/workspaces/project/file1.ts: *new*
   {"pollingInterval":500}
-/tsconfig.json: *new*
+/home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules: *new*
+  {}
+/home/src/workspaces/node_modules/@types: *new*
+  {}
+/home/src/workspaces/project/node_modules: *new*
+  {}
+/home/src/workspaces/project/node_modules/@types: *new*
+  {}
+
 Projects::
-/tsconfig.json (Configured) *new*
+/home/src/workspaces/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/file1.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file2.ts (Open) *new*
+        /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -207,7 +227,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/file2.ts",
+        "file": "/home/src/workspaces/project/file2.ts",
         "pastedText": [
           "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
         ],
@@ -226,15 +246,15 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getPasteEdits"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
-	/file2.ts SVC-1-1 "const a = 10;\nconst b = 10;\ninterface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }const c = 10;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
+	/home/src/workspaces/project/file2.ts SVC-1-1 "const a = 10;\nconst b = 10;\ninterface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }const c = 10;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
@@ -250,7 +270,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/file2.ts",
+            "fileName": "/home/src/workspaces/project/file2.ts",
             "textChanges": [
               {
                 "start": {
@@ -282,30 +302,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     autoImportProviderHost: false
 
 ScriptInfos::
-/file1.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file2.ts (Open) *changed*
+        /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/file1.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/file2.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
+        /home/src/workspaces/project/tsconfig.json *default*

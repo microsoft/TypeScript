@@ -10,7 +10,7 @@ import {
     emptyArray,
     ensureTrailingDirectorySeparator,
     findIndex,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachEntry,
     FutureSourceFile,
     getBaseFileName,
@@ -405,7 +405,13 @@ export function isImportable(
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
             return (file === toFile || !file) &&
-                isImportablePath(fromFile.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+                isImportablePath(
+                    fromFile.fileName,
+                    toPath,
+                    getCanonicalFileName,
+                    globalTypingsCache,
+                    moduleSpecifierResolutionHost,
+                );
         },
     );
 
@@ -426,9 +432,19 @@ function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) 
  * Don't include something from a `node_modules` that isn't actually reachable by a global import.
  * A relative import to node_modules is usually a bad idea.
  */
-function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
+function isImportablePath(
+    fromPath: string,
+    toPath: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    globalCachePath: string | undefined,
+    host: ModuleSpecifierResolutionHost,
+): boolean {
     // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-    const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
+    const toNodeModules = forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        toPath,
+        ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined,
+    );
     const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
     return toNodeModulesParent === undefined
         || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
@@ -494,13 +510,17 @@ function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageService
         if (excludePatterns.some(p => p.test(fileName))) return true;
         if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
             let dir = getDirectoryPath(fileName);
-            return forEachAncestorDirectory(getDirectoryPath(path), dirPath => {
-                const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
-                if (symlinks) {
-                    return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
-                }
-                dir = getDirectoryPath(dir);
-            }) ?? false;
+            return forEachAncestorDirectoryStoppingAtGlobalCache(
+                host,
+                getDirectoryPath(path),
+                dirPath => {
+                    const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
+                    if (symlinks) {
+                        return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
+                    }
+                    dir = getDirectoryPath(dir);
+                },
+            ) ?? false;
         }
         return false;
     });

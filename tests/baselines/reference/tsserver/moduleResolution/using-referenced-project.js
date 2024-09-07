@@ -1,5 +1,7 @@
-currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/packages/package-a/package.json]
 {
@@ -98,8 +100,10 @@ console.log(FOO);
 
 
 //// [/home/src/projects/project/node_modules/package-a] symlink(/home/src/projects/project/packages/package-a)
+
 //// [/home/src/projects/project/node_modules/package-b] symlink(/home/src/projects/project/packages/package-b)
-//// [/a/lib/lib.es2021.d.ts]
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -125,7 +129,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package-b/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/package-b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/packages/package-b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/packages/package-b/tsconfig.json, currentDirectory: /home/src/projects/project/packages/package-b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -276,7 +280,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2021.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2021.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/src 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
@@ -298,13 +302,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package-a/src/subfolder/index.ts Text-1 "export const FOO = \"bar\";"
 	/home/src/projects/project/packages/package-a/src/index.ts Text-1 "export * from \"./subfolder\";"
 	/home/src/projects/project/packages/package-b/src/index.ts SVC-1-0 "import { FOO } from \"package-a\";\nconsole.log(FOO);\n"
 
 
-	../../../../../../a/lib/lib.es2021.d.ts
+	../../../../tslibs/TS/Lib/lib.es2021.d.ts
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	../package-a/src/subfolder/index.ts
 	  Imported via "./subfolder" from file '../package-a/src/index.ts'
@@ -412,6 +416,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2021.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -432,8 +438,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2021.d.ts: *new*
-  {}
 /home/src/projects/project/packages/package-a/package.json: *new*
   {}
 /home/src/projects/project/packages/package-a/src/index.ts: *new*
@@ -447,6 +451,8 @@ FsWatches::
 /home/src/projects/project/packages/package-b/package.json: *new*
   {}
 /home/src/projects/project/packages/package-b/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -468,10 +474,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2021.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -484,6 +486,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
 
 Before request
 
@@ -617,10 +623,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2021.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts
     version: Text-1
     containingProjects: 1
@@ -633,6 +635,10 @@ ScriptInfos::
     version: SVC-1-1 *changed*
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
 
 Before request
 
@@ -708,11 +714,11 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package-b/src/index.ts SVC-1-1 "import { FOO } from \"package-aX\";\nconsole.log(FOO);\n"
 
 
-	../../../../../../a/lib/lib.es2021.d.ts
+	../../../../tslibs/TS/Lib/lib.es2021.d.ts
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	src/index.ts
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
@@ -753,8 +759,6 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2021.d.ts:
-  {}
 /home/src/projects/project/packages/package-a/src/index.ts:
   {}
 /home/src/projects/project/packages/package-a/src/subfolder/index.ts:
@@ -766,6 +770,8 @@ FsWatches::
 /home/src/projects/project/packages/package-b/package.json:
   {}
 /home/src/projects/project/packages/package-b/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -797,10 +803,6 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/lib/lib.es2021.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
@@ -813,6 +815,10 @@ ScriptInfos::
     version: SVC-1-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -923,10 +929,6 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/a/lib/lib.es2021.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts
     version: Text-1
     containingProjects: 0
@@ -937,6 +939,10 @@ ScriptInfos::
     version: SVC-1-2 *changed*
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
 
 Before request
 
@@ -1014,13 +1020,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/package-a/src/subfolder/index.ts Text-1 "export const FOO = \"bar\";"
 	/home/src/projects/project/packages/package-a/src/index.ts Text-1 "export * from \"./subfolder\";"
 	/home/src/projects/project/packages/package-b/src/index.ts SVC-1-2 "import { FOO } from \"package-a\";\nconsole.log(FOO);\n"
 
 
-	../../../../../../a/lib/lib.es2021.d.ts
+	../../../../tslibs/TS/Lib/lib.es2021.d.ts
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	../package-a/src/subfolder/index.ts
 	  Imported via "./subfolder" from file '../package-a/src/index.ts'
@@ -1065,8 +1071,6 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2021.d.ts:
-  {}
 /home/src/projects/project/packages/package-a/package.json: *new*
   {}
 /home/src/projects/project/packages/package-a/src/index.ts:
@@ -1080,6 +1084,8 @@ FsWatches::
 /home/src/projects/project/packages/package-b/package.json:
   {}
 /home/src/projects/project/packages/package-b/tsconfig.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1104,10 +1110,6 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
-/a/lib/lib.es2021.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -1120,6 +1122,10 @@ ScriptInfos::
     version: SVC-1-2
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck

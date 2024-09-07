@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/configs/first/tsconfig.json]
 {
@@ -70,7 +70,7 @@ export const x = 10;
 export const k = 10;
 
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -82,9 +82,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -b -w --extendedDiagnostics --explainFiles -v
+/home/src/tslibs/TS/Lib/tsc.js -b -w --extendedDiagnostics --explainFiles -v
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -125,7 +127,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -247,21 +249,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/myproject/types/sometype.ts (computed .d.ts during emit)
 /home/src/projects/myproject/main.ts (computed .d.ts during emit)
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts (used version)
@@ -336,7 +338,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -390,7 +392,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts

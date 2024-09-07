@@ -1,26 +1,28 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/a/a.ts]
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+lib.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
+lib.decorators.d.ts-Text
+
+//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
+lib.decorators.legacy.d.ts-Text
+
+//// [/home/src/workspaces/project/a/a.ts]
 /// <reference path="../b/b.ts" />
 ;
 
-//// [/a/tsconfig.json]
+//// [/home/src/workspaces/project/a/tsconfig.json]
 { "files": ["a.ts"] }
 
-//// [/b/b.ts]
+//// [/home/src/workspaces/project/b/b.ts]
 ;
 
-//// [/b/tsconfig.json]
+//// [/home/src/workspaces/project/b/tsconfig.json]
 { "files": ["b.ts"] }
-
-//// [/lib.d.ts]
-lib.d.ts-Text
-
-//// [/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -28,53 +30,65 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/a/tsconfig.json"
+        "file": "/home/src/workspaces/project/a/tsconfig.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/a/tsconfig.json, currentDirectory: /home/src/workspaces/project/a
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/tsconfig.json",
-        "reason": "Creating possible configured project for /a/tsconfig.json to open"
+        "projectName": "/home/src/workspaces/project/a/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/a/tsconfig.json to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/a/tsconfig.json : {
  "rootNames": [
-  "/a/a.ts"
+  "/home/src/workspaces/project/a/a.ts"
  ],
  "options": {
-  "configFilePath": "/a/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/a/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/b/b.ts Text-1 ";"
-	/a/a.ts Text-1 "/// <reference path=\"../b/b.ts\" />\n;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/b/b.ts Text-1 ";"
+	/home/src/workspaces/project/a/a.ts Text-1 "/// <reference path=\"../b/b.ts\" />\n;"
 
 
-	../lib.d.ts
+	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../lib.d.ts'
-	../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
 	../b/b.ts
 	  Referenced via '../b/b.ts' from file 'a.ts'
 	a.ts
@@ -87,7 +101,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/a/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -96,32 +110,48 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/tsconfig.json",
-        "configFile": "/a/tsconfig.json",
+        "triggerFile": "/home/src/workspaces/project/a/tsconfig.json",
+        "configFile": "/home/src/workspaces/project/a/tsconfig.json",
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/a
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/a/tsconfig.json SVC-1-0 "{ \"files\": [\"a.ts\"] }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/a/tsconfig.json SVC-1-0 "{ \"files\": [\"a.ts\"] }"
 
 
-	../lib.d.ts
+	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../lib.d.ts'
-	../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -130,7 +160,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -145,70 +175,96 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/a/a.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/tsconfig.json: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/a/a.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/a/jsconfig.json: *new*
   {"pollingInterval":2000}
-/b/b.ts: *new*
+/home/src/workspaces/project/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/b/b.ts: *new*
   {"pollingInterval":500}
-/lib.d.ts: *new*
-  {"pollingInterval":500}
-/lib.decorators.d.ts: *new*
-  {"pollingInterval":500}
-/lib.decorators.legacy.d.ts: *new*
-  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules: *new*
+  {}
+  {}
+/home/src/workspaces/node_modules/@types: *new*
+  {}
+  {}
+/home/src/workspaces/project/a/node_modules: *new*
+  {}
+  {}
+/home/src/workspaces/project/a/node_modules/@types: *new*
+  {}
+  {}
+/home/src/workspaces/project/node_modules: *new*
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types: *new*
+  {}
+  {}
 
 Projects::
-/a/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
+/home/src/workspaces/project/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
-/a/a.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a/a.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/a/tsconfig.json (Open) *new*
+        /home/src/workspaces/project/a/tsconfig.json
+/home/src/workspaces/project/a/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/b/b.ts *new*
+/home/src/workspaces/project/b/b.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
+        /home/src/workspaces/project/a/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
       "type": "request",
       "arguments": {
-        "file": "/a/a.ts"
+        "file": "/home/src/workspaces/project/a/a.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/a.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/a/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/a.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -217,10 +273,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -231,73 +287,99 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/a/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/b/b.ts:
+/home/src/workspaces/project/a/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/b/b.ts:
   {"pollingInterval":500}
-/lib.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 watchedFiles *deleted*::
-/a/a.ts:
+/home/src/workspaces/project/a/a.ts:
   {"pollingInterval":500}
 
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
+  {}
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/a/node_modules:
+  {}
+  {}
+/home/src/workspaces/project/a/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+
 Projects::
-/a/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: false *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
+/home/src/workspaces/project/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
-/a/a.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+/home/src/workspaces/project/a/a.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json *default*
-/a/tsconfig.json (Open)
+        /home/src/workspaces/project/a/tsconfig.json *default*
+/home/src/workspaces/project/a/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/b/b.ts
+/home/src/workspaces/project/b/b.ts
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 2
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
+        /home/src/workspaces/project/a/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/a/a.ts",
+        "file": "/home/src/workspaces/project/a/a.ts",
         "line": 2,
         "offset": 1
       },
       "command": "references-full"
     }
-Info seq  [hh:mm:ss:mss] Finding references to /a/a.ts position 35 in project /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finding references to /home/src/workspaces/project/a/a.ts position 35 in project /home/src/workspaces/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -312,48 +394,60 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request",
       "arguments": {
-        "file": "/b/b.ts"
+        "file": "/home/src/workspaces/project/b/b.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/b.ts ProjectRootPath: undefined:: Result: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/b/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/b/b.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/b/tsconfig.json, currentDirectory: /home/src/workspaces/project/b
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/b/tsconfig.json",
-        "reason": "Creating possible configured project for /b/b.ts to open"
+        "projectName": "/home/src/workspaces/project/b/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/b/b.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/b/tsconfig.json : {
  "rootNames": [
-  "/b/b.ts"
+  "/home/src/workspaces/project/b/b.ts"
  ],
  "options": {
-  "configFilePath": "/b/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/b/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/b/b.ts Text-1 ";"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/b/b.ts Text-1 ";"
 
 
-	../lib.d.ts
+	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../lib.d.ts'
-	../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../tslibs/TS/Lib/lib.d.ts'
+	../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../tslibs/TS/Lib/lib.d.ts'
 	b.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -364,7 +458,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/b/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -373,16 +467,16 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/b/b.ts",
-        "configFile": "/b/tsconfig.json",
+        "triggerFile": "/home/src/workspaces/project/b/b.ts",
+        "configFile": "/home/src/workspaces/project/b/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -391,12 +485,12 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /b/b.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/a/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/b/b.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/a/tsconfig.json,/home/src/workspaces/project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -410,81 +504,115 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/a/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/b/tsconfig.json: *new*
+/home/src/workspaces/project/a/tsconfig.json:
   {"pollingInterval":2000}
-/lib.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
+/home/src/workspaces/project/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 watchedFiles *deleted*::
-/b/b.ts:
+/home/src/workspaces/project/b/b.ts:
   {"pollingInterval":500}
 
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/a/node_modules:
+  {}
+  {}
+/home/src/workspaces/project/a/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project/b/node_modules: *new*
+  {}
+/home/src/workspaces/project/b/node_modules/@types: *new*
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+  {} *new*
+
 Projects::
-/a/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/b/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/dev/null/inferredProject1* (Inferred)
+/home/src/workspaces/project/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/home/src/workspaces/project/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/a.ts (Open)
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/b/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/b/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/a/tsconfig.json
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/b/tsconfig.json *new*
+/home/src/workspaces/project/a/a.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json *default*
-/a/tsconfig.json (Open)
+        /home/src/workspaces/project/a/tsconfig.json *default*
+/home/src/workspaces/project/a/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/b/b.ts (Open) *changed*
+/home/src/workspaces/project/b/b.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /a/tsconfig.json
-        /b/tsconfig.json *default* *new*
-/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-        /b/tsconfig.json *new*
-/lib.decorators.d.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-        /b/tsconfig.json *new*
-/lib.decorators.legacy.d.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /a/tsconfig.json
-        /dev/null/inferredProject1*
-        /b/tsconfig.json *new*
+        /home/src/workspaces/project/a/tsconfig.json
+        /home/src/workspaces/project/b/tsconfig.json *default* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
       "type": "request",
       "arguments": {
-        "file": "/b/b.ts",
+        "file": "/home/src/workspaces/project/b/b.ts",
         "line": 1,
         "offset": 1
       },
       "command": "references-full"
     }
-Info seq  [hh:mm:ss:mss] Finding references to /b/b.ts position 0 in project /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finding references to /b/b.ts position 0 in project /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finding references to /home/src/workspaces/project/b/b.ts position 0 in project /home/src/workspaces/project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finding references to /home/src/workspaces/project/b/b.ts position 0 in project /home/src/workspaces/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

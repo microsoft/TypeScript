@@ -1,19 +1,33 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
 
-//// [/a/app.js]
+//// [/home/src/projects/project/app.js]
 
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {
         "node": {
-          "typingLocation": "/a/cache/node_modules/@types/node/index.d.ts",
+          "typingLocation": "/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts",
           "version": {
             "major": 1,
             "minor": 3,
@@ -23,7 +37,7 @@ ts.JsTyping.discoverTypings::
           }
         },
         "commander": {
-          "typingLocation": "/a/cache/node_modules/@types/commander/index.d.ts",
+          "typingLocation": "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
           "version": {
             "major": 1,
             "minor": 0,
@@ -70,13 +84,13 @@ TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","commander
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [
-        "/a/cache/node_modules/@types/node/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts"
       ],
       "newTypingNames": [
         "commander"
       ],
       "filesToWatch": [
-        "/a/bower_components",
-        "/a/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

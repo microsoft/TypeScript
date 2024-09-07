@@ -2414,7 +2414,7 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
     for (let i = 0; i < values.length; i++) {
         const v = values[i];
         const pattern = getPattern(v);
-        if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+        if (pattern.prefix.length > longestMatchPrefixLength && isPatternMatch(pattern, candidate)) {
             longestMatchPrefixLength = pattern.prefix.length;
             matchedValue = v;
         }
