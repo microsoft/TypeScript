@@ -309,8 +309,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
 
             fix = {
                 ...fix,
-                ...(addAsTypeOnly === undefined ? { addAsTypeOnly } : {}),
-                ...(propertyName === undefined ? { propertyName } : {}),
+                ...(addAsTypeOnly === undefined ? {} : { addAsTypeOnly }),
+                ...(propertyName === undefined ? {} : { propertyName }),
             };
             addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
         }
