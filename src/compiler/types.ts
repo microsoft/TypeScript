@@ -6382,6 +6382,8 @@ export const enum ObjectFlags {
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
+    /** @internal */
+    IsNarrowedType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
@@ -6791,6 +6793,7 @@ export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
     constraint: Type; // Constraint that target type is known to satisfy
+    /** @internal */
 }
 
 /** @internal */

@@ -1,5 +1,7 @@
-dependentReturnType1.ts(11,9): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(26,9): error TS2322: Type 'string' is not assignable to type 'never'.
+dependentReturnType1.ts(11,9): error TS2322: Type 'number' is not assignable to type 'A[T]'.
+  Type 'number' is not assignable to type 'string'.
+dependentReturnType1.ts(26,9): error TS2322: Type '""' is not assignable to type 'C[T]'.
+  Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(35,9): error TS2322: Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(69,9): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
 dependentReturnType1.ts(71,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
@@ -17,8 +19,6 @@ dependentReturnType1.ts(169,9): error TS2322: Type 'T & {}' is not assignable to
   'this' could be instantiated with an arbitrary type which could be unrelated to 'T & {}'.
 dependentReturnType1.ts(203,24): error TS2322: Type 'string' is not assignable to type 'number'.
 dependentReturnType1.ts(203,28): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(221,9): error TS2322: Type 'number' is not assignable to type 'BB[T]'.
-  Type 'number' is not assignable to type 'never'.
 dependentReturnType1.ts(240,9): error TS2322: Type '""' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
 dependentReturnType1.ts(242,9): error TS2322: Type 'true' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
 dependentReturnType1.ts(244,5): error TS2322: Type '3' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
@@ -41,7 +41,7 @@ dependentReturnType1.ts(465,13): error TS2322: Type 'R' is not assignable to typ
 dependentReturnType1.ts(501,5): error TS2322: Type 'number' is not assignable to type 'never'.
 
 
-==== dependentReturnType1.ts (37 errors) ====
+==== dependentReturnType1.ts (36 errors) ====
     interface A {
         1: number;
         2: string;
@@ -54,7 +54,8 @@ dependentReturnType1.ts(501,5): error TS2322: Type 'number' is not assignable to
         else {
             return 1; // Error
             ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'A[T]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
         }
     }
     
@@ -71,7 +72,8 @@ dependentReturnType1.ts(501,5): error TS2322: Type 'number' is not assignable to
         else {
             return ""; // Error, returned expression needs to have type string & boolean (= never)
             ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type '""' is not assignable to type 'C[T]'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
         }
     }
     
@@ -298,9 +300,6 @@ dependentReturnType1.ts(501,5): error TS2322: Type 'number' is not assignable to
             // AA<T>[U='c'] -> BB[T]
             // BB[T='a'] -> number
             return 0; // Ok
-            ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'BB[T]'.
-!!! error TS2322:   Type 'number' is not assignable to type 'never'.
         }
     
         return undefined as never;

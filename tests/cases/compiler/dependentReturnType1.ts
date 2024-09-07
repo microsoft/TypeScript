@@ -85,20 +85,20 @@ function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? 
 }
 
 // Asymmetry
-function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
-    arg: Arg,
-    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
-    produceLeftOut: (arg: LeftIn) => LeftOut,
-    produceRightOut: (arg: RightIn) => RightOut):
-    Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
-{
-    type OK = Arg extends LeftIn ? LeftOut : RightOut;
-    if (cond(arg)) {
-        return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
-    } else {
-        return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
-    }
-}
+// function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+//     arg: Arg,
+//     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+//     produceLeftOut: (arg: LeftIn) => LeftOut,
+//     produceRightOut: (arg: RightIn) => RightOut):
+//     Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
+// {
+//     type OK = Arg extends LeftIn ? LeftOut : RightOut;
+//     if (cond(arg)) {
+//         return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
+//     } else {
+//         return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
+//     }
+// }
 
 interface Animal {
     name: string;

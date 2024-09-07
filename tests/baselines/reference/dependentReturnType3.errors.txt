@@ -1,10 +1,9 @@
 dependentReturnType3.ts(114,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
-dependentReturnType3.ts(118,13): error TS2322: Type 'SettingComposedValue<T>[]' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
 dependentReturnType3.ts(130,16): error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
 dependentReturnType3.ts(141,9): error TS2322: Type 'Record<string, object[]>' is not assignable to type 'HelperCond<T, string, object[], undefined, Record<string, object[]>>'.
 
 
-==== dependentReturnType3.ts (4 errors) ====
+==== dependentReturnType3.ts (3 errors) ====
     // Adapted from ts-error-deltas repos
     
     type HelperCond<T, A, R1, B, R2> =
@@ -125,8 +124,6 @@ dependentReturnType3.ts(141,9): error TS2322: Type 'Record<string, object[]>' is
     
             if (_.isRegExp(_id)) {
                 return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
-                ~~~~~~
-!!! error TS2322: Type 'SettingComposedValue<T>[]' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
     				const value = Meteor.settings[key];
     				if (_id.test(key)) {
     					items.push({
