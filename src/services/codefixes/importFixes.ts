@@ -301,7 +301,9 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 // Copy the type-only status from the reference import
                 addAsTypeOnly = AddAsTypeOnly.Required;
             }
+
             if (exportedSymbol.name !== localName) {
+                // checks if the symbol was aliased at the referenced import
                 propertyName = exportedSymbol.name;
             }
 

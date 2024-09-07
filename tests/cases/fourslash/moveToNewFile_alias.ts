@@ -34,5 +34,4 @@ class Consumer {
 }
 `
     }
-    // interactiveRefactorArguments: { targetFile: "/consumer.ts" },
 });
