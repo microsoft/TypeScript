@@ -121,27 +121,27 @@ var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
 var numberA3, robotAInfo, multiRobotAInfo;
 for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
-    _a = robots_1[_i], _a[0], nameA = _a[1];
+    _a = robots_1[_i], nameA = _a[1];
     console.log(nameA);
 }
 for (var _x = 0, _y = getRobots(); _x < _y.length; _x++) {
-    _b = _y[_x], _b[0], nameA = _b[1];
+    _b = _y[_x], nameA = _b[1];
     console.log(nameA);
 }
 for (var _z = 0, _0 = [robotA, robotB]; _z < _0.length; _z++) {
-    _c = _0[_z], _c[0], nameA = _c[1];
+    _c = _0[_z], nameA = _c[1];
     console.log(nameA);
 }
 for (var _1 = 0, multiRobots_1 = multiRobots; _1 < multiRobots_1.length; _1++) {
-    _d = multiRobots_1[_1], _d[0], _e = _d[1], primarySkillA = _e[0], secondarySkillA = _e[1];
+    _d = multiRobots_1[_1], _e = _d[1], primarySkillA = _e[0], secondarySkillA = _e[1];
     console.log(primarySkillA);
 }
 for (var _2 = 0, _3 = getMultiRobots(); _2 < _3.length; _2++) {
-    _f = _3[_2], _f[0], _g = _f[1], primarySkillA = _g[0], secondarySkillA = _g[1];
+    _f = _3[_2], _g = _f[1], primarySkillA = _g[0], secondarySkillA = _g[1];
     console.log(primarySkillA);
 }
 for (var _4 = 0, _5 = [multiRobotA, multiRobotB]; _4 < _5.length; _4++) {
-    _h = _5[_4], _h[0], _j = _h[1], primarySkillA = _j[0], secondarySkillA = _j[1];
+    _h = _5[_4], _j = _h[1], primarySkillA = _j[0], secondarySkillA = _j[1];
     console.log(primarySkillA);
 }
 for (var _6 = 0, robots_2 = robots; _6 < robots_2.length; _6++) {

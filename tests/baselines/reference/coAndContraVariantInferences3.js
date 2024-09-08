@@ -139,7 +139,7 @@ buildOverload("updateImportDeclaration")
 })
     .bind({
     0: function (_a) {
-        var modifiers = (_a[0], _a[1]), importClause = _a[2], moduleSpecifier = _a[3], assertClause = _a[4], other = _a[5];
+        var modifiers = _a[1], importClause = _a[2], moduleSpecifier = _a[3], assertClause = _a[4], other = _a[5];
         return (other === undefined) &&
             (modifiers === undefined || every(modifiers, isModifier)) &&
             (importClause === undefined || !isArray(importClause)) &&
@@ -147,7 +147,7 @@ buildOverload("updateImportDeclaration")
             (assertClause === undefined || isAssertClause(assertClause));
     },
     1: function (_a) {
-        var decorators = (_a[0], _a[1]), modifiers = _a[2], importClause = _a[3], moduleSpecifier = _a[4], assertClause = _a[5];
+        var decorators = _a[1], modifiers = _a[2], importClause = _a[3], moduleSpecifier = _a[4], assertClause = _a[5];
         return (decorators === undefined || every(decorators, isDecorator)) &&
             (modifiers === undefined || isArray(modifiers)) &&
             (importClause === undefined || isImportClause(importClause)) &&

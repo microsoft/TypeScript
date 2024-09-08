@@ -9,11 +9,10 @@ var a: any;
 var [,] = [1,2];
 
 //// [emptyAssignmentPatterns01_ES5.js]
-var _a;
 var a;
 (a);
 (a);
-var _b = (_a = [1, 2], _b[0], _a);
+var _a = [1, 2];
 
 
 //// [emptyAssignmentPatterns01_ES5.d.ts]

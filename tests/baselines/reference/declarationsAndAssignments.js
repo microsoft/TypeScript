@@ -194,7 +194,7 @@ function f0() {
     var x = [1, "hello"][0];
     var _b = [1, "hello"], x = _b[0], y = _b[1];
     var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2];
-    var _d = [0, 1, 2], x = (_d[0], _d[1], _d[2]);
+    var _d = [0, 1, 2], x = _d[2];
     var x;
     var y;
 }

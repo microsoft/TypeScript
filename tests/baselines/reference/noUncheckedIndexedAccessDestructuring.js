@@ -96,7 +96,7 @@ s1.toString(); // Should error, s1 possibly undefined
 var s2 = strArray.slice(0);
 s2.push(undefined); // Should error, 'undefined' not part of s2's element type
 // Destructuring a rest element -> do not include undefined
-var s3 = (strArray[0], strArray[1], strArray.slice(2));
+var s3 = strArray.slice(2);
 s3.push(undefined); // Should error, 'undefined' not part of s2's element type
 var t1 = strMap.t1;
 t1.toString(); // Should error, t1 possibly undefined
@@ -126,7 +126,7 @@ t2.z.toString(); // Should error
 // Assignment forms
 target_string = strArray[0]; // Should error
 target_string_undef = strArray[0]; // Should OK
-strArray[0], strArray[1], strArray[2], target_string_arr = strArray.slice(3); // Should OK
+target_string_arr = strArray.slice(3); // Should OK
 {
     var x = void 0, y = void 0, z = void 0;
     (x = numMapPoint.x, y = numMapPoint.y, z = numMapPoint.z); // Should OK

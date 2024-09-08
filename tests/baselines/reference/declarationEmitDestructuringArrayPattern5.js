@@ -6,10 +6,9 @@ var [, a, , ] = [3, 4, 5];
 var [, , [, b, ]] = [3,5,[0, 1]];
 
 //// [declarationEmitDestructuringArrayPattern5.js]
-var _a;
-var _b = [1, 2, 4], z = (_b[0], _b[1], _b[2]);
-var _c = [3, 4, 5], a = (_a = (_c[0], _c[1]), _c[2], _a);
-var _d = [3, 5, [0, 1]], _e = (_d[0], _d[1], _d[2]), b = (_e[0], _e[1]);
+var _a = [1, 2, 4], z = _a[2];
+var _b = [3, 4, 5], a = _b[1];
+var _c = [3, 5, [0, 1]], _d = _c[2], b = _d[1];
 
 
 //// [declarationEmitDestructuringArrayPattern5.d.ts]

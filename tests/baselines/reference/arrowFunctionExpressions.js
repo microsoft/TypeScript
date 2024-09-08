@@ -121,10 +121,10 @@ var p2 = function (_a) {
     var a = _a.slice(0);
 };
 var p3 = function (_a) {
-    var a = (_a[0], _a[1]);
+    var a = _a[1];
 };
 var p4 = function (_a) {
-    var a = (_a[0], _a.slice(1));
+    var a = _a.slice(1);
 };
 var p5 = function (_a) {
     var _b = _a[0], a = _b === void 0 ? 1 : _b;

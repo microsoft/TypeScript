@@ -43,7 +43,7 @@ import {
     isSimpleInlineableExpression,
     isStringOrNumericLiteralLike,
     isVariableDeclaration,
-    lastOrUndefined,
+    last,
     LeftHandSideExpression,
     map,
     Node,
@@ -289,20 +289,13 @@ export function flattenDestructuringBinding(
         }
         else {
             context.hoistVariableDeclaration(temp);
-            const pendingDeclaration = lastOrUndefined(pendingDeclarations);
-            if (!pendingDeclaration) {
-                const value = context.factory.inlineExpressions(pendingExpressions);
-                pendingExpressions = undefined;
-                emitBindingOrAssignment(temp, value, /*location*/ undefined, /*original*/ undefined);
-            }
-            else {
-                pendingDeclaration.pendingExpressions = append(
-                    pendingDeclaration.pendingExpressions,
-                    context.factory.createAssignment(temp, pendingDeclaration.value),
-                );
-                addRange(pendingDeclaration.pendingExpressions, pendingExpressions);
-                pendingDeclaration.value = temp;
-            }
+            const pendingDeclaration = last(pendingDeclarations);
+            pendingDeclaration.pendingExpressions = append(
+                pendingDeclaration.pendingExpressions,
+                context.factory.createAssignment(temp, pendingDeclaration.value),
+            );
+            addRange(pendingDeclaration.pendingExpressions, pendingExpressions);
+            pendingDeclaration.value = temp;
         }
     }
     for (const { pendingExpressions, name, value, location, original } of pendingDeclarations) {
@@ -505,7 +498,7 @@ function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, 
             }
         }
         else if (isOmittedExpression(element)) {
-            flattenContext.emitExpression(flattenContext.context.factory.createElementAccessExpression(value, i));
+            continue;
         }
         else if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
             const rhsValue = flattenContext.context.factory.createElementAccessExpression(value, i);

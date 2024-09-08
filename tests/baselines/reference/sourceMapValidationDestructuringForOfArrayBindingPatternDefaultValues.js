@@ -120,27 +120,27 @@ function getMultiRobots() {
     return multiRobots;
 }
 for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
-    var _a = robots_1[_i], _b = (_a[0], _a[1]), nameA = _b === void 0 ? "noName" : _b;
+    var _a = robots_1[_i], _b = _a[1], nameA = _b === void 0 ? "noName" : _b;
     console.log(nameA);
 }
 for (var _c = 0, _d = getRobots(); _c < _d.length; _c++) {
-    var _e = _d[_c], _f = (_e[0], _e[1]), nameA = _f === void 0 ? "noName" : _f;
+    var _e = _d[_c], _f = _e[1], nameA = _f === void 0 ? "noName" : _f;
     console.log(nameA);
 }
 for (var _g = 0, _h = [robotA, robotB]; _g < _h.length; _g++) {
-    var _j = _h[_g], _k = (_j[0], _j[1]), nameA = _k === void 0 ? "noName" : _k;
+    var _j = _h[_g], _k = _j[1], nameA = _k === void 0 ? "noName" : _k;
     console.log(nameA);
 }
 for (var _l = 0, multiRobots_1 = multiRobots; _l < multiRobots_1.length; _l++) {
-    var _m = multiRobots_1[_l], _o = (_m[0], _m[1]), _p = _o === void 0 ? ["skill1", "skill2"] : _o, _q = _p[0], primarySkillA = _q === void 0 ? "primary" : _q, _r = _p[1], secondarySkillA = _r === void 0 ? "secondary" : _r;
+    var _m = multiRobots_1[_l], _o = _m[1], _p = _o === void 0 ? ["skill1", "skill2"] : _o, _q = _p[0], primarySkillA = _q === void 0 ? "primary" : _q, _r = _p[1], secondarySkillA = _r === void 0 ? "secondary" : _r;
     console.log(primarySkillA);
 }
 for (var _s = 0, _t = getMultiRobots(); _s < _t.length; _s++) {
-    var _u = _t[_s], _v = (_u[0], _u[1]), _w = _v === void 0 ? ["skill1", "skill2"] : _v, _x = _w[0], primarySkillA = _x === void 0 ? "primary" : _x, _y = _w[1], secondarySkillA = _y === void 0 ? "secondary" : _y;
+    var _u = _t[_s], _v = _u[1], _w = _v === void 0 ? ["skill1", "skill2"] : _v, _x = _w[0], primarySkillA = _x === void 0 ? "primary" : _x, _y = _w[1], secondarySkillA = _y === void 0 ? "secondary" : _y;
     console.log(primarySkillA);
 }
 for (var _z = 0, _0 = [multiRobotA, multiRobotB]; _z < _0.length; _z++) {
-    var _1 = _0[_z], _2 = (_1[0], _1[1]), _3 = _2 === void 0 ? ["skill1", "skill2"] : _2, _4 = _3[0], primarySkillA = _4 === void 0 ? "primary" : _4, _5 = _3[1], secondarySkillA = _5 === void 0 ? "secondary" : _5;
+    var _1 = _0[_z], _2 = _1[1], _3 = _2 === void 0 ? ["skill1", "skill2"] : _2, _4 = _3[0], primarySkillA = _4 === void 0 ? "primary" : _4, _5 = _3[1], secondarySkillA = _5 === void 0 ? "secondary" : _5;
     console.log(primarySkillA);
 }
 for (var _6 = 0, robots_2 = robots; _6 < robots_2.length; _6++) {

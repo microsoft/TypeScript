@@ -24,7 +24,7 @@ if (nameMB == nameMA) {
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.js]
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
-var skillA = (multiRobotA[0], multiRobotA[1]);
+var skillA = multiRobotA[1];
 var nameMB = multiRobotB[0];
 var nameMA = multiRobotA[0], _a = multiRobotA[1], primarySkillA = _a[0], secondarySkillA = _a[1];
 var nameMC = ["roomba", ["vacuum", "mopping"]][0];

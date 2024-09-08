@@ -25,7 +25,7 @@ if (nameA == nameA2) {
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js]
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
-var nameA = (robotA[0], robotA[1]);
+var nameA = robotA[1];
 var numberB = robotB[0];
 var numberA2 = robotA[0], nameA2 = robotA[1], skillA2 = robotA[2];
 var numberC2 = [3, "edging", "Trimming edges"][0];

@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter05.ts] ////
+
+=== emptyArrayBindingPatternParameter05.ts ===
+export const cilBlurLinear: string[][] = [[]];
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+const [,] = cilBlurLinear;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+
+let [,] = cilBlurLinear;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+
+var [,] = cilBlurLinear;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+
+const [[]] = cilBlurLinear;
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+
+let [[]] = cilBlurLinear;
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+
+var [[]] = cilBlurLinear;
+>cilBlurLinear : string[][]
+>              : ^^^^^^^^^^
+

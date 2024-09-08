@@ -274,7 +274,6 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 2 >^^^^
 3 >    ^^^^^^^^^^^^^^^
 4 >                   ^
-5 >                    ^^^^^^^^^^->
 1 >
   >
 2 >let 
@@ -285,64 +284,58 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 3 >Emitted(9, 20) Source(16, 51) + SourceIndex(0)
 4 >Emitted(9, 21) Source(16, 52) + SourceIndex(0)
 ---
->>>robotA[0], nameA = robotA[1];
-1->
-2 >^^^^^^
-3 >      ^^^^^
-4 >           ^^^^^
-5 >                ^^^
-6 >                   ^^^^^^
-7 >                         ^^^
-8 >                            ^
-9 >                             ^^^^^^^^^^^->
-1->
+>>>nameA = robotA[1];
+1 >
+2 >^^^^^
+3 >     ^^^
+4 >        ^^^^^^
+5 >              ^^^
+6 >                 ^
+7 >                  ^^^^^^^^^^^^^^^->
+1 >
   >
-  >[, nameA] = 
-2 >robotA
-3 >      
-4 >           nameA
-5 >                ] = 
-6 >                   robotA
-7 >                         
-8 >                            ] = robotA;
-1->Emitted(10, 1) Source(18, 13) + SourceIndex(0)
-2 >Emitted(10, 7) Source(18, 19) + SourceIndex(0)
-3 >Emitted(10, 12) Source(18, 4) + SourceIndex(0)
-4 >Emitted(10, 17) Source(18, 9) + SourceIndex(0)
-5 >Emitted(10, 20) Source(18, 13) + SourceIndex(0)
-6 >Emitted(10, 26) Source(18, 19) + SourceIndex(0)
-7 >Emitted(10, 29) Source(18, 9) + SourceIndex(0)
-8 >Emitted(10, 30) Source(18, 20) + SourceIndex(0)
+  >[, 
+2 >nameA
+3 >     ] = 
+4 >        robotA
+5 >              
+6 >                 ] = robotA;
+1 >Emitted(10, 1) Source(18, 4) + SourceIndex(0)
+2 >Emitted(10, 6) Source(18, 9) + SourceIndex(0)
+3 >Emitted(10, 9) Source(18, 13) + SourceIndex(0)
+4 >Emitted(10, 15) Source(18, 19) + SourceIndex(0)
+5 >Emitted(10, 18) Source(18, 9) + SourceIndex(0)
+6 >Emitted(10, 19) Source(18, 20) + SourceIndex(0)
 ---
->>>_a = getRobotB(), _a[0], nameB = _a[1];
+>>>_a = getRobotB(), nameB = _a[1];
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^
 4 >              ^^
-5 >                ^^^^^^^^^
-6 >                         ^^^^^
-7 >                              ^^^^^^^^
-8 >                                      ^
-9 >                                       ^^^^^^^^^^^^^^^^->
+5 >                ^^
+6 >                  ^^^^^
+7 >                       ^^^^^^^^
+8 >                               ^
+9 >                                ^^^^^^^^^^^^^^^^->
 1->
   >
 2 >[, nameB] = 
 3 >     getRobotB
 4 >              ()
 5 >                
-6 >                         nameB
-7 >                              
-8 >                                      ] = getRobotB();
+6 >                  nameB
+7 >                       
+8 >                               ] = getRobotB();
 1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
 2 >Emitted(11, 6) Source(19, 13) + SourceIndex(0)
 3 >Emitted(11, 15) Source(19, 22) + SourceIndex(0)
 4 >Emitted(11, 17) Source(19, 24) + SourceIndex(0)
-5 >Emitted(11, 26) Source(19, 4) + SourceIndex(0)
-6 >Emitted(11, 31) Source(19, 9) + SourceIndex(0)
-7 >Emitted(11, 39) Source(19, 9) + SourceIndex(0)
-8 >Emitted(11, 40) Source(19, 25) + SourceIndex(0)
+5 >Emitted(11, 19) Source(19, 4) + SourceIndex(0)
+6 >Emitted(11, 24) Source(19, 9) + SourceIndex(0)
+7 >Emitted(11, 32) Source(19, 9) + SourceIndex(0)
+8 >Emitted(11, 33) Source(19, 25) + SourceIndex(0)
 ---
->>>_b = [2, "trimmer", "trimming"], _b[0], nameB = _b[1];
+>>>_b = [2, "trimmer", "trimming"], nameB = _b[1];
 1->
 2 >^^^^^
 3 >     ^
@@ -352,10 +345,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 7 >                  ^^
 8 >                    ^^^^^^^^^^
 9 >                              ^
-10>                               ^^^^^^^^^
-11>                                        ^^^^^
-12>                                             ^^^^^^^^
-13>                                                     ^
+10>                               ^^
+11>                                 ^^^^^
+12>                                      ^^^^^^^^
+13>                                              ^
 1->
   >
 2 >[, nameB] = 
@@ -367,9 +360,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 8 >                    "trimming"
 9 >                              ]
 10>                               
-11>                                        nameB
-12>                                             
-13>                                                     ] = [2, "trimmer", "trimming"];
+11>                                 nameB
+12>                                      
+13>                                              ] = [2, "trimmer", "trimming"];
 1->Emitted(12, 1) Source(20, 1) + SourceIndex(0)
 2 >Emitted(12, 6) Source(20, 13) + SourceIndex(0)
 3 >Emitted(12, 7) Source(20, 14) + SourceIndex(0)
@@ -379,68 +372,62 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 7 >Emitted(12, 21) Source(20, 28) + SourceIndex(0)
 8 >Emitted(12, 31) Source(20, 38) + SourceIndex(0)
 9 >Emitted(12, 32) Source(20, 39) + SourceIndex(0)
-10>Emitted(12, 41) Source(20, 4) + SourceIndex(0)
-11>Emitted(12, 46) Source(20, 9) + SourceIndex(0)
-12>Emitted(12, 54) Source(20, 9) + SourceIndex(0)
-13>Emitted(12, 55) Source(20, 40) + SourceIndex(0)
+10>Emitted(12, 34) Source(20, 4) + SourceIndex(0)
+11>Emitted(12, 39) Source(20, 9) + SourceIndex(0)
+12>Emitted(12, 47) Source(20, 9) + SourceIndex(0)
+13>Emitted(12, 48) Source(20, 40) + SourceIndex(0)
 ---
->>>multiRobotB[0], multiSkillB = multiRobotB[1];
+>>>multiSkillB = multiRobotB[1];
 1 >
 2 >^^^^^^^^^^^
-3 >           ^^^^^
-4 >                ^^^^^^^^^^^
-5 >                           ^^^
-6 >                              ^^^^^^^^^^^
-7 >                                         ^^^
-8 >                                            ^
-9 >                                             ^^^^^^->
+3 >           ^^^
+4 >              ^^^^^^^^^^^
+5 >                         ^^^
+6 >                            ^
+7 >                             ^^^^^^^^^^^^^^^->
 1 >
-  >[, multiSkillB] = 
-2 >multiRobotB
-3 >           
-4 >                multiSkillB
-5 >                           ] = 
-6 >                              multiRobotB
-7 >                                         
-8 >                                            ] = multiRobotB;
-1 >Emitted(13, 1) Source(21, 19) + SourceIndex(0)
-2 >Emitted(13, 12) Source(21, 30) + SourceIndex(0)
-3 >Emitted(13, 17) Source(21, 4) + SourceIndex(0)
-4 >Emitted(13, 28) Source(21, 15) + SourceIndex(0)
-5 >Emitted(13, 31) Source(21, 19) + SourceIndex(0)
-6 >Emitted(13, 42) Source(21, 30) + SourceIndex(0)
-7 >Emitted(13, 45) Source(21, 15) + SourceIndex(0)
-8 >Emitted(13, 46) Source(21, 31) + SourceIndex(0)
+  >[, 
+2 >multiSkillB
+3 >           ] = 
+4 >              multiRobotB
+5 >                         
+6 >                            ] = multiRobotB;
+1 >Emitted(13, 1) Source(21, 4) + SourceIndex(0)
+2 >Emitted(13, 12) Source(21, 15) + SourceIndex(0)
+3 >Emitted(13, 15) Source(21, 19) + SourceIndex(0)
+4 >Emitted(13, 26) Source(21, 30) + SourceIndex(0)
+5 >Emitted(13, 29) Source(21, 15) + SourceIndex(0)
+6 >Emitted(13, 30) Source(21, 31) + SourceIndex(0)
 ---
->>>_c = getMultiRobotB(), _c[0], multiSkillB = _c[1];
+>>>_c = getMultiRobotB(), multiSkillB = _c[1];
 1->
 2 >^^^^^
 3 >     ^^^^^^^^^^^^^^
 4 >                   ^^
-5 >                     ^^^^^^^^^
-6 >                              ^^^^^^^^^^^
-7 >                                         ^^^^^^^^
-8 >                                                 ^
-9 >                                                  ^^^^^^^^^^^^^^^^^^->
+5 >                     ^^
+6 >                       ^^^^^^^^^^^
+7 >                                  ^^^^^^^^
+8 >                                          ^
+9 >                                           ^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >[, multiSkillB] = 
 3 >     getMultiRobotB
 4 >                   ()
 5 >                     
-6 >                              multiSkillB
-7 >                                         
-8 >                                                 ] = getMultiRobotB();
+6 >                       multiSkillB
+7 >                                  
+8 >                                          ] = getMultiRobotB();
 1->Emitted(14, 1) Source(22, 1) + SourceIndex(0)
 2 >Emitted(14, 6) Source(22, 19) + SourceIndex(0)
 3 >Emitted(14, 20) Source(22, 33) + SourceIndex(0)
 4 >Emitted(14, 22) Source(22, 35) + SourceIndex(0)
-5 >Emitted(14, 31) Source(22, 4) + SourceIndex(0)
-6 >Emitted(14, 42) Source(22, 15) + SourceIndex(0)
-7 >Emitted(14, 50) Source(22, 15) + SourceIndex(0)
-8 >Emitted(14, 51) Source(22, 36) + SourceIndex(0)
+5 >Emitted(14, 24) Source(22, 4) + SourceIndex(0)
+6 >Emitted(14, 35) Source(22, 15) + SourceIndex(0)
+7 >Emitted(14, 43) Source(22, 15) + SourceIndex(0)
+8 >Emitted(14, 44) Source(22, 36) + SourceIndex(0)
 ---
->>>_d = ["roomba", ["vacuum", "mopping"]], _d[0], multiSkillB = _d[1];
+>>>_d = ["roomba", ["vacuum", "mopping"]], multiSkillB = _d[1];
 1->
 2 >^^^^^
 3 >     ^
@@ -452,10 +439,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 9 >                           ^^^^^^^^^
 10>                                    ^
 11>                                     ^
-12>                                      ^^^^^^^^^
-13>                                               ^^^^^^^^^^^
-14>                                                          ^^^^^^^^
-15>                                                                  ^
+12>                                      ^^
+13>                                        ^^^^^^^^^^^
+14>                                                   ^^^^^^^^
+15>                                                           ^
 1->
   >
 2 >[, multiSkillB] = 
@@ -469,9 +456,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 10>                                    ]
 11>                                     ]
 12>                                      
-13>                                               multiSkillB
-14>                                                          
-15>                                                                  ] = ["roomba", ["vacuum", "mopping"]];
+13>                                        multiSkillB
+14>                                                   
+15>                                                           ] = ["roomba", ["vacuum", "mopping"]];
 1->Emitted(15, 1) Source(23, 1) + SourceIndex(0)
 2 >Emitted(15, 6) Source(23, 19) + SourceIndex(0)
 3 >Emitted(15, 7) Source(23, 20) + SourceIndex(0)
@@ -483,10 +470,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 9 >Emitted(15, 37) Source(23, 50) + SourceIndex(0)
 10>Emitted(15, 38) Source(23, 51) + SourceIndex(0)
 11>Emitted(15, 39) Source(23, 52) + SourceIndex(0)
-12>Emitted(15, 48) Source(23, 4) + SourceIndex(0)
-13>Emitted(15, 59) Source(23, 15) + SourceIndex(0)
-14>Emitted(15, 67) Source(23, 15) + SourceIndex(0)
-15>Emitted(15, 68) Source(23, 53) + SourceIndex(0)
+12>Emitted(15, 41) Source(23, 4) + SourceIndex(0)
+13>Emitted(15, 52) Source(23, 15) + SourceIndex(0)
+14>Emitted(15, 60) Source(23, 15) + SourceIndex(0)
+15>Emitted(15, 61) Source(23, 53) + SourceIndex(0)
 ---
 >>>numberB = robotB[0];
 1 >

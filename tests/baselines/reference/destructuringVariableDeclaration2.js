@@ -33,7 +33,7 @@ var _c = [3, false, { t1: false, t2: 5 }], _d = _c[0], b0 = _d === void 0 ? 3 : 
 // The type T associated with a binding element is determined as follows:
 //      If the binding element is a rest element, T is an array type with
 //          an element type E, where E is the type of the numeric index signature of S.
-var _g = [1, 2, { c3: 4, c5: 0 }], c1 = _g[0], c2 = _g[1], _h = _g[2], c4 = _h.c3, c5 = _h.c5, c6 = (_g[3], _g.slice(4)); // Error
+var _g = [1, 2, { c3: 4, c5: 0 }], c1 = _g[0], c2 = _g[1], _h = _g[2], c4 = _h.c3, c5 = _h.c5, c6 = _g.slice(4); // Error
 // When a destructuring variable declaration, binding property, or binding element specifies
 // an initializer expression, the type of the initializer expression is required to be assignable
 // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
