@@ -329,10 +329,12 @@ function entrypointBuildTask(options) {
                 const moduleSpecifier = path.relative(outDir, output);
                 const lines = [
                     `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
-                    `const { enableCompileCache } = require("node:module");`,
-                    `if (enableCompileCache) {`,
-                    `  enableCompileCache();`,
-                    `}`,
+                    `try {`,
+                    `  const { enableCompileCache } = require("node:module");`,
+                    `  if (enableCompileCache) {`,
+                    `    enableCompileCache();`,
+                    `  }`,
+                    `} catch {}`,
                     `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
                 ];
                 await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
