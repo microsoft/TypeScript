@@ -328,6 +328,7 @@ function entrypointBuildTask(options) {
                 await fs.promises.mkdir(outDir, { recursive: true });
                 const moduleSpecifier = path.relative(outDir, output);
                 const lines = [
+                    `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
                     `const { enableCompileCache } = require("node:module");`,
                     `if (enableCompileCache) {`,
                     `  enableCompileCache();`,
