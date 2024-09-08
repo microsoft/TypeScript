@@ -4,7 +4,7 @@ import {
     AssertionLevel,
     CachedDirectoryStructureHost,
     canJsonReportNoInputFiles,
-    canWatchDirectoryOrFile,
+    canWatchDirectoryOrFilePath,
     cleanExtendedConfigCache,
     clearMap,
     clearSharedExtendedConfigFileWatcher,
@@ -42,7 +42,7 @@ import {
     FileWatcherEventKind,
     find,
     forEach,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachEntry,
     forEachKey,
     forEachResolvedProjectReference,
@@ -55,7 +55,6 @@ import {
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
-    getPathComponents,
     getSnapshotText,
     getWatchFactory,
     handleWatchOptionsConfigDirTemplateSubstitution,
@@ -940,7 +939,8 @@ export interface WildcardWatcher extends FileWatcher {
     packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 }
 
-function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
+/** @internal */
+export function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
     return `${isString(project) ? `Config: ${project} ` : project ? `Project: ${project.getProjectName()} ` : ""}WatchType: ${watchType}`;
 }
 
@@ -1336,6 +1336,10 @@ export class ProjectService {
             : undefined;
         this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
+        this.logger.info(`currentDirectory:: ${this.host.getCurrentDirectory()} useCaseSensitiveFileNames:: ${this.host.useCaseSensitiveFileNames}`);
+        this.logger.info(`libs Location:: ${getDirectoryPath(this.host.getExecutingFilePath())}`);
+        this.logger.info(`globalTypingsCacheLocation:: ${this.typingsInstaller.globalTypingsCacheLocation}`);
+
         if (this.typesMapLocation) {
             this.loadTypesMap();
         }
@@ -1352,7 +1356,12 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
+        this.documentRegistry = createDocumentRegistryInternal(
+            this.host.useCaseSensitiveFileNames,
+            this.currentDirectory,
+            this.jsDocParsingMode,
+            this,
+        );
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -2313,7 +2322,7 @@ export class ProjectService {
             // created when any of the script infos are added as root of inferred project
             if (configFileExistenceInfo.inferredProjectRoots) {
                 // If we cannot watch config file existence without configured project, close the configured file watcher
-                if (!canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path))) {
+                if (!canWatchDirectoryOrFilePath(getDirectoryPath(canonicalConfigFilePath) as Path)) {
                     configFileExistenceInfo.watcher!.close();
                     configFileExistenceInfo.watcher = noopConfigFileWatcher;
                 }
@@ -2413,7 +2422,7 @@ export class ProjectService {
             (configFileExistenceInfo.openFilesImpactedByConfigFile ??= new Set()).add(info.path);
 
             // If there is no configured project for this config file, add the file watcher
-            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path)) ?
+            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFilePath(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                 this.watchFactory.watchFile(
                     configFileName,
                     (_filename, eventKind) => this.onConfigFileChanged(configFileName, canonicalConfigFilePath, eventKind),
@@ -2611,7 +2620,6 @@ export class ProjectService {
         const project = new ExternalProject(
             projectFileName,
             this,
-            this.documentRegistry,
             compilerOptions,
             /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
             options.compileOnSave === undefined ? true : options.compileOnSave,
@@ -2684,7 +2692,6 @@ export class ProjectService {
     /** @internal */
     createConfiguredProject(configFileName: NormalizedPath, reason: string) {
         tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { configFilePath: configFileName });
-        this.logger.info(`Creating configuration project ${configFileName}`);
         const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
         let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         // We could be in this scenario if project is the configured project tracked by external project
@@ -2707,7 +2714,6 @@ export class ProjectService {
             configFileName,
             canonicalConfigFilePath,
             this,
-            this.documentRegistry,
             configFileExistenceInfo.config.cachedDirectoryStructureHost,
             reason,
         );
@@ -3019,7 +3025,10 @@ export class ProjectService {
     }
 
     /** @internal */
-    setFileNamesOfAutpImportProviderOrAuxillaryProject(project: AutoImportProviderProject | AuxiliaryProject, fileNames: readonly string[]) {
+    setFileNamesOfAutoImportProviderOrAuxillaryProject(
+        project: AutoImportProviderProject | AuxiliaryProject,
+        fileNames: readonly string[],
+    ) {
         this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
     }
 
@@ -3136,7 +3145,11 @@ export class ProjectService {
         }
 
         // Single inferred project does not have a project root and hence no current directory
-        return this.createInferredProject("", /*isSingleInferredProject*/ true);
+        return this.createInferredProject(
+            this.currentDirectory,
+            /*isSingleInferredProject*/ true,
+            /*projectRootPath*/ undefined,
+        );
     }
 
     private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string): InferredProject {
@@ -3153,10 +3166,18 @@ export class ProjectService {
             }
         }
 
-        return this.createInferredProject(currentDirectory);
+        return this.createInferredProject(
+            currentDirectory,
+            /*isSingleInferredProject*/ false,
+            /*projectRootPath*/ undefined,
+        );
     }
 
-    private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
+    private createInferredProject(
+        currentDirectory: string,
+        isSingleInferredProject: boolean,
+        projectRootPath: NormalizedPath | undefined,
+    ): InferredProject {
         const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
@@ -3171,7 +3192,14 @@ export class ProjectService {
             typeAcquisition = this.typeAcquisitionForInferredProjects;
         }
         watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, typeAcquisition);
+        const project = new InferredProject(
+            this,
+            compilerOptions,
+            watchOptionsAndErrors?.watchOptions,
+            projectRootPath,
+            currentDirectory,
+            typeAcquisition,
+        );
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         if (isSingleInferredProject) {
             this.inferredProjects.unshift(project);
@@ -5155,7 +5183,7 @@ export class ProjectService {
             switch (packageJsonCache.directoryHasPackageJson(directory)) {
                 // Sync and check same directory again
                 case Ternary.Maybe:
-                    packageJsonCache.searchDirectoryAndAncestors(directory);
+                    packageJsonCache.searchDirectoryAndAncestors(directory, project);
                     return processDirectory(directory);
                 // Check package.json
                 case Ternary.True:
@@ -5169,24 +5197,32 @@ export class ProjectService {
             }
         };
 
-        forEachAncestorDirectory(getDirectoryPath(fileName), processDirectory);
+        forEachAncestorDirectoryStoppingAtGlobalCache(
+            project,
+            getDirectoryPath(fileName),
+            processDirectory,
+        );
         return result;
     }
 
     /** @internal */
-    getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
-        return forEachAncestorDirectory(fileName, directory => {
-            switch (this.packageJsonCache.directoryHasPackageJson(directory)) {
-                case Ternary.True:
-                    return directory;
-                case Ternary.False:
-                    return undefined;
-                case Ternary.Maybe:
-                    return this.host.fileExists(combinePaths(directory, "package.json"))
-                        ? directory
-                        : undefined;
-            }
-        });
+    getNearestAncestorDirectoryWithPackageJson(fileName: string, project: Project): string | undefined {
+        return forEachAncestorDirectoryStoppingAtGlobalCache(
+            project,
+            fileName,
+            directory => {
+                switch (this.packageJsonCache.directoryHasPackageJson(directory)) {
+                    case Ternary.True:
+                        return directory;
+                    case Ternary.False:
+                        return undefined;
+                    case Ternary.Maybe:
+                        return this.host.fileExists(combinePaths(directory, "package.json"))
+                            ? directory
+                            : undefined;
+                }
+            },
+        );
     }
 
     private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {

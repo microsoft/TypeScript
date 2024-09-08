@@ -1,13 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/index.ts]
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+//// [/home/src/workspaces/project/index.ts]
 someMo
 
-//// [/someModule.ts]
+//// [/home/src/workspaces/project/someModule.ts]
 export const someModule = 0;
 export default 1;
 
-//// [/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 { "compilerOptions": { "noLib": true } }
 
 
@@ -16,43 +18,47 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/tsconfig.json"
+        "file": "/home/src/workspaces/project/tsconfig.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /tsconfig.json to open"
+        "projectName": "/home/src/workspaces/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/tsconfig.json to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
-  "/index.ts",
-  "/someModule.ts"
+  "/home/src/workspaces/project/index.ts",
+  "/home/src/workspaces/project/someModule.ts"
  ],
  "options": {
   "noLib": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /someModule.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/someModule.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/index.ts Text-1 "someMo"
-	/someModule.ts Text-1 "export const someModule = 0;\nexport default 1;"
+	/home/src/workspaces/project/index.ts Text-1 "someMo"
+	/home/src/workspaces/project/someModule.ts Text-1 "export const someModule = 0;\nexport default 1;"
 
 
 	index.ts
@@ -67,7 +73,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/workspaces/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -76,8 +82,8 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/home/src/workspaces/project/tsconfig.json",
+        "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": [
           {
             "text": "Cannot find global type 'Array'.",
@@ -122,19 +128,25 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"noLib\": true } }"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"noLib\": true } }"
 
 
 	tsconfig.json
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -143,7 +155,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -158,17 +170,25 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/index.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/lib.d.ts: *new*
+/home/src/workspaces/project/index.ts: *new*
   {"pollingInterval":500}
-/someModule.ts: *new*
+/home/src/workspaces/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/someModule.ts: *new*
   {"pollingInterval":500}
-/tsconfig.json: *new*
+/home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-: *new*
+/home/src/workspaces/node_modules/@types: *new*
+  {}
+  {}
+/home/src/workspaces/project: *new*
+  {}
+/home/src/workspaces/project/node_modules/@types: *new*
+  {}
   {}
 
 Projects::
@@ -176,21 +196,21 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/tsconfig.json (Configured) *new*
+/home/src/workspaces/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true
 
 ScriptInfos::
-/index.ts *new*
+/home/src/workspaces/project/index.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/someModule.ts *new*
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/someModule.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/tsconfig.json (Open) *new*
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -200,13 +220,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/home/src/workspaces/project/index.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -215,10 +235,10 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -229,19 +249,27 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"pollingInterval":500}
-/someModule.ts:
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/someModule.ts:
   {"pollingInterval":500}
-/tsconfig.json:
+/home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
 watchedFiles *deleted*::
-/index.ts:
+/home/src/workspaces/project/index.ts:
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-:
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
   {}
 
 Projects::
@@ -249,22 +277,22 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
 
 ScriptInfos::
-/index.ts (Open) *changed*
+/home/src/workspaces/project/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json *default*
-/someModule.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/someModule.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/tsconfig.json (Open)
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -294,7 +322,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: undefined *changed*
-/tsconfig.json (Configured)
+/home/src/workspaces/project/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -303,7 +331,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/workspaces/project/index.ts",
         "line": 1,
         "offset": 7
       },
@@ -749,12 +777,12 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/someModule",
+            "source": "/home/src/workspaces/project/someModule",
             "hasAction": true,
             "data": {
               "exportName": "default",
               "exportMapKey": "10 * someModule ",
-              "fileName": "/someModule.ts"
+              "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           },
           {
@@ -762,12 +790,12 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/someModule",
+            "source": "/home/src/workspaces/project/someModule",
             "hasAction": true,
             "data": {
               "exportName": "someModule",
               "exportMapKey": "10 * someModule ",
-              "fileName": "/someModule.ts"
+              "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           }
         ],
@@ -783,7 +811,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false *changed*
@@ -793,17 +821,17 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/workspaces/project/index.ts",
         "line": 1,
         "offset": 7,
         "entryNames": [
           {
             "name": "someModule",
-            "source": "/someModule",
+            "source": "/home/src/workspaces/project/someModule",
             "data": {
               "exportName": "default",
               "exportMapKey": "10 * someModule ",
-              "fileName": "/someModule.ts"
+              "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           }
         ]
@@ -864,7 +892,7 @@ Info seq  [hh:mm:ss:mss] response:
               "description": "Add import from \"./someModule\"",
               "changes": [
                 {
-                  "fileName": "/index.ts",
+                  "fileName": "/home/src/workspaces/project/index.ts",
                   "textChanges": [
                     {
                       "span": {
@@ -898,17 +926,17 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/workspaces/project/index.ts",
         "line": 1,
         "offset": 7,
         "entryNames": [
           {
             "name": "someModule",
-            "source": "/someModule",
+            "source": "/home/src/workspaces/project/someModule",
             "data": {
               "exportName": "someModule",
               "exportMapKey": "10 * someModule ",
-              "fileName": "/someModule.ts"
+              "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           }
         ]
@@ -961,7 +989,7 @@ Info seq  [hh:mm:ss:mss] response:
               "description": "Add import from \"./someModule\"",
               "changes": [
                 {
-                  "fileName": "/index.ts",
+                  "fileName": "/home/src/workspaces/project/index.ts",
                   "textChanges": [
                     {
                       "span": {
@@ -995,16 +1023,16 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/workspaces/project/index.ts",
         "line": 1,
         "offset": 7,
         "entryNames": [
           {
             "name": "someModule",
-            "source": "/someModule",
+            "source": "/home/src/workspaces/project/someModule",
             "data": {
               "exportName": "default",
-              "fileName": "/someModule.ts"
+              "fileName": "/home/src/workspaces/project/someModule.ts"
             }
           }
         ]
@@ -1065,7 +1093,7 @@ Info seq  [hh:mm:ss:mss] response:
               "description": "Add import from \"./someModule\"",
               "changes": [
                 {
-                  "fileName": "/index.ts",
+                  "fileName": "/home/src/workspaces/project/index.ts",
                   "textChanges": [
                     {
                       "span": {
@@ -1099,7 +1127,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 7,
       "type": "request",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/workspaces/project/index.ts",
         "line": 1,
         "offset": 1,
         "endLine": 1,
@@ -1121,22 +1149,22 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+/home/src/workspaces/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     autoImportProviderHost: false
 
 ScriptInfos::
-/index.ts (Open) *changed*
+/home/src/workspaces/project/index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/someModule.ts
+        /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/someModule.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/tsconfig.json (Open)
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

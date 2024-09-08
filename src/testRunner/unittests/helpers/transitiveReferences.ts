@@ -1,11 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FsContents,
-    getProjectConfigWithNodeNext,
-    libContent,
-} from "./contents.js";
-import { libFile } from "./virtualFileSystemWithWatch.js";
+import { getProjectConfigWithNodeNext } from "./contents.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForTransitiveReferencesRefsAdts() {
     return dedent`
@@ -39,8 +35,8 @@ export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolea
     });
 }
 
-export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): FsContents {
-    return {
+export function getSysForTransitiveReferences(withNodeNext?: boolean) {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
         "/user/username/projects/transitiveReferences/a.ts": dedent`
             export class A {}
@@ -68,6 +64,5 @@ export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): Fs
             },
             references: [{ path: "tsconfig.b.json" }],
         }),
-        [libFile.path]: libContent,
-    };
+    }, { currentDirectory: "/user/username/projects/transitiveReferences" });
 }

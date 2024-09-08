@@ -1,4 +1,4 @@
-currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
+currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames:: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
 {
@@ -26,7 +26,7 @@ import { thing } from 'lib-boilerplate'
   }
 }
 
-//// [/a/lib/lib.es2021.full.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -38,9 +38,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -59,10 +61,13 @@ File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a na
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../../../a/lib/lib.es2021.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
   Default library for target 'es2021'
 src/index.ts
   Matched by default include pattern '**/*'
@@ -74,6 +79,8 @@ test/basic.spec.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts] *Lib*
 
 //// [/Users/name/projects/lib-boilerplate/src/index.js]
 export function thing() { }
@@ -93,6 +100,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /Users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /Users/name/projects/lib-boilerplate/package.json: *new*
@@ -103,7 +116,7 @@ FsWatches::
   {}
 /Users/name/projects/lib-boilerplate/tsconfig.json: *new*
   {}
-/a/lib/lib.es2021.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -127,17 +140,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2021.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
 /Users/name/projects/lib-boilerplate/src/index.ts
 /Users/name/projects/lib-boilerplate/test/basic.spec.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2021.full.d.ts
 /Users/name/projects/lib-boilerplate/src/index.ts
 /Users/name/projects/lib-boilerplate/test/basic.spec.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2021.full.d.ts (used version)
 /users/name/projects/lib-boilerplate/src/index.ts (used version)
 /users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
 

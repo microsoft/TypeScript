@@ -64,7 +64,6 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
-    fileContainsPackageImport,
     filter,
     find,
     findAncestor,
@@ -175,7 +174,7 @@ import {
     isIdentifierPart,
     isIdentifierStart,
     isIdentifierText,
-    isImportableFile,
+    isImportable,
     isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -274,7 +273,6 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
-    JsTyping,
     JsxAttribute,
     JsxAttributes,
     JsxClosingElement,
@@ -338,13 +336,13 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
     setEmitFlags,
     setSnippetElement,
-    shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
     SignatureKind,
     singleElementArray,
@@ -1892,9 +1890,16 @@ function createCompletionEntry(
     if (parentNamedImportOrExport) {
         const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
         if (!isIdentifierText(name, languageVersion)) {
-            insertText = JSON.stringify(name);
+            insertText = quotePropertyName(sourceFile, preferences, name);
+
             if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
-                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                // check if it is import { ^here as name } from '...'
+                // we have to access the scanner here to check if it is { ^here as name } or { ^here, as, name }.
+                scanner.setText(sourceFile.text);
+                scanner.resetTokenState(position);
+                if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
+                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                }
             }
         }
         else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
@@ -4221,19 +4226,11 @@ function getCompletionData(
         );
 
         function isImportableExportInfo(info: SymbolExportInfo) {
-            const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
-            if (!moduleFile) {
-                const moduleName = stripQuotes(info.moduleSymbol.name);
-                if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
-                    return false;
-                }
-                return (packageJsonFilter?.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson)) ?? true)
-                    || fileContainsPackageImport(sourceFile, moduleName);
-            }
-            return isImportableFile(
+            return isImportable(
                 info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                 sourceFile,
-                moduleFile,
+                tryCast(info.moduleSymbol.valueDeclaration, isSourceFile),
+                info.moduleSymbol,
                 preferences,
                 packageJsonFilter,
                 getModuleSpecifierResolutionHost(info.isFromPackageJson),
@@ -4371,7 +4368,7 @@ function getCompletionData(
             // dprint-ignore
             switch (tokenKind) {
                 case SyntaxKind.CommaToken:
-                    switch (containingNodeKind) {    
+                    switch (containingNodeKind) {
                         case SyntaxKind.CallExpression:                                               // func( a, |
                         case SyntaxKind.NewExpression: {                                              // new C(a, |
                             const expression = (contextToken.parent as CallExpression | NewExpression).expression;
@@ -4454,7 +4451,7 @@ function getCompletionData(
                     }
 
                 case SyntaxKind.TemplateHead:
-                    return { 
+                    return {
                         defaultCommitCharacters: allCommitCharacters,
                         isNewIdentifierLocation: containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
                     };
@@ -4959,7 +4956,10 @@ function getCompletionData(
                 return !isFromObjectTypeDeclaration(contextToken);
 
             case SyntaxKind.Identifier: {
-                if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                if ((
+                    containingNodeKind === SyntaxKind.ImportSpecifier ||
+                    containingNodeKind === SyntaxKind.ExportSpecifier
+                ) &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
                 ) {

@@ -35,7 +35,6 @@ import {
     ExportKind,
     ExportMapInfoKey,
     factory,
-    fileContainsPackageImport,
     findAncestor,
     first,
     firstDefined,
@@ -84,7 +83,7 @@ import {
     isExternalModuleReference,
     isFullSourceFile,
     isIdentifier,
-    isImportableFile,
+    isImportable,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIntrinsicJsxName,
@@ -336,6 +335,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 exportingFileName,
                 compilerOptions,
                 createModuleSpecifierResolutionHost(program, host),
+                preferences,
             );
             const importKind = getImportKind(futureExportingSourceFile, exportKind, program);
             const addAsTypeOnly = getAddAsTypeOnly(
@@ -1542,10 +1542,7 @@ function getExportInfos(
     });
     function addSymbol(moduleSymbol: Symbol, toFile: SourceFile | undefined, exportedSymbol: Symbol, exportKind: ExportKind, program: Program, isFromPackageJson: boolean): void {
         const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(isFromPackageJson);
-        if (
-            toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
-            (!toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost) || fileContainsPackageImport(fromFile, stripQuotes(moduleSymbol.name)))
-        ) {
+        if (isImportable(program, fromFile, toFile, moduleSymbol, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache)) {
             const checker = program.getTypeChecker();
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
         }

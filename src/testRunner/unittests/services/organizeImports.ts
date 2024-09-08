@@ -1,15 +1,15 @@
 import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 import {
     newLineCharacter,
     TestProjectService,
 } from "./extract/helpers.js";
 
-describe("unittests:: services:: organizeImports", () => {
+describe("unittests:: services:: organizeImports::", () => {
     describe("Sort imports", () => {
         it("Sort - non-relative vs non-relative", () => {
             assertSortsBefore(
@@ -338,7 +338,7 @@ describe("unittests:: services:: organizeImports", () => {
 
     describe("Baselines", () => {
         const libFile = {
-            path: "/lib.ts",
+            path: "/home/src/workspaces/project/lib.ts",
             content: `
 export function F1();
 export default function F2();
@@ -346,7 +346,7 @@ export default function F2();
         };
 
         const reactLibFile = {
-            path: "/react.ts",
+            path: "/home/src/workspaces/project/react.ts",
             content: `
 export const React = {
 createElement: (_type, _props, _children) => {},
@@ -359,7 +359,7 @@ export const Other = 1;
         // Don't bother to actually emit a baseline for this.
         it("NoImports", () => {
             const testFile = {
-                path: "/a.ts",
+                path: "/home/src/workspaces/project/a.ts",
                 content: "function F() { }",
             };
             const languageService = makeLanguageService(testFile);
@@ -369,7 +369,7 @@ export const Other = 1;
 
         it("doesn't crash on shorthand ambient module", () => {
             const testFile = {
-                path: "/a.ts",
+                path: "/home/src/workspaces/project/a.ts",
                 content: "declare module '*';",
             };
             const languageService = makeLanguageService(testFile);
@@ -379,7 +379,7 @@ export const Other = 1;
 
         it("doesn't return any changes when the text would be identical", () => {
             const testFile = {
-                path: "/a.ts",
+                path: "/home/src/workspaces/project/a.ts",
                 content: `import { f } from 'foo';\nf();`,
             };
             const languageService = makeLanguageService(testFile);
@@ -388,35 +388,35 @@ export const Other = 1;
         });
 
         testDetectionBaseline("detection1", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { abc, Abc } from 'b';
 import { I, M, R } from 'a';
 const x = abc + Abc + I + M + R;`,
         });
 
         testDetectionBaseline("detection2", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { abc, Abc } from 'a';
 import { I, M, R } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
         testDetectionBaseline("detection3", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { I, M, R } from 'a';
 import { Abc, abc } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
         testDetectionBaseline("detection4", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { I, M, R } from 'a';
 import { abc, Abc } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
         testDetectionBaseline("detection5", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import {
     Type9,
     Type2,
@@ -441,37 +441,37 @@ console.log(Type1, Type2, Type3, Type4, Type5, Type6, Type7, Type8, Type9, func1
         });
 
         testDetectionBaseline("detection6", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { A, B, a, b } from 'foo';
 console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection7", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { A, a, B, b } from 'foo';
 console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection8", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { A, a, b, B } from 'foo';
 console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection9", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { a, b, A, B } from 'foo';
 console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection10", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `import { a, A, b, B } from 'foo';
 console.log(A, B, a, b);`,
         });
 
         testOrganizeImports("parseErrors", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.js",
+            path: "/home/src/workspaces/project/test.js",
             content: `declare module 'mod1' {
     declare export type P = {|
     |};
@@ -493,7 +493,7 @@ declare module 'mod2' {
         });
 
         testOrganizeImports("Renamed_used", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1 as EffOne, F2 as EffTwo } from "lib";
 EffOne();
@@ -501,7 +501,7 @@ EffOne();
         }, libFile);
 
         testOrganizeImports("Simple", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 } from "lib";
 import * as NS from "lib";
@@ -515,7 +515,7 @@ F2();
         }, libFile);
 
         testOrganizeImports("Unused_Some", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 } from "lib";
 import * as NS from "lib";
@@ -527,7 +527,7 @@ D();
 
         describe("skipDestructiveCodeActions=true", () => {
             testOrganizeImports("Syntax_Error_Body_skipDestructiveCodeActions", /*skipDestructiveCodeActions*/ true, {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { F1, F2 } from "lib";
 import * as NS from "lib";
@@ -540,7 +540,7 @@ D;
         });
 
         testOrganizeImports("Syntax_Error_Imports_skipDestructiveCodeActions", /*skipDestructiveCodeActions*/ true, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 class class class; } from "lib";
 import * as NS from "lib";
@@ -553,7 +553,7 @@ D;
 
         describe("skipDestructiveCodeActions=false", () => {
             testOrganizeImports("Syntax_Error_Body", /*skipDestructiveCodeActions*/ false, {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { F1, F2 } from "lib";
 import * as NS from "lib";
@@ -565,7 +565,7 @@ D;
             }, libFile);
 
             testOrganizeImports("Syntax_Error_Imports", /*skipDestructiveCodeActions*/ false, {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { F1, F2 class class class; } from "lib";
 import * as NS from "lib";
@@ -579,7 +579,7 @@ D;
 
         it("doesn't return any changes when the text would be identical", () => {
             const testFile = {
-                path: "/a.ts",
+                path: "/home/src/workspaces/project/a.ts",
                 content: `import { f } from 'foo';\nf();`,
             };
             const languageService = makeLanguageService(testFile);
@@ -588,7 +588,7 @@ D;
         });
 
         testOrganizeImports("Unused_All", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 } from "lib";
 import * as NS from "lib";
@@ -598,7 +598,7 @@ import D from "lib";
 
         it("Unused_Empty", () => {
             const testFile = {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { } from "lib";
 `,
@@ -609,7 +609,7 @@ import { } from "lib";
         });
 
         testOrganizeImports("Unused_false_positive_module_augmentation", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.d.ts",
+            path: "/home/src/workspaces/project/test.d.ts",
             content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
@@ -623,7 +623,7 @@ declare module 'caseless' {
         });
 
         testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
@@ -638,7 +638,7 @@ declare module 'caseless' {
 
         it("Unused_false_positive_shorthand_assignment", () => {
             const testFile = {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { x } from "a";
 const o = { x };
@@ -651,7 +651,7 @@ const o = { x };
 
         it("Unused_false_positive_export_shorthand", () => {
             const testFile = {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { x } from "a";
 export { x };
@@ -663,7 +663,7 @@ export { x };
         });
 
         testOrganizeImports("MoveToTop", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 } from "lib";
 F1();
@@ -677,7 +677,7 @@ D();
 
         /* eslint-disable no-template-curly-in-string */
         testOrganizeImports("MoveToTop_Invalid", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { F1, F2 } from "lib";
 F1();
@@ -693,7 +693,7 @@ D();
         /* eslint-enable no-template-curly-in-string */
 
         testOrganizeImports("TypeOnly", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { X } from "lib";
 import type Y from "lib";
@@ -707,7 +707,7 @@ export { A, B, X, Y, Z };`,
             "CoalesceMultipleModules",
             /*skipDestructiveCodeActions*/ false,
             {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { d } from "lib1";
 import { b } from "lib1";
@@ -716,12 +716,12 @@ import { a } from "lib2";
 a + b + c + d;
 `,
             },
-            { path: "/lib1.ts", content: "export const b = 1, d = 2;" },
-            { path: "/lib2.ts", content: "export const a = 3, c = 4;" },
+            { path: "/home/src/workspaces/project/lib1.ts", content: "export const b = 1, d = 2;" },
+            { path: "/home/src/workspaces/project/lib2.ts", content: "export const a = 3, c = 4;" },
         );
 
         testOrganizeImports("CoalesceTrivia", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 /*A*/import /*B*/ { /*C*/ F2 /*D*/ } /*E*/ from /*F*/ "lib" /*G*/;/*H*/ //I
 /*J*/import /*K*/ { /*L*/ F1 /*M*/ } /*N*/ from /*O*/ "lib" /*P*/;/*Q*/ //R
@@ -735,25 +735,25 @@ F2();
             "SortTrivia",
             /*skipDestructiveCodeActions*/ false,
             {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 /*A*/import /*B*/ "lib2" /*C*/;/*D*/ //E
 /*F*/import /*G*/ "lib1" /*H*/;/*I*/ //J
 `,
             },
-            { path: "/lib1.ts", content: "" },
-            { path: "/lib2.ts", content: "" },
+            { path: "/home/src/workspaces/project/lib1.ts", content: "" },
+            { path: "/home/src/workspaces/project/lib2.ts", content: "" },
         );
 
         testOrganizeImports("UnusedTrivia1", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 /*A*/import /*B*/ { /*C*/ F1 /*D*/ } /*E*/ from /*F*/ "lib" /*G*/;/*H*/ //I
 `,
         }, libFile);
 
         testOrganizeImports("UnusedTrivia2", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 /*A*/import /*B*/ { /*C*/ F1 /*D*/, /*E*/ F2 /*F*/ } /*G*/ from /*H*/ "lib" /*I*/;/*J*/ //K
 
@@ -762,7 +762,7 @@ F1();
         }, libFile);
 
         testOrganizeImports("UnusedHeaderComment", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 // Header
 import { F1 } from "lib";
@@ -773,19 +773,19 @@ import { F1 } from "lib";
             "SortHeaderComment",
             /*skipDestructiveCodeActions*/ false,
             {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 // Header
 import "lib2";
 import "lib1";
 `,
             },
-            { path: "/lib1.ts", content: "" },
-            { path: "/lib2.ts", content: "" },
+            { path: "/home/src/workspaces/project/lib1.ts", content: "" },
+            { path: "/home/src/workspaces/project/lib2.ts", content: "" },
         );
 
         testOrganizeImports("AmbientModule", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 declare module "mod" {
     import { F1 } from "lib";
@@ -798,7 +798,7 @@ declare module "mod" {
         }, libFile);
 
         testOrganizeImports("TopLevelAndAmbientModule", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import D from "lib";
 
@@ -818,7 +818,7 @@ D();
         }, libFile);
 
         testOrganizeImports("JsxFactoryUsedJsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.jsx",
+            path: "/home/src/workspaces/project/test.jsx",
             content: `
 import { React, Other } from "react";
 
@@ -827,7 +827,7 @@ import { React, Other } from "react";
         }, reactLibFile);
 
         testOrganizeImports("JsxFactoryUsedJs", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.js",
+            path: "/home/src/workspaces/project/test.js",
             content: `
 import { React, Other } from "react";
 
@@ -836,7 +836,7 @@ import { React, Other } from "react";
         }, reactLibFile);
 
         testOrganizeImports("JsxFactoryUsedTsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.tsx",
+            path: "/home/src/workspaces/project/test.tsx",
             content: `
 import { React, Other } from "react";
 
@@ -846,7 +846,7 @@ import { React, Other } from "react";
 
         // TS files are not JSX contexts, so the parser does not treat `<div/>` as a JSX element.
         testOrganizeImports("JsxFactoryUsedTs", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { React, Other } from "react";
 
@@ -855,7 +855,7 @@ import { React, Other } from "react";
         }, reactLibFile);
 
         testOrganizeImports("JsxFactoryUnusedJsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.jsx",
+            path: "/home/src/workspaces/project/test.jsx",
             content: `
 import { React, Other } from "react";
 `,
@@ -864,28 +864,28 @@ import { React, Other } from "react";
         // Note: Since the file extension does not end with "x", the jsx compiler option
         // will not be enabled.  The import should be retained regardless.
         testOrganizeImports("JsxFactoryUnusedJs", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.js",
+            path: "/home/src/workspaces/project/test.js",
             content: `
 import { React, Other } from "react";
 `,
         }, reactLibFile);
 
         testOrganizeImports("JsxFactoryUnusedTsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.tsx",
+            path: "/home/src/workspaces/project/test.tsx",
             content: `
 import { React, Other } from "react";
 `,
         }, reactLibFile);
 
         testOrganizeImports("JsxFactoryUnusedTs", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.ts",
+            path: "/home/src/workspaces/project/test.ts",
             content: `
 import { React, Other } from "react";
 `,
         }, reactLibFile);
 
         testOrganizeImports("JsxPragmaTsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.tsx",
+            path: "/home/src/workspaces/project/test.tsx",
             content: `/** @jsx jsx */
 
 import { Global, jsx } from '@emotion/core';
@@ -894,7 +894,7 @@ import * as React from 'react';
 export const App: React.FunctionComponent = _ => <Global><h1>Hello!</h1></Global>
 `,
         }, {
-            path: "/@emotion/core/index.d.ts",
+            path: "/home/src/workspaces/project/@emotion/core/index.d.ts",
             content: `import {  createElement } from 'react'
 export const jsx: typeof createElement;
 export function Global(props: any): ReactElement<any>;`,
@@ -909,7 +909,7 @@ export namespace React {
         });
 
         testOrganizeImports("JsxFragmentPragmaTsx", /*skipDestructiveCodeActions*/ false, {
-            path: "/test.tsx",
+            path: "/home/src/workspaces/project/test.tsx",
             content: `/** @jsx h */
 /** @jsxFrag frag */
 import { h, frag } from "@foo/core";
@@ -917,7 +917,7 @@ import { h, frag } from "@foo/core";
 const elem = <><div>Foo</div></>;
 `,
         }, {
-            path: "/@foo/core/index.d.ts",
+            path: "/home/src/workspaces/project/@foo/core/index.d.ts",
             content: `export function h(): void;
 export function frag(): void;
 `,
@@ -925,7 +925,7 @@ export function frag(): void;
 
         describe("Exports", () => {
             testOrganizeExports("MoveToTop", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 export { F1, F2 } from "lib";
 1;
@@ -936,7 +936,7 @@ export * from "lib";
 
             /* eslint-disable no-template-curly-in-string */
             testOrganizeExports("MoveToTop_Invalid", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 export { F1, F2 } from "lib";
 1;
@@ -951,7 +951,7 @@ export { D } from "lib";
             /* eslint-enable no-template-curly-in-string */
 
             testOrganizeExports("MoveToTop_WithImportsFirst", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 import { F1, F2 } from "lib";
 1;
@@ -966,7 +966,7 @@ F1(); F2(); NS.F1();
             }, libFile);
 
             testOrganizeExports("MoveToTop_WithExportsFirst", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 export { F1, F2 } from "lib";
 1;
@@ -983,7 +983,7 @@ F1(); F2(); NS.F1();
             testOrganizeExports(
                 "CoalesceMultipleModules",
                 {
-                    path: "/test.ts",
+                    path: "/home/src/workspaces/project/test.ts",
                     content: `
 export { d } from "lib1";
 export { b } from "lib1";
@@ -991,12 +991,12 @@ export { c } from "lib2";
 export { a } from "lib2";
 `,
                 },
-                { path: "/lib1.ts", content: "export const b = 1, d = 2;" },
-                { path: "/lib2.ts", content: "export const a = 3, c = 4;" },
+                { path: "/home/src/workspaces/project/lib1.ts", content: "export const b = 1, d = 2;" },
+                { path: "/home/src/workspaces/project/lib2.ts", content: "export const a = 3, c = 4;" },
             );
 
             testOrganizeExports("CoalesceTrivia", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 /*A*/export /*B*/ { /*C*/ F2 /*D*/ } /*E*/ from /*F*/ "lib" /*G*/;/*H*/ //I
 /*J*/export /*K*/ { /*L*/ F1 /*M*/ } /*N*/ from /*O*/ "lib" /*P*/;/*Q*/ //R
@@ -1006,32 +1006,32 @@ export { a } from "lib2";
             testOrganizeExports(
                 "SortTrivia",
                 {
-                    path: "/test.ts",
+                    path: "/home/src/workspaces/project/test.ts",
                     content: `
 /*A*/export /*B*/ * /*C*/ from /*D*/ "lib2" /*E*/;/*F*/ //G
 /*H*/export /*I*/ * /*J*/ from /*K*/ "lib1" /*L*/;/*M*/ //N
 `,
                 },
-                { path: "/lib1.ts", content: "" },
-                { path: "/lib2.ts", content: "" },
+                { path: "/home/src/workspaces/project/lib1.ts", content: "" },
+                { path: "/home/src/workspaces/project/lib2.ts", content: "" },
             );
 
             testOrganizeExports(
                 "SortHeaderComment",
                 {
-                    path: "/test.ts",
+                    path: "/home/src/workspaces/project/test.ts",
                     content: `
 // Header
 export * from "lib2";
 export * from "lib1";
 `,
                 },
-                { path: "/lib1.ts", content: "" },
-                { path: "/lib2.ts", content: "" },
+                { path: "/home/src/workspaces/project/lib1.ts", content: "" },
+                { path: "/home/src/workspaces/project/lib2.ts", content: "" },
             );
 
             testOrganizeExports("AmbientModule", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 declare module "mod" {
     export { F1 } from "lib";
@@ -1042,7 +1042,7 @@ declare module "mod" {
             }, libFile);
 
             testOrganizeExports("TopLevelAndAmbientModule", {
-                path: "/test.ts",
+                path: "/home/src/workspaces/project/test.ts",
                 content: `
 export { D } from "lib";
 
@@ -1120,7 +1120,7 @@ export * from "lib";
         }
 
         function makeLanguageService(...files: File[]) {
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const projectService = new TestProjectService({ host, useSingleInferredProject: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));

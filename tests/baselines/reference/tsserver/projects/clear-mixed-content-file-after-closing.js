@@ -1,13 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/b/app.ts]
+//// [/user/username/projects/project/app.ts]
  
 
-//// [/a/b/lib.html]
+//// [/user/username/projects/project/lib.html]
 <html/>
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -19,19 +21,21 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/b/project",
+        "projectFileName": "/user/username/projects/project/myproject",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/user/username/projects/project/app.ts"
           },
           {
-            "fileName": "/a/b/lib.html",
+            "fileName": "/user/username/projects/project/lib.html",
             "hasMixedContent": true
           }
         ],
@@ -40,18 +44,23 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/project/myproject, currentDirectory: /user/username/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/myproject
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/myproject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/myproject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/myproject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/myproject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/myproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/app.ts Text-1 " "
-	/a/b/lib.html Text-1 ""
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/app.ts Text-1 " "
+	/user/username/projects/project/lib.html Text-1 ""
 
 
-	../lib/lib.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	app.ts
 	  Root file specified for compilation
@@ -67,7 +76,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "de7ff745c310595cc7f2e2fae15b4273036ea7f82cc7eb382f82fca6af2b2002",
+          "projectId": "19596ebcc89c4366653930a43cf586f56b8c1640aa4644a588f6eed79576fbb4",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -78,7 +87,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -96,7 +105,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -111,30 +120,36 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/b/app.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/app.ts: *new*
   {}
 
 Projects::
-/a/b/project (External) *new*
+/user/username/projects/project/myproject (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/project
-/a/b/lib.html *new*
+        /user/username/projects/project/myproject
+/user/username/projects/project/app.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/project
-/a/lib/lib.d.ts *new*
+        /user/username/projects/project/myproject
+/user/username/projects/project/lib.html *new*
     version: Text-1
     containingProjects: 1
-        /a/b/project
+        /user/username/projects/project/myproject
 
 Before request
 
@@ -142,19 +157,19 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/user/username/projects/project/app.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/myproject
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -165,28 +180,34 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatches *deleted*::
-/a/b/app.ts:
+/user/username/projects/project/app.ts:
   {}
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/myproject
+/user/username/projects/project/app.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/project *default*
-/a/b/lib.html
+        /user/username/projects/project/myproject *default*
+/user/username/projects/project/lib.html
     version: Text-1
     containingProjects: 1
-        /a/b/project
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /a/b/project
+        /user/username/projects/project/myproject
 
 Before request
 
@@ -194,30 +215,30 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/lib.html",
+        "file": "/user/username/projects/project/lib.html",
         "fileContent": "let somelongname: string"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/myproject
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/myproject projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/app.ts Text-1 " "
-	/a/b/lib.html SVC-2-0 "let somelongname: string"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/app.ts Text-1 " "
+	/user/username/projects/project/lib.html SVC-2-0 "let somelongname: string"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/lib.html ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/myproject
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/lib.html ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/myproject
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -232,24 +253,24 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/a/b/project (External) *changed*
+/user/username/projects/project/myproject (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts (Open)
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
-        /a/b/project *default*
-/a/b/lib.html (Open) *changed*
+        /user/username/projects/project/myproject
+/user/username/projects/project/app.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/myproject *default*
+/user/username/projects/project/lib.html (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /a/b/project *default*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /a/b/project
+        /user/username/projects/project/myproject *default*
 
 Before request
 
@@ -257,7 +278,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/a/b/app.ts",
+        "file": "/user/username/projects/project/app.ts",
         "line": 1,
         "offset": 1
       },
@@ -347,6 +368,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -702,18 +729,18 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/a/b/lib.html"
+        "file": "/user/username/projects/project/lib.html"
       },
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/myproject
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -725,26 +752,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/a/b/project (External) *changed*
+/user/username/projects/project/myproject (External) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
 
 ScriptInfos::
-/a/b/app.ts (Open)
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
-        /a/b/project *default*
-/a/b/lib.html *changed*
+        /user/username/projects/project/myproject
+/user/username/projects/project/app.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/myproject *default*
+/user/username/projects/project/lib.html *changed*
     open: false *changed*
     version: SVC-2-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
-        /a/b/project
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /a/b/project
+        /user/username/projects/project/myproject
 
 Before request
 
@@ -752,20 +779,20 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/a/b/app.ts",
+        "file": "/user/username/projects/project/app.ts",
         "line": 1,
         "offset": 1
       },
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/myproject
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/myproject projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/myproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/app.ts Text-1 " "
-	/a/b/lib.html Text-3 ""
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/app.ts Text-1 " "
+	/user/username/projects/project/lib.html Text-3 ""
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -851,6 +878,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -1198,22 +1231,22 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/a/b/project (External) *changed*
+/user/username/projects/project/myproject (External) *changed*
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
 
 ScriptInfos::
-/a/b/app.ts (Open)
+/home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1
-        /a/b/project *default*
-/a/b/lib.html *changed*
+        /user/username/projects/project/myproject
+/user/username/projects/project/app.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/myproject *default*
+/user/username/projects/project/lib.html *changed*
     version: Text-3 *changed*
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
-        /a/b/project
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /a/b/project
+        /user/username/projects/project/myproject

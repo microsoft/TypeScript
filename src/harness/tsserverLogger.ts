@@ -57,7 +57,6 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
 
     let inGroup = false;
     let firstInGroup = false;

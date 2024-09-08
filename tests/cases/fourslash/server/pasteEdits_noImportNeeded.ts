@@ -1,14 +1,14 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /b.ts
+// @Filename: /home/src/workspaces/project/b.ts
 ////[||]
 
-// @Filename: /a.ts
+// @Filename: /home/src/workspaces/project/a.ts
 //// export interface Foo { }
 ////
 //// [|export|] const foo: Foo = {}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "files": ["a.ts", "b.ts"] }
 
 const ranges = test.ranges();
@@ -16,7 +16,7 @@ verify.pasteEdits({
     args: {
         pastedText: [`export`],
         pasteLocations: [ranges[0]],
-        copiedFrom: { file: "a.ts", range: [ranges[1]] },
+        copiedFrom: { file: "/home/src/workspaces/project/a.ts", range: [ranges[1]] },
     },
     newFileContents: {}
 });

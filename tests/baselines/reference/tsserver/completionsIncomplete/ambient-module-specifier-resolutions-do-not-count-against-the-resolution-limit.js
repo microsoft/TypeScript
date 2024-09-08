@@ -1,1011 +1,1028 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/tsconfig.json]
+//// [/home/src/project/project/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
 
-//// [/index.ts]
+//// [/home/src/project/project/index.ts]
 
 
-//// [/lib/ambient_0.ts]
+//// [/home/src/project/project/lib/ambient_0.ts]
 declare module "ambient_0" { export const aa_0 = 0; }
 
-//// [/lib/ambient_1.ts]
+//// [/home/src/project/project/lib/ambient_1.ts]
 declare module "ambient_1" { export const aa_1 = 1; }
 
-//// [/lib/ambient_2.ts]
+//// [/home/src/project/project/lib/ambient_2.ts]
 declare module "ambient_2" { export const aa_2 = 2; }
 
-//// [/lib/ambient_3.ts]
+//// [/home/src/project/project/lib/ambient_3.ts]
 declare module "ambient_3" { export const aa_3 = 3; }
 
-//// [/lib/ambient_4.ts]
+//// [/home/src/project/project/lib/ambient_4.ts]
 declare module "ambient_4" { export const aa_4 = 4; }
 
-//// [/lib/ambient_5.ts]
+//// [/home/src/project/project/lib/ambient_5.ts]
 declare module "ambient_5" { export const aa_5 = 5; }
 
-//// [/lib/ambient_6.ts]
+//// [/home/src/project/project/lib/ambient_6.ts]
 declare module "ambient_6" { export const aa_6 = 6; }
 
-//// [/lib/ambient_7.ts]
+//// [/home/src/project/project/lib/ambient_7.ts]
 declare module "ambient_7" { export const aa_7 = 7; }
 
-//// [/lib/ambient_8.ts]
+//// [/home/src/project/project/lib/ambient_8.ts]
 declare module "ambient_8" { export const aa_8 = 8; }
 
-//// [/lib/ambient_9.ts]
+//// [/home/src/project/project/lib/ambient_9.ts]
 declare module "ambient_9" { export const aa_9 = 9; }
 
-//// [/lib/ambient_10.ts]
+//// [/home/src/project/project/lib/ambient_10.ts]
 declare module "ambient_10" { export const aa_10 = 10; }
 
-//// [/lib/ambient_11.ts]
+//// [/home/src/project/project/lib/ambient_11.ts]
 declare module "ambient_11" { export const aa_11 = 11; }
 
-//// [/lib/ambient_12.ts]
+//// [/home/src/project/project/lib/ambient_12.ts]
 declare module "ambient_12" { export const aa_12 = 12; }
 
-//// [/lib/ambient_13.ts]
+//// [/home/src/project/project/lib/ambient_13.ts]
 declare module "ambient_13" { export const aa_13 = 13; }
 
-//// [/lib/ambient_14.ts]
+//// [/home/src/project/project/lib/ambient_14.ts]
 declare module "ambient_14" { export const aa_14 = 14; }
 
-//// [/lib/ambient_15.ts]
+//// [/home/src/project/project/lib/ambient_15.ts]
 declare module "ambient_15" { export const aa_15 = 15; }
 
-//// [/lib/ambient_16.ts]
+//// [/home/src/project/project/lib/ambient_16.ts]
 declare module "ambient_16" { export const aa_16 = 16; }
 
-//// [/lib/ambient_17.ts]
+//// [/home/src/project/project/lib/ambient_17.ts]
 declare module "ambient_17" { export const aa_17 = 17; }
 
-//// [/lib/ambient_18.ts]
+//// [/home/src/project/project/lib/ambient_18.ts]
 declare module "ambient_18" { export const aa_18 = 18; }
 
-//// [/lib/ambient_19.ts]
+//// [/home/src/project/project/lib/ambient_19.ts]
 declare module "ambient_19" { export const aa_19 = 19; }
 
-//// [/lib/ambient_20.ts]
+//// [/home/src/project/project/lib/ambient_20.ts]
 declare module "ambient_20" { export const aa_20 = 20; }
 
-//// [/lib/ambient_21.ts]
+//// [/home/src/project/project/lib/ambient_21.ts]
 declare module "ambient_21" { export const aa_21 = 21; }
 
-//// [/lib/ambient_22.ts]
+//// [/home/src/project/project/lib/ambient_22.ts]
 declare module "ambient_22" { export const aa_22 = 22; }
 
-//// [/lib/ambient_23.ts]
+//// [/home/src/project/project/lib/ambient_23.ts]
 declare module "ambient_23" { export const aa_23 = 23; }
 
-//// [/lib/ambient_24.ts]
+//// [/home/src/project/project/lib/ambient_24.ts]
 declare module "ambient_24" { export const aa_24 = 24; }
 
-//// [/lib/ambient_25.ts]
+//// [/home/src/project/project/lib/ambient_25.ts]
 declare module "ambient_25" { export const aa_25 = 25; }
 
-//// [/lib/ambient_26.ts]
+//// [/home/src/project/project/lib/ambient_26.ts]
 declare module "ambient_26" { export const aa_26 = 26; }
 
-//// [/lib/ambient_27.ts]
+//// [/home/src/project/project/lib/ambient_27.ts]
 declare module "ambient_27" { export const aa_27 = 27; }
 
-//// [/lib/ambient_28.ts]
+//// [/home/src/project/project/lib/ambient_28.ts]
 declare module "ambient_28" { export const aa_28 = 28; }
 
-//// [/lib/ambient_29.ts]
+//// [/home/src/project/project/lib/ambient_29.ts]
 declare module "ambient_29" { export const aa_29 = 29; }
 
-//// [/lib/ambient_30.ts]
+//// [/home/src/project/project/lib/ambient_30.ts]
 declare module "ambient_30" { export const aa_30 = 30; }
 
-//// [/lib/ambient_31.ts]
+//// [/home/src/project/project/lib/ambient_31.ts]
 declare module "ambient_31" { export const aa_31 = 31; }
 
-//// [/lib/ambient_32.ts]
+//// [/home/src/project/project/lib/ambient_32.ts]
 declare module "ambient_32" { export const aa_32 = 32; }
 
-//// [/lib/ambient_33.ts]
+//// [/home/src/project/project/lib/ambient_33.ts]
 declare module "ambient_33" { export const aa_33 = 33; }
 
-//// [/lib/ambient_34.ts]
+//// [/home/src/project/project/lib/ambient_34.ts]
 declare module "ambient_34" { export const aa_34 = 34; }
 
-//// [/lib/ambient_35.ts]
+//// [/home/src/project/project/lib/ambient_35.ts]
 declare module "ambient_35" { export const aa_35 = 35; }
 
-//// [/lib/ambient_36.ts]
+//// [/home/src/project/project/lib/ambient_36.ts]
 declare module "ambient_36" { export const aa_36 = 36; }
 
-//// [/lib/ambient_37.ts]
+//// [/home/src/project/project/lib/ambient_37.ts]
 declare module "ambient_37" { export const aa_37 = 37; }
 
-//// [/lib/ambient_38.ts]
+//// [/home/src/project/project/lib/ambient_38.ts]
 declare module "ambient_38" { export const aa_38 = 38; }
 
-//// [/lib/ambient_39.ts]
+//// [/home/src/project/project/lib/ambient_39.ts]
 declare module "ambient_39" { export const aa_39 = 39; }
 
-//// [/lib/ambient_40.ts]
+//// [/home/src/project/project/lib/ambient_40.ts]
 declare module "ambient_40" { export const aa_40 = 40; }
 
-//// [/lib/ambient_41.ts]
+//// [/home/src/project/project/lib/ambient_41.ts]
 declare module "ambient_41" { export const aa_41 = 41; }
 
-//// [/lib/ambient_42.ts]
+//// [/home/src/project/project/lib/ambient_42.ts]
 declare module "ambient_42" { export const aa_42 = 42; }
 
-//// [/lib/ambient_43.ts]
+//// [/home/src/project/project/lib/ambient_43.ts]
 declare module "ambient_43" { export const aa_43 = 43; }
 
-//// [/lib/ambient_44.ts]
+//// [/home/src/project/project/lib/ambient_44.ts]
 declare module "ambient_44" { export const aa_44 = 44; }
 
-//// [/lib/ambient_45.ts]
+//// [/home/src/project/project/lib/ambient_45.ts]
 declare module "ambient_45" { export const aa_45 = 45; }
 
-//// [/lib/ambient_46.ts]
+//// [/home/src/project/project/lib/ambient_46.ts]
 declare module "ambient_46" { export const aa_46 = 46; }
 
-//// [/lib/ambient_47.ts]
+//// [/home/src/project/project/lib/ambient_47.ts]
 declare module "ambient_47" { export const aa_47 = 47; }
 
-//// [/lib/ambient_48.ts]
+//// [/home/src/project/project/lib/ambient_48.ts]
 declare module "ambient_48" { export const aa_48 = 48; }
 
-//// [/lib/ambient_49.ts]
+//// [/home/src/project/project/lib/ambient_49.ts]
 declare module "ambient_49" { export const aa_49 = 49; }
 
-//// [/lib/ambient_50.ts]
+//// [/home/src/project/project/lib/ambient_50.ts]
 declare module "ambient_50" { export const aa_50 = 50; }
 
-//// [/lib/ambient_51.ts]
+//// [/home/src/project/project/lib/ambient_51.ts]
 declare module "ambient_51" { export const aa_51 = 51; }
 
-//// [/lib/ambient_52.ts]
+//// [/home/src/project/project/lib/ambient_52.ts]
 declare module "ambient_52" { export const aa_52 = 52; }
 
-//// [/lib/ambient_53.ts]
+//// [/home/src/project/project/lib/ambient_53.ts]
 declare module "ambient_53" { export const aa_53 = 53; }
 
-//// [/lib/ambient_54.ts]
+//// [/home/src/project/project/lib/ambient_54.ts]
 declare module "ambient_54" { export const aa_54 = 54; }
 
-//// [/lib/ambient_55.ts]
+//// [/home/src/project/project/lib/ambient_55.ts]
 declare module "ambient_55" { export const aa_55 = 55; }
 
-//// [/lib/ambient_56.ts]
+//// [/home/src/project/project/lib/ambient_56.ts]
 declare module "ambient_56" { export const aa_56 = 56; }
 
-//// [/lib/ambient_57.ts]
+//// [/home/src/project/project/lib/ambient_57.ts]
 declare module "ambient_57" { export const aa_57 = 57; }
 
-//// [/lib/ambient_58.ts]
+//// [/home/src/project/project/lib/ambient_58.ts]
 declare module "ambient_58" { export const aa_58 = 58; }
 
-//// [/lib/ambient_59.ts]
+//// [/home/src/project/project/lib/ambient_59.ts]
 declare module "ambient_59" { export const aa_59 = 59; }
 
-//// [/lib/ambient_60.ts]
+//// [/home/src/project/project/lib/ambient_60.ts]
 declare module "ambient_60" { export const aa_60 = 60; }
 
-//// [/lib/ambient_61.ts]
+//// [/home/src/project/project/lib/ambient_61.ts]
 declare module "ambient_61" { export const aa_61 = 61; }
 
-//// [/lib/ambient_62.ts]
+//// [/home/src/project/project/lib/ambient_62.ts]
 declare module "ambient_62" { export const aa_62 = 62; }
 
-//// [/lib/ambient_63.ts]
+//// [/home/src/project/project/lib/ambient_63.ts]
 declare module "ambient_63" { export const aa_63 = 63; }
 
-//// [/lib/ambient_64.ts]
+//// [/home/src/project/project/lib/ambient_64.ts]
 declare module "ambient_64" { export const aa_64 = 64; }
 
-//// [/lib/ambient_65.ts]
+//// [/home/src/project/project/lib/ambient_65.ts]
 declare module "ambient_65" { export const aa_65 = 65; }
 
-//// [/lib/ambient_66.ts]
+//// [/home/src/project/project/lib/ambient_66.ts]
 declare module "ambient_66" { export const aa_66 = 66; }
 
-//// [/lib/ambient_67.ts]
+//// [/home/src/project/project/lib/ambient_67.ts]
 declare module "ambient_67" { export const aa_67 = 67; }
 
-//// [/lib/ambient_68.ts]
+//// [/home/src/project/project/lib/ambient_68.ts]
 declare module "ambient_68" { export const aa_68 = 68; }
 
-//// [/lib/ambient_69.ts]
+//// [/home/src/project/project/lib/ambient_69.ts]
 declare module "ambient_69" { export const aa_69 = 69; }
 
-//// [/lib/ambient_70.ts]
+//// [/home/src/project/project/lib/ambient_70.ts]
 declare module "ambient_70" { export const aa_70 = 70; }
 
-//// [/lib/ambient_71.ts]
+//// [/home/src/project/project/lib/ambient_71.ts]
 declare module "ambient_71" { export const aa_71 = 71; }
 
-//// [/lib/ambient_72.ts]
+//// [/home/src/project/project/lib/ambient_72.ts]
 declare module "ambient_72" { export const aa_72 = 72; }
 
-//// [/lib/ambient_73.ts]
+//// [/home/src/project/project/lib/ambient_73.ts]
 declare module "ambient_73" { export const aa_73 = 73; }
 
-//// [/lib/ambient_74.ts]
+//// [/home/src/project/project/lib/ambient_74.ts]
 declare module "ambient_74" { export const aa_74 = 74; }
 
-//// [/lib/ambient_75.ts]
+//// [/home/src/project/project/lib/ambient_75.ts]
 declare module "ambient_75" { export const aa_75 = 75; }
 
-//// [/lib/ambient_76.ts]
+//// [/home/src/project/project/lib/ambient_76.ts]
 declare module "ambient_76" { export const aa_76 = 76; }
 
-//// [/lib/ambient_77.ts]
+//// [/home/src/project/project/lib/ambient_77.ts]
 declare module "ambient_77" { export const aa_77 = 77; }
 
-//// [/lib/ambient_78.ts]
+//// [/home/src/project/project/lib/ambient_78.ts]
 declare module "ambient_78" { export const aa_78 = 78; }
 
-//// [/lib/ambient_79.ts]
+//// [/home/src/project/project/lib/ambient_79.ts]
 declare module "ambient_79" { export const aa_79 = 79; }
 
-//// [/lib/ambient_80.ts]
+//// [/home/src/project/project/lib/ambient_80.ts]
 declare module "ambient_80" { export const aa_80 = 80; }
 
-//// [/lib/ambient_81.ts]
+//// [/home/src/project/project/lib/ambient_81.ts]
 declare module "ambient_81" { export const aa_81 = 81; }
 
-//// [/lib/ambient_82.ts]
+//// [/home/src/project/project/lib/ambient_82.ts]
 declare module "ambient_82" { export const aa_82 = 82; }
 
-//// [/lib/ambient_83.ts]
+//// [/home/src/project/project/lib/ambient_83.ts]
 declare module "ambient_83" { export const aa_83 = 83; }
 
-//// [/lib/ambient_84.ts]
+//// [/home/src/project/project/lib/ambient_84.ts]
 declare module "ambient_84" { export const aa_84 = 84; }
 
-//// [/lib/ambient_85.ts]
+//// [/home/src/project/project/lib/ambient_85.ts]
 declare module "ambient_85" { export const aa_85 = 85; }
 
-//// [/lib/ambient_86.ts]
+//// [/home/src/project/project/lib/ambient_86.ts]
 declare module "ambient_86" { export const aa_86 = 86; }
 
-//// [/lib/ambient_87.ts]
+//// [/home/src/project/project/lib/ambient_87.ts]
 declare module "ambient_87" { export const aa_87 = 87; }
 
-//// [/lib/ambient_88.ts]
+//// [/home/src/project/project/lib/ambient_88.ts]
 declare module "ambient_88" { export const aa_88 = 88; }
 
-//// [/lib/ambient_89.ts]
+//// [/home/src/project/project/lib/ambient_89.ts]
 declare module "ambient_89" { export const aa_89 = 89; }
 
-//// [/lib/ambient_90.ts]
+//// [/home/src/project/project/lib/ambient_90.ts]
 declare module "ambient_90" { export const aa_90 = 90; }
 
-//// [/lib/ambient_91.ts]
+//// [/home/src/project/project/lib/ambient_91.ts]
 declare module "ambient_91" { export const aa_91 = 91; }
 
-//// [/lib/ambient_92.ts]
+//// [/home/src/project/project/lib/ambient_92.ts]
 declare module "ambient_92" { export const aa_92 = 92; }
 
-//// [/lib/ambient_93.ts]
+//// [/home/src/project/project/lib/ambient_93.ts]
 declare module "ambient_93" { export const aa_93 = 93; }
 
-//// [/lib/ambient_94.ts]
+//// [/home/src/project/project/lib/ambient_94.ts]
 declare module "ambient_94" { export const aa_94 = 94; }
 
-//// [/lib/ambient_95.ts]
+//// [/home/src/project/project/lib/ambient_95.ts]
 declare module "ambient_95" { export const aa_95 = 95; }
 
-//// [/lib/ambient_96.ts]
+//// [/home/src/project/project/lib/ambient_96.ts]
 declare module "ambient_96" { export const aa_96 = 96; }
 
-//// [/lib/ambient_97.ts]
+//// [/home/src/project/project/lib/ambient_97.ts]
 declare module "ambient_97" { export const aa_97 = 97; }
 
-//// [/lib/ambient_98.ts]
+//// [/home/src/project/project/lib/ambient_98.ts]
 declare module "ambient_98" { export const aa_98 = 98; }
 
-//// [/lib/ambient_99.ts]
+//// [/home/src/project/project/lib/ambient_99.ts]
 declare module "ambient_99" { export const aa_99 = 99; }
 
-//// [/lib/a_0.ts]
+//// [/home/src/project/project/lib/a_0.ts]
 export const aa_0__0 = 0;
 export const aa_0__1 = 1;
 export const aa_0__2 = 2;
 export const aa_0__3 = 3;
 export const aa_0__4 = 4;
 
-//// [/lib/a_1.ts]
+//// [/home/src/project/project/lib/a_1.ts]
 export const aa_1__0 = 0;
 export const aa_1__1 = 1;
 export const aa_1__2 = 2;
 export const aa_1__3 = 3;
 export const aa_1__4 = 4;
 
-//// [/lib/a_2.ts]
+//// [/home/src/project/project/lib/a_2.ts]
 export const aa_2__0 = 0;
 export const aa_2__1 = 1;
 export const aa_2__2 = 2;
 export const aa_2__3 = 3;
 export const aa_2__4 = 4;
 
-//// [/lib/a_3.ts]
+//// [/home/src/project/project/lib/a_3.ts]
 export const aa_3__0 = 0;
 export const aa_3__1 = 1;
 export const aa_3__2 = 2;
 export const aa_3__3 = 3;
 export const aa_3__4 = 4;
 
-//// [/lib/a_4.ts]
+//// [/home/src/project/project/lib/a_4.ts]
 export const aa_4__0 = 0;
 export const aa_4__1 = 1;
 export const aa_4__2 = 2;
 export const aa_4__3 = 3;
 export const aa_4__4 = 4;
 
-//// [/lib/a_5.ts]
+//// [/home/src/project/project/lib/a_5.ts]
 export const aa_5__0 = 0;
 export const aa_5__1 = 1;
 export const aa_5__2 = 2;
 export const aa_5__3 = 3;
 export const aa_5__4 = 4;
 
-//// [/lib/a_6.ts]
+//// [/home/src/project/project/lib/a_6.ts]
 export const aa_6__0 = 0;
 export const aa_6__1 = 1;
 export const aa_6__2 = 2;
 export const aa_6__3 = 3;
 export const aa_6__4 = 4;
 
-//// [/lib/a_7.ts]
+//// [/home/src/project/project/lib/a_7.ts]
 export const aa_7__0 = 0;
 export const aa_7__1 = 1;
 export const aa_7__2 = 2;
 export const aa_7__3 = 3;
 export const aa_7__4 = 4;
 
-//// [/lib/a_8.ts]
+//// [/home/src/project/project/lib/a_8.ts]
 export const aa_8__0 = 0;
 export const aa_8__1 = 1;
 export const aa_8__2 = 2;
 export const aa_8__3 = 3;
 export const aa_8__4 = 4;
 
-//// [/lib/a_9.ts]
+//// [/home/src/project/project/lib/a_9.ts]
 export const aa_9__0 = 0;
 export const aa_9__1 = 1;
 export const aa_9__2 = 2;
 export const aa_9__3 = 3;
 export const aa_9__4 = 4;
 
-//// [/lib/a_10.ts]
+//// [/home/src/project/project/lib/a_10.ts]
 export const aa_10__0 = 0;
 export const aa_10__1 = 1;
 export const aa_10__2 = 2;
 export const aa_10__3 = 3;
 export const aa_10__4 = 4;
 
-//// [/lib/a_11.ts]
+//// [/home/src/project/project/lib/a_11.ts]
 export const aa_11__0 = 0;
 export const aa_11__1 = 1;
 export const aa_11__2 = 2;
 export const aa_11__3 = 3;
 export const aa_11__4 = 4;
 
-//// [/lib/a_12.ts]
+//// [/home/src/project/project/lib/a_12.ts]
 export const aa_12__0 = 0;
 export const aa_12__1 = 1;
 export const aa_12__2 = 2;
 export const aa_12__3 = 3;
 export const aa_12__4 = 4;
 
-//// [/lib/a_13.ts]
+//// [/home/src/project/project/lib/a_13.ts]
 export const aa_13__0 = 0;
 export const aa_13__1 = 1;
 export const aa_13__2 = 2;
 export const aa_13__3 = 3;
 export const aa_13__4 = 4;
 
-//// [/lib/a_14.ts]
+//// [/home/src/project/project/lib/a_14.ts]
 export const aa_14__0 = 0;
 export const aa_14__1 = 1;
 export const aa_14__2 = 2;
 export const aa_14__3 = 3;
 export const aa_14__4 = 4;
 
-//// [/lib/a_15.ts]
+//// [/home/src/project/project/lib/a_15.ts]
 export const aa_15__0 = 0;
 export const aa_15__1 = 1;
 export const aa_15__2 = 2;
 export const aa_15__3 = 3;
 export const aa_15__4 = 4;
 
-//// [/lib/a_16.ts]
+//// [/home/src/project/project/lib/a_16.ts]
 export const aa_16__0 = 0;
 export const aa_16__1 = 1;
 export const aa_16__2 = 2;
 export const aa_16__3 = 3;
 export const aa_16__4 = 4;
 
-//// [/lib/a_17.ts]
+//// [/home/src/project/project/lib/a_17.ts]
 export const aa_17__0 = 0;
 export const aa_17__1 = 1;
 export const aa_17__2 = 2;
 export const aa_17__3 = 3;
 export const aa_17__4 = 4;
 
-//// [/lib/a_18.ts]
+//// [/home/src/project/project/lib/a_18.ts]
 export const aa_18__0 = 0;
 export const aa_18__1 = 1;
 export const aa_18__2 = 2;
 export const aa_18__3 = 3;
 export const aa_18__4 = 4;
 
-//// [/lib/a_19.ts]
+//// [/home/src/project/project/lib/a_19.ts]
 export const aa_19__0 = 0;
 export const aa_19__1 = 1;
 export const aa_19__2 = 2;
 export const aa_19__3 = 3;
 export const aa_19__4 = 4;
 
-//// [/lib/a_20.ts]
+//// [/home/src/project/project/lib/a_20.ts]
 export const aa_20__0 = 0;
 export const aa_20__1 = 1;
 export const aa_20__2 = 2;
 export const aa_20__3 = 3;
 export const aa_20__4 = 4;
 
-//// [/lib/a_21.ts]
+//// [/home/src/project/project/lib/a_21.ts]
 export const aa_21__0 = 0;
 export const aa_21__1 = 1;
 export const aa_21__2 = 2;
 export const aa_21__3 = 3;
 export const aa_21__4 = 4;
 
-//// [/lib/a_22.ts]
+//// [/home/src/project/project/lib/a_22.ts]
 export const aa_22__0 = 0;
 export const aa_22__1 = 1;
 export const aa_22__2 = 2;
 export const aa_22__3 = 3;
 export const aa_22__4 = 4;
 
-//// [/lib/a_23.ts]
+//// [/home/src/project/project/lib/a_23.ts]
 export const aa_23__0 = 0;
 export const aa_23__1 = 1;
 export const aa_23__2 = 2;
 export const aa_23__3 = 3;
 export const aa_23__4 = 4;
 
-//// [/lib/a_24.ts]
+//// [/home/src/project/project/lib/a_24.ts]
 export const aa_24__0 = 0;
 export const aa_24__1 = 1;
 export const aa_24__2 = 2;
 export const aa_24__3 = 3;
 export const aa_24__4 = 4;
 
-//// [/lib/a_25.ts]
+//// [/home/src/project/project/lib/a_25.ts]
 export const aa_25__0 = 0;
 export const aa_25__1 = 1;
 export const aa_25__2 = 2;
 export const aa_25__3 = 3;
 export const aa_25__4 = 4;
 
-//// [/lib/a_26.ts]
+//// [/home/src/project/project/lib/a_26.ts]
 export const aa_26__0 = 0;
 export const aa_26__1 = 1;
 export const aa_26__2 = 2;
 export const aa_26__3 = 3;
 export const aa_26__4 = 4;
 
-//// [/lib/a_27.ts]
+//// [/home/src/project/project/lib/a_27.ts]
 export const aa_27__0 = 0;
 export const aa_27__1 = 1;
 export const aa_27__2 = 2;
 export const aa_27__3 = 3;
 export const aa_27__4 = 4;
 
-//// [/lib/a_28.ts]
+//// [/home/src/project/project/lib/a_28.ts]
 export const aa_28__0 = 0;
 export const aa_28__1 = 1;
 export const aa_28__2 = 2;
 export const aa_28__3 = 3;
 export const aa_28__4 = 4;
 
-//// [/lib/a_29.ts]
+//// [/home/src/project/project/lib/a_29.ts]
 export const aa_29__0 = 0;
 export const aa_29__1 = 1;
 export const aa_29__2 = 2;
 export const aa_29__3 = 3;
 export const aa_29__4 = 4;
 
-//// [/lib/a_30.ts]
+//// [/home/src/project/project/lib/a_30.ts]
 export const aa_30__0 = 0;
 export const aa_30__1 = 1;
 export const aa_30__2 = 2;
 export const aa_30__3 = 3;
 export const aa_30__4 = 4;
 
-//// [/lib/a_31.ts]
+//// [/home/src/project/project/lib/a_31.ts]
 export const aa_31__0 = 0;
 export const aa_31__1 = 1;
 export const aa_31__2 = 2;
 export const aa_31__3 = 3;
 export const aa_31__4 = 4;
 
-//// [/lib/a_32.ts]
+//// [/home/src/project/project/lib/a_32.ts]
 export const aa_32__0 = 0;
 export const aa_32__1 = 1;
 export const aa_32__2 = 2;
 export const aa_32__3 = 3;
 export const aa_32__4 = 4;
 
-//// [/lib/a_33.ts]
+//// [/home/src/project/project/lib/a_33.ts]
 export const aa_33__0 = 0;
 export const aa_33__1 = 1;
 export const aa_33__2 = 2;
 export const aa_33__3 = 3;
 export const aa_33__4 = 4;
 
-//// [/lib/a_34.ts]
+//// [/home/src/project/project/lib/a_34.ts]
 export const aa_34__0 = 0;
 export const aa_34__1 = 1;
 export const aa_34__2 = 2;
 export const aa_34__3 = 3;
 export const aa_34__4 = 4;
 
-//// [/lib/a_35.ts]
+//// [/home/src/project/project/lib/a_35.ts]
 export const aa_35__0 = 0;
 export const aa_35__1 = 1;
 export const aa_35__2 = 2;
 export const aa_35__3 = 3;
 export const aa_35__4 = 4;
 
-//// [/lib/a_36.ts]
+//// [/home/src/project/project/lib/a_36.ts]
 export const aa_36__0 = 0;
 export const aa_36__1 = 1;
 export const aa_36__2 = 2;
 export const aa_36__3 = 3;
 export const aa_36__4 = 4;
 
-//// [/lib/a_37.ts]
+//// [/home/src/project/project/lib/a_37.ts]
 export const aa_37__0 = 0;
 export const aa_37__1 = 1;
 export const aa_37__2 = 2;
 export const aa_37__3 = 3;
 export const aa_37__4 = 4;
 
-//// [/lib/a_38.ts]
+//// [/home/src/project/project/lib/a_38.ts]
 export const aa_38__0 = 0;
 export const aa_38__1 = 1;
 export const aa_38__2 = 2;
 export const aa_38__3 = 3;
 export const aa_38__4 = 4;
 
-//// [/lib/a_39.ts]
+//// [/home/src/project/project/lib/a_39.ts]
 export const aa_39__0 = 0;
 export const aa_39__1 = 1;
 export const aa_39__2 = 2;
 export const aa_39__3 = 3;
 export const aa_39__4 = 4;
 
-//// [/lib/a_40.ts]
+//// [/home/src/project/project/lib/a_40.ts]
 export const aa_40__0 = 0;
 export const aa_40__1 = 1;
 export const aa_40__2 = 2;
 export const aa_40__3 = 3;
 export const aa_40__4 = 4;
 
-//// [/lib/a_41.ts]
+//// [/home/src/project/project/lib/a_41.ts]
 export const aa_41__0 = 0;
 export const aa_41__1 = 1;
 export const aa_41__2 = 2;
 export const aa_41__3 = 3;
 export const aa_41__4 = 4;
 
-//// [/lib/a_42.ts]
+//// [/home/src/project/project/lib/a_42.ts]
 export const aa_42__0 = 0;
 export const aa_42__1 = 1;
 export const aa_42__2 = 2;
 export const aa_42__3 = 3;
 export const aa_42__4 = 4;
 
-//// [/lib/a_43.ts]
+//// [/home/src/project/project/lib/a_43.ts]
 export const aa_43__0 = 0;
 export const aa_43__1 = 1;
 export const aa_43__2 = 2;
 export const aa_43__3 = 3;
 export const aa_43__4 = 4;
 
-//// [/lib/a_44.ts]
+//// [/home/src/project/project/lib/a_44.ts]
 export const aa_44__0 = 0;
 export const aa_44__1 = 1;
 export const aa_44__2 = 2;
 export const aa_44__3 = 3;
 export const aa_44__4 = 4;
 
-//// [/lib/a_45.ts]
+//// [/home/src/project/project/lib/a_45.ts]
 export const aa_45__0 = 0;
 export const aa_45__1 = 1;
 export const aa_45__2 = 2;
 export const aa_45__3 = 3;
 export const aa_45__4 = 4;
 
-//// [/lib/a_46.ts]
+//// [/home/src/project/project/lib/a_46.ts]
 export const aa_46__0 = 0;
 export const aa_46__1 = 1;
 export const aa_46__2 = 2;
 export const aa_46__3 = 3;
 export const aa_46__4 = 4;
 
-//// [/lib/a_47.ts]
+//// [/home/src/project/project/lib/a_47.ts]
 export const aa_47__0 = 0;
 export const aa_47__1 = 1;
 export const aa_47__2 = 2;
 export const aa_47__3 = 3;
 export const aa_47__4 = 4;
 
-//// [/lib/a_48.ts]
+//// [/home/src/project/project/lib/a_48.ts]
 export const aa_48__0 = 0;
 export const aa_48__1 = 1;
 export const aa_48__2 = 2;
 export const aa_48__3 = 3;
 export const aa_48__4 = 4;
 
-//// [/lib/a_49.ts]
+//// [/home/src/project/project/lib/a_49.ts]
 export const aa_49__0 = 0;
 export const aa_49__1 = 1;
 export const aa_49__2 = 2;
 export const aa_49__3 = 3;
 export const aa_49__4 = 4;
 
-//// [/lib/a_50.ts]
+//// [/home/src/project/project/lib/a_50.ts]
 export const aa_50__0 = 0;
 export const aa_50__1 = 1;
 export const aa_50__2 = 2;
 export const aa_50__3 = 3;
 export const aa_50__4 = 4;
 
-//// [/lib/a_51.ts]
+//// [/home/src/project/project/lib/a_51.ts]
 export const aa_51__0 = 0;
 export const aa_51__1 = 1;
 export const aa_51__2 = 2;
 export const aa_51__3 = 3;
 export const aa_51__4 = 4;
 
-//// [/lib/a_52.ts]
+//// [/home/src/project/project/lib/a_52.ts]
 export const aa_52__0 = 0;
 export const aa_52__1 = 1;
 export const aa_52__2 = 2;
 export const aa_52__3 = 3;
 export const aa_52__4 = 4;
 
-//// [/lib/a_53.ts]
+//// [/home/src/project/project/lib/a_53.ts]
 export const aa_53__0 = 0;
 export const aa_53__1 = 1;
 export const aa_53__2 = 2;
 export const aa_53__3 = 3;
 export const aa_53__4 = 4;
 
-//// [/lib/a_54.ts]
+//// [/home/src/project/project/lib/a_54.ts]
 export const aa_54__0 = 0;
 export const aa_54__1 = 1;
 export const aa_54__2 = 2;
 export const aa_54__3 = 3;
 export const aa_54__4 = 4;
 
-//// [/lib/a_55.ts]
+//// [/home/src/project/project/lib/a_55.ts]
 export const aa_55__0 = 0;
 export const aa_55__1 = 1;
 export const aa_55__2 = 2;
 export const aa_55__3 = 3;
 export const aa_55__4 = 4;
 
-//// [/lib/a_56.ts]
+//// [/home/src/project/project/lib/a_56.ts]
 export const aa_56__0 = 0;
 export const aa_56__1 = 1;
 export const aa_56__2 = 2;
 export const aa_56__3 = 3;
 export const aa_56__4 = 4;
 
-//// [/lib/a_57.ts]
+//// [/home/src/project/project/lib/a_57.ts]
 export const aa_57__0 = 0;
 export const aa_57__1 = 1;
 export const aa_57__2 = 2;
 export const aa_57__3 = 3;
 export const aa_57__4 = 4;
 
-//// [/lib/a_58.ts]
+//// [/home/src/project/project/lib/a_58.ts]
 export const aa_58__0 = 0;
 export const aa_58__1 = 1;
 export const aa_58__2 = 2;
 export const aa_58__3 = 3;
 export const aa_58__4 = 4;
 
-//// [/lib/a_59.ts]
+//// [/home/src/project/project/lib/a_59.ts]
 export const aa_59__0 = 0;
 export const aa_59__1 = 1;
 export const aa_59__2 = 2;
 export const aa_59__3 = 3;
 export const aa_59__4 = 4;
 
-//// [/lib/a_60.ts]
+//// [/home/src/project/project/lib/a_60.ts]
 export const aa_60__0 = 0;
 export const aa_60__1 = 1;
 export const aa_60__2 = 2;
 export const aa_60__3 = 3;
 export const aa_60__4 = 4;
 
-//// [/lib/a_61.ts]
+//// [/home/src/project/project/lib/a_61.ts]
 export const aa_61__0 = 0;
 export const aa_61__1 = 1;
 export const aa_61__2 = 2;
 export const aa_61__3 = 3;
 export const aa_61__4 = 4;
 
-//// [/lib/a_62.ts]
+//// [/home/src/project/project/lib/a_62.ts]
 export const aa_62__0 = 0;
 export const aa_62__1 = 1;
 export const aa_62__2 = 2;
 export const aa_62__3 = 3;
 export const aa_62__4 = 4;
 
-//// [/lib/a_63.ts]
+//// [/home/src/project/project/lib/a_63.ts]
 export const aa_63__0 = 0;
 export const aa_63__1 = 1;
 export const aa_63__2 = 2;
 export const aa_63__3 = 3;
 export const aa_63__4 = 4;
 
-//// [/lib/a_64.ts]
+//// [/home/src/project/project/lib/a_64.ts]
 export const aa_64__0 = 0;
 export const aa_64__1 = 1;
 export const aa_64__2 = 2;
 export const aa_64__3 = 3;
 export const aa_64__4 = 4;
 
-//// [/lib/a_65.ts]
+//// [/home/src/project/project/lib/a_65.ts]
 export const aa_65__0 = 0;
 export const aa_65__1 = 1;
 export const aa_65__2 = 2;
 export const aa_65__3 = 3;
 export const aa_65__4 = 4;
 
-//// [/lib/a_66.ts]
+//// [/home/src/project/project/lib/a_66.ts]
 export const aa_66__0 = 0;
 export const aa_66__1 = 1;
 export const aa_66__2 = 2;
 export const aa_66__3 = 3;
 export const aa_66__4 = 4;
 
-//// [/lib/a_67.ts]
+//// [/home/src/project/project/lib/a_67.ts]
 export const aa_67__0 = 0;
 export const aa_67__1 = 1;
 export const aa_67__2 = 2;
 export const aa_67__3 = 3;
 export const aa_67__4 = 4;
 
-//// [/lib/a_68.ts]
+//// [/home/src/project/project/lib/a_68.ts]
 export const aa_68__0 = 0;
 export const aa_68__1 = 1;
 export const aa_68__2 = 2;
 export const aa_68__3 = 3;
 export const aa_68__4 = 4;
 
-//// [/lib/a_69.ts]
+//// [/home/src/project/project/lib/a_69.ts]
 export const aa_69__0 = 0;
 export const aa_69__1 = 1;
 export const aa_69__2 = 2;
 export const aa_69__3 = 3;
 export const aa_69__4 = 4;
 
-//// [/lib/a_70.ts]
+//// [/home/src/project/project/lib/a_70.ts]
 export const aa_70__0 = 0;
 export const aa_70__1 = 1;
 export const aa_70__2 = 2;
 export const aa_70__3 = 3;
 export const aa_70__4 = 4;
 
-//// [/lib/a_71.ts]
+//// [/home/src/project/project/lib/a_71.ts]
 export const aa_71__0 = 0;
 export const aa_71__1 = 1;
 export const aa_71__2 = 2;
 export const aa_71__3 = 3;
 export const aa_71__4 = 4;
 
-//// [/lib/a_72.ts]
+//// [/home/src/project/project/lib/a_72.ts]
 export const aa_72__0 = 0;
 export const aa_72__1 = 1;
 export const aa_72__2 = 2;
 export const aa_72__3 = 3;
 export const aa_72__4 = 4;
 
-//// [/lib/a_73.ts]
+//// [/home/src/project/project/lib/a_73.ts]
 export const aa_73__0 = 0;
 export const aa_73__1 = 1;
 export const aa_73__2 = 2;
 export const aa_73__3 = 3;
 export const aa_73__4 = 4;
 
-//// [/lib/a_74.ts]
+//// [/home/src/project/project/lib/a_74.ts]
 export const aa_74__0 = 0;
 export const aa_74__1 = 1;
 export const aa_74__2 = 2;
 export const aa_74__3 = 3;
 export const aa_74__4 = 4;
 
-//// [/lib/a_75.ts]
+//// [/home/src/project/project/lib/a_75.ts]
 export const aa_75__0 = 0;
 export const aa_75__1 = 1;
 export const aa_75__2 = 2;
 export const aa_75__3 = 3;
 export const aa_75__4 = 4;
 
-//// [/lib/a_76.ts]
+//// [/home/src/project/project/lib/a_76.ts]
 export const aa_76__0 = 0;
 export const aa_76__1 = 1;
 export const aa_76__2 = 2;
 export const aa_76__3 = 3;
 export const aa_76__4 = 4;
 
-//// [/lib/a_77.ts]
+//// [/home/src/project/project/lib/a_77.ts]
 export const aa_77__0 = 0;
 export const aa_77__1 = 1;
 export const aa_77__2 = 2;
 export const aa_77__3 = 3;
 export const aa_77__4 = 4;
 
-//// [/lib/a_78.ts]
+//// [/home/src/project/project/lib/a_78.ts]
 export const aa_78__0 = 0;
 export const aa_78__1 = 1;
 export const aa_78__2 = 2;
 export const aa_78__3 = 3;
 export const aa_78__4 = 4;
 
-//// [/lib/a_79.ts]
+//// [/home/src/project/project/lib/a_79.ts]
 export const aa_79__0 = 0;
 export const aa_79__1 = 1;
 export const aa_79__2 = 2;
 export const aa_79__3 = 3;
 export const aa_79__4 = 4;
 
-//// [/lib/a_80.ts]
+//// [/home/src/project/project/lib/a_80.ts]
 export const aa_80__0 = 0;
 export const aa_80__1 = 1;
 export const aa_80__2 = 2;
 export const aa_80__3 = 3;
 export const aa_80__4 = 4;
 
-//// [/lib/a_81.ts]
+//// [/home/src/project/project/lib/a_81.ts]
 export const aa_81__0 = 0;
 export const aa_81__1 = 1;
 export const aa_81__2 = 2;
 export const aa_81__3 = 3;
 export const aa_81__4 = 4;
 
-//// [/lib/a_82.ts]
+//// [/home/src/project/project/lib/a_82.ts]
 export const aa_82__0 = 0;
 export const aa_82__1 = 1;
 export const aa_82__2 = 2;
 export const aa_82__3 = 3;
 export const aa_82__4 = 4;
 
-//// [/lib/a_83.ts]
+//// [/home/src/project/project/lib/a_83.ts]
 export const aa_83__0 = 0;
 export const aa_83__1 = 1;
 export const aa_83__2 = 2;
 export const aa_83__3 = 3;
 export const aa_83__4 = 4;
 
-//// [/lib/a_84.ts]
+//// [/home/src/project/project/lib/a_84.ts]
 export const aa_84__0 = 0;
 export const aa_84__1 = 1;
 export const aa_84__2 = 2;
 export const aa_84__3 = 3;
 export const aa_84__4 = 4;
 
-//// [/lib/a_85.ts]
+//// [/home/src/project/project/lib/a_85.ts]
 export const aa_85__0 = 0;
 export const aa_85__1 = 1;
 export const aa_85__2 = 2;
 export const aa_85__3 = 3;
 export const aa_85__4 = 4;
 
-//// [/lib/a_86.ts]
+//// [/home/src/project/project/lib/a_86.ts]
 export const aa_86__0 = 0;
 export const aa_86__1 = 1;
 export const aa_86__2 = 2;
 export const aa_86__3 = 3;
 export const aa_86__4 = 4;
 
-//// [/lib/a_87.ts]
+//// [/home/src/project/project/lib/a_87.ts]
 export const aa_87__0 = 0;
 export const aa_87__1 = 1;
 export const aa_87__2 = 2;
 export const aa_87__3 = 3;
 export const aa_87__4 = 4;
 
-//// [/lib/a_88.ts]
+//// [/home/src/project/project/lib/a_88.ts]
 export const aa_88__0 = 0;
 export const aa_88__1 = 1;
 export const aa_88__2 = 2;
 export const aa_88__3 = 3;
 export const aa_88__4 = 4;
 
-//// [/lib/a_89.ts]
+//// [/home/src/project/project/lib/a_89.ts]
 export const aa_89__0 = 0;
 export const aa_89__1 = 1;
 export const aa_89__2 = 2;
 export const aa_89__3 = 3;
 export const aa_89__4 = 4;
 
-//// [/lib/a_90.ts]
+//// [/home/src/project/project/lib/a_90.ts]
 export const aa_90__0 = 0;
 export const aa_90__1 = 1;
 export const aa_90__2 = 2;
 export const aa_90__3 = 3;
 export const aa_90__4 = 4;
 
-//// [/lib/a_91.ts]
+//// [/home/src/project/project/lib/a_91.ts]
 export const aa_91__0 = 0;
 export const aa_91__1 = 1;
 export const aa_91__2 = 2;
 export const aa_91__3 = 3;
 export const aa_91__4 = 4;
 
-//// [/lib/a_92.ts]
+//// [/home/src/project/project/lib/a_92.ts]
 export const aa_92__0 = 0;
 export const aa_92__1 = 1;
 export const aa_92__2 = 2;
 export const aa_92__3 = 3;
 export const aa_92__4 = 4;
 
-//// [/lib/a_93.ts]
+//// [/home/src/project/project/lib/a_93.ts]
 export const aa_93__0 = 0;
 export const aa_93__1 = 1;
 export const aa_93__2 = 2;
 export const aa_93__3 = 3;
 export const aa_93__4 = 4;
 
-//// [/lib/a_94.ts]
+//// [/home/src/project/project/lib/a_94.ts]
 export const aa_94__0 = 0;
 export const aa_94__1 = 1;
 export const aa_94__2 = 2;
 export const aa_94__3 = 3;
 export const aa_94__4 = 4;
 
-//// [/lib/a_95.ts]
+//// [/home/src/project/project/lib/a_95.ts]
 export const aa_95__0 = 0;
 export const aa_95__1 = 1;
 export const aa_95__2 = 2;
 export const aa_95__3 = 3;
 export const aa_95__4 = 4;
 
-//// [/lib/a_96.ts]
+//// [/home/src/project/project/lib/a_96.ts]
 export const aa_96__0 = 0;
 export const aa_96__1 = 1;
 export const aa_96__2 = 2;
 export const aa_96__3 = 3;
 export const aa_96__4 = 4;
 
-//// [/lib/a_97.ts]
+//// [/home/src/project/project/lib/a_97.ts]
 export const aa_97__0 = 0;
 export const aa_97__1 = 1;
 export const aa_97__2 = 2;
 export const aa_97__3 = 3;
 export const aa_97__4 = 4;
 
-//// [/lib/a_98.ts]
+//// [/home/src/project/project/lib/a_98.ts]
 export const aa_98__0 = 0;
 export const aa_98__1 = 1;
 export const aa_98__2 = 2;
 export const aa_98__3 = 3;
 export const aa_98__4 = 4;
 
-//// [/lib/a_99.ts]
+//// [/home/src/project/project/lib/a_99.ts]
 export const aa_99__0 = 0;
 export const aa_99__1 = 1;
 export const aa_99__2 = 2;
 export const aa_99__3 = 3;
 export const aa_99__4 = 4;
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1039,643 +1056,650 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/home/src/project/project/index.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/project/project/index.ts ProjectRootPath: undefined:: Result: /home/src/project/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/project/project/tsconfig.json, currentDirectory: /home/src/project/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/tsconfig.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /index.ts to open"
+        "projectName": "/home/src/project/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/project/project/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/project/project/tsconfig.json : {
  "rootNames": [
-  "/index.ts",
-  "/lib/a_0.ts",
-  "/lib/a_1.ts",
-  "/lib/a_10.ts",
-  "/lib/a_11.ts",
-  "/lib/a_12.ts",
-  "/lib/a_13.ts",
-  "/lib/a_14.ts",
-  "/lib/a_15.ts",
-  "/lib/a_16.ts",
-  "/lib/a_17.ts",
-  "/lib/a_18.ts",
-  "/lib/a_19.ts",
-  "/lib/a_2.ts",
-  "/lib/a_20.ts",
-  "/lib/a_21.ts",
-  "/lib/a_22.ts",
-  "/lib/a_23.ts",
-  "/lib/a_24.ts",
-  "/lib/a_25.ts",
-  "/lib/a_26.ts",
-  "/lib/a_27.ts",
-  "/lib/a_28.ts",
-  "/lib/a_29.ts",
-  "/lib/a_3.ts",
-  "/lib/a_30.ts",
-  "/lib/a_31.ts",
-  "/lib/a_32.ts",
-  "/lib/a_33.ts",
-  "/lib/a_34.ts",
-  "/lib/a_35.ts",
-  "/lib/a_36.ts",
-  "/lib/a_37.ts",
-  "/lib/a_38.ts",
-  "/lib/a_39.ts",
-  "/lib/a_4.ts",
-  "/lib/a_40.ts",
-  "/lib/a_41.ts",
-  "/lib/a_42.ts",
-  "/lib/a_43.ts",
-  "/lib/a_44.ts",
-  "/lib/a_45.ts",
-  "/lib/a_46.ts",
-  "/lib/a_47.ts",
-  "/lib/a_48.ts",
-  "/lib/a_49.ts",
-  "/lib/a_5.ts",
-  "/lib/a_50.ts",
-  "/lib/a_51.ts",
-  "/lib/a_52.ts",
-  "/lib/a_53.ts",
-  "/lib/a_54.ts",
-  "/lib/a_55.ts",
-  "/lib/a_56.ts",
-  "/lib/a_57.ts",
-  "/lib/a_58.ts",
-  "/lib/a_59.ts",
-  "/lib/a_6.ts",
-  "/lib/a_60.ts",
-  "/lib/a_61.ts",
-  "/lib/a_62.ts",
-  "/lib/a_63.ts",
-  "/lib/a_64.ts",
-  "/lib/a_65.ts",
-  "/lib/a_66.ts",
-  "/lib/a_67.ts",
-  "/lib/a_68.ts",
-  "/lib/a_69.ts",
-  "/lib/a_7.ts",
-  "/lib/a_70.ts",
-  "/lib/a_71.ts",
-  "/lib/a_72.ts",
-  "/lib/a_73.ts",
-  "/lib/a_74.ts",
-  "/lib/a_75.ts",
-  "/lib/a_76.ts",
-  "/lib/a_77.ts",
-  "/lib/a_78.ts",
-  "/lib/a_79.ts",
-  "/lib/a_8.ts",
-  "/lib/a_80.ts",
-  "/lib/a_81.ts",
-  "/lib/a_82.ts",
-  "/lib/a_83.ts",
-  "/lib/a_84.ts",
-  "/lib/a_85.ts",
-  "/lib/a_86.ts",
-  "/lib/a_87.ts",
-  "/lib/a_88.ts",
-  "/lib/a_89.ts",
-  "/lib/a_9.ts",
-  "/lib/a_90.ts",
-  "/lib/a_91.ts",
-  "/lib/a_92.ts",
-  "/lib/a_93.ts",
-  "/lib/a_94.ts",
-  "/lib/a_95.ts",
-  "/lib/a_96.ts",
-  "/lib/a_97.ts",
-  "/lib/a_98.ts",
-  "/lib/a_99.ts",
-  "/lib/ambient_0.ts",
-  "/lib/ambient_1.ts",
-  "/lib/ambient_10.ts",
-  "/lib/ambient_11.ts",
-  "/lib/ambient_12.ts",
-  "/lib/ambient_13.ts",
-  "/lib/ambient_14.ts",
-  "/lib/ambient_15.ts",
-  "/lib/ambient_16.ts",
-  "/lib/ambient_17.ts",
-  "/lib/ambient_18.ts",
-  "/lib/ambient_19.ts",
-  "/lib/ambient_2.ts",
-  "/lib/ambient_20.ts",
-  "/lib/ambient_21.ts",
-  "/lib/ambient_22.ts",
-  "/lib/ambient_23.ts",
-  "/lib/ambient_24.ts",
-  "/lib/ambient_25.ts",
-  "/lib/ambient_26.ts",
-  "/lib/ambient_27.ts",
-  "/lib/ambient_28.ts",
-  "/lib/ambient_29.ts",
-  "/lib/ambient_3.ts",
-  "/lib/ambient_30.ts",
-  "/lib/ambient_31.ts",
-  "/lib/ambient_32.ts",
-  "/lib/ambient_33.ts",
-  "/lib/ambient_34.ts",
-  "/lib/ambient_35.ts",
-  "/lib/ambient_36.ts",
-  "/lib/ambient_37.ts",
-  "/lib/ambient_38.ts",
-  "/lib/ambient_39.ts",
-  "/lib/ambient_4.ts",
-  "/lib/ambient_40.ts",
-  "/lib/ambient_41.ts",
-  "/lib/ambient_42.ts",
-  "/lib/ambient_43.ts",
-  "/lib/ambient_44.ts",
-  "/lib/ambient_45.ts",
-  "/lib/ambient_46.ts",
-  "/lib/ambient_47.ts",
-  "/lib/ambient_48.ts",
-  "/lib/ambient_49.ts",
-  "/lib/ambient_5.ts",
-  "/lib/ambient_50.ts",
-  "/lib/ambient_51.ts",
-  "/lib/ambient_52.ts",
-  "/lib/ambient_53.ts",
-  "/lib/ambient_54.ts",
-  "/lib/ambient_55.ts",
-  "/lib/ambient_56.ts",
-  "/lib/ambient_57.ts",
-  "/lib/ambient_58.ts",
-  "/lib/ambient_59.ts",
-  "/lib/ambient_6.ts",
-  "/lib/ambient_60.ts",
-  "/lib/ambient_61.ts",
-  "/lib/ambient_62.ts",
-  "/lib/ambient_63.ts",
-  "/lib/ambient_64.ts",
-  "/lib/ambient_65.ts",
-  "/lib/ambient_66.ts",
-  "/lib/ambient_67.ts",
-  "/lib/ambient_68.ts",
-  "/lib/ambient_69.ts",
-  "/lib/ambient_7.ts",
-  "/lib/ambient_70.ts",
-  "/lib/ambient_71.ts",
-  "/lib/ambient_72.ts",
-  "/lib/ambient_73.ts",
-  "/lib/ambient_74.ts",
-  "/lib/ambient_75.ts",
-  "/lib/ambient_76.ts",
-  "/lib/ambient_77.ts",
-  "/lib/ambient_78.ts",
-  "/lib/ambient_79.ts",
-  "/lib/ambient_8.ts",
-  "/lib/ambient_80.ts",
-  "/lib/ambient_81.ts",
-  "/lib/ambient_82.ts",
-  "/lib/ambient_83.ts",
-  "/lib/ambient_84.ts",
-  "/lib/ambient_85.ts",
-  "/lib/ambient_86.ts",
-  "/lib/ambient_87.ts",
-  "/lib/ambient_88.ts",
-  "/lib/ambient_89.ts",
-  "/lib/ambient_9.ts",
-  "/lib/ambient_90.ts",
-  "/lib/ambient_91.ts",
-  "/lib/ambient_92.ts",
-  "/lib/ambient_93.ts",
-  "/lib/ambient_94.ts",
-  "/lib/ambient_95.ts",
-  "/lib/ambient_96.ts",
-  "/lib/ambient_97.ts",
-  "/lib/ambient_98.ts",
-  "/lib/ambient_99.ts"
+  "/home/src/project/project/index.ts",
+  "/home/src/project/project/lib/a_0.ts",
+  "/home/src/project/project/lib/a_1.ts",
+  "/home/src/project/project/lib/a_10.ts",
+  "/home/src/project/project/lib/a_11.ts",
+  "/home/src/project/project/lib/a_12.ts",
+  "/home/src/project/project/lib/a_13.ts",
+  "/home/src/project/project/lib/a_14.ts",
+  "/home/src/project/project/lib/a_15.ts",
+  "/home/src/project/project/lib/a_16.ts",
+  "/home/src/project/project/lib/a_17.ts",
+  "/home/src/project/project/lib/a_18.ts",
+  "/home/src/project/project/lib/a_19.ts",
+  "/home/src/project/project/lib/a_2.ts",
+  "/home/src/project/project/lib/a_20.ts",
+  "/home/src/project/project/lib/a_21.ts",
+  "/home/src/project/project/lib/a_22.ts",
+  "/home/src/project/project/lib/a_23.ts",
+  "/home/src/project/project/lib/a_24.ts",
+  "/home/src/project/project/lib/a_25.ts",
+  "/home/src/project/project/lib/a_26.ts",
+  "/home/src/project/project/lib/a_27.ts",
+  "/home/src/project/project/lib/a_28.ts",
+  "/home/src/project/project/lib/a_29.ts",
+  "/home/src/project/project/lib/a_3.ts",
+  "/home/src/project/project/lib/a_30.ts",
+  "/home/src/project/project/lib/a_31.ts",
+  "/home/src/project/project/lib/a_32.ts",
+  "/home/src/project/project/lib/a_33.ts",
+  "/home/src/project/project/lib/a_34.ts",
+  "/home/src/project/project/lib/a_35.ts",
+  "/home/src/project/project/lib/a_36.ts",
+  "/home/src/project/project/lib/a_37.ts",
+  "/home/src/project/project/lib/a_38.ts",
+  "/home/src/project/project/lib/a_39.ts",
+  "/home/src/project/project/lib/a_4.ts",
+  "/home/src/project/project/lib/a_40.ts",
+  "/home/src/project/project/lib/a_41.ts",
+  "/home/src/project/project/lib/a_42.ts",
+  "/home/src/project/project/lib/a_43.ts",
+  "/home/src/project/project/lib/a_44.ts",
+  "/home/src/project/project/lib/a_45.ts",
+  "/home/src/project/project/lib/a_46.ts",
+  "/home/src/project/project/lib/a_47.ts",
+  "/home/src/project/project/lib/a_48.ts",
+  "/home/src/project/project/lib/a_49.ts",
+  "/home/src/project/project/lib/a_5.ts",
+  "/home/src/project/project/lib/a_50.ts",
+  "/home/src/project/project/lib/a_51.ts",
+  "/home/src/project/project/lib/a_52.ts",
+  "/home/src/project/project/lib/a_53.ts",
+  "/home/src/project/project/lib/a_54.ts",
+  "/home/src/project/project/lib/a_55.ts",
+  "/home/src/project/project/lib/a_56.ts",
+  "/home/src/project/project/lib/a_57.ts",
+  "/home/src/project/project/lib/a_58.ts",
+  "/home/src/project/project/lib/a_59.ts",
+  "/home/src/project/project/lib/a_6.ts",
+  "/home/src/project/project/lib/a_60.ts",
+  "/home/src/project/project/lib/a_61.ts",
+  "/home/src/project/project/lib/a_62.ts",
+  "/home/src/project/project/lib/a_63.ts",
+  "/home/src/project/project/lib/a_64.ts",
+  "/home/src/project/project/lib/a_65.ts",
+  "/home/src/project/project/lib/a_66.ts",
+  "/home/src/project/project/lib/a_67.ts",
+  "/home/src/project/project/lib/a_68.ts",
+  "/home/src/project/project/lib/a_69.ts",
+  "/home/src/project/project/lib/a_7.ts",
+  "/home/src/project/project/lib/a_70.ts",
+  "/home/src/project/project/lib/a_71.ts",
+  "/home/src/project/project/lib/a_72.ts",
+  "/home/src/project/project/lib/a_73.ts",
+  "/home/src/project/project/lib/a_74.ts",
+  "/home/src/project/project/lib/a_75.ts",
+  "/home/src/project/project/lib/a_76.ts",
+  "/home/src/project/project/lib/a_77.ts",
+  "/home/src/project/project/lib/a_78.ts",
+  "/home/src/project/project/lib/a_79.ts",
+  "/home/src/project/project/lib/a_8.ts",
+  "/home/src/project/project/lib/a_80.ts",
+  "/home/src/project/project/lib/a_81.ts",
+  "/home/src/project/project/lib/a_82.ts",
+  "/home/src/project/project/lib/a_83.ts",
+  "/home/src/project/project/lib/a_84.ts",
+  "/home/src/project/project/lib/a_85.ts",
+  "/home/src/project/project/lib/a_86.ts",
+  "/home/src/project/project/lib/a_87.ts",
+  "/home/src/project/project/lib/a_88.ts",
+  "/home/src/project/project/lib/a_89.ts",
+  "/home/src/project/project/lib/a_9.ts",
+  "/home/src/project/project/lib/a_90.ts",
+  "/home/src/project/project/lib/a_91.ts",
+  "/home/src/project/project/lib/a_92.ts",
+  "/home/src/project/project/lib/a_93.ts",
+  "/home/src/project/project/lib/a_94.ts",
+  "/home/src/project/project/lib/a_95.ts",
+  "/home/src/project/project/lib/a_96.ts",
+  "/home/src/project/project/lib/a_97.ts",
+  "/home/src/project/project/lib/a_98.ts",
+  "/home/src/project/project/lib/a_99.ts",
+  "/home/src/project/project/lib/ambient_0.ts",
+  "/home/src/project/project/lib/ambient_1.ts",
+  "/home/src/project/project/lib/ambient_10.ts",
+  "/home/src/project/project/lib/ambient_11.ts",
+  "/home/src/project/project/lib/ambient_12.ts",
+  "/home/src/project/project/lib/ambient_13.ts",
+  "/home/src/project/project/lib/ambient_14.ts",
+  "/home/src/project/project/lib/ambient_15.ts",
+  "/home/src/project/project/lib/ambient_16.ts",
+  "/home/src/project/project/lib/ambient_17.ts",
+  "/home/src/project/project/lib/ambient_18.ts",
+  "/home/src/project/project/lib/ambient_19.ts",
+  "/home/src/project/project/lib/ambient_2.ts",
+  "/home/src/project/project/lib/ambient_20.ts",
+  "/home/src/project/project/lib/ambient_21.ts",
+  "/home/src/project/project/lib/ambient_22.ts",
+  "/home/src/project/project/lib/ambient_23.ts",
+  "/home/src/project/project/lib/ambient_24.ts",
+  "/home/src/project/project/lib/ambient_25.ts",
+  "/home/src/project/project/lib/ambient_26.ts",
+  "/home/src/project/project/lib/ambient_27.ts",
+  "/home/src/project/project/lib/ambient_28.ts",
+  "/home/src/project/project/lib/ambient_29.ts",
+  "/home/src/project/project/lib/ambient_3.ts",
+  "/home/src/project/project/lib/ambient_30.ts",
+  "/home/src/project/project/lib/ambient_31.ts",
+  "/home/src/project/project/lib/ambient_32.ts",
+  "/home/src/project/project/lib/ambient_33.ts",
+  "/home/src/project/project/lib/ambient_34.ts",
+  "/home/src/project/project/lib/ambient_35.ts",
+  "/home/src/project/project/lib/ambient_36.ts",
+  "/home/src/project/project/lib/ambient_37.ts",
+  "/home/src/project/project/lib/ambient_38.ts",
+  "/home/src/project/project/lib/ambient_39.ts",
+  "/home/src/project/project/lib/ambient_4.ts",
+  "/home/src/project/project/lib/ambient_40.ts",
+  "/home/src/project/project/lib/ambient_41.ts",
+  "/home/src/project/project/lib/ambient_42.ts",
+  "/home/src/project/project/lib/ambient_43.ts",
+  "/home/src/project/project/lib/ambient_44.ts",
+  "/home/src/project/project/lib/ambient_45.ts",
+  "/home/src/project/project/lib/ambient_46.ts",
+  "/home/src/project/project/lib/ambient_47.ts",
+  "/home/src/project/project/lib/ambient_48.ts",
+  "/home/src/project/project/lib/ambient_49.ts",
+  "/home/src/project/project/lib/ambient_5.ts",
+  "/home/src/project/project/lib/ambient_50.ts",
+  "/home/src/project/project/lib/ambient_51.ts",
+  "/home/src/project/project/lib/ambient_52.ts",
+  "/home/src/project/project/lib/ambient_53.ts",
+  "/home/src/project/project/lib/ambient_54.ts",
+  "/home/src/project/project/lib/ambient_55.ts",
+  "/home/src/project/project/lib/ambient_56.ts",
+  "/home/src/project/project/lib/ambient_57.ts",
+  "/home/src/project/project/lib/ambient_58.ts",
+  "/home/src/project/project/lib/ambient_59.ts",
+  "/home/src/project/project/lib/ambient_6.ts",
+  "/home/src/project/project/lib/ambient_60.ts",
+  "/home/src/project/project/lib/ambient_61.ts",
+  "/home/src/project/project/lib/ambient_62.ts",
+  "/home/src/project/project/lib/ambient_63.ts",
+  "/home/src/project/project/lib/ambient_64.ts",
+  "/home/src/project/project/lib/ambient_65.ts",
+  "/home/src/project/project/lib/ambient_66.ts",
+  "/home/src/project/project/lib/ambient_67.ts",
+  "/home/src/project/project/lib/ambient_68.ts",
+  "/home/src/project/project/lib/ambient_69.ts",
+  "/home/src/project/project/lib/ambient_7.ts",
+  "/home/src/project/project/lib/ambient_70.ts",
+  "/home/src/project/project/lib/ambient_71.ts",
+  "/home/src/project/project/lib/ambient_72.ts",
+  "/home/src/project/project/lib/ambient_73.ts",
+  "/home/src/project/project/lib/ambient_74.ts",
+  "/home/src/project/project/lib/ambient_75.ts",
+  "/home/src/project/project/lib/ambient_76.ts",
+  "/home/src/project/project/lib/ambient_77.ts",
+  "/home/src/project/project/lib/ambient_78.ts",
+  "/home/src/project/project/lib/ambient_79.ts",
+  "/home/src/project/project/lib/ambient_8.ts",
+  "/home/src/project/project/lib/ambient_80.ts",
+  "/home/src/project/project/lib/ambient_81.ts",
+  "/home/src/project/project/lib/ambient_82.ts",
+  "/home/src/project/project/lib/ambient_83.ts",
+  "/home/src/project/project/lib/ambient_84.ts",
+  "/home/src/project/project/lib/ambient_85.ts",
+  "/home/src/project/project/lib/ambient_86.ts",
+  "/home/src/project/project/lib/ambient_87.ts",
+  "/home/src/project/project/lib/ambient_88.ts",
+  "/home/src/project/project/lib/ambient_89.ts",
+  "/home/src/project/project/lib/ambient_9.ts",
+  "/home/src/project/project/lib/ambient_90.ts",
+  "/home/src/project/project/lib/ambient_91.ts",
+  "/home/src/project/project/lib/ambient_92.ts",
+  "/home/src/project/project/lib/ambient_93.ts",
+  "/home/src/project/project/lib/ambient_94.ts",
+  "/home/src/project/project/lib/ambient_95.ts",
+  "/home/src/project/project/lib/ambient_96.ts",
+  "/home/src/project/project/lib/ambient_97.ts",
+  "/home/src/project/project/lib/ambient_98.ts",
+  "/home/src/project/project/lib/ambient_99.ts"
  ],
  "options": {
   "module": 1,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/home/src/project/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_0.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_10.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_11.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_12.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_13.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_14.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_15.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_16.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_17.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_18.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_19.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_20.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_21.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_22.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_23.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_24.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_25.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_26.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_27.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_28.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_29.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_30.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_31.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_32.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_33.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_34.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_35.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_36.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_37.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_38.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_39.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_4.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_40.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_41.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_42.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_43.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_44.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_45.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_46.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_47.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_48.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_49.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_5.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_50.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_51.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_52.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_53.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_54.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_55.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_56.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_57.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_58.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_59.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_6.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_60.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_61.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_62.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_63.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_64.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_65.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_66.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_67.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_68.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_69.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_7.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_70.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_71.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_72.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_73.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_74.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_75.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_76.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_77.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_78.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_79.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_8.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_80.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_81.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_82.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_83.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_84.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_85.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_86.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_87.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_88.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_89.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_9.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_90.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_91.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_92.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_93.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_94.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_95.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_96.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_97.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_98.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/ambient_99.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (201)
-	/index.ts SVC-1-0 ""
-	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;"
-	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;"
-	/lib/a_10.ts Text-1 "export const aa_10__0 = 0;\nexport const aa_10__1 = 1;\nexport const aa_10__2 = 2;\nexport const aa_10__3 = 3;\nexport const aa_10__4 = 4;"
-	/lib/a_11.ts Text-1 "export const aa_11__0 = 0;\nexport const aa_11__1 = 1;\nexport const aa_11__2 = 2;\nexport const aa_11__3 = 3;\nexport const aa_11__4 = 4;"
-	/lib/a_12.ts Text-1 "export const aa_12__0 = 0;\nexport const aa_12__1 = 1;\nexport const aa_12__2 = 2;\nexport const aa_12__3 = 3;\nexport const aa_12__4 = 4;"
-	/lib/a_13.ts Text-1 "export const aa_13__0 = 0;\nexport const aa_13__1 = 1;\nexport const aa_13__2 = 2;\nexport const aa_13__3 = 3;\nexport const aa_13__4 = 4;"
-	/lib/a_14.ts Text-1 "export const aa_14__0 = 0;\nexport const aa_14__1 = 1;\nexport const aa_14__2 = 2;\nexport const aa_14__3 = 3;\nexport const aa_14__4 = 4;"
-	/lib/a_15.ts Text-1 "export const aa_15__0 = 0;\nexport const aa_15__1 = 1;\nexport const aa_15__2 = 2;\nexport const aa_15__3 = 3;\nexport const aa_15__4 = 4;"
-	/lib/a_16.ts Text-1 "export const aa_16__0 = 0;\nexport const aa_16__1 = 1;\nexport const aa_16__2 = 2;\nexport const aa_16__3 = 3;\nexport const aa_16__4 = 4;"
-	/lib/a_17.ts Text-1 "export const aa_17__0 = 0;\nexport const aa_17__1 = 1;\nexport const aa_17__2 = 2;\nexport const aa_17__3 = 3;\nexport const aa_17__4 = 4;"
-	/lib/a_18.ts Text-1 "export const aa_18__0 = 0;\nexport const aa_18__1 = 1;\nexport const aa_18__2 = 2;\nexport const aa_18__3 = 3;\nexport const aa_18__4 = 4;"
-	/lib/a_19.ts Text-1 "export const aa_19__0 = 0;\nexport const aa_19__1 = 1;\nexport const aa_19__2 = 2;\nexport const aa_19__3 = 3;\nexport const aa_19__4 = 4;"
-	/lib/a_2.ts Text-1 "export const aa_2__0 = 0;\nexport const aa_2__1 = 1;\nexport const aa_2__2 = 2;\nexport const aa_2__3 = 3;\nexport const aa_2__4 = 4;"
-	/lib/a_20.ts Text-1 "export const aa_20__0 = 0;\nexport const aa_20__1 = 1;\nexport const aa_20__2 = 2;\nexport const aa_20__3 = 3;\nexport const aa_20__4 = 4;"
-	/lib/a_21.ts Text-1 "export const aa_21__0 = 0;\nexport const aa_21__1 = 1;\nexport const aa_21__2 = 2;\nexport const aa_21__3 = 3;\nexport const aa_21__4 = 4;"
-	/lib/a_22.ts Text-1 "export const aa_22__0 = 0;\nexport const aa_22__1 = 1;\nexport const aa_22__2 = 2;\nexport const aa_22__3 = 3;\nexport const aa_22__4 = 4;"
-	/lib/a_23.ts Text-1 "export const aa_23__0 = 0;\nexport const aa_23__1 = 1;\nexport const aa_23__2 = 2;\nexport const aa_23__3 = 3;\nexport const aa_23__4 = 4;"
-	/lib/a_24.ts Text-1 "export const aa_24__0 = 0;\nexport const aa_24__1 = 1;\nexport const aa_24__2 = 2;\nexport const aa_24__3 = 3;\nexport const aa_24__4 = 4;"
-	/lib/a_25.ts Text-1 "export const aa_25__0 = 0;\nexport const aa_25__1 = 1;\nexport const aa_25__2 = 2;\nexport const aa_25__3 = 3;\nexport const aa_25__4 = 4;"
-	/lib/a_26.ts Text-1 "export const aa_26__0 = 0;\nexport const aa_26__1 = 1;\nexport const aa_26__2 = 2;\nexport const aa_26__3 = 3;\nexport const aa_26__4 = 4;"
-	/lib/a_27.ts Text-1 "export const aa_27__0 = 0;\nexport const aa_27__1 = 1;\nexport const aa_27__2 = 2;\nexport const aa_27__3 = 3;\nexport const aa_27__4 = 4;"
-	/lib/a_28.ts Text-1 "export const aa_28__0 = 0;\nexport const aa_28__1 = 1;\nexport const aa_28__2 = 2;\nexport const aa_28__3 = 3;\nexport const aa_28__4 = 4;"
-	/lib/a_29.ts Text-1 "export const aa_29__0 = 0;\nexport const aa_29__1 = 1;\nexport const aa_29__2 = 2;\nexport const aa_29__3 = 3;\nexport const aa_29__4 = 4;"
-	/lib/a_3.ts Text-1 "export const aa_3__0 = 0;\nexport const aa_3__1 = 1;\nexport const aa_3__2 = 2;\nexport const aa_3__3 = 3;\nexport const aa_3__4 = 4;"
-	/lib/a_30.ts Text-1 "export const aa_30__0 = 0;\nexport const aa_30__1 = 1;\nexport const aa_30__2 = 2;\nexport const aa_30__3 = 3;\nexport const aa_30__4 = 4;"
-	/lib/a_31.ts Text-1 "export const aa_31__0 = 0;\nexport const aa_31__1 = 1;\nexport const aa_31__2 = 2;\nexport const aa_31__3 = 3;\nexport const aa_31__4 = 4;"
-	/lib/a_32.ts Text-1 "export const aa_32__0 = 0;\nexport const aa_32__1 = 1;\nexport const aa_32__2 = 2;\nexport const aa_32__3 = 3;\nexport const aa_32__4 = 4;"
-	/lib/a_33.ts Text-1 "export const aa_33__0 = 0;\nexport const aa_33__1 = 1;\nexport const aa_33__2 = 2;\nexport const aa_33__3 = 3;\nexport const aa_33__4 = 4;"
-	/lib/a_34.ts Text-1 "export const aa_34__0 = 0;\nexport const aa_34__1 = 1;\nexport const aa_34__2 = 2;\nexport const aa_34__3 = 3;\nexport const aa_34__4 = 4;"
-	/lib/a_35.ts Text-1 "export const aa_35__0 = 0;\nexport const aa_35__1 = 1;\nexport const aa_35__2 = 2;\nexport const aa_35__3 = 3;\nexport const aa_35__4 = 4;"
-	/lib/a_36.ts Text-1 "export const aa_36__0 = 0;\nexport const aa_36__1 = 1;\nexport const aa_36__2 = 2;\nexport const aa_36__3 = 3;\nexport const aa_36__4 = 4;"
-	/lib/a_37.ts Text-1 "export const aa_37__0 = 0;\nexport const aa_37__1 = 1;\nexport const aa_37__2 = 2;\nexport const aa_37__3 = 3;\nexport const aa_37__4 = 4;"
-	/lib/a_38.ts Text-1 "export const aa_38__0 = 0;\nexport const aa_38__1 = 1;\nexport const aa_38__2 = 2;\nexport const aa_38__3 = 3;\nexport const aa_38__4 = 4;"
-	/lib/a_39.ts Text-1 "export const aa_39__0 = 0;\nexport const aa_39__1 = 1;\nexport const aa_39__2 = 2;\nexport const aa_39__3 = 3;\nexport const aa_39__4 = 4;"
-	/lib/a_4.ts Text-1 "export const aa_4__0 = 0;\nexport const aa_4__1 = 1;\nexport const aa_4__2 = 2;\nexport const aa_4__3 = 3;\nexport const aa_4__4 = 4;"
-	/lib/a_40.ts Text-1 "export const aa_40__0 = 0;\nexport const aa_40__1 = 1;\nexport const aa_40__2 = 2;\nexport const aa_40__3 = 3;\nexport const aa_40__4 = 4;"
-	/lib/a_41.ts Text-1 "export const aa_41__0 = 0;\nexport const aa_41__1 = 1;\nexport const aa_41__2 = 2;\nexport const aa_41__3 = 3;\nexport const aa_41__4 = 4;"
-	/lib/a_42.ts Text-1 "export const aa_42__0 = 0;\nexport const aa_42__1 = 1;\nexport const aa_42__2 = 2;\nexport const aa_42__3 = 3;\nexport const aa_42__4 = 4;"
-	/lib/a_43.ts Text-1 "export const aa_43__0 = 0;\nexport const aa_43__1 = 1;\nexport const aa_43__2 = 2;\nexport const aa_43__3 = 3;\nexport const aa_43__4 = 4;"
-	/lib/a_44.ts Text-1 "export const aa_44__0 = 0;\nexport const aa_44__1 = 1;\nexport const aa_44__2 = 2;\nexport const aa_44__3 = 3;\nexport const aa_44__4 = 4;"
-	/lib/a_45.ts Text-1 "export const aa_45__0 = 0;\nexport const aa_45__1 = 1;\nexport const aa_45__2 = 2;\nexport const aa_45__3 = 3;\nexport const aa_45__4 = 4;"
-	/lib/a_46.ts Text-1 "export const aa_46__0 = 0;\nexport const aa_46__1 = 1;\nexport const aa_46__2 = 2;\nexport const aa_46__3 = 3;\nexport const aa_46__4 = 4;"
-	/lib/a_47.ts Text-1 "export const aa_47__0 = 0;\nexport const aa_47__1 = 1;\nexport const aa_47__2 = 2;\nexport const aa_47__3 = 3;\nexport const aa_47__4 = 4;"
-	/lib/a_48.ts Text-1 "export const aa_48__0 = 0;\nexport const aa_48__1 = 1;\nexport const aa_48__2 = 2;\nexport const aa_48__3 = 3;\nexport const aa_48__4 = 4;"
-	/lib/a_49.ts Text-1 "export const aa_49__0 = 0;\nexport const aa_49__1 = 1;\nexport const aa_49__2 = 2;\nexport const aa_49__3 = 3;\nexport const aa_49__4 = 4;"
-	/lib/a_5.ts Text-1 "export const aa_5__0 = 0;\nexport const aa_5__1 = 1;\nexport const aa_5__2 = 2;\nexport const aa_5__3 = 3;\nexport const aa_5__4 = 4;"
-	/lib/a_50.ts Text-1 "export const aa_50__0 = 0;\nexport const aa_50__1 = 1;\nexport const aa_50__2 = 2;\nexport const aa_50__3 = 3;\nexport const aa_50__4 = 4;"
-	/lib/a_51.ts Text-1 "export const aa_51__0 = 0;\nexport const aa_51__1 = 1;\nexport const aa_51__2 = 2;\nexport const aa_51__3 = 3;\nexport const aa_51__4 = 4;"
-	/lib/a_52.ts Text-1 "export const aa_52__0 = 0;\nexport const aa_52__1 = 1;\nexport const aa_52__2 = 2;\nexport const aa_52__3 = 3;\nexport const aa_52__4 = 4;"
-	/lib/a_53.ts Text-1 "export const aa_53__0 = 0;\nexport const aa_53__1 = 1;\nexport const aa_53__2 = 2;\nexport const aa_53__3 = 3;\nexport const aa_53__4 = 4;"
-	/lib/a_54.ts Text-1 "export const aa_54__0 = 0;\nexport const aa_54__1 = 1;\nexport const aa_54__2 = 2;\nexport const aa_54__3 = 3;\nexport const aa_54__4 = 4;"
-	/lib/a_55.ts Text-1 "export const aa_55__0 = 0;\nexport const aa_55__1 = 1;\nexport const aa_55__2 = 2;\nexport const aa_55__3 = 3;\nexport const aa_55__4 = 4;"
-	/lib/a_56.ts Text-1 "export const aa_56__0 = 0;\nexport const aa_56__1 = 1;\nexport const aa_56__2 = 2;\nexport const aa_56__3 = 3;\nexport const aa_56__4 = 4;"
-	/lib/a_57.ts Text-1 "export const aa_57__0 = 0;\nexport const aa_57__1 = 1;\nexport const aa_57__2 = 2;\nexport const aa_57__3 = 3;\nexport const aa_57__4 = 4;"
-	/lib/a_58.ts Text-1 "export const aa_58__0 = 0;\nexport const aa_58__1 = 1;\nexport const aa_58__2 = 2;\nexport const aa_58__3 = 3;\nexport const aa_58__4 = 4;"
-	/lib/a_59.ts Text-1 "export const aa_59__0 = 0;\nexport const aa_59__1 = 1;\nexport const aa_59__2 = 2;\nexport const aa_59__3 = 3;\nexport const aa_59__4 = 4;"
-	/lib/a_6.ts Text-1 "export const aa_6__0 = 0;\nexport const aa_6__1 = 1;\nexport const aa_6__2 = 2;\nexport const aa_6__3 = 3;\nexport const aa_6__4 = 4;"
-	/lib/a_60.ts Text-1 "export const aa_60__0 = 0;\nexport const aa_60__1 = 1;\nexport const aa_60__2 = 2;\nexport const aa_60__3 = 3;\nexport const aa_60__4 = 4;"
-	/lib/a_61.ts Text-1 "export const aa_61__0 = 0;\nexport const aa_61__1 = 1;\nexport const aa_61__2 = 2;\nexport const aa_61__3 = 3;\nexport const aa_61__4 = 4;"
-	/lib/a_62.ts Text-1 "export const aa_62__0 = 0;\nexport const aa_62__1 = 1;\nexport const aa_62__2 = 2;\nexport const aa_62__3 = 3;\nexport const aa_62__4 = 4;"
-	/lib/a_63.ts Text-1 "export const aa_63__0 = 0;\nexport const aa_63__1 = 1;\nexport const aa_63__2 = 2;\nexport const aa_63__3 = 3;\nexport const aa_63__4 = 4;"
-	/lib/a_64.ts Text-1 "export const aa_64__0 = 0;\nexport const aa_64__1 = 1;\nexport const aa_64__2 = 2;\nexport const aa_64__3 = 3;\nexport const aa_64__4 = 4;"
-	/lib/a_65.ts Text-1 "export const aa_65__0 = 0;\nexport const aa_65__1 = 1;\nexport const aa_65__2 = 2;\nexport const aa_65__3 = 3;\nexport const aa_65__4 = 4;"
-	/lib/a_66.ts Text-1 "export const aa_66__0 = 0;\nexport const aa_66__1 = 1;\nexport const aa_66__2 = 2;\nexport const aa_66__3 = 3;\nexport const aa_66__4 = 4;"
-	/lib/a_67.ts Text-1 "export const aa_67__0 = 0;\nexport const aa_67__1 = 1;\nexport const aa_67__2 = 2;\nexport const aa_67__3 = 3;\nexport const aa_67__4 = 4;"
-	/lib/a_68.ts Text-1 "export const aa_68__0 = 0;\nexport const aa_68__1 = 1;\nexport const aa_68__2 = 2;\nexport const aa_68__3 = 3;\nexport const aa_68__4 = 4;"
-	/lib/a_69.ts Text-1 "export const aa_69__0 = 0;\nexport const aa_69__1 = 1;\nexport const aa_69__2 = 2;\nexport const aa_69__3 = 3;\nexport const aa_69__4 = 4;"
-	/lib/a_7.ts Text-1 "export const aa_7__0 = 0;\nexport const aa_7__1 = 1;\nexport const aa_7__2 = 2;\nexport const aa_7__3 = 3;\nexport const aa_7__4 = 4;"
-	/lib/a_70.ts Text-1 "export const aa_70__0 = 0;\nexport const aa_70__1 = 1;\nexport const aa_70__2 = 2;\nexport const aa_70__3 = 3;\nexport const aa_70__4 = 4;"
-	/lib/a_71.ts Text-1 "export const aa_71__0 = 0;\nexport const aa_71__1 = 1;\nexport const aa_71__2 = 2;\nexport const aa_71__3 = 3;\nexport const aa_71__4 = 4;"
-	/lib/a_72.ts Text-1 "export const aa_72__0 = 0;\nexport const aa_72__1 = 1;\nexport const aa_72__2 = 2;\nexport const aa_72__3 = 3;\nexport const aa_72__4 = 4;"
-	/lib/a_73.ts Text-1 "export const aa_73__0 = 0;\nexport const aa_73__1 = 1;\nexport const aa_73__2 = 2;\nexport const aa_73__3 = 3;\nexport const aa_73__4 = 4;"
-	/lib/a_74.ts Text-1 "export const aa_74__0 = 0;\nexport const aa_74__1 = 1;\nexport const aa_74__2 = 2;\nexport const aa_74__3 = 3;\nexport const aa_74__4 = 4;"
-	/lib/a_75.ts Text-1 "export const aa_75__0 = 0;\nexport const aa_75__1 = 1;\nexport const aa_75__2 = 2;\nexport const aa_75__3 = 3;\nexport const aa_75__4 = 4;"
-	/lib/a_76.ts Text-1 "export const aa_76__0 = 0;\nexport const aa_76__1 = 1;\nexport const aa_76__2 = 2;\nexport const aa_76__3 = 3;\nexport const aa_76__4 = 4;"
-	/lib/a_77.ts Text-1 "export const aa_77__0 = 0;\nexport const aa_77__1 = 1;\nexport const aa_77__2 = 2;\nexport const aa_77__3 = 3;\nexport const aa_77__4 = 4;"
-	/lib/a_78.ts Text-1 "export const aa_78__0 = 0;\nexport const aa_78__1 = 1;\nexport const aa_78__2 = 2;\nexport const aa_78__3 = 3;\nexport const aa_78__4 = 4;"
-	/lib/a_79.ts Text-1 "export const aa_79__0 = 0;\nexport const aa_79__1 = 1;\nexport const aa_79__2 = 2;\nexport const aa_79__3 = 3;\nexport const aa_79__4 = 4;"
-	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;\nexport const aa_8__1 = 1;\nexport const aa_8__2 = 2;\nexport const aa_8__3 = 3;\nexport const aa_8__4 = 4;"
-	/lib/a_80.ts Text-1 "export const aa_80__0 = 0;\nexport const aa_80__1 = 1;\nexport const aa_80__2 = 2;\nexport const aa_80__3 = 3;\nexport const aa_80__4 = 4;"
-	/lib/a_81.ts Text-1 "export const aa_81__0 = 0;\nexport const aa_81__1 = 1;\nexport const aa_81__2 = 2;\nexport const aa_81__3 = 3;\nexport const aa_81__4 = 4;"
-	/lib/a_82.ts Text-1 "export const aa_82__0 = 0;\nexport const aa_82__1 = 1;\nexport const aa_82__2 = 2;\nexport const aa_82__3 = 3;\nexport const aa_82__4 = 4;"
-	/lib/a_83.ts Text-1 "export const aa_83__0 = 0;\nexport const aa_83__1 = 1;\nexport const aa_83__2 = 2;\nexport const aa_83__3 = 3;\nexport const aa_83__4 = 4;"
-	/lib/a_84.ts Text-1 "export const aa_84__0 = 0;\nexport const aa_84__1 = 1;\nexport const aa_84__2 = 2;\nexport const aa_84__3 = 3;\nexport const aa_84__4 = 4;"
-	/lib/a_85.ts Text-1 "export const aa_85__0 = 0;\nexport const aa_85__1 = 1;\nexport const aa_85__2 = 2;\nexport const aa_85__3 = 3;\nexport const aa_85__4 = 4;"
-	/lib/a_86.ts Text-1 "export const aa_86__0 = 0;\nexport const aa_86__1 = 1;\nexport const aa_86__2 = 2;\nexport const aa_86__3 = 3;\nexport const aa_86__4 = 4;"
-	/lib/a_87.ts Text-1 "export const aa_87__0 = 0;\nexport const aa_87__1 = 1;\nexport const aa_87__2 = 2;\nexport const aa_87__3 = 3;\nexport const aa_87__4 = 4;"
-	/lib/a_88.ts Text-1 "export const aa_88__0 = 0;\nexport const aa_88__1 = 1;\nexport const aa_88__2 = 2;\nexport const aa_88__3 = 3;\nexport const aa_88__4 = 4;"
-	/lib/a_89.ts Text-1 "export const aa_89__0 = 0;\nexport const aa_89__1 = 1;\nexport const aa_89__2 = 2;\nexport const aa_89__3 = 3;\nexport const aa_89__4 = 4;"
-	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;"
-	/lib/a_90.ts Text-1 "export const aa_90__0 = 0;\nexport const aa_90__1 = 1;\nexport const aa_90__2 = 2;\nexport const aa_90__3 = 3;\nexport const aa_90__4 = 4;"
-	/lib/a_91.ts Text-1 "export const aa_91__0 = 0;\nexport const aa_91__1 = 1;\nexport const aa_91__2 = 2;\nexport const aa_91__3 = 3;\nexport const aa_91__4 = 4;"
-	/lib/a_92.ts Text-1 "export const aa_92__0 = 0;\nexport const aa_92__1 = 1;\nexport const aa_92__2 = 2;\nexport const aa_92__3 = 3;\nexport const aa_92__4 = 4;"
-	/lib/a_93.ts Text-1 "export const aa_93__0 = 0;\nexport const aa_93__1 = 1;\nexport const aa_93__2 = 2;\nexport const aa_93__3 = 3;\nexport const aa_93__4 = 4;"
-	/lib/a_94.ts Text-1 "export const aa_94__0 = 0;\nexport const aa_94__1 = 1;\nexport const aa_94__2 = 2;\nexport const aa_94__3 = 3;\nexport const aa_94__4 = 4;"
-	/lib/a_95.ts Text-1 "export const aa_95__0 = 0;\nexport const aa_95__1 = 1;\nexport const aa_95__2 = 2;\nexport const aa_95__3 = 3;\nexport const aa_95__4 = 4;"
-	/lib/a_96.ts Text-1 "export const aa_96__0 = 0;\nexport const aa_96__1 = 1;\nexport const aa_96__2 = 2;\nexport const aa_96__3 = 3;\nexport const aa_96__4 = 4;"
-	/lib/a_97.ts Text-1 "export const aa_97__0 = 0;\nexport const aa_97__1 = 1;\nexport const aa_97__2 = 2;\nexport const aa_97__3 = 3;\nexport const aa_97__4 = 4;"
-	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;\nexport const aa_98__1 = 1;\nexport const aa_98__2 = 2;\nexport const aa_98__3 = 3;\nexport const aa_98__4 = 4;"
-	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;\nexport const aa_99__1 = 1;\nexport const aa_99__2 = 2;\nexport const aa_99__3 = 3;\nexport const aa_99__4 = 4;"
-	/lib/ambient_0.ts Text-1 "declare module \"ambient_0\" { export const aa_0 = 0; }"
-	/lib/ambient_1.ts Text-1 "declare module \"ambient_1\" { export const aa_1 = 1; }"
-	/lib/ambient_10.ts Text-1 "declare module \"ambient_10\" { export const aa_10 = 10; }"
-	/lib/ambient_11.ts Text-1 "declare module \"ambient_11\" { export const aa_11 = 11; }"
-	/lib/ambient_12.ts Text-1 "declare module \"ambient_12\" { export const aa_12 = 12; }"
-	/lib/ambient_13.ts Text-1 "declare module \"ambient_13\" { export const aa_13 = 13; }"
-	/lib/ambient_14.ts Text-1 "declare module \"ambient_14\" { export const aa_14 = 14; }"
-	/lib/ambient_15.ts Text-1 "declare module \"ambient_15\" { export const aa_15 = 15; }"
-	/lib/ambient_16.ts Text-1 "declare module \"ambient_16\" { export const aa_16 = 16; }"
-	/lib/ambient_17.ts Text-1 "declare module \"ambient_17\" { export const aa_17 = 17; }"
-	/lib/ambient_18.ts Text-1 "declare module \"ambient_18\" { export const aa_18 = 18; }"
-	/lib/ambient_19.ts Text-1 "declare module \"ambient_19\" { export const aa_19 = 19; }"
-	/lib/ambient_2.ts Text-1 "declare module \"ambient_2\" { export const aa_2 = 2; }"
-	/lib/ambient_20.ts Text-1 "declare module \"ambient_20\" { export const aa_20 = 20; }"
-	/lib/ambient_21.ts Text-1 "declare module \"ambient_21\" { export const aa_21 = 21; }"
-	/lib/ambient_22.ts Text-1 "declare module \"ambient_22\" { export const aa_22 = 22; }"
-	/lib/ambient_23.ts Text-1 "declare module \"ambient_23\" { export const aa_23 = 23; }"
-	/lib/ambient_24.ts Text-1 "declare module \"ambient_24\" { export const aa_24 = 24; }"
-	/lib/ambient_25.ts Text-1 "declare module \"ambient_25\" { export const aa_25 = 25; }"
-	/lib/ambient_26.ts Text-1 "declare module \"ambient_26\" { export const aa_26 = 26; }"
-	/lib/ambient_27.ts Text-1 "declare module \"ambient_27\" { export const aa_27 = 27; }"
-	/lib/ambient_28.ts Text-1 "declare module \"ambient_28\" { export const aa_28 = 28; }"
-	/lib/ambient_29.ts Text-1 "declare module \"ambient_29\" { export const aa_29 = 29; }"
-	/lib/ambient_3.ts Text-1 "declare module \"ambient_3\" { export const aa_3 = 3; }"
-	/lib/ambient_30.ts Text-1 "declare module \"ambient_30\" { export const aa_30 = 30; }"
-	/lib/ambient_31.ts Text-1 "declare module \"ambient_31\" { export const aa_31 = 31; }"
-	/lib/ambient_32.ts Text-1 "declare module \"ambient_32\" { export const aa_32 = 32; }"
-	/lib/ambient_33.ts Text-1 "declare module \"ambient_33\" { export const aa_33 = 33; }"
-	/lib/ambient_34.ts Text-1 "declare module \"ambient_34\" { export const aa_34 = 34; }"
-	/lib/ambient_35.ts Text-1 "declare module \"ambient_35\" { export const aa_35 = 35; }"
-	/lib/ambient_36.ts Text-1 "declare module \"ambient_36\" { export const aa_36 = 36; }"
-	/lib/ambient_37.ts Text-1 "declare module \"ambient_37\" { export const aa_37 = 37; }"
-	/lib/ambient_38.ts Text-1 "declare module \"ambient_38\" { export const aa_38 = 38; }"
-	/lib/ambient_39.ts Text-1 "declare module \"ambient_39\" { export const aa_39 = 39; }"
-	/lib/ambient_4.ts Text-1 "declare module \"ambient_4\" { export const aa_4 = 4; }"
-	/lib/ambient_40.ts Text-1 "declare module \"ambient_40\" { export const aa_40 = 40; }"
-	/lib/ambient_41.ts Text-1 "declare module \"ambient_41\" { export const aa_41 = 41; }"
-	/lib/ambient_42.ts Text-1 "declare module \"ambient_42\" { export const aa_42 = 42; }"
-	/lib/ambient_43.ts Text-1 "declare module \"ambient_43\" { export const aa_43 = 43; }"
-	/lib/ambient_44.ts Text-1 "declare module \"ambient_44\" { export const aa_44 = 44; }"
-	/lib/ambient_45.ts Text-1 "declare module \"ambient_45\" { export const aa_45 = 45; }"
-	/lib/ambient_46.ts Text-1 "declare module \"ambient_46\" { export const aa_46 = 46; }"
-	/lib/ambient_47.ts Text-1 "declare module \"ambient_47\" { export const aa_47 = 47; }"
-	/lib/ambient_48.ts Text-1 "declare module \"ambient_48\" { export const aa_48 = 48; }"
-	/lib/ambient_49.ts Text-1 "declare module \"ambient_49\" { export const aa_49 = 49; }"
-	/lib/ambient_5.ts Text-1 "declare module \"ambient_5\" { export const aa_5 = 5; }"
-	/lib/ambient_50.ts Text-1 "declare module \"ambient_50\" { export const aa_50 = 50; }"
-	/lib/ambient_51.ts Text-1 "declare module \"ambient_51\" { export const aa_51 = 51; }"
-	/lib/ambient_52.ts Text-1 "declare module \"ambient_52\" { export const aa_52 = 52; }"
-	/lib/ambient_53.ts Text-1 "declare module \"ambient_53\" { export const aa_53 = 53; }"
-	/lib/ambient_54.ts Text-1 "declare module \"ambient_54\" { export const aa_54 = 54; }"
-	/lib/ambient_55.ts Text-1 "declare module \"ambient_55\" { export const aa_55 = 55; }"
-	/lib/ambient_56.ts Text-1 "declare module \"ambient_56\" { export const aa_56 = 56; }"
-	/lib/ambient_57.ts Text-1 "declare module \"ambient_57\" { export const aa_57 = 57; }"
-	/lib/ambient_58.ts Text-1 "declare module \"ambient_58\" { export const aa_58 = 58; }"
-	/lib/ambient_59.ts Text-1 "declare module \"ambient_59\" { export const aa_59 = 59; }"
-	/lib/ambient_6.ts Text-1 "declare module \"ambient_6\" { export const aa_6 = 6; }"
-	/lib/ambient_60.ts Text-1 "declare module \"ambient_60\" { export const aa_60 = 60; }"
-	/lib/ambient_61.ts Text-1 "declare module \"ambient_61\" { export const aa_61 = 61; }"
-	/lib/ambient_62.ts Text-1 "declare module \"ambient_62\" { export const aa_62 = 62; }"
-	/lib/ambient_63.ts Text-1 "declare module \"ambient_63\" { export const aa_63 = 63; }"
-	/lib/ambient_64.ts Text-1 "declare module \"ambient_64\" { export const aa_64 = 64; }"
-	/lib/ambient_65.ts Text-1 "declare module \"ambient_65\" { export const aa_65 = 65; }"
-	/lib/ambient_66.ts Text-1 "declare module \"ambient_66\" { export const aa_66 = 66; }"
-	/lib/ambient_67.ts Text-1 "declare module \"ambient_67\" { export const aa_67 = 67; }"
-	/lib/ambient_68.ts Text-1 "declare module \"ambient_68\" { export const aa_68 = 68; }"
-	/lib/ambient_69.ts Text-1 "declare module \"ambient_69\" { export const aa_69 = 69; }"
-	/lib/ambient_7.ts Text-1 "declare module \"ambient_7\" { export const aa_7 = 7; }"
-	/lib/ambient_70.ts Text-1 "declare module \"ambient_70\" { export const aa_70 = 70; }"
-	/lib/ambient_71.ts Text-1 "declare module \"ambient_71\" { export const aa_71 = 71; }"
-	/lib/ambient_72.ts Text-1 "declare module \"ambient_72\" { export const aa_72 = 72; }"
-	/lib/ambient_73.ts Text-1 "declare module \"ambient_73\" { export const aa_73 = 73; }"
-	/lib/ambient_74.ts Text-1 "declare module \"ambient_74\" { export const aa_74 = 74; }"
-	/lib/ambient_75.ts Text-1 "declare module \"ambient_75\" { export const aa_75 = 75; }"
-	/lib/ambient_76.ts Text-1 "declare module \"ambient_76\" { export const aa_76 = 76; }"
-	/lib/ambient_77.ts Text-1 "declare module \"ambient_77\" { export const aa_77 = 77; }"
-	/lib/ambient_78.ts Text-1 "declare module \"ambient_78\" { export const aa_78 = 78; }"
-	/lib/ambient_79.ts Text-1 "declare module \"ambient_79\" { export const aa_79 = 79; }"
-	/lib/ambient_8.ts Text-1 "declare module \"ambient_8\" { export const aa_8 = 8; }"
-	/lib/ambient_80.ts Text-1 "declare module \"ambient_80\" { export const aa_80 = 80; }"
-	/lib/ambient_81.ts Text-1 "declare module \"ambient_81\" { export const aa_81 = 81; }"
-	/lib/ambient_82.ts Text-1 "declare module \"ambient_82\" { export const aa_82 = 82; }"
-	/lib/ambient_83.ts Text-1 "declare module \"ambient_83\" { export const aa_83 = 83; }"
-	/lib/ambient_84.ts Text-1 "declare module \"ambient_84\" { export const aa_84 = 84; }"
-	/lib/ambient_85.ts Text-1 "declare module \"ambient_85\" { export const aa_85 = 85; }"
-	/lib/ambient_86.ts Text-1 "declare module \"ambient_86\" { export const aa_86 = 86; }"
-	/lib/ambient_87.ts Text-1 "declare module \"ambient_87\" { export const aa_87 = 87; }"
-	/lib/ambient_88.ts Text-1 "declare module \"ambient_88\" { export const aa_88 = 88; }"
-	/lib/ambient_89.ts Text-1 "declare module \"ambient_89\" { export const aa_89 = 89; }"
-	/lib/ambient_9.ts Text-1 "declare module \"ambient_9\" { export const aa_9 = 9; }"
-	/lib/ambient_90.ts Text-1 "declare module \"ambient_90\" { export const aa_90 = 90; }"
-	/lib/ambient_91.ts Text-1 "declare module \"ambient_91\" { export const aa_91 = 91; }"
-	/lib/ambient_92.ts Text-1 "declare module \"ambient_92\" { export const aa_92 = 92; }"
-	/lib/ambient_93.ts Text-1 "declare module \"ambient_93\" { export const aa_93 = 93; }"
-	/lib/ambient_94.ts Text-1 "declare module \"ambient_94\" { export const aa_94 = 94; }"
-	/lib/ambient_95.ts Text-1 "declare module \"ambient_95\" { export const aa_95 = 95; }"
-	/lib/ambient_96.ts Text-1 "declare module \"ambient_96\" { export const aa_96 = 96; }"
-	/lib/ambient_97.ts Text-1 "declare module \"ambient_97\" { export const aa_97 = 97; }"
-	/lib/ambient_98.ts Text-1 "declare module \"ambient_98\" { export const aa_98 = 98; }"
-	/lib/ambient_99.ts Text-1 "declare module \"ambient_99\" { export const aa_99 = 99; }"
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project 1 undefined Config: /home/src/project/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project 1 undefined Config: /home/src/project/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_0.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_10.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_11.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_12.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_13.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_14.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_15.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_16.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_17.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_18.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_19.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_20.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_21.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_22.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_23.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_24.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_25.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_26.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_27.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_28.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_29.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_30.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_31.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_32.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_33.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_34.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_35.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_36.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_37.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_38.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_39.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_40.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_41.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_42.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_43.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_44.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_45.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_46.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_47.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_48.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_49.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_5.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_50.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_51.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_52.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_53.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_54.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_55.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_56.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_57.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_58.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_59.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_6.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_60.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_61.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_62.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_63.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_64.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_65.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_66.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_67.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_68.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_69.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_70.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_71.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_72.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_73.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_74.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_75.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_76.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_77.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_78.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_79.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_8.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_80.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_81.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_82.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_83.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_84.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_85.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_86.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_87.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_88.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_89.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_9.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_90.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_91.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_92.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_93.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_94.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_95.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_96.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_97.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_98.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_99.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_0.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_10.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_11.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_12.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_13.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_14.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_15.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_16.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_17.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_18.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_19.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_20.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_21.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_22.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_23.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_24.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_25.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_26.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_27.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_28.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_29.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_30.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_31.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_32.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_33.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_34.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_35.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_36.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_37.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_38.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_39.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_40.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_41.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_42.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_43.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_44.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_45.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_46.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_47.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_48.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_49.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_5.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_50.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_51.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_52.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_53.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_54.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_55.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_56.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_57.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_58.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_59.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_6.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_60.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_61.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_62.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_63.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_64.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_65.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_66.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_67.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_68.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_69.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_70.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_71.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_72.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_73.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_74.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_75.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_76.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_77.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_78.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_79.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_8.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_80.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_81.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_82.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_83.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_84.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_85.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_86.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_87.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_88.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_89.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_9.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_90.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_91.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_92.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_93.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_94.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_95.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_96.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_97.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_98.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/ambient_99.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (202)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/project/project/index.ts SVC-1-0 ""
+	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;"
+	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;"
+	/home/src/project/project/lib/a_10.ts Text-1 "export const aa_10__0 = 0;\nexport const aa_10__1 = 1;\nexport const aa_10__2 = 2;\nexport const aa_10__3 = 3;\nexport const aa_10__4 = 4;"
+	/home/src/project/project/lib/a_11.ts Text-1 "export const aa_11__0 = 0;\nexport const aa_11__1 = 1;\nexport const aa_11__2 = 2;\nexport const aa_11__3 = 3;\nexport const aa_11__4 = 4;"
+	/home/src/project/project/lib/a_12.ts Text-1 "export const aa_12__0 = 0;\nexport const aa_12__1 = 1;\nexport const aa_12__2 = 2;\nexport const aa_12__3 = 3;\nexport const aa_12__4 = 4;"
+	/home/src/project/project/lib/a_13.ts Text-1 "export const aa_13__0 = 0;\nexport const aa_13__1 = 1;\nexport const aa_13__2 = 2;\nexport const aa_13__3 = 3;\nexport const aa_13__4 = 4;"
+	/home/src/project/project/lib/a_14.ts Text-1 "export const aa_14__0 = 0;\nexport const aa_14__1 = 1;\nexport const aa_14__2 = 2;\nexport const aa_14__3 = 3;\nexport const aa_14__4 = 4;"
+	/home/src/project/project/lib/a_15.ts Text-1 "export const aa_15__0 = 0;\nexport const aa_15__1 = 1;\nexport const aa_15__2 = 2;\nexport const aa_15__3 = 3;\nexport const aa_15__4 = 4;"
+	/home/src/project/project/lib/a_16.ts Text-1 "export const aa_16__0 = 0;\nexport const aa_16__1 = 1;\nexport const aa_16__2 = 2;\nexport const aa_16__3 = 3;\nexport const aa_16__4 = 4;"
+	/home/src/project/project/lib/a_17.ts Text-1 "export const aa_17__0 = 0;\nexport const aa_17__1 = 1;\nexport const aa_17__2 = 2;\nexport const aa_17__3 = 3;\nexport const aa_17__4 = 4;"
+	/home/src/project/project/lib/a_18.ts Text-1 "export const aa_18__0 = 0;\nexport const aa_18__1 = 1;\nexport const aa_18__2 = 2;\nexport const aa_18__3 = 3;\nexport const aa_18__4 = 4;"
+	/home/src/project/project/lib/a_19.ts Text-1 "export const aa_19__0 = 0;\nexport const aa_19__1 = 1;\nexport const aa_19__2 = 2;\nexport const aa_19__3 = 3;\nexport const aa_19__4 = 4;"
+	/home/src/project/project/lib/a_2.ts Text-1 "export const aa_2__0 = 0;\nexport const aa_2__1 = 1;\nexport const aa_2__2 = 2;\nexport const aa_2__3 = 3;\nexport const aa_2__4 = 4;"
+	/home/src/project/project/lib/a_20.ts Text-1 "export const aa_20__0 = 0;\nexport const aa_20__1 = 1;\nexport const aa_20__2 = 2;\nexport const aa_20__3 = 3;\nexport const aa_20__4 = 4;"
+	/home/src/project/project/lib/a_21.ts Text-1 "export const aa_21__0 = 0;\nexport const aa_21__1 = 1;\nexport const aa_21__2 = 2;\nexport const aa_21__3 = 3;\nexport const aa_21__4 = 4;"
+	/home/src/project/project/lib/a_22.ts Text-1 "export const aa_22__0 = 0;\nexport const aa_22__1 = 1;\nexport const aa_22__2 = 2;\nexport const aa_22__3 = 3;\nexport const aa_22__4 = 4;"
+	/home/src/project/project/lib/a_23.ts Text-1 "export const aa_23__0 = 0;\nexport const aa_23__1 = 1;\nexport const aa_23__2 = 2;\nexport const aa_23__3 = 3;\nexport const aa_23__4 = 4;"
+	/home/src/project/project/lib/a_24.ts Text-1 "export const aa_24__0 = 0;\nexport const aa_24__1 = 1;\nexport const aa_24__2 = 2;\nexport const aa_24__3 = 3;\nexport const aa_24__4 = 4;"
+	/home/src/project/project/lib/a_25.ts Text-1 "export const aa_25__0 = 0;\nexport const aa_25__1 = 1;\nexport const aa_25__2 = 2;\nexport const aa_25__3 = 3;\nexport const aa_25__4 = 4;"
+	/home/src/project/project/lib/a_26.ts Text-1 "export const aa_26__0 = 0;\nexport const aa_26__1 = 1;\nexport const aa_26__2 = 2;\nexport const aa_26__3 = 3;\nexport const aa_26__4 = 4;"
+	/home/src/project/project/lib/a_27.ts Text-1 "export const aa_27__0 = 0;\nexport const aa_27__1 = 1;\nexport const aa_27__2 = 2;\nexport const aa_27__3 = 3;\nexport const aa_27__4 = 4;"
+	/home/src/project/project/lib/a_28.ts Text-1 "export const aa_28__0 = 0;\nexport const aa_28__1 = 1;\nexport const aa_28__2 = 2;\nexport const aa_28__3 = 3;\nexport const aa_28__4 = 4;"
+	/home/src/project/project/lib/a_29.ts Text-1 "export const aa_29__0 = 0;\nexport const aa_29__1 = 1;\nexport const aa_29__2 = 2;\nexport const aa_29__3 = 3;\nexport const aa_29__4 = 4;"
+	/home/src/project/project/lib/a_3.ts Text-1 "export const aa_3__0 = 0;\nexport const aa_3__1 = 1;\nexport const aa_3__2 = 2;\nexport const aa_3__3 = 3;\nexport const aa_3__4 = 4;"
+	/home/src/project/project/lib/a_30.ts Text-1 "export const aa_30__0 = 0;\nexport const aa_30__1 = 1;\nexport const aa_30__2 = 2;\nexport const aa_30__3 = 3;\nexport const aa_30__4 = 4;"
+	/home/src/project/project/lib/a_31.ts Text-1 "export const aa_31__0 = 0;\nexport const aa_31__1 = 1;\nexport const aa_31__2 = 2;\nexport const aa_31__3 = 3;\nexport const aa_31__4 = 4;"
+	/home/src/project/project/lib/a_32.ts Text-1 "export const aa_32__0 = 0;\nexport const aa_32__1 = 1;\nexport const aa_32__2 = 2;\nexport const aa_32__3 = 3;\nexport const aa_32__4 = 4;"
+	/home/src/project/project/lib/a_33.ts Text-1 "export const aa_33__0 = 0;\nexport const aa_33__1 = 1;\nexport const aa_33__2 = 2;\nexport const aa_33__3 = 3;\nexport const aa_33__4 = 4;"
+	/home/src/project/project/lib/a_34.ts Text-1 "export const aa_34__0 = 0;\nexport const aa_34__1 = 1;\nexport const aa_34__2 = 2;\nexport const aa_34__3 = 3;\nexport const aa_34__4 = 4;"
+	/home/src/project/project/lib/a_35.ts Text-1 "export const aa_35__0 = 0;\nexport const aa_35__1 = 1;\nexport const aa_35__2 = 2;\nexport const aa_35__3 = 3;\nexport const aa_35__4 = 4;"
+	/home/src/project/project/lib/a_36.ts Text-1 "export const aa_36__0 = 0;\nexport const aa_36__1 = 1;\nexport const aa_36__2 = 2;\nexport const aa_36__3 = 3;\nexport const aa_36__4 = 4;"
+	/home/src/project/project/lib/a_37.ts Text-1 "export const aa_37__0 = 0;\nexport const aa_37__1 = 1;\nexport const aa_37__2 = 2;\nexport const aa_37__3 = 3;\nexport const aa_37__4 = 4;"
+	/home/src/project/project/lib/a_38.ts Text-1 "export const aa_38__0 = 0;\nexport const aa_38__1 = 1;\nexport const aa_38__2 = 2;\nexport const aa_38__3 = 3;\nexport const aa_38__4 = 4;"
+	/home/src/project/project/lib/a_39.ts Text-1 "export const aa_39__0 = 0;\nexport const aa_39__1 = 1;\nexport const aa_39__2 = 2;\nexport const aa_39__3 = 3;\nexport const aa_39__4 = 4;"
+	/home/src/project/project/lib/a_4.ts Text-1 "export const aa_4__0 = 0;\nexport const aa_4__1 = 1;\nexport const aa_4__2 = 2;\nexport const aa_4__3 = 3;\nexport const aa_4__4 = 4;"
+	/home/src/project/project/lib/a_40.ts Text-1 "export const aa_40__0 = 0;\nexport const aa_40__1 = 1;\nexport const aa_40__2 = 2;\nexport const aa_40__3 = 3;\nexport const aa_40__4 = 4;"
+	/home/src/project/project/lib/a_41.ts Text-1 "export const aa_41__0 = 0;\nexport const aa_41__1 = 1;\nexport const aa_41__2 = 2;\nexport const aa_41__3 = 3;\nexport const aa_41__4 = 4;"
+	/home/src/project/project/lib/a_42.ts Text-1 "export const aa_42__0 = 0;\nexport const aa_42__1 = 1;\nexport const aa_42__2 = 2;\nexport const aa_42__3 = 3;\nexport const aa_42__4 = 4;"
+	/home/src/project/project/lib/a_43.ts Text-1 "export const aa_43__0 = 0;\nexport const aa_43__1 = 1;\nexport const aa_43__2 = 2;\nexport const aa_43__3 = 3;\nexport const aa_43__4 = 4;"
+	/home/src/project/project/lib/a_44.ts Text-1 "export const aa_44__0 = 0;\nexport const aa_44__1 = 1;\nexport const aa_44__2 = 2;\nexport const aa_44__3 = 3;\nexport const aa_44__4 = 4;"
+	/home/src/project/project/lib/a_45.ts Text-1 "export const aa_45__0 = 0;\nexport const aa_45__1 = 1;\nexport const aa_45__2 = 2;\nexport const aa_45__3 = 3;\nexport const aa_45__4 = 4;"
+	/home/src/project/project/lib/a_46.ts Text-1 "export const aa_46__0 = 0;\nexport const aa_46__1 = 1;\nexport const aa_46__2 = 2;\nexport const aa_46__3 = 3;\nexport const aa_46__4 = 4;"
+	/home/src/project/project/lib/a_47.ts Text-1 "export const aa_47__0 = 0;\nexport const aa_47__1 = 1;\nexport const aa_47__2 = 2;\nexport const aa_47__3 = 3;\nexport const aa_47__4 = 4;"
+	/home/src/project/project/lib/a_48.ts Text-1 "export const aa_48__0 = 0;\nexport const aa_48__1 = 1;\nexport const aa_48__2 = 2;\nexport const aa_48__3 = 3;\nexport const aa_48__4 = 4;"
+	/home/src/project/project/lib/a_49.ts Text-1 "export const aa_49__0 = 0;\nexport const aa_49__1 = 1;\nexport const aa_49__2 = 2;\nexport const aa_49__3 = 3;\nexport const aa_49__4 = 4;"
+	/home/src/project/project/lib/a_5.ts Text-1 "export const aa_5__0 = 0;\nexport const aa_5__1 = 1;\nexport const aa_5__2 = 2;\nexport const aa_5__3 = 3;\nexport const aa_5__4 = 4;"
+	/home/src/project/project/lib/a_50.ts Text-1 "export const aa_50__0 = 0;\nexport const aa_50__1 = 1;\nexport const aa_50__2 = 2;\nexport const aa_50__3 = 3;\nexport const aa_50__4 = 4;"
+	/home/src/project/project/lib/a_51.ts Text-1 "export const aa_51__0 = 0;\nexport const aa_51__1 = 1;\nexport const aa_51__2 = 2;\nexport const aa_51__3 = 3;\nexport const aa_51__4 = 4;"
+	/home/src/project/project/lib/a_52.ts Text-1 "export const aa_52__0 = 0;\nexport const aa_52__1 = 1;\nexport const aa_52__2 = 2;\nexport const aa_52__3 = 3;\nexport const aa_52__4 = 4;"
+	/home/src/project/project/lib/a_53.ts Text-1 "export const aa_53__0 = 0;\nexport const aa_53__1 = 1;\nexport const aa_53__2 = 2;\nexport const aa_53__3 = 3;\nexport const aa_53__4 = 4;"
+	/home/src/project/project/lib/a_54.ts Text-1 "export const aa_54__0 = 0;\nexport const aa_54__1 = 1;\nexport const aa_54__2 = 2;\nexport const aa_54__3 = 3;\nexport const aa_54__4 = 4;"
+	/home/src/project/project/lib/a_55.ts Text-1 "export const aa_55__0 = 0;\nexport const aa_55__1 = 1;\nexport const aa_55__2 = 2;\nexport const aa_55__3 = 3;\nexport const aa_55__4 = 4;"
+	/home/src/project/project/lib/a_56.ts Text-1 "export const aa_56__0 = 0;\nexport const aa_56__1 = 1;\nexport const aa_56__2 = 2;\nexport const aa_56__3 = 3;\nexport const aa_56__4 = 4;"
+	/home/src/project/project/lib/a_57.ts Text-1 "export const aa_57__0 = 0;\nexport const aa_57__1 = 1;\nexport const aa_57__2 = 2;\nexport const aa_57__3 = 3;\nexport const aa_57__4 = 4;"
+	/home/src/project/project/lib/a_58.ts Text-1 "export const aa_58__0 = 0;\nexport const aa_58__1 = 1;\nexport const aa_58__2 = 2;\nexport const aa_58__3 = 3;\nexport const aa_58__4 = 4;"
+	/home/src/project/project/lib/a_59.ts Text-1 "export const aa_59__0 = 0;\nexport const aa_59__1 = 1;\nexport const aa_59__2 = 2;\nexport const aa_59__3 = 3;\nexport const aa_59__4 = 4;"
+	/home/src/project/project/lib/a_6.ts Text-1 "export const aa_6__0 = 0;\nexport const aa_6__1 = 1;\nexport const aa_6__2 = 2;\nexport const aa_6__3 = 3;\nexport const aa_6__4 = 4;"
+	/home/src/project/project/lib/a_60.ts Text-1 "export const aa_60__0 = 0;\nexport const aa_60__1 = 1;\nexport const aa_60__2 = 2;\nexport const aa_60__3 = 3;\nexport const aa_60__4 = 4;"
+	/home/src/project/project/lib/a_61.ts Text-1 "export const aa_61__0 = 0;\nexport const aa_61__1 = 1;\nexport const aa_61__2 = 2;\nexport const aa_61__3 = 3;\nexport const aa_61__4 = 4;"
+	/home/src/project/project/lib/a_62.ts Text-1 "export const aa_62__0 = 0;\nexport const aa_62__1 = 1;\nexport const aa_62__2 = 2;\nexport const aa_62__3 = 3;\nexport const aa_62__4 = 4;"
+	/home/src/project/project/lib/a_63.ts Text-1 "export const aa_63__0 = 0;\nexport const aa_63__1 = 1;\nexport const aa_63__2 = 2;\nexport const aa_63__3 = 3;\nexport const aa_63__4 = 4;"
+	/home/src/project/project/lib/a_64.ts Text-1 "export const aa_64__0 = 0;\nexport const aa_64__1 = 1;\nexport const aa_64__2 = 2;\nexport const aa_64__3 = 3;\nexport const aa_64__4 = 4;"
+	/home/src/project/project/lib/a_65.ts Text-1 "export const aa_65__0 = 0;\nexport const aa_65__1 = 1;\nexport const aa_65__2 = 2;\nexport const aa_65__3 = 3;\nexport const aa_65__4 = 4;"
+	/home/src/project/project/lib/a_66.ts Text-1 "export const aa_66__0 = 0;\nexport const aa_66__1 = 1;\nexport const aa_66__2 = 2;\nexport const aa_66__3 = 3;\nexport const aa_66__4 = 4;"
+	/home/src/project/project/lib/a_67.ts Text-1 "export const aa_67__0 = 0;\nexport const aa_67__1 = 1;\nexport const aa_67__2 = 2;\nexport const aa_67__3 = 3;\nexport const aa_67__4 = 4;"
+	/home/src/project/project/lib/a_68.ts Text-1 "export const aa_68__0 = 0;\nexport const aa_68__1 = 1;\nexport const aa_68__2 = 2;\nexport const aa_68__3 = 3;\nexport const aa_68__4 = 4;"
+	/home/src/project/project/lib/a_69.ts Text-1 "export const aa_69__0 = 0;\nexport const aa_69__1 = 1;\nexport const aa_69__2 = 2;\nexport const aa_69__3 = 3;\nexport const aa_69__4 = 4;"
+	/home/src/project/project/lib/a_7.ts Text-1 "export const aa_7__0 = 0;\nexport const aa_7__1 = 1;\nexport const aa_7__2 = 2;\nexport const aa_7__3 = 3;\nexport const aa_7__4 = 4;"
+	/home/src/project/project/lib/a_70.ts Text-1 "export const aa_70__0 = 0;\nexport const aa_70__1 = 1;\nexport const aa_70__2 = 2;\nexport const aa_70__3 = 3;\nexport const aa_70__4 = 4;"
+	/home/src/project/project/lib/a_71.ts Text-1 "export const aa_71__0 = 0;\nexport const aa_71__1 = 1;\nexport const aa_71__2 = 2;\nexport const aa_71__3 = 3;\nexport const aa_71__4 = 4;"
+	/home/src/project/project/lib/a_72.ts Text-1 "export const aa_72__0 = 0;\nexport const aa_72__1 = 1;\nexport const aa_72__2 = 2;\nexport const aa_72__3 = 3;\nexport const aa_72__4 = 4;"
+	/home/src/project/project/lib/a_73.ts Text-1 "export const aa_73__0 = 0;\nexport const aa_73__1 = 1;\nexport const aa_73__2 = 2;\nexport const aa_73__3 = 3;\nexport const aa_73__4 = 4;"
+	/home/src/project/project/lib/a_74.ts Text-1 "export const aa_74__0 = 0;\nexport const aa_74__1 = 1;\nexport const aa_74__2 = 2;\nexport const aa_74__3 = 3;\nexport const aa_74__4 = 4;"
+	/home/src/project/project/lib/a_75.ts Text-1 "export const aa_75__0 = 0;\nexport const aa_75__1 = 1;\nexport const aa_75__2 = 2;\nexport const aa_75__3 = 3;\nexport const aa_75__4 = 4;"
+	/home/src/project/project/lib/a_76.ts Text-1 "export const aa_76__0 = 0;\nexport const aa_76__1 = 1;\nexport const aa_76__2 = 2;\nexport const aa_76__3 = 3;\nexport const aa_76__4 = 4;"
+	/home/src/project/project/lib/a_77.ts Text-1 "export const aa_77__0 = 0;\nexport const aa_77__1 = 1;\nexport const aa_77__2 = 2;\nexport const aa_77__3 = 3;\nexport const aa_77__4 = 4;"
+	/home/src/project/project/lib/a_78.ts Text-1 "export const aa_78__0 = 0;\nexport const aa_78__1 = 1;\nexport const aa_78__2 = 2;\nexport const aa_78__3 = 3;\nexport const aa_78__4 = 4;"
+	/home/src/project/project/lib/a_79.ts Text-1 "export const aa_79__0 = 0;\nexport const aa_79__1 = 1;\nexport const aa_79__2 = 2;\nexport const aa_79__3 = 3;\nexport const aa_79__4 = 4;"
+	/home/src/project/project/lib/a_8.ts Text-1 "export const aa_8__0 = 0;\nexport const aa_8__1 = 1;\nexport const aa_8__2 = 2;\nexport const aa_8__3 = 3;\nexport const aa_8__4 = 4;"
+	/home/src/project/project/lib/a_80.ts Text-1 "export const aa_80__0 = 0;\nexport const aa_80__1 = 1;\nexport const aa_80__2 = 2;\nexport const aa_80__3 = 3;\nexport const aa_80__4 = 4;"
+	/home/src/project/project/lib/a_81.ts Text-1 "export const aa_81__0 = 0;\nexport const aa_81__1 = 1;\nexport const aa_81__2 = 2;\nexport const aa_81__3 = 3;\nexport const aa_81__4 = 4;"
+	/home/src/project/project/lib/a_82.ts Text-1 "export const aa_82__0 = 0;\nexport const aa_82__1 = 1;\nexport const aa_82__2 = 2;\nexport const aa_82__3 = 3;\nexport const aa_82__4 = 4;"
+	/home/src/project/project/lib/a_83.ts Text-1 "export const aa_83__0 = 0;\nexport const aa_83__1 = 1;\nexport const aa_83__2 = 2;\nexport const aa_83__3 = 3;\nexport const aa_83__4 = 4;"
+	/home/src/project/project/lib/a_84.ts Text-1 "export const aa_84__0 = 0;\nexport const aa_84__1 = 1;\nexport const aa_84__2 = 2;\nexport const aa_84__3 = 3;\nexport const aa_84__4 = 4;"
+	/home/src/project/project/lib/a_85.ts Text-1 "export const aa_85__0 = 0;\nexport const aa_85__1 = 1;\nexport const aa_85__2 = 2;\nexport const aa_85__3 = 3;\nexport const aa_85__4 = 4;"
+	/home/src/project/project/lib/a_86.ts Text-1 "export const aa_86__0 = 0;\nexport const aa_86__1 = 1;\nexport const aa_86__2 = 2;\nexport const aa_86__3 = 3;\nexport const aa_86__4 = 4;"
+	/home/src/project/project/lib/a_87.ts Text-1 "export const aa_87__0 = 0;\nexport const aa_87__1 = 1;\nexport const aa_87__2 = 2;\nexport const aa_87__3 = 3;\nexport const aa_87__4 = 4;"
+	/home/src/project/project/lib/a_88.ts Text-1 "export const aa_88__0 = 0;\nexport const aa_88__1 = 1;\nexport const aa_88__2 = 2;\nexport const aa_88__3 = 3;\nexport const aa_88__4 = 4;"
+	/home/src/project/project/lib/a_89.ts Text-1 "export const aa_89__0 = 0;\nexport const aa_89__1 = 1;\nexport const aa_89__2 = 2;\nexport const aa_89__3 = 3;\nexport const aa_89__4 = 4;"
+	/home/src/project/project/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;"
+	/home/src/project/project/lib/a_90.ts Text-1 "export const aa_90__0 = 0;\nexport const aa_90__1 = 1;\nexport const aa_90__2 = 2;\nexport const aa_90__3 = 3;\nexport const aa_90__4 = 4;"
+	/home/src/project/project/lib/a_91.ts Text-1 "export const aa_91__0 = 0;\nexport const aa_91__1 = 1;\nexport const aa_91__2 = 2;\nexport const aa_91__3 = 3;\nexport const aa_91__4 = 4;"
+	/home/src/project/project/lib/a_92.ts Text-1 "export const aa_92__0 = 0;\nexport const aa_92__1 = 1;\nexport const aa_92__2 = 2;\nexport const aa_92__3 = 3;\nexport const aa_92__4 = 4;"
+	/home/src/project/project/lib/a_93.ts Text-1 "export const aa_93__0 = 0;\nexport const aa_93__1 = 1;\nexport const aa_93__2 = 2;\nexport const aa_93__3 = 3;\nexport const aa_93__4 = 4;"
+	/home/src/project/project/lib/a_94.ts Text-1 "export const aa_94__0 = 0;\nexport const aa_94__1 = 1;\nexport const aa_94__2 = 2;\nexport const aa_94__3 = 3;\nexport const aa_94__4 = 4;"
+	/home/src/project/project/lib/a_95.ts Text-1 "export const aa_95__0 = 0;\nexport const aa_95__1 = 1;\nexport const aa_95__2 = 2;\nexport const aa_95__3 = 3;\nexport const aa_95__4 = 4;"
+	/home/src/project/project/lib/a_96.ts Text-1 "export const aa_96__0 = 0;\nexport const aa_96__1 = 1;\nexport const aa_96__2 = 2;\nexport const aa_96__3 = 3;\nexport const aa_96__4 = 4;"
+	/home/src/project/project/lib/a_97.ts Text-1 "export const aa_97__0 = 0;\nexport const aa_97__1 = 1;\nexport const aa_97__2 = 2;\nexport const aa_97__3 = 3;\nexport const aa_97__4 = 4;"
+	/home/src/project/project/lib/a_98.ts Text-1 "export const aa_98__0 = 0;\nexport const aa_98__1 = 1;\nexport const aa_98__2 = 2;\nexport const aa_98__3 = 3;\nexport const aa_98__4 = 4;"
+	/home/src/project/project/lib/a_99.ts Text-1 "export const aa_99__0 = 0;\nexport const aa_99__1 = 1;\nexport const aa_99__2 = 2;\nexport const aa_99__3 = 3;\nexport const aa_99__4 = 4;"
+	/home/src/project/project/lib/ambient_0.ts Text-1 "declare module \"ambient_0\" { export const aa_0 = 0; }"
+	/home/src/project/project/lib/ambient_1.ts Text-1 "declare module \"ambient_1\" { export const aa_1 = 1; }"
+	/home/src/project/project/lib/ambient_10.ts Text-1 "declare module \"ambient_10\" { export const aa_10 = 10; }"
+	/home/src/project/project/lib/ambient_11.ts Text-1 "declare module \"ambient_11\" { export const aa_11 = 11; }"
+	/home/src/project/project/lib/ambient_12.ts Text-1 "declare module \"ambient_12\" { export const aa_12 = 12; }"
+	/home/src/project/project/lib/ambient_13.ts Text-1 "declare module \"ambient_13\" { export const aa_13 = 13; }"
+	/home/src/project/project/lib/ambient_14.ts Text-1 "declare module \"ambient_14\" { export const aa_14 = 14; }"
+	/home/src/project/project/lib/ambient_15.ts Text-1 "declare module \"ambient_15\" { export const aa_15 = 15; }"
+	/home/src/project/project/lib/ambient_16.ts Text-1 "declare module \"ambient_16\" { export const aa_16 = 16; }"
+	/home/src/project/project/lib/ambient_17.ts Text-1 "declare module \"ambient_17\" { export const aa_17 = 17; }"
+	/home/src/project/project/lib/ambient_18.ts Text-1 "declare module \"ambient_18\" { export const aa_18 = 18; }"
+	/home/src/project/project/lib/ambient_19.ts Text-1 "declare module \"ambient_19\" { export const aa_19 = 19; }"
+	/home/src/project/project/lib/ambient_2.ts Text-1 "declare module \"ambient_2\" { export const aa_2 = 2; }"
+	/home/src/project/project/lib/ambient_20.ts Text-1 "declare module \"ambient_20\" { export const aa_20 = 20; }"
+	/home/src/project/project/lib/ambient_21.ts Text-1 "declare module \"ambient_21\" { export const aa_21 = 21; }"
+	/home/src/project/project/lib/ambient_22.ts Text-1 "declare module \"ambient_22\" { export const aa_22 = 22; }"
+	/home/src/project/project/lib/ambient_23.ts Text-1 "declare module \"ambient_23\" { export const aa_23 = 23; }"
+	/home/src/project/project/lib/ambient_24.ts Text-1 "declare module \"ambient_24\" { export const aa_24 = 24; }"
+	/home/src/project/project/lib/ambient_25.ts Text-1 "declare module \"ambient_25\" { export const aa_25 = 25; }"
+	/home/src/project/project/lib/ambient_26.ts Text-1 "declare module \"ambient_26\" { export const aa_26 = 26; }"
+	/home/src/project/project/lib/ambient_27.ts Text-1 "declare module \"ambient_27\" { export const aa_27 = 27; }"
+	/home/src/project/project/lib/ambient_28.ts Text-1 "declare module \"ambient_28\" { export const aa_28 = 28; }"
+	/home/src/project/project/lib/ambient_29.ts Text-1 "declare module \"ambient_29\" { export const aa_29 = 29; }"
+	/home/src/project/project/lib/ambient_3.ts Text-1 "declare module \"ambient_3\" { export const aa_3 = 3; }"
+	/home/src/project/project/lib/ambient_30.ts Text-1 "declare module \"ambient_30\" { export const aa_30 = 30; }"
+	/home/src/project/project/lib/ambient_31.ts Text-1 "declare module \"ambient_31\" { export const aa_31 = 31; }"
+	/home/src/project/project/lib/ambient_32.ts Text-1 "declare module \"ambient_32\" { export const aa_32 = 32; }"
+	/home/src/project/project/lib/ambient_33.ts Text-1 "declare module \"ambient_33\" { export const aa_33 = 33; }"
+	/home/src/project/project/lib/ambient_34.ts Text-1 "declare module \"ambient_34\" { export const aa_34 = 34; }"
+	/home/src/project/project/lib/ambient_35.ts Text-1 "declare module \"ambient_35\" { export const aa_35 = 35; }"
+	/home/src/project/project/lib/ambient_36.ts Text-1 "declare module \"ambient_36\" { export const aa_36 = 36; }"
+	/home/src/project/project/lib/ambient_37.ts Text-1 "declare module \"ambient_37\" { export const aa_37 = 37; }"
+	/home/src/project/project/lib/ambient_38.ts Text-1 "declare module \"ambient_38\" { export const aa_38 = 38; }"
+	/home/src/project/project/lib/ambient_39.ts Text-1 "declare module \"ambient_39\" { export const aa_39 = 39; }"
+	/home/src/project/project/lib/ambient_4.ts Text-1 "declare module \"ambient_4\" { export const aa_4 = 4; }"
+	/home/src/project/project/lib/ambient_40.ts Text-1 "declare module \"ambient_40\" { export const aa_40 = 40; }"
+	/home/src/project/project/lib/ambient_41.ts Text-1 "declare module \"ambient_41\" { export const aa_41 = 41; }"
+	/home/src/project/project/lib/ambient_42.ts Text-1 "declare module \"ambient_42\" { export const aa_42 = 42; }"
+	/home/src/project/project/lib/ambient_43.ts Text-1 "declare module \"ambient_43\" { export const aa_43 = 43; }"
+	/home/src/project/project/lib/ambient_44.ts Text-1 "declare module \"ambient_44\" { export const aa_44 = 44; }"
+	/home/src/project/project/lib/ambient_45.ts Text-1 "declare module \"ambient_45\" { export const aa_45 = 45; }"
+	/home/src/project/project/lib/ambient_46.ts Text-1 "declare module \"ambient_46\" { export const aa_46 = 46; }"
+	/home/src/project/project/lib/ambient_47.ts Text-1 "declare module \"ambient_47\" { export const aa_47 = 47; }"
+	/home/src/project/project/lib/ambient_48.ts Text-1 "declare module \"ambient_48\" { export const aa_48 = 48; }"
+	/home/src/project/project/lib/ambient_49.ts Text-1 "declare module \"ambient_49\" { export const aa_49 = 49; }"
+	/home/src/project/project/lib/ambient_5.ts Text-1 "declare module \"ambient_5\" { export const aa_5 = 5; }"
+	/home/src/project/project/lib/ambient_50.ts Text-1 "declare module \"ambient_50\" { export const aa_50 = 50; }"
+	/home/src/project/project/lib/ambient_51.ts Text-1 "declare module \"ambient_51\" { export const aa_51 = 51; }"
+	/home/src/project/project/lib/ambient_52.ts Text-1 "declare module \"ambient_52\" { export const aa_52 = 52; }"
+	/home/src/project/project/lib/ambient_53.ts Text-1 "declare module \"ambient_53\" { export const aa_53 = 53; }"
+	/home/src/project/project/lib/ambient_54.ts Text-1 "declare module \"ambient_54\" { export const aa_54 = 54; }"
+	/home/src/project/project/lib/ambient_55.ts Text-1 "declare module \"ambient_55\" { export const aa_55 = 55; }"
+	/home/src/project/project/lib/ambient_56.ts Text-1 "declare module \"ambient_56\" { export const aa_56 = 56; }"
+	/home/src/project/project/lib/ambient_57.ts Text-1 "declare module \"ambient_57\" { export const aa_57 = 57; }"
+	/home/src/project/project/lib/ambient_58.ts Text-1 "declare module \"ambient_58\" { export const aa_58 = 58; }"
+	/home/src/project/project/lib/ambient_59.ts Text-1 "declare module \"ambient_59\" { export const aa_59 = 59; }"
+	/home/src/project/project/lib/ambient_6.ts Text-1 "declare module \"ambient_6\" { export const aa_6 = 6; }"
+	/home/src/project/project/lib/ambient_60.ts Text-1 "declare module \"ambient_60\" { export const aa_60 = 60; }"
+	/home/src/project/project/lib/ambient_61.ts Text-1 "declare module \"ambient_61\" { export const aa_61 = 61; }"
+	/home/src/project/project/lib/ambient_62.ts Text-1 "declare module \"ambient_62\" { export const aa_62 = 62; }"
+	/home/src/project/project/lib/ambient_63.ts Text-1 "declare module \"ambient_63\" { export const aa_63 = 63; }"
+	/home/src/project/project/lib/ambient_64.ts Text-1 "declare module \"ambient_64\" { export const aa_64 = 64; }"
+	/home/src/project/project/lib/ambient_65.ts Text-1 "declare module \"ambient_65\" { export const aa_65 = 65; }"
+	/home/src/project/project/lib/ambient_66.ts Text-1 "declare module \"ambient_66\" { export const aa_66 = 66; }"
+	/home/src/project/project/lib/ambient_67.ts Text-1 "declare module \"ambient_67\" { export const aa_67 = 67; }"
+	/home/src/project/project/lib/ambient_68.ts Text-1 "declare module \"ambient_68\" { export const aa_68 = 68; }"
+	/home/src/project/project/lib/ambient_69.ts Text-1 "declare module \"ambient_69\" { export const aa_69 = 69; }"
+	/home/src/project/project/lib/ambient_7.ts Text-1 "declare module \"ambient_7\" { export const aa_7 = 7; }"
+	/home/src/project/project/lib/ambient_70.ts Text-1 "declare module \"ambient_70\" { export const aa_70 = 70; }"
+	/home/src/project/project/lib/ambient_71.ts Text-1 "declare module \"ambient_71\" { export const aa_71 = 71; }"
+	/home/src/project/project/lib/ambient_72.ts Text-1 "declare module \"ambient_72\" { export const aa_72 = 72; }"
+	/home/src/project/project/lib/ambient_73.ts Text-1 "declare module \"ambient_73\" { export const aa_73 = 73; }"
+	/home/src/project/project/lib/ambient_74.ts Text-1 "declare module \"ambient_74\" { export const aa_74 = 74; }"
+	/home/src/project/project/lib/ambient_75.ts Text-1 "declare module \"ambient_75\" { export const aa_75 = 75; }"
+	/home/src/project/project/lib/ambient_76.ts Text-1 "declare module \"ambient_76\" { export const aa_76 = 76; }"
+	/home/src/project/project/lib/ambient_77.ts Text-1 "declare module \"ambient_77\" { export const aa_77 = 77; }"
+	/home/src/project/project/lib/ambient_78.ts Text-1 "declare module \"ambient_78\" { export const aa_78 = 78; }"
+	/home/src/project/project/lib/ambient_79.ts Text-1 "declare module \"ambient_79\" { export const aa_79 = 79; }"
+	/home/src/project/project/lib/ambient_8.ts Text-1 "declare module \"ambient_8\" { export const aa_8 = 8; }"
+	/home/src/project/project/lib/ambient_80.ts Text-1 "declare module \"ambient_80\" { export const aa_80 = 80; }"
+	/home/src/project/project/lib/ambient_81.ts Text-1 "declare module \"ambient_81\" { export const aa_81 = 81; }"
+	/home/src/project/project/lib/ambient_82.ts Text-1 "declare module \"ambient_82\" { export const aa_82 = 82; }"
+	/home/src/project/project/lib/ambient_83.ts Text-1 "declare module \"ambient_83\" { export const aa_83 = 83; }"
+	/home/src/project/project/lib/ambient_84.ts Text-1 "declare module \"ambient_84\" { export const aa_84 = 84; }"
+	/home/src/project/project/lib/ambient_85.ts Text-1 "declare module \"ambient_85\" { export const aa_85 = 85; }"
+	/home/src/project/project/lib/ambient_86.ts Text-1 "declare module \"ambient_86\" { export const aa_86 = 86; }"
+	/home/src/project/project/lib/ambient_87.ts Text-1 "declare module \"ambient_87\" { export const aa_87 = 87; }"
+	/home/src/project/project/lib/ambient_88.ts Text-1 "declare module \"ambient_88\" { export const aa_88 = 88; }"
+	/home/src/project/project/lib/ambient_89.ts Text-1 "declare module \"ambient_89\" { export const aa_89 = 89; }"
+	/home/src/project/project/lib/ambient_9.ts Text-1 "declare module \"ambient_9\" { export const aa_9 = 9; }"
+	/home/src/project/project/lib/ambient_90.ts Text-1 "declare module \"ambient_90\" { export const aa_90 = 90; }"
+	/home/src/project/project/lib/ambient_91.ts Text-1 "declare module \"ambient_91\" { export const aa_91 = 91; }"
+	/home/src/project/project/lib/ambient_92.ts Text-1 "declare module \"ambient_92\" { export const aa_92 = 92; }"
+	/home/src/project/project/lib/ambient_93.ts Text-1 "declare module \"ambient_93\" { export const aa_93 = 93; }"
+	/home/src/project/project/lib/ambient_94.ts Text-1 "declare module \"ambient_94\" { export const aa_94 = 94; }"
+	/home/src/project/project/lib/ambient_95.ts Text-1 "declare module \"ambient_95\" { export const aa_95 = 95; }"
+	/home/src/project/project/lib/ambient_96.ts Text-1 "declare module \"ambient_96\" { export const aa_96 = 96; }"
+	/home/src/project/project/lib/ambient_97.ts Text-1 "declare module \"ambient_97\" { export const aa_97 = 97; }"
+	/home/src/project/project/lib/ambient_98.ts Text-1 "declare module \"ambient_98\" { export const aa_98 = 98; }"
+	/home/src/project/project/lib/ambient_99.ts Text-1 "declare module \"ambient_99\" { export const aa_99 = 99; }"
 
 
+	../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
 	lib/a_0.ts
@@ -2086,7 +2110,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/project/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -2097,7 +2121,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "e8cfc03c81e8897a29d9587afed09a120dde12731abea5b9fd4b93e78d6d3221",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -2107,8 +2131,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 18920,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -2138,64 +2162,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/index.ts",
-        "configFile": "/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/home/src/project/project/index.ts",
+        "configFile": "/home/src/project/project/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (201)
+Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (202)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/project/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/project/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -2210,1228 +2188,1236 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/project/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/lib/a_0.ts: *new*
+/home/src/project/project/lib/a_0.ts: *new*
   {}
-/lib/a_1.ts: *new*
+/home/src/project/project/lib/a_1.ts: *new*
   {}
-/lib/a_10.ts: *new*
+/home/src/project/project/lib/a_10.ts: *new*
   {}
-/lib/a_11.ts: *new*
+/home/src/project/project/lib/a_11.ts: *new*
   {}
-/lib/a_12.ts: *new*
+/home/src/project/project/lib/a_12.ts: *new*
   {}
-/lib/a_13.ts: *new*
+/home/src/project/project/lib/a_13.ts: *new*
   {}
-/lib/a_14.ts: *new*
+/home/src/project/project/lib/a_14.ts: *new*
   {}
-/lib/a_15.ts: *new*
+/home/src/project/project/lib/a_15.ts: *new*
   {}
-/lib/a_16.ts: *new*
+/home/src/project/project/lib/a_16.ts: *new*
   {}
-/lib/a_17.ts: *new*
+/home/src/project/project/lib/a_17.ts: *new*
   {}
-/lib/a_18.ts: *new*
+/home/src/project/project/lib/a_18.ts: *new*
   {}
-/lib/a_19.ts: *new*
+/home/src/project/project/lib/a_19.ts: *new*
   {}
-/lib/a_2.ts: *new*
+/home/src/project/project/lib/a_2.ts: *new*
   {}
-/lib/a_20.ts: *new*
+/home/src/project/project/lib/a_20.ts: *new*
   {}
-/lib/a_21.ts: *new*
+/home/src/project/project/lib/a_21.ts: *new*
   {}
-/lib/a_22.ts: *new*
+/home/src/project/project/lib/a_22.ts: *new*
   {}
-/lib/a_23.ts: *new*
+/home/src/project/project/lib/a_23.ts: *new*
   {}
-/lib/a_24.ts: *new*
+/home/src/project/project/lib/a_24.ts: *new*
   {}
-/lib/a_25.ts: *new*
+/home/src/project/project/lib/a_25.ts: *new*
   {}
-/lib/a_26.ts: *new*
+/home/src/project/project/lib/a_26.ts: *new*
   {}
-/lib/a_27.ts: *new*
+/home/src/project/project/lib/a_27.ts: *new*
   {}
-/lib/a_28.ts: *new*
+/home/src/project/project/lib/a_28.ts: *new*
   {}
-/lib/a_29.ts: *new*
+/home/src/project/project/lib/a_29.ts: *new*
   {}
-/lib/a_3.ts: *new*
+/home/src/project/project/lib/a_3.ts: *new*
   {}
-/lib/a_30.ts: *new*
+/home/src/project/project/lib/a_30.ts: *new*
   {}
-/lib/a_31.ts: *new*
+/home/src/project/project/lib/a_31.ts: *new*
   {}
-/lib/a_32.ts: *new*
+/home/src/project/project/lib/a_32.ts: *new*
   {}
-/lib/a_33.ts: *new*
+/home/src/project/project/lib/a_33.ts: *new*
   {}
-/lib/a_34.ts: *new*
+/home/src/project/project/lib/a_34.ts: *new*
   {}
-/lib/a_35.ts: *new*
+/home/src/project/project/lib/a_35.ts: *new*
   {}
-/lib/a_36.ts: *new*
+/home/src/project/project/lib/a_36.ts: *new*
   {}
-/lib/a_37.ts: *new*
+/home/src/project/project/lib/a_37.ts: *new*
   {}
-/lib/a_38.ts: *new*
+/home/src/project/project/lib/a_38.ts: *new*
   {}
-/lib/a_39.ts: *new*
+/home/src/project/project/lib/a_39.ts: *new*
   {}
-/lib/a_4.ts: *new*
+/home/src/project/project/lib/a_4.ts: *new*
   {}
-/lib/a_40.ts: *new*
+/home/src/project/project/lib/a_40.ts: *new*
   {}
-/lib/a_41.ts: *new*
+/home/src/project/project/lib/a_41.ts: *new*
   {}
-/lib/a_42.ts: *new*
+/home/src/project/project/lib/a_42.ts: *new*
   {}
-/lib/a_43.ts: *new*
+/home/src/project/project/lib/a_43.ts: *new*
   {}
-/lib/a_44.ts: *new*
+/home/src/project/project/lib/a_44.ts: *new*
   {}
-/lib/a_45.ts: *new*
+/home/src/project/project/lib/a_45.ts: *new*
   {}
-/lib/a_46.ts: *new*
+/home/src/project/project/lib/a_46.ts: *new*
   {}
-/lib/a_47.ts: *new*
+/home/src/project/project/lib/a_47.ts: *new*
   {}
-/lib/a_48.ts: *new*
+/home/src/project/project/lib/a_48.ts: *new*
   {}
-/lib/a_49.ts: *new*
+/home/src/project/project/lib/a_49.ts: *new*
   {}
-/lib/a_5.ts: *new*
+/home/src/project/project/lib/a_5.ts: *new*
   {}
-/lib/a_50.ts: *new*
+/home/src/project/project/lib/a_50.ts: *new*
   {}
-/lib/a_51.ts: *new*
+/home/src/project/project/lib/a_51.ts: *new*
   {}
-/lib/a_52.ts: *new*
+/home/src/project/project/lib/a_52.ts: *new*
   {}
-/lib/a_53.ts: *new*
+/home/src/project/project/lib/a_53.ts: *new*
   {}
-/lib/a_54.ts: *new*
+/home/src/project/project/lib/a_54.ts: *new*
   {}
-/lib/a_55.ts: *new*
+/home/src/project/project/lib/a_55.ts: *new*
   {}
-/lib/a_56.ts: *new*
+/home/src/project/project/lib/a_56.ts: *new*
   {}
-/lib/a_57.ts: *new*
+/home/src/project/project/lib/a_57.ts: *new*
   {}
-/lib/a_58.ts: *new*
+/home/src/project/project/lib/a_58.ts: *new*
   {}
-/lib/a_59.ts: *new*
+/home/src/project/project/lib/a_59.ts: *new*
   {}
-/lib/a_6.ts: *new*
+/home/src/project/project/lib/a_6.ts: *new*
   {}
-/lib/a_60.ts: *new*
+/home/src/project/project/lib/a_60.ts: *new*
   {}
-/lib/a_61.ts: *new*
+/home/src/project/project/lib/a_61.ts: *new*
   {}
-/lib/a_62.ts: *new*
+/home/src/project/project/lib/a_62.ts: *new*
   {}
-/lib/a_63.ts: *new*
+/home/src/project/project/lib/a_63.ts: *new*
   {}
-/lib/a_64.ts: *new*
+/home/src/project/project/lib/a_64.ts: *new*
   {}
-/lib/a_65.ts: *new*
+/home/src/project/project/lib/a_65.ts: *new*
   {}
-/lib/a_66.ts: *new*
+/home/src/project/project/lib/a_66.ts: *new*
   {}
-/lib/a_67.ts: *new*
+/home/src/project/project/lib/a_67.ts: *new*
   {}
-/lib/a_68.ts: *new*
+/home/src/project/project/lib/a_68.ts: *new*
   {}
-/lib/a_69.ts: *new*
+/home/src/project/project/lib/a_69.ts: *new*
   {}
-/lib/a_7.ts: *new*
+/home/src/project/project/lib/a_7.ts: *new*
   {}
-/lib/a_70.ts: *new*
+/home/src/project/project/lib/a_70.ts: *new*
   {}
-/lib/a_71.ts: *new*
+/home/src/project/project/lib/a_71.ts: *new*
   {}
-/lib/a_72.ts: *new*
+/home/src/project/project/lib/a_72.ts: *new*
   {}
-/lib/a_73.ts: *new*
+/home/src/project/project/lib/a_73.ts: *new*
   {}
-/lib/a_74.ts: *new*
+/home/src/project/project/lib/a_74.ts: *new*
   {}
-/lib/a_75.ts: *new*
+/home/src/project/project/lib/a_75.ts: *new*
   {}
-/lib/a_76.ts: *new*
+/home/src/project/project/lib/a_76.ts: *new*
   {}
-/lib/a_77.ts: *new*
+/home/src/project/project/lib/a_77.ts: *new*
   {}
-/lib/a_78.ts: *new*
+/home/src/project/project/lib/a_78.ts: *new*
   {}
-/lib/a_79.ts: *new*
+/home/src/project/project/lib/a_79.ts: *new*
   {}
-/lib/a_8.ts: *new*
+/home/src/project/project/lib/a_8.ts: *new*
   {}
-/lib/a_80.ts: *new*
+/home/src/project/project/lib/a_80.ts: *new*
   {}
-/lib/a_81.ts: *new*
+/home/src/project/project/lib/a_81.ts: *new*
   {}
-/lib/a_82.ts: *new*
+/home/src/project/project/lib/a_82.ts: *new*
   {}
-/lib/a_83.ts: *new*
+/home/src/project/project/lib/a_83.ts: *new*
   {}
-/lib/a_84.ts: *new*
+/home/src/project/project/lib/a_84.ts: *new*
   {}
-/lib/a_85.ts: *new*
+/home/src/project/project/lib/a_85.ts: *new*
   {}
-/lib/a_86.ts: *new*
+/home/src/project/project/lib/a_86.ts: *new*
   {}
-/lib/a_87.ts: *new*
+/home/src/project/project/lib/a_87.ts: *new*
   {}
-/lib/a_88.ts: *new*
+/home/src/project/project/lib/a_88.ts: *new*
   {}
-/lib/a_89.ts: *new*
+/home/src/project/project/lib/a_89.ts: *new*
   {}
-/lib/a_9.ts: *new*
+/home/src/project/project/lib/a_9.ts: *new*
   {}
-/lib/a_90.ts: *new*
+/home/src/project/project/lib/a_90.ts: *new*
   {}
-/lib/a_91.ts: *new*
+/home/src/project/project/lib/a_91.ts: *new*
   {}
-/lib/a_92.ts: *new*
+/home/src/project/project/lib/a_92.ts: *new*
   {}
-/lib/a_93.ts: *new*
+/home/src/project/project/lib/a_93.ts: *new*
   {}
-/lib/a_94.ts: *new*
+/home/src/project/project/lib/a_94.ts: *new*
   {}
-/lib/a_95.ts: *new*
+/home/src/project/project/lib/a_95.ts: *new*
   {}
-/lib/a_96.ts: *new*
+/home/src/project/project/lib/a_96.ts: *new*
   {}
-/lib/a_97.ts: *new*
+/home/src/project/project/lib/a_97.ts: *new*
   {}
-/lib/a_98.ts: *new*
+/home/src/project/project/lib/a_98.ts: *new*
   {}
-/lib/a_99.ts: *new*
+/home/src/project/project/lib/a_99.ts: *new*
   {}
-/lib/ambient_0.ts: *new*
+/home/src/project/project/lib/ambient_0.ts: *new*
   {}
-/lib/ambient_1.ts: *new*
+/home/src/project/project/lib/ambient_1.ts: *new*
   {}
-/lib/ambient_10.ts: *new*
+/home/src/project/project/lib/ambient_10.ts: *new*
   {}
-/lib/ambient_11.ts: *new*
+/home/src/project/project/lib/ambient_11.ts: *new*
   {}
-/lib/ambient_12.ts: *new*
+/home/src/project/project/lib/ambient_12.ts: *new*
   {}
-/lib/ambient_13.ts: *new*
+/home/src/project/project/lib/ambient_13.ts: *new*
   {}
-/lib/ambient_14.ts: *new*
+/home/src/project/project/lib/ambient_14.ts: *new*
   {}
-/lib/ambient_15.ts: *new*
+/home/src/project/project/lib/ambient_15.ts: *new*
   {}
-/lib/ambient_16.ts: *new*
+/home/src/project/project/lib/ambient_16.ts: *new*
   {}
-/lib/ambient_17.ts: *new*
+/home/src/project/project/lib/ambient_17.ts: *new*
   {}
-/lib/ambient_18.ts: *new*
+/home/src/project/project/lib/ambient_18.ts: *new*
   {}
-/lib/ambient_19.ts: *new*
+/home/src/project/project/lib/ambient_19.ts: *new*
   {}
-/lib/ambient_2.ts: *new*
+/home/src/project/project/lib/ambient_2.ts: *new*
   {}
-/lib/ambient_20.ts: *new*
+/home/src/project/project/lib/ambient_20.ts: *new*
   {}
-/lib/ambient_21.ts: *new*
+/home/src/project/project/lib/ambient_21.ts: *new*
   {}
-/lib/ambient_22.ts: *new*
+/home/src/project/project/lib/ambient_22.ts: *new*
   {}
-/lib/ambient_23.ts: *new*
+/home/src/project/project/lib/ambient_23.ts: *new*
   {}
-/lib/ambient_24.ts: *new*
+/home/src/project/project/lib/ambient_24.ts: *new*
   {}
-/lib/ambient_25.ts: *new*
+/home/src/project/project/lib/ambient_25.ts: *new*
   {}
-/lib/ambient_26.ts: *new*
+/home/src/project/project/lib/ambient_26.ts: *new*
   {}
-/lib/ambient_27.ts: *new*
+/home/src/project/project/lib/ambient_27.ts: *new*
   {}
-/lib/ambient_28.ts: *new*
+/home/src/project/project/lib/ambient_28.ts: *new*
   {}
-/lib/ambient_29.ts: *new*
+/home/src/project/project/lib/ambient_29.ts: *new*
   {}
-/lib/ambient_3.ts: *new*
+/home/src/project/project/lib/ambient_3.ts: *new*
   {}
-/lib/ambient_30.ts: *new*
+/home/src/project/project/lib/ambient_30.ts: *new*
   {}
-/lib/ambient_31.ts: *new*
+/home/src/project/project/lib/ambient_31.ts: *new*
   {}
-/lib/ambient_32.ts: *new*
+/home/src/project/project/lib/ambient_32.ts: *new*
   {}
-/lib/ambient_33.ts: *new*
+/home/src/project/project/lib/ambient_33.ts: *new*
   {}
-/lib/ambient_34.ts: *new*
+/home/src/project/project/lib/ambient_34.ts: *new*
   {}
-/lib/ambient_35.ts: *new*
+/home/src/project/project/lib/ambient_35.ts: *new*
   {}
-/lib/ambient_36.ts: *new*
+/home/src/project/project/lib/ambient_36.ts: *new*
   {}
-/lib/ambient_37.ts: *new*
+/home/src/project/project/lib/ambient_37.ts: *new*
   {}
-/lib/ambient_38.ts: *new*
+/home/src/project/project/lib/ambient_38.ts: *new*
   {}
-/lib/ambient_39.ts: *new*
+/home/src/project/project/lib/ambient_39.ts: *new*
   {}
-/lib/ambient_4.ts: *new*
+/home/src/project/project/lib/ambient_4.ts: *new*
   {}
-/lib/ambient_40.ts: *new*
+/home/src/project/project/lib/ambient_40.ts: *new*
   {}
-/lib/ambient_41.ts: *new*
+/home/src/project/project/lib/ambient_41.ts: *new*
   {}
-/lib/ambient_42.ts: *new*
+/home/src/project/project/lib/ambient_42.ts: *new*
   {}
-/lib/ambient_43.ts: *new*
+/home/src/project/project/lib/ambient_43.ts: *new*
   {}
-/lib/ambient_44.ts: *new*
+/home/src/project/project/lib/ambient_44.ts: *new*
   {}
-/lib/ambient_45.ts: *new*
+/home/src/project/project/lib/ambient_45.ts: *new*
   {}
-/lib/ambient_46.ts: *new*
+/home/src/project/project/lib/ambient_46.ts: *new*
   {}
-/lib/ambient_47.ts: *new*
+/home/src/project/project/lib/ambient_47.ts: *new*
   {}
-/lib/ambient_48.ts: *new*
+/home/src/project/project/lib/ambient_48.ts: *new*
   {}
-/lib/ambient_49.ts: *new*
+/home/src/project/project/lib/ambient_49.ts: *new*
   {}
-/lib/ambient_5.ts: *new*
+/home/src/project/project/lib/ambient_5.ts: *new*
   {}
-/lib/ambient_50.ts: *new*
+/home/src/project/project/lib/ambient_50.ts: *new*
   {}
-/lib/ambient_51.ts: *new*
+/home/src/project/project/lib/ambient_51.ts: *new*
   {}
-/lib/ambient_52.ts: *new*
+/home/src/project/project/lib/ambient_52.ts: *new*
   {}
-/lib/ambient_53.ts: *new*
+/home/src/project/project/lib/ambient_53.ts: *new*
   {}
-/lib/ambient_54.ts: *new*
+/home/src/project/project/lib/ambient_54.ts: *new*
   {}
-/lib/ambient_55.ts: *new*
+/home/src/project/project/lib/ambient_55.ts: *new*
   {}
-/lib/ambient_56.ts: *new*
+/home/src/project/project/lib/ambient_56.ts: *new*
   {}
-/lib/ambient_57.ts: *new*
+/home/src/project/project/lib/ambient_57.ts: *new*
   {}
-/lib/ambient_58.ts: *new*
+/home/src/project/project/lib/ambient_58.ts: *new*
   {}
-/lib/ambient_59.ts: *new*
+/home/src/project/project/lib/ambient_59.ts: *new*
   {}
-/lib/ambient_6.ts: *new*
+/home/src/project/project/lib/ambient_6.ts: *new*
   {}
-/lib/ambient_60.ts: *new*
+/home/src/project/project/lib/ambient_60.ts: *new*
   {}
-/lib/ambient_61.ts: *new*
+/home/src/project/project/lib/ambient_61.ts: *new*
   {}
-/lib/ambient_62.ts: *new*
+/home/src/project/project/lib/ambient_62.ts: *new*
   {}
-/lib/ambient_63.ts: *new*
+/home/src/project/project/lib/ambient_63.ts: *new*
   {}
-/lib/ambient_64.ts: *new*
+/home/src/project/project/lib/ambient_64.ts: *new*
   {}
-/lib/ambient_65.ts: *new*
+/home/src/project/project/lib/ambient_65.ts: *new*
   {}
-/lib/ambient_66.ts: *new*
+/home/src/project/project/lib/ambient_66.ts: *new*
   {}
-/lib/ambient_67.ts: *new*
+/home/src/project/project/lib/ambient_67.ts: *new*
   {}
-/lib/ambient_68.ts: *new*
+/home/src/project/project/lib/ambient_68.ts: *new*
   {}
-/lib/ambient_69.ts: *new*
+/home/src/project/project/lib/ambient_69.ts: *new*
   {}
-/lib/ambient_7.ts: *new*
+/home/src/project/project/lib/ambient_7.ts: *new*
   {}
-/lib/ambient_70.ts: *new*
+/home/src/project/project/lib/ambient_70.ts: *new*
   {}
-/lib/ambient_71.ts: *new*
+/home/src/project/project/lib/ambient_71.ts: *new*
   {}
-/lib/ambient_72.ts: *new*
+/home/src/project/project/lib/ambient_72.ts: *new*
   {}
-/lib/ambient_73.ts: *new*
+/home/src/project/project/lib/ambient_73.ts: *new*
   {}
-/lib/ambient_74.ts: *new*
+/home/src/project/project/lib/ambient_74.ts: *new*
   {}
-/lib/ambient_75.ts: *new*
+/home/src/project/project/lib/ambient_75.ts: *new*
   {}
-/lib/ambient_76.ts: *new*
+/home/src/project/project/lib/ambient_76.ts: *new*
   {}
-/lib/ambient_77.ts: *new*
+/home/src/project/project/lib/ambient_77.ts: *new*
   {}
-/lib/ambient_78.ts: *new*
+/home/src/project/project/lib/ambient_78.ts: *new*
   {}
-/lib/ambient_79.ts: *new*
+/home/src/project/project/lib/ambient_79.ts: *new*
   {}
-/lib/ambient_8.ts: *new*
+/home/src/project/project/lib/ambient_8.ts: *new*
   {}
-/lib/ambient_80.ts: *new*
+/home/src/project/project/lib/ambient_80.ts: *new*
   {}
-/lib/ambient_81.ts: *new*
+/home/src/project/project/lib/ambient_81.ts: *new*
   {}
-/lib/ambient_82.ts: *new*
+/home/src/project/project/lib/ambient_82.ts: *new*
   {}
-/lib/ambient_83.ts: *new*
+/home/src/project/project/lib/ambient_83.ts: *new*
   {}
-/lib/ambient_84.ts: *new*
+/home/src/project/project/lib/ambient_84.ts: *new*
   {}
-/lib/ambient_85.ts: *new*
+/home/src/project/project/lib/ambient_85.ts: *new*
   {}
-/lib/ambient_86.ts: *new*
+/home/src/project/project/lib/ambient_86.ts: *new*
   {}
-/lib/ambient_87.ts: *new*
+/home/src/project/project/lib/ambient_87.ts: *new*
   {}
-/lib/ambient_88.ts: *new*
+/home/src/project/project/lib/ambient_88.ts: *new*
   {}
-/lib/ambient_89.ts: *new*
+/home/src/project/project/lib/ambient_89.ts: *new*
   {}
-/lib/ambient_9.ts: *new*
+/home/src/project/project/lib/ambient_9.ts: *new*
   {}
-/lib/ambient_90.ts: *new*
+/home/src/project/project/lib/ambient_90.ts: *new*
   {}
-/lib/ambient_91.ts: *new*
+/home/src/project/project/lib/ambient_91.ts: *new*
   {}
-/lib/ambient_92.ts: *new*
+/home/src/project/project/lib/ambient_92.ts: *new*
   {}
-/lib/ambient_93.ts: *new*
+/home/src/project/project/lib/ambient_93.ts: *new*
   {}
-/lib/ambient_94.ts: *new*
+/home/src/project/project/lib/ambient_94.ts: *new*
   {}
-/lib/ambient_95.ts: *new*
+/home/src/project/project/lib/ambient_95.ts: *new*
   {}
-/lib/ambient_96.ts: *new*
+/home/src/project/project/lib/ambient_96.ts: *new*
   {}
-/lib/ambient_97.ts: *new*
+/home/src/project/project/lib/ambient_97.ts: *new*
   {}
-/lib/ambient_98.ts: *new*
+/home/src/project/project/lib/ambient_98.ts: *new*
   {}
-/lib/ambient_99.ts: *new*
+/home/src/project/project/lib/ambient_99.ts: *new*
   {}
-/tsconfig.json: *new*
+/home/src/project/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/home/src/project/project: *new*
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/home/src/project/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/index.ts (Open) *new*
+/home/src/project/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/lib/a_0.ts *new*
+        /home/src/project/project/tsconfig.json *default*
+/home/src/project/project/lib/a_0.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_1.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_1.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_10.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_10.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_11.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_11.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_12.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_12.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_13.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_13.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_14.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_14.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_15.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_15.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_16.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_16.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_17.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_17.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_18.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_18.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_19.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_19.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_2.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_2.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_20.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_20.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_21.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_21.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_22.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_22.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_23.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_23.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_24.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_24.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_25.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_25.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_26.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_26.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_27.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_27.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_28.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_28.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_29.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_29.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_3.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_3.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_30.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_30.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_31.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_31.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_32.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_32.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_33.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_33.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_34.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_34.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_35.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_35.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_36.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_36.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_37.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_37.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_38.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_38.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_39.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_39.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_4.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_4.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_40.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_40.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_41.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_41.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_42.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_42.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_43.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_43.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_44.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_44.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_45.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_45.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_46.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_46.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_47.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_47.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_48.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_48.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_49.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_49.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_5.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_5.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_50.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_50.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_51.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_51.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_52.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_52.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_53.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_53.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_54.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_54.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_55.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_55.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_56.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_56.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_57.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_57.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_58.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_58.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_59.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_59.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_6.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_6.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_60.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_60.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_61.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_61.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_62.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_62.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_63.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_63.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_64.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_64.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_65.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_65.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_66.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_66.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_67.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_67.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_68.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_68.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_69.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_69.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_7.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_7.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_70.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_70.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_71.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_71.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_72.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_72.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_73.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_73.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_74.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_74.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_75.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_75.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_76.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_76.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_77.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_77.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_78.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_78.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_79.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_79.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_8.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_8.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_80.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_80.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_81.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_81.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_82.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_82.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_83.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_83.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_84.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_84.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_85.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_85.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_86.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_86.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_87.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_87.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_88.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_88.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_89.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_89.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_9.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_9.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_90.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_90.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_91.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_91.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_92.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_92.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_93.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_93.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_94.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_94.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_95.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_95.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_96.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_96.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_97.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_97.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_98.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_98.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_99.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_99.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_0.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_0.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_1.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_1.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_10.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_10.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_11.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_11.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_12.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_12.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_13.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_13.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_14.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_14.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_15.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_15.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_16.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_16.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_17.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_17.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_18.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_18.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_19.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_19.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_2.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_2.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_20.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_20.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_21.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_21.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_22.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_22.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_23.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_23.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_24.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_24.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_25.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_25.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_26.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_26.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_27.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_27.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_28.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_28.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_29.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_29.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_3.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_3.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_30.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_30.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_31.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_31.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_32.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_32.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_33.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_33.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_34.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_34.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_35.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_35.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_36.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_36.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_37.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_37.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_38.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_38.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_39.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_39.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_4.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_4.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_40.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_40.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_41.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_41.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_42.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_42.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_43.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_43.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_44.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_44.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_45.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_45.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_46.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_46.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_47.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_47.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_48.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_48.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_49.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_49.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_5.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_5.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_50.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_50.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_51.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_51.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_52.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_52.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_53.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_53.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_54.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_54.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_55.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_55.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_56.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_56.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_57.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_57.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_58.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_58.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_59.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_59.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_6.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_6.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_60.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_60.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_61.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_61.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_62.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_62.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_63.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_63.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_64.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_64.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_65.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_65.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_66.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_66.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_67.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_67.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_68.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_68.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_69.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_69.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_7.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_7.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_70.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_70.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_71.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_71.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_72.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_72.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_73.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_73.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_74.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_74.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_75.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_75.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_76.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_76.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_77.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_77.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_78.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_78.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_79.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_79.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_8.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_8.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_80.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_80.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_81.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_81.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_82.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_82.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_83.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_83.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_84.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_84.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_85.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_85.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_86.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_86.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_87.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_87.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_88.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_88.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_89.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_89.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_9.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_9.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_90.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_90.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_91.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_91.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_92.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_92.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_93.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_93.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_94.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_94.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_95.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_95.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_96.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_96.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_97.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_97.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_98.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_98.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_99.ts *new*
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_99.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /home/src/project/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
 
 Before request
 
@@ -3441,7 +3427,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "changedFiles": [
           {
-            "fileName": "/index.ts",
+            "fileName": "/home/src/project/project/index.ts",
             "textChanges": [
               {
                 "newText": "a",
@@ -3469,817 +3455,821 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/tsconfig.json (Configured) *changed*
+/home/src/project/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     autoImportProviderHost: false
 
 ScriptInfos::
-/index.ts (Open) *changed*
+/home/src/project/project/index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
-/lib/a_0.ts
+        /home/src/project/project/tsconfig.json *default*
+/home/src/project/project/lib/a_0.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_1.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_1.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_10.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_10.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_11.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_11.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_12.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_12.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_13.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_13.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_14.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_14.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_15.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_15.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_16.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_16.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_17.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_17.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_18.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_18.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_19.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_19.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_2.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_2.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_20.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_20.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_21.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_21.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_22.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_22.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_23.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_23.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_24.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_24.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_25.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_25.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_26.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_26.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_27.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_27.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_28.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_28.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_29.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_29.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_3.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_3.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_30.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_30.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_31.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_31.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_32.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_32.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_33.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_33.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_34.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_34.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_35.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_35.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_36.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_36.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_37.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_37.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_38.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_38.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_39.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_39.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_4.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_4.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_40.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_40.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_41.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_41.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_42.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_42.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_43.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_43.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_44.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_44.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_45.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_45.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_46.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_46.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_47.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_47.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_48.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_48.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_49.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_49.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_5.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_5.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_50.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_50.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_51.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_51.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_52.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_52.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_53.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_53.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_54.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_54.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_55.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_55.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_56.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_56.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_57.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_57.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_58.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_58.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_59.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_59.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_6.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_6.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_60.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_60.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_61.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_61.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_62.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_62.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_63.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_63.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_64.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_64.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_65.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_65.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_66.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_66.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_67.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_67.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_68.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_68.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_69.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_69.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_7.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_7.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_70.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_70.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_71.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_71.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_72.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_72.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_73.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_73.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_74.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_74.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_75.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_75.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_76.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_76.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_77.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_77.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_78.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_78.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_79.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_79.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_8.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_8.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_80.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_80.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_81.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_81.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_82.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_82.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_83.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_83.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_84.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_84.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_85.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_85.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_86.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_86.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_87.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_87.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_88.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_88.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_89.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_89.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_9.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_9.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_90.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_90.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_91.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_91.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_92.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_92.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_93.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_93.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_94.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_94.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_95.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_95.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_96.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_96.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_97.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_97.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_98.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_98.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/a_99.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/a_99.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_0.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_0.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_1.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_1.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_10.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_10.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_11.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_11.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_12.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_12.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_13.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_13.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_14.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_14.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_15.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_15.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_16.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_16.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_17.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_17.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_18.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_18.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_19.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_19.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_2.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_2.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_20.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_20.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_21.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_21.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_22.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_22.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_23.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_23.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_24.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_24.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_25.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_25.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_26.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_26.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_27.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_27.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_28.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_28.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_29.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_29.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_3.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_3.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_30.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_30.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_31.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_31.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_32.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_32.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_33.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_33.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_34.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_34.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_35.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_35.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_36.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_36.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_37.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_37.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_38.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_38.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_39.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_39.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_4.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_4.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_40.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_40.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_41.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_41.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_42.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_42.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_43.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_43.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_44.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_44.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_45.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_45.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_46.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_46.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_47.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_47.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_48.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_48.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_49.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_49.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_5.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_5.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_50.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_50.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_51.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_51.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_52.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_52.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_53.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_53.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_54.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_54.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_55.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_55.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_56.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_56.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_57.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_57.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_58.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_58.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_59.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_59.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_6.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_6.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_60.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_60.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_61.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_61.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_62.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_62.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_63.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_63.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_64.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_64.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_65.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_65.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_66.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_66.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_67.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_67.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_68.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_68.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_69.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_69.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_7.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_7.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_70.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_70.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_71.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_71.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_72.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_72.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_73.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_73.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_74.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_74.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_75.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_75.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_76.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_76.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_77.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_77.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_78.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_78.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_79.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_79.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_8.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_8.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_80.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_80.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_81.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_81.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_82.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_82.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_83.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_83.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_84.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_84.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_85.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_85.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_86.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_86.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_87.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_87.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_88.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_88.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_89.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_89.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_9.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_9.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_90.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_90.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_91.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_91.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_92.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_92.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_93.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_93.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_94.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_94.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_95.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_95.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_96.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_96.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_97.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_97.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_98.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_98.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/lib/ambient_99.ts
+        /home/src/project/project/tsconfig.json
+/home/src/project/project/lib/ambient_99.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /home/src/project/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
 
 Before request
 
@@ -4287,218 +4277,219 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/index.ts",
+        "file": "/home/src/project/project/index.ts",
         "line": 1,
         "offset": 1
       },
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (201)
-	/index.ts SVC-1-1 "a"
-	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;"
-	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;"
-	/lib/a_10.ts Text-1 "export const aa_10__0 = 0;\nexport const aa_10__1 = 1;\nexport const aa_10__2 = 2;\nexport const aa_10__3 = 3;\nexport const aa_10__4 = 4;"
-	/lib/a_11.ts Text-1 "export const aa_11__0 = 0;\nexport const aa_11__1 = 1;\nexport const aa_11__2 = 2;\nexport const aa_11__3 = 3;\nexport const aa_11__4 = 4;"
-	/lib/a_12.ts Text-1 "export const aa_12__0 = 0;\nexport const aa_12__1 = 1;\nexport const aa_12__2 = 2;\nexport const aa_12__3 = 3;\nexport const aa_12__4 = 4;"
-	/lib/a_13.ts Text-1 "export const aa_13__0 = 0;\nexport const aa_13__1 = 1;\nexport const aa_13__2 = 2;\nexport const aa_13__3 = 3;\nexport const aa_13__4 = 4;"
-	/lib/a_14.ts Text-1 "export const aa_14__0 = 0;\nexport const aa_14__1 = 1;\nexport const aa_14__2 = 2;\nexport const aa_14__3 = 3;\nexport const aa_14__4 = 4;"
-	/lib/a_15.ts Text-1 "export const aa_15__0 = 0;\nexport const aa_15__1 = 1;\nexport const aa_15__2 = 2;\nexport const aa_15__3 = 3;\nexport const aa_15__4 = 4;"
-	/lib/a_16.ts Text-1 "export const aa_16__0 = 0;\nexport const aa_16__1 = 1;\nexport const aa_16__2 = 2;\nexport const aa_16__3 = 3;\nexport const aa_16__4 = 4;"
-	/lib/a_17.ts Text-1 "export const aa_17__0 = 0;\nexport const aa_17__1 = 1;\nexport const aa_17__2 = 2;\nexport const aa_17__3 = 3;\nexport const aa_17__4 = 4;"
-	/lib/a_18.ts Text-1 "export const aa_18__0 = 0;\nexport const aa_18__1 = 1;\nexport const aa_18__2 = 2;\nexport const aa_18__3 = 3;\nexport const aa_18__4 = 4;"
-	/lib/a_19.ts Text-1 "export const aa_19__0 = 0;\nexport const aa_19__1 = 1;\nexport const aa_19__2 = 2;\nexport const aa_19__3 = 3;\nexport const aa_19__4 = 4;"
-	/lib/a_2.ts Text-1 "export const aa_2__0 = 0;\nexport const aa_2__1 = 1;\nexport const aa_2__2 = 2;\nexport const aa_2__3 = 3;\nexport const aa_2__4 = 4;"
-	/lib/a_20.ts Text-1 "export const aa_20__0 = 0;\nexport const aa_20__1 = 1;\nexport const aa_20__2 = 2;\nexport const aa_20__3 = 3;\nexport const aa_20__4 = 4;"
-	/lib/a_21.ts Text-1 "export const aa_21__0 = 0;\nexport const aa_21__1 = 1;\nexport const aa_21__2 = 2;\nexport const aa_21__3 = 3;\nexport const aa_21__4 = 4;"
-	/lib/a_22.ts Text-1 "export const aa_22__0 = 0;\nexport const aa_22__1 = 1;\nexport const aa_22__2 = 2;\nexport const aa_22__3 = 3;\nexport const aa_22__4 = 4;"
-	/lib/a_23.ts Text-1 "export const aa_23__0 = 0;\nexport const aa_23__1 = 1;\nexport const aa_23__2 = 2;\nexport const aa_23__3 = 3;\nexport const aa_23__4 = 4;"
-	/lib/a_24.ts Text-1 "export const aa_24__0 = 0;\nexport const aa_24__1 = 1;\nexport const aa_24__2 = 2;\nexport const aa_24__3 = 3;\nexport const aa_24__4 = 4;"
-	/lib/a_25.ts Text-1 "export const aa_25__0 = 0;\nexport const aa_25__1 = 1;\nexport const aa_25__2 = 2;\nexport const aa_25__3 = 3;\nexport const aa_25__4 = 4;"
-	/lib/a_26.ts Text-1 "export const aa_26__0 = 0;\nexport const aa_26__1 = 1;\nexport const aa_26__2 = 2;\nexport const aa_26__3 = 3;\nexport const aa_26__4 = 4;"
-	/lib/a_27.ts Text-1 "export const aa_27__0 = 0;\nexport const aa_27__1 = 1;\nexport const aa_27__2 = 2;\nexport const aa_27__3 = 3;\nexport const aa_27__4 = 4;"
-	/lib/a_28.ts Text-1 "export const aa_28__0 = 0;\nexport const aa_28__1 = 1;\nexport const aa_28__2 = 2;\nexport const aa_28__3 = 3;\nexport const aa_28__4 = 4;"
-	/lib/a_29.ts Text-1 "export const aa_29__0 = 0;\nexport const aa_29__1 = 1;\nexport const aa_29__2 = 2;\nexport const aa_29__3 = 3;\nexport const aa_29__4 = 4;"
-	/lib/a_3.ts Text-1 "export const aa_3__0 = 0;\nexport const aa_3__1 = 1;\nexport const aa_3__2 = 2;\nexport const aa_3__3 = 3;\nexport const aa_3__4 = 4;"
-	/lib/a_30.ts Text-1 "export const aa_30__0 = 0;\nexport const aa_30__1 = 1;\nexport const aa_30__2 = 2;\nexport const aa_30__3 = 3;\nexport const aa_30__4 = 4;"
-	/lib/a_31.ts Text-1 "export const aa_31__0 = 0;\nexport const aa_31__1 = 1;\nexport const aa_31__2 = 2;\nexport const aa_31__3 = 3;\nexport const aa_31__4 = 4;"
-	/lib/a_32.ts Text-1 "export const aa_32__0 = 0;\nexport const aa_32__1 = 1;\nexport const aa_32__2 = 2;\nexport const aa_32__3 = 3;\nexport const aa_32__4 = 4;"
-	/lib/a_33.ts Text-1 "export const aa_33__0 = 0;\nexport const aa_33__1 = 1;\nexport const aa_33__2 = 2;\nexport const aa_33__3 = 3;\nexport const aa_33__4 = 4;"
-	/lib/a_34.ts Text-1 "export const aa_34__0 = 0;\nexport const aa_34__1 = 1;\nexport const aa_34__2 = 2;\nexport const aa_34__3 = 3;\nexport const aa_34__4 = 4;"
-	/lib/a_35.ts Text-1 "export const aa_35__0 = 0;\nexport const aa_35__1 = 1;\nexport const aa_35__2 = 2;\nexport const aa_35__3 = 3;\nexport const aa_35__4 = 4;"
-	/lib/a_36.ts Text-1 "export const aa_36__0 = 0;\nexport const aa_36__1 = 1;\nexport const aa_36__2 = 2;\nexport const aa_36__3 = 3;\nexport const aa_36__4 = 4;"
-	/lib/a_37.ts Text-1 "export const aa_37__0 = 0;\nexport const aa_37__1 = 1;\nexport const aa_37__2 = 2;\nexport const aa_37__3 = 3;\nexport const aa_37__4 = 4;"
-	/lib/a_38.ts Text-1 "export const aa_38__0 = 0;\nexport const aa_38__1 = 1;\nexport const aa_38__2 = 2;\nexport const aa_38__3 = 3;\nexport const aa_38__4 = 4;"
-	/lib/a_39.ts Text-1 "export const aa_39__0 = 0;\nexport const aa_39__1 = 1;\nexport const aa_39__2 = 2;\nexport const aa_39__3 = 3;\nexport const aa_39__4 = 4;"
-	/lib/a_4.ts Text-1 "export const aa_4__0 = 0;\nexport const aa_4__1 = 1;\nexport const aa_4__2 = 2;\nexport const aa_4__3 = 3;\nexport const aa_4__4 = 4;"
-	/lib/a_40.ts Text-1 "export const aa_40__0 = 0;\nexport const aa_40__1 = 1;\nexport const aa_40__2 = 2;\nexport const aa_40__3 = 3;\nexport const aa_40__4 = 4;"
-	/lib/a_41.ts Text-1 "export const aa_41__0 = 0;\nexport const aa_41__1 = 1;\nexport const aa_41__2 = 2;\nexport const aa_41__3 = 3;\nexport const aa_41__4 = 4;"
-	/lib/a_42.ts Text-1 "export const aa_42__0 = 0;\nexport const aa_42__1 = 1;\nexport const aa_42__2 = 2;\nexport const aa_42__3 = 3;\nexport const aa_42__4 = 4;"
-	/lib/a_43.ts Text-1 "export const aa_43__0 = 0;\nexport const aa_43__1 = 1;\nexport const aa_43__2 = 2;\nexport const aa_43__3 = 3;\nexport const aa_43__4 = 4;"
-	/lib/a_44.ts Text-1 "export const aa_44__0 = 0;\nexport const aa_44__1 = 1;\nexport const aa_44__2 = 2;\nexport const aa_44__3 = 3;\nexport const aa_44__4 = 4;"
-	/lib/a_45.ts Text-1 "export const aa_45__0 = 0;\nexport const aa_45__1 = 1;\nexport const aa_45__2 = 2;\nexport const aa_45__3 = 3;\nexport const aa_45__4 = 4;"
-	/lib/a_46.ts Text-1 "export const aa_46__0 = 0;\nexport const aa_46__1 = 1;\nexport const aa_46__2 = 2;\nexport const aa_46__3 = 3;\nexport const aa_46__4 = 4;"
-	/lib/a_47.ts Text-1 "export const aa_47__0 = 0;\nexport const aa_47__1 = 1;\nexport const aa_47__2 = 2;\nexport const aa_47__3 = 3;\nexport const aa_47__4 = 4;"
-	/lib/a_48.ts Text-1 "export const aa_48__0 = 0;\nexport const aa_48__1 = 1;\nexport const aa_48__2 = 2;\nexport const aa_48__3 = 3;\nexport const aa_48__4 = 4;"
-	/lib/a_49.ts Text-1 "export const aa_49__0 = 0;\nexport const aa_49__1 = 1;\nexport const aa_49__2 = 2;\nexport const aa_49__3 = 3;\nexport const aa_49__4 = 4;"
-	/lib/a_5.ts Text-1 "export const aa_5__0 = 0;\nexport const aa_5__1 = 1;\nexport const aa_5__2 = 2;\nexport const aa_5__3 = 3;\nexport const aa_5__4 = 4;"
-	/lib/a_50.ts Text-1 "export const aa_50__0 = 0;\nexport const aa_50__1 = 1;\nexport const aa_50__2 = 2;\nexport const aa_50__3 = 3;\nexport const aa_50__4 = 4;"
-	/lib/a_51.ts Text-1 "export const aa_51__0 = 0;\nexport const aa_51__1 = 1;\nexport const aa_51__2 = 2;\nexport const aa_51__3 = 3;\nexport const aa_51__4 = 4;"
-	/lib/a_52.ts Text-1 "export const aa_52__0 = 0;\nexport const aa_52__1 = 1;\nexport const aa_52__2 = 2;\nexport const aa_52__3 = 3;\nexport const aa_52__4 = 4;"
-	/lib/a_53.ts Text-1 "export const aa_53__0 = 0;\nexport const aa_53__1 = 1;\nexport const aa_53__2 = 2;\nexport const aa_53__3 = 3;\nexport const aa_53__4 = 4;"
-	/lib/a_54.ts Text-1 "export const aa_54__0 = 0;\nexport const aa_54__1 = 1;\nexport const aa_54__2 = 2;\nexport const aa_54__3 = 3;\nexport const aa_54__4 = 4;"
-	/lib/a_55.ts Text-1 "export const aa_55__0 = 0;\nexport const aa_55__1 = 1;\nexport const aa_55__2 = 2;\nexport const aa_55__3 = 3;\nexport const aa_55__4 = 4;"
-	/lib/a_56.ts Text-1 "export const aa_56__0 = 0;\nexport const aa_56__1 = 1;\nexport const aa_56__2 = 2;\nexport const aa_56__3 = 3;\nexport const aa_56__4 = 4;"
-	/lib/a_57.ts Text-1 "export const aa_57__0 = 0;\nexport const aa_57__1 = 1;\nexport const aa_57__2 = 2;\nexport const aa_57__3 = 3;\nexport const aa_57__4 = 4;"
-	/lib/a_58.ts Text-1 "export const aa_58__0 = 0;\nexport const aa_58__1 = 1;\nexport const aa_58__2 = 2;\nexport const aa_58__3 = 3;\nexport const aa_58__4 = 4;"
-	/lib/a_59.ts Text-1 "export const aa_59__0 = 0;\nexport const aa_59__1 = 1;\nexport const aa_59__2 = 2;\nexport const aa_59__3 = 3;\nexport const aa_59__4 = 4;"
-	/lib/a_6.ts Text-1 "export const aa_6__0 = 0;\nexport const aa_6__1 = 1;\nexport const aa_6__2 = 2;\nexport const aa_6__3 = 3;\nexport const aa_6__4 = 4;"
-	/lib/a_60.ts Text-1 "export const aa_60__0 = 0;\nexport const aa_60__1 = 1;\nexport const aa_60__2 = 2;\nexport const aa_60__3 = 3;\nexport const aa_60__4 = 4;"
-	/lib/a_61.ts Text-1 "export const aa_61__0 = 0;\nexport const aa_61__1 = 1;\nexport const aa_61__2 = 2;\nexport const aa_61__3 = 3;\nexport const aa_61__4 = 4;"
-	/lib/a_62.ts Text-1 "export const aa_62__0 = 0;\nexport const aa_62__1 = 1;\nexport const aa_62__2 = 2;\nexport const aa_62__3 = 3;\nexport const aa_62__4 = 4;"
-	/lib/a_63.ts Text-1 "export const aa_63__0 = 0;\nexport const aa_63__1 = 1;\nexport const aa_63__2 = 2;\nexport const aa_63__3 = 3;\nexport const aa_63__4 = 4;"
-	/lib/a_64.ts Text-1 "export const aa_64__0 = 0;\nexport const aa_64__1 = 1;\nexport const aa_64__2 = 2;\nexport const aa_64__3 = 3;\nexport const aa_64__4 = 4;"
-	/lib/a_65.ts Text-1 "export const aa_65__0 = 0;\nexport const aa_65__1 = 1;\nexport const aa_65__2 = 2;\nexport const aa_65__3 = 3;\nexport const aa_65__4 = 4;"
-	/lib/a_66.ts Text-1 "export const aa_66__0 = 0;\nexport const aa_66__1 = 1;\nexport const aa_66__2 = 2;\nexport const aa_66__3 = 3;\nexport const aa_66__4 = 4;"
-	/lib/a_67.ts Text-1 "export const aa_67__0 = 0;\nexport const aa_67__1 = 1;\nexport const aa_67__2 = 2;\nexport const aa_67__3 = 3;\nexport const aa_67__4 = 4;"
-	/lib/a_68.ts Text-1 "export const aa_68__0 = 0;\nexport const aa_68__1 = 1;\nexport const aa_68__2 = 2;\nexport const aa_68__3 = 3;\nexport const aa_68__4 = 4;"
-	/lib/a_69.ts Text-1 "export const aa_69__0 = 0;\nexport const aa_69__1 = 1;\nexport const aa_69__2 = 2;\nexport const aa_69__3 = 3;\nexport const aa_69__4 = 4;"
-	/lib/a_7.ts Text-1 "export const aa_7__0 = 0;\nexport const aa_7__1 = 1;\nexport const aa_7__2 = 2;\nexport const aa_7__3 = 3;\nexport const aa_7__4 = 4;"
-	/lib/a_70.ts Text-1 "export const aa_70__0 = 0;\nexport const aa_70__1 = 1;\nexport const aa_70__2 = 2;\nexport const aa_70__3 = 3;\nexport const aa_70__4 = 4;"
-	/lib/a_71.ts Text-1 "export const aa_71__0 = 0;\nexport const aa_71__1 = 1;\nexport const aa_71__2 = 2;\nexport const aa_71__3 = 3;\nexport const aa_71__4 = 4;"
-	/lib/a_72.ts Text-1 "export const aa_72__0 = 0;\nexport const aa_72__1 = 1;\nexport const aa_72__2 = 2;\nexport const aa_72__3 = 3;\nexport const aa_72__4 = 4;"
-	/lib/a_73.ts Text-1 "export const aa_73__0 = 0;\nexport const aa_73__1 = 1;\nexport const aa_73__2 = 2;\nexport const aa_73__3 = 3;\nexport const aa_73__4 = 4;"
-	/lib/a_74.ts Text-1 "export const aa_74__0 = 0;\nexport const aa_74__1 = 1;\nexport const aa_74__2 = 2;\nexport const aa_74__3 = 3;\nexport const aa_74__4 = 4;"
-	/lib/a_75.ts Text-1 "export const aa_75__0 = 0;\nexport const aa_75__1 = 1;\nexport const aa_75__2 = 2;\nexport const aa_75__3 = 3;\nexport const aa_75__4 = 4;"
-	/lib/a_76.ts Text-1 "export const aa_76__0 = 0;\nexport const aa_76__1 = 1;\nexport const aa_76__2 = 2;\nexport const aa_76__3 = 3;\nexport const aa_76__4 = 4;"
-	/lib/a_77.ts Text-1 "export const aa_77__0 = 0;\nexport const aa_77__1 = 1;\nexport const aa_77__2 = 2;\nexport const aa_77__3 = 3;\nexport const aa_77__4 = 4;"
-	/lib/a_78.ts Text-1 "export const aa_78__0 = 0;\nexport const aa_78__1 = 1;\nexport const aa_78__2 = 2;\nexport const aa_78__3 = 3;\nexport const aa_78__4 = 4;"
-	/lib/a_79.ts Text-1 "export const aa_79__0 = 0;\nexport const aa_79__1 = 1;\nexport const aa_79__2 = 2;\nexport const aa_79__3 = 3;\nexport const aa_79__4 = 4;"
-	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;\nexport const aa_8__1 = 1;\nexport const aa_8__2 = 2;\nexport const aa_8__3 = 3;\nexport const aa_8__4 = 4;"
-	/lib/a_80.ts Text-1 "export const aa_80__0 = 0;\nexport const aa_80__1 = 1;\nexport const aa_80__2 = 2;\nexport const aa_80__3 = 3;\nexport const aa_80__4 = 4;"
-	/lib/a_81.ts Text-1 "export const aa_81__0 = 0;\nexport const aa_81__1 = 1;\nexport const aa_81__2 = 2;\nexport const aa_81__3 = 3;\nexport const aa_81__4 = 4;"
-	/lib/a_82.ts Text-1 "export const aa_82__0 = 0;\nexport const aa_82__1 = 1;\nexport const aa_82__2 = 2;\nexport const aa_82__3 = 3;\nexport const aa_82__4 = 4;"
-	/lib/a_83.ts Text-1 "export const aa_83__0 = 0;\nexport const aa_83__1 = 1;\nexport const aa_83__2 = 2;\nexport const aa_83__3 = 3;\nexport const aa_83__4 = 4;"
-	/lib/a_84.ts Text-1 "export const aa_84__0 = 0;\nexport const aa_84__1 = 1;\nexport const aa_84__2 = 2;\nexport const aa_84__3 = 3;\nexport const aa_84__4 = 4;"
-	/lib/a_85.ts Text-1 "export const aa_85__0 = 0;\nexport const aa_85__1 = 1;\nexport const aa_85__2 = 2;\nexport const aa_85__3 = 3;\nexport const aa_85__4 = 4;"
-	/lib/a_86.ts Text-1 "export const aa_86__0 = 0;\nexport const aa_86__1 = 1;\nexport const aa_86__2 = 2;\nexport const aa_86__3 = 3;\nexport const aa_86__4 = 4;"
-	/lib/a_87.ts Text-1 "export const aa_87__0 = 0;\nexport const aa_87__1 = 1;\nexport const aa_87__2 = 2;\nexport const aa_87__3 = 3;\nexport const aa_87__4 = 4;"
-	/lib/a_88.ts Text-1 "export const aa_88__0 = 0;\nexport const aa_88__1 = 1;\nexport const aa_88__2 = 2;\nexport const aa_88__3 = 3;\nexport const aa_88__4 = 4;"
-	/lib/a_89.ts Text-1 "export const aa_89__0 = 0;\nexport const aa_89__1 = 1;\nexport const aa_89__2 = 2;\nexport const aa_89__3 = 3;\nexport const aa_89__4 = 4;"
-	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;"
-	/lib/a_90.ts Text-1 "export const aa_90__0 = 0;\nexport const aa_90__1 = 1;\nexport const aa_90__2 = 2;\nexport const aa_90__3 = 3;\nexport const aa_90__4 = 4;"
-	/lib/a_91.ts Text-1 "export const aa_91__0 = 0;\nexport const aa_91__1 = 1;\nexport const aa_91__2 = 2;\nexport const aa_91__3 = 3;\nexport const aa_91__4 = 4;"
-	/lib/a_92.ts Text-1 "export const aa_92__0 = 0;\nexport const aa_92__1 = 1;\nexport const aa_92__2 = 2;\nexport const aa_92__3 = 3;\nexport const aa_92__4 = 4;"
-	/lib/a_93.ts Text-1 "export const aa_93__0 = 0;\nexport const aa_93__1 = 1;\nexport const aa_93__2 = 2;\nexport const aa_93__3 = 3;\nexport const aa_93__4 = 4;"
-	/lib/a_94.ts Text-1 "export const aa_94__0 = 0;\nexport const aa_94__1 = 1;\nexport const aa_94__2 = 2;\nexport const aa_94__3 = 3;\nexport const aa_94__4 = 4;"
-	/lib/a_95.ts Text-1 "export const aa_95__0 = 0;\nexport const aa_95__1 = 1;\nexport const aa_95__2 = 2;\nexport const aa_95__3 = 3;\nexport const aa_95__4 = 4;"
-	/lib/a_96.ts Text-1 "export const aa_96__0 = 0;\nexport const aa_96__1 = 1;\nexport const aa_96__2 = 2;\nexport const aa_96__3 = 3;\nexport const aa_96__4 = 4;"
-	/lib/a_97.ts Text-1 "export const aa_97__0 = 0;\nexport const aa_97__1 = 1;\nexport const aa_97__2 = 2;\nexport const aa_97__3 = 3;\nexport const aa_97__4 = 4;"
-	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;\nexport const aa_98__1 = 1;\nexport const aa_98__2 = 2;\nexport const aa_98__3 = 3;\nexport const aa_98__4 = 4;"
-	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;\nexport const aa_99__1 = 1;\nexport const aa_99__2 = 2;\nexport const aa_99__3 = 3;\nexport const aa_99__4 = 4;"
-	/lib/ambient_0.ts Text-1 "declare module \"ambient_0\" { export const aa_0 = 0; }"
-	/lib/ambient_1.ts Text-1 "declare module \"ambient_1\" { export const aa_1 = 1; }"
-	/lib/ambient_10.ts Text-1 "declare module \"ambient_10\" { export const aa_10 = 10; }"
-	/lib/ambient_11.ts Text-1 "declare module \"ambient_11\" { export const aa_11 = 11; }"
-	/lib/ambient_12.ts Text-1 "declare module \"ambient_12\" { export const aa_12 = 12; }"
-	/lib/ambient_13.ts Text-1 "declare module \"ambient_13\" { export const aa_13 = 13; }"
-	/lib/ambient_14.ts Text-1 "declare module \"ambient_14\" { export const aa_14 = 14; }"
-	/lib/ambient_15.ts Text-1 "declare module \"ambient_15\" { export const aa_15 = 15; }"
-	/lib/ambient_16.ts Text-1 "declare module \"ambient_16\" { export const aa_16 = 16; }"
-	/lib/ambient_17.ts Text-1 "declare module \"ambient_17\" { export const aa_17 = 17; }"
-	/lib/ambient_18.ts Text-1 "declare module \"ambient_18\" { export const aa_18 = 18; }"
-	/lib/ambient_19.ts Text-1 "declare module \"ambient_19\" { export const aa_19 = 19; }"
-	/lib/ambient_2.ts Text-1 "declare module \"ambient_2\" { export const aa_2 = 2; }"
-	/lib/ambient_20.ts Text-1 "declare module \"ambient_20\" { export const aa_20 = 20; }"
-	/lib/ambient_21.ts Text-1 "declare module \"ambient_21\" { export const aa_21 = 21; }"
-	/lib/ambient_22.ts Text-1 "declare module \"ambient_22\" { export const aa_22 = 22; }"
-	/lib/ambient_23.ts Text-1 "declare module \"ambient_23\" { export const aa_23 = 23; }"
-	/lib/ambient_24.ts Text-1 "declare module \"ambient_24\" { export const aa_24 = 24; }"
-	/lib/ambient_25.ts Text-1 "declare module \"ambient_25\" { export const aa_25 = 25; }"
-	/lib/ambient_26.ts Text-1 "declare module \"ambient_26\" { export const aa_26 = 26; }"
-	/lib/ambient_27.ts Text-1 "declare module \"ambient_27\" { export const aa_27 = 27; }"
-	/lib/ambient_28.ts Text-1 "declare module \"ambient_28\" { export const aa_28 = 28; }"
-	/lib/ambient_29.ts Text-1 "declare module \"ambient_29\" { export const aa_29 = 29; }"
-	/lib/ambient_3.ts Text-1 "declare module \"ambient_3\" { export const aa_3 = 3; }"
-	/lib/ambient_30.ts Text-1 "declare module \"ambient_30\" { export const aa_30 = 30; }"
-	/lib/ambient_31.ts Text-1 "declare module \"ambient_31\" { export const aa_31 = 31; }"
-	/lib/ambient_32.ts Text-1 "declare module \"ambient_32\" { export const aa_32 = 32; }"
-	/lib/ambient_33.ts Text-1 "declare module \"ambient_33\" { export const aa_33 = 33; }"
-	/lib/ambient_34.ts Text-1 "declare module \"ambient_34\" { export const aa_34 = 34; }"
-	/lib/ambient_35.ts Text-1 "declare module \"ambient_35\" { export const aa_35 = 35; }"
-	/lib/ambient_36.ts Text-1 "declare module \"ambient_36\" { export const aa_36 = 36; }"
-	/lib/ambient_37.ts Text-1 "declare module \"ambient_37\" { export const aa_37 = 37; }"
-	/lib/ambient_38.ts Text-1 "declare module \"ambient_38\" { export const aa_38 = 38; }"
-	/lib/ambient_39.ts Text-1 "declare module \"ambient_39\" { export const aa_39 = 39; }"
-	/lib/ambient_4.ts Text-1 "declare module \"ambient_4\" { export const aa_4 = 4; }"
-	/lib/ambient_40.ts Text-1 "declare module \"ambient_40\" { export const aa_40 = 40; }"
-	/lib/ambient_41.ts Text-1 "declare module \"ambient_41\" { export const aa_41 = 41; }"
-	/lib/ambient_42.ts Text-1 "declare module \"ambient_42\" { export const aa_42 = 42; }"
-	/lib/ambient_43.ts Text-1 "declare module \"ambient_43\" { export const aa_43 = 43; }"
-	/lib/ambient_44.ts Text-1 "declare module \"ambient_44\" { export const aa_44 = 44; }"
-	/lib/ambient_45.ts Text-1 "declare module \"ambient_45\" { export const aa_45 = 45; }"
-	/lib/ambient_46.ts Text-1 "declare module \"ambient_46\" { export const aa_46 = 46; }"
-	/lib/ambient_47.ts Text-1 "declare module \"ambient_47\" { export const aa_47 = 47; }"
-	/lib/ambient_48.ts Text-1 "declare module \"ambient_48\" { export const aa_48 = 48; }"
-	/lib/ambient_49.ts Text-1 "declare module \"ambient_49\" { export const aa_49 = 49; }"
-	/lib/ambient_5.ts Text-1 "declare module \"ambient_5\" { export const aa_5 = 5; }"
-	/lib/ambient_50.ts Text-1 "declare module \"ambient_50\" { export const aa_50 = 50; }"
-	/lib/ambient_51.ts Text-1 "declare module \"ambient_51\" { export const aa_51 = 51; }"
-	/lib/ambient_52.ts Text-1 "declare module \"ambient_52\" { export const aa_52 = 52; }"
-	/lib/ambient_53.ts Text-1 "declare module \"ambient_53\" { export const aa_53 = 53; }"
-	/lib/ambient_54.ts Text-1 "declare module \"ambient_54\" { export const aa_54 = 54; }"
-	/lib/ambient_55.ts Text-1 "declare module \"ambient_55\" { export const aa_55 = 55; }"
-	/lib/ambient_56.ts Text-1 "declare module \"ambient_56\" { export const aa_56 = 56; }"
-	/lib/ambient_57.ts Text-1 "declare module \"ambient_57\" { export const aa_57 = 57; }"
-	/lib/ambient_58.ts Text-1 "declare module \"ambient_58\" { export const aa_58 = 58; }"
-	/lib/ambient_59.ts Text-1 "declare module \"ambient_59\" { export const aa_59 = 59; }"
-	/lib/ambient_6.ts Text-1 "declare module \"ambient_6\" { export const aa_6 = 6; }"
-	/lib/ambient_60.ts Text-1 "declare module \"ambient_60\" { export const aa_60 = 60; }"
-	/lib/ambient_61.ts Text-1 "declare module \"ambient_61\" { export const aa_61 = 61; }"
-	/lib/ambient_62.ts Text-1 "declare module \"ambient_62\" { export const aa_62 = 62; }"
-	/lib/ambient_63.ts Text-1 "declare module \"ambient_63\" { export const aa_63 = 63; }"
-	/lib/ambient_64.ts Text-1 "declare module \"ambient_64\" { export const aa_64 = 64; }"
-	/lib/ambient_65.ts Text-1 "declare module \"ambient_65\" { export const aa_65 = 65; }"
-	/lib/ambient_66.ts Text-1 "declare module \"ambient_66\" { export const aa_66 = 66; }"
-	/lib/ambient_67.ts Text-1 "declare module \"ambient_67\" { export const aa_67 = 67; }"
-	/lib/ambient_68.ts Text-1 "declare module \"ambient_68\" { export const aa_68 = 68; }"
-	/lib/ambient_69.ts Text-1 "declare module \"ambient_69\" { export const aa_69 = 69; }"
-	/lib/ambient_7.ts Text-1 "declare module \"ambient_7\" { export const aa_7 = 7; }"
-	/lib/ambient_70.ts Text-1 "declare module \"ambient_70\" { export const aa_70 = 70; }"
-	/lib/ambient_71.ts Text-1 "declare module \"ambient_71\" { export const aa_71 = 71; }"
-	/lib/ambient_72.ts Text-1 "declare module \"ambient_72\" { export const aa_72 = 72; }"
-	/lib/ambient_73.ts Text-1 "declare module \"ambient_73\" { export const aa_73 = 73; }"
-	/lib/ambient_74.ts Text-1 "declare module \"ambient_74\" { export const aa_74 = 74; }"
-	/lib/ambient_75.ts Text-1 "declare module \"ambient_75\" { export const aa_75 = 75; }"
-	/lib/ambient_76.ts Text-1 "declare module \"ambient_76\" { export const aa_76 = 76; }"
-	/lib/ambient_77.ts Text-1 "declare module \"ambient_77\" { export const aa_77 = 77; }"
-	/lib/ambient_78.ts Text-1 "declare module \"ambient_78\" { export const aa_78 = 78; }"
-	/lib/ambient_79.ts Text-1 "declare module \"ambient_79\" { export const aa_79 = 79; }"
-	/lib/ambient_8.ts Text-1 "declare module \"ambient_8\" { export const aa_8 = 8; }"
-	/lib/ambient_80.ts Text-1 "declare module \"ambient_80\" { export const aa_80 = 80; }"
-	/lib/ambient_81.ts Text-1 "declare module \"ambient_81\" { export const aa_81 = 81; }"
-	/lib/ambient_82.ts Text-1 "declare module \"ambient_82\" { export const aa_82 = 82; }"
-	/lib/ambient_83.ts Text-1 "declare module \"ambient_83\" { export const aa_83 = 83; }"
-	/lib/ambient_84.ts Text-1 "declare module \"ambient_84\" { export const aa_84 = 84; }"
-	/lib/ambient_85.ts Text-1 "declare module \"ambient_85\" { export const aa_85 = 85; }"
-	/lib/ambient_86.ts Text-1 "declare module \"ambient_86\" { export const aa_86 = 86; }"
-	/lib/ambient_87.ts Text-1 "declare module \"ambient_87\" { export const aa_87 = 87; }"
-	/lib/ambient_88.ts Text-1 "declare module \"ambient_88\" { export const aa_88 = 88; }"
-	/lib/ambient_89.ts Text-1 "declare module \"ambient_89\" { export const aa_89 = 89; }"
-	/lib/ambient_9.ts Text-1 "declare module \"ambient_9\" { export const aa_9 = 9; }"
-	/lib/ambient_90.ts Text-1 "declare module \"ambient_90\" { export const aa_90 = 90; }"
-	/lib/ambient_91.ts Text-1 "declare module \"ambient_91\" { export const aa_91 = 91; }"
-	/lib/ambient_92.ts Text-1 "declare module \"ambient_92\" { export const aa_92 = 92; }"
-	/lib/ambient_93.ts Text-1 "declare module \"ambient_93\" { export const aa_93 = 93; }"
-	/lib/ambient_94.ts Text-1 "declare module \"ambient_94\" { export const aa_94 = 94; }"
-	/lib/ambient_95.ts Text-1 "declare module \"ambient_95\" { export const aa_95 = 95; }"
-	/lib/ambient_96.ts Text-1 "declare module \"ambient_96\" { export const aa_96 = 96; }"
-	/lib/ambient_97.ts Text-1 "declare module \"ambient_97\" { export const aa_97 = 97; }"
-	/lib/ambient_98.ts Text-1 "declare module \"ambient_98\" { export const aa_98 = 98; }"
-	/lib/ambient_99.ts Text-1 "declare module \"ambient_99\" { export const aa_99 = 99; }"
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (202)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/project/project/index.ts SVC-1-1 "a"
+	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;"
+	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;"
+	/home/src/project/project/lib/a_10.ts Text-1 "export const aa_10__0 = 0;\nexport const aa_10__1 = 1;\nexport const aa_10__2 = 2;\nexport const aa_10__3 = 3;\nexport const aa_10__4 = 4;"
+	/home/src/project/project/lib/a_11.ts Text-1 "export const aa_11__0 = 0;\nexport const aa_11__1 = 1;\nexport const aa_11__2 = 2;\nexport const aa_11__3 = 3;\nexport const aa_11__4 = 4;"
+	/home/src/project/project/lib/a_12.ts Text-1 "export const aa_12__0 = 0;\nexport const aa_12__1 = 1;\nexport const aa_12__2 = 2;\nexport const aa_12__3 = 3;\nexport const aa_12__4 = 4;"
+	/home/src/project/project/lib/a_13.ts Text-1 "export const aa_13__0 = 0;\nexport const aa_13__1 = 1;\nexport const aa_13__2 = 2;\nexport const aa_13__3 = 3;\nexport const aa_13__4 = 4;"
+	/home/src/project/project/lib/a_14.ts Text-1 "export const aa_14__0 = 0;\nexport const aa_14__1 = 1;\nexport const aa_14__2 = 2;\nexport const aa_14__3 = 3;\nexport const aa_14__4 = 4;"
+	/home/src/project/project/lib/a_15.ts Text-1 "export const aa_15__0 = 0;\nexport const aa_15__1 = 1;\nexport const aa_15__2 = 2;\nexport const aa_15__3 = 3;\nexport const aa_15__4 = 4;"
+	/home/src/project/project/lib/a_16.ts Text-1 "export const aa_16__0 = 0;\nexport const aa_16__1 = 1;\nexport const aa_16__2 = 2;\nexport const aa_16__3 = 3;\nexport const aa_16__4 = 4;"
+	/home/src/project/project/lib/a_17.ts Text-1 "export const aa_17__0 = 0;\nexport const aa_17__1 = 1;\nexport const aa_17__2 = 2;\nexport const aa_17__3 = 3;\nexport const aa_17__4 = 4;"
+	/home/src/project/project/lib/a_18.ts Text-1 "export const aa_18__0 = 0;\nexport const aa_18__1 = 1;\nexport const aa_18__2 = 2;\nexport const aa_18__3 = 3;\nexport const aa_18__4 = 4;"
+	/home/src/project/project/lib/a_19.ts Text-1 "export const aa_19__0 = 0;\nexport const aa_19__1 = 1;\nexport const aa_19__2 = 2;\nexport const aa_19__3 = 3;\nexport const aa_19__4 = 4;"
+	/home/src/project/project/lib/a_2.ts Text-1 "export const aa_2__0 = 0;\nexport const aa_2__1 = 1;\nexport const aa_2__2 = 2;\nexport const aa_2__3 = 3;\nexport const aa_2__4 = 4;"
+	/home/src/project/project/lib/a_20.ts Text-1 "export const aa_20__0 = 0;\nexport const aa_20__1 = 1;\nexport const aa_20__2 = 2;\nexport const aa_20__3 = 3;\nexport const aa_20__4 = 4;"
+	/home/src/project/project/lib/a_21.ts Text-1 "export const aa_21__0 = 0;\nexport const aa_21__1 = 1;\nexport const aa_21__2 = 2;\nexport const aa_21__3 = 3;\nexport const aa_21__4 = 4;"
+	/home/src/project/project/lib/a_22.ts Text-1 "export const aa_22__0 = 0;\nexport const aa_22__1 = 1;\nexport const aa_22__2 = 2;\nexport const aa_22__3 = 3;\nexport const aa_22__4 = 4;"
+	/home/src/project/project/lib/a_23.ts Text-1 "export const aa_23__0 = 0;\nexport const aa_23__1 = 1;\nexport const aa_23__2 = 2;\nexport const aa_23__3 = 3;\nexport const aa_23__4 = 4;"
+	/home/src/project/project/lib/a_24.ts Text-1 "export const aa_24__0 = 0;\nexport const aa_24__1 = 1;\nexport const aa_24__2 = 2;\nexport const aa_24__3 = 3;\nexport const aa_24__4 = 4;"
+	/home/src/project/project/lib/a_25.ts Text-1 "export const aa_25__0 = 0;\nexport const aa_25__1 = 1;\nexport const aa_25__2 = 2;\nexport const aa_25__3 = 3;\nexport const aa_25__4 = 4;"
+	/home/src/project/project/lib/a_26.ts Text-1 "export const aa_26__0 = 0;\nexport const aa_26__1 = 1;\nexport const aa_26__2 = 2;\nexport const aa_26__3 = 3;\nexport const aa_26__4 = 4;"
+	/home/src/project/project/lib/a_27.ts Text-1 "export const aa_27__0 = 0;\nexport const aa_27__1 = 1;\nexport const aa_27__2 = 2;\nexport const aa_27__3 = 3;\nexport const aa_27__4 = 4;"
+	/home/src/project/project/lib/a_28.ts Text-1 "export const aa_28__0 = 0;\nexport const aa_28__1 = 1;\nexport const aa_28__2 = 2;\nexport const aa_28__3 = 3;\nexport const aa_28__4 = 4;"
+	/home/src/project/project/lib/a_29.ts Text-1 "export const aa_29__0 = 0;\nexport const aa_29__1 = 1;\nexport const aa_29__2 = 2;\nexport const aa_29__3 = 3;\nexport const aa_29__4 = 4;"
+	/home/src/project/project/lib/a_3.ts Text-1 "export const aa_3__0 = 0;\nexport const aa_3__1 = 1;\nexport const aa_3__2 = 2;\nexport const aa_3__3 = 3;\nexport const aa_3__4 = 4;"
+	/home/src/project/project/lib/a_30.ts Text-1 "export const aa_30__0 = 0;\nexport const aa_30__1 = 1;\nexport const aa_30__2 = 2;\nexport const aa_30__3 = 3;\nexport const aa_30__4 = 4;"
+	/home/src/project/project/lib/a_31.ts Text-1 "export const aa_31__0 = 0;\nexport const aa_31__1 = 1;\nexport const aa_31__2 = 2;\nexport const aa_31__3 = 3;\nexport const aa_31__4 = 4;"
+	/home/src/project/project/lib/a_32.ts Text-1 "export const aa_32__0 = 0;\nexport const aa_32__1 = 1;\nexport const aa_32__2 = 2;\nexport const aa_32__3 = 3;\nexport const aa_32__4 = 4;"
+	/home/src/project/project/lib/a_33.ts Text-1 "export const aa_33__0 = 0;\nexport const aa_33__1 = 1;\nexport const aa_33__2 = 2;\nexport const aa_33__3 = 3;\nexport const aa_33__4 = 4;"
+	/home/src/project/project/lib/a_34.ts Text-1 "export const aa_34__0 = 0;\nexport const aa_34__1 = 1;\nexport const aa_34__2 = 2;\nexport const aa_34__3 = 3;\nexport const aa_34__4 = 4;"
+	/home/src/project/project/lib/a_35.ts Text-1 "export const aa_35__0 = 0;\nexport const aa_35__1 = 1;\nexport const aa_35__2 = 2;\nexport const aa_35__3 = 3;\nexport const aa_35__4 = 4;"
+	/home/src/project/project/lib/a_36.ts Text-1 "export const aa_36__0 = 0;\nexport const aa_36__1 = 1;\nexport const aa_36__2 = 2;\nexport const aa_36__3 = 3;\nexport const aa_36__4 = 4;"
+	/home/src/project/project/lib/a_37.ts Text-1 "export const aa_37__0 = 0;\nexport const aa_37__1 = 1;\nexport const aa_37__2 = 2;\nexport const aa_37__3 = 3;\nexport const aa_37__4 = 4;"
+	/home/src/project/project/lib/a_38.ts Text-1 "export const aa_38__0 = 0;\nexport const aa_38__1 = 1;\nexport const aa_38__2 = 2;\nexport const aa_38__3 = 3;\nexport const aa_38__4 = 4;"
+	/home/src/project/project/lib/a_39.ts Text-1 "export const aa_39__0 = 0;\nexport const aa_39__1 = 1;\nexport const aa_39__2 = 2;\nexport const aa_39__3 = 3;\nexport const aa_39__4 = 4;"
+	/home/src/project/project/lib/a_4.ts Text-1 "export const aa_4__0 = 0;\nexport const aa_4__1 = 1;\nexport const aa_4__2 = 2;\nexport const aa_4__3 = 3;\nexport const aa_4__4 = 4;"
+	/home/src/project/project/lib/a_40.ts Text-1 "export const aa_40__0 = 0;\nexport const aa_40__1 = 1;\nexport const aa_40__2 = 2;\nexport const aa_40__3 = 3;\nexport const aa_40__4 = 4;"
+	/home/src/project/project/lib/a_41.ts Text-1 "export const aa_41__0 = 0;\nexport const aa_41__1 = 1;\nexport const aa_41__2 = 2;\nexport const aa_41__3 = 3;\nexport const aa_41__4 = 4;"
+	/home/src/project/project/lib/a_42.ts Text-1 "export const aa_42__0 = 0;\nexport const aa_42__1 = 1;\nexport const aa_42__2 = 2;\nexport const aa_42__3 = 3;\nexport const aa_42__4 = 4;"
+	/home/src/project/project/lib/a_43.ts Text-1 "export const aa_43__0 = 0;\nexport const aa_43__1 = 1;\nexport const aa_43__2 = 2;\nexport const aa_43__3 = 3;\nexport const aa_43__4 = 4;"
+	/home/src/project/project/lib/a_44.ts Text-1 "export const aa_44__0 = 0;\nexport const aa_44__1 = 1;\nexport const aa_44__2 = 2;\nexport const aa_44__3 = 3;\nexport const aa_44__4 = 4;"
+	/home/src/project/project/lib/a_45.ts Text-1 "export const aa_45__0 = 0;\nexport const aa_45__1 = 1;\nexport const aa_45__2 = 2;\nexport const aa_45__3 = 3;\nexport const aa_45__4 = 4;"
+	/home/src/project/project/lib/a_46.ts Text-1 "export const aa_46__0 = 0;\nexport const aa_46__1 = 1;\nexport const aa_46__2 = 2;\nexport const aa_46__3 = 3;\nexport const aa_46__4 = 4;"
+	/home/src/project/project/lib/a_47.ts Text-1 "export const aa_47__0 = 0;\nexport const aa_47__1 = 1;\nexport const aa_47__2 = 2;\nexport const aa_47__3 = 3;\nexport const aa_47__4 = 4;"
+	/home/src/project/project/lib/a_48.ts Text-1 "export const aa_48__0 = 0;\nexport const aa_48__1 = 1;\nexport const aa_48__2 = 2;\nexport const aa_48__3 = 3;\nexport const aa_48__4 = 4;"
+	/home/src/project/project/lib/a_49.ts Text-1 "export const aa_49__0 = 0;\nexport const aa_49__1 = 1;\nexport const aa_49__2 = 2;\nexport const aa_49__3 = 3;\nexport const aa_49__4 = 4;"
+	/home/src/project/project/lib/a_5.ts Text-1 "export const aa_5__0 = 0;\nexport const aa_5__1 = 1;\nexport const aa_5__2 = 2;\nexport const aa_5__3 = 3;\nexport const aa_5__4 = 4;"
+	/home/src/project/project/lib/a_50.ts Text-1 "export const aa_50__0 = 0;\nexport const aa_50__1 = 1;\nexport const aa_50__2 = 2;\nexport const aa_50__3 = 3;\nexport const aa_50__4 = 4;"
+	/home/src/project/project/lib/a_51.ts Text-1 "export const aa_51__0 = 0;\nexport const aa_51__1 = 1;\nexport const aa_51__2 = 2;\nexport const aa_51__3 = 3;\nexport const aa_51__4 = 4;"
+	/home/src/project/project/lib/a_52.ts Text-1 "export const aa_52__0 = 0;\nexport const aa_52__1 = 1;\nexport const aa_52__2 = 2;\nexport const aa_52__3 = 3;\nexport const aa_52__4 = 4;"
+	/home/src/project/project/lib/a_53.ts Text-1 "export const aa_53__0 = 0;\nexport const aa_53__1 = 1;\nexport const aa_53__2 = 2;\nexport const aa_53__3 = 3;\nexport const aa_53__4 = 4;"
+	/home/src/project/project/lib/a_54.ts Text-1 "export const aa_54__0 = 0;\nexport const aa_54__1 = 1;\nexport const aa_54__2 = 2;\nexport const aa_54__3 = 3;\nexport const aa_54__4 = 4;"
+	/home/src/project/project/lib/a_55.ts Text-1 "export const aa_55__0 = 0;\nexport const aa_55__1 = 1;\nexport const aa_55__2 = 2;\nexport const aa_55__3 = 3;\nexport const aa_55__4 = 4;"
+	/home/src/project/project/lib/a_56.ts Text-1 "export const aa_56__0 = 0;\nexport const aa_56__1 = 1;\nexport const aa_56__2 = 2;\nexport const aa_56__3 = 3;\nexport const aa_56__4 = 4;"
+	/home/src/project/project/lib/a_57.ts Text-1 "export const aa_57__0 = 0;\nexport const aa_57__1 = 1;\nexport const aa_57__2 = 2;\nexport const aa_57__3 = 3;\nexport const aa_57__4 = 4;"
+	/home/src/project/project/lib/a_58.ts Text-1 "export const aa_58__0 = 0;\nexport const aa_58__1 = 1;\nexport const aa_58__2 = 2;\nexport const aa_58__3 = 3;\nexport const aa_58__4 = 4;"
+	/home/src/project/project/lib/a_59.ts Text-1 "export const aa_59__0 = 0;\nexport const aa_59__1 = 1;\nexport const aa_59__2 = 2;\nexport const aa_59__3 = 3;\nexport const aa_59__4 = 4;"
+	/home/src/project/project/lib/a_6.ts Text-1 "export const aa_6__0 = 0;\nexport const aa_6__1 = 1;\nexport const aa_6__2 = 2;\nexport const aa_6__3 = 3;\nexport const aa_6__4 = 4;"
+	/home/src/project/project/lib/a_60.ts Text-1 "export const aa_60__0 = 0;\nexport const aa_60__1 = 1;\nexport const aa_60__2 = 2;\nexport const aa_60__3 = 3;\nexport const aa_60__4 = 4;"
+	/home/src/project/project/lib/a_61.ts Text-1 "export const aa_61__0 = 0;\nexport const aa_61__1 = 1;\nexport const aa_61__2 = 2;\nexport const aa_61__3 = 3;\nexport const aa_61__4 = 4;"
+	/home/src/project/project/lib/a_62.ts Text-1 "export const aa_62__0 = 0;\nexport const aa_62__1 = 1;\nexport const aa_62__2 = 2;\nexport const aa_62__3 = 3;\nexport const aa_62__4 = 4;"
+	/home/src/project/project/lib/a_63.ts Text-1 "export const aa_63__0 = 0;\nexport const aa_63__1 = 1;\nexport const aa_63__2 = 2;\nexport const aa_63__3 = 3;\nexport const aa_63__4 = 4;"
+	/home/src/project/project/lib/a_64.ts Text-1 "export const aa_64__0 = 0;\nexport const aa_64__1 = 1;\nexport const aa_64__2 = 2;\nexport const aa_64__3 = 3;\nexport const aa_64__4 = 4;"
+	/home/src/project/project/lib/a_65.ts Text-1 "export const aa_65__0 = 0;\nexport const aa_65__1 = 1;\nexport const aa_65__2 = 2;\nexport const aa_65__3 = 3;\nexport const aa_65__4 = 4;"
+	/home/src/project/project/lib/a_66.ts Text-1 "export const aa_66__0 = 0;\nexport const aa_66__1 = 1;\nexport const aa_66__2 = 2;\nexport const aa_66__3 = 3;\nexport const aa_66__4 = 4;"
+	/home/src/project/project/lib/a_67.ts Text-1 "export const aa_67__0 = 0;\nexport const aa_67__1 = 1;\nexport const aa_67__2 = 2;\nexport const aa_67__3 = 3;\nexport const aa_67__4 = 4;"
+	/home/src/project/project/lib/a_68.ts Text-1 "export const aa_68__0 = 0;\nexport const aa_68__1 = 1;\nexport const aa_68__2 = 2;\nexport const aa_68__3 = 3;\nexport const aa_68__4 = 4;"
+	/home/src/project/project/lib/a_69.ts Text-1 "export const aa_69__0 = 0;\nexport const aa_69__1 = 1;\nexport const aa_69__2 = 2;\nexport const aa_69__3 = 3;\nexport const aa_69__4 = 4;"
+	/home/src/project/project/lib/a_7.ts Text-1 "export const aa_7__0 = 0;\nexport const aa_7__1 = 1;\nexport const aa_7__2 = 2;\nexport const aa_7__3 = 3;\nexport const aa_7__4 = 4;"
+	/home/src/project/project/lib/a_70.ts Text-1 "export const aa_70__0 = 0;\nexport const aa_70__1 = 1;\nexport const aa_70__2 = 2;\nexport const aa_70__3 = 3;\nexport const aa_70__4 = 4;"
+	/home/src/project/project/lib/a_71.ts Text-1 "export const aa_71__0 = 0;\nexport const aa_71__1 = 1;\nexport const aa_71__2 = 2;\nexport const aa_71__3 = 3;\nexport const aa_71__4 = 4;"
+	/home/src/project/project/lib/a_72.ts Text-1 "export const aa_72__0 = 0;\nexport const aa_72__1 = 1;\nexport const aa_72__2 = 2;\nexport const aa_72__3 = 3;\nexport const aa_72__4 = 4;"
+	/home/src/project/project/lib/a_73.ts Text-1 "export const aa_73__0 = 0;\nexport const aa_73__1 = 1;\nexport const aa_73__2 = 2;\nexport const aa_73__3 = 3;\nexport const aa_73__4 = 4;"
+	/home/src/project/project/lib/a_74.ts Text-1 "export const aa_74__0 = 0;\nexport const aa_74__1 = 1;\nexport const aa_74__2 = 2;\nexport const aa_74__3 = 3;\nexport const aa_74__4 = 4;"
+	/home/src/project/project/lib/a_75.ts Text-1 "export const aa_75__0 = 0;\nexport const aa_75__1 = 1;\nexport const aa_75__2 = 2;\nexport const aa_75__3 = 3;\nexport const aa_75__4 = 4;"
+	/home/src/project/project/lib/a_76.ts Text-1 "export const aa_76__0 = 0;\nexport const aa_76__1 = 1;\nexport const aa_76__2 = 2;\nexport const aa_76__3 = 3;\nexport const aa_76__4 = 4;"
+	/home/src/project/project/lib/a_77.ts Text-1 "export const aa_77__0 = 0;\nexport const aa_77__1 = 1;\nexport const aa_77__2 = 2;\nexport const aa_77__3 = 3;\nexport const aa_77__4 = 4;"
+	/home/src/project/project/lib/a_78.ts Text-1 "export const aa_78__0 = 0;\nexport const aa_78__1 = 1;\nexport const aa_78__2 = 2;\nexport const aa_78__3 = 3;\nexport const aa_78__4 = 4;"
+	/home/src/project/project/lib/a_79.ts Text-1 "export const aa_79__0 = 0;\nexport const aa_79__1 = 1;\nexport const aa_79__2 = 2;\nexport const aa_79__3 = 3;\nexport const aa_79__4 = 4;"
+	/home/src/project/project/lib/a_8.ts Text-1 "export const aa_8__0 = 0;\nexport const aa_8__1 = 1;\nexport const aa_8__2 = 2;\nexport const aa_8__3 = 3;\nexport const aa_8__4 = 4;"
+	/home/src/project/project/lib/a_80.ts Text-1 "export const aa_80__0 = 0;\nexport const aa_80__1 = 1;\nexport const aa_80__2 = 2;\nexport const aa_80__3 = 3;\nexport const aa_80__4 = 4;"
+	/home/src/project/project/lib/a_81.ts Text-1 "export const aa_81__0 = 0;\nexport const aa_81__1 = 1;\nexport const aa_81__2 = 2;\nexport const aa_81__3 = 3;\nexport const aa_81__4 = 4;"
+	/home/src/project/project/lib/a_82.ts Text-1 "export const aa_82__0 = 0;\nexport const aa_82__1 = 1;\nexport const aa_82__2 = 2;\nexport const aa_82__3 = 3;\nexport const aa_82__4 = 4;"
+	/home/src/project/project/lib/a_83.ts Text-1 "export const aa_83__0 = 0;\nexport const aa_83__1 = 1;\nexport const aa_83__2 = 2;\nexport const aa_83__3 = 3;\nexport const aa_83__4 = 4;"
+	/home/src/project/project/lib/a_84.ts Text-1 "export const aa_84__0 = 0;\nexport const aa_84__1 = 1;\nexport const aa_84__2 = 2;\nexport const aa_84__3 = 3;\nexport const aa_84__4 = 4;"
+	/home/src/project/project/lib/a_85.ts Text-1 "export const aa_85__0 = 0;\nexport const aa_85__1 = 1;\nexport const aa_85__2 = 2;\nexport const aa_85__3 = 3;\nexport const aa_85__4 = 4;"
+	/home/src/project/project/lib/a_86.ts Text-1 "export const aa_86__0 = 0;\nexport const aa_86__1 = 1;\nexport const aa_86__2 = 2;\nexport const aa_86__3 = 3;\nexport const aa_86__4 = 4;"
+	/home/src/project/project/lib/a_87.ts Text-1 "export const aa_87__0 = 0;\nexport const aa_87__1 = 1;\nexport const aa_87__2 = 2;\nexport const aa_87__3 = 3;\nexport const aa_87__4 = 4;"
+	/home/src/project/project/lib/a_88.ts Text-1 "export const aa_88__0 = 0;\nexport const aa_88__1 = 1;\nexport const aa_88__2 = 2;\nexport const aa_88__3 = 3;\nexport const aa_88__4 = 4;"
+	/home/src/project/project/lib/a_89.ts Text-1 "export const aa_89__0 = 0;\nexport const aa_89__1 = 1;\nexport const aa_89__2 = 2;\nexport const aa_89__3 = 3;\nexport const aa_89__4 = 4;"
+	/home/src/project/project/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;"
+	/home/src/project/project/lib/a_90.ts Text-1 "export const aa_90__0 = 0;\nexport const aa_90__1 = 1;\nexport const aa_90__2 = 2;\nexport const aa_90__3 = 3;\nexport const aa_90__4 = 4;"
+	/home/src/project/project/lib/a_91.ts Text-1 "export const aa_91__0 = 0;\nexport const aa_91__1 = 1;\nexport const aa_91__2 = 2;\nexport const aa_91__3 = 3;\nexport const aa_91__4 = 4;"
+	/home/src/project/project/lib/a_92.ts Text-1 "export const aa_92__0 = 0;\nexport const aa_92__1 = 1;\nexport const aa_92__2 = 2;\nexport const aa_92__3 = 3;\nexport const aa_92__4 = 4;"
+	/home/src/project/project/lib/a_93.ts Text-1 "export const aa_93__0 = 0;\nexport const aa_93__1 = 1;\nexport const aa_93__2 = 2;\nexport const aa_93__3 = 3;\nexport const aa_93__4 = 4;"
+	/home/src/project/project/lib/a_94.ts Text-1 "export const aa_94__0 = 0;\nexport const aa_94__1 = 1;\nexport const aa_94__2 = 2;\nexport const aa_94__3 = 3;\nexport const aa_94__4 = 4;"
+	/home/src/project/project/lib/a_95.ts Text-1 "export const aa_95__0 = 0;\nexport const aa_95__1 = 1;\nexport const aa_95__2 = 2;\nexport const aa_95__3 = 3;\nexport const aa_95__4 = 4;"
+	/home/src/project/project/lib/a_96.ts Text-1 "export const aa_96__0 = 0;\nexport const aa_96__1 = 1;\nexport const aa_96__2 = 2;\nexport const aa_96__3 = 3;\nexport const aa_96__4 = 4;"
+	/home/src/project/project/lib/a_97.ts Text-1 "export const aa_97__0 = 0;\nexport const aa_97__1 = 1;\nexport const aa_97__2 = 2;\nexport const aa_97__3 = 3;\nexport const aa_97__4 = 4;"
+	/home/src/project/project/lib/a_98.ts Text-1 "export const aa_98__0 = 0;\nexport const aa_98__1 = 1;\nexport const aa_98__2 = 2;\nexport const aa_98__3 = 3;\nexport const aa_98__4 = 4;"
+	/home/src/project/project/lib/a_99.ts Text-1 "export const aa_99__0 = 0;\nexport const aa_99__1 = 1;\nexport const aa_99__2 = 2;\nexport const aa_99__3 = 3;\nexport const aa_99__4 = 4;"
+	/home/src/project/project/lib/ambient_0.ts Text-1 "declare module \"ambient_0\" { export const aa_0 = 0; }"
+	/home/src/project/project/lib/ambient_1.ts Text-1 "declare module \"ambient_1\" { export const aa_1 = 1; }"
+	/home/src/project/project/lib/ambient_10.ts Text-1 "declare module \"ambient_10\" { export const aa_10 = 10; }"
+	/home/src/project/project/lib/ambient_11.ts Text-1 "declare module \"ambient_11\" { export const aa_11 = 11; }"
+	/home/src/project/project/lib/ambient_12.ts Text-1 "declare module \"ambient_12\" { export const aa_12 = 12; }"
+	/home/src/project/project/lib/ambient_13.ts Text-1 "declare module \"ambient_13\" { export const aa_13 = 13; }"
+	/home/src/project/project/lib/ambient_14.ts Text-1 "declare module \"ambient_14\" { export const aa_14 = 14; }"
+	/home/src/project/project/lib/ambient_15.ts Text-1 "declare module \"ambient_15\" { export const aa_15 = 15; }"
+	/home/src/project/project/lib/ambient_16.ts Text-1 "declare module \"ambient_16\" { export const aa_16 = 16; }"
+	/home/src/project/project/lib/ambient_17.ts Text-1 "declare module \"ambient_17\" { export const aa_17 = 17; }"
+	/home/src/project/project/lib/ambient_18.ts Text-1 "declare module \"ambient_18\" { export const aa_18 = 18; }"
+	/home/src/project/project/lib/ambient_19.ts Text-1 "declare module \"ambient_19\" { export const aa_19 = 19; }"
+	/home/src/project/project/lib/ambient_2.ts Text-1 "declare module \"ambient_2\" { export const aa_2 = 2; }"
+	/home/src/project/project/lib/ambient_20.ts Text-1 "declare module \"ambient_20\" { export const aa_20 = 20; }"
+	/home/src/project/project/lib/ambient_21.ts Text-1 "declare module \"ambient_21\" { export const aa_21 = 21; }"
+	/home/src/project/project/lib/ambient_22.ts Text-1 "declare module \"ambient_22\" { export const aa_22 = 22; }"
+	/home/src/project/project/lib/ambient_23.ts Text-1 "declare module \"ambient_23\" { export const aa_23 = 23; }"
+	/home/src/project/project/lib/ambient_24.ts Text-1 "declare module \"ambient_24\" { export const aa_24 = 24; }"
+	/home/src/project/project/lib/ambient_25.ts Text-1 "declare module \"ambient_25\" { export const aa_25 = 25; }"
+	/home/src/project/project/lib/ambient_26.ts Text-1 "declare module \"ambient_26\" { export const aa_26 = 26; }"
+	/home/src/project/project/lib/ambient_27.ts Text-1 "declare module \"ambient_27\" { export const aa_27 = 27; }"
+	/home/src/project/project/lib/ambient_28.ts Text-1 "declare module \"ambient_28\" { export const aa_28 = 28; }"
+	/home/src/project/project/lib/ambient_29.ts Text-1 "declare module \"ambient_29\" { export const aa_29 = 29; }"
+	/home/src/project/project/lib/ambient_3.ts Text-1 "declare module \"ambient_3\" { export const aa_3 = 3; }"
+	/home/src/project/project/lib/ambient_30.ts Text-1 "declare module \"ambient_30\" { export const aa_30 = 30; }"
+	/home/src/project/project/lib/ambient_31.ts Text-1 "declare module \"ambient_31\" { export const aa_31 = 31; }"
+	/home/src/project/project/lib/ambient_32.ts Text-1 "declare module \"ambient_32\" { export const aa_32 = 32; }"
+	/home/src/project/project/lib/ambient_33.ts Text-1 "declare module \"ambient_33\" { export const aa_33 = 33; }"
+	/home/src/project/project/lib/ambient_34.ts Text-1 "declare module \"ambient_34\" { export const aa_34 = 34; }"
+	/home/src/project/project/lib/ambient_35.ts Text-1 "declare module \"ambient_35\" { export const aa_35 = 35; }"
+	/home/src/project/project/lib/ambient_36.ts Text-1 "declare module \"ambient_36\" { export const aa_36 = 36; }"
+	/home/src/project/project/lib/ambient_37.ts Text-1 "declare module \"ambient_37\" { export const aa_37 = 37; }"
+	/home/src/project/project/lib/ambient_38.ts Text-1 "declare module \"ambient_38\" { export const aa_38 = 38; }"
+	/home/src/project/project/lib/ambient_39.ts Text-1 "declare module \"ambient_39\" { export const aa_39 = 39; }"
+	/home/src/project/project/lib/ambient_4.ts Text-1 "declare module \"ambient_4\" { export const aa_4 = 4; }"
+	/home/src/project/project/lib/ambient_40.ts Text-1 "declare module \"ambient_40\" { export const aa_40 = 40; }"
+	/home/src/project/project/lib/ambient_41.ts Text-1 "declare module \"ambient_41\" { export const aa_41 = 41; }"
+	/home/src/project/project/lib/ambient_42.ts Text-1 "declare module \"ambient_42\" { export const aa_42 = 42; }"
+	/home/src/project/project/lib/ambient_43.ts Text-1 "declare module \"ambient_43\" { export const aa_43 = 43; }"
+	/home/src/project/project/lib/ambient_44.ts Text-1 "declare module \"ambient_44\" { export const aa_44 = 44; }"
+	/home/src/project/project/lib/ambient_45.ts Text-1 "declare module \"ambient_45\" { export const aa_45 = 45; }"
+	/home/src/project/project/lib/ambient_46.ts Text-1 "declare module \"ambient_46\" { export const aa_46 = 46; }"
+	/home/src/project/project/lib/ambient_47.ts Text-1 "declare module \"ambient_47\" { export const aa_47 = 47; }"
+	/home/src/project/project/lib/ambient_48.ts Text-1 "declare module \"ambient_48\" { export const aa_48 = 48; }"
+	/home/src/project/project/lib/ambient_49.ts Text-1 "declare module \"ambient_49\" { export const aa_49 = 49; }"
+	/home/src/project/project/lib/ambient_5.ts Text-1 "declare module \"ambient_5\" { export const aa_5 = 5; }"
+	/home/src/project/project/lib/ambient_50.ts Text-1 "declare module \"ambient_50\" { export const aa_50 = 50; }"
+	/home/src/project/project/lib/ambient_51.ts Text-1 "declare module \"ambient_51\" { export const aa_51 = 51; }"
+	/home/src/project/project/lib/ambient_52.ts Text-1 "declare module \"ambient_52\" { export const aa_52 = 52; }"
+	/home/src/project/project/lib/ambient_53.ts Text-1 "declare module \"ambient_53\" { export const aa_53 = 53; }"
+	/home/src/project/project/lib/ambient_54.ts Text-1 "declare module \"ambient_54\" { export const aa_54 = 54; }"
+	/home/src/project/project/lib/ambient_55.ts Text-1 "declare module \"ambient_55\" { export const aa_55 = 55; }"
+	/home/src/project/project/lib/ambient_56.ts Text-1 "declare module \"ambient_56\" { export const aa_56 = 56; }"
+	/home/src/project/project/lib/ambient_57.ts Text-1 "declare module \"ambient_57\" { export const aa_57 = 57; }"
+	/home/src/project/project/lib/ambient_58.ts Text-1 "declare module \"ambient_58\" { export const aa_58 = 58; }"
+	/home/src/project/project/lib/ambient_59.ts Text-1 "declare module \"ambient_59\" { export const aa_59 = 59; }"
+	/home/src/project/project/lib/ambient_6.ts Text-1 "declare module \"ambient_6\" { export const aa_6 = 6; }"
+	/home/src/project/project/lib/ambient_60.ts Text-1 "declare module \"ambient_60\" { export const aa_60 = 60; }"
+	/home/src/project/project/lib/ambient_61.ts Text-1 "declare module \"ambient_61\" { export const aa_61 = 61; }"
+	/home/src/project/project/lib/ambient_62.ts Text-1 "declare module \"ambient_62\" { export const aa_62 = 62; }"
+	/home/src/project/project/lib/ambient_63.ts Text-1 "declare module \"ambient_63\" { export const aa_63 = 63; }"
+	/home/src/project/project/lib/ambient_64.ts Text-1 "declare module \"ambient_64\" { export const aa_64 = 64; }"
+	/home/src/project/project/lib/ambient_65.ts Text-1 "declare module \"ambient_65\" { export const aa_65 = 65; }"
+	/home/src/project/project/lib/ambient_66.ts Text-1 "declare module \"ambient_66\" { export const aa_66 = 66; }"
+	/home/src/project/project/lib/ambient_67.ts Text-1 "declare module \"ambient_67\" { export const aa_67 = 67; }"
+	/home/src/project/project/lib/ambient_68.ts Text-1 "declare module \"ambient_68\" { export const aa_68 = 68; }"
+	/home/src/project/project/lib/ambient_69.ts Text-1 "declare module \"ambient_69\" { export const aa_69 = 69; }"
+	/home/src/project/project/lib/ambient_7.ts Text-1 "declare module \"ambient_7\" { export const aa_7 = 7; }"
+	/home/src/project/project/lib/ambient_70.ts Text-1 "declare module \"ambient_70\" { export const aa_70 = 70; }"
+	/home/src/project/project/lib/ambient_71.ts Text-1 "declare module \"ambient_71\" { export const aa_71 = 71; }"
+	/home/src/project/project/lib/ambient_72.ts Text-1 "declare module \"ambient_72\" { export const aa_72 = 72; }"
+	/home/src/project/project/lib/ambient_73.ts Text-1 "declare module \"ambient_73\" { export const aa_73 = 73; }"
+	/home/src/project/project/lib/ambient_74.ts Text-1 "declare module \"ambient_74\" { export const aa_74 = 74; }"
+	/home/src/project/project/lib/ambient_75.ts Text-1 "declare module \"ambient_75\" { export const aa_75 = 75; }"
+	/home/src/project/project/lib/ambient_76.ts Text-1 "declare module \"ambient_76\" { export const aa_76 = 76; }"
+	/home/src/project/project/lib/ambient_77.ts Text-1 "declare module \"ambient_77\" { export const aa_77 = 77; }"
+	/home/src/project/project/lib/ambient_78.ts Text-1 "declare module \"ambient_78\" { export const aa_78 = 78; }"
+	/home/src/project/project/lib/ambient_79.ts Text-1 "declare module \"ambient_79\" { export const aa_79 = 79; }"
+	/home/src/project/project/lib/ambient_8.ts Text-1 "declare module \"ambient_8\" { export const aa_8 = 8; }"
+	/home/src/project/project/lib/ambient_80.ts Text-1 "declare module \"ambient_80\" { export const aa_80 = 80; }"
+	/home/src/project/project/lib/ambient_81.ts Text-1 "declare module \"ambient_81\" { export const aa_81 = 81; }"
+	/home/src/project/project/lib/ambient_82.ts Text-1 "declare module \"ambient_82\" { export const aa_82 = 82; }"
+	/home/src/project/project/lib/ambient_83.ts Text-1 "declare module \"ambient_83\" { export const aa_83 = 83; }"
+	/home/src/project/project/lib/ambient_84.ts Text-1 "declare module \"ambient_84\" { export const aa_84 = 84; }"
+	/home/src/project/project/lib/ambient_85.ts Text-1 "declare module \"ambient_85\" { export const aa_85 = 85; }"
+	/home/src/project/project/lib/ambient_86.ts Text-1 "declare module \"ambient_86\" { export const aa_86 = 86; }"
+	/home/src/project/project/lib/ambient_87.ts Text-1 "declare module \"ambient_87\" { export const aa_87 = 87; }"
+	/home/src/project/project/lib/ambient_88.ts Text-1 "declare module \"ambient_88\" { export const aa_88 = 88; }"
+	/home/src/project/project/lib/ambient_89.ts Text-1 "declare module \"ambient_89\" { export const aa_89 = 89; }"
+	/home/src/project/project/lib/ambient_9.ts Text-1 "declare module \"ambient_9\" { export const aa_9 = 9; }"
+	/home/src/project/project/lib/ambient_90.ts Text-1 "declare module \"ambient_90\" { export const aa_90 = 90; }"
+	/home/src/project/project/lib/ambient_91.ts Text-1 "declare module \"ambient_91\" { export const aa_91 = 91; }"
+	/home/src/project/project/lib/ambient_92.ts Text-1 "declare module \"ambient_92\" { export const aa_92 = 92; }"
+	/home/src/project/project/lib/ambient_93.ts Text-1 "declare module \"ambient_93\" { export const aa_93 = 93; }"
+	/home/src/project/project/lib/ambient_94.ts Text-1 "declare module \"ambient_94\" { export const aa_94 = 94; }"
+	/home/src/project/project/lib/ambient_95.ts Text-1 "declare module \"ambient_95\" { export const aa_95 = 95; }"
+	/home/src/project/project/lib/ambient_96.ts Text-1 "declare module \"ambient_96\" { export const aa_96 = 96; }"
+	/home/src/project/project/lib/ambient_97.ts Text-1 "declare module \"ambient_97\" { export const aa_97 = 97; }"
+	/home/src/project/project/lib/ambient_98.ts Text-1 "declare module \"ambient_98\" { export const aa_98 = 98; }"
+	/home/src/project/project/lib/ambient_99.ts Text-1 "declare module \"ambient_99\" { export const aa_99 = 99; }"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -4599,6 +4590,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -4968,7 +4965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_0__0",
               "exportMapKey": "7 * aa_0__0 ",
               "moduleSpecifier": "./lib/a_0",
-              "fileName": "/lib/a_0.ts"
+              "fileName": "/home/src/project/project/lib/a_0.ts"
             }
           },
           {
@@ -4988,7 +4985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_0__1",
               "exportMapKey": "7 * aa_0__1 ",
               "moduleSpecifier": "./lib/a_0",
-              "fileName": "/lib/a_0.ts"
+              "fileName": "/home/src/project/project/lib/a_0.ts"
             }
           },
           {
@@ -5008,7 +5005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_0__2",
               "exportMapKey": "7 * aa_0__2 ",
               "moduleSpecifier": "./lib/a_0",
-              "fileName": "/lib/a_0.ts"
+              "fileName": "/home/src/project/project/lib/a_0.ts"
             }
           },
           {
@@ -5028,7 +5025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_0__3",
               "exportMapKey": "7 * aa_0__3 ",
               "moduleSpecifier": "./lib/a_0",
-              "fileName": "/lib/a_0.ts"
+              "fileName": "/home/src/project/project/lib/a_0.ts"
             }
           },
           {
@@ -5048,7 +5045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_0__4",
               "exportMapKey": "7 * aa_0__4 ",
               "moduleSpecifier": "./lib/a_0",
-              "fileName": "/lib/a_0.ts"
+              "fileName": "/home/src/project/project/lib/a_0.ts"
             }
           },
           {
@@ -5088,7 +5085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_1__0",
               "exportMapKey": "7 * aa_1__0 ",
               "moduleSpecifier": "./lib/a_1",
-              "fileName": "/lib/a_1.ts"
+              "fileName": "/home/src/project/project/lib/a_1.ts"
             }
           },
           {
@@ -5108,7 +5105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_1__1",
               "exportMapKey": "7 * aa_1__1 ",
               "moduleSpecifier": "./lib/a_1",
-              "fileName": "/lib/a_1.ts"
+              "fileName": "/home/src/project/project/lib/a_1.ts"
             }
           },
           {
@@ -5128,7 +5125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_1__2",
               "exportMapKey": "7 * aa_1__2 ",
               "moduleSpecifier": "./lib/a_1",
-              "fileName": "/lib/a_1.ts"
+              "fileName": "/home/src/project/project/lib/a_1.ts"
             }
           },
           {
@@ -5148,7 +5145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_1__3",
               "exportMapKey": "7 * aa_1__3 ",
               "moduleSpecifier": "./lib/a_1",
-              "fileName": "/lib/a_1.ts"
+              "fileName": "/home/src/project/project/lib/a_1.ts"
             }
           },
           {
@@ -5168,7 +5165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_1__4",
               "exportMapKey": "7 * aa_1__4 ",
               "moduleSpecifier": "./lib/a_1",
-              "fileName": "/lib/a_1.ts"
+              "fileName": "/home/src/project/project/lib/a_1.ts"
             }
           },
           {
@@ -5208,7 +5205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_2__0",
               "exportMapKey": "7 * aa_2__0 ",
               "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
+              "fileName": "/home/src/project/project/lib/a_2.ts"
             }
           },
           {
@@ -5228,7 +5225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_2__1",
               "exportMapKey": "7 * aa_2__1 ",
               "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
+              "fileName": "/home/src/project/project/lib/a_2.ts"
             }
           },
           {
@@ -5248,7 +5245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_2__2",
               "exportMapKey": "7 * aa_2__2 ",
               "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
+              "fileName": "/home/src/project/project/lib/a_2.ts"
             }
           },
           {
@@ -5268,7 +5265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_2__3",
               "exportMapKey": "7 * aa_2__3 ",
               "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
+              "fileName": "/home/src/project/project/lib/a_2.ts"
             }
           },
           {
@@ -5288,7 +5285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_2__4",
               "exportMapKey": "7 * aa_2__4 ",
               "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
+              "fileName": "/home/src/project/project/lib/a_2.ts"
             }
           },
           {
@@ -5328,7 +5325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_3__0",
               "exportMapKey": "7 * aa_3__0 ",
               "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
+              "fileName": "/home/src/project/project/lib/a_3.ts"
             }
           },
           {
@@ -5348,7 +5345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_3__1",
               "exportMapKey": "7 * aa_3__1 ",
               "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
+              "fileName": "/home/src/project/project/lib/a_3.ts"
             }
           },
           {
@@ -5368,7 +5365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_3__2",
               "exportMapKey": "7 * aa_3__2 ",
               "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
+              "fileName": "/home/src/project/project/lib/a_3.ts"
             }
           },
           {
@@ -5388,7 +5385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_3__3",
               "exportMapKey": "7 * aa_3__3 ",
               "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
+              "fileName": "/home/src/project/project/lib/a_3.ts"
             }
           },
           {
@@ -5408,7 +5405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_3__4",
               "exportMapKey": "7 * aa_3__4 ",
               "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
+              "fileName": "/home/src/project/project/lib/a_3.ts"
             }
           },
           {
@@ -5448,7 +5445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_4__0",
               "exportMapKey": "7 * aa_4__0 ",
               "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
+              "fileName": "/home/src/project/project/lib/a_4.ts"
             }
           },
           {
@@ -5468,7 +5465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_4__1",
               "exportMapKey": "7 * aa_4__1 ",
               "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
+              "fileName": "/home/src/project/project/lib/a_4.ts"
             }
           },
           {
@@ -5488,7 +5485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_4__2",
               "exportMapKey": "7 * aa_4__2 ",
               "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
+              "fileName": "/home/src/project/project/lib/a_4.ts"
             }
           },
           {
@@ -5508,7 +5505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_4__3",
               "exportMapKey": "7 * aa_4__3 ",
               "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
+              "fileName": "/home/src/project/project/lib/a_4.ts"
             }
           },
           {
@@ -5528,7 +5525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_4__4",
               "exportMapKey": "7 * aa_4__4 ",
               "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
+              "fileName": "/home/src/project/project/lib/a_4.ts"
             }
           },
           {
@@ -5568,7 +5565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_5__0",
               "exportMapKey": "7 * aa_5__0 ",
               "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
+              "fileName": "/home/src/project/project/lib/a_5.ts"
             }
           },
           {
@@ -5588,7 +5585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_5__1",
               "exportMapKey": "7 * aa_5__1 ",
               "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
+              "fileName": "/home/src/project/project/lib/a_5.ts"
             }
           },
           {
@@ -5608,7 +5605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_5__2",
               "exportMapKey": "7 * aa_5__2 ",
               "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
+              "fileName": "/home/src/project/project/lib/a_5.ts"
             }
           },
           {
@@ -5628,7 +5625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_5__3",
               "exportMapKey": "7 * aa_5__3 ",
               "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
+              "fileName": "/home/src/project/project/lib/a_5.ts"
             }
           },
           {
@@ -5648,7 +5645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_5__4",
               "exportMapKey": "7 * aa_5__4 ",
               "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
+              "fileName": "/home/src/project/project/lib/a_5.ts"
             }
           },
           {
@@ -5688,7 +5685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_6__0",
               "exportMapKey": "7 * aa_6__0 ",
               "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
+              "fileName": "/home/src/project/project/lib/a_6.ts"
             }
           },
           {
@@ -5708,7 +5705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_6__1",
               "exportMapKey": "7 * aa_6__1 ",
               "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
+              "fileName": "/home/src/project/project/lib/a_6.ts"
             }
           },
           {
@@ -5728,7 +5725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_6__2",
               "exportMapKey": "7 * aa_6__2 ",
               "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
+              "fileName": "/home/src/project/project/lib/a_6.ts"
             }
           },
           {
@@ -5748,7 +5745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_6__3",
               "exportMapKey": "7 * aa_6__3 ",
               "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
+              "fileName": "/home/src/project/project/lib/a_6.ts"
             }
           },
           {
@@ -5768,7 +5765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_6__4",
               "exportMapKey": "7 * aa_6__4 ",
               "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
+              "fileName": "/home/src/project/project/lib/a_6.ts"
             }
           },
           {
@@ -5808,7 +5805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_7__0",
               "exportMapKey": "7 * aa_7__0 ",
               "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
+              "fileName": "/home/src/project/project/lib/a_7.ts"
             }
           },
           {
@@ -5828,7 +5825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_7__1",
               "exportMapKey": "7 * aa_7__1 ",
               "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
+              "fileName": "/home/src/project/project/lib/a_7.ts"
             }
           },
           {
@@ -5848,7 +5845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_7__2",
               "exportMapKey": "7 * aa_7__2 ",
               "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
+              "fileName": "/home/src/project/project/lib/a_7.ts"
             }
           },
           {
@@ -5868,7 +5865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_7__3",
               "exportMapKey": "7 * aa_7__3 ",
               "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
+              "fileName": "/home/src/project/project/lib/a_7.ts"
             }
           },
           {
@@ -5888,7 +5885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_7__4",
               "exportMapKey": "7 * aa_7__4 ",
               "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
+              "fileName": "/home/src/project/project/lib/a_7.ts"
             }
           },
           {
@@ -5928,7 +5925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_8__0",
               "exportMapKey": "7 * aa_8__0 ",
               "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
+              "fileName": "/home/src/project/project/lib/a_8.ts"
             }
           },
           {
@@ -5948,7 +5945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_8__1",
               "exportMapKey": "7 * aa_8__1 ",
               "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
+              "fileName": "/home/src/project/project/lib/a_8.ts"
             }
           },
           {
@@ -5968,7 +5965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_8__2",
               "exportMapKey": "7 * aa_8__2 ",
               "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
+              "fileName": "/home/src/project/project/lib/a_8.ts"
             }
           },
           {
@@ -5988,7 +5985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_8__3",
               "exportMapKey": "7 * aa_8__3 ",
               "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
+              "fileName": "/home/src/project/project/lib/a_8.ts"
             }
           },
           {
@@ -6008,7 +6005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_8__4",
               "exportMapKey": "7 * aa_8__4 ",
               "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
+              "fileName": "/home/src/project/project/lib/a_8.ts"
             }
           },
           {
@@ -6048,7 +6045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_9__0",
               "exportMapKey": "7 * aa_9__0 ",
               "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
+              "fileName": "/home/src/project/project/lib/a_9.ts"
             }
           },
           {
@@ -6068,7 +6065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_9__1",
               "exportMapKey": "7 * aa_9__1 ",
               "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
+              "fileName": "/home/src/project/project/lib/a_9.ts"
             }
           },
           {
@@ -6088,7 +6085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_9__2",
               "exportMapKey": "7 * aa_9__2 ",
               "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
+              "fileName": "/home/src/project/project/lib/a_9.ts"
             }
           },
           {
@@ -6108,7 +6105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_9__3",
               "exportMapKey": "7 * aa_9__3 ",
               "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
+              "fileName": "/home/src/project/project/lib/a_9.ts"
             }
           },
           {
@@ -6128,7 +6125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_9__4",
               "exportMapKey": "7 * aa_9__4 ",
               "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
+              "fileName": "/home/src/project/project/lib/a_9.ts"
             }
           },
           {
@@ -6168,7 +6165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_10__0",
               "exportMapKey": "8 * aa_10__0 ",
               "moduleSpecifier": "./lib/a_10",
-              "fileName": "/lib/a_10.ts"
+              "fileName": "/home/src/project/project/lib/a_10.ts"
             }
           },
           {
@@ -6188,7 +6185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_10__1",
               "exportMapKey": "8 * aa_10__1 ",
               "moduleSpecifier": "./lib/a_10",
-              "fileName": "/lib/a_10.ts"
+              "fileName": "/home/src/project/project/lib/a_10.ts"
             }
           },
           {
@@ -6208,7 +6205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_10__2",
               "exportMapKey": "8 * aa_10__2 ",
               "moduleSpecifier": "./lib/a_10",
-              "fileName": "/lib/a_10.ts"
+              "fileName": "/home/src/project/project/lib/a_10.ts"
             }
           },
           {
@@ -6228,7 +6225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_10__3",
               "exportMapKey": "8 * aa_10__3 ",
               "moduleSpecifier": "./lib/a_10",
-              "fileName": "/lib/a_10.ts"
+              "fileName": "/home/src/project/project/lib/a_10.ts"
             }
           },
           {
@@ -6248,7 +6245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_10__4",
               "exportMapKey": "8 * aa_10__4 ",
               "moduleSpecifier": "./lib/a_10",
-              "fileName": "/lib/a_10.ts"
+              "fileName": "/home/src/project/project/lib/a_10.ts"
             }
           },
           {
@@ -6288,7 +6285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_11__0",
               "exportMapKey": "8 * aa_11__0 ",
               "moduleSpecifier": "./lib/a_11",
-              "fileName": "/lib/a_11.ts"
+              "fileName": "/home/src/project/project/lib/a_11.ts"
             }
           },
           {
@@ -6308,7 +6305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_11__1",
               "exportMapKey": "8 * aa_11__1 ",
               "moduleSpecifier": "./lib/a_11",
-              "fileName": "/lib/a_11.ts"
+              "fileName": "/home/src/project/project/lib/a_11.ts"
             }
           },
           {
@@ -6328,7 +6325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_11__2",
               "exportMapKey": "8 * aa_11__2 ",
               "moduleSpecifier": "./lib/a_11",
-              "fileName": "/lib/a_11.ts"
+              "fileName": "/home/src/project/project/lib/a_11.ts"
             }
           },
           {
@@ -6348,7 +6345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_11__3",
               "exportMapKey": "8 * aa_11__3 ",
               "moduleSpecifier": "./lib/a_11",
-              "fileName": "/lib/a_11.ts"
+              "fileName": "/home/src/project/project/lib/a_11.ts"
             }
           },
           {
@@ -6368,7 +6365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_11__4",
               "exportMapKey": "8 * aa_11__4 ",
               "moduleSpecifier": "./lib/a_11",
-              "fileName": "/lib/a_11.ts"
+              "fileName": "/home/src/project/project/lib/a_11.ts"
             }
           },
           {
@@ -6408,7 +6405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_12__0",
               "exportMapKey": "8 * aa_12__0 ",
               "moduleSpecifier": "./lib/a_12",
-              "fileName": "/lib/a_12.ts"
+              "fileName": "/home/src/project/project/lib/a_12.ts"
             }
           },
           {
@@ -6428,7 +6425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_12__1",
               "exportMapKey": "8 * aa_12__1 ",
               "moduleSpecifier": "./lib/a_12",
-              "fileName": "/lib/a_12.ts"
+              "fileName": "/home/src/project/project/lib/a_12.ts"
             }
           },
           {
@@ -6448,7 +6445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_12__2",
               "exportMapKey": "8 * aa_12__2 ",
               "moduleSpecifier": "./lib/a_12",
-              "fileName": "/lib/a_12.ts"
+              "fileName": "/home/src/project/project/lib/a_12.ts"
             }
           },
           {
@@ -6468,7 +6465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_12__3",
               "exportMapKey": "8 * aa_12__3 ",
               "moduleSpecifier": "./lib/a_12",
-              "fileName": "/lib/a_12.ts"
+              "fileName": "/home/src/project/project/lib/a_12.ts"
             }
           },
           {
@@ -6488,7 +6485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_12__4",
               "exportMapKey": "8 * aa_12__4 ",
               "moduleSpecifier": "./lib/a_12",
-              "fileName": "/lib/a_12.ts"
+              "fileName": "/home/src/project/project/lib/a_12.ts"
             }
           },
           {
@@ -6528,7 +6525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_13__0",
               "exportMapKey": "8 * aa_13__0 ",
               "moduleSpecifier": "./lib/a_13",
-              "fileName": "/lib/a_13.ts"
+              "fileName": "/home/src/project/project/lib/a_13.ts"
             }
           },
           {
@@ -6548,7 +6545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_13__1",
               "exportMapKey": "8 * aa_13__1 ",
               "moduleSpecifier": "./lib/a_13",
-              "fileName": "/lib/a_13.ts"
+              "fileName": "/home/src/project/project/lib/a_13.ts"
             }
           },
           {
@@ -6568,7 +6565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_13__2",
               "exportMapKey": "8 * aa_13__2 ",
               "moduleSpecifier": "./lib/a_13",
-              "fileName": "/lib/a_13.ts"
+              "fileName": "/home/src/project/project/lib/a_13.ts"
             }
           },
           {
@@ -6588,7 +6585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_13__3",
               "exportMapKey": "8 * aa_13__3 ",
               "moduleSpecifier": "./lib/a_13",
-              "fileName": "/lib/a_13.ts"
+              "fileName": "/home/src/project/project/lib/a_13.ts"
             }
           },
           {
@@ -6608,7 +6605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_13__4",
               "exportMapKey": "8 * aa_13__4 ",
               "moduleSpecifier": "./lib/a_13",
-              "fileName": "/lib/a_13.ts"
+              "fileName": "/home/src/project/project/lib/a_13.ts"
             }
           },
           {
@@ -6648,7 +6645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_14__0",
               "exportMapKey": "8 * aa_14__0 ",
               "moduleSpecifier": "./lib/a_14",
-              "fileName": "/lib/a_14.ts"
+              "fileName": "/home/src/project/project/lib/a_14.ts"
             }
           },
           {
@@ -6668,7 +6665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_14__1",
               "exportMapKey": "8 * aa_14__1 ",
               "moduleSpecifier": "./lib/a_14",
-              "fileName": "/lib/a_14.ts"
+              "fileName": "/home/src/project/project/lib/a_14.ts"
             }
           },
           {
@@ -6688,7 +6685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_14__2",
               "exportMapKey": "8 * aa_14__2 ",
               "moduleSpecifier": "./lib/a_14",
-              "fileName": "/lib/a_14.ts"
+              "fileName": "/home/src/project/project/lib/a_14.ts"
             }
           },
           {
@@ -6708,7 +6705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_14__3",
               "exportMapKey": "8 * aa_14__3 ",
               "moduleSpecifier": "./lib/a_14",
-              "fileName": "/lib/a_14.ts"
+              "fileName": "/home/src/project/project/lib/a_14.ts"
             }
           },
           {
@@ -6728,7 +6725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_14__4",
               "exportMapKey": "8 * aa_14__4 ",
               "moduleSpecifier": "./lib/a_14",
-              "fileName": "/lib/a_14.ts"
+              "fileName": "/home/src/project/project/lib/a_14.ts"
             }
           },
           {
@@ -6768,7 +6765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_15__0",
               "exportMapKey": "8 * aa_15__0 ",
               "moduleSpecifier": "./lib/a_15",
-              "fileName": "/lib/a_15.ts"
+              "fileName": "/home/src/project/project/lib/a_15.ts"
             }
           },
           {
@@ -6788,7 +6785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_15__1",
               "exportMapKey": "8 * aa_15__1 ",
               "moduleSpecifier": "./lib/a_15",
-              "fileName": "/lib/a_15.ts"
+              "fileName": "/home/src/project/project/lib/a_15.ts"
             }
           },
           {
@@ -6808,7 +6805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_15__2",
               "exportMapKey": "8 * aa_15__2 ",
               "moduleSpecifier": "./lib/a_15",
-              "fileName": "/lib/a_15.ts"
+              "fileName": "/home/src/project/project/lib/a_15.ts"
             }
           },
           {
@@ -6828,7 +6825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_15__3",
               "exportMapKey": "8 * aa_15__3 ",
               "moduleSpecifier": "./lib/a_15",
-              "fileName": "/lib/a_15.ts"
+              "fileName": "/home/src/project/project/lib/a_15.ts"
             }
           },
           {
@@ -6848,7 +6845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_15__4",
               "exportMapKey": "8 * aa_15__4 ",
               "moduleSpecifier": "./lib/a_15",
-              "fileName": "/lib/a_15.ts"
+              "fileName": "/home/src/project/project/lib/a_15.ts"
             }
           },
           {
@@ -6888,7 +6885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_16__0",
               "exportMapKey": "8 * aa_16__0 ",
               "moduleSpecifier": "./lib/a_16",
-              "fileName": "/lib/a_16.ts"
+              "fileName": "/home/src/project/project/lib/a_16.ts"
             }
           },
           {
@@ -6908,7 +6905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_16__1",
               "exportMapKey": "8 * aa_16__1 ",
               "moduleSpecifier": "./lib/a_16",
-              "fileName": "/lib/a_16.ts"
+              "fileName": "/home/src/project/project/lib/a_16.ts"
             }
           },
           {
@@ -6928,7 +6925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_16__2",
               "exportMapKey": "8 * aa_16__2 ",
               "moduleSpecifier": "./lib/a_16",
-              "fileName": "/lib/a_16.ts"
+              "fileName": "/home/src/project/project/lib/a_16.ts"
             }
           },
           {
@@ -6948,7 +6945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_16__3",
               "exportMapKey": "8 * aa_16__3 ",
               "moduleSpecifier": "./lib/a_16",
-              "fileName": "/lib/a_16.ts"
+              "fileName": "/home/src/project/project/lib/a_16.ts"
             }
           },
           {
@@ -6968,7 +6965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_16__4",
               "exportMapKey": "8 * aa_16__4 ",
               "moduleSpecifier": "./lib/a_16",
-              "fileName": "/lib/a_16.ts"
+              "fileName": "/home/src/project/project/lib/a_16.ts"
             }
           },
           {
@@ -7008,7 +7005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_17__0",
               "exportMapKey": "8 * aa_17__0 ",
               "moduleSpecifier": "./lib/a_17",
-              "fileName": "/lib/a_17.ts"
+              "fileName": "/home/src/project/project/lib/a_17.ts"
             }
           },
           {
@@ -7028,7 +7025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_17__1",
               "exportMapKey": "8 * aa_17__1 ",
               "moduleSpecifier": "./lib/a_17",
-              "fileName": "/lib/a_17.ts"
+              "fileName": "/home/src/project/project/lib/a_17.ts"
             }
           },
           {
@@ -7048,7 +7045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_17__2",
               "exportMapKey": "8 * aa_17__2 ",
               "moduleSpecifier": "./lib/a_17",
-              "fileName": "/lib/a_17.ts"
+              "fileName": "/home/src/project/project/lib/a_17.ts"
             }
           },
           {
@@ -7068,7 +7065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_17__3",
               "exportMapKey": "8 * aa_17__3 ",
               "moduleSpecifier": "./lib/a_17",
-              "fileName": "/lib/a_17.ts"
+              "fileName": "/home/src/project/project/lib/a_17.ts"
             }
           },
           {
@@ -7088,7 +7085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_17__4",
               "exportMapKey": "8 * aa_17__4 ",
               "moduleSpecifier": "./lib/a_17",
-              "fileName": "/lib/a_17.ts"
+              "fileName": "/home/src/project/project/lib/a_17.ts"
             }
           },
           {
@@ -7128,7 +7125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_18__0",
               "exportMapKey": "8 * aa_18__0 ",
               "moduleSpecifier": "./lib/a_18",
-              "fileName": "/lib/a_18.ts"
+              "fileName": "/home/src/project/project/lib/a_18.ts"
             }
           },
           {
@@ -7148,7 +7145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_18__1",
               "exportMapKey": "8 * aa_18__1 ",
               "moduleSpecifier": "./lib/a_18",
-              "fileName": "/lib/a_18.ts"
+              "fileName": "/home/src/project/project/lib/a_18.ts"
             }
           },
           {
@@ -7168,7 +7165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_18__2",
               "exportMapKey": "8 * aa_18__2 ",
               "moduleSpecifier": "./lib/a_18",
-              "fileName": "/lib/a_18.ts"
+              "fileName": "/home/src/project/project/lib/a_18.ts"
             }
           },
           {
@@ -7188,7 +7185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_18__3",
               "exportMapKey": "8 * aa_18__3 ",
               "moduleSpecifier": "./lib/a_18",
-              "fileName": "/lib/a_18.ts"
+              "fileName": "/home/src/project/project/lib/a_18.ts"
             }
           },
           {
@@ -7208,7 +7205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_18__4",
               "exportMapKey": "8 * aa_18__4 ",
               "moduleSpecifier": "./lib/a_18",
-              "fileName": "/lib/a_18.ts"
+              "fileName": "/home/src/project/project/lib/a_18.ts"
             }
           },
           {
@@ -7248,7 +7245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_19__0",
               "exportMapKey": "8 * aa_19__0 ",
               "moduleSpecifier": "./lib/a_19",
-              "fileName": "/lib/a_19.ts"
+              "fileName": "/home/src/project/project/lib/a_19.ts"
             }
           },
           {
@@ -7268,7 +7265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_19__1",
               "exportMapKey": "8 * aa_19__1 ",
               "moduleSpecifier": "./lib/a_19",
-              "fileName": "/lib/a_19.ts"
+              "fileName": "/home/src/project/project/lib/a_19.ts"
             }
           },
           {
@@ -7288,7 +7285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_19__2",
               "exportMapKey": "8 * aa_19__2 ",
               "moduleSpecifier": "./lib/a_19",
-              "fileName": "/lib/a_19.ts"
+              "fileName": "/home/src/project/project/lib/a_19.ts"
             }
           },
           {
@@ -7308,7 +7305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_19__3",
               "exportMapKey": "8 * aa_19__3 ",
               "moduleSpecifier": "./lib/a_19",
-              "fileName": "/lib/a_19.ts"
+              "fileName": "/home/src/project/project/lib/a_19.ts"
             }
           },
           {
@@ -7328,7 +7325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_19__4",
               "exportMapKey": "8 * aa_19__4 ",
               "moduleSpecifier": "./lib/a_19",
-              "fileName": "/lib/a_19.ts"
+              "fileName": "/home/src/project/project/lib/a_19.ts"
             }
           },
           {
@@ -7368,7 +7365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_20__0",
               "exportMapKey": "8 * aa_20__0 ",
               "moduleSpecifier": "./lib/a_20",
-              "fileName": "/lib/a_20.ts"
+              "fileName": "/home/src/project/project/lib/a_20.ts"
             }
           },
           {
@@ -7388,7 +7385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_20__1",
               "exportMapKey": "8 * aa_20__1 ",
               "moduleSpecifier": "./lib/a_20",
-              "fileName": "/lib/a_20.ts"
+              "fileName": "/home/src/project/project/lib/a_20.ts"
             }
           },
           {
@@ -7408,7 +7405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_20__2",
               "exportMapKey": "8 * aa_20__2 ",
               "moduleSpecifier": "./lib/a_20",
-              "fileName": "/lib/a_20.ts"
+              "fileName": "/home/src/project/project/lib/a_20.ts"
             }
           },
           {
@@ -7428,7 +7425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_20__3",
               "exportMapKey": "8 * aa_20__3 ",
               "moduleSpecifier": "./lib/a_20",
-              "fileName": "/lib/a_20.ts"
+              "fileName": "/home/src/project/project/lib/a_20.ts"
             }
           },
           {
@@ -7448,7 +7445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_20__4",
               "exportMapKey": "8 * aa_20__4 ",
               "moduleSpecifier": "./lib/a_20",
-              "fileName": "/lib/a_20.ts"
+              "fileName": "/home/src/project/project/lib/a_20.ts"
             }
           },
           {
@@ -7488,7 +7485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_21__0",
               "exportMapKey": "8 * aa_21__0 ",
               "moduleSpecifier": "./lib/a_21",
-              "fileName": "/lib/a_21.ts"
+              "fileName": "/home/src/project/project/lib/a_21.ts"
             }
           },
           {
@@ -7508,7 +7505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_21__1",
               "exportMapKey": "8 * aa_21__1 ",
               "moduleSpecifier": "./lib/a_21",
-              "fileName": "/lib/a_21.ts"
+              "fileName": "/home/src/project/project/lib/a_21.ts"
             }
           },
           {
@@ -7528,7 +7525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_21__2",
               "exportMapKey": "8 * aa_21__2 ",
               "moduleSpecifier": "./lib/a_21",
-              "fileName": "/lib/a_21.ts"
+              "fileName": "/home/src/project/project/lib/a_21.ts"
             }
           },
           {
@@ -7548,7 +7545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_21__3",
               "exportMapKey": "8 * aa_21__3 ",
               "moduleSpecifier": "./lib/a_21",
-              "fileName": "/lib/a_21.ts"
+              "fileName": "/home/src/project/project/lib/a_21.ts"
             }
           },
           {
@@ -7568,7 +7565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_21__4",
               "exportMapKey": "8 * aa_21__4 ",
               "moduleSpecifier": "./lib/a_21",
-              "fileName": "/lib/a_21.ts"
+              "fileName": "/home/src/project/project/lib/a_21.ts"
             }
           },
           {
@@ -7608,7 +7605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_22__0",
               "exportMapKey": "8 * aa_22__0 ",
               "moduleSpecifier": "./lib/a_22",
-              "fileName": "/lib/a_22.ts"
+              "fileName": "/home/src/project/project/lib/a_22.ts"
             }
           },
           {
@@ -7628,7 +7625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_22__1",
               "exportMapKey": "8 * aa_22__1 ",
               "moduleSpecifier": "./lib/a_22",
-              "fileName": "/lib/a_22.ts"
+              "fileName": "/home/src/project/project/lib/a_22.ts"
             }
           },
           {
@@ -7648,7 +7645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_22__2",
               "exportMapKey": "8 * aa_22__2 ",
               "moduleSpecifier": "./lib/a_22",
-              "fileName": "/lib/a_22.ts"
+              "fileName": "/home/src/project/project/lib/a_22.ts"
             }
           },
           {
@@ -7668,7 +7665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_22__3",
               "exportMapKey": "8 * aa_22__3 ",
               "moduleSpecifier": "./lib/a_22",
-              "fileName": "/lib/a_22.ts"
+              "fileName": "/home/src/project/project/lib/a_22.ts"
             }
           },
           {
@@ -7688,7 +7685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_22__4",
               "exportMapKey": "8 * aa_22__4 ",
               "moduleSpecifier": "./lib/a_22",
-              "fileName": "/lib/a_22.ts"
+              "fileName": "/home/src/project/project/lib/a_22.ts"
             }
           },
           {
@@ -7728,7 +7725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_23__0",
               "exportMapKey": "8 * aa_23__0 ",
               "moduleSpecifier": "./lib/a_23",
-              "fileName": "/lib/a_23.ts"
+              "fileName": "/home/src/project/project/lib/a_23.ts"
             }
           },
           {
@@ -7748,7 +7745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_23__1",
               "exportMapKey": "8 * aa_23__1 ",
               "moduleSpecifier": "./lib/a_23",
-              "fileName": "/lib/a_23.ts"
+              "fileName": "/home/src/project/project/lib/a_23.ts"
             }
           },
           {
@@ -7768,7 +7765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_23__2",
               "exportMapKey": "8 * aa_23__2 ",
               "moduleSpecifier": "./lib/a_23",
-              "fileName": "/lib/a_23.ts"
+              "fileName": "/home/src/project/project/lib/a_23.ts"
             }
           },
           {
@@ -7788,7 +7785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_23__3",
               "exportMapKey": "8 * aa_23__3 ",
               "moduleSpecifier": "./lib/a_23",
-              "fileName": "/lib/a_23.ts"
+              "fileName": "/home/src/project/project/lib/a_23.ts"
             }
           },
           {
@@ -7808,7 +7805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_23__4",
               "exportMapKey": "8 * aa_23__4 ",
               "moduleSpecifier": "./lib/a_23",
-              "fileName": "/lib/a_23.ts"
+              "fileName": "/home/src/project/project/lib/a_23.ts"
             }
           },
           {
@@ -7848,7 +7845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_24__0",
               "exportMapKey": "8 * aa_24__0 ",
               "moduleSpecifier": "./lib/a_24",
-              "fileName": "/lib/a_24.ts"
+              "fileName": "/home/src/project/project/lib/a_24.ts"
             }
           },
           {
@@ -7868,7 +7865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_24__1",
               "exportMapKey": "8 * aa_24__1 ",
               "moduleSpecifier": "./lib/a_24",
-              "fileName": "/lib/a_24.ts"
+              "fileName": "/home/src/project/project/lib/a_24.ts"
             }
           },
           {
@@ -7888,7 +7885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_24__2",
               "exportMapKey": "8 * aa_24__2 ",
               "moduleSpecifier": "./lib/a_24",
-              "fileName": "/lib/a_24.ts"
+              "fileName": "/home/src/project/project/lib/a_24.ts"
             }
           },
           {
@@ -7908,7 +7905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_24__3",
               "exportMapKey": "8 * aa_24__3 ",
               "moduleSpecifier": "./lib/a_24",
-              "fileName": "/lib/a_24.ts"
+              "fileName": "/home/src/project/project/lib/a_24.ts"
             }
           },
           {
@@ -7928,7 +7925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_24__4",
               "exportMapKey": "8 * aa_24__4 ",
               "moduleSpecifier": "./lib/a_24",
-              "fileName": "/lib/a_24.ts"
+              "fileName": "/home/src/project/project/lib/a_24.ts"
             }
           },
           {
@@ -7968,7 +7965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_25__0",
               "exportMapKey": "8 * aa_25__0 ",
               "moduleSpecifier": "./lib/a_25",
-              "fileName": "/lib/a_25.ts"
+              "fileName": "/home/src/project/project/lib/a_25.ts"
             }
           },
           {
@@ -7988,7 +7985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_25__1",
               "exportMapKey": "8 * aa_25__1 ",
               "moduleSpecifier": "./lib/a_25",
-              "fileName": "/lib/a_25.ts"
+              "fileName": "/home/src/project/project/lib/a_25.ts"
             }
           },
           {
@@ -8008,7 +8005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_25__2",
               "exportMapKey": "8 * aa_25__2 ",
               "moduleSpecifier": "./lib/a_25",
-              "fileName": "/lib/a_25.ts"
+              "fileName": "/home/src/project/project/lib/a_25.ts"
             }
           },
           {
@@ -8028,7 +8025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_25__3",
               "exportMapKey": "8 * aa_25__3 ",
               "moduleSpecifier": "./lib/a_25",
-              "fileName": "/lib/a_25.ts"
+              "fileName": "/home/src/project/project/lib/a_25.ts"
             }
           },
           {
@@ -8048,7 +8045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_25__4",
               "exportMapKey": "8 * aa_25__4 ",
               "moduleSpecifier": "./lib/a_25",
-              "fileName": "/lib/a_25.ts"
+              "fileName": "/home/src/project/project/lib/a_25.ts"
             }
           },
           {
@@ -8088,7 +8085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_26__0",
               "exportMapKey": "8 * aa_26__0 ",
               "moduleSpecifier": "./lib/a_26",
-              "fileName": "/lib/a_26.ts"
+              "fileName": "/home/src/project/project/lib/a_26.ts"
             }
           },
           {
@@ -8108,7 +8105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_26__1",
               "exportMapKey": "8 * aa_26__1 ",
               "moduleSpecifier": "./lib/a_26",
-              "fileName": "/lib/a_26.ts"
+              "fileName": "/home/src/project/project/lib/a_26.ts"
             }
           },
           {
@@ -8128,7 +8125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_26__2",
               "exportMapKey": "8 * aa_26__2 ",
               "moduleSpecifier": "./lib/a_26",
-              "fileName": "/lib/a_26.ts"
+              "fileName": "/home/src/project/project/lib/a_26.ts"
             }
           },
           {
@@ -8148,7 +8145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_26__3",
               "exportMapKey": "8 * aa_26__3 ",
               "moduleSpecifier": "./lib/a_26",
-              "fileName": "/lib/a_26.ts"
+              "fileName": "/home/src/project/project/lib/a_26.ts"
             }
           },
           {
@@ -8168,7 +8165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_26__4",
               "exportMapKey": "8 * aa_26__4 ",
               "moduleSpecifier": "./lib/a_26",
-              "fileName": "/lib/a_26.ts"
+              "fileName": "/home/src/project/project/lib/a_26.ts"
             }
           },
           {
@@ -8208,7 +8205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_27__0",
               "exportMapKey": "8 * aa_27__0 ",
               "moduleSpecifier": "./lib/a_27",
-              "fileName": "/lib/a_27.ts"
+              "fileName": "/home/src/project/project/lib/a_27.ts"
             }
           },
           {
@@ -8228,7 +8225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_27__1",
               "exportMapKey": "8 * aa_27__1 ",
               "moduleSpecifier": "./lib/a_27",
-              "fileName": "/lib/a_27.ts"
+              "fileName": "/home/src/project/project/lib/a_27.ts"
             }
           },
           {
@@ -8248,7 +8245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_27__2",
               "exportMapKey": "8 * aa_27__2 ",
               "moduleSpecifier": "./lib/a_27",
-              "fileName": "/lib/a_27.ts"
+              "fileName": "/home/src/project/project/lib/a_27.ts"
             }
           },
           {
@@ -8268,7 +8265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_27__3",
               "exportMapKey": "8 * aa_27__3 ",
               "moduleSpecifier": "./lib/a_27",
-              "fileName": "/lib/a_27.ts"
+              "fileName": "/home/src/project/project/lib/a_27.ts"
             }
           },
           {
@@ -8288,7 +8285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_27__4",
               "exportMapKey": "8 * aa_27__4 ",
               "moduleSpecifier": "./lib/a_27",
-              "fileName": "/lib/a_27.ts"
+              "fileName": "/home/src/project/project/lib/a_27.ts"
             }
           },
           {
@@ -8328,7 +8325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_28__0",
               "exportMapKey": "8 * aa_28__0 ",
               "moduleSpecifier": "./lib/a_28",
-              "fileName": "/lib/a_28.ts"
+              "fileName": "/home/src/project/project/lib/a_28.ts"
             }
           },
           {
@@ -8348,7 +8345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_28__1",
               "exportMapKey": "8 * aa_28__1 ",
               "moduleSpecifier": "./lib/a_28",
-              "fileName": "/lib/a_28.ts"
+              "fileName": "/home/src/project/project/lib/a_28.ts"
             }
           },
           {
@@ -8368,7 +8365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_28__2",
               "exportMapKey": "8 * aa_28__2 ",
               "moduleSpecifier": "./lib/a_28",
-              "fileName": "/lib/a_28.ts"
+              "fileName": "/home/src/project/project/lib/a_28.ts"
             }
           },
           {
@@ -8388,7 +8385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_28__3",
               "exportMapKey": "8 * aa_28__3 ",
               "moduleSpecifier": "./lib/a_28",
-              "fileName": "/lib/a_28.ts"
+              "fileName": "/home/src/project/project/lib/a_28.ts"
             }
           },
           {
@@ -8408,7 +8405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_28__4",
               "exportMapKey": "8 * aa_28__4 ",
               "moduleSpecifier": "./lib/a_28",
-              "fileName": "/lib/a_28.ts"
+              "fileName": "/home/src/project/project/lib/a_28.ts"
             }
           },
           {
@@ -8448,7 +8445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_29__0",
               "exportMapKey": "8 * aa_29__0 ",
               "moduleSpecifier": "./lib/a_29",
-              "fileName": "/lib/a_29.ts"
+              "fileName": "/home/src/project/project/lib/a_29.ts"
             }
           },
           {
@@ -8468,7 +8465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_29__1",
               "exportMapKey": "8 * aa_29__1 ",
               "moduleSpecifier": "./lib/a_29",
-              "fileName": "/lib/a_29.ts"
+              "fileName": "/home/src/project/project/lib/a_29.ts"
             }
           },
           {
@@ -8488,7 +8485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_29__2",
               "exportMapKey": "8 * aa_29__2 ",
               "moduleSpecifier": "./lib/a_29",
-              "fileName": "/lib/a_29.ts"
+              "fileName": "/home/src/project/project/lib/a_29.ts"
             }
           },
           {
@@ -8508,7 +8505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_29__3",
               "exportMapKey": "8 * aa_29__3 ",
               "moduleSpecifier": "./lib/a_29",
-              "fileName": "/lib/a_29.ts"
+              "fileName": "/home/src/project/project/lib/a_29.ts"
             }
           },
           {
@@ -8528,7 +8525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_29__4",
               "exportMapKey": "8 * aa_29__4 ",
               "moduleSpecifier": "./lib/a_29",
-              "fileName": "/lib/a_29.ts"
+              "fileName": "/home/src/project/project/lib/a_29.ts"
             }
           },
           {
@@ -8568,7 +8565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_30__0",
               "exportMapKey": "8 * aa_30__0 ",
               "moduleSpecifier": "./lib/a_30",
-              "fileName": "/lib/a_30.ts"
+              "fileName": "/home/src/project/project/lib/a_30.ts"
             }
           },
           {
@@ -8588,7 +8585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_30__1",
               "exportMapKey": "8 * aa_30__1 ",
               "moduleSpecifier": "./lib/a_30",
-              "fileName": "/lib/a_30.ts"
+              "fileName": "/home/src/project/project/lib/a_30.ts"
             }
           },
           {
@@ -8608,7 +8605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_30__2",
               "exportMapKey": "8 * aa_30__2 ",
               "moduleSpecifier": "./lib/a_30",
-              "fileName": "/lib/a_30.ts"
+              "fileName": "/home/src/project/project/lib/a_30.ts"
             }
           },
           {
@@ -8628,7 +8625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_30__3",
               "exportMapKey": "8 * aa_30__3 ",
               "moduleSpecifier": "./lib/a_30",
-              "fileName": "/lib/a_30.ts"
+              "fileName": "/home/src/project/project/lib/a_30.ts"
             }
           },
           {
@@ -8648,7 +8645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_30__4",
               "exportMapKey": "8 * aa_30__4 ",
               "moduleSpecifier": "./lib/a_30",
-              "fileName": "/lib/a_30.ts"
+              "fileName": "/home/src/project/project/lib/a_30.ts"
             }
           },
           {
@@ -8688,7 +8685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_31__0",
               "exportMapKey": "8 * aa_31__0 ",
               "moduleSpecifier": "./lib/a_31",
-              "fileName": "/lib/a_31.ts"
+              "fileName": "/home/src/project/project/lib/a_31.ts"
             }
           },
           {
@@ -8708,7 +8705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_31__1",
               "exportMapKey": "8 * aa_31__1 ",
               "moduleSpecifier": "./lib/a_31",
-              "fileName": "/lib/a_31.ts"
+              "fileName": "/home/src/project/project/lib/a_31.ts"
             }
           },
           {
@@ -8728,7 +8725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_31__2",
               "exportMapKey": "8 * aa_31__2 ",
               "moduleSpecifier": "./lib/a_31",
-              "fileName": "/lib/a_31.ts"
+              "fileName": "/home/src/project/project/lib/a_31.ts"
             }
           },
           {
@@ -8748,7 +8745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_31__3",
               "exportMapKey": "8 * aa_31__3 ",
               "moduleSpecifier": "./lib/a_31",
-              "fileName": "/lib/a_31.ts"
+              "fileName": "/home/src/project/project/lib/a_31.ts"
             }
           },
           {
@@ -8768,7 +8765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_31__4",
               "exportMapKey": "8 * aa_31__4 ",
               "moduleSpecifier": "./lib/a_31",
-              "fileName": "/lib/a_31.ts"
+              "fileName": "/home/src/project/project/lib/a_31.ts"
             }
           },
           {
@@ -8808,7 +8805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_32__0",
               "exportMapKey": "8 * aa_32__0 ",
               "moduleSpecifier": "./lib/a_32",
-              "fileName": "/lib/a_32.ts"
+              "fileName": "/home/src/project/project/lib/a_32.ts"
             }
           },
           {
@@ -8828,7 +8825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_32__1",
               "exportMapKey": "8 * aa_32__1 ",
               "moduleSpecifier": "./lib/a_32",
-              "fileName": "/lib/a_32.ts"
+              "fileName": "/home/src/project/project/lib/a_32.ts"
             }
           },
           {
@@ -8848,7 +8845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_32__2",
               "exportMapKey": "8 * aa_32__2 ",
               "moduleSpecifier": "./lib/a_32",
-              "fileName": "/lib/a_32.ts"
+              "fileName": "/home/src/project/project/lib/a_32.ts"
             }
           },
           {
@@ -8868,7 +8865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_32__3",
               "exportMapKey": "8 * aa_32__3 ",
               "moduleSpecifier": "./lib/a_32",
-              "fileName": "/lib/a_32.ts"
+              "fileName": "/home/src/project/project/lib/a_32.ts"
             }
           },
           {
@@ -8888,7 +8885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_32__4",
               "exportMapKey": "8 * aa_32__4 ",
               "moduleSpecifier": "./lib/a_32",
-              "fileName": "/lib/a_32.ts"
+              "fileName": "/home/src/project/project/lib/a_32.ts"
             }
           },
           {
@@ -8928,7 +8925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_33__0",
               "exportMapKey": "8 * aa_33__0 ",
               "moduleSpecifier": "./lib/a_33",
-              "fileName": "/lib/a_33.ts"
+              "fileName": "/home/src/project/project/lib/a_33.ts"
             }
           },
           {
@@ -8948,7 +8945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_33__1",
               "exportMapKey": "8 * aa_33__1 ",
               "moduleSpecifier": "./lib/a_33",
-              "fileName": "/lib/a_33.ts"
+              "fileName": "/home/src/project/project/lib/a_33.ts"
             }
           },
           {
@@ -8968,7 +8965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_33__2",
               "exportMapKey": "8 * aa_33__2 ",
               "moduleSpecifier": "./lib/a_33",
-              "fileName": "/lib/a_33.ts"
+              "fileName": "/home/src/project/project/lib/a_33.ts"
             }
           },
           {
@@ -8988,7 +8985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_33__3",
               "exportMapKey": "8 * aa_33__3 ",
               "moduleSpecifier": "./lib/a_33",
-              "fileName": "/lib/a_33.ts"
+              "fileName": "/home/src/project/project/lib/a_33.ts"
             }
           },
           {
@@ -9008,7 +9005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_33__4",
               "exportMapKey": "8 * aa_33__4 ",
               "moduleSpecifier": "./lib/a_33",
-              "fileName": "/lib/a_33.ts"
+              "fileName": "/home/src/project/project/lib/a_33.ts"
             }
           },
           {
@@ -9048,7 +9045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_34__0",
               "exportMapKey": "8 * aa_34__0 ",
               "moduleSpecifier": "./lib/a_34",
-              "fileName": "/lib/a_34.ts"
+              "fileName": "/home/src/project/project/lib/a_34.ts"
             }
           },
           {
@@ -9068,7 +9065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_34__1",
               "exportMapKey": "8 * aa_34__1 ",
               "moduleSpecifier": "./lib/a_34",
-              "fileName": "/lib/a_34.ts"
+              "fileName": "/home/src/project/project/lib/a_34.ts"
             }
           },
           {
@@ -9088,7 +9085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_34__2",
               "exportMapKey": "8 * aa_34__2 ",
               "moduleSpecifier": "./lib/a_34",
-              "fileName": "/lib/a_34.ts"
+              "fileName": "/home/src/project/project/lib/a_34.ts"
             }
           },
           {
@@ -9108,7 +9105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_34__3",
               "exportMapKey": "8 * aa_34__3 ",
               "moduleSpecifier": "./lib/a_34",
-              "fileName": "/lib/a_34.ts"
+              "fileName": "/home/src/project/project/lib/a_34.ts"
             }
           },
           {
@@ -9128,7 +9125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_34__4",
               "exportMapKey": "8 * aa_34__4 ",
               "moduleSpecifier": "./lib/a_34",
-              "fileName": "/lib/a_34.ts"
+              "fileName": "/home/src/project/project/lib/a_34.ts"
             }
           },
           {
@@ -9168,7 +9165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_35__0",
               "exportMapKey": "8 * aa_35__0 ",
               "moduleSpecifier": "./lib/a_35",
-              "fileName": "/lib/a_35.ts"
+              "fileName": "/home/src/project/project/lib/a_35.ts"
             }
           },
           {
@@ -9188,7 +9185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_35__1",
               "exportMapKey": "8 * aa_35__1 ",
               "moduleSpecifier": "./lib/a_35",
-              "fileName": "/lib/a_35.ts"
+              "fileName": "/home/src/project/project/lib/a_35.ts"
             }
           },
           {
@@ -9208,7 +9205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_35__2",
               "exportMapKey": "8 * aa_35__2 ",
               "moduleSpecifier": "./lib/a_35",
-              "fileName": "/lib/a_35.ts"
+              "fileName": "/home/src/project/project/lib/a_35.ts"
             }
           },
           {
@@ -9228,7 +9225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_35__3",
               "exportMapKey": "8 * aa_35__3 ",
               "moduleSpecifier": "./lib/a_35",
-              "fileName": "/lib/a_35.ts"
+              "fileName": "/home/src/project/project/lib/a_35.ts"
             }
           },
           {
@@ -9248,7 +9245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_35__4",
               "exportMapKey": "8 * aa_35__4 ",
               "moduleSpecifier": "./lib/a_35",
-              "fileName": "/lib/a_35.ts"
+              "fileName": "/home/src/project/project/lib/a_35.ts"
             }
           },
           {
@@ -9288,7 +9285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_36__0",
               "exportMapKey": "8 * aa_36__0 ",
               "moduleSpecifier": "./lib/a_36",
-              "fileName": "/lib/a_36.ts"
+              "fileName": "/home/src/project/project/lib/a_36.ts"
             }
           },
           {
@@ -9308,7 +9305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_36__1",
               "exportMapKey": "8 * aa_36__1 ",
               "moduleSpecifier": "./lib/a_36",
-              "fileName": "/lib/a_36.ts"
+              "fileName": "/home/src/project/project/lib/a_36.ts"
             }
           },
           {
@@ -9328,7 +9325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_36__2",
               "exportMapKey": "8 * aa_36__2 ",
               "moduleSpecifier": "./lib/a_36",
-              "fileName": "/lib/a_36.ts"
+              "fileName": "/home/src/project/project/lib/a_36.ts"
             }
           },
           {
@@ -9348,7 +9345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_36__3",
               "exportMapKey": "8 * aa_36__3 ",
               "moduleSpecifier": "./lib/a_36",
-              "fileName": "/lib/a_36.ts"
+              "fileName": "/home/src/project/project/lib/a_36.ts"
             }
           },
           {
@@ -9368,7 +9365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_36__4",
               "exportMapKey": "8 * aa_36__4 ",
               "moduleSpecifier": "./lib/a_36",
-              "fileName": "/lib/a_36.ts"
+              "fileName": "/home/src/project/project/lib/a_36.ts"
             }
           },
           {
@@ -9408,7 +9405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_37__0",
               "exportMapKey": "8 * aa_37__0 ",
               "moduleSpecifier": "./lib/a_37",
-              "fileName": "/lib/a_37.ts"
+              "fileName": "/home/src/project/project/lib/a_37.ts"
             }
           },
           {
@@ -9428,7 +9425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_37__1",
               "exportMapKey": "8 * aa_37__1 ",
               "moduleSpecifier": "./lib/a_37",
-              "fileName": "/lib/a_37.ts"
+              "fileName": "/home/src/project/project/lib/a_37.ts"
             }
           },
           {
@@ -9448,7 +9445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_37__2",
               "exportMapKey": "8 * aa_37__2 ",
               "moduleSpecifier": "./lib/a_37",
-              "fileName": "/lib/a_37.ts"
+              "fileName": "/home/src/project/project/lib/a_37.ts"
             }
           },
           {
@@ -9468,7 +9465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_37__3",
               "exportMapKey": "8 * aa_37__3 ",
               "moduleSpecifier": "./lib/a_37",
-              "fileName": "/lib/a_37.ts"
+              "fileName": "/home/src/project/project/lib/a_37.ts"
             }
           },
           {
@@ -9488,7 +9485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_37__4",
               "exportMapKey": "8 * aa_37__4 ",
               "moduleSpecifier": "./lib/a_37",
-              "fileName": "/lib/a_37.ts"
+              "fileName": "/home/src/project/project/lib/a_37.ts"
             }
           },
           {
@@ -9528,7 +9525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_38__0",
               "exportMapKey": "8 * aa_38__0 ",
               "moduleSpecifier": "./lib/a_38",
-              "fileName": "/lib/a_38.ts"
+              "fileName": "/home/src/project/project/lib/a_38.ts"
             }
           },
           {
@@ -9548,7 +9545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_38__1",
               "exportMapKey": "8 * aa_38__1 ",
               "moduleSpecifier": "./lib/a_38",
-              "fileName": "/lib/a_38.ts"
+              "fileName": "/home/src/project/project/lib/a_38.ts"
             }
           },
           {
@@ -9568,7 +9565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_38__2",
               "exportMapKey": "8 * aa_38__2 ",
               "moduleSpecifier": "./lib/a_38",
-              "fileName": "/lib/a_38.ts"
+              "fileName": "/home/src/project/project/lib/a_38.ts"
             }
           },
           {
@@ -9588,7 +9585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_38__3",
               "exportMapKey": "8 * aa_38__3 ",
               "moduleSpecifier": "./lib/a_38",
-              "fileName": "/lib/a_38.ts"
+              "fileName": "/home/src/project/project/lib/a_38.ts"
             }
           },
           {
@@ -9608,7 +9605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_38__4",
               "exportMapKey": "8 * aa_38__4 ",
               "moduleSpecifier": "./lib/a_38",
-              "fileName": "/lib/a_38.ts"
+              "fileName": "/home/src/project/project/lib/a_38.ts"
             }
           },
           {
@@ -9648,7 +9645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_39__0",
               "exportMapKey": "8 * aa_39__0 ",
               "moduleSpecifier": "./lib/a_39",
-              "fileName": "/lib/a_39.ts"
+              "fileName": "/home/src/project/project/lib/a_39.ts"
             }
           },
           {
@@ -9668,7 +9665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_39__1",
               "exportMapKey": "8 * aa_39__1 ",
               "moduleSpecifier": "./lib/a_39",
-              "fileName": "/lib/a_39.ts"
+              "fileName": "/home/src/project/project/lib/a_39.ts"
             }
           },
           {
@@ -9688,7 +9685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_39__2",
               "exportMapKey": "8 * aa_39__2 ",
               "moduleSpecifier": "./lib/a_39",
-              "fileName": "/lib/a_39.ts"
+              "fileName": "/home/src/project/project/lib/a_39.ts"
             }
           },
           {
@@ -9708,7 +9705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_39__3",
               "exportMapKey": "8 * aa_39__3 ",
               "moduleSpecifier": "./lib/a_39",
-              "fileName": "/lib/a_39.ts"
+              "fileName": "/home/src/project/project/lib/a_39.ts"
             }
           },
           {
@@ -9728,7 +9725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_39__4",
               "exportMapKey": "8 * aa_39__4 ",
               "moduleSpecifier": "./lib/a_39",
-              "fileName": "/lib/a_39.ts"
+              "fileName": "/home/src/project/project/lib/a_39.ts"
             }
           },
           {
@@ -9768,7 +9765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_40__0",
               "exportMapKey": "8 * aa_40__0 ",
               "moduleSpecifier": "./lib/a_40",
-              "fileName": "/lib/a_40.ts"
+              "fileName": "/home/src/project/project/lib/a_40.ts"
             }
           },
           {
@@ -9788,7 +9785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_40__1",
               "exportMapKey": "8 * aa_40__1 ",
               "moduleSpecifier": "./lib/a_40",
-              "fileName": "/lib/a_40.ts"
+              "fileName": "/home/src/project/project/lib/a_40.ts"
             }
           },
           {
@@ -9808,7 +9805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_40__2",
               "exportMapKey": "8 * aa_40__2 ",
               "moduleSpecifier": "./lib/a_40",
-              "fileName": "/lib/a_40.ts"
+              "fileName": "/home/src/project/project/lib/a_40.ts"
             }
           },
           {
@@ -9828,7 +9825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_40__3",
               "exportMapKey": "8 * aa_40__3 ",
               "moduleSpecifier": "./lib/a_40",
-              "fileName": "/lib/a_40.ts"
+              "fileName": "/home/src/project/project/lib/a_40.ts"
             }
           },
           {
@@ -9848,7 +9845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_40__4",
               "exportMapKey": "8 * aa_40__4 ",
               "moduleSpecifier": "./lib/a_40",
-              "fileName": "/lib/a_40.ts"
+              "fileName": "/home/src/project/project/lib/a_40.ts"
             }
           },
           {
@@ -9888,7 +9885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_41__0",
               "exportMapKey": "8 * aa_41__0 ",
               "moduleSpecifier": "./lib/a_41",
-              "fileName": "/lib/a_41.ts"
+              "fileName": "/home/src/project/project/lib/a_41.ts"
             }
           },
           {
@@ -9908,7 +9905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_41__1",
               "exportMapKey": "8 * aa_41__1 ",
               "moduleSpecifier": "./lib/a_41",
-              "fileName": "/lib/a_41.ts"
+              "fileName": "/home/src/project/project/lib/a_41.ts"
             }
           },
           {
@@ -9928,7 +9925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_41__2",
               "exportMapKey": "8 * aa_41__2 ",
               "moduleSpecifier": "./lib/a_41",
-              "fileName": "/lib/a_41.ts"
+              "fileName": "/home/src/project/project/lib/a_41.ts"
             }
           },
           {
@@ -9948,7 +9945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_41__3",
               "exportMapKey": "8 * aa_41__3 ",
               "moduleSpecifier": "./lib/a_41",
-              "fileName": "/lib/a_41.ts"
+              "fileName": "/home/src/project/project/lib/a_41.ts"
             }
           },
           {
@@ -9968,7 +9965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_41__4",
               "exportMapKey": "8 * aa_41__4 ",
               "moduleSpecifier": "./lib/a_41",
-              "fileName": "/lib/a_41.ts"
+              "fileName": "/home/src/project/project/lib/a_41.ts"
             }
           },
           {
@@ -10008,7 +10005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_42__0",
               "exportMapKey": "8 * aa_42__0 ",
               "moduleSpecifier": "./lib/a_42",
-              "fileName": "/lib/a_42.ts"
+              "fileName": "/home/src/project/project/lib/a_42.ts"
             }
           },
           {
@@ -10028,7 +10025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_42__1",
               "exportMapKey": "8 * aa_42__1 ",
               "moduleSpecifier": "./lib/a_42",
-              "fileName": "/lib/a_42.ts"
+              "fileName": "/home/src/project/project/lib/a_42.ts"
             }
           },
           {
@@ -10048,7 +10045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_42__2",
               "exportMapKey": "8 * aa_42__2 ",
               "moduleSpecifier": "./lib/a_42",
-              "fileName": "/lib/a_42.ts"
+              "fileName": "/home/src/project/project/lib/a_42.ts"
             }
           },
           {
@@ -10068,7 +10065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_42__3",
               "exportMapKey": "8 * aa_42__3 ",
               "moduleSpecifier": "./lib/a_42",
-              "fileName": "/lib/a_42.ts"
+              "fileName": "/home/src/project/project/lib/a_42.ts"
             }
           },
           {
@@ -10088,7 +10085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_42__4",
               "exportMapKey": "8 * aa_42__4 ",
               "moduleSpecifier": "./lib/a_42",
-              "fileName": "/lib/a_42.ts"
+              "fileName": "/home/src/project/project/lib/a_42.ts"
             }
           },
           {
@@ -10128,7 +10125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_43__0",
               "exportMapKey": "8 * aa_43__0 ",
               "moduleSpecifier": "./lib/a_43",
-              "fileName": "/lib/a_43.ts"
+              "fileName": "/home/src/project/project/lib/a_43.ts"
             }
           },
           {
@@ -10148,7 +10145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_43__1",
               "exportMapKey": "8 * aa_43__1 ",
               "moduleSpecifier": "./lib/a_43",
-              "fileName": "/lib/a_43.ts"
+              "fileName": "/home/src/project/project/lib/a_43.ts"
             }
           },
           {
@@ -10168,7 +10165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_43__2",
               "exportMapKey": "8 * aa_43__2 ",
               "moduleSpecifier": "./lib/a_43",
-              "fileName": "/lib/a_43.ts"
+              "fileName": "/home/src/project/project/lib/a_43.ts"
             }
           },
           {
@@ -10188,7 +10185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_43__3",
               "exportMapKey": "8 * aa_43__3 ",
               "moduleSpecifier": "./lib/a_43",
-              "fileName": "/lib/a_43.ts"
+              "fileName": "/home/src/project/project/lib/a_43.ts"
             }
           },
           {
@@ -10208,7 +10205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_43__4",
               "exportMapKey": "8 * aa_43__4 ",
               "moduleSpecifier": "./lib/a_43",
-              "fileName": "/lib/a_43.ts"
+              "fileName": "/home/src/project/project/lib/a_43.ts"
             }
           },
           {
@@ -10248,7 +10245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_44__0",
               "exportMapKey": "8 * aa_44__0 ",
               "moduleSpecifier": "./lib/a_44",
-              "fileName": "/lib/a_44.ts"
+              "fileName": "/home/src/project/project/lib/a_44.ts"
             }
           },
           {
@@ -10268,7 +10265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_44__1",
               "exportMapKey": "8 * aa_44__1 ",
               "moduleSpecifier": "./lib/a_44",
-              "fileName": "/lib/a_44.ts"
+              "fileName": "/home/src/project/project/lib/a_44.ts"
             }
           },
           {
@@ -10288,7 +10285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_44__2",
               "exportMapKey": "8 * aa_44__2 ",
               "moduleSpecifier": "./lib/a_44",
-              "fileName": "/lib/a_44.ts"
+              "fileName": "/home/src/project/project/lib/a_44.ts"
             }
           },
           {
@@ -10308,7 +10305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_44__3",
               "exportMapKey": "8 * aa_44__3 ",
               "moduleSpecifier": "./lib/a_44",
-              "fileName": "/lib/a_44.ts"
+              "fileName": "/home/src/project/project/lib/a_44.ts"
             }
           },
           {
@@ -10328,7 +10325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_44__4",
               "exportMapKey": "8 * aa_44__4 ",
               "moduleSpecifier": "./lib/a_44",
-              "fileName": "/lib/a_44.ts"
+              "fileName": "/home/src/project/project/lib/a_44.ts"
             }
           },
           {
@@ -10368,7 +10365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_45__0",
               "exportMapKey": "8 * aa_45__0 ",
               "moduleSpecifier": "./lib/a_45",
-              "fileName": "/lib/a_45.ts"
+              "fileName": "/home/src/project/project/lib/a_45.ts"
             }
           },
           {
@@ -10388,7 +10385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_45__1",
               "exportMapKey": "8 * aa_45__1 ",
               "moduleSpecifier": "./lib/a_45",
-              "fileName": "/lib/a_45.ts"
+              "fileName": "/home/src/project/project/lib/a_45.ts"
             }
           },
           {
@@ -10408,7 +10405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_45__2",
               "exportMapKey": "8 * aa_45__2 ",
               "moduleSpecifier": "./lib/a_45",
-              "fileName": "/lib/a_45.ts"
+              "fileName": "/home/src/project/project/lib/a_45.ts"
             }
           },
           {
@@ -10428,7 +10425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_45__3",
               "exportMapKey": "8 * aa_45__3 ",
               "moduleSpecifier": "./lib/a_45",
-              "fileName": "/lib/a_45.ts"
+              "fileName": "/home/src/project/project/lib/a_45.ts"
             }
           },
           {
@@ -10448,7 +10445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_45__4",
               "exportMapKey": "8 * aa_45__4 ",
               "moduleSpecifier": "./lib/a_45",
-              "fileName": "/lib/a_45.ts"
+              "fileName": "/home/src/project/project/lib/a_45.ts"
             }
           },
           {
@@ -10488,7 +10485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_46__0",
               "exportMapKey": "8 * aa_46__0 ",
               "moduleSpecifier": "./lib/a_46",
-              "fileName": "/lib/a_46.ts"
+              "fileName": "/home/src/project/project/lib/a_46.ts"
             }
           },
           {
@@ -10508,7 +10505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_46__1",
               "exportMapKey": "8 * aa_46__1 ",
               "moduleSpecifier": "./lib/a_46",
-              "fileName": "/lib/a_46.ts"
+              "fileName": "/home/src/project/project/lib/a_46.ts"
             }
           },
           {
@@ -10528,7 +10525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_46__2",
               "exportMapKey": "8 * aa_46__2 ",
               "moduleSpecifier": "./lib/a_46",
-              "fileName": "/lib/a_46.ts"
+              "fileName": "/home/src/project/project/lib/a_46.ts"
             }
           },
           {
@@ -10548,7 +10545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_46__3",
               "exportMapKey": "8 * aa_46__3 ",
               "moduleSpecifier": "./lib/a_46",
-              "fileName": "/lib/a_46.ts"
+              "fileName": "/home/src/project/project/lib/a_46.ts"
             }
           },
           {
@@ -10568,7 +10565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_46__4",
               "exportMapKey": "8 * aa_46__4 ",
               "moduleSpecifier": "./lib/a_46",
-              "fileName": "/lib/a_46.ts"
+              "fileName": "/home/src/project/project/lib/a_46.ts"
             }
           },
           {
@@ -10608,7 +10605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_47__0",
               "exportMapKey": "8 * aa_47__0 ",
               "moduleSpecifier": "./lib/a_47",
-              "fileName": "/lib/a_47.ts"
+              "fileName": "/home/src/project/project/lib/a_47.ts"
             }
           },
           {
@@ -10628,7 +10625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_47__1",
               "exportMapKey": "8 * aa_47__1 ",
               "moduleSpecifier": "./lib/a_47",
-              "fileName": "/lib/a_47.ts"
+              "fileName": "/home/src/project/project/lib/a_47.ts"
             }
           },
           {
@@ -10648,7 +10645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_47__2",
               "exportMapKey": "8 * aa_47__2 ",
               "moduleSpecifier": "./lib/a_47",
-              "fileName": "/lib/a_47.ts"
+              "fileName": "/home/src/project/project/lib/a_47.ts"
             }
           },
           {
@@ -10668,7 +10665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_47__3",
               "exportMapKey": "8 * aa_47__3 ",
               "moduleSpecifier": "./lib/a_47",
-              "fileName": "/lib/a_47.ts"
+              "fileName": "/home/src/project/project/lib/a_47.ts"
             }
           },
           {
@@ -10688,7 +10685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_47__4",
               "exportMapKey": "8 * aa_47__4 ",
               "moduleSpecifier": "./lib/a_47",
-              "fileName": "/lib/a_47.ts"
+              "fileName": "/home/src/project/project/lib/a_47.ts"
             }
           },
           {
@@ -10728,7 +10725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_48__0",
               "exportMapKey": "8 * aa_48__0 ",
               "moduleSpecifier": "./lib/a_48",
-              "fileName": "/lib/a_48.ts"
+              "fileName": "/home/src/project/project/lib/a_48.ts"
             }
           },
           {
@@ -10748,7 +10745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_48__1",
               "exportMapKey": "8 * aa_48__1 ",
               "moduleSpecifier": "./lib/a_48",
-              "fileName": "/lib/a_48.ts"
+              "fileName": "/home/src/project/project/lib/a_48.ts"
             }
           },
           {
@@ -10768,7 +10765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_48__2",
               "exportMapKey": "8 * aa_48__2 ",
               "moduleSpecifier": "./lib/a_48",
-              "fileName": "/lib/a_48.ts"
+              "fileName": "/home/src/project/project/lib/a_48.ts"
             }
           },
           {
@@ -10788,7 +10785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_48__3",
               "exportMapKey": "8 * aa_48__3 ",
               "moduleSpecifier": "./lib/a_48",
-              "fileName": "/lib/a_48.ts"
+              "fileName": "/home/src/project/project/lib/a_48.ts"
             }
           },
           {
@@ -10808,7 +10805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_48__4",
               "exportMapKey": "8 * aa_48__4 ",
               "moduleSpecifier": "./lib/a_48",
-              "fileName": "/lib/a_48.ts"
+              "fileName": "/home/src/project/project/lib/a_48.ts"
             }
           },
           {
@@ -10848,7 +10845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_49__0",
               "exportMapKey": "8 * aa_49__0 ",
               "moduleSpecifier": "./lib/a_49",
-              "fileName": "/lib/a_49.ts"
+              "fileName": "/home/src/project/project/lib/a_49.ts"
             }
           },
           {
@@ -10868,7 +10865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_49__1",
               "exportMapKey": "8 * aa_49__1 ",
               "moduleSpecifier": "./lib/a_49",
-              "fileName": "/lib/a_49.ts"
+              "fileName": "/home/src/project/project/lib/a_49.ts"
             }
           },
           {
@@ -10888,7 +10885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_49__2",
               "exportMapKey": "8 * aa_49__2 ",
               "moduleSpecifier": "./lib/a_49",
-              "fileName": "/lib/a_49.ts"
+              "fileName": "/home/src/project/project/lib/a_49.ts"
             }
           },
           {
@@ -10908,7 +10905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_49__3",
               "exportMapKey": "8 * aa_49__3 ",
               "moduleSpecifier": "./lib/a_49",
-              "fileName": "/lib/a_49.ts"
+              "fileName": "/home/src/project/project/lib/a_49.ts"
             }
           },
           {
@@ -10928,7 +10925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_49__4",
               "exportMapKey": "8 * aa_49__4 ",
               "moduleSpecifier": "./lib/a_49",
-              "fileName": "/lib/a_49.ts"
+              "fileName": "/home/src/project/project/lib/a_49.ts"
             }
           },
           {
@@ -10968,7 +10965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_50__0",
               "exportMapKey": "8 * aa_50__0 ",
               "moduleSpecifier": "./lib/a_50",
-              "fileName": "/lib/a_50.ts"
+              "fileName": "/home/src/project/project/lib/a_50.ts"
             }
           },
           {
@@ -10988,7 +10985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_50__1",
               "exportMapKey": "8 * aa_50__1 ",
               "moduleSpecifier": "./lib/a_50",
-              "fileName": "/lib/a_50.ts"
+              "fileName": "/home/src/project/project/lib/a_50.ts"
             }
           },
           {
@@ -11008,7 +11005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_50__2",
               "exportMapKey": "8 * aa_50__2 ",
               "moduleSpecifier": "./lib/a_50",
-              "fileName": "/lib/a_50.ts"
+              "fileName": "/home/src/project/project/lib/a_50.ts"
             }
           },
           {
@@ -11028,7 +11025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_50__3",
               "exportMapKey": "8 * aa_50__3 ",
               "moduleSpecifier": "./lib/a_50",
-              "fileName": "/lib/a_50.ts"
+              "fileName": "/home/src/project/project/lib/a_50.ts"
             }
           },
           {
@@ -11048,7 +11045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_50__4",
               "exportMapKey": "8 * aa_50__4 ",
               "moduleSpecifier": "./lib/a_50",
-              "fileName": "/lib/a_50.ts"
+              "fileName": "/home/src/project/project/lib/a_50.ts"
             }
           },
           {
@@ -11088,7 +11085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_51__0",
               "exportMapKey": "8 * aa_51__0 ",
               "moduleSpecifier": "./lib/a_51",
-              "fileName": "/lib/a_51.ts"
+              "fileName": "/home/src/project/project/lib/a_51.ts"
             }
           },
           {
@@ -11108,7 +11105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_51__1",
               "exportMapKey": "8 * aa_51__1 ",
               "moduleSpecifier": "./lib/a_51",
-              "fileName": "/lib/a_51.ts"
+              "fileName": "/home/src/project/project/lib/a_51.ts"
             }
           },
           {
@@ -11128,7 +11125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_51__2",
               "exportMapKey": "8 * aa_51__2 ",
               "moduleSpecifier": "./lib/a_51",
-              "fileName": "/lib/a_51.ts"
+              "fileName": "/home/src/project/project/lib/a_51.ts"
             }
           },
           {
@@ -11148,7 +11145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_51__3",
               "exportMapKey": "8 * aa_51__3 ",
               "moduleSpecifier": "./lib/a_51",
-              "fileName": "/lib/a_51.ts"
+              "fileName": "/home/src/project/project/lib/a_51.ts"
             }
           },
           {
@@ -11168,7 +11165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_51__4",
               "exportMapKey": "8 * aa_51__4 ",
               "moduleSpecifier": "./lib/a_51",
-              "fileName": "/lib/a_51.ts"
+              "fileName": "/home/src/project/project/lib/a_51.ts"
             }
           },
           {
@@ -11208,7 +11205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_52__0",
               "exportMapKey": "8 * aa_52__0 ",
               "moduleSpecifier": "./lib/a_52",
-              "fileName": "/lib/a_52.ts"
+              "fileName": "/home/src/project/project/lib/a_52.ts"
             }
           },
           {
@@ -11228,7 +11225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_52__1",
               "exportMapKey": "8 * aa_52__1 ",
               "moduleSpecifier": "./lib/a_52",
-              "fileName": "/lib/a_52.ts"
+              "fileName": "/home/src/project/project/lib/a_52.ts"
             }
           },
           {
@@ -11248,7 +11245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_52__2",
               "exportMapKey": "8 * aa_52__2 ",
               "moduleSpecifier": "./lib/a_52",
-              "fileName": "/lib/a_52.ts"
+              "fileName": "/home/src/project/project/lib/a_52.ts"
             }
           },
           {
@@ -11268,7 +11265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_52__3",
               "exportMapKey": "8 * aa_52__3 ",
               "moduleSpecifier": "./lib/a_52",
-              "fileName": "/lib/a_52.ts"
+              "fileName": "/home/src/project/project/lib/a_52.ts"
             }
           },
           {
@@ -11288,7 +11285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_52__4",
               "exportMapKey": "8 * aa_52__4 ",
               "moduleSpecifier": "./lib/a_52",
-              "fileName": "/lib/a_52.ts"
+              "fileName": "/home/src/project/project/lib/a_52.ts"
             }
           },
           {
@@ -11328,7 +11325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_53__0",
               "exportMapKey": "8 * aa_53__0 ",
               "moduleSpecifier": "./lib/a_53",
-              "fileName": "/lib/a_53.ts"
+              "fileName": "/home/src/project/project/lib/a_53.ts"
             }
           },
           {
@@ -11348,7 +11345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_53__1",
               "exportMapKey": "8 * aa_53__1 ",
               "moduleSpecifier": "./lib/a_53",
-              "fileName": "/lib/a_53.ts"
+              "fileName": "/home/src/project/project/lib/a_53.ts"
             }
           },
           {
@@ -11368,7 +11365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_53__2",
               "exportMapKey": "8 * aa_53__2 ",
               "moduleSpecifier": "./lib/a_53",
-              "fileName": "/lib/a_53.ts"
+              "fileName": "/home/src/project/project/lib/a_53.ts"
             }
           },
           {
@@ -11388,7 +11385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_53__3",
               "exportMapKey": "8 * aa_53__3 ",
               "moduleSpecifier": "./lib/a_53",
-              "fileName": "/lib/a_53.ts"
+              "fileName": "/home/src/project/project/lib/a_53.ts"
             }
           },
           {
@@ -11408,7 +11405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_53__4",
               "exportMapKey": "8 * aa_53__4 ",
               "moduleSpecifier": "./lib/a_53",
-              "fileName": "/lib/a_53.ts"
+              "fileName": "/home/src/project/project/lib/a_53.ts"
             }
           },
           {
@@ -11448,7 +11445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_54__0",
               "exportMapKey": "8 * aa_54__0 ",
               "moduleSpecifier": "./lib/a_54",
-              "fileName": "/lib/a_54.ts"
+              "fileName": "/home/src/project/project/lib/a_54.ts"
             }
           },
           {
@@ -11468,7 +11465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_54__1",
               "exportMapKey": "8 * aa_54__1 ",
               "moduleSpecifier": "./lib/a_54",
-              "fileName": "/lib/a_54.ts"
+              "fileName": "/home/src/project/project/lib/a_54.ts"
             }
           },
           {
@@ -11488,7 +11485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_54__2",
               "exportMapKey": "8 * aa_54__2 ",
               "moduleSpecifier": "./lib/a_54",
-              "fileName": "/lib/a_54.ts"
+              "fileName": "/home/src/project/project/lib/a_54.ts"
             }
           },
           {
@@ -11508,7 +11505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_54__3",
               "exportMapKey": "8 * aa_54__3 ",
               "moduleSpecifier": "./lib/a_54",
-              "fileName": "/lib/a_54.ts"
+              "fileName": "/home/src/project/project/lib/a_54.ts"
             }
           },
           {
@@ -11528,7 +11525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_54__4",
               "exportMapKey": "8 * aa_54__4 ",
               "moduleSpecifier": "./lib/a_54",
-              "fileName": "/lib/a_54.ts"
+              "fileName": "/home/src/project/project/lib/a_54.ts"
             }
           },
           {
@@ -11568,7 +11565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_55__0",
               "exportMapKey": "8 * aa_55__0 ",
               "moduleSpecifier": "./lib/a_55",
-              "fileName": "/lib/a_55.ts"
+              "fileName": "/home/src/project/project/lib/a_55.ts"
             }
           },
           {
@@ -11588,7 +11585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_55__1",
               "exportMapKey": "8 * aa_55__1 ",
               "moduleSpecifier": "./lib/a_55",
-              "fileName": "/lib/a_55.ts"
+              "fileName": "/home/src/project/project/lib/a_55.ts"
             }
           },
           {
@@ -11608,7 +11605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_55__2",
               "exportMapKey": "8 * aa_55__2 ",
               "moduleSpecifier": "./lib/a_55",
-              "fileName": "/lib/a_55.ts"
+              "fileName": "/home/src/project/project/lib/a_55.ts"
             }
           },
           {
@@ -11628,7 +11625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_55__3",
               "exportMapKey": "8 * aa_55__3 ",
               "moduleSpecifier": "./lib/a_55",
-              "fileName": "/lib/a_55.ts"
+              "fileName": "/home/src/project/project/lib/a_55.ts"
             }
           },
           {
@@ -11648,7 +11645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_55__4",
               "exportMapKey": "8 * aa_55__4 ",
               "moduleSpecifier": "./lib/a_55",
-              "fileName": "/lib/a_55.ts"
+              "fileName": "/home/src/project/project/lib/a_55.ts"
             }
           },
           {
@@ -11688,7 +11685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_56__0",
               "exportMapKey": "8 * aa_56__0 ",
               "moduleSpecifier": "./lib/a_56",
-              "fileName": "/lib/a_56.ts"
+              "fileName": "/home/src/project/project/lib/a_56.ts"
             }
           },
           {
@@ -11708,7 +11705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_56__1",
               "exportMapKey": "8 * aa_56__1 ",
               "moduleSpecifier": "./lib/a_56",
-              "fileName": "/lib/a_56.ts"
+              "fileName": "/home/src/project/project/lib/a_56.ts"
             }
           },
           {
@@ -11728,7 +11725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_56__2",
               "exportMapKey": "8 * aa_56__2 ",
               "moduleSpecifier": "./lib/a_56",
-              "fileName": "/lib/a_56.ts"
+              "fileName": "/home/src/project/project/lib/a_56.ts"
             }
           },
           {
@@ -11748,7 +11745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_56__3",
               "exportMapKey": "8 * aa_56__3 ",
               "moduleSpecifier": "./lib/a_56",
-              "fileName": "/lib/a_56.ts"
+              "fileName": "/home/src/project/project/lib/a_56.ts"
             }
           },
           {
@@ -11768,7 +11765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_56__4",
               "exportMapKey": "8 * aa_56__4 ",
               "moduleSpecifier": "./lib/a_56",
-              "fileName": "/lib/a_56.ts"
+              "fileName": "/home/src/project/project/lib/a_56.ts"
             }
           },
           {
@@ -11808,7 +11805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_57__0",
               "exportMapKey": "8 * aa_57__0 ",
               "moduleSpecifier": "./lib/a_57",
-              "fileName": "/lib/a_57.ts"
+              "fileName": "/home/src/project/project/lib/a_57.ts"
             }
           },
           {
@@ -11828,7 +11825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_57__1",
               "exportMapKey": "8 * aa_57__1 ",
               "moduleSpecifier": "./lib/a_57",
-              "fileName": "/lib/a_57.ts"
+              "fileName": "/home/src/project/project/lib/a_57.ts"
             }
           },
           {
@@ -11848,7 +11845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_57__2",
               "exportMapKey": "8 * aa_57__2 ",
               "moduleSpecifier": "./lib/a_57",
-              "fileName": "/lib/a_57.ts"
+              "fileName": "/home/src/project/project/lib/a_57.ts"
             }
           },
           {
@@ -11868,7 +11865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_57__3",
               "exportMapKey": "8 * aa_57__3 ",
               "moduleSpecifier": "./lib/a_57",
-              "fileName": "/lib/a_57.ts"
+              "fileName": "/home/src/project/project/lib/a_57.ts"
             }
           },
           {
@@ -11888,7 +11885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_57__4",
               "exportMapKey": "8 * aa_57__4 ",
               "moduleSpecifier": "./lib/a_57",
-              "fileName": "/lib/a_57.ts"
+              "fileName": "/home/src/project/project/lib/a_57.ts"
             }
           },
           {
@@ -11928,7 +11925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_58__0",
               "exportMapKey": "8 * aa_58__0 ",
               "moduleSpecifier": "./lib/a_58",
-              "fileName": "/lib/a_58.ts"
+              "fileName": "/home/src/project/project/lib/a_58.ts"
             }
           },
           {
@@ -11948,7 +11945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_58__1",
               "exportMapKey": "8 * aa_58__1 ",
               "moduleSpecifier": "./lib/a_58",
-              "fileName": "/lib/a_58.ts"
+              "fileName": "/home/src/project/project/lib/a_58.ts"
             }
           },
           {
@@ -11968,7 +11965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_58__2",
               "exportMapKey": "8 * aa_58__2 ",
               "moduleSpecifier": "./lib/a_58",
-              "fileName": "/lib/a_58.ts"
+              "fileName": "/home/src/project/project/lib/a_58.ts"
             }
           },
           {
@@ -11988,7 +11985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_58__3",
               "exportMapKey": "8 * aa_58__3 ",
               "moduleSpecifier": "./lib/a_58",
-              "fileName": "/lib/a_58.ts"
+              "fileName": "/home/src/project/project/lib/a_58.ts"
             }
           },
           {
@@ -12008,7 +12005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_58__4",
               "exportMapKey": "8 * aa_58__4 ",
               "moduleSpecifier": "./lib/a_58",
-              "fileName": "/lib/a_58.ts"
+              "fileName": "/home/src/project/project/lib/a_58.ts"
             }
           },
           {
@@ -12048,7 +12045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_59__0",
               "exportMapKey": "8 * aa_59__0 ",
               "moduleSpecifier": "./lib/a_59",
-              "fileName": "/lib/a_59.ts"
+              "fileName": "/home/src/project/project/lib/a_59.ts"
             }
           },
           {
@@ -12068,7 +12065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_59__1",
               "exportMapKey": "8 * aa_59__1 ",
               "moduleSpecifier": "./lib/a_59",
-              "fileName": "/lib/a_59.ts"
+              "fileName": "/home/src/project/project/lib/a_59.ts"
             }
           },
           {
@@ -12088,7 +12085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_59__2",
               "exportMapKey": "8 * aa_59__2 ",
               "moduleSpecifier": "./lib/a_59",
-              "fileName": "/lib/a_59.ts"
+              "fileName": "/home/src/project/project/lib/a_59.ts"
             }
           },
           {
@@ -12108,7 +12105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_59__3",
               "exportMapKey": "8 * aa_59__3 ",
               "moduleSpecifier": "./lib/a_59",
-              "fileName": "/lib/a_59.ts"
+              "fileName": "/home/src/project/project/lib/a_59.ts"
             }
           },
           {
@@ -12128,7 +12125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_59__4",
               "exportMapKey": "8 * aa_59__4 ",
               "moduleSpecifier": "./lib/a_59",
-              "fileName": "/lib/a_59.ts"
+              "fileName": "/home/src/project/project/lib/a_59.ts"
             }
           },
           {
@@ -12168,7 +12165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_60__0",
               "exportMapKey": "8 * aa_60__0 ",
               "moduleSpecifier": "./lib/a_60",
-              "fileName": "/lib/a_60.ts"
+              "fileName": "/home/src/project/project/lib/a_60.ts"
             }
           },
           {
@@ -12188,7 +12185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_60__1",
               "exportMapKey": "8 * aa_60__1 ",
               "moduleSpecifier": "./lib/a_60",
-              "fileName": "/lib/a_60.ts"
+              "fileName": "/home/src/project/project/lib/a_60.ts"
             }
           },
           {
@@ -12208,7 +12205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_60__2",
               "exportMapKey": "8 * aa_60__2 ",
               "moduleSpecifier": "./lib/a_60",
-              "fileName": "/lib/a_60.ts"
+              "fileName": "/home/src/project/project/lib/a_60.ts"
             }
           },
           {
@@ -12228,7 +12225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_60__3",
               "exportMapKey": "8 * aa_60__3 ",
               "moduleSpecifier": "./lib/a_60",
-              "fileName": "/lib/a_60.ts"
+              "fileName": "/home/src/project/project/lib/a_60.ts"
             }
           },
           {
@@ -12248,7 +12245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_60__4",
               "exportMapKey": "8 * aa_60__4 ",
               "moduleSpecifier": "./lib/a_60",
-              "fileName": "/lib/a_60.ts"
+              "fileName": "/home/src/project/project/lib/a_60.ts"
             }
           },
           {
@@ -12288,7 +12285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_61__0",
               "exportMapKey": "8 * aa_61__0 ",
               "moduleSpecifier": "./lib/a_61",
-              "fileName": "/lib/a_61.ts"
+              "fileName": "/home/src/project/project/lib/a_61.ts"
             }
           },
           {
@@ -12308,7 +12305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_61__1",
               "exportMapKey": "8 * aa_61__1 ",
               "moduleSpecifier": "./lib/a_61",
-              "fileName": "/lib/a_61.ts"
+              "fileName": "/home/src/project/project/lib/a_61.ts"
             }
           },
           {
@@ -12328,7 +12325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_61__2",
               "exportMapKey": "8 * aa_61__2 ",
               "moduleSpecifier": "./lib/a_61",
-              "fileName": "/lib/a_61.ts"
+              "fileName": "/home/src/project/project/lib/a_61.ts"
             }
           },
           {
@@ -12348,7 +12345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_61__3",
               "exportMapKey": "8 * aa_61__3 ",
               "moduleSpecifier": "./lib/a_61",
-              "fileName": "/lib/a_61.ts"
+              "fileName": "/home/src/project/project/lib/a_61.ts"
             }
           },
           {
@@ -12368,7 +12365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_61__4",
               "exportMapKey": "8 * aa_61__4 ",
               "moduleSpecifier": "./lib/a_61",
-              "fileName": "/lib/a_61.ts"
+              "fileName": "/home/src/project/project/lib/a_61.ts"
             }
           },
           {
@@ -12408,7 +12405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_62__0",
               "exportMapKey": "8 * aa_62__0 ",
               "moduleSpecifier": "./lib/a_62",
-              "fileName": "/lib/a_62.ts"
+              "fileName": "/home/src/project/project/lib/a_62.ts"
             }
           },
           {
@@ -12428,7 +12425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_62__1",
               "exportMapKey": "8 * aa_62__1 ",
               "moduleSpecifier": "./lib/a_62",
-              "fileName": "/lib/a_62.ts"
+              "fileName": "/home/src/project/project/lib/a_62.ts"
             }
           },
           {
@@ -12448,7 +12445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_62__2",
               "exportMapKey": "8 * aa_62__2 ",
               "moduleSpecifier": "./lib/a_62",
-              "fileName": "/lib/a_62.ts"
+              "fileName": "/home/src/project/project/lib/a_62.ts"
             }
           },
           {
@@ -12468,7 +12465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_62__3",
               "exportMapKey": "8 * aa_62__3 ",
               "moduleSpecifier": "./lib/a_62",
-              "fileName": "/lib/a_62.ts"
+              "fileName": "/home/src/project/project/lib/a_62.ts"
             }
           },
           {
@@ -12488,7 +12485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_62__4",
               "exportMapKey": "8 * aa_62__4 ",
               "moduleSpecifier": "./lib/a_62",
-              "fileName": "/lib/a_62.ts"
+              "fileName": "/home/src/project/project/lib/a_62.ts"
             }
           },
           {
@@ -12528,7 +12525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_63__0",
               "exportMapKey": "8 * aa_63__0 ",
               "moduleSpecifier": "./lib/a_63",
-              "fileName": "/lib/a_63.ts"
+              "fileName": "/home/src/project/project/lib/a_63.ts"
             }
           },
           {
@@ -12548,7 +12545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_63__1",
               "exportMapKey": "8 * aa_63__1 ",
               "moduleSpecifier": "./lib/a_63",
-              "fileName": "/lib/a_63.ts"
+              "fileName": "/home/src/project/project/lib/a_63.ts"
             }
           },
           {
@@ -12568,7 +12565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_63__2",
               "exportMapKey": "8 * aa_63__2 ",
               "moduleSpecifier": "./lib/a_63",
-              "fileName": "/lib/a_63.ts"
+              "fileName": "/home/src/project/project/lib/a_63.ts"
             }
           },
           {
@@ -12588,7 +12585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_63__3",
               "exportMapKey": "8 * aa_63__3 ",
               "moduleSpecifier": "./lib/a_63",
-              "fileName": "/lib/a_63.ts"
+              "fileName": "/home/src/project/project/lib/a_63.ts"
             }
           },
           {
@@ -12608,7 +12605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_63__4",
               "exportMapKey": "8 * aa_63__4 ",
               "moduleSpecifier": "./lib/a_63",
-              "fileName": "/lib/a_63.ts"
+              "fileName": "/home/src/project/project/lib/a_63.ts"
             }
           },
           {
@@ -12648,7 +12645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_64__0",
               "exportMapKey": "8 * aa_64__0 ",
               "moduleSpecifier": "./lib/a_64",
-              "fileName": "/lib/a_64.ts"
+              "fileName": "/home/src/project/project/lib/a_64.ts"
             }
           },
           {
@@ -12668,7 +12665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_64__1",
               "exportMapKey": "8 * aa_64__1 ",
               "moduleSpecifier": "./lib/a_64",
-              "fileName": "/lib/a_64.ts"
+              "fileName": "/home/src/project/project/lib/a_64.ts"
             }
           },
           {
@@ -12688,7 +12685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_64__2",
               "exportMapKey": "8 * aa_64__2 ",
               "moduleSpecifier": "./lib/a_64",
-              "fileName": "/lib/a_64.ts"
+              "fileName": "/home/src/project/project/lib/a_64.ts"
             }
           },
           {
@@ -12708,7 +12705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_64__3",
               "exportMapKey": "8 * aa_64__3 ",
               "moduleSpecifier": "./lib/a_64",
-              "fileName": "/lib/a_64.ts"
+              "fileName": "/home/src/project/project/lib/a_64.ts"
             }
           },
           {
@@ -12728,7 +12725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_64__4",
               "exportMapKey": "8 * aa_64__4 ",
               "moduleSpecifier": "./lib/a_64",
-              "fileName": "/lib/a_64.ts"
+              "fileName": "/home/src/project/project/lib/a_64.ts"
             }
           },
           {
@@ -12768,7 +12765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_65__0",
               "exportMapKey": "8 * aa_65__0 ",
               "moduleSpecifier": "./lib/a_65",
-              "fileName": "/lib/a_65.ts"
+              "fileName": "/home/src/project/project/lib/a_65.ts"
             }
           },
           {
@@ -12788,7 +12785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_65__1",
               "exportMapKey": "8 * aa_65__1 ",
               "moduleSpecifier": "./lib/a_65",
-              "fileName": "/lib/a_65.ts"
+              "fileName": "/home/src/project/project/lib/a_65.ts"
             }
           },
           {
@@ -12808,7 +12805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_65__2",
               "exportMapKey": "8 * aa_65__2 ",
               "moduleSpecifier": "./lib/a_65",
-              "fileName": "/lib/a_65.ts"
+              "fileName": "/home/src/project/project/lib/a_65.ts"
             }
           },
           {
@@ -12828,7 +12825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_65__3",
               "exportMapKey": "8 * aa_65__3 ",
               "moduleSpecifier": "./lib/a_65",
-              "fileName": "/lib/a_65.ts"
+              "fileName": "/home/src/project/project/lib/a_65.ts"
             }
           },
           {
@@ -12848,7 +12845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_65__4",
               "exportMapKey": "8 * aa_65__4 ",
               "moduleSpecifier": "./lib/a_65",
-              "fileName": "/lib/a_65.ts"
+              "fileName": "/home/src/project/project/lib/a_65.ts"
             }
           },
           {
@@ -12888,7 +12885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_66__0",
               "exportMapKey": "8 * aa_66__0 ",
               "moduleSpecifier": "./lib/a_66",
-              "fileName": "/lib/a_66.ts"
+              "fileName": "/home/src/project/project/lib/a_66.ts"
             }
           },
           {
@@ -12908,7 +12905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_66__1",
               "exportMapKey": "8 * aa_66__1 ",
               "moduleSpecifier": "./lib/a_66",
-              "fileName": "/lib/a_66.ts"
+              "fileName": "/home/src/project/project/lib/a_66.ts"
             }
           },
           {
@@ -12928,7 +12925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_66__2",
               "exportMapKey": "8 * aa_66__2 ",
               "moduleSpecifier": "./lib/a_66",
-              "fileName": "/lib/a_66.ts"
+              "fileName": "/home/src/project/project/lib/a_66.ts"
             }
           },
           {
@@ -12948,7 +12945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_66__3",
               "exportMapKey": "8 * aa_66__3 ",
               "moduleSpecifier": "./lib/a_66",
-              "fileName": "/lib/a_66.ts"
+              "fileName": "/home/src/project/project/lib/a_66.ts"
             }
           },
           {
@@ -12968,7 +12965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_66__4",
               "exportMapKey": "8 * aa_66__4 ",
               "moduleSpecifier": "./lib/a_66",
-              "fileName": "/lib/a_66.ts"
+              "fileName": "/home/src/project/project/lib/a_66.ts"
             }
           },
           {
@@ -13008,7 +13005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_67__0",
               "exportMapKey": "8 * aa_67__0 ",
               "moduleSpecifier": "./lib/a_67",
-              "fileName": "/lib/a_67.ts"
+              "fileName": "/home/src/project/project/lib/a_67.ts"
             }
           },
           {
@@ -13028,7 +13025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_67__1",
               "exportMapKey": "8 * aa_67__1 ",
               "moduleSpecifier": "./lib/a_67",
-              "fileName": "/lib/a_67.ts"
+              "fileName": "/home/src/project/project/lib/a_67.ts"
             }
           },
           {
@@ -13048,7 +13045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_67__2",
               "exportMapKey": "8 * aa_67__2 ",
               "moduleSpecifier": "./lib/a_67",
-              "fileName": "/lib/a_67.ts"
+              "fileName": "/home/src/project/project/lib/a_67.ts"
             }
           },
           {
@@ -13068,7 +13065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_67__3",
               "exportMapKey": "8 * aa_67__3 ",
               "moduleSpecifier": "./lib/a_67",
-              "fileName": "/lib/a_67.ts"
+              "fileName": "/home/src/project/project/lib/a_67.ts"
             }
           },
           {
@@ -13088,7 +13085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_67__4",
               "exportMapKey": "8 * aa_67__4 ",
               "moduleSpecifier": "./lib/a_67",
-              "fileName": "/lib/a_67.ts"
+              "fileName": "/home/src/project/project/lib/a_67.ts"
             }
           },
           {
@@ -13128,7 +13125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_68__0",
               "exportMapKey": "8 * aa_68__0 ",
               "moduleSpecifier": "./lib/a_68",
-              "fileName": "/lib/a_68.ts"
+              "fileName": "/home/src/project/project/lib/a_68.ts"
             }
           },
           {
@@ -13148,7 +13145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_68__1",
               "exportMapKey": "8 * aa_68__1 ",
               "moduleSpecifier": "./lib/a_68",
-              "fileName": "/lib/a_68.ts"
+              "fileName": "/home/src/project/project/lib/a_68.ts"
             }
           },
           {
@@ -13168,7 +13165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_68__2",
               "exportMapKey": "8 * aa_68__2 ",
               "moduleSpecifier": "./lib/a_68",
-              "fileName": "/lib/a_68.ts"
+              "fileName": "/home/src/project/project/lib/a_68.ts"
             }
           },
           {
@@ -13188,7 +13185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_68__3",
               "exportMapKey": "8 * aa_68__3 ",
               "moduleSpecifier": "./lib/a_68",
-              "fileName": "/lib/a_68.ts"
+              "fileName": "/home/src/project/project/lib/a_68.ts"
             }
           },
           {
@@ -13208,7 +13205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_68__4",
               "exportMapKey": "8 * aa_68__4 ",
               "moduleSpecifier": "./lib/a_68",
-              "fileName": "/lib/a_68.ts"
+              "fileName": "/home/src/project/project/lib/a_68.ts"
             }
           },
           {
@@ -13248,7 +13245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_69__0",
               "exportMapKey": "8 * aa_69__0 ",
               "moduleSpecifier": "./lib/a_69",
-              "fileName": "/lib/a_69.ts"
+              "fileName": "/home/src/project/project/lib/a_69.ts"
             }
           },
           {
@@ -13268,7 +13265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_69__1",
               "exportMapKey": "8 * aa_69__1 ",
               "moduleSpecifier": "./lib/a_69",
-              "fileName": "/lib/a_69.ts"
+              "fileName": "/home/src/project/project/lib/a_69.ts"
             }
           },
           {
@@ -13288,7 +13285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_69__2",
               "exportMapKey": "8 * aa_69__2 ",
               "moduleSpecifier": "./lib/a_69",
-              "fileName": "/lib/a_69.ts"
+              "fileName": "/home/src/project/project/lib/a_69.ts"
             }
           },
           {
@@ -13308,7 +13305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_69__3",
               "exportMapKey": "8 * aa_69__3 ",
               "moduleSpecifier": "./lib/a_69",
-              "fileName": "/lib/a_69.ts"
+              "fileName": "/home/src/project/project/lib/a_69.ts"
             }
           },
           {
@@ -13328,7 +13325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_69__4",
               "exportMapKey": "8 * aa_69__4 ",
               "moduleSpecifier": "./lib/a_69",
-              "fileName": "/lib/a_69.ts"
+              "fileName": "/home/src/project/project/lib/a_69.ts"
             }
           },
           {
@@ -13368,7 +13365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_70__0",
               "exportMapKey": "8 * aa_70__0 ",
               "moduleSpecifier": "./lib/a_70",
-              "fileName": "/lib/a_70.ts"
+              "fileName": "/home/src/project/project/lib/a_70.ts"
             }
           },
           {
@@ -13388,7 +13385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_70__1",
               "exportMapKey": "8 * aa_70__1 ",
               "moduleSpecifier": "./lib/a_70",
-              "fileName": "/lib/a_70.ts"
+              "fileName": "/home/src/project/project/lib/a_70.ts"
             }
           },
           {
@@ -13408,7 +13405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_70__2",
               "exportMapKey": "8 * aa_70__2 ",
               "moduleSpecifier": "./lib/a_70",
-              "fileName": "/lib/a_70.ts"
+              "fileName": "/home/src/project/project/lib/a_70.ts"
             }
           },
           {
@@ -13428,7 +13425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_70__3",
               "exportMapKey": "8 * aa_70__3 ",
               "moduleSpecifier": "./lib/a_70",
-              "fileName": "/lib/a_70.ts"
+              "fileName": "/home/src/project/project/lib/a_70.ts"
             }
           },
           {
@@ -13448,7 +13445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_70__4",
               "exportMapKey": "8 * aa_70__4 ",
               "moduleSpecifier": "./lib/a_70",
-              "fileName": "/lib/a_70.ts"
+              "fileName": "/home/src/project/project/lib/a_70.ts"
             }
           },
           {
@@ -13488,7 +13485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_71__0",
               "exportMapKey": "8 * aa_71__0 ",
               "moduleSpecifier": "./lib/a_71",
-              "fileName": "/lib/a_71.ts"
+              "fileName": "/home/src/project/project/lib/a_71.ts"
             }
           },
           {
@@ -13508,7 +13505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_71__1",
               "exportMapKey": "8 * aa_71__1 ",
               "moduleSpecifier": "./lib/a_71",
-              "fileName": "/lib/a_71.ts"
+              "fileName": "/home/src/project/project/lib/a_71.ts"
             }
           },
           {
@@ -13528,7 +13525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_71__2",
               "exportMapKey": "8 * aa_71__2 ",
               "moduleSpecifier": "./lib/a_71",
-              "fileName": "/lib/a_71.ts"
+              "fileName": "/home/src/project/project/lib/a_71.ts"
             }
           },
           {
@@ -13548,7 +13545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_71__3",
               "exportMapKey": "8 * aa_71__3 ",
               "moduleSpecifier": "./lib/a_71",
-              "fileName": "/lib/a_71.ts"
+              "fileName": "/home/src/project/project/lib/a_71.ts"
             }
           },
           {
@@ -13568,7 +13565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_71__4",
               "exportMapKey": "8 * aa_71__4 ",
               "moduleSpecifier": "./lib/a_71",
-              "fileName": "/lib/a_71.ts"
+              "fileName": "/home/src/project/project/lib/a_71.ts"
             }
           },
           {
@@ -13608,7 +13605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_72__0",
               "exportMapKey": "8 * aa_72__0 ",
               "moduleSpecifier": "./lib/a_72",
-              "fileName": "/lib/a_72.ts"
+              "fileName": "/home/src/project/project/lib/a_72.ts"
             }
           },
           {
@@ -13628,7 +13625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_72__1",
               "exportMapKey": "8 * aa_72__1 ",
               "moduleSpecifier": "./lib/a_72",
-              "fileName": "/lib/a_72.ts"
+              "fileName": "/home/src/project/project/lib/a_72.ts"
             }
           },
           {
@@ -13648,7 +13645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_72__2",
               "exportMapKey": "8 * aa_72__2 ",
               "moduleSpecifier": "./lib/a_72",
-              "fileName": "/lib/a_72.ts"
+              "fileName": "/home/src/project/project/lib/a_72.ts"
             }
           },
           {
@@ -13668,7 +13665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_72__3",
               "exportMapKey": "8 * aa_72__3 ",
               "moduleSpecifier": "./lib/a_72",
-              "fileName": "/lib/a_72.ts"
+              "fileName": "/home/src/project/project/lib/a_72.ts"
             }
           },
           {
@@ -13688,7 +13685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_72__4",
               "exportMapKey": "8 * aa_72__4 ",
               "moduleSpecifier": "./lib/a_72",
-              "fileName": "/lib/a_72.ts"
+              "fileName": "/home/src/project/project/lib/a_72.ts"
             }
           },
           {
@@ -13728,7 +13725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_73__0",
               "exportMapKey": "8 * aa_73__0 ",
               "moduleSpecifier": "./lib/a_73",
-              "fileName": "/lib/a_73.ts"
+              "fileName": "/home/src/project/project/lib/a_73.ts"
             }
           },
           {
@@ -13748,7 +13745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_73__1",
               "exportMapKey": "8 * aa_73__1 ",
               "moduleSpecifier": "./lib/a_73",
-              "fileName": "/lib/a_73.ts"
+              "fileName": "/home/src/project/project/lib/a_73.ts"
             }
           },
           {
@@ -13768,7 +13765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_73__2",
               "exportMapKey": "8 * aa_73__2 ",
               "moduleSpecifier": "./lib/a_73",
-              "fileName": "/lib/a_73.ts"
+              "fileName": "/home/src/project/project/lib/a_73.ts"
             }
           },
           {
@@ -13788,7 +13785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_73__3",
               "exportMapKey": "8 * aa_73__3 ",
               "moduleSpecifier": "./lib/a_73",
-              "fileName": "/lib/a_73.ts"
+              "fileName": "/home/src/project/project/lib/a_73.ts"
             }
           },
           {
@@ -13808,7 +13805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_73__4",
               "exportMapKey": "8 * aa_73__4 ",
               "moduleSpecifier": "./lib/a_73",
-              "fileName": "/lib/a_73.ts"
+              "fileName": "/home/src/project/project/lib/a_73.ts"
             }
           },
           {
@@ -13848,7 +13845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_74__0",
               "exportMapKey": "8 * aa_74__0 ",
               "moduleSpecifier": "./lib/a_74",
-              "fileName": "/lib/a_74.ts"
+              "fileName": "/home/src/project/project/lib/a_74.ts"
             }
           },
           {
@@ -13868,7 +13865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_74__1",
               "exportMapKey": "8 * aa_74__1 ",
               "moduleSpecifier": "./lib/a_74",
-              "fileName": "/lib/a_74.ts"
+              "fileName": "/home/src/project/project/lib/a_74.ts"
             }
           },
           {
@@ -13888,7 +13885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_74__2",
               "exportMapKey": "8 * aa_74__2 ",
               "moduleSpecifier": "./lib/a_74",
-              "fileName": "/lib/a_74.ts"
+              "fileName": "/home/src/project/project/lib/a_74.ts"
             }
           },
           {
@@ -13908,7 +13905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_74__3",
               "exportMapKey": "8 * aa_74__3 ",
               "moduleSpecifier": "./lib/a_74",
-              "fileName": "/lib/a_74.ts"
+              "fileName": "/home/src/project/project/lib/a_74.ts"
             }
           },
           {
@@ -13928,7 +13925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_74__4",
               "exportMapKey": "8 * aa_74__4 ",
               "moduleSpecifier": "./lib/a_74",
-              "fileName": "/lib/a_74.ts"
+              "fileName": "/home/src/project/project/lib/a_74.ts"
             }
           },
           {
@@ -13968,7 +13965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_75__0",
               "exportMapKey": "8 * aa_75__0 ",
               "moduleSpecifier": "./lib/a_75",
-              "fileName": "/lib/a_75.ts"
+              "fileName": "/home/src/project/project/lib/a_75.ts"
             }
           },
           {
@@ -13988,7 +13985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_75__1",
               "exportMapKey": "8 * aa_75__1 ",
               "moduleSpecifier": "./lib/a_75",
-              "fileName": "/lib/a_75.ts"
+              "fileName": "/home/src/project/project/lib/a_75.ts"
             }
           },
           {
@@ -14008,7 +14005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_75__2",
               "exportMapKey": "8 * aa_75__2 ",
               "moduleSpecifier": "./lib/a_75",
-              "fileName": "/lib/a_75.ts"
+              "fileName": "/home/src/project/project/lib/a_75.ts"
             }
           },
           {
@@ -14028,7 +14025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_75__3",
               "exportMapKey": "8 * aa_75__3 ",
               "moduleSpecifier": "./lib/a_75",
-              "fileName": "/lib/a_75.ts"
+              "fileName": "/home/src/project/project/lib/a_75.ts"
             }
           },
           {
@@ -14048,7 +14045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_75__4",
               "exportMapKey": "8 * aa_75__4 ",
               "moduleSpecifier": "./lib/a_75",
-              "fileName": "/lib/a_75.ts"
+              "fileName": "/home/src/project/project/lib/a_75.ts"
             }
           },
           {
@@ -14088,7 +14085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_76__0",
               "exportMapKey": "8 * aa_76__0 ",
               "moduleSpecifier": "./lib/a_76",
-              "fileName": "/lib/a_76.ts"
+              "fileName": "/home/src/project/project/lib/a_76.ts"
             }
           },
           {
@@ -14108,7 +14105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_76__1",
               "exportMapKey": "8 * aa_76__1 ",
               "moduleSpecifier": "./lib/a_76",
-              "fileName": "/lib/a_76.ts"
+              "fileName": "/home/src/project/project/lib/a_76.ts"
             }
           },
           {
@@ -14128,7 +14125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_76__2",
               "exportMapKey": "8 * aa_76__2 ",
               "moduleSpecifier": "./lib/a_76",
-              "fileName": "/lib/a_76.ts"
+              "fileName": "/home/src/project/project/lib/a_76.ts"
             }
           },
           {
@@ -14148,7 +14145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_76__3",
               "exportMapKey": "8 * aa_76__3 ",
               "moduleSpecifier": "./lib/a_76",
-              "fileName": "/lib/a_76.ts"
+              "fileName": "/home/src/project/project/lib/a_76.ts"
             }
           },
           {
@@ -14168,7 +14165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_76__4",
               "exportMapKey": "8 * aa_76__4 ",
               "moduleSpecifier": "./lib/a_76",
-              "fileName": "/lib/a_76.ts"
+              "fileName": "/home/src/project/project/lib/a_76.ts"
             }
           },
           {
@@ -14208,7 +14205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_77__0",
               "exportMapKey": "8 * aa_77__0 ",
               "moduleSpecifier": "./lib/a_77",
-              "fileName": "/lib/a_77.ts"
+              "fileName": "/home/src/project/project/lib/a_77.ts"
             }
           },
           {
@@ -14228,7 +14225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_77__1",
               "exportMapKey": "8 * aa_77__1 ",
               "moduleSpecifier": "./lib/a_77",
-              "fileName": "/lib/a_77.ts"
+              "fileName": "/home/src/project/project/lib/a_77.ts"
             }
           },
           {
@@ -14248,7 +14245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_77__2",
               "exportMapKey": "8 * aa_77__2 ",
               "moduleSpecifier": "./lib/a_77",
-              "fileName": "/lib/a_77.ts"
+              "fileName": "/home/src/project/project/lib/a_77.ts"
             }
           },
           {
@@ -14268,7 +14265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_77__3",
               "exportMapKey": "8 * aa_77__3 ",
               "moduleSpecifier": "./lib/a_77",
-              "fileName": "/lib/a_77.ts"
+              "fileName": "/home/src/project/project/lib/a_77.ts"
             }
           },
           {
@@ -14288,7 +14285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_77__4",
               "exportMapKey": "8 * aa_77__4 ",
               "moduleSpecifier": "./lib/a_77",
-              "fileName": "/lib/a_77.ts"
+              "fileName": "/home/src/project/project/lib/a_77.ts"
             }
           },
           {
@@ -14328,7 +14325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_78__0",
               "exportMapKey": "8 * aa_78__0 ",
               "moduleSpecifier": "./lib/a_78",
-              "fileName": "/lib/a_78.ts"
+              "fileName": "/home/src/project/project/lib/a_78.ts"
             }
           },
           {
@@ -14348,7 +14345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_78__1",
               "exportMapKey": "8 * aa_78__1 ",
               "moduleSpecifier": "./lib/a_78",
-              "fileName": "/lib/a_78.ts"
+              "fileName": "/home/src/project/project/lib/a_78.ts"
             }
           },
           {
@@ -14368,7 +14365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_78__2",
               "exportMapKey": "8 * aa_78__2 ",
               "moduleSpecifier": "./lib/a_78",
-              "fileName": "/lib/a_78.ts"
+              "fileName": "/home/src/project/project/lib/a_78.ts"
             }
           },
           {
@@ -14388,7 +14385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_78__3",
               "exportMapKey": "8 * aa_78__3 ",
               "moduleSpecifier": "./lib/a_78",
-              "fileName": "/lib/a_78.ts"
+              "fileName": "/home/src/project/project/lib/a_78.ts"
             }
           },
           {
@@ -14408,7 +14405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_78__4",
               "exportMapKey": "8 * aa_78__4 ",
               "moduleSpecifier": "./lib/a_78",
-              "fileName": "/lib/a_78.ts"
+              "fileName": "/home/src/project/project/lib/a_78.ts"
             }
           },
           {
@@ -14448,7 +14445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_79__0",
               "exportMapKey": "8 * aa_79__0 ",
               "moduleSpecifier": "./lib/a_79",
-              "fileName": "/lib/a_79.ts"
+              "fileName": "/home/src/project/project/lib/a_79.ts"
             }
           },
           {
@@ -14468,7 +14465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_79__1",
               "exportMapKey": "8 * aa_79__1 ",
               "moduleSpecifier": "./lib/a_79",
-              "fileName": "/lib/a_79.ts"
+              "fileName": "/home/src/project/project/lib/a_79.ts"
             }
           },
           {
@@ -14488,7 +14485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_79__2",
               "exportMapKey": "8 * aa_79__2 ",
               "moduleSpecifier": "./lib/a_79",
-              "fileName": "/lib/a_79.ts"
+              "fileName": "/home/src/project/project/lib/a_79.ts"
             }
           },
           {
@@ -14508,7 +14505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_79__3",
               "exportMapKey": "8 * aa_79__3 ",
               "moduleSpecifier": "./lib/a_79",
-              "fileName": "/lib/a_79.ts"
+              "fileName": "/home/src/project/project/lib/a_79.ts"
             }
           },
           {
@@ -14528,7 +14525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_79__4",
               "exportMapKey": "8 * aa_79__4 ",
               "moduleSpecifier": "./lib/a_79",
-              "fileName": "/lib/a_79.ts"
+              "fileName": "/home/src/project/project/lib/a_79.ts"
             }
           },
           {
@@ -14568,7 +14565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_80__0",
               "exportMapKey": "8 * aa_80__0 ",
               "moduleSpecifier": "./lib/a_80",
-              "fileName": "/lib/a_80.ts"
+              "fileName": "/home/src/project/project/lib/a_80.ts"
             }
           },
           {
@@ -14588,7 +14585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_80__1",
               "exportMapKey": "8 * aa_80__1 ",
               "moduleSpecifier": "./lib/a_80",
-              "fileName": "/lib/a_80.ts"
+              "fileName": "/home/src/project/project/lib/a_80.ts"
             }
           },
           {
@@ -14608,7 +14605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_80__2",
               "exportMapKey": "8 * aa_80__2 ",
               "moduleSpecifier": "./lib/a_80",
-              "fileName": "/lib/a_80.ts"
+              "fileName": "/home/src/project/project/lib/a_80.ts"
             }
           },
           {
@@ -14628,7 +14625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_80__3",
               "exportMapKey": "8 * aa_80__3 ",
               "moduleSpecifier": "./lib/a_80",
-              "fileName": "/lib/a_80.ts"
+              "fileName": "/home/src/project/project/lib/a_80.ts"
             }
           },
           {
@@ -14648,7 +14645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_80__4",
               "exportMapKey": "8 * aa_80__4 ",
               "moduleSpecifier": "./lib/a_80",
-              "fileName": "/lib/a_80.ts"
+              "fileName": "/home/src/project/project/lib/a_80.ts"
             }
           },
           {
@@ -14688,7 +14685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_81__0",
               "exportMapKey": "8 * aa_81__0 ",
               "moduleSpecifier": "./lib/a_81",
-              "fileName": "/lib/a_81.ts"
+              "fileName": "/home/src/project/project/lib/a_81.ts"
             }
           },
           {
@@ -14708,7 +14705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_81__1",
               "exportMapKey": "8 * aa_81__1 ",
               "moduleSpecifier": "./lib/a_81",
-              "fileName": "/lib/a_81.ts"
+              "fileName": "/home/src/project/project/lib/a_81.ts"
             }
           },
           {
@@ -14728,7 +14725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_81__2",
               "exportMapKey": "8 * aa_81__2 ",
               "moduleSpecifier": "./lib/a_81",
-              "fileName": "/lib/a_81.ts"
+              "fileName": "/home/src/project/project/lib/a_81.ts"
             }
           },
           {
@@ -14748,7 +14745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_81__3",
               "exportMapKey": "8 * aa_81__3 ",
               "moduleSpecifier": "./lib/a_81",
-              "fileName": "/lib/a_81.ts"
+              "fileName": "/home/src/project/project/lib/a_81.ts"
             }
           },
           {
@@ -14768,7 +14765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_81__4",
               "exportMapKey": "8 * aa_81__4 ",
               "moduleSpecifier": "./lib/a_81",
-              "fileName": "/lib/a_81.ts"
+              "fileName": "/home/src/project/project/lib/a_81.ts"
             }
           },
           {
@@ -14808,7 +14805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_82__0",
               "exportMapKey": "8 * aa_82__0 ",
               "moduleSpecifier": "./lib/a_82",
-              "fileName": "/lib/a_82.ts"
+              "fileName": "/home/src/project/project/lib/a_82.ts"
             }
           },
           {
@@ -14828,7 +14825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_82__1",
               "exportMapKey": "8 * aa_82__1 ",
               "moduleSpecifier": "./lib/a_82",
-              "fileName": "/lib/a_82.ts"
+              "fileName": "/home/src/project/project/lib/a_82.ts"
             }
           },
           {
@@ -14848,7 +14845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_82__2",
               "exportMapKey": "8 * aa_82__2 ",
               "moduleSpecifier": "./lib/a_82",
-              "fileName": "/lib/a_82.ts"
+              "fileName": "/home/src/project/project/lib/a_82.ts"
             }
           },
           {
@@ -14868,7 +14865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_82__3",
               "exportMapKey": "8 * aa_82__3 ",
               "moduleSpecifier": "./lib/a_82",
-              "fileName": "/lib/a_82.ts"
+              "fileName": "/home/src/project/project/lib/a_82.ts"
             }
           },
           {
@@ -14888,7 +14885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_82__4",
               "exportMapKey": "8 * aa_82__4 ",
               "moduleSpecifier": "./lib/a_82",
-              "fileName": "/lib/a_82.ts"
+              "fileName": "/home/src/project/project/lib/a_82.ts"
             }
           },
           {
@@ -14928,7 +14925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_83__0",
               "exportMapKey": "8 * aa_83__0 ",
               "moduleSpecifier": "./lib/a_83",
-              "fileName": "/lib/a_83.ts"
+              "fileName": "/home/src/project/project/lib/a_83.ts"
             }
           },
           {
@@ -14948,7 +14945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_83__1",
               "exportMapKey": "8 * aa_83__1 ",
               "moduleSpecifier": "./lib/a_83",
-              "fileName": "/lib/a_83.ts"
+              "fileName": "/home/src/project/project/lib/a_83.ts"
             }
           },
           {
@@ -14968,7 +14965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_83__2",
               "exportMapKey": "8 * aa_83__2 ",
               "moduleSpecifier": "./lib/a_83",
-              "fileName": "/lib/a_83.ts"
+              "fileName": "/home/src/project/project/lib/a_83.ts"
             }
           },
           {
@@ -14988,7 +14985,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_83__3",
               "exportMapKey": "8 * aa_83__3 ",
               "moduleSpecifier": "./lib/a_83",
-              "fileName": "/lib/a_83.ts"
+              "fileName": "/home/src/project/project/lib/a_83.ts"
             }
           },
           {
@@ -15008,7 +15005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_83__4",
               "exportMapKey": "8 * aa_83__4 ",
               "moduleSpecifier": "./lib/a_83",
-              "fileName": "/lib/a_83.ts"
+              "fileName": "/home/src/project/project/lib/a_83.ts"
             }
           },
           {
@@ -15048,7 +15045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_84__0",
               "exportMapKey": "8 * aa_84__0 ",
               "moduleSpecifier": "./lib/a_84",
-              "fileName": "/lib/a_84.ts"
+              "fileName": "/home/src/project/project/lib/a_84.ts"
             }
           },
           {
@@ -15068,7 +15065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_84__1",
               "exportMapKey": "8 * aa_84__1 ",
               "moduleSpecifier": "./lib/a_84",
-              "fileName": "/lib/a_84.ts"
+              "fileName": "/home/src/project/project/lib/a_84.ts"
             }
           },
           {
@@ -15088,7 +15085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_84__2",
               "exportMapKey": "8 * aa_84__2 ",
               "moduleSpecifier": "./lib/a_84",
-              "fileName": "/lib/a_84.ts"
+              "fileName": "/home/src/project/project/lib/a_84.ts"
             }
           },
           {
@@ -15108,7 +15105,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_84__3",
               "exportMapKey": "8 * aa_84__3 ",
               "moduleSpecifier": "./lib/a_84",
-              "fileName": "/lib/a_84.ts"
+              "fileName": "/home/src/project/project/lib/a_84.ts"
             }
           },
           {
@@ -15128,7 +15125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_84__4",
               "exportMapKey": "8 * aa_84__4 ",
               "moduleSpecifier": "./lib/a_84",
-              "fileName": "/lib/a_84.ts"
+              "fileName": "/home/src/project/project/lib/a_84.ts"
             }
           },
           {
@@ -15168,7 +15165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_85__0",
               "exportMapKey": "8 * aa_85__0 ",
               "moduleSpecifier": "./lib/a_85",
-              "fileName": "/lib/a_85.ts"
+              "fileName": "/home/src/project/project/lib/a_85.ts"
             }
           },
           {
@@ -15188,7 +15185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_85__1",
               "exportMapKey": "8 * aa_85__1 ",
               "moduleSpecifier": "./lib/a_85",
-              "fileName": "/lib/a_85.ts"
+              "fileName": "/home/src/project/project/lib/a_85.ts"
             }
           },
           {
@@ -15208,7 +15205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_85__2",
               "exportMapKey": "8 * aa_85__2 ",
               "moduleSpecifier": "./lib/a_85",
-              "fileName": "/lib/a_85.ts"
+              "fileName": "/home/src/project/project/lib/a_85.ts"
             }
           },
           {
@@ -15228,7 +15225,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_85__3",
               "exportMapKey": "8 * aa_85__3 ",
               "moduleSpecifier": "./lib/a_85",
-              "fileName": "/lib/a_85.ts"
+              "fileName": "/home/src/project/project/lib/a_85.ts"
             }
           },
           {
@@ -15248,7 +15245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_85__4",
               "exportMapKey": "8 * aa_85__4 ",
               "moduleSpecifier": "./lib/a_85",
-              "fileName": "/lib/a_85.ts"
+              "fileName": "/home/src/project/project/lib/a_85.ts"
             }
           },
           {
@@ -15288,7 +15285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_86__0",
               "exportMapKey": "8 * aa_86__0 ",
               "moduleSpecifier": "./lib/a_86",
-              "fileName": "/lib/a_86.ts"
+              "fileName": "/home/src/project/project/lib/a_86.ts"
             }
           },
           {
@@ -15308,7 +15305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_86__1",
               "exportMapKey": "8 * aa_86__1 ",
               "moduleSpecifier": "./lib/a_86",
-              "fileName": "/lib/a_86.ts"
+              "fileName": "/home/src/project/project/lib/a_86.ts"
             }
           },
           {
@@ -15328,7 +15325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_86__2",
               "exportMapKey": "8 * aa_86__2 ",
               "moduleSpecifier": "./lib/a_86",
-              "fileName": "/lib/a_86.ts"
+              "fileName": "/home/src/project/project/lib/a_86.ts"
             }
           },
           {
@@ -15348,7 +15345,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_86__3",
               "exportMapKey": "8 * aa_86__3 ",
               "moduleSpecifier": "./lib/a_86",
-              "fileName": "/lib/a_86.ts"
+              "fileName": "/home/src/project/project/lib/a_86.ts"
             }
           },
           {
@@ -15368,7 +15365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_86__4",
               "exportMapKey": "8 * aa_86__4 ",
               "moduleSpecifier": "./lib/a_86",
-              "fileName": "/lib/a_86.ts"
+              "fileName": "/home/src/project/project/lib/a_86.ts"
             }
           },
           {
@@ -15408,7 +15405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_87__0",
               "exportMapKey": "8 * aa_87__0 ",
               "moduleSpecifier": "./lib/a_87",
-              "fileName": "/lib/a_87.ts"
+              "fileName": "/home/src/project/project/lib/a_87.ts"
             }
           },
           {
@@ -15428,7 +15425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_87__1",
               "exportMapKey": "8 * aa_87__1 ",
               "moduleSpecifier": "./lib/a_87",
-              "fileName": "/lib/a_87.ts"
+              "fileName": "/home/src/project/project/lib/a_87.ts"
             }
           },
           {
@@ -15448,7 +15445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_87__2",
               "exportMapKey": "8 * aa_87__2 ",
               "moduleSpecifier": "./lib/a_87",
-              "fileName": "/lib/a_87.ts"
+              "fileName": "/home/src/project/project/lib/a_87.ts"
             }
           },
           {
@@ -15468,7 +15465,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_87__3",
               "exportMapKey": "8 * aa_87__3 ",
               "moduleSpecifier": "./lib/a_87",
-              "fileName": "/lib/a_87.ts"
+              "fileName": "/home/src/project/project/lib/a_87.ts"
             }
           },
           {
@@ -15488,7 +15485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_87__4",
               "exportMapKey": "8 * aa_87__4 ",
               "moduleSpecifier": "./lib/a_87",
-              "fileName": "/lib/a_87.ts"
+              "fileName": "/home/src/project/project/lib/a_87.ts"
             }
           },
           {
@@ -15528,7 +15525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_88__0",
               "exportMapKey": "8 * aa_88__0 ",
               "moduleSpecifier": "./lib/a_88",
-              "fileName": "/lib/a_88.ts"
+              "fileName": "/home/src/project/project/lib/a_88.ts"
             }
           },
           {
@@ -15548,7 +15545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_88__1",
               "exportMapKey": "8 * aa_88__1 ",
               "moduleSpecifier": "./lib/a_88",
-              "fileName": "/lib/a_88.ts"
+              "fileName": "/home/src/project/project/lib/a_88.ts"
             }
           },
           {
@@ -15568,7 +15565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_88__2",
               "exportMapKey": "8 * aa_88__2 ",
               "moduleSpecifier": "./lib/a_88",
-              "fileName": "/lib/a_88.ts"
+              "fileName": "/home/src/project/project/lib/a_88.ts"
             }
           },
           {
@@ -15588,7 +15585,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_88__3",
               "exportMapKey": "8 * aa_88__3 ",
               "moduleSpecifier": "./lib/a_88",
-              "fileName": "/lib/a_88.ts"
+              "fileName": "/home/src/project/project/lib/a_88.ts"
             }
           },
           {
@@ -15608,7 +15605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_88__4",
               "exportMapKey": "8 * aa_88__4 ",
               "moduleSpecifier": "./lib/a_88",
-              "fileName": "/lib/a_88.ts"
+              "fileName": "/home/src/project/project/lib/a_88.ts"
             }
           },
           {
@@ -15648,7 +15645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_89__0",
               "exportMapKey": "8 * aa_89__0 ",
               "moduleSpecifier": "./lib/a_89",
-              "fileName": "/lib/a_89.ts"
+              "fileName": "/home/src/project/project/lib/a_89.ts"
             }
           },
           {
@@ -15668,7 +15665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_89__1",
               "exportMapKey": "8 * aa_89__1 ",
               "moduleSpecifier": "./lib/a_89",
-              "fileName": "/lib/a_89.ts"
+              "fileName": "/home/src/project/project/lib/a_89.ts"
             }
           },
           {
@@ -15688,7 +15685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_89__2",
               "exportMapKey": "8 * aa_89__2 ",
               "moduleSpecifier": "./lib/a_89",
-              "fileName": "/lib/a_89.ts"
+              "fileName": "/home/src/project/project/lib/a_89.ts"
             }
           },
           {
@@ -15708,7 +15705,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_89__3",
               "exportMapKey": "8 * aa_89__3 ",
               "moduleSpecifier": "./lib/a_89",
-              "fileName": "/lib/a_89.ts"
+              "fileName": "/home/src/project/project/lib/a_89.ts"
             }
           },
           {
@@ -15728,7 +15725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_89__4",
               "exportMapKey": "8 * aa_89__4 ",
               "moduleSpecifier": "./lib/a_89",
-              "fileName": "/lib/a_89.ts"
+              "fileName": "/home/src/project/project/lib/a_89.ts"
             }
           },
           {
@@ -15768,7 +15765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_90__0",
               "exportMapKey": "8 * aa_90__0 ",
               "moduleSpecifier": "./lib/a_90",
-              "fileName": "/lib/a_90.ts"
+              "fileName": "/home/src/project/project/lib/a_90.ts"
             }
           },
           {
@@ -15788,7 +15785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_90__1",
               "exportMapKey": "8 * aa_90__1 ",
               "moduleSpecifier": "./lib/a_90",
-              "fileName": "/lib/a_90.ts"
+              "fileName": "/home/src/project/project/lib/a_90.ts"
             }
           },
           {
@@ -15808,7 +15805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_90__2",
               "exportMapKey": "8 * aa_90__2 ",
               "moduleSpecifier": "./lib/a_90",
-              "fileName": "/lib/a_90.ts"
+              "fileName": "/home/src/project/project/lib/a_90.ts"
             }
           },
           {
@@ -15828,7 +15825,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_90__3",
               "exportMapKey": "8 * aa_90__3 ",
               "moduleSpecifier": "./lib/a_90",
-              "fileName": "/lib/a_90.ts"
+              "fileName": "/home/src/project/project/lib/a_90.ts"
             }
           },
           {
@@ -15848,7 +15845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_90__4",
               "exportMapKey": "8 * aa_90__4 ",
               "moduleSpecifier": "./lib/a_90",
-              "fileName": "/lib/a_90.ts"
+              "fileName": "/home/src/project/project/lib/a_90.ts"
             }
           },
           {
@@ -15888,7 +15885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_91__0",
               "exportMapKey": "8 * aa_91__0 ",
               "moduleSpecifier": "./lib/a_91",
-              "fileName": "/lib/a_91.ts"
+              "fileName": "/home/src/project/project/lib/a_91.ts"
             }
           },
           {
@@ -15908,7 +15905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_91__1",
               "exportMapKey": "8 * aa_91__1 ",
               "moduleSpecifier": "./lib/a_91",
-              "fileName": "/lib/a_91.ts"
+              "fileName": "/home/src/project/project/lib/a_91.ts"
             }
           },
           {
@@ -15928,7 +15925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_91__2",
               "exportMapKey": "8 * aa_91__2 ",
               "moduleSpecifier": "./lib/a_91",
-              "fileName": "/lib/a_91.ts"
+              "fileName": "/home/src/project/project/lib/a_91.ts"
             }
           },
           {
@@ -15948,7 +15945,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_91__3",
               "exportMapKey": "8 * aa_91__3 ",
               "moduleSpecifier": "./lib/a_91",
-              "fileName": "/lib/a_91.ts"
+              "fileName": "/home/src/project/project/lib/a_91.ts"
             }
           },
           {
@@ -15968,7 +15965,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_91__4",
               "exportMapKey": "8 * aa_91__4 ",
               "moduleSpecifier": "./lib/a_91",
-              "fileName": "/lib/a_91.ts"
+              "fileName": "/home/src/project/project/lib/a_91.ts"
             }
           },
           {
@@ -16008,7 +16005,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_92__0",
               "exportMapKey": "8 * aa_92__0 ",
               "moduleSpecifier": "./lib/a_92",
-              "fileName": "/lib/a_92.ts"
+              "fileName": "/home/src/project/project/lib/a_92.ts"
             }
           },
           {
@@ -16028,7 +16025,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_92__1",
               "exportMapKey": "8 * aa_92__1 ",
               "moduleSpecifier": "./lib/a_92",
-              "fileName": "/lib/a_92.ts"
+              "fileName": "/home/src/project/project/lib/a_92.ts"
             }
           },
           {
@@ -16048,7 +16045,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_92__2",
               "exportMapKey": "8 * aa_92__2 ",
               "moduleSpecifier": "./lib/a_92",
-              "fileName": "/lib/a_92.ts"
+              "fileName": "/home/src/project/project/lib/a_92.ts"
             }
           },
           {
@@ -16068,7 +16065,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_92__3",
               "exportMapKey": "8 * aa_92__3 ",
               "moduleSpecifier": "./lib/a_92",
-              "fileName": "/lib/a_92.ts"
+              "fileName": "/home/src/project/project/lib/a_92.ts"
             }
           },
           {
@@ -16088,7 +16085,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_92__4",
               "exportMapKey": "8 * aa_92__4 ",
               "moduleSpecifier": "./lib/a_92",
-              "fileName": "/lib/a_92.ts"
+              "fileName": "/home/src/project/project/lib/a_92.ts"
             }
           },
           {
@@ -16128,7 +16125,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_93__0",
               "exportMapKey": "8 * aa_93__0 ",
               "moduleSpecifier": "./lib/a_93",
-              "fileName": "/lib/a_93.ts"
+              "fileName": "/home/src/project/project/lib/a_93.ts"
             }
           },
           {
@@ -16148,7 +16145,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_93__1",
               "exportMapKey": "8 * aa_93__1 ",
               "moduleSpecifier": "./lib/a_93",
-              "fileName": "/lib/a_93.ts"
+              "fileName": "/home/src/project/project/lib/a_93.ts"
             }
           },
           {
@@ -16168,7 +16165,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_93__2",
               "exportMapKey": "8 * aa_93__2 ",
               "moduleSpecifier": "./lib/a_93",
-              "fileName": "/lib/a_93.ts"
+              "fileName": "/home/src/project/project/lib/a_93.ts"
             }
           },
           {
@@ -16188,7 +16185,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_93__3",
               "exportMapKey": "8 * aa_93__3 ",
               "moduleSpecifier": "./lib/a_93",
-              "fileName": "/lib/a_93.ts"
+              "fileName": "/home/src/project/project/lib/a_93.ts"
             }
           },
           {
@@ -16208,7 +16205,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_93__4",
               "exportMapKey": "8 * aa_93__4 ",
               "moduleSpecifier": "./lib/a_93",
-              "fileName": "/lib/a_93.ts"
+              "fileName": "/home/src/project/project/lib/a_93.ts"
             }
           },
           {
@@ -16248,7 +16245,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_94__0",
               "exportMapKey": "8 * aa_94__0 ",
               "moduleSpecifier": "./lib/a_94",
-              "fileName": "/lib/a_94.ts"
+              "fileName": "/home/src/project/project/lib/a_94.ts"
             }
           },
           {
@@ -16268,7 +16265,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_94__1",
               "exportMapKey": "8 * aa_94__1 ",
               "moduleSpecifier": "./lib/a_94",
-              "fileName": "/lib/a_94.ts"
+              "fileName": "/home/src/project/project/lib/a_94.ts"
             }
           },
           {
@@ -16288,7 +16285,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_94__2",
               "exportMapKey": "8 * aa_94__2 ",
               "moduleSpecifier": "./lib/a_94",
-              "fileName": "/lib/a_94.ts"
+              "fileName": "/home/src/project/project/lib/a_94.ts"
             }
           },
           {
@@ -16308,7 +16305,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_94__3",
               "exportMapKey": "8 * aa_94__3 ",
               "moduleSpecifier": "./lib/a_94",
-              "fileName": "/lib/a_94.ts"
+              "fileName": "/home/src/project/project/lib/a_94.ts"
             }
           },
           {
@@ -16328,7 +16325,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_94__4",
               "exportMapKey": "8 * aa_94__4 ",
               "moduleSpecifier": "./lib/a_94",
-              "fileName": "/lib/a_94.ts"
+              "fileName": "/home/src/project/project/lib/a_94.ts"
             }
           },
           {
@@ -16368,7 +16365,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_95__0",
               "exportMapKey": "8 * aa_95__0 ",
               "moduleSpecifier": "./lib/a_95",
-              "fileName": "/lib/a_95.ts"
+              "fileName": "/home/src/project/project/lib/a_95.ts"
             }
           },
           {
@@ -16388,7 +16385,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_95__1",
               "exportMapKey": "8 * aa_95__1 ",
               "moduleSpecifier": "./lib/a_95",
-              "fileName": "/lib/a_95.ts"
+              "fileName": "/home/src/project/project/lib/a_95.ts"
             }
           },
           {
@@ -16408,7 +16405,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_95__2",
               "exportMapKey": "8 * aa_95__2 ",
               "moduleSpecifier": "./lib/a_95",
-              "fileName": "/lib/a_95.ts"
+              "fileName": "/home/src/project/project/lib/a_95.ts"
             }
           },
           {
@@ -16428,7 +16425,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_95__3",
               "exportMapKey": "8 * aa_95__3 ",
               "moduleSpecifier": "./lib/a_95",
-              "fileName": "/lib/a_95.ts"
+              "fileName": "/home/src/project/project/lib/a_95.ts"
             }
           },
           {
@@ -16448,7 +16445,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_95__4",
               "exportMapKey": "8 * aa_95__4 ",
               "moduleSpecifier": "./lib/a_95",
-              "fileName": "/lib/a_95.ts"
+              "fileName": "/home/src/project/project/lib/a_95.ts"
             }
           },
           {
@@ -16488,7 +16485,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_96__0",
               "exportMapKey": "8 * aa_96__0 ",
               "moduleSpecifier": "./lib/a_96",
-              "fileName": "/lib/a_96.ts"
+              "fileName": "/home/src/project/project/lib/a_96.ts"
             }
           },
           {
@@ -16508,7 +16505,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_96__1",
               "exportMapKey": "8 * aa_96__1 ",
               "moduleSpecifier": "./lib/a_96",
-              "fileName": "/lib/a_96.ts"
+              "fileName": "/home/src/project/project/lib/a_96.ts"
             }
           },
           {
@@ -16528,7 +16525,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_96__2",
               "exportMapKey": "8 * aa_96__2 ",
               "moduleSpecifier": "./lib/a_96",
-              "fileName": "/lib/a_96.ts"
+              "fileName": "/home/src/project/project/lib/a_96.ts"
             }
           },
           {
@@ -16548,7 +16545,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_96__3",
               "exportMapKey": "8 * aa_96__3 ",
               "moduleSpecifier": "./lib/a_96",
-              "fileName": "/lib/a_96.ts"
+              "fileName": "/home/src/project/project/lib/a_96.ts"
             }
           },
           {
@@ -16568,7 +16565,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_96__4",
               "exportMapKey": "8 * aa_96__4 ",
               "moduleSpecifier": "./lib/a_96",
-              "fileName": "/lib/a_96.ts"
+              "fileName": "/home/src/project/project/lib/a_96.ts"
             }
           },
           {
@@ -16608,7 +16605,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_97__0",
               "exportMapKey": "8 * aa_97__0 ",
               "moduleSpecifier": "./lib/a_97",
-              "fileName": "/lib/a_97.ts"
+              "fileName": "/home/src/project/project/lib/a_97.ts"
             }
           },
           {
@@ -16628,7 +16625,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_97__1",
               "exportMapKey": "8 * aa_97__1 ",
               "moduleSpecifier": "./lib/a_97",
-              "fileName": "/lib/a_97.ts"
+              "fileName": "/home/src/project/project/lib/a_97.ts"
             }
           },
           {
@@ -16648,7 +16645,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_97__2",
               "exportMapKey": "8 * aa_97__2 ",
               "moduleSpecifier": "./lib/a_97",
-              "fileName": "/lib/a_97.ts"
+              "fileName": "/home/src/project/project/lib/a_97.ts"
             }
           },
           {
@@ -16668,7 +16665,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_97__3",
               "exportMapKey": "8 * aa_97__3 ",
               "moduleSpecifier": "./lib/a_97",
-              "fileName": "/lib/a_97.ts"
+              "fileName": "/home/src/project/project/lib/a_97.ts"
             }
           },
           {
@@ -16688,7 +16685,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_97__4",
               "exportMapKey": "8 * aa_97__4 ",
               "moduleSpecifier": "./lib/a_97",
-              "fileName": "/lib/a_97.ts"
+              "fileName": "/home/src/project/project/lib/a_97.ts"
             }
           },
           {
@@ -16728,7 +16725,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_98__0",
               "exportMapKey": "8 * aa_98__0 ",
               "moduleSpecifier": "./lib/a_98",
-              "fileName": "/lib/a_98.ts"
+              "fileName": "/home/src/project/project/lib/a_98.ts"
             }
           },
           {
@@ -16748,7 +16745,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_98__1",
               "exportMapKey": "8 * aa_98__1 ",
               "moduleSpecifier": "./lib/a_98",
-              "fileName": "/lib/a_98.ts"
+              "fileName": "/home/src/project/project/lib/a_98.ts"
             }
           },
           {
@@ -16768,7 +16765,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_98__2",
               "exportMapKey": "8 * aa_98__2 ",
               "moduleSpecifier": "./lib/a_98",
-              "fileName": "/lib/a_98.ts"
+              "fileName": "/home/src/project/project/lib/a_98.ts"
             }
           },
           {
@@ -16788,7 +16785,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_98__3",
               "exportMapKey": "8 * aa_98__3 ",
               "moduleSpecifier": "./lib/a_98",
-              "fileName": "/lib/a_98.ts"
+              "fileName": "/home/src/project/project/lib/a_98.ts"
             }
           },
           {
@@ -16808,7 +16805,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_98__4",
               "exportMapKey": "8 * aa_98__4 ",
               "moduleSpecifier": "./lib/a_98",
-              "fileName": "/lib/a_98.ts"
+              "fileName": "/home/src/project/project/lib/a_98.ts"
             }
           },
           {
@@ -16848,7 +16845,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_99__0",
               "exportMapKey": "8 * aa_99__0 ",
               "moduleSpecifier": "./lib/a_99",
-              "fileName": "/lib/a_99.ts"
+              "fileName": "/home/src/project/project/lib/a_99.ts"
             }
           },
           {
@@ -16868,7 +16865,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_99__1",
               "exportMapKey": "8 * aa_99__1 ",
               "moduleSpecifier": "./lib/a_99",
-              "fileName": "/lib/a_99.ts"
+              "fileName": "/home/src/project/project/lib/a_99.ts"
             }
           },
           {
@@ -16888,7 +16885,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_99__2",
               "exportMapKey": "8 * aa_99__2 ",
               "moduleSpecifier": "./lib/a_99",
-              "fileName": "/lib/a_99.ts"
+              "fileName": "/home/src/project/project/lib/a_99.ts"
             }
           },
           {
@@ -16908,7 +16905,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_99__3",
               "exportMapKey": "8 * aa_99__3 ",
               "moduleSpecifier": "./lib/a_99",
-              "fileName": "/lib/a_99.ts"
+              "fileName": "/home/src/project/project/lib/a_99.ts"
             }
           },
           {
@@ -16928,7 +16925,7 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "aa_99__4",
               "exportMapKey": "8 * aa_99__4 ",
               "moduleSpecifier": "./lib/a_99",
-              "fileName": "/lib/a_99.ts"
+              "fileName": "/home/src/project/project/lib/a_99.ts"
             }
           }
         ],
@@ -16946,7 +16943,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/tsconfig.json (Configured) *changed*
+/home/src/project/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
