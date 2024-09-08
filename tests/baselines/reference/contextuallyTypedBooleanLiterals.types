@@ -7,16 +7,17 @@ type Box<T> = {
 >Box : Box<T>
 >    : ^^^^^^
 
-    get: () => T,
+  get: () => T;
 >get : () => T
 >    : ^^^^^^ 
 
-    set: (value: T) => void
+  set: (value: T) => void;
 >set : (value: T) => void
 >    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
-}
+
+};
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
@@ -24,7 +25,7 @@ declare function box<T>(value: T): Box<T>;
 >value : T
 >      : ^
 
-const bn1 = box(0);  // Box<number>
+const bn1 = box(0); // Box<number>
 >bn1 : Box<number>
 >    : ^^^^^^^^^^^
 >box(0) : Box<number>
@@ -34,7 +35,7 @@ const bn1 = box(0);  // Box<number>
 >0 : 0
 >  : ^
 
-const bn2: Box<number> = box(0);  // Ok
+const bn2: Box<number> = box(0); // Ok, Box<number>
 >bn2 : Box<number>
 >    : ^^^^^^^^^^^
 >box(0) : Box<number>
@@ -44,7 +45,7 @@ const bn2: Box<number> = box(0);  // Ok
 >0 : 0
 >  : ^
 
-const bb1 = box(false);  // Box<boolean>
+const bb1 = box(false); // Box<boolean>
 >bb1 : Box<boolean>
 >    : ^^^^^^^^^^^^
 >box(false) : Box<boolean>
@@ -54,7 +55,7 @@ const bb1 = box(false);  // Box<boolean>
 >false : false
 >      : ^^^^^
 
-const bb2: Box<boolean> = box(false);  // Error, box<false> not assignable to Box<boolean>
+const bb2: Box<boolean> = box(false); // Ok, Box<boolean>
 >bb2 : Box<boolean>
 >    : ^^^^^^^^^^^^
 >box(false) : Box<boolean>
@@ -63,6 +64,244 @@ const bb2: Box<boolean> = box(false);  // Error, box<false> not assignable to Bo
 >    : ^ ^^     ^^ ^^^^^      
 >false : false
 >      : ^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/59754
+
+const bn3 = box({ prop: 0 }); // Box<{ prop: number }>
+>bn3 : Box<{ prop: number; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>box({ prop: 0 }) : Box<{ prop: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: 0 } : { prop: number; }
+>            : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>0 : 0
+>  : ^
+
+const bn4: Box<{ prop: number }> = box({ prop: 0 }); // Ok, Box<{ prop: number }>
+>bn4 : Box<{ prop: number; }>
+>    : ^^^^^^^^^^^^      ^^^^
+>prop : number
+>     : ^^^^^^
+>box({ prop: 0 }) : Box<{ prop: number; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: 0 } : { prop: number; }
+>            : ^^^^^^^^^^^^^^^^^
+>prop : number
+>     : ^^^^^^
+>0 : 0
+>  : ^
+
+const bb3 = box({ prop: false }); // Box<boolean>
+>bb3 : Box<{ prop: boolean; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>box({ prop: false }) : Box<{ prop: boolean; }>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: false } : { prop: false; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+
+const bb4: Box<{ prop: boolean }> = box({ prop: false }); // Ok, Box<{ prop: boolean }>
+>bb4 : Box<{ prop: boolean; }>
+>    : ^^^^^^^^^^^^       ^^^^
+>prop : boolean
+>     : ^^^^^^^
+>box({ prop: false }) : Box<{ prop: boolean; }>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: false } : { prop: false; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+
+const bn5 = box([0]); // Box<[number]>
+>bn5 : Box<number[]>
+>    : ^^^^^^^^^^^^^
+>box([0]) : Box<number[]>
+>         : ^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>[0] : number[]
+>    : ^^^^^^^^
+>0 : 0
+>  : ^
+
+const bn6: Box<[number]> = box([0]); // Ok, Box<[number]>
+>bn6 : Box<[number]>
+>    : ^^^^^^^^^^^^^
+>box([0]) : Box<[number]>
+>         : ^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>[0] : [number]
+>    : ^^^^^^^^
+>0 : 0
+>  : ^
+
+const bb5 = box([false]); // Box<[boolean]>
+>bb5 : Box<boolean[]>
+>    : ^^^^^^^^^^^^^^
+>box([false]) : Box<boolean[]>
+>             : ^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>[false] : false[]
+>        : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+const bb6: Box<[boolean]> = box([false]); // Ok, Box<[boolean]>
+>bb6 : Box<[boolean]>
+>    : ^^^^^^^^^^^^^^
+>box([false]) : Box<[boolean]>
+>             : ^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>[false] : [false]
+>        : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+const bb7: Box<{ deep: { prop: boolean } }> = box({ deep: { prop: false } }); // Ok, Box<{ deep: { prop: boolean } }>
+>bb7 : Box<{ deep: { prop: boolean; }; }>
+>    : ^^^^^^^^^^^^                  ^^^^
+>deep : { prop: boolean; }
+>     : ^^^^^^^^       ^^^
+>prop : boolean
+>     : ^^^^^^^
+>box({ deep: { prop: false } }) : Box<{ deep: { prop: boolean; }; }>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ deep: { prop: false } } : { deep: { prop: false; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>deep : { prop: false; }
+>     : ^^^^^^^^^^^^^^^^
+>{ prop: false } : { prop: false; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+
+const bb8: Box<{ prop: true; other: string } | { prop: false; other: number }> = box({ prop: false, other: 0 }); // Error (T is invariant), Box<{ prop: false; other: number }>
+>bb8 : Box<{ prop: true; other: string; } | { prop: false; other: number; }>
+>    : ^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^
+>prop : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>other : string
+>      : ^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>other : number
+>      : ^^^^^^
+>box({ prop: false, other: 0 }) : Box<{ prop: false; other: number; }>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: false, other: 0 } : { prop: false; other: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>other : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+const bb9: Box<false> = box(false); // Ok, Box<false>
+>bb9 : Box<false>
+>    : ^^^^^^^^^^
+>false : false
+>      : ^^^^^
+>box(false) : Box<false>
+>           : ^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>false : false
+>      : ^^^^^
+
+const bb10: Box<{ prop: false }> = box({ prop: false }); // Ok, Box<{ prop: false }>
+>bb10 : Box<{ prop: false; }>
+>     : ^^^^^^^^^^^^     ^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>box({ prop: false }) : Box<{ prop: false; }>
+>                     : ^^^^^^^^^^^^^^^^^^^^^
+>box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
+>{ prop: false } : { prop: false; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+
+type Box2<T> = {
+>Box2 : Box2<T>
+>     : ^^^^^^^
+
+  get: () => T;
+>get : () => T
+>    : ^^^^^^ 
+
+};
+
+const bb11: Box2<{ prop: true; other: string } | { prop: false; other: number }> = box2({ prop: false, other: 0 }); // Ok, Box2<{ prop: false; other: number }>
+>bb11 : Box2<{ prop: true; other: string; } | { prop: false; other: number; }>
+>     : ^^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^
+>prop : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>other : string
+>      : ^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>other : number
+>      : ^^^^^^
+>box2({ prop: false, other: 0 }) : Box2<{ prop: false; other: number; }>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>box2 : <T>(value: T) => Box2<T>
+>     : ^ ^^     ^^ ^^^^^       
+>{ prop: false, other: 0 } : { prop: false; other: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>other : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+declare function box2<T>(value: T): Box2<T>;
+>box2 : <T>(value: T) => Box2<T>
+>     : ^ ^^     ^^ ^^^^^       
+>value : T
+>      : ^
 
 // Repro from #48150
 
@@ -89,4 +328,5 @@ const x: Observable<boolean> = observable(false);
 >           : ^ ^^     ^^ ^^^^^             
 >false : false
 >      : ^^^^^
+
 
