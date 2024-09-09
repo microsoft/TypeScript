@@ -1,0 +1,157 @@
+//// [tests/cases/compiler/noExcessPropertyCheckWithGenericMappedType1.ts] ////
+
+=== noExcessPropertyCheckWithGenericMappedType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56391
+
+type S = { x: "abc" };
+>S : S
+>  : ^
+>x : "abc"
+>  : ^^^^^
+
+function f<T extends S>() {
+>f : <T extends S>() => void
+>  : ^ ^^^^^^^^^ ^^^^^^^^^^^
+
+  type Target = { [k in T["x"]]: number };
+>Target : { [k in T["x"]]: number; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+  const x: Target = { abc: 1 };
+>x : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1 } : { abc: number; }
+>           : ^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+  const y: Target = {};
+>y : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  const z: Target = { abc: "" };
+>z : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: "" } : { abc: string; }
+>            : ^^^^^^^^^^^^^^^^
+>abc : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  const a: Target = { abc: 1, other: 2 };
+>a : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1, other: 2 } : { abc: number; other: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>other : number
+>      : ^^^^^^
+>2 : 2
+>  : ^
+
+  const b: Target = { other: 2 };
+>b : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ other: 2 } : { other: number; }
+>             : ^^^^^^^^^^^^^^^^^^
+>other : number
+>      : ^^^^^^
+>2 : 2
+>  : ^
+
+  const c: Target = { abc: 1, other: "" };
+>c : { [k in T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1, other: "" } : { abc: number; other: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>other : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+function f2<T extends S, T2 extends string>() {
+>f2 : <T extends S, T2 extends string>() => void
+>   : ^ ^^^^^^^^^ ^^  ^^^^^^^^^      ^^^^^^^^^^^
+
+  type Target = { [k in T["x"] | T2]: number };
+>Target : { [k in T2 | T["x"]]: number; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const x: Target = { abc: 1 };
+>x : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1 } : { abc: number; }
+>           : ^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+  const y: Target = {};
+>y : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  const z: Target = { abc: "" };
+>z : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: "" } : { abc: string; }
+>            : ^^^^^^^^^^^^^^^^
+>abc : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  const a: Target = { abc: 1, other: 2 };
+>a : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1, other: 2 } : { abc: number; other: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>other : number
+>      : ^^^^^^
+>2 : 2
+>  : ^
+
+  const b: Target = { other: 2 };
+>b : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ other: 2 } : { other: number; }
+>             : ^^^^^^^^^^^^^^^^^^
+>other : number
+>      : ^^^^^^
+>2 : 2
+>  : ^
+
+  const c: Target = { abc: 1, other: "" };
+>c : { [k in T2 | T["x"]]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ abc: 1, other: "" } : { abc: number; other: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abc : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>other : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
