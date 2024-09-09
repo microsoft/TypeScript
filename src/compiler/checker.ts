@@ -16255,9 +16255,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol) : emptyArray;
     }
 
+    // note intentional similarities to index signature building in `checkObjectLiteral` for parity
     function getIndexInfosOfIndexSymbol(indexSymbol: Symbol): IndexInfo[] {
         if (indexSymbol.declarations) {
             const indexInfos: IndexInfo[] = [];
+            let hasComputedNumberProperty = false;
+            let readonlyComputedNumberProperty = true;
+            let hasComputedSymbolProperty = false;
+            let readonlyComputedSymbolProperty = true;
+            let hasComputedStringProperty = false;
+            let readonlyComputedStringProperty = true;
+            const computedPropertySymbols: Symbol[] = [];
             for (const declaration of indexSymbol.declarations) {
                 if (isIndexSignatureDeclaration(declaration)) {
                     if (declaration.parameters.length === 1) {
@@ -16272,25 +16280,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else if (hasLateBindableIndexSignature(declaration)) {
-                    // TODO: Combine index signatures inferred for each member? Or make an index info for each?
-                    // Combined?
-                    // Pros: Easily made, definite compatability with all relevant signatures.
-                    // Cons: Unspecific. Can't make the signature until all declarations are processed
-                    // Individual?
-                    // Pros: Can inject one at a time. Accurate read types via index info applicability filtering.
-                    // Cons: Can't tell at-a-glance which signatures apply? Potentially lots of signatures to track?
-                    // Individual probably better, so is what we do here.
-
                     const declName = isBinaryExpression(declaration) ? declaration.left as ElementAccessExpression : (declaration as LateBoundDeclaration).name;
                     const keyType = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
-                    forEachType(keyType, keyType => {
-                        // First-in-wins on multiple declarations right now - combine? leave as multiple, but with compatability error?
-                        if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
-                            indexInfos.push(createIndexInfo(keyType, getTypeOfVariableOrParameterOrProperty(declaration.symbol), hasEffectiveModifier(declaration, ModifierFlags.Readonly)));
+                    if (findIndexInfo(indexInfos, keyType)) {
+                        continue; // Explicit index for key type takes priority
+                    }
+                    if (isTypeAssignableTo(keyType, stringNumberSymbolType)) {
+                        if (isTypeAssignableTo(keyType, numberType)) {
+                            hasComputedNumberProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedNumberProperty = false;
+                            }
                         }
-                    });
+                        else if (isTypeAssignableTo(keyType, esSymbolType)) {
+                            hasComputedSymbolProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedSymbolProperty = false;
+                            }
+                        }
+                        else {
+                            hasComputedStringProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedStringProperty = false;
+                            }
+                        }
+                        computedPropertySymbols.push(declaration.symbol);
+                    }
                 }
             }
+            // aggregate similar index infos implied to be the same key to the same combined index info
+            if (hasComputedStringProperty && !findIndexInfo(indexInfos, stringType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedStringProperty, 0, computedPropertySymbols, stringType));
+            if (hasComputedNumberProperty && !findIndexInfo(indexInfos, numberType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedNumberProperty, 0, computedPropertySymbols, numberType));
+            if (hasComputedSymbolProperty && !findIndexInfo(indexInfos, esSymbolType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedSymbolProperty, 0, computedPropertySymbols, esSymbolType));
             return indexInfos;
         }
         return emptyArray;
@@ -32858,7 +32879,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
     }
 
-    function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
+    // NOTE: currently does not make pattern literal indexers, eg `${number}px`
+    function getObjectLiteralIndexInfo(isReadonly: boolean, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
         const propTypes: Type[] = [];
         for (let i = offset; i < properties.length; i++) {
             const prop = properties[i];
@@ -32871,7 +32893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-        return createIndexInfo(keyType, unionType, isConstContext(node));
+        return createIndexInfo(keyType, unionType, isReadonly);
     }
 
     function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -33076,9 +33098,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function createObjectLiteralType() {
             const indexInfos = [];
-            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
-            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
-            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
+            const isReadonly = isConstContext(node);
+            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, stringType));
+            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, numberType));
+            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, esSymbolType));
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             if (isJSObjectLiteral) {

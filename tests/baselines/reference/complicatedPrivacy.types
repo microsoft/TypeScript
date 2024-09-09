@@ -86,8 +86,8 @@ module m1 {
     export function f4(arg1: 
 >f4 : (arg1: { [number]: C1; }) => void
 >   : ^    ^^                 ^^^^^^^^^
->arg1 : {}
->     : ^^
+>arg1 : { [x: number]: C1; }
+>     : ^^^^^^^^^^^^^^^^^^^^
     {
     [number]: C1; // Used to be indexer, now it is a computed property
 >[number] : C1

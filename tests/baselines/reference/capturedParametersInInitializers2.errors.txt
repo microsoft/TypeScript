@@ -1,12 +1,11 @@
 capturedParametersInInitializers2.ts(3,20): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
 capturedParametersInInitializers2.ts(4,14): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
-capturedParametersInInitializers2.ts(6,9): error TS2411: Property '[z]' of type '() => number' is not assignable to 'number' index type 'number'.
 capturedParametersInInitializers2.ts(6,10): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 capturedParametersInInitializers2.ts(13,26): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 capturedParametersInInitializers2.ts(13,27): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
 
 
-==== capturedParametersInInitializers2.ts (6 errors) ====
+==== capturedParametersInInitializers2.ts (5 errors) ====
     function foo(
         y = class {
             static c = x;
@@ -17,8 +16,6 @@ capturedParametersInInitializers2.ts(13,27): error TS2373: Parameter 'y' cannot 
 !!! error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
             constructor() { x; }
             [z]() { return z; }
-            ~~~
-!!! error TS2411: Property '[z]' of type '() => number' is not assignable to 'number' index type 'number'.
              ~
 !!! error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
         },
