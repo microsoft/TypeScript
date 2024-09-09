@@ -113,11 +113,12 @@ function parse(sourceFile: SourceFile, content: string): NodeArray<Node> {
         }
     }
     // Heuristic: fewer errors = more likely to be the right kind.
-    const { body } = parsedNodes.sort(
+    parsedNodes.sort(
         (a, b) =>
             a.sourceFile.parseDiagnostics.length -
             b.sourceFile.parseDiagnostics.length,
-    )[0];
+    );
+    const { body } = parsedNodes[0];
     return body;
 }
 

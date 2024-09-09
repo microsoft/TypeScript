@@ -195,8 +195,7 @@ function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCal
 >                                   : ^^^^^^                                  
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
->yield constCall : undefined
->                : ^^^^^^^^^
+>yield constCall : any
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -1304,8 +1303,8 @@ interface Context {
 const o3: Context = {
 >o3 : Context
 >   : ^^^^^^^
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, undefined>; method4(): Generator<unique symbol, void, undefined>; method5(p?: unique symbol): unique symbol; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol): unique symbol; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     method1() {
 >method1 : () => unique symbol
@@ -1326,23 +1325,21 @@ const o3: Context = {
 
     },
     async * method3() {
->method3 : () => AsyncGenerator<unique symbol, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>method3 : () => AsyncGenerator<unique symbol, void, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield s; // yield type should not widen due to contextual type
->yield s : undefined
->        : ^^^^^^^^^
+>yield s : any
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     },
     * method4() {
->method4 : () => Generator<unique symbol, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>method4 : () => Generator<unique symbol, void, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield s; // yield type should not widen due to contextual type
->yield s : undefined
->        : ^^^^^^^^^
+>yield s : any
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 

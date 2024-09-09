@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     GetErrForProjectDiagnostics,
@@ -11,7 +10,6 @@ import {
 } from "../helpers/tsserver.js";
 import {
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -145,7 +143,7 @@ fnErr();
     });
 
     it("when options for dependency project are different from usage project", () => {
-        const host = new TestServerHost({
+        const host = TestServerHost.createServerHost({
             "/home/src/projects/project/a/index.ts": dedent`
                 export function f2() {
                     return console.log()
@@ -174,7 +172,6 @@ fnErr();
                 references: [{ path: "../a/" }],
                 include: ["."],
             }),
-            [libFile.path]: libContent,
         });
         const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/b/index.ts"], session);

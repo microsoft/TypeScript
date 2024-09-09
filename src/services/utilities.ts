@@ -62,6 +62,7 @@ import {
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
     escapeString,
+    exclusivelyPrefixedNodeCoreModules,
     ExportAssignment,
     ExportDeclaration,
     Expression,
@@ -75,7 +76,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachChild,
     forEachLeadingCommentRange,
     forEachTrailingCommentRange,
@@ -95,6 +96,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
     getImpliedNodeFormatForFileWorker,
     getIndentString,
@@ -131,6 +133,7 @@ import {
     ImportTypeNode,
     indexOfNode,
     IndexSignatureDeclaration,
+    InternalNodeBuilderFlags,
     InternalSymbolName,
     isAmbientModule,
     isAnyImportSyntax,
@@ -269,7 +272,6 @@ import {
     JSDocLinkDisplayPart,
     JSDocLinkPlain,
     JSDocTypedefTag,
-    JsTyping,
     JsxEmit,
     JsxOpeningLikeElement,
     JsxTagNameExpression,
@@ -295,6 +297,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    nodeCoreModules,
     NodeFlags,
     nodeIsMissing,
     nodeIsPresent,
@@ -341,7 +344,6 @@ import {
     SourceFileLike,
     SourceMapper,
     SpreadElement,
-    stableSort,
     startsWith,
     StringLiteral,
     StringLiteralLike,
@@ -370,6 +372,7 @@ import {
     Token,
     tokenToString,
     toPath,
+    toSorted,
     tryCast,
     tryParseJson,
     Type,
@@ -2476,6 +2479,8 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
+        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 
@@ -2622,7 +2627,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     const { comparer, isSorted } = OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
+    const sortedNewImports = isArray(imports) ? toSorted(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements?.length) {
         if (isFullSourceFile(sourceFile)) {
             changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
@@ -3437,7 +3442,7 @@ export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, progra
     const checker = program.getTypeChecker();
     let typeIsAccessible = true;
     const notAccessible = () => typeIsAccessible = false;
-    const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
+    const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames, {
         trackSymbol: (symbol, declaration, meaning) => {
             typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             return !typeIsAccessible;
@@ -3633,30 +3638,35 @@ function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) |
 }
 
 /** @internal */
-export function findPackageJsons(startDirectory: string, host: Pick<LanguageServiceHost, "fileExists">, stopDirectory?: string): string[] {
+export function findPackageJsons(startDirectory: string, host: LanguageServiceHost): string[] {
     const paths: string[] = [];
-    forEachAncestorDirectory(startDirectory, ancestor => {
-        if (ancestor === stopDirectory) {
-            return true;
-        }
-        const currentConfigPath = combinePaths(ancestor, "package.json");
-        if (tryFileExists(host, currentConfigPath)) {
-            paths.push(currentConfigPath);
-        }
-    });
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        startDirectory,
+        ancestor => {
+            const currentConfigPath = combinePaths(ancestor, "package.json");
+            if (tryFileExists(host, currentConfigPath)) {
+                paths.push(currentConfigPath);
+            }
+        },
+    );
     return paths;
 }
 
 /** @internal */
 export function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
     let packageJson: string | undefined;
-    forEachAncestorDirectory(directory, ancestor => {
-        if (ancestor === "node_modules") return true;
-        packageJson = findConfigFile(ancestor, f => tryFileExists(host, f), "package.json");
-        if (packageJson) {
-            return true; // break out
-        }
-    });
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        directory,
+        ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, f => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        },
+    );
     return packageJson;
 }
 
@@ -3666,15 +3676,19 @@ function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHos
     }
 
     const packageJsons: ProjectPackageJsonInfo[] = [];
-    forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
-        const packageJsonFileName = combinePaths(ancestor, "package.json");
-        if (host.fileExists(packageJsonFileName)) {
-            const info = createPackageJsonInfo(packageJsonFileName, host);
-            if (info) {
-                packageJsons.push(info);
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        getDirectoryPath(fileName),
+        ancestor => {
+            const packageJsonFileName = combinePaths(ancestor, "package.json");
+            if (host.fileExists(packageJsonFileName)) {
+                const info = createPackageJsonInfo(packageJsonFileName, host);
+                if (info) {
+                    packageJsons.push(info);
+                }
             }
-        }
-    });
+        },
+    );
 
     return packageJsons;
 }
@@ -3736,7 +3750,7 @@ export function createPackageJsonInfo(fileName: string, host: { readFile?(fileNa
 /** @internal */
 export interface PackageJsonImportFilter {
     allowsImportingAmbientModule: (moduleSymbol: Symbol, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
-    allowsImportingSourceFile: (sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
+    getSourceFileInfo: (sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => { importable: boolean; packageName?: string; };
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
@@ -3753,10 +3767,10 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
 
     let usesNodeCoreModules: boolean | undefined;
     let ambientModuleCache: Map<Symbol, boolean> | undefined;
-    let sourceFileCache: Map<SourceFile, boolean> | undefined;
+    let sourceFileCache: Map<SourceFile, { importable: boolean; packageName?: string; }> | undefined;
     return {
         allowsImportingAmbientModule,
-        allowsImportingSourceFile,
+        getSourceFileInfo,
         allowsImportingSpecifier,
     };
 
@@ -3804,9 +3818,9 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
         return result;
     }
 
-    function allowsImportingSourceFile(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): boolean {
+    function getSourceFileInfo(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): { importable: boolean; packageName?: string; } {
         if (!packageJsons.length) {
-            return true;
+            return { importable: true, packageName: undefined };
         }
 
         if (!sourceFileCache) {
@@ -3819,13 +3833,15 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
             }
         }
 
-        const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
-        if (!moduleSpecifier) {
-            sourceFileCache.set(sourceFile, true);
-            return true;
+        const packageName = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
+        if (!packageName) {
+            const result = { importable: true, packageName };
+            sourceFileCache.set(sourceFile, result);
+            return result;
         }
 
-        const result = moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        const importable = moduleSpecifierIsCoveredByPackageJson(packageName);
+        const result = { importable, packageName };
         sourceFileCache.set(sourceFile, result);
         return result;
     }
@@ -3845,7 +3861,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
-        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && nodeCoreModules.has(moduleSpecifier)) {
             if (usesNodeCoreModules === undefined) {
                 usesNodeCoreModules = consumesNodeCoreModules(fromFile);
             }
@@ -3890,7 +3906,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourc
 
 /** @internal */
 export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
-    return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
+    return some(sourceFile.imports, ({ text }) => nodeCoreModules.has(text));
 }
 
 /** @internal */
@@ -3987,22 +4003,13 @@ export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
     return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
 }
 
-/** @internal */
-export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
-    if (needsNameFromDeclaration(symbol)) {
-        const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
-        if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
-        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
-        if (fileNameCase === capitalized) return fileNameCase;
-        return [fileNameCase, capitalized];
-    }
-    return symbol.name;
-}
-
-/** @internal */
+/**
+ * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
+ * instead, which searches for names of re-exported defaults/namespaces in target files.
+ * @internal
+ */
 export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
-    if (needsNameFromDeclaration(symbol)) {
+    if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
         // Names for default exports:
         // - export default foo => foo
         // - export { foo as default } => foo
@@ -4013,11 +4020,11 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
     return symbol.name;
 }
 
-function needsNameFromDeclaration(symbol: Symbol) {
-    return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
-}
-
-/** @internal */
+/**
+ * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
+ * instead, which searches for names of re-exported defaults/namespaces in target files.
+ * @internal
+ */
 export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d => {
         // "export default" in this case. See `ExportAssignment`for more details.
@@ -4126,12 +4133,18 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 }
 
 /** @internal */
-export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean {
-    const decisionFromFile = firstDefined(file.imports, node => {
-        if (JsTyping.nodeCoreModules.has(node.text)) {
-            return startsWith(node.text, "node:");
+export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean | undefined {
+    let decisionFromFile;
+    for (const node of file.imports) {
+        if (nodeCoreModules.has(node.text) && !exclusivelyPrefixedNodeCoreModules.has(node.text)) {
+            if (startsWith(node.text, "node:")) {
+                return true;
+            }
+            else {
+                decisionFromFile = false;
+            }
         }
-    });
+    }
     return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
 }
 
@@ -4250,11 +4263,13 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = program.getCompilerOptions();
+    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const impliedNodeFormat = typeof file === "string"
-        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
-        : file.impliedNodeFormat;
+    const sourceFileLike = typeof file === "string" ? {
+        fileName: file,
+        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
+    } : file;
+    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

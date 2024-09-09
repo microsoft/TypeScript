@@ -1,19 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a.ts]
+//// [/user/username/projects/project/a.ts]
 export class C {}
 
-//// [/b.ts]
+//// [/user/username/projects/project/b.ts]
 import {C} from './a'; import * as A from './A';
 
-//// [/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "forceConsistentCasingInFileNames": false
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -25,9 +25,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -36,7 +38,7 @@ Output::
 
 
 
-//// [/a.js]
+//// [/user/username/projects/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
@@ -48,58 +50,63 @@ var C = /** @class */ (function () {
 exports.C = C;
 
 
-//// [/b.js]
+//// [/user/username/projects/project/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/a.ts: *new*
   {}
-/b.ts: *new*
+/user/username/projects/project/b.ts: *new*
   {}
-/tsconfig.json: *new*
+/user/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/projects/project: *new*
   {}
 
 Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/projects/project/a.ts",
+  "/user/username/projects/project/b.ts"
 ]
 Program options: {
   "forceConsistentCasingInFileNames": false,
   "watch": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a.ts
-/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/a.ts
+/user/username/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
-/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/a.ts
+/user/username/projects/project/b.ts
 
 Shape signatures in builder refreshed for::
-/a.ts (used version)
-/b.ts (used version)
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/project/a.ts (used version)
+/user/username/projects/project/b.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Enable forceConsistentCasingInFileNames
 
 Input::
-//// [/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true
@@ -119,11 +126,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m1[0m:[93m43[0m - [91merror[0m[90m TS1149: [0mFile name '/A.ts' differs from already included file name '/a.ts' only in casing.
+[96mb.ts[0m:[93m1[0m:[93m43[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/project/A.ts' differs from already included file name '/user/username/projects/project/a.ts' only in casing.
   The file is in the program because:
     Matched by default include pattern '**/*'
-    Imported via './a' from file '/b.ts'
-    Imported via './A' from file '/b.ts'
+    Imported via './a' from file '/user/username/projects/project/b.ts'
+    Imported via './A' from file '/user/username/projects/project/b.ts'
 
 [7m1[0m import {C} from './a'; import * as A from './A';
 [7m [0m [91m                                          ~~~~~[0m
@@ -140,20 +147,19 @@ Output::
 
 
 Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/projects/project/a.ts",
+  "/user/username/projects/project/b.ts"
 ]
 Program options: {
   "forceConsistentCasingInFileNames": true,
   "watch": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a.ts
-/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/a.ts
+/user/username/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
 

@@ -55,6 +55,7 @@ import {
     Identifier,
     idText,
     InterfaceDeclaration,
+    InternalNodeBuilderFlags,
     isCallExpression,
     isClassLike,
     isComputedPropertyName,
@@ -369,7 +370,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
         const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
         if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
-            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
+            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleDeclarationSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
         }
 
         const moduleSourceFile = find(symbol.declarations, isSourceFile);
@@ -493,11 +494,11 @@ function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | Interfac
         const binaryExpression = token.parent.parent as BinaryExpression;
         const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
         const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
-        typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation);
+        typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
     }
     else {
         const contextualType = checker.getContextualType(token.parent as Expression);
-        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation) : undefined;
+        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames) : undefined;
     }
     return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
 }
@@ -775,7 +776,7 @@ function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | Interfac
 
 function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
     if (isTransientSymbol(symbol)) {
-        const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
+        const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, InternalNodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
     // We're using these nodes as property names in an object literal; no need to quote names when not needed.

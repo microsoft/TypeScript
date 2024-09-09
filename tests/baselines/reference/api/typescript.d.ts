@@ -2808,7 +2808,6 @@ declare namespace ts {
         abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
             readonly projectKind: ProjectKind;
             readonly projectService: ProjectService;
-            private documentRegistry;
             private compilerOptions;
             compileOnSaveEnabled: boolean;
             protected watchOptions: WatchOptions | undefined;
@@ -2931,7 +2930,6 @@ declare namespace ts {
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
             private isDefaultProjectForOpenFiles;
-            private getCompilerOptionsForNoDtsResolutionProject;
         }
         /**
          * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -3268,6 +3266,7 @@ declare namespace ts {
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
             private watchWildcardDirectory;
+            private onWildCardDirectoryWatcherInvoke;
             private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
             private onConfigFileChanged;
             private removeProject;
@@ -3317,6 +3316,7 @@ declare namespace ts {
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
             private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
+            private sendSourceFileChange;
             /**
              * This function rebuilds the project for every file opened by the client
              * This does not reload contents of open files from disk. But we could do that if needed
@@ -3338,6 +3338,7 @@ declare namespace ts {
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
             private cleanupProjectsAndScriptInfos;
+            private tryInvokeWildCardDirectories;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
             private removeOrphanScriptInfos;
             private telemetryOnOpenFile;
@@ -3592,7 +3593,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.6";
+    const versionMajorMinor = "5.7";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -3980,10 +3981,11 @@ declare namespace ts {
         JSDocImportTag = 351,
         SyntaxList = 352,
         NotEmittedStatement = 353,
-        PartiallyEmittedExpression = 354,
-        CommaListExpression = 355,
-        SyntheticReferenceExpression = 356,
-        Count = 357,
+        NotEmittedTypeElement = 354,
+        PartiallyEmittedExpression = 355,
+        CommaListExpression = 356,
+        SyntheticReferenceExpression = 357,
+        Count = 358,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4422,7 +4424,7 @@ declare namespace ts {
         readonly right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
-    type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;
     type MemberName = Identifier | PrivateIdentifier;
     type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
     interface Declaration extends Node {
@@ -4773,7 +4775,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.StringLiteral;
     }
     type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
-    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
+    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName | BigIntLiteral;
     interface TemplateLiteralTypeNode extends TypeNode {
         kind: SyntaxKind.TemplateLiteralType;
         readonly head: TemplateHead;
@@ -5208,6 +5210,9 @@ declare namespace ts {
     }
     interface NotEmittedStatement extends Statement {
         readonly kind: SyntaxKind.NotEmittedStatement;
+    }
+    interface NotEmittedTypeElement extends TypeElement {
+        readonly kind: SyntaxKind.NotEmittedTypeElement;
     }
     /**
      * A list of comma-separated expressions. This node is only created by transformations.
@@ -5991,19 +5996,67 @@ declare namespace ts {
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
         /**
-         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-         * impact on module resolution, emit, or type checking.
+         * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+         * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+         * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+         * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+         * Some examples:
+         *
+         * ```ts
+         * // tsc foo.mts --module nodenext
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+         *
+         * // tsc foo.cts --module nodenext
+         * import {} from "mod";
+         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+         *
+         * // tsc foo.ts --module preserve --moduleResolution bundler
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+         * // supports conditional imports/exports
+         *
+         * // tsc foo.ts --module preserve --moduleResolution node10
+         * import {} from "mod";
+         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+         * // does not support conditional imports/exports
+         *
+         * // tsc foo.ts --module commonjs --moduleResolution node10
+         * import type {} from "mod" with { "resolution-mode": "import" };
+         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+         * ```
          */
         getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
         /**
-         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
-         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
-         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
-         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
-         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This function only returns a result
+         * when module resolution settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided
+         * via import attributes, which cause an `import` or `require` condition to be used during resolution regardless of module resolution
+         * settings. In absence of overriding attributes, and in modes that support differing resolution, the result indicates the syntax the
+         * usage would emit to JavaScript. Some examples:
+         *
+         * ```ts
+         * // tsc foo.mts --module nodenext
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+         *
+         * // tsc foo.cts --module nodenext
+         * import {} from "mod";
+         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+         *
+         * // tsc foo.ts --module preserve --moduleResolution bundler
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+         * // supports conditional imports/exports
+         *
+         * // tsc foo.ts --module preserve --moduleResolution node10
+         * import {} from "mod";
+         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+         * // does not support conditional imports/exports
+         *
+         * // tsc foo.ts --module commonjs --moduleResolution node10
+         * import type {} from "mod" with { "resolution-mode": "import" };
+         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+         * ```
          */
         getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
@@ -6070,6 +6123,27 @@ declare namespace ts {
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
+        /**
+         * Gets the "awaited type" of a type.
+         *
+         * If an expression has a Promise-like type, the "awaited type" of the expression is
+         * derived from the type of the first argument of the fulfillment callback for that
+         * Promise's `then` method. If the "awaited type" is itself a Promise-like, it is
+         * recursively unwrapped in the same manner until a non-promise type is found.
+         *
+         * If an expression does not have a Promise-like type, its "awaited type" is the type
+         * of the expression.
+         *
+         * If the resulting "awaited type" is a generic object type, then it is wrapped in
+         * an `Awaited<T>`.
+         *
+         * In the event the "awaited type" circularly references itself, or is a non-Promise
+         * object-type with a callable `then()` method, an "awaited type" cannot be determined
+         * and the value `undefined` will be returned.
+         *
+         * This is used to reflect the runtime behavior of the `await` keyword.
+         */
+        getAwaitedType(type: Type): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
@@ -6960,6 +7034,7 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        strictBuiltinIteratorReturn?: boolean;
         stripInternal?: boolean;
         /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
@@ -6968,6 +7043,7 @@ declare namespace ts {
         target?: ScriptTarget;
         traceResolution?: boolean;
         useUnknownInCatchVariables?: boolean;
+        noUncheckedSideEffectImports?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
@@ -7294,9 +7370,10 @@ declare namespace ts {
         TypeAssertions = 2,
         NonNullAssertions = 4,
         PartiallyEmittedExpressions = 8,
+        ExpressionsWithTypeArguments = 16,
         Assertions = 6,
-        All = 15,
-        ExcludeJSDocTypeAssertion = 16,
+        All = 31,
+        ExcludeJSDocTypeAssertion = -2147483648,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
@@ -7738,6 +7815,7 @@ declare namespace ts {
         createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile;
         updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
         createNotEmittedStatement(original: Node): NotEmittedStatement;
+        createNotEmittedTypeElement(): NotEmittedTypeElement;
         createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
         updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
@@ -8188,6 +8266,7 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly autoImportSpecifierExcludeRegexes?: string[];
         readonly preferTypeOnlyAutoImports?: boolean;
         /**
          * Indicates whether imports should be organized in a case-insensitive manner.
@@ -9044,6 +9123,7 @@ declare namespace ts {
         jsDocParsingMode?: JSDocParsingMode;
     }
     function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
+    function parseBuildCommand(commandLine: readonly string[]): ParsedBuildCommand;
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
@@ -9098,6 +9178,13 @@ declare namespace ts {
         options: TypeAcquisition;
         errors: Diagnostic[];
     };
+    /** Parsed command line for build */
+    interface ParsedBuildCommand {
+        buildOptions: BuildOptions;
+        watchOptions: WatchOptions | undefined;
+        projects: string[];
+        errors: Diagnostic[];
+    }
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     /**
      * Reports config file diagnostics
@@ -9362,24 +9449,43 @@ declare namespace ts {
     function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
      * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
-     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-     * impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+     * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+     * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+     * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+     * Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
+     *
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
      * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
      * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(
-        file: {
-            impliedNodeFormat?: ResolutionMode;
-        },
-        usage: StringLiteralLike,
-        compilerOptions: CompilerOptions,
-    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions): ResolutionMode;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -9728,6 +9834,7 @@ declare namespace ts {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
+        stopBuildOnErrors?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         declaration?: boolean;
@@ -9805,6 +9912,8 @@ declare namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
     type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
+    /** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
+    function isBuildCommand(commandLineArgs: readonly string[]): boolean;
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -10695,6 +10804,10 @@ declare namespace ts {
          */
         isIncomplete?: true;
         entries: CompletionEntry[];
+        /**
+         * Default commit characters for the completion entries.
+         */
+        defaultCommitCharacters?: string[];
     }
     interface CompletionEntryDataAutoImport {
         /**
@@ -10801,6 +10914,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        /**
+         * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+         */
+        commitCharacters?: string[];
     }
     interface CompletionEntryLabelDetails {
         /**

@@ -157,8 +157,8 @@ export declare const e: typeof import("inner/mjs");
 export declare const a: Promise<{
     default: typeof import("./index.cjs");
 }>;
-export declare const b: Promise<typeof import("./index.mjs", { with: { "resolution-mode": "import" } })>;
-export declare const c: Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>;
+export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>;
+export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;
 export declare const f: Promise<{
     default: typeof import("inner");
     cjsMain: true;

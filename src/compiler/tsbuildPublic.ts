@@ -135,6 +135,7 @@ export interface BuildOptions {
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
+    stopBuildOnErrors?: boolean;
 
     /** @internal */ clean?: boolean;
     /** @internal */ watch?: boolean;
@@ -1254,6 +1255,23 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             }
         }
 
+        if (status.type === UpToDateStatusType.UpstreamBlocked) {
+            verboseReportProjectStatus(state, project, status);
+            reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
+            projectPendingBuild.delete(projectPath);
+            if (options.verbose) {
+                reportStatus(
+                    state,
+                    status.upstreamProjectBlocked ?
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                    project,
+                    status.upstreamProjectName,
+                );
+            }
+            continue;
+        }
+
         if (status.type === UpToDateStatusType.ContainerOnly) {
             verboseReportProjectStatus(state, project, status);
             reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
@@ -1453,6 +1471,20 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 refStatus.type === UpToDateStatusType.ContainerOnly
             ) { // Container only ignore this project
                 continue;
+            }
+
+            // An upstream project is blocked
+            if (
+                state.options.stopBuildOnErrors && (
+                    refStatus.type === UpToDateStatusType.Unbuildable ||
+                    refStatus.type === UpToDateStatusType.UpstreamBlocked
+                )
+            ) {
+                return {
+                    type: UpToDateStatusType.UpstreamBlocked,
+                    upstreamProjectName: ref.path,
+                    upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked,
+                };
             }
 
             if (!force) (referenceStatuses ||= []).push({ ref, refStatus, resolvedRefPath, resolvedConfig });
@@ -1848,6 +1880,8 @@ function queueReferencingProjects<T extends BuilderProgram>(
     buildOrder: readonly ResolvedConfigFileName[],
     buildResult: BuildResultFlags,
 ) {
+    // Queue only if there are no errors
+    if (state.options.stopBuildOnErrors && (buildResult & BuildResultFlags.AnyErrors)) return;
     // Only composite projects can be referenced by other projects
     if (!config.options.composite) return;
     // Always use build order to queue projects
@@ -1881,6 +1915,12 @@ function queueReferencingProjects<T extends BuilderProgram>(
                                 outOfDateOutputFileName: status.oldestOutputFileName,
                                 newerProjectName: project,
                             });
+                        }
+                        break;
+
+                    case UpToDateStatusType.UpstreamBlocked:
+                        if (toResolvedConfigFilePath(state, resolveProjectName(state, status.upstreamProjectName)) === projectPath) {
+                            clearProjectStatus(state, nextProjectPath);
                         }
                         break;
                 }
@@ -2383,6 +2423,15 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
             return reportStatus(
                 state,
                 Diagnostics.Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date,
+                relName(state, configFileName),
+                relName(state, status.upstreamProjectName),
+            );
+        case UpToDateStatusType.UpstreamBlocked:
+            return reportStatus(
+                state,
+                status.upstreamProjectBlocked ?
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                 relName(state, configFileName),
                 relName(state, status.upstreamProjectName),
             );

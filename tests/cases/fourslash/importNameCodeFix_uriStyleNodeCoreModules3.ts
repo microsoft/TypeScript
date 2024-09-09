@@ -31,12 +31,24 @@
 //// import "path";
 //// writeFile/*mixed2*/
 
-verify.importFixModuleSpecifiers("noPrefix", ["fs", "fs/promises", "node:fs", "node:fs/promises"]);
-verify.importFixModuleSpecifiers("prefix", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+// @Filename: /test1.ts
+//// import "node:test";
+//// import "path";
+//// writeFile/*test1*/
 
-// We're doing as little work as possible to decide which module specifiers
-// to use, so we just take the *first* recognized node core module in the file
-// and copy its style.
+// @Filename: /test2.ts
+//// import "node:test";
+//// writeFile/*test2*/
 
-verify.importFixModuleSpecifiers("mixed1", ["fs", "fs/promises", "node:fs", "node:fs/promises"]);
-verify.importFixModuleSpecifiers("mixed2", ["node:fs", "node:fs/promises", "fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("noPrefix", ["fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("prefix", ["node:fs", "node:fs/promises"]);
+
+// Prefixed imports take precedence over non-prefixed imports when mixed
+
+verify.importFixModuleSpecifiers("mixed1", ["node:fs", "node:fs/promises"]);
+verify.importFixModuleSpecifiers("mixed2", ["node:fs", "node:fs/promises"]);
+
+// Unless the prefixed import is not available unprefixed
+
+verify.importFixModuleSpecifiers("test1", ["fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("test2", ["node:fs", "node:fs/promises"]);

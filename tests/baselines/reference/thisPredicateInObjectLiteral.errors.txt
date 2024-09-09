@@ -1,0 +1,20 @@
+thisPredicateInObjectLiteral.ts(10,28): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+
+
+==== thisPredicateInObjectLiteral.ts (1 errors) ====
+    // Should be OK
+    const foo2 = {
+        isNumber(): this is { b: string } {
+            return true;
+        },
+    };
+    
+    // Still an error
+    const foo3 = {
+        isNumber(x: any): x is this {
+                               ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+            return true;
+        },
+    };
+    

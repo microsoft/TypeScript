@@ -1006,7 +1006,7 @@ const enum EscapeSequenceScanningFlags {
     AtomEscape = 1 << 5,
 
     ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
-    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+    AllowExtendedUnicodeEscape = String | AnyUnicodeMode,
 }
 
 const enum ClassSetExpressionType {
@@ -1609,13 +1609,17 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.doubleQuote:
                 return '"';
             case CharacterCodes.u:
-                if (
-                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
-                    pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
-                ) {
+                if (pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    const result = scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    if (!(flags & EscapeSequenceScanningFlags.AllowExtendedUnicodeEscape)) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                            error(Diagnostics.Unicode_escape_sequences_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        }
+                    }
+                    return result;
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
@@ -1640,7 +1644,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     const nextStart = pos;
                     let nextPos = pos + 2;
                     for (; nextPos < nextStart + 6; nextPos++) {
-                        if (!isHexDigit(charCodeUnchecked(pos))) {
+                        if (!isHexDigit(charCodeUnchecked(nextPos))) {
                             // leave the error to the next call
                             return escapedValueString;
                         }
@@ -3552,7 +3556,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanSourceCharacter(): string {
-            const size = anyUnicodeMode ? charSize(charCodeChecked(pos)) : 1;
+            const size = anyUnicodeMode ? charSize(codePointChecked(pos)) : 1;
             pos += size;
             return size > 0 ? text.substring(pos - size, pos) : "";
         }
