@@ -84,21 +84,24 @@ function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? 
     return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // EPC Error
 }
 
-// Asymmetry
-// function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
-//     arg: Arg,
-//     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
-//     produceLeftOut: (arg: LeftIn) => LeftOut,
-//     produceRightOut: (arg: RightIn) => RightOut):
-//     Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
-// {
-//     type OK = Arg extends LeftIn ? LeftOut : RightOut;
-//     if (cond(arg)) {
-//         return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
-//     } else {
-//         return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
-//     }
-// }
+// This will not work for several reasons:
+// - first because the constraint of type parameter `Arg` is generic,
+//   so attempting to narrow the type of `arg` in the `if` would result in type `Arg & LeftIn`,
+//   which when substituted in the conditional return type, would not further resolve that conditional type
+// - second because the `else` branch would never work because we don't narrow the type of `arg` to `Arg & RightIn` 
+function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+    arg: Arg,
+    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+    produceLeftOut: (arg: LeftIn) => LeftOut,
+    produceRightOut: (arg: RightIn) => RightOut):
+    Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
+{
+    if (cond(arg)) {
+        return produceLeftOut(arg);
+    } else {
+        return produceRightOut(arg as RightIn);
+    }
+}
 
 interface Animal {
     name: string;
