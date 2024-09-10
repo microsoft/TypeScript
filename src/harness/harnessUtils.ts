@@ -41,7 +41,7 @@ export function readTestFile(path: string) {
     try {
         content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
     }
-    catch (err) {
+    catch {
         return undefined;
     }
 
@@ -333,7 +333,7 @@ const maxHarnessFrames = 1;
 export function filterStack(error: Error, stackTraceLimit = Infinity) {
     const stack = (error as any).stack as string;
     if (stack) {
-        const lines = stack.split(/\r\n?|\n/g);
+        const lines = stack.split(/\r\n?|\n/);
         const filtered: string[] = [];
         let frameCount = 0;
         let harnessFrameCount = 0;
@@ -355,7 +355,7 @@ export function filterStack(error: Error, stackTraceLimit = Infinity) {
                     harnessFrameCount++;
                 }
 
-                line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                line = line.replace(/\bfile:\/\/\/(.*?)(?=(?::\d+)*(?:$|\)))/, (_, path) => ts.sys.resolvePath(path));
                 frameCount++;
             }
 
@@ -373,11 +373,11 @@ function isStackFrame(line: string) {
 }
 
 function isMocha(line: string) {
-    return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
+    return /[\\/](?:node_modules|components)[\\/]mocha(?:js)?[\\/]|[\\/]mocha\.js/.test(line);
 }
 
 function isNode(line: string) {
-    return /\((timers|events|node|module)\.js:/.test(line);
+    return /\((?:timers|events|node|module)\.js:/.test(line);
 }
 
 function isHarness(line: string) {

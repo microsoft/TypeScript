@@ -1763,6 +1763,7 @@ export function createLanguageService(
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
             jsDocParsingMode: host.jsDocParsingMode,
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -3166,7 +3167,7 @@ export function createLanguageService(
             //
             // The following three regexps are used to match the start of the text up to the TODO
             // comment portion.
-            const singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            const singleLineCommentStart = /(?:\/{2,}\s*)/.source;
             const multiLineCommentStart = /(?:\/\*+\s*)/.source;
             const anyNumberOfSpacesAndAsterisksAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 

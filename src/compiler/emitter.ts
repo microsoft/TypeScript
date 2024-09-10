@@ -1880,6 +1880,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
+                case SyntaxKind.NotEmittedTypeElement:
                     return;
             }
             if (isExpression(node)) {
@@ -4005,7 +4006,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.comment) {
             const text = getTextOfJSDocComment(node.comment);
             if (text) {
-                const lines = text.split(/\r\n?|\n/g);
+                const lines = text.split(/\r\n?|\n/);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -4508,7 +4509,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
-        emitList(parentNode, typeParameters, ListFormat.TypeParameters);
+        emitList(parentNode, typeParameters, ListFormat.TypeParameters | (isArrowFunction(parentNode) ? ListFormat.AllowTrailingComma : ListFormat.None));
     }
 
     function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
@@ -4880,7 +4881,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeLines(text: string): void {
-        const lines = text.split(/\r\n?|\n/g);
+        const lines = text.split(/\r\n?|\n/);
         const indentation = guessIndentation(lines);
         for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;

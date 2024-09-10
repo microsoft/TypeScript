@@ -1,33 +1,32 @@
-import * as fakes from "../../_namespaces/fakes.js";
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
-import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    baselinePrograms,
+    applyEdit,
+    baselineAfterTscCompile as baseline_baselineAfterTscCompile,
+    BaselineBase,
     CommandLineCallbacks,
     commandLineCallbacks,
     CommandLineProgram,
-    generateSourceMapBaselineFiles,
+    createBaseline,
     isReadableIncrementalBuildInfo,
     isReadableIncrementalBundleEmitBuildInfo,
     isReadableIncrementalMultiFileEmitBuildInfo,
+    isWatch,
     ReadableBuildInfo,
     ReadableIncrementalBuildInfo,
     ReadableIncrementalBuildInfoFileInfo,
     ReadableIncrementalBundleEmitBuildInfo,
     ReadableIncrementalMultiFileEmitBuildInfo,
-    sanitizeSysOutput,
     toPathWithSystem,
     tscBaselineName,
+    TscWatchSystem,
 } from "./baseline.js";
-
-export type TscCompileSystem = fakes.System & {
-    writtenFiles: Set<ts.Path>;
-    baseLine(): { file: string; text: string; };
-    dtsSignaures?: Map<ts.Path, Map<string, string>>;
-    storeSignatureInfo?: boolean;
-};
+import {
+    isFsFile,
+    TestServerHost,
+    TestServerHostSnapshot,
+} from "./virtualFileSystemWithWatch.js";
 
 export const noChangeRun: TestTscEdit = {
     caption: "no-change-run",
@@ -35,106 +34,40 @@ export const noChangeRun: TestTscEdit = {
 };
 export const noChangeOnlyRuns = [noChangeRun];
 
-export interface TestTscCompile extends TestTscCompileLikeBase {
+export interface TestTscCompile {
+    commandLineArgs: readonly string[];
+    sys: () => TestServerHost;
+    modifySystem?: (fs: TestServerHost) => void;
+    computeDtsSignatures?: boolean;
+    getWrittenFiles?: boolean;
     baselineSourceMap?: boolean;
     baselineReadFileCalls?: boolean;
     baselinePrograms?: boolean;
     baselineDependencies?: boolean;
-}
-
-export interface TestTscCompileLikeBase extends VerifyTscCompileLike {
-    diffWithInitial?: boolean;
-    modifyFs?: (fs: vfs.FileSystem) => void;
-    computeDtsSignatures?: boolean;
-    environmentVariables?: Record<string, string>;
-}
-
-export interface TestTscCompileLike extends TestTscCompileLikeBase {
-    compile: (sys: TscCompileSystem) => void;
-    additionalBaseline?: (sys: TscCompileSystem) => void;
-}
-/**
- * Initialize FS, run compile function and save baseline
- */
-export function testTscCompileLike(input: TestTscCompileLike) {
-    const initialFs = input.fs();
-    const inputFs = initialFs.shadow();
-    const {
-        scenario,
-        subScenario,
-        diffWithInitial,
-        commandLineArgs,
-        modifyFs,
-        environmentVariables,
-        compile: worker,
-        additionalBaseline,
-    } = input;
-    if (modifyFs) modifyFs(inputFs);
-    inputFs.makeReadonly();
-    const fs = inputFs.shadow();
-
-    // Create system
-    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
-    sys.storeSignatureInfo = true;
-    sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
-    sys.exit = exitCode => sys.exitCode = exitCode;
-    worker(sys);
-    sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
-    additionalBaseline?.(sys);
-    fs.makeReadonly();
-    sys.baseLine = () => {
-        const baseFsPatch = diffWithInitial ?
-            inputFs.diff(initialFs, { includeChangedFileWithSameContent: true }) :
-            inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
-        const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
-        return {
-            file: tscBaselineName(scenario, subScenario, commandLineArgs),
-            text: `Input::
-${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
-
-Output::
-${sys.output.map(sanitizeSysOutput).join("")}
-
-${patch ? vfs.formatPatch(patch) : ""}`,
-        };
-    };
-    return sys;
-}
-
-export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
-    if (versionToWrite) {
-        fakes.patchHostForBuildInfoWrite(sys, versionToWrite);
-    }
-    else {
-        fakes.patchHostForBuildInfoReadWrite(sys);
-    }
-    const writtenFiles = sys.writtenFiles = new Set();
-    const originalWriteFile = sys.writeFile;
-    sys.writeFile = (fileName, content, writeByteOrderMark) => {
-        const path = toPathWithSystem(sys, fileName);
-        // When buildinfo is same for two projects,
-        // it gives error and doesnt write buildinfo but because buildInfo is written for one project,
-        // readable baseline will be written two times for those two projects with same contents and is ok
-        ts.Debug.assert(!writtenFiles.has(path) || ts.endsWith(path, "baseline.txt"));
-        writtenFiles.add(path);
-        return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-    };
+    compile?: (sys: TscWatchSystem) => CommandLineCallbacks["getPrograms"];
 }
 
 /**
  * Initialize Fs, execute command line and save baseline
  */
-export function testTscCompile(input: TestTscCompile) {
+function initialTestTscCompile(input: TestTscCompile) {
+    const { sys, baseline } = createBaseline(input.sys(), input.modifySystem);
+    sys.exit = exitCode => sys.exitCode = exitCode;
+    ts.Debug.assert(!isWatch(input.commandLineArgs), "use verifyTscWatch");
+    return testTscCompileWith(sys, baseline, input);
+}
+
+/**
+ * execute command line and save baseline
+ */
+function testTscCompileWith(
+    sys: BaselineBase["sys"],
+    baseline: BaselineBase["baseline"],
+    input: TestTscCompileBaselineInput & Pick<TestTscCompile, "compile">,
+) {
     let actualReadFileMap: ts.MapLike<number> | undefined;
     let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
-    return testTscCompileLike({
-        ...input,
-        compile: commandLineCompile,
-        additionalBaseline,
-    });
-
-    function commandLineCompile(sys: TscCompileSystem) {
-        makeSystemReadyForBaseline(sys);
+    if (!input.compile) {
         actualReadFileMap = {};
         const originalReadFile = sys.readFile;
         if (input.baselineReadFileCalls) {
@@ -146,7 +79,6 @@ export function testTscCompile(input: TestTscCompile) {
                 return originalReadFile.call(sys, path);
             };
         }
-
         const result = commandLineCallbacks(sys, originalReadFile);
         ts.executeCommandLine(
             sys,
@@ -156,33 +88,57 @@ export function testTscCompile(input: TestTscCompile) {
         sys.readFile = originalReadFile;
         getPrograms = result.getPrograms;
     }
-
-    function additionalBaseline(sys: TscCompileSystem) {
-        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
-        const programs = getPrograms!();
-        if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
-        if (shouldBaselinePrograms) {
-            const baseline: string[] = [];
-            baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
-            sys.write(baseline.join("\n"));
-        }
-        if (baselineReadFileCalls) {
-            sys.write(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
-        }
-        if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
-        actualReadFileMap = undefined;
-        getPrograms = undefined;
+    else {
+        getPrograms = input.compile(sys);
     }
+    const { dtsSignatures, writtenFiles } = baselineAfterTscCompile(sys, baseline, input, getPrograms, actualReadFileMap);
+    return { sys, baseline, dtsSignatures, writtenFiles };
+}
+type TestTscCompileBaselineInput = Pick<
+    TestTscCompile,
+    | "commandLineArgs"
+    | "computeDtsSignatures"
+    | "getWrittenFiles"
+    | "baselineSourceMap"
+    | "baselineReadFileCalls"
+    | "baselinePrograms"
+    | "baselineDependencies"
+>;
+function baselineAfterTscCompile(
+    sys: BaselineBase["sys"],
+    baseline: BaselineBase["baseline"],
+    input: TestTscCompileBaselineInput,
+    getPrograms: () => readonly CommandLineProgram[],
+    actualReadFileMap: ts.MapLike<number> | undefined,
+) {
+    baseline.push(`${sys.getExecutingFilePath()} ${input.commandLineArgs.join(" ")}`);
+    const writtenFiles = input.getWrittenFiles ? new Set(sys.writtenFiles.keys()) : undefined;
+    const programs = baseline_baselineAfterTscCompile(
+        sys,
+        baseline,
+        getPrograms,
+        ts.emptyArray,
+        input.baselineSourceMap,
+        input.baselinePrograms,
+        input.baselineDependencies,
+    );
+    const dtsSignatures = input.computeDtsSignatures ? storeDtsSignatures(sys, programs) : undefined;
+    if (input.baselineReadFileCalls) {
+        baseline.push(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
+    }
+    actualReadFileMap = undefined;
+    return { dtsSignatures, writtenFiles };
 }
 
-function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLineProgram[]) {
+function storeDtsSignatures(sys: TscWatchSystem, programs: readonly CommandLineProgram[]) {
+    let dtsSignatures: Map<ts.Path, Map<string, string>> | undefined;
     for (const [program, builderProgram] of programs) {
         if (!builderProgram) continue;
         const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(program.getCompilerOptions());
         if (!buildInfoPath) continue;
-        sys.dtsSignaures ??= new Map();
+        dtsSignatures ??= new Map();
         const dtsSignatureData = new Map<string, string>();
-        sys.dtsSignaures.set(`${toPathWithSystem(sys, buildInfoPath)}.readable.baseline.txt` as ts.Path, dtsSignatureData);
+        dtsSignatures.set(`${toPathWithSystem(sys, buildInfoPath)}.readable.baseline.txt` as ts.Path, dtsSignatureData);
         builderProgram.state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
             const file = program.getSourceFileByPath(resolvedPath);
             if (!file || file.isDeclarationFile) return;
@@ -203,84 +159,36 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
             return ts.ensurePathIsNonModuleName(ts.getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
     }
+    return dtsSignatures;
 }
 
-export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
-    it(`Generates files matching the baseline`, () => {
-        const { file, text } = sys().baseLine();
-        Harness.Baseline.runBaseline(file, text);
-    });
-}
-export interface VerifyTscCompileLike {
-    scenario: string;
-    subScenario: string;
-    commandLineArgs: readonly string[];
-    fs: () => vfs.FileSystem;
-}
-
-/**
- * Verify by baselining after initializing FS and custom compile
- */
-export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
-    describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
-        describe(input.scenario, () => {
-            describe(input.subScenario, () => {
-                verifyTscBaseline(() =>
-                    verifier({
-                        ...input,
-                        fs: () => input.fs().makeReadonly(),
-                    })
-                );
-            });
-        });
-    });
-}
-
-interface VerifyTscEditDiscrepanciesInput {
-    index: number;
-    edits: readonly TestTscEdit[];
-    scenario: TestTscCompile["scenario"];
-    baselines: string[] | undefined;
-    commandLineArgs: TestTscCompile["commandLineArgs"];
-    modifyFs: TestTscCompile["modifyFs"];
-    baseFs: vfs.FileSystem;
-    newSys: TscCompileSystem;
-    environmentVariables: TestTscCompile["environmentVariables"];
-}
-function verifyTscEditDiscrepancies({
-    index,
-    edits,
-    scenario,
-    commandLineArgs,
-    environmentVariables,
-    baselines,
-    modifyFs,
-    baseFs,
-    newSys,
-}: VerifyTscEditDiscrepanciesInput): string[] | undefined {
-    const { caption, discrepancyExplanation } = edits[index];
-    const sys = testTscCompile({
-        scenario,
-        subScenario: caption,
-        fs: () => baseFs.makeReadonly(),
-        commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
-        modifyFs: fs => {
-            if (modifyFs) modifyFs(fs);
+function verifyTscEditDiscrepancies(
+    input: VerifyTscWithEditsInput,
+    index: number,
+    snaps: readonly TestServerHostSnapshot[],
+    baselines: string[] | undefined,
+): string[] | undefined {
+    const result = initialTestTscCompile({
+        ...input,
+        modifySystem: fs => {
+            input.modifySystem?.(fs);
             for (let i = 0; i <= index; i++) {
-                edits[i].edit(fs);
+                input.edits![i].edit(fs as TscWatchSystem);
             }
         },
-        environmentVariables,
+        commandLineArgs: input.edits![index].commandLineArgs ?? input.commandLineArgs,
         computeDtsSignatures: true,
+        getWrittenFiles: true,
     });
     let headerAdded = false;
-    for (const outputFile of sys.writtenFiles.keys()) {
-        const cleanBuildText = sys.readFile(outputFile);
-        const incrementalBuildText = newSys.readFile(outputFile);
+    for (const outputFile of result.writtenFiles!.keys()) {
+        const cleanBuildText = result.sys.readFile(outputFile);
+        const incrementalFsEntry = snaps[index].get(outputFile);
+        const incrementalBuildText = isFsFile(incrementalFsEntry) ? incrementalFsEntry.content : undefined;
         if (ts.isBuildInfoFile(outputFile)) {
             // Check only presence and absence and not text as we will do that for readable baseline
-            if (!sys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
-            if (!newSys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
+            if (!result.sys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
+            if (!isFsFile(snaps[index].get(`${outputFile}.readable.baseline.txt` as ts.Path))) addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
             verifyPresenceAbsence(incrementalBuildText, cleanBuildText, `Incremental and clean tsbuildinfo file presence differs:: File:: ${outputFile}`);
         }
         else if (!ts.fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
@@ -290,14 +198,14 @@ function verifyTscEditDiscrepancies({
             // Verify build info without affectedFilesPendingEmit
             const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
             const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
-            const dtsSignaures = sys.dtsSignaures?.get(outputFile);
+            const dtsSignatures = result.dtsSignatures?.get(outputFile);
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
             // Verify file info sigantures
             verifyMapLike(
                 (incrementalReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
                 (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
                 (key, incrementalFileInfo, cleanFileInfo) => {
-                    const dtsForKey = dtsSignaures?.get(key);
+                    const dtsForKey = dtsSignatures?.get(key);
                     if (
                         !incrementalFileInfo ||
                         !cleanFileInfo ||
@@ -436,7 +344,7 @@ function verifyTscEditDiscrepancies({
             });
         }
     }
-    if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt find any difference");
+    if (!headerAdded && input.edits![index].discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt find any difference");
     return baselines;
 
     function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {
@@ -487,7 +395,7 @@ function verifyTscEditDiscrepancies({
 
     function addBaseline(...text: string[]) {
         if (!baselines || !headerAdded) {
-            (baselines ||= []).push(`${index}:: ${caption}`, ...(discrepancyExplanation?.() || ["*** Needs explanation"]));
+            (baselines ||= []).push(`${index}:: ${input.edits![index].caption}`, ...(input.edits![index].discrepancyExplanation?.() || ["*** Needs explanation"]));
             headerAdded = true;
         }
         baselines.push(...text);
@@ -537,107 +445,56 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
 }
 
 export interface TestTscEdit {
-    edit: (fs: vfs.FileSystem) => void;
+    edit: (sys: TscWatchSystem) => void;
     caption: string;
     commandLineArgs?: readonly string[];
     /** An array of lines to be printed in order when a discrepancy is detected */
     discrepancyExplanation?: () => readonly string[];
 }
 
-export interface VerifyTscWithEditsInput extends TestTscCompile {
+export interface VerifyTscWithEditsInput extends Omit<TestTscCompile, "computeDtsSignatures" | "getWrittenFiles"> {
+    scenario: string;
+    subScenario: string;
     edits?: readonly TestTscEdit[];
 }
 
 /**
  * Verify non watch tsc invokcation after each edit
  */
-export function verifyTsc({
-    subScenario,
-    fs,
-    scenario,
-    commandLineArgs,
-    environmentVariables,
-    baselineSourceMap,
-    modifyFs,
-    baselineReadFileCalls,
-    baselinePrograms,
-    edits,
-}: VerifyTscWithEditsInput) {
-    describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
-        let sys: TscCompileSystem;
-        let baseFs: vfs.FileSystem;
-        let editsSys: TscCompileSystem[] | undefined;
-        before(() => {
-            baseFs = fs().makeReadonly();
-            sys = testTscCompile({
-                scenario,
-                subScenario,
-                fs: () => baseFs,
-                commandLineArgs,
-                modifyFs,
-                baselineSourceMap,
-                baselineReadFileCalls,
-                baselinePrograms,
-                environmentVariables,
-            });
-            edits?.forEach((
-                { edit, caption, commandLineArgs: editCommandLineArgs },
-                index,
-            ) => {
-                (editsSys || (editsSys = [])).push(testTscCompile({
-                    scenario,
-                    subScenario: caption,
-                    diffWithInitial: true,
-                    fs: () => index === 0 ? sys.vfs : editsSys![index - 1].vfs,
-                    commandLineArgs: editCommandLineArgs || commandLineArgs,
-                    modifyFs: edit,
-                    baselineSourceMap,
-                    baselineReadFileCalls,
-                    baselinePrograms,
-                    environmentVariables,
-                }));
-            });
-        });
+export function verifyTsc(input: VerifyTscWithEditsInput) {
+    describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
+        let snaps: TestServerHostSnapshot[] | undefined;
         after(() => {
-            baseFs = undefined!;
-            sys = undefined!;
-            editsSys = undefined!;
+            snaps = undefined;
         });
-        verifyTscBaseline(() => ({
-            baseLine: () => {
-                const { file, text } = sys.baseLine();
-                const texts: string[] = [text];
-                editsSys?.forEach((sys, index) => {
-                    const incrementalScenario = edits![index];
-                    texts.push("");
-                    texts.push(`Change:: ${incrementalScenario.caption}`);
-                    texts.push(sys.baseLine().text);
+        it("baseline for the tsc compiles", () => {
+            const { sys, baseline } = initialTestTscCompile(input);
+            input.edits?.forEach(edit => {
+                applyEdit(sys, baseline, edit.edit, edit.caption);
+                testTscCompileWith(sys, baseline, {
+                    ...input,
+                    commandLineArgs: edit.commandLineArgs ?? input.commandLineArgs,
                 });
-                return {
-                    file,
-                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
-                        texts.join("\r\n"),
-                };
-            },
-        }));
-        if (edits?.length) {
+                (snaps ??= []).push(sys.getSnap());
+            });
+            Baseline.runBaseline(
+                tscBaselineName(input.scenario, input.subScenario, input.commandLineArgs),
+                baseline.join("\r\n"),
+            );
+        });
+        if (input.edits?.length) {
             it("tsc invocation after edit and clean build correctness", () => {
                 let baselines: string[] | undefined;
-                for (let index = 0; index < edits.length; index++) {
-                    baselines = verifyTscEditDiscrepancies({
+                for (let index = 0; index < input.edits!.length; index++) {
+                    baselines = verifyTscEditDiscrepancies(
+                        input,
                         index,
-                        edits,
-                        scenario,
+                        snaps!,
                         baselines,
-                        baseFs,
-                        newSys: editsSys![index],
-                        commandLineArgs,
-                        modifyFs,
-                        environmentVariables,
-                    });
+                    );
                 }
-                Harness.Baseline.runBaseline(
-                    tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
+                Baseline.runBaseline(
+                    tscBaselineName(input.scenario, input.subScenario, input.commandLineArgs, "-discrepancies"),
                     baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-restricted-syntax
                 );
             });

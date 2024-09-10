@@ -14,9 +14,8 @@ import {
     updateProgramText,
 } from "./helpers.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
+    TestServerHost,
 } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: reuseProgramStructure:: General", () => {
@@ -115,17 +114,17 @@ describe("unittests:: reuseProgramStructure:: General", () => {
 
     it("successful if change affects a single module of a package", () => {
         const files = [
-            { name: "/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
-            { name: "/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
-            { name: "/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
-            { name: "/node_modules/b/package.json", text: SourceText.New("", "", jsonToReadableText({ name: "b", version: "1.2.3" })) },
+            { name: "/home/src/workspaces/project/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
+            { name: "/home/src/workspaces/project/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
+            { name: "/home/src/workspaces/project/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
+            { name: "/home/src/workspaces/project/node_modules/b/package.json", text: SourceText.New("", "", jsonToReadableText({ name: "b", version: "1.2.3" })) },
         ];
 
         const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
-        const program1 = newProgram(files, ["/a.ts"], options);
+        const program1 = newProgram(files, ["/home/src/workspaces/project/a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+        const program2 = updateProgram(program1, ["/home/src/workspaces/project/a.ts"], options, files => {
             files[2].text = files[2].text.updateProgram("export const b = 2;");
         });
         baselineProgram(baselines, program2);
@@ -200,19 +199,19 @@ describe("unittests:: reuseProgramStructure:: General", () => {
     });
 
     it("succeeds if rootdir changes", () => {
-        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/b" });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/home/src/workspaces/project/a/b" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/c" }, ts.noop);
+        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/home/src/workspaces/project/a/c" }, ts.noop);
         baselineProgram(baselines, program2);
         runBaseline("rootdir changes", baselines);
     });
 
     it("fails if config path changes", () => {
-        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/home/src/workspaces/project/a/b/tsconfig.json" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, ts.noop);
+        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/home/src/workspaces/project/a/c/tsconfig.json" }, ts.noop);
         baselineProgram(baselines, program2);
         runBaseline("config path changes", baselines);
     });
@@ -273,14 +272,14 @@ describe("unittests:: reuseProgramStructure:: General", () => {
 
     it("set the resolvedImports after re-using an ambient external module declaration", () => {
         const files = [
-            { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
-            { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            { name: "/home/src/workspaces/project/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
+            { name: "/home/src/workspaces/project/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
         ];
-        const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
-        const program1 = newProgram(files, ["/a.ts"], options);
+        const options: ts.CompilerOptions = { target, typeRoots: ["/home/src/workspaces/project/types"] };
+        const program1 = newProgram(files, ["/home/src/workspaces/project/a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+        const program2 = updateProgram(program1, ["/home/src/workspaces/project/a.ts"], options, files => {
             files[0].text = files[0].text.updateProgram('import * as aa from "a";');
         });
         baselineProgram(baselines, program2);
@@ -290,14 +289,14 @@ describe("unittests:: reuseProgramStructure:: General", () => {
     it("works with updated SourceFiles", () => {
         // adapted repro from https://github.com/Microsoft/TypeScript/issues/26166
         const files = [
-            { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";a;') },
-            { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            { name: "/home/src/workspaces/project/a.ts", text: SourceText.New("", "", 'import * as a from "a";a;') },
+            { name: "/home/src/workspaces/project/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
         ];
         const host = createTestCompilerHost(files, target);
-        const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
-        const program1 = ts.createProgram(["/a.ts"], options, host) as ProgramToBaseline;
+        const options: ts.CompilerOptions = { target, typeRoots: ["/home/src/workspaces/project/types"] };
+        const program1 = ts.createProgram(["/home/src/workspaces/project/a.ts"], options, host) as ProgramToBaseline;
         program1.version = 1;
-        let sourceFile = program1.getSourceFile("/a.ts")!;
+        let sourceFile = program1.getSourceFile("/home/src/workspaces/project/a.ts")!;
         const baselines: string[] = [];
         baselineProgram(baselines, program1, host);
         sourceFile = ts.updateSourceFile(sourceFile, "'use strict';" + sourceFile.text, { newLength: "'use strict';".length, span: { start: 0, length: 0 } });
@@ -308,7 +307,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 return fileName === sourceFile.fileName ? sourceFile : program1.getSourceFile(fileName);
             },
         };
-        const program2 = ts.createProgram(["/a.ts"], options, updateHost, program1) as ProgramToBaseline;
+        const program2 = ts.createProgram(["/home/src/workspaces/project/a.ts"], options, updateHost, program1) as ProgramToBaseline;
         program2.version = 2;
         baselineProgram(baselines, program2, updateHost);
         baselines.push(`parent pointers are not altered: ${sourceFile.statements[2].getSourceFile() === sourceFile}`);
@@ -317,28 +316,28 @@ describe("unittests:: reuseProgramStructure:: General", () => {
 
     it("resolved type directives cache follows type directives", () => {
         const files = [
-            { name: "/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
-            { name: "/types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
+            { name: "/home/src/workspaces/project/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
+            { name: "/home/src/workspaces/project/types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
         ];
-        const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
+        const options: ts.CompilerOptions = { target, typeRoots: ["/home/src/workspaces/project/types"] };
 
-        const program1 = newProgram(files, ["/a.ts"], options);
+        const program1 = newProgram(files, ["/home/src/workspaces/project/a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
 
-        const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+        const program2 = updateProgram(program1, ["/home/src/workspaces/project/a.ts"], options, files => {
             files[0].text = files[0].text.updateProgram("var x = 2");
         });
         baselineProgram(baselines, program2);
 
         // type reference directives has changed - program is not reused
-        const program3 = updateProgram(program2, ["/a.ts"], options, files => {
+        const program3 = updateProgram(program2, ["/home/src/workspaces/project/a.ts"], options, files => {
             files[0].text = files[0].text.updateReferences("");
         });
 
         baselineProgram(baselines, program3);
 
-        const program4 = updateProgram(program3, ["/a.ts"], options, files => {
+        const program4 = updateProgram(program3, ["/home/src/workspaces/project/a.ts"], options, files => {
             const newReferences = `/// <reference types="typedefs"/>
                 /// <reference types="typedefs2"/>
                 `;
@@ -369,8 +368,8 @@ describe("unittests:: reuseProgramStructure:: General", () => {
 
     it("should not reuse ambient module declarations from non-modified files", () => {
         const files = [
-            { name: "/a/b/app.ts", text: SourceText.New("", "import * as fs from 'fs'", "") },
-            { name: "/a/b/node.d.ts", text: SourceText.New("", "", "declare module 'fs' {}") },
+            { name: "/home/src/workspaces/project/a/b/app.ts", text: SourceText.New("", "import * as fs from 'fs'", "") },
+            { name: "/home/src/workspaces/project/a/b/node.d.ts", text: SourceText.New("", "", "declare module 'fs' {}") },
         ];
         const options = { target: ts.ScriptTarget.ES2015, traceResolution: true };
         const program = newProgram(files, files.map(f => f.name), options);
@@ -460,17 +459,17 @@ describe("unittests:: reuseProgramStructure:: General", () => {
     });
 
     describe("redirects", () => {
-        const axIndex = "/node_modules/a/node_modules/x/index.d.ts";
-        const axPackage = "/node_modules/a/node_modules/x/package.json";
-        const bxIndex = "/node_modules/b/node_modules/x/index.d.ts";
-        const bxPackage = "/node_modules/b/node_modules/x/package.json";
-        const root = "/a.ts";
+        const axIndex = "/home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts";
+        const axPackage = "/home/src/workspaces/project/node_modules/a/node_modules/x/package.json";
+        const bxIndex = "/home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts";
+        const bxPackage = "/home/src/workspaces/project/node_modules/b/node_modules/x/package.json";
+        const root = "/home/src/workspaces/project/a.ts";
         const compilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
 
         function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string; bVersion: string; }): ProgramWithSourceTexts {
             const files: NamedSourceText[] = [
                 {
-                    name: "/node_modules/a/index.d.ts",
+                    name: "/home/src/workspaces/project/node_modules/a/index.d.ts",
                     text: SourceText.New("", 'import X from "x";', "export function a(x: X): void;"),
                 },
                 {
@@ -482,7 +481,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                     text: SourceText.New("", "", jsonToReadableText({ name: "x", version: "1.2.3" })),
                 },
                 {
-                    name: "/node_modules/b/index.d.ts",
+                    name: "/home/src/workspaces/project/node_modules/b/index.d.ts",
                     text: SourceText.New("", 'import X from "x";', "export const b: X;"),
                 },
                 {
@@ -574,7 +573,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
     it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics", () => {
         const files = [
             {
-                name: "/src/project/src/struct.d.ts",
+                name: "/home/src/workspaces/project/src/project/src/struct.d.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -587,7 +586,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/src/anotherFile.ts",
+                name: "/home/src/workspaces/project/src/project/src/anotherFile.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -600,7 +599,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/src/oneMore.ts",
+                name: "/home/src/workspaces/project/src/project/src/oneMore.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -613,7 +612,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                name: "/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/struct.d.ts",
                 text: SourceText.New("", "", `export function foo(): void`),
             },
         ];
@@ -659,7 +658,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
     it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics when diagnostics are not queried", () => {
         const files = [
             {
-                name: "/src/project/src/struct.d.ts",
+                name: "/home/src/workspaces/project/src/project/src/struct.d.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -672,7 +671,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/src/anotherFile.ts",
+                name: "/home/src/workspaces/project/src/project/src/anotherFile.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -685,7 +684,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/src/oneMore.ts",
+                name: "/home/src/workspaces/project/src/project/src/oneMore.ts",
                 text: SourceText.New(
                     "",
                     "",
@@ -698,7 +697,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
                 ),
             },
             {
-                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                name: "/home/src/workspaces/project/src/project/node_modules/fp-ts/lib/struct.d.ts",
                 text: SourceText.New("", "", `export function foo(): void`),
             },
         ];
@@ -836,43 +835,46 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
         }
 
         function verifyProgram(files: File[], rootFiles: string[], options: ts.CompilerOptions, configFile: string) {
-            const system = createWatchedSystem(files);
+            const system = TestServerHost.createWatchedSystem(
+                files,
+                { currentDirectory: ts.getDirectoryPath(configFile) },
+            );
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
             const file1: File = {
-                path: "/a/b/file1.ts",
+                path: "/home/src/workspaces/project/a/b/file1.ts",
                 content: "let x = 1",
             };
             const file2: File = {
-                path: "/a/b/file2.ts",
+                path: "/home/src/workspaces/project/a/b/file2.ts",
                 content: "let y = 1",
             };
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspaces/project/a/b/tsconfig.json",
                 content: "{}",
             };
-            verifyProgram([file1, file2, libFile, configFile], [file1.path, file2.path], {}, configFile.path);
+            verifyProgram([file1, file2, configFile], [file1.path, file2.path], {}, configFile.path);
         });
 
         it("has lib specified in the options", () => {
             const compilerOptions: ts.CompilerOptions = { lib: ["es5", "es2015.promise"] };
             const app: File = {
-                path: "/src/app.ts",
+                path: "/home/src/workspaces/project/src/app.ts",
                 content: "var x: Promise<string>;",
             };
             const configFile: File = {
-                path: "/src/tsconfig.json",
+                path: "/home/src/workspaces/project/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions }),
             };
             const es5Lib: File = {
-                path: "/compiler/lib.es5.d.ts",
+                path: "/home/src/workspaces/project/compiler/lib.es5.d.ts",
                 content: "declare const eval: any",
             };
             const es2015Promise: File = {
-                path: "/compiler/lib.es2015.promise.d.ts",
+                path: "/home/src/workspaces/project/compiler/lib.es2015.promise.d.ts",
                 content: "declare class Promise<T> {}",
             };
 
@@ -891,30 +893,30 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 },
             };
             const app: File = {
-                path: "/src/packages/framework/app.ts",
+                path: "/home/src/workspaces/project/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                               import classD from "module3/file3";\
                               let x = new classc();\
                               let y = new classD();',
             };
             const module1: File = {
-                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
             const module2: File = {
-                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
             const module3: File = {
-                path: "/src/packages/styles/module3/file3.ts",
+                path: "/home/src/workspaces/project/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const configFile: File = {
-                path: "/src/tsconfig.json",
+                path: "/home/src/workspaces/project/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions }),
             };
 
-            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
+            verifyProgram([app, module1, module2, module3, configFile], [app.path], compilerOptions, configFile.path);
         });
 
         it("has include paths specified in tsconfig file", () => {
@@ -929,45 +931,54 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 },
             };
             const app: File = {
-                path: "/src/packages/framework/app.ts",
+                path: "/home/src/workspaces/project/home/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                               import classD from "module3/file3";\
                               let x = new classc();\
                               let y = new classD();',
             };
             const module1: File = {
-                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
             const module2: File = {
-                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
             const module3: File = {
-                path: "/src/packages/styles/module3/file3.ts",
+                path: "/home/src/workspaces/project/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const configFile: File = {
-                path: "/src/tsconfig.json",
+                path: "/home/src/workspaces/project/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions, include: ["packages/**/*.ts"] }),
             };
-            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
+            verifyProgramWithConfigFile(
+                TestServerHost.createWatchedSystem(
+                    [app, module1, module2, module3, configFile],
+                    { currentDirectory: ts.getDirectoryPath(configFile.path) },
+                ),
+                configFile.path,
+            );
         });
         it("has the same root file names", () => {
             const module1: File = {
-                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
             const module2: File = {
-                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
             const module3: File = {
-                path: "/src/packages/styles/module3/file3.ts",
+                path: "/home/src/workspaces/project/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const rootFiles = [module1.path, module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem(
+                [module1, module2, module3],
+                { currentDirectory: "/home/src/workspaces/project/src/packages" },
+            );
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -989,20 +1000,23 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
         }
         it("has more root file names", () => {
             const module1: File = {
-                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
             const module2: File = {
-                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
             const module3: File = {
-                path: "/src/packages/styles/module3/file3.ts",
+                path: "/home/src/workspaces/project/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module1.path, module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem(
+                [module1, module2, module3],
+                { currentDirectory: "/home/src/workspaces/project/src/packages" },
+            );
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -1014,20 +1028,23 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
         });
         it("has one root file replaced by another", () => {
             const module1: File = {
-                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
             const module2: File = {
-                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                path: "/home/src/workspaces/project/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
             const module3: File = {
-                path: "/src/packages/styles/module3/file3.ts",
+                path: "/home/src/workspaces/project/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;",
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module2.path, module3.path];
-            const system = createWatchedSystem([module1, module2, module3]);
+            const system = TestServerHost.createWatchedSystem(
+                [module1, module2, module3],
+                { currentDirectory: "/home/src/workspaces/project/src/packages" },
+            );
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,

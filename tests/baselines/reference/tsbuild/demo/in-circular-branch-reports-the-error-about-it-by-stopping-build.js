@@ -1,20 +1,5 @@
-currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/projects/demo/animals/animal.ts]
 export type Size = "small" | "medium" | "large";
 export default interface Animal {
@@ -64,6 +49,17 @@ export { createDog, Dog };
   ]
 }
 
+//// [/user/username/projects/demo/core/utilities.ts]
+export function makeRandomName() {
+    return "Bob!?! ";
+}
+
+export function lastElementOf<T>(arr: T[]): T | undefined {
+    if (arr.length === 0) return undefined;
+    return arr[arr.length - 1];
+}
+
+
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
   "extends": "../tsconfig-base.json",
@@ -78,16 +74,29 @@ export { createDog, Dog };
   ]
 }
 
-//// [/user/username/projects/demo/core/utilities.ts]
-export function makeRandomName() {
-    return "Bob!?! ";
+//// [/user/username/projects/demo/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
 }
 
-export function lastElementOf<T>(arr: T[]): T | undefined {
-    if (arr.length === 0) return undefined;
-    return arr[arr.length - 1];
-}
 
+//// [/user/username/projects/demo/zoo/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/zoo",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../animals"
+    }
+  ]
+}
 
 //// [/user/username/projects/demo/tsconfig-base.json]
 {
@@ -120,34 +129,24 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
   ]
 }
 
-//// [/user/username/projects/demo/zoo/tsconfig.json]
-{
-  "extends": "../tsconfig-base.json",
-  "compilerOptions": {
-    "outDir": "../lib/zoo",
-    "rootDir": "."
-  },
-  "references": [
-    {
-      "path": "../animals"
-    }
-  ]
-}
-
-//// [/user/username/projects/demo/zoo/zoo.ts]
-import { Dog, createDog } from '../animals/index';
-
-export function createZoo(): Array<Dog> {
-    return [
-        createDog()
-    ];
-}
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-
-
+/home/src/tslibs/TS/Lib/tsc.js --b --verbose
 Output::
-/a/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
@@ -162,6 +161,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkipped
-
-

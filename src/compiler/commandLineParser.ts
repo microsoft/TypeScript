@@ -446,7 +446,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         name: "generateTrace",
         type: "string",
         isFilePath: true,
-        isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
@@ -649,15 +648,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Command_line_Options,
         paramType: Diagnostics.FILE_OR_DIRECTORY,
         description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
-    },
-    {
-        name: "build",
-        type: "boolean",
-        shortName: "b",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Command_line_Options,
-        description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
-        defaultValueDescription: false,
     },
     {
         name: "showConfig",
@@ -1673,9 +1663,21 @@ function isCommandLineOptionOfCustomType(option: CommandLineOption): option is C
     return !isString(option.type);
 }
 
+/** @internal */
+export const tscBuildOption: CommandLineOption = {
+    name: "build",
+    type: "boolean",
+    shortName: "b",
+    showInSimplifiedHelpView: true,
+    category: Diagnostics.Command_line_Options,
+    description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
+    defaultValueDescription: false,
+};
+
 // Build related options
 /** @internal */
 export const optionsForBuild: CommandLineOption[] = [
+    tscBuildOption,
     {
         name: "verbose",
         shortName: "v",
@@ -1704,6 +1706,13 @@ export const optionsForBuild: CommandLineOption[] = [
         name: "clean",
         category: Diagnostics.Command_line_Options,
         description: Diagnostics.Delete_the_outputs_of_all_projects,
+        type: "boolean",
+        defaultValueDescription: false,
+    },
+    {
+        name: "stopBuildOnErrors",
+        category: Diagnostics.Command_line_Options,
+        description: Diagnostics.Skip_building_downstream_projects_on_error_in_upstream_project,
         type: "boolean",
         defaultValueDescription: false,
     },
@@ -1853,8 +1862,16 @@ function createUnknownOptionError(
     node?: PropertyName,
     sourceFile?: TsConfigSourceFile,
 ) {
-    if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
-        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.alternateMode.diagnostic, unknownOption);
+    const otherOption = diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.get(unknownOption.toLowerCase());
+    if (otherOption) {
+        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+            sourceFile,
+            node,
+            otherOption !== tscBuildOption ?
+                diagnostics.alternateMode!.diagnostic :
+                Diagnostics.Option_build_must_be_the_first_command_line_argument,
+            unknownOption,
+        );
     }
 
     const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
@@ -2055,7 +2072,7 @@ function getOptionDeclarationFromName(getOptionNameMap: () => OptionsNameMap, op
     return optionsNameMap.get(optionName);
 }
 
-/** @internal */
+/** Parsed command line for build */
 export interface ParsedBuildCommand {
     buildOptions: BuildOptions;
     watchOptions: WatchOptions | undefined;
@@ -2082,11 +2099,10 @@ const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1,
 };
 
-/** @internal */
-export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
+export function parseBuildCommand(commandLine: readonly string[]): ParsedBuildCommand {
     const { options, watchOptions, fileNames: projects, errors } = parseCommandLineWorker(
         buildOptionsDidYouMeanDiagnostics,
-        args,
+        commandLine,
     );
     const buildOptions = options as BuildOptions;
 
@@ -3075,7 +3091,6 @@ function parseJsonConfigFileContentWorker(
             validatedFilesSpecBeforeSubstitution,
             validatedIncludeSpecsBeforeSubstitution,
             validatedExcludeSpecsBeforeSubstitution,
-            pathPatterns: undefined, // Initialized on first use
             isDefaultIncludeSpec,
         };
     }
@@ -3272,6 +3287,7 @@ function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
 interface ExtendsResult {
     options: CompilerOptions;
     watchOptions?: WatchOptions;
+    watchOptionsCopied?: boolean;
     include?: string[];
     exclude?: string[];
     files?: string[];
@@ -3330,7 +3346,7 @@ function parseConfig(
 
         ownConfig.options = assign(result.options, ownConfig.options);
         ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
-            assign(result.watchOptions, ownConfig.watchOptions) :
+            assignWatchOptions(result, ownConfig.watchOptions) :
             ownConfig.watchOptions || result.watchOptions;
     }
     return ownConfig;
@@ -3360,10 +3376,16 @@ function parseConfig(
             }
             assign(result.options, extendedConfig.options);
             result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
-                assign({}, result.watchOptions, extendedConfig.watchOptions) :
+                assignWatchOptions(result, extendedConfig.watchOptions) :
                 result.watchOptions || extendedConfig.watchOptions;
             // TODO extend type typeAcquisition
         }
+    }
+
+    function assignWatchOptions(result: ExtendsResult, watchOptions: WatchOptions) {
+        if (result.watchOptionsCopied) return assign(result.watchOptions!, watchOptions);
+        result.watchOptionsCopied = true;
+        return assign({}, result.watchOptions, watchOptions);
     }
 }
 
@@ -3772,7 +3794,7 @@ function convertJsonOptionOfListType(
  *  \*\*        # matches the recursive directory wildcard "**".
  *  \/?$        # matches an optional trailing directory separator at the end of the string.
  */
-const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+const invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
 
 /**
  * Matches the portion of a wildcard path that does not contain wildcards.

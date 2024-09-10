@@ -60,7 +60,8 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     const res: OutliningSpan[] = [];
     addNodeOutliningSpans(sourceFile, cancellationToken, res);
     addRegionOutliningSpans(sourceFile, res);
-    return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
+    res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
+    return res;
 }
 
 function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
@@ -138,14 +139,14 @@ function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): 
     for (const currentLineStart of lineStarts) {
         const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
         const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-        const result = isRegionDelimiter(lineText);
+        const result = parseRegionDelimiter(lineText);
         if (!result || isInComment(sourceFile, currentLineStart)) {
             continue;
         }
 
-        if (!result[1]) {
+        if (result.isStart) {
             const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
-            regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
+            regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result.name || "#region"));
         }
         else {
             const region = regions.pop();
@@ -158,8 +159,8 @@ function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): 
     }
 }
 
-const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
-function isRegionDelimiter(lineText: string) {
+const regionDelimiterRegExp = /^#(end)?region(.*)\r?$/;
+function parseRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
     lineText = lineText.trimStart();
@@ -167,7 +168,11 @@ function isRegionDelimiter(lineText: string) {
         return null; // eslint-disable-line no-restricted-syntax
     }
     lineText = lineText.slice(2).trim();
-    return regionDelimiterRegExp.exec(lineText);
+    const result = regionDelimiterRegExp.exec(lineText);
+    if (result) {
+        return { isStart: !result[1], name: result[2].trim() };
+    }
+    return undefined;
 }
 
 function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
@@ -184,7 +189,7 @@ function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFil
             case SyntaxKind.SingleLineCommentTrivia:
                 // never fold region delimiters into single-line comment regions
                 const commentText = sourceText.slice(pos, end);
-                if (isRegionDelimiter(commentText)) {
+                if (parseRegionDelimiter(commentText)) {
                     combineAndAddMultipleSingleLineComments();
                     singleLineCommentCount = 0;
                     break;

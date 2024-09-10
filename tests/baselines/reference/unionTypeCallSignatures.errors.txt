@@ -12,8 +12,8 @@ unionTypeCallSignatures.ts(15,29): error TS2769: No overload matches this call.
   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
 unionTypeCallSignatures.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
-unionTypeCallSignatures.ts(19,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
-unionTypeCallSignatures.ts(20,32): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+unionTypeCallSignatures.ts(19,32): error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
+unionTypeCallSignatures.ts(20,32): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
 unionTypeCallSignatures.ts(21,1): error TS2554: Expected 1 arguments, but got 0.
 unionTypeCallSignatures.ts(24,1): error TS2554: Expected 1 arguments, but got 0.
 unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -78,10 +78,10 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
     var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
     unionOfDifferentParameterTypes(10);// error - no call signatures
                                    ~~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
     unionOfDifferentParameterTypes("hello");// error - no call signatures
                                    ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'never'.
     unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.

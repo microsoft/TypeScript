@@ -1,18 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /node_modules/@angular/forms/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@angular/forms/package.json
 //// { "name": "@angular/forms", "typings": "./forms.d.ts" }
 
-// @Filename: /node_modules/@angular/forms/forms.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@angular/forms/forms.d.ts
 //// export class PatternValidator {}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {}
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "@angular/forms": "*" } }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// PatternValidator/**/
 
 goTo.marker("");
