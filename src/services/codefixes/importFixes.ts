@@ -241,7 +241,7 @@ export function createImportAdder(sourceFile: SourceFile | FutureSourceFile, pro
 interface AddToExistingState {
     readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
     defaultImport: Import | undefined;
-    readonly namedImports: Map<string, [AddAsTypeOnly, /*propertyName*/ string | undefined]>;
+    readonly namedImports: Map<string, { addAsTypeOnly: AddAsTypeOnly; propertyName?: string | undefined; }>;
 }
 
 function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, program: Program, useAutoImportProvider: boolean, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken: CancellationToken | undefined): ImportAdder {
@@ -394,8 +394,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                     addToExisting.set(importClauseOrBindingPattern, entry = { importClauseOrBindingPattern, defaultImport: undefined, namedImports: new Map() });
                 }
                 if (importKind === ImportKind.Named) {
-                    const prevValue = entry?.namedImports.get(symbolName)?.[0];
-                    entry.namedImports.set(symbolName, [reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly), propertyName]);
+                    const prevTypeOnly = entry?.namedImports.get(symbolName)?.addAsTypeOnly;
+                    entry.namedImports.set(symbolName, { addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, addAsTypeOnly), propertyName });
                 }
                 else {
                     Debug.assert(entry.defaultImport === undefined || entry.defaultImport.name === symbolName, "(Add to Existing) Default import should be missing or match symbolName");
@@ -595,7 +595,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 sourceFile as SourceFile,
                 importClauseOrBindingPattern,
                 defaultImport,
-                arrayFrom(namedImports.entries(), ([name, [addAsTypeOnly, propertyName]]) => ({ addAsTypeOnly, propertyName, name })),
+                arrayFrom(namedImports.entries(), ([name, { addAsTypeOnly, propertyName }]) => ({ addAsTypeOnly, propertyName, name })),
                 importSpecifiersToRemoveWhileAdding,
                 preferences,
             );
