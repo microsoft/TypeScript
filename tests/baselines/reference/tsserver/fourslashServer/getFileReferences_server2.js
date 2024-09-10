@@ -712,6 +712,268 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/workspaces/project/packages/shared/src/referenced.ts"
       },
+      "command": "open"
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/packages/shared/src/referenced.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/packages/shared/src/referenced.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/packages/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/packages/shared/tsconfig.json, currentDirectory: /home/src/workspaces/project/packages/shared
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/packages/shared/src/referenced.ts to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/packages/shared/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/packages/shared/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/workspaces/project/packages/shared/src/referenced.ts Text-1 "export {};"
+
+
+	../../../../tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../../../../tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../tslibs/TS/Lib/lib.d.ts'
+	src/referenced.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/workspaces/project/packages/shared/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/workspaces/project/packages/shared/src/referenced.ts",
+        "configFile": "/home/src/workspaces/project/packages/shared/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/packages/shared/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/server/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/client/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/packages/shared/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/packages/server/index.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/packages/server/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/packages/client/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/packages/client/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/packages/shared/src/referenced.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/packages/server/tsconfig.json,/home/src/workspaces/project/packages/client/tsconfig.json,/home/src/workspaces/project/packages/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
+After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/packages/client/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/packages/server/router.js:
+  {"pollingInterval":500}
+/home/src/workspaces/project/packages/server/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/packages/shared/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/home/src/workspaces/project/packages/shared/src/referenced.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/packages/client:
+  {}
+/home/src/workspaces/project/packages/client/node_modules:
+  {}
+/home/src/workspaces/project/packages/client/node_modules/@types:
+  {}
+/home/src/workspaces/project/packages/node_modules:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/packages/node_modules/@types:
+  {}
+  {}
+  {} *new*
+/home/src/workspaces/project/packages/server:
+  {}
+/home/src/workspaces/project/packages/server/node_modules:
+  {}
+/home/src/workspaces/project/packages/server/node_modules/@types:
+  {}
+/home/src/workspaces/project/packages/shared:
+  {}
+  {}
+/home/src/workspaces/project/packages/shared/node_modules: *new*
+  {}
+/home/src/workspaces/project/packages/shared/node_modules/@types: *new*
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/workspaces/project/packages/client/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/workspaces/project/packages/server/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/workspaces/project/packages/shared/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/workspaces/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/packages/server/tsconfig.json
+        /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/packages/server/tsconfig.json
+        /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/packages/server/tsconfig.json
+        /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json *new*
+/home/src/workspaces/project/packages/client/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/workspaces/project/packages/client/tsconfig.json *default*
+/home/src/workspaces/project/packages/server/index.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/workspaces/project/packages/server/tsconfig.json *default*
+/home/src/workspaces/project/packages/server/router.js
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/packages/server/tsconfig.json
+/home/src/workspaces/project/packages/shared/src/referenced.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /home/src/workspaces/project/packages/server/tsconfig.json
+        /home/src/workspaces/project/packages/client/tsconfig.json
+        /home/src/workspaces/project/packages/shared/tsconfig.json *default* *new*
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 4,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/packages/shared/src/referenced.ts"
+      },
       "command": "fileReferences"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -719,7 +981,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "fileReferences",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": {
         "refs": [

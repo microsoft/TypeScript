@@ -657,6 +657,129 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/workspaces/project/util.ts"
       },
+      "command": "open"
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/util.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/util.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.build.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.test.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.build.json,/home/src/workspaces/project/tsconfig.test.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/test.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.test.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/util.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.build.json,/home/src/workspaces/project/tsconfig.test.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
+    }
+After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.build.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/tsconfig.test.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/home/src/workspaces/project/util.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
+  {}
+  {}
+/home/src/workspaces/node_modules/@types:
+  {}
+  {}
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+  {}
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.build.json
+        /home/src/workspaces/project/tsconfig.test.json
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.build.json
+        /home/src/workspaces/project/tsconfig.test.json
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /dev/null/inferredProject1*
+        /home/src/workspaces/project/tsconfig.build.json
+        /home/src/workspaces/project/tsconfig.test.json
+/home/src/workspaces/project/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.build.json *default*
+        /home/src/workspaces/project/tsconfig.test.json
+/home/src/workspaces/project/test.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.test.json *default*
+/home/src/workspaces/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/home/src/workspaces/project/util.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2
+        /home/src/workspaces/project/tsconfig.build.json *default*
+        /home/src/workspaces/project/tsconfig.test.json
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 4,
+      "type": "request",
+      "arguments": {
+        "file": "/home/src/workspaces/project/util.ts"
+      },
       "command": "fileReferences"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -664,7 +787,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "fileReferences",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": {
         "refs": [
