@@ -75,6 +75,15 @@ const iter1 = Iterator.from(g1);
 declare const iter2: IteratorObject<string>;
 const iter3 = iter2.flatMap(() => g1);
 
+// Iterator.from pass-through of return value
+const customGenerator = function* () {
+  return 42;
+}();
+const withHelpers = Iterator.from(customGenerator);
+const result = withHelpers.next();
+const resultValue: number = result.value; // this should work
+
+
 //// [builtinIterator.js]
 "use strict";
 const iterator = Iterator.from([0, 1, 2]);
@@ -134,3 +143,10 @@ class BadIterator3 extends Iterator {
 }
 const iter1 = Iterator.from(g1);
 const iter3 = iter2.flatMap(() => g1);
+// Iterator.from pass-through of return value
+const customGenerator = function* () {
+    return 42;
+}();
+const withHelpers = Iterator.from(customGenerator);
+const result = withHelpers.next();
+const resultValue = result.value; // this should work

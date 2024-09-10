@@ -143,3 +143,12 @@ builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean
 !!! error TS2322:               Type '[undefined]' is not assignable to type '[boolean]'.
 !!! error TS2322:                 Type 'undefined' is not assignable to type 'boolean'.
 !!! related TS6502 lib.esnext.iterator.d.ts:--:--: The expected type comes from the return type of this signature.
+    
+    // Iterator.from pass-through of return value
+    const customGenerator = function* () {
+      return 42;
+    }();
+    const withHelpers = Iterator.from(customGenerator);
+    const result = withHelpers.next();
+    const resultValue: number = result.value; // this should work
+    
