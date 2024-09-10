@@ -5016,7 +5016,7 @@ export interface EmitResult {
 }
 
 /** @internal */
-export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
+export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
     getCompilerOptions(): CompilerOptions;
 
     getSourceFiles(): readonly SourceFile[];
@@ -9849,7 +9849,7 @@ export interface HasCurrentDirectory {
 
 /** @internal */
 export interface ModuleSpecifierResolutionHost {
-    useCaseSensitiveFileNames?(): boolean;
+    useCaseSensitiveFileNames(): boolean;
     fileExists(path: string): boolean;
     getCurrentDirectory(): string;
     directoryExists?(path: string): boolean;

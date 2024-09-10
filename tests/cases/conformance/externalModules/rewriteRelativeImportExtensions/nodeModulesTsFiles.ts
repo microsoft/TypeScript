@@ -2,6 +2,7 @@
 // @rewriteRelativeImportExtensions: true
 // @noTypesAndSymbols: true
 // @noEmit: true
+// @noImplicitReferences: true
 
 // @Filename: /node_modules/lodash-ts/add.ts
 export function add(a: number, b: number) {

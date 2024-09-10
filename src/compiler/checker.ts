@@ -934,7 +934,6 @@ import {
     parsePseudoBigInt,
     parseValidBigInt,
     Path,
-    pathContainsNodeModules,
     pathIsRelative,
     PatternAmbientModule,
     PlusToken,
@@ -1011,6 +1010,7 @@ import {
     skipTypeParentheses,
     some,
     SourceFile,
+    sourceFileMayBeEmitted,
     SpreadAssignment,
     SpreadElement,
     startsWith,
@@ -4676,7 +4676,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
                     );
                 }
-                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite && !isDeclarationFileName(moduleReference) && !pathContainsNodeModules(resolvedModule.resolvedFileName)) {
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite && !isDeclarationFileName(moduleReference) && sourceFileMayBeEmitted(sourceFile, host)) {
                     error(
                         errorNode,
                         Diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
@@ -52751,7 +52751,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         getCurrentDirectory: () => host.getCurrentDirectory(),
         getSymlinkCache: maybeBind(host, host.getSymlinkCache),
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
-        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         redirectTargetsMap: host.redirectTargetsMap,
         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),

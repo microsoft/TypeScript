@@ -2468,7 +2468,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         fileExists: fileName => program.fileExists(fileName),
         getCurrentDirectory: () => host.getCurrentDirectory(),
         readFile: maybeBind(host, host.readFile),
-        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames) || program.useCaseSensitiveFileNames,
         getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
         getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
         getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
