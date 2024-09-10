@@ -53,7 +53,7 @@
     // Note: if adding new languages, make sure settings.template.json is updated too.
     // Also, if updating typescript, update the one in package.json.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.91.7.wasm",
+        "https://plugins.dprint.dev/typescript-0.91.8.wasm",
         "https://plugins.dprint.dev/json-0.19.3.wasm",
         "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm"
     ]
