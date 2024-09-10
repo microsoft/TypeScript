@@ -7,12 +7,12 @@
 export {};
 
 // Abstract type that allows us to mark `next` as `abstract`
-declare abstract class Iterator<T, TResult = undefined, TNext = unknown> { // eslint-disable-line @typescript-eslint/no-unsafe-declaration-merging
-    abstract next(value?: TNext): IteratorResult<T, TResult>;
+declare abstract class Iterator<T, TReturn = undefined, TNext = unknown> { // eslint-disable-line @typescript-eslint/no-unsafe-declaration-merging
+    abstract next(value?: TNext): IteratorResult<T, TReturn>;
 }
 
 // Merge all members of `IteratorObject<T>` into `Iterator<T>`
-interface Iterator<T, TResult, TNext> extends globalThis.IteratorObject<T, TResult, TNext> {}
+interface Iterator<T, TReturn, TNext> extends globalThis.IteratorObject<T, TReturn, TNext> {}
 
 // Capture the `Iterator` constructor in a type we can use in the `extends` clause of `IteratorConstructor`.
 type IteratorObjectConstructor = typeof Iterator;
