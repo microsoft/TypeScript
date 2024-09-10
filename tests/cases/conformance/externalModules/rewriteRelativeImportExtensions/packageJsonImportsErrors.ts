@@ -1,5 +1,6 @@
 // @module: nodenext
 // @rewriteRelativeImportExtensions: true
+// @noTypesAndSymbols: true
 // @verbatimModuleSyntax: true
 
 // @Filename: /package.json

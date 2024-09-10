@@ -934,6 +934,7 @@ import {
     parsePseudoBigInt,
     parseValidBigInt,
     Path,
+    pathContainsNodeModules,
     pathIsRelative,
     PatternAmbientModule,
     PlusToken,
@@ -4675,10 +4676,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
                     );
                 }
-                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite) {
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite && !isDeclarationFileName(moduleReference) && !pathContainsNodeModules(resolvedModule.resolvedFileName)) {
                     error(
                         errorNode,
-                        Diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_it_will_not_get_rewritten_during_emit_because_it_is_not_a_relative_path,
+                        Diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
                         getAnyExtensionFromPath(moduleReference),
                     );
                 }
