@@ -1,6 +1,9 @@
 preacty-no-fragment.tsx(5,12): error TS6133: 'Fragment' is declared but its value is never read.
 preacty-only-fragment-no-jsx.tsx(6,1): error TS2304: Cannot find name 'h'.
 snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
+snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'null'.
+snabbdomy-only-fragment.tsx(4,1): error TS2304: Cannot find name 'null'.
+snabbdomy.tsx(4,1): error TS2304: Cannot find name 'null'.
 
 
 ==== renderer.d.ts (0 errors) ====
@@ -23,11 +26,13 @@ snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
     import {h, Fragment} from "./renderer";
     <><div></div></>
     
-==== snabbdomy.tsx (0 errors) ====
+==== snabbdomy.tsx (1 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {jsx} from "./renderer";
     <><span></span></>
+    ~~
+!!! error TS2304: Cannot find name 'null'.
     
 ==== preacty-only-fragment.tsx (0 errors) ====
     /**
@@ -37,11 +42,13 @@ snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
     import {h, Fragment} from "./renderer";
     <></>
     
-==== snabbdomy-only-fragment.tsx (0 errors) ====
+==== snabbdomy-only-fragment.tsx (1 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {jsx} from "./renderer";
     <></>
+    ~~
+!!! error TS2304: Cannot find name 'null'.
     
 ==== preacty-only-fragment-no-jsx.tsx (1 errors) ====
     /**
@@ -53,13 +60,15 @@ snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
     ~~
 !!! error TS2304: Cannot find name 'h'.
     
-==== snabbdomy-only-fragment-no-jsx.tsx (1 errors) ====
+==== snabbdomy-only-fragment-no-jsx.tsx (2 errors) ====
     /* @jsx jsx */
     /* @jsxfrag null */
     import {} from "./renderer";
     <></>
     ~~
 !!! error TS2304: Cannot find name 'jsx'.
+    ~~
+!!! error TS2304: Cannot find name 'null'.
     
 ==== preacty-no-fragment.tsx (1 errors) ====
     /**

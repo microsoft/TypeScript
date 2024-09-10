@@ -33122,9 +33122,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let explicitlySpecifyChildrenAttribute = false;
         let objectFlags: ObjectFlags = ObjectFlags.JsxAttributes;
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
-        
+
         const isJsxOpenFragment = isJsxOpeningFragment(openingLikeElement);
-        
+
         let attributesSymbol: Symbol | undefined;
         let attributeParent: Node = openingLikeElement;
         if (!isJsxOpenFragment) {
@@ -33196,10 +33196,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Handle children attribute
         const parent = openingLikeElement.parent;
-        // .kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement 
-            // : openingLikeElement.parent.kind === SyntaxKind.JsxFragment ? openingLikeElement.parent as JsxFragment : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
-        if ((isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) && 
+        if (
+            (isJsxElement(parent) && parent.openingElement === openingLikeElement || isJsxFragment(parent) && parent.openingFragment === openingLikeElement) &&
             getSemanticJsxChildren(parent.children).length > 0
         ) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
@@ -35425,7 +35424,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (reportErrors) {
                 const errorNode = isJsxOpeningFragment(node) ? node : node.tagName;
-                const errorEntityName = isJsxOpeningFragment(node) ? 'Fragment' : entityNameToString(node.tagName);
+                const errorEntityName = isJsxOpeningFragment(node) ? "Fragment" : entityNameToString(node.tagName);
                 const diag = createDiagnosticForNode(errorNode, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, errorEntityName, absoluteMinArgCount, entityNameToString(factory), maxParamCount);
                 const tagNameDeclaration = isJsxOpeningFragment(node) ? getJSXFragmentType(node).symbol.valueDeclaration : getSymbolAtLocation(node.tagName)?.valueDeclaration;
                 if (tagNameDeclaration) {
@@ -36798,18 +36797,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getJSXFragmentType(node: Node): Type {
-        // This function
+    function getJSXFragmentType(node: JsxOpeningFragment): Type {
+        // An opening fragment is required in order for `getJsxNamespace` to give the fragment factory
+        const jsxFragmentFactoryName = getJsxNamespace(node);
         const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-        const jsxFactorySymbol = resolveName(node, getJsxNamespace(node), SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
-        // Debug.assert(jsxFactorySymbol);
+        const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
+            resolveName(node, jsxFragmentFactoryName, SymbolFlags.Value, /*nameNotFoundMessage*/ jsxFactoryRefErr, /*isUse*/ true);
+        if (jsxFactorySymbol === undefined) {
+            return errorType;
+        }
+        if (jsxFactorySymbol.escapedName === ReactNames.Fragment) {
+            return getTypeOfSymbol(jsxFactorySymbol);
+        }
 
-        const reactExports = jsxFactorySymbol && getExportsOfSymbol(resolveAlias(jsxFactorySymbol));
+        const resolvedAlias = (jsxFactorySymbol.flags & SymbolFlags.Alias) === 0 ? jsxFactorySymbol : resolveAlias(jsxFactorySymbol);
+
+        const reactExports = jsxFactorySymbol && getExportsOfSymbol(resolvedAlias);
         const typeSymbol = reactExports && getSymbol(reactExports, ReactNames.Fragment, SymbolFlags.BlockScopedVariable);
-        // Debug.assert(typeSymbol);
 
         const type = typeSymbol && getTypeOfSymbol(typeSymbol);
-        Debug.assert(type);
+        if (type === undefined) {
+            return errorType;
+        }
         return type;
     }
 
