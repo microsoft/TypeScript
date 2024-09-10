@@ -484,6 +484,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Finding references to file /home/src/projects/project/a.ts in project /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

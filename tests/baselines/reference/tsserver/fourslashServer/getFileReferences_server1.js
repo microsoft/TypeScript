@@ -395,6 +395,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "fileReferences"
     }
+Info seq  [hh:mm:ss:mss] Finding references to file /home/src/workspaces/project/a.ts in project /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
