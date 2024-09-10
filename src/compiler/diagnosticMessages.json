@@ -3948,7 +3948,7 @@
         "category": "Error",
         "code": 2873
     },
-    "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"$0\".": {
+    "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"{0}\".": {
         "category": "Error",
         "code": 2874
     },

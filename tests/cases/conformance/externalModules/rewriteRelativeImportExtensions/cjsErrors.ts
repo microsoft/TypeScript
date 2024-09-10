@@ -1,8 +1,11 @@
 // @module: nodenext
 // @rewriteRelativeImportExtensions: true
+// @noTypesAndSymbols: true
+// @verbatimModuleSyntax: true
 
 // @Filename: foo.ts/index.ts
-export {};
+export = {};
 
 // @Filename: index.ts
-import {} from "./foo.ts";
+import foo = require("./foo.ts"); // Error
+import type _foo = require("./foo.ts"); // Ok
