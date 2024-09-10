@@ -5048,7 +5048,7 @@ export interface TypeChecker {
     /** @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
     getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
     getIndexInfosOfType(type: Type): readonly IndexInfo[];
-    getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
+    getIndexInfosOfIndexSymbol: (indexSymbol: Symbol, siblingSymbols?: Symbol[] | undefined) => IndexInfo[];
     getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
     getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
     /** @internal */ getIndexType(type: Type): Type;

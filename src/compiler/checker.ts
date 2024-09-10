@@ -14207,7 +14207,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const indexSymbol = getIndexSymbolFromSymbolTable(members);
         if (indexSymbol) {
-            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol);
+            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(members.values()));
         }
         else {
             if (baseConstructorIndexInfo) {
@@ -16252,11 +16252,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getIndexInfosOfSymbol(symbol: Symbol): IndexInfo[] {
         const indexSymbol = getIndexSymbol(symbol);
-        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol) : emptyArray;
+        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(getMembersOfSymbol(symbol).values())) : emptyArray;
     }
 
     // note intentional similarities to index signature building in `checkObjectLiteral` for parity
-    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol): IndexInfo[] {
+    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol, siblingSymbols: Symbol[] | undefined = indexSymbol.parent ? arrayFrom(getMembersOfSymbol(indexSymbol.parent).values()) : undefined): IndexInfo[] {
         if (indexSymbol.declarations) {
             const indexInfos: IndexInfo[] = [];
             let hasComputedNumberProperty = false;
@@ -16308,10 +16308,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            const allPropertySymbols = concatenate(computedPropertySymbols, filter(siblingSymbols, s => s !== indexSymbol));
             // aggregate similar index infos implied to be the same key to the same combined index info
-            if (hasComputedStringProperty && !findIndexInfo(indexInfos, stringType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedStringProperty, 0, computedPropertySymbols, stringType));
-            if (hasComputedNumberProperty && !findIndexInfo(indexInfos, numberType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedNumberProperty, 0, computedPropertySymbols, numberType));
-            if (hasComputedSymbolProperty && !findIndexInfo(indexInfos, esSymbolType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedSymbolProperty, 0, computedPropertySymbols, esSymbolType));
+            if (hasComputedStringProperty && !findIndexInfo(indexInfos, stringType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedStringProperty, 0, allPropertySymbols, stringType));
+            if (hasComputedNumberProperty && !findIndexInfo(indexInfos, numberType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedNumberProperty, 0, allPropertySymbols, numberType));
+            if (hasComputedSymbolProperty && !findIndexInfo(indexInfos, esSymbolType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedSymbolProperty, 0, allPropertySymbols, esSymbolType));
             return indexInfos;
         }
         return emptyArray;
@@ -50523,7 +50524,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sym = cls.symbol;
                 const staticInfos = getIndexInfosOfType(getTypeOfSymbol(sym));
                 const instanceIndexSymbol = getIndexSymbol(sym);
-                const instanceInfos = instanceIndexSymbol && getIndexInfosOfIndexSymbol(instanceIndexSymbol);
+                const instanceInfos = instanceIndexSymbol && getIndexInfosOfIndexSymbol(instanceIndexSymbol, arrayFrom(getMembersOfSymbol(sym).values()));
                 let result;
                 for (const infoList of [staticInfos, instanceInfos]) {
                     if (!length(infoList)) continue;
