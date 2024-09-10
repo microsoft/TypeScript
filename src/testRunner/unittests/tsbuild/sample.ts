@@ -1,7 +1,10 @@
 import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { fakeTsVersion, patchHostForBuildInfoReadWrite } from "../helpers/baseline.js";
+import {
+    fakeTsVersion,
+    patchHostForBuildInfoReadWrite,
+} from "../helpers/baseline.js";
 import { getTypeScriptLibTestLocation } from "../helpers/contents.js";
 import {
     getSysForSampleProjectReferences,
