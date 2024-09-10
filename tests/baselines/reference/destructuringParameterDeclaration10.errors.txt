@@ -1,0 +1,18 @@
+destructuringParameterDeclaration10.ts(2,3): error TS7031: Binding element 'username' implicitly has an 'any' type.
+
+
+==== destructuringParameterDeclaration10.ts (1 errors) ====
+    const getUserProfileByUsername = ({
+      username,
+      ~~~~~~~~
+!!! error TS7031: Binding element 'username' implicitly has an 'any' type.
+      withEmail = false,
+      withNotificationSettings = false,
+    } = {}) => {
+      return {};
+    };
+    
+    getUserProfileByUsername({
+      username: 'ly', // ok (implicit any reported at declaration site)
+    });
+    

@@ -40565,11 +40565,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function padObjectLiteralType(type: ObjectType, pattern: ObjectBindingPattern): Type {
         let missingElements: BindingElement[] | undefined;
         for (const e of pattern.elements) {
-            if (e.initializer) {
-                const name = getPropertyNameFromBindingElement(e);
-                if (name && !getPropertyOfType(type, name)) {
-                    missingElements = append(missingElements, e);
-                }
+            const name = getPropertyNameFromBindingElement(e);
+            if (name && !getPropertyOfType(type, name)) {
+                missingElements = append(missingElements, e);
             }
         }
         if (!missingElements) {
@@ -40581,7 +40579,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         for (const e of missingElements) {
             const symbol = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, getPropertyNameFromBindingElement(e)!);
-            symbol.links.type = getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false);
+            symbol.links.type = getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ true);
             members.set(symbol.escapedName, symbol);
         }
         const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, getIndexInfosOfType(type));

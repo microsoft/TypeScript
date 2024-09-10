@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration10.ts] ////
+
+=== destructuringParameterDeclaration10.ts ===
+const getUserProfileByUsername = ({
+>getUserProfileByUsername : ({ username, withEmail, withNotificationSettings, }?: { username?: any; withEmail?: boolean | undefined; withNotificationSettings?: boolean | undefined; }) => {}
+>                         : ^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({  username,  withEmail = false,  withNotificationSettings = false,} = {}) => {  return {};} : ({ username, withEmail, withNotificationSettings, }?: { username?: any; withEmail?: boolean | undefined; withNotificationSettings?: boolean | undefined; }) => {}
+>                                                                                              : ^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  username,
+>username : any
+>         : ^^^
+
+  withEmail = false,
+>withEmail : boolean
+>          : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+  withNotificationSettings = false,
+>withNotificationSettings : boolean
+>                         : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+} = {}) => {
+>{} : {}
+>   : ^^
+
+  return {};
+>{} : {}
+>   : ^^
+
+};
+
+getUserProfileByUsername({
+>getUserProfileByUsername({  username: 'ly', // ok (implicit any reported at declaration site)}) : {}
+>                                                                                                : ^^
+>getUserProfileByUsername : ({ username, withEmail, withNotificationSettings, }?: { username?: any; withEmail?: boolean | undefined; withNotificationSettings?: boolean | undefined; }) => {}
+>                         : ^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  username: 'ly', // ok (implicit any reported at declaration site)} : { username: string; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^
+
+  username: 'ly', // ok (implicit any reported at declaration site)
+>username : string
+>         : ^^^^^^
+>'ly' : "ly"
+>     : ^^^^
+
+});
+
