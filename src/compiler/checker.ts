@@ -37405,7 +37405,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.instantiationExpressionTypes = new Map();
         }
         if (links.instantiationExpressionTypes.has(exprType.id)) {
-            return links.instantiationExpressionTypes.get(exprType.id);
+            return links.instantiationExpressionTypes.get(exprType.id)!;
         }
         let hasSomeApplicableSignature = false;
         let nonApplicableType: Type | undefined;
