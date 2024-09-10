@@ -261,6 +261,7 @@ import {
     getCombinedLocalAndExportSymbolFlags,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getCommonSourceDirectoryOfConfig,
     getContainingClass,
     getContainingClassExcludingClassDecorators,
     getContainingClassStaticBlock,
@@ -353,6 +354,7 @@ import {
     getPropertyAssignmentAliasLikeExpression,
     getPropertyNameForPropertyNameNode,
     getPropertyNameFromType,
+    getRelativePathFromDirectory,
     getRelativePathFromFile,
     getResolutionDiagnostic,
     getResolutionModeOverride,
@@ -4665,6 +4667,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (
                 compilerOptions.rewriteRelativeImportExtensions
                 && !(location.flags & NodeFlags.Ambient)
+                && !isDeclarationFileName(moduleReference)
                 && !isLiteralImportTypeNode(location)
                 && !isPartOfTypeOnlyImportOrExportDeclaration(location)
             ) {
@@ -4676,12 +4679,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
                     );
                 }
-                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite && !isDeclarationFileName(moduleReference) && sourceFileMayBeEmitted(sourceFile, host)) {
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite && sourceFileMayBeEmitted(sourceFile, host)) {
                     error(
                         errorNode,
                         Diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
                         getAnyExtensionFromPath(moduleReference),
                     );
+                }
+                else if (resolvedModule.resolvedUsingTsExtension && shouldRewrite) {
+                    const redirect = host.getResolvedProjectReferenceToRedirect(sourceFile.path);
+                    if (redirect) {
+                        const ignoreCase = !host.useCaseSensitiveFileNames();
+                        const ownRootDir = host.getCommonSourceDirectory();
+                        const otherRootDir = getCommonSourceDirectoryOfConfig(redirect.commandLine, ignoreCase);
+                        const rootDirPath = getRelativePathFromDirectory(ownRootDir, otherRootDir, ignoreCase);
+                        const outDirPath = getRelativePathFromDirectory(compilerOptions.outDir || ownRootDir, redirect.commandLine.options.outDir || otherRootDir, ignoreCase);
+                        if (rootDirPath !== outDirPath) {
+                            error(
+                                errorNode,
+                                Diagnostics.This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_between_the_projects_output_files_is_not_the_same_as_the_relative_path_between_its_input_files,
+                            );
+                        }
+                    }
                 }
             }
 
