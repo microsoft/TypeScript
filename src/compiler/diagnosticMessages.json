@@ -3952,6 +3952,10 @@
         "category": "Error",
         "code": 2874
     },
+    "This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.": {
+        "category": "Error",
+        "code": 2875
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

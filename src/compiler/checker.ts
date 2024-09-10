@@ -249,6 +249,7 @@ import {
     getAllJSDocTags,
     getAllowSyntheticDefaultImports,
     getAncestor,
+    getAnyExtensionFromPath,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
@@ -4661,17 +4662,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (
-                !(location.flags & NodeFlags.Ambient)
-                && !resolvedModule.resolvedUsingTsExtension
-                && shouldRewriteModuleSpecifier(moduleReference, compilerOptions)
+                compilerOptions.rewriteRelativeImportExtensions
+                && !(location.flags & NodeFlags.Ambient)
                 && !isLiteralImportTypeNode(location)
                 && !isPartOfTypeOnlyImportOrExportDeclaration(location)
             ) {
-                error(
-                    errorNode,
-                    Diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
-                    getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
-                );
+                const shouldRewrite = shouldRewriteModuleSpecifier(moduleReference, compilerOptions);
+                if (!resolvedModule.resolvedUsingTsExtension && shouldRewrite) {
+                    error(
+                        errorNode,
+                        Diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
+                        getRelativePathFromFile(getNormalizedAbsolutePath(currentSourceFile.fileName, host.getCurrentDirectory()), resolvedModule.resolvedFileName, hostGetCanonicalFileName(host)),
+                    );
+                }
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldRewrite) {
+                    error(
+                        errorNode,
+                        Diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_it_will_not_get_rewritten_during_emit_because_it_is_not_a_relative_path,
+                        getAnyExtensionFromPath(moduleReference),
+                    );
+                }
             }
 
             if (sourceFile.symbol) {
