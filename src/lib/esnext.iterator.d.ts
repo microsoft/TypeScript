@@ -123,7 +123,7 @@ declare global {
          * Returns its input if the input already inherits from the built-in Iterator class.
          * @param value An iterator or iterable object to convert a native iterator.
          */
-        from<T, TReturn>(value: Iterator<T, TReturn, any> | Iterable<T, TReturn, any>): IteratorObject<T, TReturn, unknown>;
+        from<T, TReturn = any, TNext = any>(value: Iterator<T, TReturn, TNext> | Iterable<T, TReturn, TNext>): IteratorObject<T, TReturn, unknown>;
     }
 
     var Iterator: IteratorConstructor;
