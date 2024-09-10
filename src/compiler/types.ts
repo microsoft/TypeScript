@@ -6238,6 +6238,7 @@ export interface NodeLinks {
     potentialReflectCollisions?: Node[];
     potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
+    instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
 }
 
 /** @internal */
