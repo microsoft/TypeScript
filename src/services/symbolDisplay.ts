@@ -660,7 +660,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     // If the type is type parameter, format it specially
                     if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
                         const typeParameterParts = mapToDisplayParts(writer => {
-                            const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
+                            const param = typeChecker.typeParameterToDeclaration(
+                                type as TypeParameter,
+                                enclosingDeclaration,
+                                symbolDisplayNodeBuilderFlags,
+                                /*internalFlags*/ undefined,
+                                /*tracker*/ undefined,
+                                verbosityLevel)!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                         });
                         addRange(displayParts, typeParameterParts);
