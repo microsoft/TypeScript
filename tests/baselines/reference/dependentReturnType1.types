@@ -1463,11 +1463,9 @@ declare let someX: boolean;
 >someX : boolean
 >      : ^^^^^^^
 
-function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : never {
->scope2 : <T extends boolean>(opts: { a: T; }) => T extends true ? 1 : T extends false ? 2 : never
->       : ^ ^^^^^^^^^       ^^    ^^         ^^^^^                                                
->opts : { a: T; }
->     : ^^^^^ ^^^
+function scope2<T extends boolean>(a: T): T extends true ? 1 : T extends false ? 2 : never {
+>scope2 : <T extends boolean>(a: T) => T extends true ? 1 : T extends false ? 2 : never
+>       : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
 >a : T
 >  : ^
 >true : true
@@ -1481,13 +1479,9 @@ function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T exten
 >true : true
 >     : ^^^^
 
-        const someX = opts.a;
+        const someX = a;
 >someX : T
 >      : ^
->opts.a : T
->       : ^
->opts : { a: T; }
->     : ^^^^^ ^^^
 >a : T
 >  : ^
 
@@ -1727,6 +1721,7 @@ type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
 
     EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : never;
 
+
 class ConditionalOperation<
 >ConditionalOperation : ConditionalOperation<T, R, EOp>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1761,6 +1756,7 @@ class ConditionalOperation<
 >      : ^^^^^^^^^^^^^^^^
     }
 
+    // We won't try to narrow the return type because `T` is declared on the class and we don't analyze this case.
     perform(t: T): ConditionalReturnType<T, R, EOp> {
 >perform : (t: T) => ConditionalReturnType<T, R, EOp>
 >        : ^ ^^ ^^^^^                                
@@ -1809,7 +1805,7 @@ class ConditionalOperation<
 >"undefined" : "undefined"
 >            : ^^^^^^^^^^^
 
-            return this.elseOp.perform(t); // Ok
+            return this.elseOp.perform(t); // Would be ok
 >this.elseOp.perform(t) : R
 >                       : ^
 >this.elseOp.perform : (t: T) => R
@@ -1826,53 +1822,89 @@ class ConditionalOperation<
 >  : ^
 
         } else {
-            return t; // Ok
+            return t; // Would be ok
 >t : T
 >  : ^
         }
     }
 }
 
-// Optional tuple element
-function tupl<T extends true | false | undefined>(x: [string, some?: T]):
->tupl : <T extends true | false | undefined>(x: [string, some?: T]) => T extends true ? 1 : T extends false | undefined ? 2 : never
->     : ^ ^^^^^^^^^                        ^^ ^^                  ^^^^^                                                            
->true : true
->     : ^^^^
->false : false
->      : ^^^^^
->x : [string, some?: T | undefined]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Like the version above, we will not attempt to narrow because there's more than one reference to `T`,
+// because `T` shows up in the type of `predicate`.
+function perform<T, R, EOp extends Operation<T, R> | undefined>(
+>perform : <T, R, EOp extends Operation<T, R> | undefined>(t: T, predicate: (value: T) => boolean, thenOp: Operation<T, R>, elseOp?: EOp) => ConditionalReturnType<T, R, EOp>
+>        : ^ ^^ ^^   ^^^^^^^^^                           ^^ ^^ ^^         ^^                     ^^      ^^               ^^      ^^^   ^^^^^                                
 
-    T extends true ? 1 : T extends false | undefined ? 2 : never {
->true : true
->     : ^^^^
->false : false
->      : ^^^^^
-
-    if (x[1]) {
->x[1] : T | undefined
->     : ^^^^^^^^^^^^^
->x : [string, some?: T | undefined]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
+    t: T,
+>t : T
 >  : ^
 
-        return 1;
->1 : 1
+    predicate: (value: T) => boolean,
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>value : T
+>      : ^
+
+    thenOp: Operation<T, R>,
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+
+    elseOp?: EOp,
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+
+    ): ConditionalReturnType<T, R, EOp> {
+    if (predicate(t)) {
+>predicate(t) : boolean
+>             : ^^^^^^^
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>t : T
+>  : ^
+
+        return thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+>thenOp.perform(t) : R
+>                  : ^
+>thenOp.perform : (t: T) => R
+>               : ^ ^^^^^^^^^
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+    } else if (elseOp !== undefined) {
+>elseOp !== undefined : boolean
+>                     : ^^^^^^^
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return elseOp.perform(t); // Would be ok
+>elseOp.perform(t) : R
+>                  : ^
+>elseOp.perform : (t: T) => R
+>               : ^ ^^^^^^^^^
+>elseOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+    } else {
+        return t; // Would be ok
+>t : T
 >  : ^
     }
-    return 2;
->2 : 2
->  : ^
 }
 
 // Return conditional expressions with parentheses
-function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : never {
->returnStuff1 : <T extends boolean>(opts: { x: T; }) => T extends true ? 1 : T extends false ? 2 : never
->             : ^ ^^^^^^^^^       ^^    ^^         ^^^^^                                                
->opts : { x: T; }
->     : ^^^^^ ^^^
+function returnStuff1<T extends boolean>(x: T ): T extends true ? 1 : T extends false ? 2 : never {
+>returnStuff1 : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never
+>             : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
 >x : T
 >  : ^
 >true : true
@@ -1880,15 +1912,11 @@ function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T
 >false : false
 >      : ^^^^^
 
-    return (opts.x ? (1) : 2);
->(opts.x ? (1) : 2) : 1 | 2
->                   : ^^^^^
->opts.x ? (1) : 2 : 1 | 2
->                 : ^^^^^
->opts.x : T
->       : ^
->opts : { x: T; }
->     : ^^^^^ ^^^
+    return (x ? (1) : 2);
+>(x ? (1) : 2) : 1 | 2
+>              : ^^^^^
+>x ? (1) : 2 : 1 | 2
+>            : ^^^^^
 >x : T
 >  : ^
 >(1) : 1
@@ -1899,44 +1927,34 @@ function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T
 >  : ^
 }
 
-function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
->returnStuff2 : <T extends 1 | 2 | "a">(opts: { x: T; }) => T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never
->             : ^ ^^^^^^^^^           ^^    ^^         ^^^^^                                                                     
->opts : { x: T; }
->     : ^^^^^ ^^^
+function returnStuff2<T extends 1 | 2 | "a">(x: T ):
+>returnStuff2 : <T extends 1 | 2 | "a">(x: T) => T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never
+>             : ^ ^^^^^^^^^           ^^ ^^ ^^^^^                                                                     
 >x : T
 >  : ^
 
     T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
-    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
->(typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two")) : 0 | "one" | "two"
->                                                                    : ^^^^^^^^^^^^^^^^^
->typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two") : 0 | "one" | "two"
->                                                                  : ^^^^^^^^^^^^^^^^^
->typeof opts.x === "string" : boolean
->                           : ^^^^^^^
->typeof opts.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->opts.x : T
->       : ^
->opts : { x: T; }
->     : ^^^^^ ^^^
+    return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+>(typeof x === "string" ? 0 : (x === 1 ? ("one") : "two")) : 0 | "one" | "two"
+>                                                          : ^^^^^^^^^^^^^^^^^
+>typeof x === "string" ? 0 : (x === 1 ? ("one") : "two") : 0 | "one" | "two"
+>                                                        : ^^^^^^^^^^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >"string" : "string"
 >         : ^^^^^^^^
 >0 : 0
 >  : ^
->(opts.x === 1 ? ("one") : "two") : "one" | "two"
->                                 : ^^^^^^^^^^^^^
->opts.x === 1 ? ("one") : "two" : "one" | "two"
->                               : ^^^^^^^^^^^^^
->opts.x === 1 : boolean
->             : ^^^^^^^
->opts.x : T
->       : ^
->opts : { x: T; }
->     : ^^^^^ ^^^
+>(x === 1 ? ("one") : "two") : "one" | "two"
+>                            : ^^^^^^^^^^^^^
+>x === 1 ? ("one") : "two" : "one" | "two"
+>                          : ^^^^^^^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
 >x : T
 >  : ^
 >1 : 1

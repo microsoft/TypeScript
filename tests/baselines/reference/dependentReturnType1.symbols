@@ -1015,21 +1015,18 @@ function noShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 
 declare let someX: boolean;
 >someX : Symbol(someX, Decl(dependentReturnType1.ts, 382, 11))
 
-function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : never {
+function scope2<T extends boolean>(a: T): T extends true ? 1 : T extends false ? 2 : never {
 >scope2 : Symbol(scope2, Decl(dependentReturnType1.ts, 382, 27))
 >T : Symbol(T, Decl(dependentReturnType1.ts, 383, 16))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 383, 35))
->a : Symbol(a, Decl(dependentReturnType1.ts, 383, 42))
+>a : Symbol(a, Decl(dependentReturnType1.ts, 383, 35))
 >T : Symbol(T, Decl(dependentReturnType1.ts, 383, 16))
 >T : Symbol(T, Decl(dependentReturnType1.ts, 383, 16))
 >T : Symbol(T, Decl(dependentReturnType1.ts, 383, 16))
 
     if ((true)) {
-        const someX = opts.a;
+        const someX = a;
 >someX : Symbol(someX, Decl(dependentReturnType1.ts, 385, 13))
->opts.a : Symbol(a, Decl(dependentReturnType1.ts, 383, 42))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 383, 35))
->a : Symbol(a, Decl(dependentReturnType1.ts, 383, 42))
+>a : Symbol(a, Decl(dependentReturnType1.ts, 383, 35))
 
         if (someX) { // We narrow `someX` and the return type here
 >someX : Symbol(someX, Decl(dependentReturnType1.ts, 385, 13))
@@ -1186,166 +1183,202 @@ type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
 >T : Symbol(T, Decl(dependentReturnType1.ts, 449, 27))
 >R : Symbol(R, Decl(dependentReturnType1.ts, 449, 29))
 
+
 class ConditionalOperation<
 >ConditionalOperation : Symbol(ConditionalOperation, Decl(dependentReturnType1.ts, 450, 76))
 
     T,
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
 
     R,
->R : Symbol(R, Decl(dependentReturnType1.ts, 453, 6))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 454, 6))
 
     EOp extends Operation<T, R> | undefined,
->EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 454, 6))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 455, 6))
 >Operation : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
->R : Symbol(R, Decl(dependentReturnType1.ts, 453, 6))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 454, 6))
 
 > extends Operation<T, ConditionalReturnType<T, R, EOp>> {
 >Operation : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
 >ConditionalReturnType : Symbol(ConditionalReturnType, Decl(dependentReturnType1.ts, 447, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
->R : Symbol(R, Decl(dependentReturnType1.ts, 453, 6))
->EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 454, 6))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 454, 6))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 455, 6))
 
     constructor(
         private predicate: (value: T) => boolean,
->predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 457, 16))
->value : Symbol(value, Decl(dependentReturnType1.ts, 458, 28))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
+>predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 458, 16))
+>value : Symbol(value, Decl(dependentReturnType1.ts, 459, 28))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
 
         private thenOp: Operation<T, R>,
->thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 458, 49))
+>thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 459, 49))
 >Operation : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
->R : Symbol(R, Decl(dependentReturnType1.ts, 453, 6))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 454, 6))
 
         private elseOp?: EOp,
->elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 459, 40))
->EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 454, 6))
+>elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 460, 40))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 455, 6))
 
     ) {
         super();
 >super : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
     }
 
+    // We won't try to narrow the return type because `T` is declared on the class and we don't analyze this case.
     perform(t: T): ConditionalReturnType<T, R, EOp> {
->perform : Symbol(ConditionalOperation.perform, Decl(dependentReturnType1.ts, 463, 5))
->t : Symbol(t, Decl(dependentReturnType1.ts, 465, 12))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
+>perform : Symbol(ConditionalOperation.perform, Decl(dependentReturnType1.ts, 464, 5))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 467, 12))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
 >ConditionalReturnType : Symbol(ConditionalReturnType, Decl(dependentReturnType1.ts, 447, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 452, 27))
->R : Symbol(R, Decl(dependentReturnType1.ts, 453, 6))
->EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 454, 6))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 453, 27))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 454, 6))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 455, 6))
 
         if (this.predicate(t)) {
->this.predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 457, 16))
+>this.predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 458, 16))
 >this : Symbol(ConditionalOperation, Decl(dependentReturnType1.ts, 450, 76))
->predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 457, 16))
->t : Symbol(t, Decl(dependentReturnType1.ts, 465, 12))
+>predicate : Symbol(ConditionalOperation.predicate, Decl(dependentReturnType1.ts, 458, 16))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 467, 12))
 
             return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
 >this.thenOp.perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
->this.thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 458, 49))
+>this.thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 459, 49))
 >this : Symbol(ConditionalOperation, Decl(dependentReturnType1.ts, 450, 76))
->thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 458, 49))
+>thenOp : Symbol(ConditionalOperation.thenOp, Decl(dependentReturnType1.ts, 459, 49))
 >perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
->t : Symbol(t, Decl(dependentReturnType1.ts, 465, 12))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 467, 12))
 
         } else if (typeof this.elseOp !== "undefined") {
->this.elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 459, 40))
+>this.elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 460, 40))
 >this : Symbol(ConditionalOperation, Decl(dependentReturnType1.ts, 450, 76))
->elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 459, 40))
+>elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 460, 40))
 
-            return this.elseOp.perform(t); // Ok
+            return this.elseOp.perform(t); // Would be ok
 >this.elseOp.perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
->this.elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 459, 40))
+>this.elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 460, 40))
 >this : Symbol(ConditionalOperation, Decl(dependentReturnType1.ts, 450, 76))
->elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 459, 40))
+>elseOp : Symbol(ConditionalOperation.elseOp, Decl(dependentReturnType1.ts, 460, 40))
 >perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
->t : Symbol(t, Decl(dependentReturnType1.ts, 465, 12))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 467, 12))
 
         } else {
-            return t; // Ok
->t : Symbol(t, Decl(dependentReturnType1.ts, 465, 12))
+            return t; // Would be ok
+>t : Symbol(t, Decl(dependentReturnType1.ts, 467, 12))
         }
     }
 }
 
-// Optional tuple element
-function tupl<T extends true | false | undefined>(x: [string, some?: T]):
->tupl : Symbol(tupl, Decl(dependentReturnType1.ts, 474, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 477, 14))
->x : Symbol(x, Decl(dependentReturnType1.ts, 477, 50))
->T : Symbol(T, Decl(dependentReturnType1.ts, 477, 14))
+// Like the version above, we will not attempt to narrow because there's more than one reference to `T`,
+// because `T` shows up in the type of `predicate`.
+function perform<T, R, EOp extends Operation<T, R> | undefined>(
+>perform : Symbol(perform, Decl(dependentReturnType1.ts, 476, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 480, 19))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 480, 22))
+>Operation : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 480, 19))
 
-    T extends true ? 1 : T extends false | undefined ? 2 : never {
->T : Symbol(T, Decl(dependentReturnType1.ts, 477, 14))
->T : Symbol(T, Decl(dependentReturnType1.ts, 477, 14))
+    t: T,
+>t : Symbol(t, Decl(dependentReturnType1.ts, 480, 64))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
 
-    if (x[1]) {
->x : Symbol(x, Decl(dependentReturnType1.ts, 477, 50))
->1 : Symbol(1)
+    predicate: (value: T) => boolean,
+>predicate : Symbol(predicate, Decl(dependentReturnType1.ts, 481, 9))
+>value : Symbol(value, Decl(dependentReturnType1.ts, 482, 16))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
 
-        return 1;
+    thenOp: Operation<T, R>,
+>thenOp : Symbol(thenOp, Decl(dependentReturnType1.ts, 482, 37))
+>Operation : Symbol(Operation, Decl(dependentReturnType1.ts, 442, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 480, 19))
+
+    elseOp?: EOp,
+>elseOp : Symbol(elseOp, Decl(dependentReturnType1.ts, 483, 28))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 480, 22))
+
+    ): ConditionalReturnType<T, R, EOp> {
+>ConditionalReturnType : Symbol(ConditionalReturnType, Decl(dependentReturnType1.ts, 447, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 480, 17))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 480, 19))
+>EOp : Symbol(EOp, Decl(dependentReturnType1.ts, 480, 22))
+
+    if (predicate(t)) {
+>predicate : Symbol(predicate, Decl(dependentReturnType1.ts, 481, 9))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 480, 64))
+
+        return thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+>thenOp.perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
+>thenOp : Symbol(thenOp, Decl(dependentReturnType1.ts, 482, 37))
+>perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 480, 64))
+
+    } else if (elseOp !== undefined) {
+>elseOp : Symbol(elseOp, Decl(dependentReturnType1.ts, 483, 28))
+>undefined : Symbol(undefined)
+
+        return elseOp.perform(t); // Would be ok
+>elseOp.perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
+>elseOp : Symbol(elseOp, Decl(dependentReturnType1.ts, 483, 28))
+>perform : Symbol(Operation.perform, Decl(dependentReturnType1.ts, 445, 32))
+>t : Symbol(t, Decl(dependentReturnType1.ts, 480, 64))
+
+    } else {
+        return t; // Would be ok
+>t : Symbol(t, Decl(dependentReturnType1.ts, 480, 64))
     }
-    return 2;
 }
 
 // Return conditional expressions with parentheses
-function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : never {
->returnStuff1 : Symbol(returnStuff1, Decl(dependentReturnType1.ts, 483, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 486, 22))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 486, 41))
->x : Symbol(x, Decl(dependentReturnType1.ts, 486, 48))
->T : Symbol(T, Decl(dependentReturnType1.ts, 486, 22))
->T : Symbol(T, Decl(dependentReturnType1.ts, 486, 22))
->T : Symbol(T, Decl(dependentReturnType1.ts, 486, 22))
+function returnStuff1<T extends boolean>(x: T ): T extends true ? 1 : T extends false ? 2 : never {
+>returnStuff1 : Symbol(returnStuff1, Decl(dependentReturnType1.ts, 493, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 496, 22))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 496, 41))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 496, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 496, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 496, 22))
 
-    return (opts.x ? (1) : 2);
->opts.x : Symbol(x, Decl(dependentReturnType1.ts, 486, 48))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 486, 41))
->x : Symbol(x, Decl(dependentReturnType1.ts, 486, 48))
+    return (x ? (1) : 2);
+>x : Symbol(x, Decl(dependentReturnType1.ts, 496, 41))
 }
 
-function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
->returnStuff2 : Symbol(returnStuff2, Decl(dependentReturnType1.ts, 488, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 490, 22))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 490, 45))
->x : Symbol(x, Decl(dependentReturnType1.ts, 490, 52))
->T : Symbol(T, Decl(dependentReturnType1.ts, 490, 22))
+function returnStuff2<T extends 1 | 2 | "a">(x: T ):
+>returnStuff2 : Symbol(returnStuff2, Decl(dependentReturnType1.ts, 498, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 500, 22))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 500, 45))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 500, 22))
 
     T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
->T : Symbol(T, Decl(dependentReturnType1.ts, 490, 22))
->T : Symbol(T, Decl(dependentReturnType1.ts, 490, 22))
->T : Symbol(T, Decl(dependentReturnType1.ts, 490, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 500, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 500, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 500, 22))
 
-    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
->opts.x : Symbol(x, Decl(dependentReturnType1.ts, 490, 52))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 490, 45))
->x : Symbol(x, Decl(dependentReturnType1.ts, 490, 52))
->opts.x : Symbol(x, Decl(dependentReturnType1.ts, 490, 52))
->opts : Symbol(opts, Decl(dependentReturnType1.ts, 490, 45))
->x : Symbol(x, Decl(dependentReturnType1.ts, 490, 52))
+    return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+>x : Symbol(x, Decl(dependentReturnType1.ts, 500, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 500, 45))
 }
 
 // If the conditional type's input is `never`, then it resolves to `never`:
 function neverOk<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 2 : never {
->neverOk : Symbol(neverOk, Decl(dependentReturnType1.ts, 493, 1))
->T : Symbol(T, Decl(dependentReturnType1.ts, 496, 17))
->x : Symbol(x, Decl(dependentReturnType1.ts, 496, 36))
->T : Symbol(T, Decl(dependentReturnType1.ts, 496, 17))
->T : Symbol(T, Decl(dependentReturnType1.ts, 496, 17))
->T : Symbol(T, Decl(dependentReturnType1.ts, 496, 17))
+>neverOk : Symbol(neverOk, Decl(dependentReturnType1.ts, 503, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 506, 17))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 506, 36))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 506, 17))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 506, 17))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 506, 17))
 
     if (x === true) {
->x : Symbol(x, Decl(dependentReturnType1.ts, 496, 36))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 506, 36))
 
         return 1;
     }
     if (x === false) {
->x : Symbol(x, Decl(dependentReturnType1.ts, 496, 36))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 506, 36))
 
         return 2;
     }

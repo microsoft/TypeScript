@@ -485,7 +485,6 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
-    isCaseClause,
     isCatchClause,
     isCatchClauseVariableDeclaration,
     isCatchClauseVariableDeclarationOrBindingElement,
@@ -1011,7 +1010,6 @@ import {
     StructuredType,
     SubstitutionType,
     SuperCall,
-    SuperExpression,
     SwitchStatement,
     Symbol,
     SymbolAccessibility,
@@ -1561,14 +1559,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         onSuccessfullyResolvedSymbol,
     });
 
-    type TypeParameterReference =
-        | Identifier
-        | PropertyAccessExpression
-        | ElementAccessExpression
-        | SuperExpression
-        | ThisExpression;
-    type TypeParameterToReference = Map<TypeParameter, Map<Symbol, TypeParameterReference>>;
-    var typeParameterReferencesCache = new Map<SignatureDeclaration, TypeParameterToReference>();
     var resolveNameForSymbolSuggestion = createNameResolver({
         compilerOptions,
         requireSymbol,
@@ -45483,15 +45473,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
         const allTypeParameters = appendTypeParameters(getOuterTypeParameters(container, /*includeThisTypes*/ false), getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-        const unionTypeParameters = allTypeParameters?.filter(tp => {
-            const constraint = getConstraintOfTypeParameter(tp);
-            return !!((constraint?.flags ?? 0) & TypeFlags.Union);
-        });
-        const narrowableTypeParameters = unionTypeParameters
-            && filterNarrowableTypeParameters(container, unionTypeParameters);
+        const narrowableTypeParameters = allTypeParameters && getNarrowableTypeParameters(allTypeParameters);
 
         if (
             !narrowableTypeParameters ||
+            !narrowableTypeParameters.length ||
             !isNarrowableReturnType(narrowableTypeParameters.map(trio => trio[0]), unwrappedReturnType)
         ) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
@@ -45582,265 +45568,76 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
     }
 
-    // Narrowable type parameters are type parameters that are the type of a single reference in the function scope
-    // whose type could possibly narrowed.
-    // For instance, `T` is a narrowable type parameter in the function below because it is the type of reference `x`,
-    // reference `x` appears in the control flow graph for the function, and therefore `x`'s type could be narrowed,
-    // and `T` is not the type of any other such references in the scope of the function.
-    // `
-    // function f<T, U>(x: T, y: U): ... {
-    //     if (typeof x === ...) { return ...; }
-    // }
-    // `
-    function filterNarrowableTypeParameters(container: SignatureDeclaration, typeParameters: TypeParameter[]): [TypeParameter, Symbol, TypeParameterReference][] | undefined {
-        const narrowableTypeParameterReferences = collectTypeParameterReferences(container);
-        const queryParameters: [TypeParameter, Symbol, TypeParameterReference][] = [];
-        for (const typeParam of typeParameters) {
-            const symbolMap = narrowableTypeParameterReferences.get(typeParam);
-            if (!symbolMap) continue;
-            if (symbolMap.size === 1) {
-                const [symbol, reference] = firstIterator(symbolMap.entries());
-                queryParameters.push([typeParam, symbol, reference]);
-            }
-        }
-        return queryParameters.length ? queryParameters : undefined;
-    }
-
-    function collectTypeParameterReferences(container: SignatureDeclaration): TypeParameterToReference {
-        const references: TypeParameterToReference = new Map();
-        if (!typeParameterReferencesCache.has(container)) {
-            typeParameterReferencesCache.set(container, references);
-            const flowNodes = collectReturnStatementFlowNodes(container);
-            visitFlowNodes(flowNodes, getNodeFromFlowNode);
-        }
-        return typeParameterReferencesCache.get(container)!;
-
-        // Get the node from the flow node that could have narrowable references.
-        function getNodeFromFlowNode(flow: FlowNode) {
-            const flags = flow.flags;
-            // Based on `getTypeAtFlowX` functions.
-            let node;
-            if (flags & FlowFlags.Assignment) {
-                node = (flow as FlowAssignment).node;
-            }
-            else if (flags & FlowFlags.Call) {
-                node = (flow as FlowCall).node;
-            }
-            else if (flags & FlowFlags.Condition) {
-                node = (flow as FlowCondition).node;
-            }
-            else if (flags & FlowFlags.SwitchClause) {
-                node = (flow as FlowSwitchClause).node.switchStatement.expression;
-                // We have:
-                // `switch (true) {
-                //      case expr1: ...
-                //      case expr2: ...
-                // }`
-                // so we need to also gather narrowing references from the case expressions.
-                if (skipParentheses(node).kind === SyntaxKind.TrueKeyword) {
-                    const switchStmt = node.parent as SwitchStatement;
-                    for (const clause of switchStmt.caseBlock.clauses) {
-                        if (isCaseClause(clause)) {
-                            getReferencesFromNode(clause.expression);
+    // Narrowable type parameters are type parameters that:
+    // (1) have a union type constraint;
+    // (2) are used as the type of a single parameter in the function, and nothing else
+    function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
+        const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
+        for (const typeParam of candidates) {
+            const constraint = getConstraintOfTypeParameter(typeParam);
+            if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
+            if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
+                const container = typeParam.symbol.declarations[0].parent;
+                if (!isFunctionLike(container)) continue;
+                let reference: Identifier | undefined;
+                let hasInvalidReference = false;
+                for (const paramDecl of container.parameters) {
+                    const typeNode = paramDecl.type;
+                    if (!typeNode) {
+                        // Parameter's type could be inferred to a type that references the type parameter.
+                        hasInvalidReference = true;
+                        break;
+                    }
+                    if (isTypeParameterReferenced(typeParam, typeNode)) {
+                        let candidateReference;
+                        if (isTypeReferenceNode(typeNode) &&
+                            isReferenceToTypeParameter(typeParam, typeNode) &&
+                            (candidateReference = getValidParameterReference(paramDecl, constraint))) {
+                            if (reference) {
+                                hasInvalidReference = true;
+                                break;
+                            }
+                            reference = candidateReference;
+                            continue;
                         }
+                        hasInvalidReference = true;
+                        break;
                     }
                 }
-            }
-            else if (flags & FlowFlags.ArrayMutation) {
-                // `node` is either `arr.push(expr2)` (or other array method calls),
-                // or `arr[expr2] = expr3`, and in both we might narrow `arr`.
-                const callNode = (flow as FlowArrayMutation).node;
-                node = callNode.kind === SyntaxKind.CallExpression ?
-                    (callNode.expression as PropertyAccessExpression).expression :
-                    (callNode.left as ElementAccessExpression).expression;
-            }
-            if (node) getReferencesFromNode(node);
-        }
-
-        // Collect narrowable references from the nodes associated to a flow node.
-        // A narrowable reference here means an expression whose type may be narrowed during
-        // control flow analysis, and whose unnarrowed type could be a type parameter.
-        function getReferencesFromNode(node: Node, inlineLevel = 0): void {
-            switch (node.kind) {
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.NonNullExpression:
-                    getReferencesFromNode(
-                        (node as NonNullExpression | ParenthesizedExpression).expression,
-                        inlineLevel,
-                    );
-                    return;
-                case SyntaxKind.BinaryExpression:
-                    getReferencesFromNode((node as BinaryExpression).left, inlineLevel);
-                    getReferencesFromNode((node as BinaryExpression).right, inlineLevel);
-                    return;
-                case SyntaxKind.CallExpression:
-                    let callAccess;
-                    // `node` is `expr.hasOwnExpression(prop)`, so we create a synthetic `expr.prop` reference for narrowing.
-                    if (
-                        isPropertyAccessExpression(callAccess = (node as CallExpression).expression)
-                        && isIdentifier(callAccess.name)
-                        && callAccess.name.escapedText === "hasOwnProperty"
-                        && (node as CallExpression).arguments.length === 1
-                        && isStringLiteralLike((node as CallExpression).arguments[0])
-                    ) {
-                        const propName = (node as CallExpression).arguments[0] as StringLiteralLike;
-                        const synthPropertyAccess = canUsePropertyAccess(propName.text, languageVersion) ?
-                            factory.createPropertyAccessExpression(callAccess.expression, propName.text) :
-                            factory.createElementAccessExpression(callAccess.expression, propName);
-                        setParent(synthPropertyAccess, node.parent);
-                        addReference(synthPropertyAccess, inlineLevel);
-                    }
-                    getReferencesFromNode((node as CallExpression).expression, inlineLevel);
-                    (node as CallExpression).arguments.forEach(arg => getReferencesFromNode(arg, inlineLevel));
-                    return;
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixUnaryExpression:
-                    getReferencesFromNode((node as PrefixUnaryExpression | PostfixUnaryExpression).operand, inlineLevel);
-                    return;
-                case SyntaxKind.TypeOfExpression:
-                    getReferencesFromNode((node as TypeOfExpression).expression);
-                    return;
-                case SyntaxKind.ThisKeyword:
-                    addReference(node as ThisExpression, inlineLevel);
-                    return;
-                case SyntaxKind.Identifier:
-                    addReference(node as Identifier, inlineLevel);
-                    return;
-                case SyntaxKind.SuperKeyword:
-                    addReference(node as SuperExpression, inlineLevel);
-                    return;
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                    getReferencesFromNode(
-                        (node as PropertyAccessExpression | ElementAccessExpression).expression,
-                        inlineLevel,
-                    );
-                    addReference(node as PropertyAccessExpression | ElementAccessExpression, inlineLevel);
-                    return;
-            }
-        }
-
-        function addReference(reference: TypeParameterReference, inlineLevel: number): void {
-            const symbol = getSymbolForExpression(reference);
-            const type = symbol && getTypeOfSymbol(symbol);
-            if (!type || isErrorType(type)) return;
-            // Check if we have an optional parameter, an optional property, or an optional tuple element.
-            // In this case, its type can be `T | undefined`,
-            // and if `T` allows for the undefined type, then we can still narrow `T`.
-            if (
-                ((symbol.valueDeclaration && isOptionalDeclaration(symbol.valueDeclaration))
-                    || isOptionalTupleElementSymbol(symbol))
-                && type.flags & TypeFlags.Union
-                && ((type as UnionType).types[0] === undefinedType
-                    || exactOptionalPropertyTypes && (type as UnionType).types[0] === missingType)
-                && (type as UnionType).types[1].flags & TypeFlags.TypeParameter
-            ) {
-                const typeParam = (type as UnionType).types[1] as TypeParameter;
-                const constraint = getConstraintOfTypeParameter(typeParam);
-                if (!constraint || constraint.flags & TypeFlags.Unknown || containsUndefinedType(constraint)) {
-                    add(typeParam, symbol, reference);
+                if (!hasInvalidReference && reference) {
+                    const symbol = getResolvedSymbol(reference);
+                    if (symbol !== unknownSymbol) narrowableParams.push([typeParam, symbol, reference]);
                 }
             }
-            else if (type.flags & TypeFlags.TypeParameter) {
-                add(type as TypeParameter, symbol, reference);
-            }
-            else if (inlineLevel < 5) {
-                const inlineExpression = getNarrowableInlineExpression(symbol);
-                if (inlineExpression) {
-                    getReferencesFromNode(inlineExpression, inlineLevel + 1);
+        }
+
+        return narrowableParams;
+        // For a parameter of declared type `T` to be a valid reference for narrowing, it must satisfy:
+        // - the parameter name is an identifier
+        // - if the parameter is optional, then `T`'s constraint must allow for undefined
+        function getValidParameterReference(paramDecl: ParameterDeclaration, constraint: Type): Identifier | undefined {
+            if (!isIdentifier(paramDecl.name)) return;
+            if (paramDecl.questionToken && !containsUndefinedType(constraint)) return;
+            return paramDecl.name;
+        }
+
+        function isReferenceToTypeParameter(typeParam: TypeParameter, node: TypeReferenceNode) {
+            return getTypeFromTypeReference(node) === typeParam;
+        }
+
+        function isTypeParameterReferenced(typeParam: TypeParameter, node: TypeNode) {
+            return isReferenced(node);
+
+            function isReferenced(node: Node): boolean {
+                if (isTypeReferenceNode(node)) {
+                    return isReferenceToTypeParameter(typeParam, node);
                 }
-            }
-
-            function add(type: TypeParameter, symbol: Symbol, reference: TypeParameterReference) {
-                if (!references.has(type)) {
-                    references.set(type, new Map());
+                if (isTypeQueryNode(node)) {
+                    return isTypeParameterPossiblyReferenced(typeParam, node);
                 }
-                references.get(type)!.set(symbol, reference);
+                return !!forEachChild(node, isReferenced);
             }
         }
-    }
-
-    function collectReturnStatementFlowNodes(container: SignatureDeclaration): FlowNode[] {
-        const flowNodes: FlowNode[] = [];
-        visit(container);
-        if (isFunctionLikeDeclaration(container) && container.endFlowNode) {
-            flowNodes.push(container.endFlowNode);
-        }
-        return flowNodes;
-
-        function visit(node: Node) {
-            if (node.kind === SyntaxKind.ReturnStatement) {
-                const nodeContainer = getContainingFunctionOrClassStaticBlock(node as ReturnStatement);
-                if (nodeContainer === container) {
-                    visitConditionalReturnExpression((node as ReturnStatement).expression);
-                    const flowNode = (node as ReturnStatement).flowNode;
-                    if (flowNode) {
-                        flowNodes.push(flowNode);
-                    }
-                }
-                return;
-            }
-
-            forEachChild(node, visit);
-        }
-
-        function visitConditionalReturnExpression(node: Expression | undefined): void {
-            if (!node) return;
-            node = skipParentheses(node);
-            if (isConditionalExpression(node)) {
-                if (node.flowNodeWhenTrue) flowNodes.push(node.flowNodeWhenTrue);
-                if (node.flowNodeWhenFalse) flowNodes.push(node.flowNodeWhenFalse);
-                visitConditionalReturnExpression(node.whenTrue);
-                visitConditionalReturnExpression(node.whenFalse);
-            }
-        }
-    }
-
-    type HasFlowAntecedent =
-        | FlowAssignment
-        | FlowCondition
-        | FlowSwitchClause
-        | FlowArrayMutation
-        | FlowCall
-        | FlowReduceLabel;
-
-    function hasFlowAntecedent(flow: FlowNode): flow is HasFlowAntecedent {
-        return !!(flow.flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ArrayMutation | FlowFlags.Call | FlowFlags.ReduceLabel));
-    }
-
-    function visitFlowNodes(flowNodes: FlowNode[], visit: (n: FlowNode) => void): void {
-        const visited = new Set<number>();
-        flowNodes.forEach(visitFlowNode);
-        function visitFlowNode(flow: FlowNode): void {
-            const id = getFlowNodeId(flow);
-            if (visited.has(id)) return;
-            visited.add(id);
-
-            visit(flow);
-            const flags = flow.flags;
-            if (flags & FlowFlags.Label) {
-                return (flow as FlowLabel).antecedent?.forEach(visitFlowNode);
-            }
-            if (flags & FlowFlags.ReduceLabel) {
-                (flow as FlowReduceLabel).node.antecedents.forEach(visitFlowNode);
-                // >> TODO: also visit flow.target?
-            }
-            if (hasFlowAntecedent(flow)) {
-                return visitFlowNode((flow as HasFlowAntecedent).antecedent);
-            }
-        }
-    }
-
-    function isOptionalTupleElementSymbol(symbol: Symbol): boolean {
-        if (
-            isTransientSymbol(symbol)
-            && symbol.links.target
-            && isTransientSymbol(symbol.links.target)
-            && symbol.links.target.links.tupleLabelDeclaration
-        ) {
-            return !!symbol.links.target.links.tupleLabelDeclaration?.questionToken;
-        }
-        return false;
     }
 
     // A valid conditional type will have the following shape:

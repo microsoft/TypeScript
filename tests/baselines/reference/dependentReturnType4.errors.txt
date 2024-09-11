@@ -1,31 +1,15 @@
-dependentReturnType4.ts(48,15): error TS2322: Type 'string | number' is not assignable to type 'string'.
-  Type 'number' is not assignable to type 'string'.
-dependentReturnType4.ts(49,9): error TS2322: Type 'number' is not assignable to type 'T extends number ? string : T extends string ? number : never'.
-dependentReturnType4.ts(51,5): error TS2322: Type 'string' is not assignable to type 'T extends number ? string : T extends string ? number : never'.
+dependentReturnType4.ts(28,9): error TS2322: Type '0' is not assignable to type 'T extends undefined ? 0 : T extends string ? 1 : never'.
+dependentReturnType4.ts(30,5): error TS2322: Type '1' is not assignable to type 'T extends undefined ? 0 : T extends string ? 1 : never'.
 
 
-==== dependentReturnType4.ts (3 errors) ====
-    // Test narrowing through `hasOwnProperty` calls
+==== dependentReturnType4.ts (2 errors) ====
     declare const rand: { a?: never };
     type Missing = typeof rand.a;
-    declare function takesString(x: string): void;
-    function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : never {
-        if (obj.hasOwnProperty("a")) {
-            takesString(obj.a);
-            return 1;
-        }
-        return 2;
-    }
     
-    function foo<T extends string | undefined>(opts: { x?: T }):
-        T extends undefined ? 0 : T extends string ? 1 : never {
-        if (opts.x === undefined) {
-            return 0;
-        }
-        return 1;
-    }
+    // Detection of valid optional parameter references
     
-    function bar<T extends string | Missing>(x?: T ):
+    // Ok, will narrow return type
+    function bar1<T extends string | Missing>(x?: T):
         T extends Missing ? 0 : T extends string ? 1 : never {
         if (x === undefined) {
             return 0;
@@ -33,63 +17,24 @@ dependentReturnType4.ts(51,5): error TS2322: Type 'string' is not assignable to 
         return 1;
     }
     
-    // Aliased narrowing
-    function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
-        const t = typeof x === "string";
-        if (t) {
-            const y: string = x;
-            return 1;
+    // Ok, will narrow return type
+    function bar2<T extends string | undefined>(x?: T):
+        T extends undefined ? 0 : T extends string ? 1 : never {
+        if (x === undefined) {
+            return 0;
         }
-        return "one";
+        return 1;
     }
     
-    // Don't narrow more than 5 levels of aliasing
-    function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
-        const t1 = typeof x === "string";
-        const t2 = t1;
-        const t3 = t2;
-        const t4 = t3;
-        const t5 = t4;
-        const t6 = t5;
-        if (t6) {
-            const y: string = x;
-                  ~
-!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
-            return 1;
+    // Not ok, will not narrow return type
+    function bar3<T extends string>(x?: T):
+        T extends undefined ? 0 : T extends string ? 1 : never {
+        if (x === undefined) {
+            return 0;
             ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'T extends number ? string : T extends string ? number : never'.
+!!! error TS2322: Type '0' is not assignable to type 'T extends undefined ? 0 : T extends string ? 1 : never'.
         }
-        return "one";
+        return 1;
         ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'T extends number ? string : T extends string ? number : never'.
-    }
-    
-    type A = { kind: "a", a: number };
-    type B = { kind: "b", b: string };
-    type AOrB = A | B;
-    
-    function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : never {
-        if (x.kind === "b") {
-            return "some str";
-        }
-        return 0;
-    }
-    
-    function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : never {
-        switch (true) {
-            case x:
-                return 1;
-        }
-        return 0;
-    }
-    
-    // Don't raise errors when getting the narrowed type of synthesized nodes
-    type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : never;
-    function f<T extends string | number>(x: T): Ret<T> {
-        let y!: T;
-        if (typeof y === "string") {
-            return 1;
-        }
-        return 2;
+!!! error TS2322: Type '1' is not assignable to type 'T extends undefined ? 0 : T extends string ? 1 : never'.
     }

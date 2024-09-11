@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/dependentReturnType4.ts] ////
 
 === dependentReturnType4.ts ===
-// Test narrowing through `hasOwnProperty` calls
 declare const rand: { a?: never };
 >rand : { a?: never; }
 >     : ^^^^^^     ^^^
@@ -18,86 +17,12 @@ type Missing = typeof rand.a;
 >a : undefined
 >  : ^^^^^^^^^
 
-declare function takesString(x: string): void;
->takesString : (x: string) => void
->            : ^ ^^      ^^^^^    
->x : string
->  : ^^^^^^
+// Detection of valid optional parameter references
 
-function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : never {
->hasOwnP : <T extends string | Missing>(obj: { a?: T; }) => T extends string ? 1 : T extends undefined ? 2 : never
->        : ^ ^^^^^^^^^                ^^   ^^          ^^^^^                                                      
->obj : { a?: T; }
->    : ^^^^^^ ^^^
->a : T | undefined
->  : ^^^^^^^^^^^^^
-
-    if (obj.hasOwnProperty("a")) {
->obj.hasOwnProperty("a") : boolean
->                        : ^^^^^^^
->obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^           ^^^^^       
->obj : { a?: T; }
->    : ^^^^^^ ^^^
->hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^       
->"a" : "a"
->    : ^^^
-
-        takesString(obj.a);
->takesString(obj.a) : void
->                   : ^^^^
->takesString : (x: string) => void
->            : ^ ^^      ^^^^^    
->obj.a : string
->      : ^^^^^^
->obj : { a?: T; }
->    : ^^^^^^ ^^^
->a : string
->  : ^^^^^^
-
-        return 1;
->1 : 1
->  : ^
-    }
-    return 2;
->2 : 2
->  : ^
-}
-
-function foo<T extends string | undefined>(opts: { x?: T }):
->foo : <T extends string | undefined>(opts: { x?: T; }) => T extends undefined ? 0 : T extends string ? 1 : never
->    : ^ ^^^^^^^^^                  ^^    ^^          ^^^^^                                                      
->opts : { x?: T; }
->     : ^^^^^^ ^^^
->x : T | undefined
->  : ^^^^^^^^^^^^^
-
-    T extends undefined ? 0 : T extends string ? 1 : never {
-    if (opts.x === undefined) {
->opts.x === undefined : boolean
->                     : ^^^^^^^
->opts.x : T | undefined
->       : ^^^^^^^^^^^^^
->opts : { x?: T; }
->     : ^^^^^^ ^^^
->x : T | undefined
->  : ^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
-
-        return 0;
->0 : 0
->  : ^
-    }
-    return 1;
->1 : 1
->  : ^
-}
-
-function bar<T extends string | Missing>(x?: T ):
->bar : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : never
->    : ^ ^^^^^^^^^                ^^ ^^^ ^^^^^                                                    
+// Ok, will narrow return type
+function bar1<T extends string | Missing>(x?: T):
+>bar1 : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^                ^^ ^^^ ^^^^^                                                    
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -119,216 +44,52 @@ function bar<T extends string | Missing>(x?: T ):
 >  : ^
 }
 
-// Aliased narrowing
-function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
->inlined : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : never
->        : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                             
->x : T
->  : ^
+// Ok, will narrow return type
+function bar2<T extends string | undefined>(x?: T):
+>bar2 : <T extends string | undefined>(x?: T) => T extends undefined ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^                  ^^ ^^^ ^^^^^                                                      
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 
-    const t = typeof x === "string";
->t : boolean
->  : ^^^^^^^
->typeof x === "string" : boolean
->                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : T
->  : ^
->"string" : "string"
->         : ^^^^^^^^
+    T extends undefined ? 0 : T extends string ? 1 : never {
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
 
-    if (t) {
->t : boolean
->  : ^^^^^^^
-
-        const y: string = x;
->y : string
->  : ^^^^^^
->x : string
->  : ^^^^^^
-
-        return 1;
->1 : 1
->  : ^
-    }
-    return "one";
->"one" : "one"
->      : ^^^^^
-}
-
-// Don't narrow more than 5 levels of aliasing
-function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : never {
->inlined6 : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : never
->         : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                             
->x : T
->  : ^
-
-    const t1 = typeof x === "string";
->t1 : boolean
->   : ^^^^^^^
->typeof x === "string" : boolean
->                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : T
->  : ^
->"string" : "string"
->         : ^^^^^^^^
-
-    const t2 = t1;
->t2 : boolean
->   : ^^^^^^^
->t1 : boolean
->   : ^^^^^^^
-
-    const t3 = t2;
->t3 : boolean
->   : ^^^^^^^
->t2 : boolean
->   : ^^^^^^^
-
-    const t4 = t3;
->t4 : boolean
->   : ^^^^^^^
->t3 : boolean
->   : ^^^^^^^
-
-    const t5 = t4;
->t5 : boolean
->   : ^^^^^^^
->t4 : boolean
->   : ^^^^^^^
-
-    const t6 = t5;
->t6 : boolean
->   : ^^^^^^^
->t5 : boolean
->   : ^^^^^^^
-
-    if (t6) {
->t6 : boolean
->   : ^^^^^^^
-
-        const y: string = x;
->y : string
->  : ^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
-
-        return 1;
->1 : 1
->  : ^
-    }
-    return "one";
->"one" : "one"
->      : ^^^^^
-}
-
-type A = { kind: "a", a: number };
->A : A
->  : ^
->kind : "a"
->     : ^^^
->a : number
->  : ^^^^^^
-
-type B = { kind: "b", b: string };
->B : B
->  : ^
->kind : "b"
->     : ^^^
->b : string
->  : ^^^^^^
-
-type AOrB = A | B;
->AOrB : AOrB
->     : ^^^^
-
-function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : never {
->subexpression : <T extends AOrB>(x: T) => T extends A ? number : T extends B ? string : never
->              : ^ ^^^^^^^^^    ^^ ^^ ^^^^^                                                   
->x : T
->  : ^
-
-    if (x.kind === "b") {
->x.kind === "b" : boolean
->               : ^^^^^^^
->x.kind : "a" | "b"
->       : ^^^^^^^^^
->x : AOrB
->  : ^^^^
->kind : "a" | "b"
->     : ^^^^^^^^^
->"b" : "b"
->    : ^^^
-
-        return "some str";
->"some str" : "some str"
->           : ^^^^^^^^^^
-    }
-    return 0;
+        return 0;
 >0 : 0
 >  : ^
-}
-
-function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : never {
->switchTrue : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 0 : never
->           : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
->x : T
->  : ^
->true : true
->     : ^^^^
->false : false
->      : ^^^^^
-
-    switch (true) {
->true : true
->     : ^^^^
-
-        case x:
->x : T
->  : ^
-
-            return 1;
+    }
+    return 1;
 >1 : 1
 >  : ^
-    }
-    return 0;
+}
+
+// Not ok, will not narrow return type
+function bar3<T extends string>(x?: T):
+>bar3 : <T extends string>(x?: T) => T extends undefined ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^      ^^ ^^^ ^^^^^                                                      
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+
+    T extends undefined ? 0 : T extends string ? 1 : never {
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 0;
 >0 : 0
 >  : ^
-}
-
-// Don't raise errors when getting the narrowed type of synthesized nodes
-type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : never;
->Ret : Ret<T>
->    : ^^^^^^
-
-function f<T extends string | number>(x: T): Ret<T> {
->f : <T extends string | number>(x: T) => Ret<T>
->  : ^ ^^^^^^^^^               ^^ ^^ ^^^^^      
->x : T
->  : ^
-
-    let y!: T;
->y : T
->  : ^
-
-    if (typeof y === "string") {
->typeof y === "string" : boolean
->                      : ^^^^^^^
->typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->y : T
->  : ^
->"string" : "string"
->         : ^^^^^^^^
-
-        return 1;
->1 : 1
->  : ^
     }
-    return 2;
->2 : 2
+    return 1;
+>1 : 1
 >  : ^
 }

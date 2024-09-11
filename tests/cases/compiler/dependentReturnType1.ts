@@ -385,9 +385,9 @@ function noShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 
 
 // If the narrowing reference is out of scope, we simply won't narrow its type
 declare let someX: boolean;
-function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : never {
+function scope2<T extends boolean>(a: T): T extends true ? 1 : T extends false ? 2 : never {
     if ((true)) {
-        const someX = opts.a;
+        const someX = a;
         if (someX) { // We narrow `someX` and the return type here
             return 1;
         }
@@ -454,6 +454,7 @@ abstract class Operation<T, R> {
 type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
     EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : never;
 
+
 class ConditionalOperation<
     T,
     R,
@@ -467,34 +468,43 @@ class ConditionalOperation<
         super();
     }
 
+    // We won't try to narrow the return type because `T` is declared on the class and we don't analyze this case.
     perform(t: T): ConditionalReturnType<T, R, EOp> {
         if (this.predicate(t)) {
             return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
         } else if (typeof this.elseOp !== "undefined") {
-            return this.elseOp.perform(t); // Ok
+            return this.elseOp.perform(t); // Would be ok
         } else {
-            return t; // Ok
+            return t; // Would be ok
         }
     }
 }
 
-// Optional tuple element
-function tupl<T extends true | false | undefined>(x: [string, some?: T]):
-    T extends true ? 1 : T extends false | undefined ? 2 : never {
-    if (x[1]) {
-        return 1;
+// Like the version above, we will not attempt to narrow because there's more than one reference to `T`,
+// because `T` shows up in the type of `predicate`.
+function perform<T, R, EOp extends Operation<T, R> | undefined>(
+    t: T,
+    predicate: (value: T) => boolean,
+    thenOp: Operation<T, R>,
+    elseOp?: EOp,
+    ): ConditionalReturnType<T, R, EOp> {
+    if (predicate(t)) {
+        return thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+    } else if (elseOp !== undefined) {
+        return elseOp.perform(t); // Would be ok
+    } else {
+        return t; // Would be ok
     }
-    return 2;
 }
 
 // Return conditional expressions with parentheses
-function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : never {
-    return (opts.x ? (1) : 2);
+function returnStuff1<T extends boolean>(x: T ): T extends true ? 1 : T extends false ? 2 : never {
+    return (x ? (1) : 2);
 }
 
-function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
+function returnStuff2<T extends 1 | 2 | "a">(x: T ):
     T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
-    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+    return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
 }
 
 // If the conditional type's input is `never`, then it resolves to `never`:
