@@ -2259,7 +2259,14 @@ export function transformTypeScript(context: TransformationContext) {
         if (!node.importClause) {
             // Do not elide a side-effect only import declaration.
             //  import "foo";
-            return node;
+            const specifier = rewriteModuleSpecifier(node.moduleSpecifier);
+            return specifier === node.moduleSpecifier ? node : factory.updateImportDeclaration(
+                node,
+                /*modifiers*/ undefined,
+                /*importClause*/ undefined,
+                specifier,
+                node.attributes,
+            );
         }
         if (node.importClause.isTypeOnly) {
             // Always elide type-only imports

@@ -1,0 +1,75 @@
+main.ts(1,16): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+main.ts(2,16): error TS2307: Cannot find module '../foo.mts' or its corresponding type declarations.
+main.ts(3,16): error TS2307: Cannot find module '../../foo.cts' or its corresponding type declarations.
+main.ts(4,16): error TS2307: Cannot find module './foo.tsx' or its corresponding type declarations.
+main.ts(5,22): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+main.ts(7,15): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+no.ts(1,16): error TS2307: Cannot find module './foo.ts/foo.js' or its corresponding type declarations.
+no.ts(2,16): error TS2307: Cannot find module 'foo.ts' or its corresponding type declarations.
+no.ts(3,16): error TS2307: Cannot find module 'pkg/foo.ts' or its corresponding type declarations.
+no.ts(4,16): error TS2307: Cannot find module '.foo.ts' or its corresponding type declarations.
+no.ts(5,16): error TS2307: Cannot find module './foo.d.ts' or its corresponding type declarations.
+no.ts(6,16): error TS2307: Cannot find module './foo.d.mts' or its corresponding type declarations.
+no.ts(7,16): error TS2307: Cannot find module './foo.d.css.ts' or its corresponding type declarations.
+no.ts(8,16): error TS2307: Cannot find module '#internal/foo.ts' or its corresponding type declarations.
+no.ts(9,16): error TS2307: Cannot find module 'node:foo.ts' or its corresponding type declarations.
+
+
+==== main.ts (6 errors) ====
+    import {} from "./foo.ts";
+                   ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+    import {} from "../foo.mts";
+                   ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '../foo.mts' or its corresponding type declarations.
+    import {} from "../../foo.cts";
+                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '../../foo.cts' or its corresponding type declarations.
+    import {} from "./foo.tsx";
+                   ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.tsx' or its corresponding type declarations.
+    import foo = require("./foo.ts");
+                         ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+    import "./foo.ts";
+    export * from "./foo.ts";
+                  ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+==== js.js (0 errors) ====
+    import {} from "./foo.ts";
+    import {} from "../foo.mts";
+    import {} from "../../foo.cts";
+    import {} from "./foo.tsx";
+    import "./foo.ts";
+    export * from "./foo.ts";
+    
+    // No rewrite
+==== no.ts (9 errors) ====
+    import {} from "./foo.ts/foo.js";
+                   ~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts/foo.js' or its corresponding type declarations.
+    import {} from "foo.ts";
+                   ~~~~~~~~
+!!! error TS2307: Cannot find module 'foo.ts' or its corresponding type declarations.
+    import {} from "pkg/foo.ts";
+                   ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'pkg/foo.ts' or its corresponding type declarations.
+    import {} from ".foo.ts";
+                   ~~~~~~~~~
+!!! error TS2307: Cannot find module '.foo.ts' or its corresponding type declarations.
+    import {} from "./foo.d.ts";
+                   ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.d.ts' or its corresponding type declarations.
+    import {} from "./foo.d.mts";
+                   ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.d.mts' or its corresponding type declarations.
+    import {} from "./foo.d.css.ts";
+                   ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.d.css.ts' or its corresponding type declarations.
+    import {} from "#internal/foo.ts";
+                   ~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '#internal/foo.ts' or its corresponding type declarations.
+    import {} from "node:foo.ts";
+                   ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'node:foo.ts' or its corresponding type declarations.
+    
