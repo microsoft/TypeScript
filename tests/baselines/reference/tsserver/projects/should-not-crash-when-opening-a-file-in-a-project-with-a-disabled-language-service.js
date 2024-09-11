@@ -1,11 +1,28 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/b/f1.js]
+//// [/user/username/projects/project/f1.js]
 let x =1;
 
-//// [/a/b/f2.js]
+//// [/user/username/projects/project/f2.js]
 let x =1;
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -14,10 +31,10 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "rootFiles": [
           {
-            "fileName": "/a/b/f1.js"
+            "fileName": "/user/username/projects/project/f1.js"
           },
           {
-            "fileName": "/a/b/f2.js"
+            "fileName": "/user/username/projects/project/f2.js"
           }
         ],
         "options": {},
@@ -26,7 +43,8 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (52428800). Largest files: /a/b/f1.js:52428800, /a/b/f2.js:100
+Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (52428800). Largest files: /user/username/projects/project/f1.js:52428800, /user/username/projects/project/f2.js:100
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: proj1, currentDirectory: 
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -37,8 +55,8 @@ Info seq  [hh:mm:ss:mss] event:
         "languageServiceEnabled": false
       }
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/f1.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/f2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj1
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
@@ -47,14 +65,14 @@ Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a/b/f1.js for info /a/b/f1.js: fileSize: 52428800
+Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/project/f1.js for info /user/username/projects/project/f1.js: fileSize: 52428800
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "largeFileReferenced",
       "body": {
-        "file": "/a/b/f1.js",
+        "file": "/user/username/projects/project/f1.js",
         "fileSize": 52428800,
         "maxFileSize": 4194304
       }
@@ -112,9 +130,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/f1.js: *new*
+/user/username/projects/project/f1.js: *new*
   {}
-/a/b/f2.js: *new*
+/user/username/projects/project/f2.js: *new*
   {}
 
 Projects::
@@ -123,11 +141,11 @@ proj1 (External) *new*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/f1.js *new*
+/user/username/projects/project/f1.js *new*
     version: Text-1
     containingProjects: 1
         proj1
-/a/b/f2.js *new*
+/user/username/projects/project/f2.js *new*
     version: Text-1
     containingProjects: 1
         proj1
@@ -138,18 +156,18 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/f2.js"
+        "file": "/user/username/projects/project/f2.js"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/f2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f2.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/f2.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: proj1
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -162,19 +180,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/f1.js:
+/user/username/projects/project/f1.js:
   {}
 
 FsWatches *deleted*::
-/a/b/f2.js:
+/user/username/projects/project/f2.js:
   {}
 
 ScriptInfos::
-/a/b/f1.js
+/user/username/projects/project/f1.js
     version: Text-1
     containingProjects: 1
         proj1
-/a/b/f2.js (Open) *changed*
+/user/username/projects/project/f2.js (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1

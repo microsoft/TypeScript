@@ -445,6 +445,7 @@ export const enum SyntaxKind {
 
     // Transformation nodes
     NotEmittedStatement,
+    NotEmittedTypeElement,
     PartiallyEmittedExpression,
     CommaListExpression,
     SyntheticReferenceExpression,
@@ -3310,6 +3311,10 @@ export interface NotEmittedStatement extends Statement {
     readonly kind: SyntaxKind.NotEmittedStatement;
 }
 
+export interface NotEmittedTypeElement extends TypeElement {
+    readonly kind: SyntaxKind.NotEmittedTypeElement;
+}
+
 /**
  * A list of comma-separated expressions. This node is only created by transformations.
  */
@@ -4866,11 +4871,14 @@ export interface Program extends ScriptReferenceHost {
      */
     redirectTargetsMap: MultiMap<Path, string>;
     /**
-     * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers.
+     * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers
+     * (except for those that are not available without the prefix).
+     * `false` indicates that an unprefixed builtin module was seen; `undefined` indicates that no
+     * builtin modules (or only modules exclusively available with the prefix) were seen.
      *
      * @internal
      */
-    readonly usesUriStyleNodeCoreModules: boolean;
+    readonly usesUriStyleNodeCoreModules: boolean | undefined;
     /**
      * Map from libFileName to actual resolved location of the lib
      * @internal
@@ -5051,7 +5059,26 @@ export interface TypeChecker {
     getWidenedLiteralType(type: Type): Type;
     /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
-    /** @internal */
+    /**
+     * Gets the "awaited type" of a type.
+     *
+     * If an expression has a Promise-like type, the "awaited type" of the expression is
+     * derived from the type of the first argument of the fulfillment callback for that
+     * Promise's `then` method. If the "awaited type" is itself a Promise-like, it is
+     * recursively unwrapped in the same manner until a non-promise type is found.
+     *
+     * If an expression does not have a Promise-like type, its "awaited type" is the type
+     * of the expression.
+     *
+     * If the resulting "awaited type" is a generic object type, then it is wrapped in
+     * an `Awaited<T>`.
+     *
+     * In the event the "awaited type" circularly references itself, or is a non-Promise
+     * object-type with a callable `then()` method, an "awaited type" cannot be determined
+     * and the value `undefined` will be returned.
+     *
+     * This is used to reflect the runtime behavior of the `await` keyword.
+     */
     getAwaitedType(type: Type): Type | undefined;
     /** @internal */
     isEmptyAnonymousObjectType(type: Type): boolean;
@@ -5294,7 +5321,7 @@ export interface TypeChecker {
     /** @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): Diagnostic[];
     /** @internal */ getGlobalDiagnostics(): Diagnostic[];
     /** @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken, forceDts?: boolean): EmitResolver;
-    /** @internal */ requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
+    /** @internal */ requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
 
     /** @internal */ getNodeCount(): number;
     /** @internal */ getIdentifierCount(): number;
@@ -5462,7 +5489,7 @@ export const enum NodeBuilderFlags {
     AllowEmptyIndexInfoType                 = 1 << 21,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
-    
+
 
     IgnoreErrors = AllowThisInObjectLiteral | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
 
@@ -5815,7 +5842,7 @@ export interface EmitResolver {
     collectLinkedAliases(node: ModuleExportName, setVisibility?: boolean): Node[] | undefined;
     markLinkedReferences(node: Node): void;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
-    requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
+    requiresAddingImplicitUndefined(node: ParameterDeclaration, enclosingDeclaration: Node | undefined): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
@@ -5952,7 +5979,7 @@ export interface Symbol {
     /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
-    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol
+    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
@@ -7607,7 +7634,6 @@ export interface ConfigFileSpecs {
     validatedFilesSpecBeforeSubstitution: readonly string[] | undefined;
     validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined;
     validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
-    pathPatterns: readonly (string | Pattern)[] | undefined;
     isDefaultIncludeSpec: boolean;
 }
 
@@ -7872,6 +7898,7 @@ export interface ModuleResolutionHost {
     getCurrentDirectory?(): string;
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
+    /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
 }
 
 /**
@@ -9145,6 +9172,7 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
+    createNotEmittedTypeElement(): NotEmittedTypeElement;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
@@ -9856,6 +9884,7 @@ export interface ModulePath {
 export interface ResolvedModuleSpecifierInfo {
     kind: "node_modules" | "paths" | "redirect" | "relative" | "ambient" | undefined;
     modulePaths: readonly ModulePath[] | undefined;
+    packageName: string | undefined;
     moduleSpecifiers: readonly string[] | undefined;
     isBlockedByPackageJsonDependencies: boolean | undefined;
 }
@@ -9869,7 +9898,7 @@ export interface ModuleSpecifierOptions {
 export interface ModuleSpecifierCache {
     get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
     set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, kind: ResolvedModuleSpecifierInfo["kind"], modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-    setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
+    setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, packageName: string | undefined, isBlockedByPackageJsonDependencies: boolean): void;
     setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
     clear(): void;
     count(): number;
@@ -10379,6 +10408,6 @@ export interface SyntacticTypeNodeBuilderResolver {
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
-    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
+    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
 }

@@ -1,14 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FsContents,
-    libContent,
-} from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
     return jsonToReadableText({
@@ -20,8 +12,8 @@ export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: obj
         ...additional,
     });
 }
-export function getFsContentsForDemoProjectReferences(): FsContents {
-    return {
+export function getSysForDemoProjectReferences() {
+    return TestServerHost.createWatchedSystem({
         "/user/username/projects/demo/animals/animal.ts": dedent`
             export type Size = "small" | "medium" | "large";
             export default interface Animal {
@@ -124,25 +116,5 @@ export function getFsContentsForDemoProjectReferences(): FsContents {
                 },
             ],
         }),
-        [libFile.path]: libContent,
-    };
-}
-
-export function getFsForDemoProjectReferences() {
-    return loadProjectFromFiles(
-        getFsContentsForDemoProjectReferences(),
-        {
-            cwd: "/user/username/projects/demo",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForDemoProjectReferences() {
-    return createWatchedSystem(
-        getFsContentsForDemoProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/demo",
-        },
-    );
+    }, { currentDirectory: "/user/username/projects/demo" });
 }

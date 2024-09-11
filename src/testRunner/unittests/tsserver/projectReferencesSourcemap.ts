@@ -9,9 +9,7 @@ import {
     TestSessionRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -69,7 +67,7 @@ fn5();
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
     const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
 
-    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
+    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, randomFile, randomConfig];
 
     function changeDtsFile(session: TestSession, content?: string) {
         session.host.writeFile(
@@ -437,7 +435,7 @@ fn5();
             });
 
             it("when projects are not built", () => {
-                const host = createServerHost(files);
+                const host = TestServerHost.createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession(options.openFiles, session);
                 runActions(session, options.action);

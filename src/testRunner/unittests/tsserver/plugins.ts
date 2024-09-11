@@ -1,4 +1,4 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { LanguageService } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
@@ -8,9 +8,8 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: plugins:: loading", () => {
@@ -19,7 +18,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
     const testProtocolCommandResponse = "testProtocolCommandResponse";
 
     function createHostWithPlugin(files: readonly File[], globalPlugins?: readonly string[]) {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Loading plugin: ${moduleName}`);
             return {
@@ -33,7 +32,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                                 response: testProtocolCommandResponse,
                             };
                         });
-                        return Harness.LanguageService.makeDefaultProxy(info);
+                        return LanguageService.makeDefaultProxy(info);
                     },
                 }),
                 error: undefined,
@@ -58,9 +57,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "myPlugin/../malicious",
             "myPlugin/subpath/../../malicious",
         ];
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
@@ -70,7 +69,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 },
             }),
         };
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session } = createHostWithPlugin([aTs, tsconfig]);
         openFilesForSession([aTs], session);
         baselineTsserverLogs("plugins", "With local plugins", session);
     });
@@ -90,21 +89,21 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "myPlugin/../malicious",
             "myPlugin/subpath/../../malicious",
         ];
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile], [...expectedToLoad, ...notToLoad]);
+        const { session } = createHostWithPlugin([aTs, tsconfig], [...expectedToLoad, ...notToLoad]);
         openFilesForSession([aTs], session);
         baselineTsserverLogs("plugins", "With global plugins", session);
     });
 
     it("With session and custom protocol message", () => {
         const pluginName = "some-plugin";
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
@@ -114,7 +113,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             }),
         };
 
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session } = createHostWithPlugin([aTs, tsconfig]);
 
         openFilesForSession([aTs], session);
 
@@ -143,7 +142,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             }),
         };
 
-        const { session, host } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session, host } = createHostWithPlugin([aTs, tsconfig]);
 
         openFilesForSession([aTs], session);
         // Write the missing file (referenced by 'a.ts') to schedule an update.
@@ -177,14 +176,14 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "some-other-plugin": ["someOtherFile.txt"],
         };
 
-        const host = createServerHost([aTs, tsconfig, libFile]);
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Require:: ${moduleName}`);
             return {
                 module: (): ts.server.PluginModule => {
                     session.logger.log(`PluginFactory Invoke`);
                     return {
-                        create: Harness.LanguageService.makeDefaultProxy,
+                        create: LanguageService.makeDefaultProxy,
                         getExternalFiles: () => externalFiles[moduleName],
                     };
                 },
@@ -213,34 +212,34 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
 describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", () => {
     it("getSupportedCodeFixes can be proxied", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: `class c { prop = "hello"; foo() { const x = 0; } }`,
         };
         const bTs: File = {
-            path: "/b.ts",
+            path: "/home/src/projects/project/b.ts",
             content: aTs.content,
         };
         const cTs: File = {
-            path: "/c.ts",
+            path: "/home/src/projects/project/c.ts",
             content: aTs.content,
         };
         const config: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: { plugins: [{ name: "myplugin" }] },
             }),
         };
-        const host = createServerHost([aTs, bTs, cTs, config, libFile]);
+        const host = TestServerHost.createServerHost([aTs, bTs, cTs, config]);
         host.require = () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         proxy.getSupportedCodeFixes = fileName => {
                             switch (fileName) {
-                                case "/a.ts":
+                                case "/home/src/projects/project/a.ts":
                                     return ["a"];
-                                case "/b.ts":
+                                case "/home/src/projects/project/b.ts":
                                     return ["b"];
                                 default:
                                     // Make this stable list of single item so we dont have to update the baseline for every additional error
@@ -330,12 +329,12 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, dTs, bVue, config, libFile]);
+        const host = TestServerHost.createServerHost([aTs, dTs, bVue, config]);
         host.require = () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
                             ts.fileExtensionIs(fileName, ".vue") ?
@@ -381,13 +380,13 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, bVue, config, libFile]);
+        const host = TestServerHost.createServerHost([aTs, bVue, config]);
         let currentVueScriptKind = ts.ScriptKind.TS;
         host.require = () => {
             return {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
                             fileName === bVue.path ?

@@ -113,6 +113,7 @@ import {
 } from "../_namespaces/ts.js";
 
 const enum ESNextSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for async methods with `super` calls. */
     AsyncMethodsWithSuper = 1 << 0,
 }
@@ -170,7 +171,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     context.onSubstituteNode = onSubstituteNode;
 
     let exportedVariableStatement = false;
-    let enabledSubstitutions: ESNextSubstitutionFlags;
+    let enabledSubstitutions = ESNextSubstitutionFlags.None;
     let enclosingFunctionFlags: FunctionFlags;
     let parametersWithPrecedingObjectRestOrSpread: Set<ParameterDeclaration> | undefined;
     let enclosingSuperContainerFlags: NodeCheckFlags = 0;

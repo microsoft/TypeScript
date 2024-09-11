@@ -680,7 +680,7 @@ export function transformDeclarations(context: TransformationContext) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
         }
-        const shouldAddImplicitUndefined = node.kind === SyntaxKind.Parameter && resolver.requiresAddingImplicitUndefined(node);
+        const shouldAddImplicitUndefined = node.kind === SyntaxKind.Parameter && resolver.requiresAddingImplicitUndefined(node, enclosingDeclaration);
         if (type && !shouldAddImplicitUndefined) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }

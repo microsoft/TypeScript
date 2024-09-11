@@ -3,11 +3,7 @@ import { createHasErrorMessageLogger } from "../../../../harness/tsserverLogger.
 import * as Harness from "../../../_namespaces/Harness.js";
 import * as ts from "../../../_namespaces/ts.js";
 import { customTypesMap } from "../../helpers/typingsInstaller.js";
-import {
-    createServerHost,
-    libFile,
-    TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../../helpers/virtualFileSystemWithWatch.js";
 
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     host: TestServerHost;
@@ -112,7 +108,7 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     fileExists: ts.notImplemented,
 };
 
-export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
+export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage) {
     const t = extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {
@@ -122,8 +118,8 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
     [ts.Extension.Ts, ts.Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: ts.Extension) {
-        const path = "/a" + extension;
-        const { program } = makeProgram({ path, content: t.source }, includeLib);
+        const path = "/home/src/workspaces/project/a" + extension;
+        const { program } = makeProgram({ path, content: t.source });
 
         if (hasSyntacticDiagnostics(program)) {
             // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -158,14 +154,14 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
             data.push(newTextWithRename);
 
-            const { program: diagProgram } = makeProgram({ path, content: newText }, includeLib);
+            const { program: diagProgram } = makeProgram({ path, content: newText });
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
         }
         Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
     }
 
-    function makeProgram(f: { path: string; content: string; }, includeLib?: boolean) {
-        const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+    function makeProgram(f: { path: string; content: string; }) {
+        const host = TestServerHost.createServerHost([f]); // libFile is expensive to parse repeatedly - only test when required
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
@@ -187,10 +183,10 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             throw new Error(`Test ${caption} does not specify selection range`);
         }
         const f = {
-            path: "/a.ts",
+            path: "/home/src/workspaces/project/a.ts",
             content: t.source,
         };
-        const host = createServerHost([f, libFile]);
+        const host = TestServerHost.createServerHost([f]);
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;

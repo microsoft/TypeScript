@@ -1,34 +1,21 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts] Inode:: 3
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/src/main.ts] Inode:: 9
+//// [/user/username/projects/myproject/src/main.ts] Inode:: 6
 import { foo } from "bar"; foo();
 
-//// [/user/username/projects/myproject/node_modules/bar/index.d.ts] Inode:: 12
+//// [/user/username/projects/myproject/node_modules/bar/index.d.ts] Inode:: 9
 export { foo } from "./foo";
 
-//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts] Inode:: 13
+//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts] Inode:: 10
 export function foo(): string;
 
-//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] Inode:: 14
+//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] Inode:: 11
 export function fooBar(): string;
 
-//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts] Inode:: 16
+//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts] Inode:: 13
 export function temp(): string;
 
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 17
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 14
 {
   "exclude": [
     "node_modules"
@@ -40,8 +27,23 @@ export function temp(): string;
   }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 20
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-/a/lib/tsc.js -w -extendedDiagnostics
+
+/home/src/tslibs/TS/Lib/tsc.js -w -extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -56,7 +58,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
@@ -73,7 +75,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 18
+//// [/user/username/projects/myproject/src/main.js] Inode:: 111
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -96,24 +98,24 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":3}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":20}
 /user/username/projects/myproject: *new*
-  {"inode":7}
+  {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {"inode":10}
+  {"inode":7}
 /user/username/projects/myproject/node_modules/bar: *new*
-  {"inode":11}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
-  {"inode":13}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/src: *new*
   {"inode":8}
-/user/username/projects/myproject/src/main.ts: *new*
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
+  {"inode":10}
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
   {"inode":9}
+/user/username/projects/myproject/src: *new*
+  {"inode":5}
+/user/username/projects/myproject/src/main.ts: *new*
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {"inode":17}
+  {"inode":14}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -128,19 +130,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/bar/foo.d.ts
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/bar/foo.d.ts
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
@@ -173,7 +175,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 20
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 113
 export function temp(): string;
 
 

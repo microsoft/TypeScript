@@ -5,22 +5,19 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: reload", () => {
+describe("unittests:: tsserver:: reload::", () => {
     it("should work with temp file", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/app.ts",
             content: "let x = 1",
         };
         const tmp = {
-            path: "/a/b/app.tmp",
+            path: "/home/src/projects/project/app.tmp",
             content: "const y = 42",
         };
-        const host = createServerHost([f1, tmp]);
+        const host = TestServerHost.createServerHost([f1, tmp]);
         const session = new TestSession(host);
 
         // send open request
@@ -50,14 +47,14 @@ describe("unittests:: tsserver:: reload", () => {
 
     it("should work when script info doesnt have any project open", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/app.ts",
             content: "let x = 1",
         };
         const tmp = {
-            path: "/a/b/app.tmp",
+            path: "/home/src/projects/project/app.tmp",
             content: "const y = 42",
         };
-        const host = createServerHost([f1, tmp, libFile]);
+        const host = TestServerHost.createServerHost([f1, tmp]);
         const session = new TestSession(host);
         const openContent = "let z = 1";
         // send open request

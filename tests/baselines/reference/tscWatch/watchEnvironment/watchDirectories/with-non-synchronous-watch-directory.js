@@ -1,6 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts] Inode:: 3
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 6
+import { x } from "file2";
+
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 9
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 10
+{}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 16
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,18 +21,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/src/file1.ts] Inode:: 9
-import { x } from "file2";
-
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 12
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 13
-{}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -32,7 +34,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] Inode:: 14
+//// [/user/username/projects/myproject/src/file1.js] Inode:: 107
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -53,22 +55,22 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":3}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":16}
 /user/username/projects/myproject: *new*
-  {"inode":7}
+  {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {"inode":10}
+  {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
-  {"inode":11}
-/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/src: *new*
   {"inode":8}
-/user/username/projects/myproject/src/file1.ts: *new*
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {"inode":9}
+/user/username/projects/myproject/src: *new*
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts: *new*
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {"inode":13}
+  {"inode":10}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -78,22 +80,21 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -141,24 +142,24 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":3}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {"inode":7}
+  {"inode":4}
 /user/username/projects/myproject/src:
-  {"inode":8}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {"inode":9}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":10}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/node_modules:
-  {"inode":10}
+  {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
-  {"inode":11}
+  {"inode":8}
 /user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"inode":12}
+  {"inode":9}
 
 Timeout callback:: count: 3
 7: timerToInvalidateFailedLookupResolutions *new*
@@ -177,7 +178,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+[96msrc/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "file2";
 [7m [0m [91m                  ~~~~~~~[0m
@@ -186,7 +187,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 14
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 107
 
 PolledWatches::
 /user/username/projects/myproject/node_modules:
@@ -211,16 +212,16 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":3}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {"inode":7}
+  {"inode":4}
 /user/username/projects/myproject/src:
-  {"inode":8}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {"inode":9}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":10}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *deleted*
@@ -232,12 +233,11 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -281,7 +281,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
+[96msrc/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "file2";
 [7m [0m [91m                  ~~~~~~~[0m
@@ -297,12 +297,11 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -333,18 +332,18 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":3}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {"inode":7}
+  {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {"inode":15}
+  {"inode":108}
 /user/username/projects/myproject/src:
-  {"inode":8}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {"inode":9}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":10}
 
 Timeout callback:: count: 1
 16: timerToUpdateChildWatches *new*
@@ -366,7 +365,7 @@ exitCode:: ExitStatus.undefined
 Change:: npm install index file in file2
 
 Input::
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 17
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 110
 export const x = 10;
 
 
@@ -391,20 +390,20 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":3}
-/user/username/projects/myproject:
-  {"inode":7}
-/user/username/projects/myproject/node_modules:
-  {"inode":15}
-/user/username/projects/myproject/node_modules/file2: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":16}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/node_modules:
+  {"inode":108}
+/user/username/projects/myproject/node_modules/file2: *new*
+  {"inode":109}
 /user/username/projects/myproject/src:
-  {"inode":8}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {"inode":9}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":10}
 
 Timeout callback:: count: 2
 18: timerToInvalidateFailedLookupResolutions *new*
@@ -448,7 +447,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 14
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 107
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -469,22 +468,22 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":3}
-/user/username/projects/myproject:
-  {"inode":7}
-/user/username/projects/myproject/node_modules:
-  {"inode":15}
-/user/username/projects/myproject/node_modules/file2:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":16}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/node_modules:
+  {"inode":108}
+/user/username/projects/myproject/node_modules/file2:
+  {"inode":109}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {"inode":17}
+  {"inode":110}
 /user/username/projects/myproject/src:
-  {"inode":8}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {"inode":9}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":10}
 
 
 Program root files: [
@@ -492,12 +491,11 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 

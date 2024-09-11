@@ -153,6 +153,8 @@ import {
     forEachChild,
     forEachChildRecursively,
     ForInOrOfStatement,
+    ForInStatement,
+    ForOfStatement,
     ForStatement,
     FunctionBody,
     FunctionDeclaration,
@@ -2622,12 +2624,12 @@ export function getJSDocCommentRanges(node: Node, text: string) {
         text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
 }
 
-const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashLibReferenceRegEx = /^(\/\/\/\s*<reference\s+lib\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
-const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
-const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
+const fullTripleSlashReferencePathRegEx = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^\/\/\/\s*<reference\s+types\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashLibReferenceRegEx = /^\/\/\/\s*<reference\s+lib\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashAMDReferencePathRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*(?:'[^']*'|"[^"]*").*?\/>/;
+const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+(?:\S.*?)??\/>/;
+const defaultLibReferenceRegEx = /^\/\/\/\s*<reference\s+no-default-lib\s*=\s*(?:'[^']*'|"[^"]*")\s*\/>/;
 
 export function isPartOfTypeNode(node: Node): boolean {
     if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -5988,10 +5990,10 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
 // There is no reason for this other than that JSON.stringify does not handle it either.
-const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
+const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -7906,6 +7908,9 @@ function accessKind(node: Node): AccessKind {
             return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
         case SyntaxKind.ArrayLiteralExpression:
             return accessKind(parent);
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+            return node === (parent as ForInStatement | ForOfStatement).initializer ? AccessKind.Write : AccessKind.Read;
         default:
             return AccessKind.Read;
     }
@@ -8365,7 +8370,7 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
 
 /** @internal */
 export function formatStringFromArgs(text: string, args: DiagnosticArguments): string {
-    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
+    return text.replace(/\{(\d+)\}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
 let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -9967,8 +9972,51 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
 }
 
 /** @internal */
-export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
-    return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
+export interface ParsedPatterns {
+    matchableStringSet: ReadonlySet<string> | undefined;
+    patterns: (readonly Pattern[]) | undefined;
+}
+
+const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
+
+/**
+ * Divides patterns into a set of exact specifiers and patterns.
+ * NOTE that this function caches the result based on object identity.
+ *
+ * @internal
+ */
+export function tryParsePatterns(paths: MapLike<string[]>): ParsedPatterns {
+    let result = parsedPatternsCache.get(paths);
+    if (result !== undefined) {
+        return result;
+    }
+
+    let matchableStringSet: Set<string> | undefined;
+    let patterns: Pattern[] | undefined;
+
+    const pathList = getOwnKeys(paths);
+    for (const path of pathList) {
+        const patternOrStr = tryParsePattern(path);
+        if (patternOrStr === undefined) {
+            continue;
+        }
+        else if (typeof patternOrStr === "string") {
+            (matchableStringSet ??= new Set()).add(patternOrStr);
+        }
+        else {
+            (patterns ??= []).push(patternOrStr);
+        }
+    }
+
+    parsedPatternsCache.set(
+        paths,
+        result = {
+            matchableStringSet,
+            patterns,
+        },
+    );
+
+    return result;
 }
 
 /** @internal */
@@ -10025,22 +10073,21 @@ export const emptyFileSystemEntries: FileSystemEntries = {
 };
 
 /**
- * patternOrStrings contains both patterns (containing "*") and regular strings.
+ * `parsedPatterns` contains both patterns (containing "*") and regular strings.
  * Return an exact match if possible, or a pattern match, or undefined.
  * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
  *
  * @internal
  */
-export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
-    const patterns: Pattern[] = [];
-    for (const patternOrString of patternOrStrings) {
-        if (patternOrString === candidate) {
-            return candidate;
-        }
+export function matchPatternOrExact(parsedPatterns: ParsedPatterns, candidate: string): string | Pattern | undefined {
+    const { matchableStringSet, patterns } = parsedPatterns;
 
-        if (!isString(patternOrString)) {
-            patterns.push(patternOrString);
-        }
+    if (matchableStringSet?.has(candidate)) {
+        return candidate;
+    }
+
+    if (patterns === undefined || patterns.length === 0) {
+        return undefined;
     }
 
     return findBestPatternMatch(patterns, _ => _, candidate);
@@ -10623,7 +10670,7 @@ export function isFunctionExpressionOrArrowFunction(node: Node): node is Functio
 
 /** @internal */
 export function escapeSnippetText(text: string): string {
-    return text.replace(/\$/gm, () => "\\$");
+    return text.replace(/\$/g, () => "\\$");
 }
 
 /** @internal */
@@ -11791,3 +11838,83 @@ export function isSideEffectImport(node: Node): boolean {
     const ancestor = findAncestor(node, isImportDeclaration);
     return !!ancestor && !ancestor.importClause;
 }
+
+// require('module').builtinModules.filter(x => !x.startsWith('_'))
+const unprefixedNodeCoreModulesList = [
+    "assert",
+    "assert/strict",
+    "async_hooks",
+    "buffer",
+    "child_process",
+    "cluster",
+    "console",
+    "constants",
+    "crypto",
+    "dgram",
+    "diagnostics_channel",
+    "dns",
+    "dns/promises",
+    "domain",
+    "events",
+    "fs",
+    "fs/promises",
+    "http",
+    "http2",
+    "https",
+    "inspector",
+    "inspector/promises",
+    "module",
+    "net",
+    "os",
+    "path",
+    "path/posix",
+    "path/win32",
+    "perf_hooks",
+    "process",
+    "punycode",
+    "querystring",
+    "readline",
+    "readline/promises",
+    "repl",
+    "stream",
+    "stream/consumers",
+    "stream/promises",
+    "stream/web",
+    "string_decoder",
+    "sys",
+    "test/mock_loader",
+    "timers",
+    "timers/promises",
+    "tls",
+    "trace_events",
+    "tty",
+    "url",
+    "util",
+    "util/types",
+    "v8",
+    "vm",
+    "wasi",
+    "worker_threads",
+    "zlib",
+];
+
+/** @internal */
+export const unprefixedNodeCoreModules = new Set(unprefixedNodeCoreModulesList);
+
+// await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
+//   new Set(t.match(/(?<=')node:.+?(?=')/g))
+//     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
+/** @internal */
+export const exclusivelyPrefixedNodeCoreModules = new Set([
+    "node:sea",
+    "node:sqlite",
+    "node:test",
+    "node:test/reporters",
+]);
+
+/** @internal */
+export const nodeCoreModules = new Set([
+    ...unprefixedNodeCoreModulesList,
+    ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
+    ...exclusivelyPrefixedNodeCoreModules,
+]);

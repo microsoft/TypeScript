@@ -6,9 +6,9 @@ import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger.js";
 import { FileRangesRequestArgs } from "../../../server/protocol.js";
-import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
+import { patchHostForBuildInfoReadWrite } from "./baseline.js";
 import { ensureErrorFreeBuild } from "./solutionBuilder.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
 import {
@@ -18,17 +18,15 @@ import {
 } from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
-    createServerHost,
     File,
     FileOrFolderOrSymLink,
-    libFile,
     SerializeOutputOrder,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch.js";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -200,7 +198,9 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     useCancellationToken?: boolean | number;
     regionDiagLineCountThreshold?: number;
 }
-export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionPartialOptionsAndHost =
+    & Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">>
+    & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 
@@ -551,7 +551,7 @@ function filePath(file: string | File) {
 
 function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -562,7 +562,7 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
 
 function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
     it("verifies the errors in projects", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -579,7 +579,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
 
 function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
     it("verifies the errors using sync commands", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = TestServerHost.createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
@@ -626,7 +626,7 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
 }
 
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-    const host = createServerHost(files);
+    const host = TestServerHost.createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;
