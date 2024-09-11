@@ -666,7 +666,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                                 symbolDisplayNodeBuilderFlags,
                                 /*internalFlags*/ undefined,
                                 /*tracker*/ undefined,
-                                verbosityLevel)!;
+                                verbosityLevel,
+                            )!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                         });
                         addRange(displayParts, typeParameterParts);
