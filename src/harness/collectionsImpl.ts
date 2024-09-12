@@ -112,7 +112,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public *keys(): Generator<K, undefined, any> {
+    public *keys(): Generator<K, undefined, unknown> {
         const keys = this._keys;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -135,7 +135,7 @@ export class SortedMap<K, V> {
         return undefined;
     }
 
-    public *values(): Generator<V, undefined, any> {
+    public *values(): Generator<V, undefined, unknown> {
         const values = this._values;
         const indices = this.getIterationOrder();
         const version = this._version;
