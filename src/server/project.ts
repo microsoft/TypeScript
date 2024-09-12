@@ -909,7 +909,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
+    globalCacheResolutionModuleName: typeof JsTyping.nonRelativeModuleNameForTypingCache = JsTyping.nonRelativeModuleNameForTypingCache;
 
     /** @internal */
     fileIsOpen(filePath: Path): boolean {
@@ -2339,7 +2339,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getCompilerOptionsForNoDtsResolutionProject() {
+    getCompilerOptionsForNoDtsResolutionProject(): ts.CompilerOptions {
         return {
             ...this.getCompilerOptions(),
             noDtsResolution: true,

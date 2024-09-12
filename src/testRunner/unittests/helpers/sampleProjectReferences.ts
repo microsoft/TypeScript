@@ -1,17 +1,8 @@
 import { dedent } from "../../_namespaces/Utils.js";
-import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FsContents,
-    getProjectConfigWithNodeNext,
-} from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createServerHost,
-    createWatchedSystem,
-    libFile,
-    TestServerHost,
-} from "./virtualFileSystemWithWatch.js";
+import { getProjectConfigWithNodeNext } from "./contents.js";
+import { solutionBuildWithBaseline } from "./solutionBuilder.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean): string {
     return jsonToReadableText({
@@ -28,9 +19,13 @@ export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean): FsContents {
-    return {
-        [libFile.path]: libFile.content,
+
+export function getSysForSampleProjectReferences(
+    withNodeNext?: boolean,
+    skipReferenceCoreFromTest?: boolean,
+    forTsserver?: boolean,
+): TestServerHost {
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 ...getProjectConfigWithNodeNext(withNodeNext),
@@ -57,10 +52,14 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
             export const m = mod;
         `,
         "/user/username/projects/sample1/tests/tsconfig.json": jsonToReadableText({
-            references: [
-                { path: "../core" },
-                { path: "../logic" },
-            ],
+            references: !skipReferenceCoreFromTest ?
+                [
+                    { path: "../core" },
+                    { path: "../logic" },
+                ] :
+                [
+                    { path: "../logic" },
+                ],
             files: ["index.ts"],
             compilerOptions: {
                 ...getProjectConfigWithNodeNext(withNodeNext),
@@ -80,33 +79,12 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
             import * as mod from '../core/anotherModule';
             export const m = mod;
         `,
-    };
+    }, { currentDirectory: "/user/username/projects/sample1" });
 }
 
-export function getFsForSampleProjectReferences(): FileSystem {
-    return loadProjectFromFiles(
-        getFsContentsForSampleProjectReferences(),
-        {
-            cwd: "/user/username/projects/sample1",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForSampleProjectReferences(withNodeNext?: boolean): TestServerHost {
-    return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(withNodeNext),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
-    );
-}
-
-export function getServerHostForSampleProjectReferences(): TestServerHost {
-    return createServerHost(
-        getFsContentsForSampleProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
+export function getSysForSampleProjectReferencesBuilt(withNodeNext?: boolean): TestServerHost {
+    return solutionBuildWithBaseline(
+        getSysForSampleProjectReferences(withNodeNext),
+        ["tests"],
     );
 }

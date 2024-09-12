@@ -25,7 +25,7 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch.js";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
+export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }): void {
     Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
@@ -625,7 +625,7 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario): void {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]): TestServerHost {
     const host = TestServerHost.createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
