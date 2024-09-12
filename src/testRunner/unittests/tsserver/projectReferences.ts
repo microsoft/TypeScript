@@ -1725,7 +1725,7 @@ const b: B = new B();`,
         /* eslint-enable local/argument-trivia */
     });
 
-    describe("when file is not part of first config tree found sheetal", () => {
+    describe("when file is not part of first config tree found", () => {
         it("finds default project", () => {
             const { session, appDemo, baseline, verifyProjectManagement } = setup();
             verifyGetErrRequest({

@@ -4352,8 +4352,6 @@ export class ProjectService {
         // At this point if file is part of any any configured or external project, then it would be present in the containing projects
         // So if it still doesnt have any containing projects, it needs to be part of inferred project
         if (info.isOrphan()) {
-            // TODO:: sheetal: Do we instead send some kind of event to inform that the file didnt belong to any of the project
-            // and the reason - esp for projects that we skipped loading
             // Even though this info did not belong to any of the configured projects, send the config file diag for all non optimized loads
             retainProjects?.forEach((kind, project) => {
                 if (
