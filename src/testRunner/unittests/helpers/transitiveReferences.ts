@@ -35,7 +35,7 @@ export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolea
     });
 }
 
-export function getSysForTransitiveReferences(withNodeNext?: boolean) {
+export function getSysForTransitiveReferences(withNodeNext?: boolean): TestServerHost {
     return TestServerHost.createWatchedSystem({
         "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
         "/user/username/projects/transitiveReferences/a.ts": dedent`

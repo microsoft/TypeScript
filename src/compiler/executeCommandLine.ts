@@ -728,7 +728,7 @@ function executeCommandLineWorker(
     }
 }
 
-/** @internal Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
+/** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
 export function isBuildCommand(commandLineArgs: readonly string[]): boolean {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();

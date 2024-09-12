@@ -2,7 +2,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getSysForMultipleErrorsForceConsistentCasingInFileNames(forTsserver?: boolean) {
+export function getSysForMultipleErrorsForceConsistentCasingInFileNames(forTsserver?: boolean): TestServerHost {
     return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/home/src/projects/project/src/struct.d.ts": dedent`
             import * as xs1 from "fp-ts/lib/Struct";
