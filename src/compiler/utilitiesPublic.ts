@@ -303,28 +303,34 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
     return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
+/** @internal */
+export const targetToLibMap = new Map<ScriptTarget, string>([
+    [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
+    [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
+    [ScriptTarget.ES2021, "lib.es2021.full.d.ts"],
+    [ScriptTarget.ES2020, "lib.es2020.full.d.ts"],
+    [ScriptTarget.ES2019, "lib.es2019.full.d.ts"],
+    [ScriptTarget.ES2018, "lib.es2018.full.d.ts"],
+    [ScriptTarget.ES2017, "lib.es2017.full.d.ts"],
+    [ScriptTarget.ES2016, "lib.es2016.full.d.ts"],
+    [ScriptTarget.ES2015, "lib.es6.d.ts"], // We don't use lib.es2015.full.d.ts due to breaking change.
+]);
+
 export function getDefaultLibFileName(options: CompilerOptions): string {
-    switch (getEmitScriptTarget(options)) {
+    const target = getEmitScriptTarget(options);
+    switch (target) {
         case ScriptTarget.ESNext:
-            return "lib.esnext.full.d.ts";
         case ScriptTarget.ES2023:
-            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
-            return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
-            return "lib.es2021.full.d.ts";
         case ScriptTarget.ES2020:
-            return "lib.es2020.full.d.ts";
         case ScriptTarget.ES2019:
-            return "lib.es2019.full.d.ts";
         case ScriptTarget.ES2018:
-            return "lib.es2018.full.d.ts";
         case ScriptTarget.ES2017:
-            return "lib.es2017.full.d.ts";
         case ScriptTarget.ES2016:
-            return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
+            return targetToLibMap.get(target)!;
         default:
             return "lib.d.ts";
     }
@@ -681,7 +687,7 @@ export function validateLocaleAndSetLanguage(
     errors?: Diagnostic[],
 ): void {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)(?:[_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -691,7 +697,7 @@ export function validateLocaleAndSetLanguage(
     }
 
     const language = matchResult[1];
-    const territory = matchResult[3];
+    const territory = matchResult[2];
 
     // First try the entire locale, then fall back to just language if that's all we have.
     // Either ways do not fail, and fallback to the English diagnostic strings.
@@ -723,7 +729,7 @@ export function validateLocaleAndSetLanguage(
         try {
             fileContents = sys.readFile(filePath);
         }
-        catch (e) {
+        catch {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
             }
@@ -1767,7 +1773,8 @@ export function isTypeElement(node: Node): node is TypeElement {
         || kind === SyntaxKind.MethodSignature
         || kind === SyntaxKind.IndexSignature
         || kind === SyntaxKind.GetAccessor
-        || kind === SyntaxKind.SetAccessor;
+        || kind === SyntaxKind.SetAccessor
+        || kind === SyntaxKind.NotEmittedTypeElement;
 }
 
 export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {

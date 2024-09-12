@@ -8,26 +8,25 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: auxiliaryProject::", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/user/username/projects/project/a.ts",
             content: `import { B } from "./b";`,
         };
         const bDts: File = {
-            path: "/b.d.ts",
+            path: "/user/username/projects/project/b.d.ts",
             content: `export declare class B {}`,
         };
         const bJs: File = {
-            path: "/b.js",
+            path: "/user/username/projects/project/b.js",
             content: `export class B {}`,
         };
-        const host = createServerHost([aTs, bDts, bJs]);
+        const host = TestServerHost.createServerHost([aTs, bDts, bJs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -70,7 +69,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",
@@ -96,7 +95,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 export function command(cmd, cb) { cb(Yargs) }
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);
@@ -126,7 +124,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 });
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
                 name: "@types/yargs",
                 version: "1.0.0",
@@ -155,7 +153,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 import { Yargs } from "yargs/callback";
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);

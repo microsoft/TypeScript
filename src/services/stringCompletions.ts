@@ -1,4 +1,3 @@
-import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers.js";
 import {
     CompletionKind,
     createCompletionDetails,
@@ -54,7 +53,7 @@ import {
     firstOrUndefined,
     flatMap,
     flatten,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     getBaseFileName,
     getConditions,
     getContextualTypeFromParent,
@@ -823,7 +822,7 @@ function getFilenameWithExtensionOption(name: string, program: Program, extensio
         return { name, extension: tryGetExtensionFromPath(name) };
     }
 
-    let allowedEndings = getModuleSpecifierPreferences(
+    let allowedEndings = moduleSpecifiers.getModuleSpecifierPreferences(
         { importModuleSpecifierEnding: extensionOptions.endingPreference },
         program,
         program.getCompilerOptions(),
@@ -1039,7 +1038,7 @@ function getCompletionEntriesForNonRelativeModules(
                     return nodeModulesDirectoryLookup(ancestor);
                 };
             }
-            forEachAncestorDirectory(scriptPath, ancestorLookup);
+            forEachAncestorDirectoryStoppingAtGlobalCache(host, scriptPath, ancestorLookup);
         }
     }
 

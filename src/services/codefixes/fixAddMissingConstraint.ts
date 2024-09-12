@@ -123,7 +123,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
-        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, tracker);
+        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
         if (typeNode) {
             changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));
             importAdder.writeFixes(changes);

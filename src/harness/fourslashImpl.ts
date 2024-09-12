@@ -9,6 +9,11 @@ import * as vpath from "./_namespaces/vpath.js";
 import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import {
+    harnessSessionLibLocation,
+    harnessTypingInstallerCacheLocation,
+} from "./harnessLanguageService.js";
+import { ensureWatchablePath } from "./watchUtils.js";
 
 export const enum FourSlashTestType {
     Native,
@@ -318,7 +323,17 @@ export class TestState {
         let startResolveFileRef: FourSlashFile | undefined;
 
         let configFileName: string | undefined;
+        if (testData.symlinks && this.testType === FourSlashTestType.Server) {
+            for (const symlink of ts.getOwnKeys(testData.symlinks)) {
+                ensureWatchablePath(ts.getDirectoryPath(symlink), `Directory of input link: ${symlink}`);
+                const target = (testData.symlinks[symlink] as vfs.Symlink).symlink;
+                ensureWatchablePath(ts.getDirectoryPath(target), `Directory of target link: ${target} for symlink ${symlink}`);
+            }
+        }
         for (const file of testData.files) {
+            if (this.testType === FourSlashTestType.Server) {
+                ensureWatchablePath(ts.getDirectoryPath(file.fileName), `Directory of input file: ${file.fileName}`);
+            }
             // Create map between fileName and its content for easily looking up when resolveReference flag is specified
             this.inputFiles.set(file.fileName, file.content);
             if (isConfig(file)) {
@@ -347,6 +362,11 @@ export class TestState {
                 throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
             }
         }
+
+        const libName = (name: string) =>
+            this.testType !== FourSlashTestType.Server ?
+                name :
+                `${harnessSessionLibLocation}/${name}`;
 
         let configParseResult: ts.ParsedCommandLine | undefined;
         if (configFileName) {
@@ -401,13 +421,21 @@ export class TestState {
 
             // Check if no-default-lib flag is false and if so add default library
             if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+                this.languageServiceAdapterHost.addScript(
+                    libName(Harness.Compiler.defaultLibFileName),
+                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
+                    /*isRootFile*/ false,
+                );
 
                 compilationOptions.lib?.forEach(fileName => {
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
                     if (libFile) {
-                        this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        this.languageServiceAdapterHost.addScript(
+                            libName(fileName),
+                            libFile.text,
+                            /*isRootFile*/ false,
+                        );
                     }
                 });
             }
@@ -419,7 +447,7 @@ export class TestState {
                     // all files if config file not specified, otherwise root files from the config and typings cache files are root files
                     const isRootFile = !configParseResult ||
                         ts.contains(configParseResult.fileNames, fileName) ||
-                        (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
+                        (ts.isDeclarationFileName(fileName) && ts.containsPath(harnessTypingInstallerCacheLocation, fileName));
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
@@ -431,7 +459,7 @@ export class TestState {
                     seen.add(fileName);
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                    this.languageServiceAdapterHost.addScript(libName(fileName), libFile.text, /*isRootFile*/ false);
                     if (!ts.some(libFile.libReferenceDirectives)) return;
                     for (const directive of libFile.libReferenceDirectives) {
                         addSourceFile(`lib.${directive.fileName}.d.ts`);
@@ -963,10 +991,10 @@ export class TestState {
 
         const fileName = this.activeFile.fileName;
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
-        const annotations = ts.map(hints.sort(sortHints), hint => {
+        const annotations = ts.map(hints.slice().sort(sortHints), hint => {
             if (hint.displayParts) {
                 hint.displayParts = ts.map(hint.displayParts, part => {
-                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                    if (part.file && /lib.*\.d\.ts$/.test(part.file)) {
                         part.span!.start = -1;
                     }
                     return part;
@@ -1045,8 +1073,8 @@ export class TestState {
 
         if (ts.hasProperty(options, "defaultCommitCharacters")) {
             assert.deepEqual(
-                actualCompletions.defaultCommitCharacters?.sort(),
-                options.defaultCommitCharacters?.sort(),
+                actualCompletions.defaultCommitCharacters?.slice().sort(),
+                options.defaultCommitCharacters?.slice().sort(),
                 "Expected 'defaultCommitCharacters' properties to match",
             );
         }
@@ -1199,8 +1227,8 @@ export class TestState {
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
         if (ts.hasProperty(expected, "commitCharacters")) {
             assert.deepEqual(
-                actual.commitCharacters?.sort(),
-                expected.commitCharacters?.sort(),
+                actual.commitCharacters?.slice().sort(),
+                expected.commitCharacters?.slice().sort(),
                 `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
             );
         }
@@ -1555,7 +1583,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
+        const isLibFile = /lib.*\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -2522,7 +2550,7 @@ export class TestState {
                     for (const part of tag.text ?? ts.emptyArray) {
                         if (part.kind === "linkName") {
                             const link = part as ts.JSDocLinkDisplayPart;
-                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                            if (/lib.*\.d\.ts$/.test(link.target.fileName)) {
                                 // The object literal isn't a complete TextSpan, but we're only going to
                                 // use these results in the baseline for diffing, so just overwrite.
                                 (link.target.textSpan as any) = { start: "--", length: "--" };
@@ -3265,8 +3293,8 @@ export class TestState {
             allSpanInsets.push({ text: "|]", pos: span.textSpan.start + span.textSpan.length });
         });
 
-        const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
-        ts.forEach(reverseSpans, span => {
+        allSpanInsets.sort((l, r) => r.pos - l.pos);
+        ts.forEach(allSpanInsets, span => {
             annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
         });
         Harness.IO.log(`\nMockup:\n${annotated}`);
@@ -3376,8 +3404,8 @@ export class TestState {
         this.verifyTextMatches(this.rangeText(this.getOnlyRange()), !!includeWhiteSpace, expectedText);
     }
 
-    private getOnlyRange() {
-        const ranges = this.getRanges();
+    private getOnlyRange(fileName?: string) {
+        const ranges = fileName ? this.getRangesInFile(fileName) : this.getRanges();
         if (ranges.length !== 1) {
             this.raiseError("Exactly one range should be specified in the testfile.");
         }
@@ -3463,7 +3491,7 @@ export class TestState {
             const change = ts.first(changes);
             assert(change.fileName = this.activeFile.fileName);
             const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
-            const newRange = updateTextRangeForTextChanges(this.getOnlyRange(), change.textChanges);
+            const newRange = updateTextRangeForTextChanges(this.getOnlyRange(this.activeFile.fileName), change.textChanges);
             const actualText = newText.slice(newRange.pos, newRange.end);
             this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
         }
@@ -3791,7 +3819,7 @@ export class TestState {
                 return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
             }
 
-            let inlineLinkedEditBaselines: { start: number; end: number; index: number; }[] = [];
+            const inlineLinkedEditBaselines: { start: number; end: number; index: number; }[] = [];
             let linkedEditInfoBaseline = "";
             for (const edit of linkedEditsByRange) {
                 const [linkedEdit, positions] = edit;
@@ -3810,7 +3838,7 @@ export class TestState {
                 offset++;
             }
 
-            inlineLinkedEditBaselines = inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
+            inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
             const fileText = activeFile.content;
             baselineContent += fileText.slice(0, inlineLinkedEditBaselines[0].start);
             for (let i = 0; i < inlineLinkedEditBaselines.length; i++) {
@@ -4066,7 +4094,7 @@ export class TestState {
     public verifyRefactorKindsAvailable(kind: string, expected: string[], preferences: {} = ts.emptyOptions): void {
         const refactors = this.getApplicableRefactorsAtSelection("invoked", kind, preferences);
         const availableKinds = ts.flatMap(refactors, refactor => refactor.actions).map(action => action.kind);
-        assert.deepEqual(availableKinds.sort(), expected.sort(), `Expected kinds to be equal`);
+        assert.deepEqual(availableKinds.slice().sort(), expected.slice().sort(), `Expected kinds to be equal`);
     }
 
     public verifyRefactorsAvailable(names: readonly string[]): void {
@@ -4946,7 +4974,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
     const openRanges: RangeLocationInformation[] = [];
 
     /// A list of ranges we've collected so far */
-    let localRanges: Range[] = [];
+    const localRanges: Range[] = [];
 
     /// The latest position of the start of an unflushed plain text area
     let lastNormalCharPosition = 0;
@@ -5113,7 +5141,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
     }
 
     // put ranges in the correct order
-    localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
+    localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
     localRanges.forEach(r => ranges.push(r));
 
     return {

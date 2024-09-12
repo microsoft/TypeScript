@@ -667,7 +667,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         const name = node.name;
         if (isIdentifier(name)) {
             const text = idText(name);
-            return (/^[A-Za-z_]\w*$/.test(text)) ? name : factory.createStringLiteral(text);
+            return (/^[A-Z_]\w*$/i.test(text)) ? name : factory.createStringLiteral(text);
         }
         return factory.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
     }

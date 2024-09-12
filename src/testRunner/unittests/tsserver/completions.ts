@@ -6,27 +6,26 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: completions::", () => {
     it("works", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/home/src/project/project/a.ts",
             content: "export const foo = 0;",
         };
         const bTs: File = {
-            path: "/b.ts",
+            path: "/home/src/project/project/b.ts",
             content: "foo",
         };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/project/project/tsconfig.json",
             content: "{}",
         };
 
-        const host = createServerHost([aTs, bTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTs, tsconfig]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -57,7 +56,15 @@ describe("unittests:: tsserver:: completions::", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/home/src/project/project/a",
+                    data: {
+                        exportName: "foo",
+                        fileName: "/home/src/project/project/a.ts",
+                        exportMapKey,
+                    },
+                }],
             },
         });
 
@@ -69,14 +76,22 @@ describe("unittests:: tsserver:: completions::", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetailsFull,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/home/src/project/project/a",
+                    data: {
+                        exportName: "foo",
+                        fileName: "/home/src/project/project/a.ts",
+                        exportMapKey,
+                    },
+                }],
             },
         });
         baselineTsserverLogs("completions", "works", session);
     });
 
     it("works when files are included from two different drives of windows", () => {
-        const projectRoot = "e:/myproject";
+        const projectRoot = "e:/solution/myproject";
         const appPackage: File = {
             path: `${projectRoot}/package.json`,
             content: jsonToReadableText({
@@ -178,7 +193,6 @@ export interface BrowserRouterProps {
         const files = [
             ...filesInProject,
             appPackage,
-            libFile,
             localReactPackage,
             localReactRouterDomPackage,
             localReactRouterDom,
@@ -187,8 +201,8 @@ export interface BrowserRouterProps {
             globalReactPackage,
         ];
 
-        const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-        const session = new TestSession({ host, globalTypingsCacheLocation });
+        const host = TestServerHost.createServerHost(files, { windowsStyleRoot: "c:/", typingsInstallerGlobalCacheLocation: globalTypingsCacheLocation });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
@@ -216,7 +230,7 @@ export interface BrowserRouterProps {
     });
 
     it("in project where there are no imports but has project references setup", () => {
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             "/user/username/projects/app/src/index.ts": "",
             "/user/username/projects/app/tsconfig.json": JSON.stringify(
                 {
@@ -310,7 +324,7 @@ export interface BrowserRouterProps {
         }
         function verify(withExistingImport: boolean, includeCompletionsForModuleExports: boolean) {
             it(`in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}${!includeCompletionsForModuleExports ? " without includeCompletionsForModuleExports" : ""}`, () => {
-                const host = createServerHost({
+                const host = TestServerHost.createServerHost({
                     "/user/username/projects/app/src/index.ts": `
 
 ${withExistingImport ? "import { MyClass } from 'shared';" : ""}`,

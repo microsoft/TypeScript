@@ -26,7 +26,7 @@ export import changeExtension = ts.changeAnyExtension;
 export import isTypeScript = ts.hasTSFileExtension;
 export import isJavaScript = ts.hasJSFileExtension;
 
-const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
+const invalidRootComponentRegExp = /^(?!(?:\/|\/\/\w+\/|[a-z]:\/?)?$)/i;
 const invalidNavigableComponentRegExp = /[:*?"<>|]/;
 const invalidNavigableComponentWithWildcardsRegExp = /[:"<>|]/;
 const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
