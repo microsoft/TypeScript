@@ -197,6 +197,7 @@ import {
     isImportCall,
     isImportDeclaration,
     isImportEqualsDeclaration,
+    isImportMetaResolveCall,
     isImportSpecifier,
     isImportTypeNode,
     isInJSFile,
@@ -3482,7 +3483,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-            collectDynamicImportOrRequireOrJsDocImportCalls(file);
+            collectDynamicImportOrSimilarCalls(file);
         }
 
         file.imports = imports || emptyArray;
@@ -3546,7 +3547,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
+        function collectDynamicImportOrSimilarCalls(file: SourceFile) {
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
                 const node = getNodeAtPosition(file, r.lastIndex);
@@ -3555,7 +3556,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     imports = append(imports, node.arguments[0]);
                 }
                 // we have to check the argument list has length of at least 1. We will still have to process these even though we have parsing error.
-                else if (isImportCall(node) && node.arguments.length >= 1 && isStringLiteralLike(node.arguments[0])) {
+                else if ((isImportCall(node) || isImportMetaResolveCall(node)) && node.arguments.length >= 1 && isStringLiteralLike(node.arguments[0])) {
+                    console.log("isImportMetaResolveCall mbyybyey", node)
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.arguments[0]);
                 }
