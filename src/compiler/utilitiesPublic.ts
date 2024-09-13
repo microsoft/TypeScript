@@ -1982,6 +1982,11 @@ enum NodeKindFacts {
     StrictlyMiscellaneousExpression = 1 << 2,
     CanHaveSymbol = 1 << 3,
     CanHaveLocals = 1 << 4,
+    
+    // TODO: reorganize these
+    Declaration = 1 << 5,
+    DeclarationStatement = 1 << 6,
+    StrictlyStatement = 1 << 7,
 
     IsLeftHandSideExpression = StrictlyLeftHandSideExpression,
     IsUnaryExpression = StrictlyUnaryExpression | IsLeftHandSideExpression,
@@ -1995,6 +2000,9 @@ for (let i = 0; i < SyntaxKind.Count; i++) {
 initExpressionFacts();
 initCanHaveSymbolFacts();
 initCanHaveLocalsFacts();
+initDeclarationKindFacts();
+initDeclarationStatementKindFacts();
+initStatementKindButNotDeclarationKindFacts();
 
 export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
     return !!(nodeKindFacts[skipPartiallyEmittedExpressions(node).kind] & NodeKindFacts.IsLeftHandSideExpression);
@@ -2308,79 +2316,83 @@ function initCanHaveLocalsFacts(): void {
 }
 
 function isDeclarationKind(kind: SyntaxKind) {
-    return kind === SyntaxKind.ArrowFunction
-        || kind === SyntaxKind.BindingElement
-        || kind === SyntaxKind.ClassDeclaration
-        || kind === SyntaxKind.ClassExpression
-        || kind === SyntaxKind.ClassStaticBlockDeclaration
-        || kind === SyntaxKind.Constructor
-        || kind === SyntaxKind.EnumDeclaration
-        || kind === SyntaxKind.EnumMember
-        || kind === SyntaxKind.ExportSpecifier
-        || kind === SyntaxKind.FunctionDeclaration
-        || kind === SyntaxKind.FunctionExpression
-        || kind === SyntaxKind.GetAccessor
-        || kind === SyntaxKind.ImportClause
-        || kind === SyntaxKind.ImportEqualsDeclaration
-        || kind === SyntaxKind.ImportSpecifier
-        || kind === SyntaxKind.InterfaceDeclaration
-        || kind === SyntaxKind.JsxAttribute
-        || kind === SyntaxKind.MethodDeclaration
-        || kind === SyntaxKind.MethodSignature
-        || kind === SyntaxKind.ModuleDeclaration
-        || kind === SyntaxKind.NamespaceExportDeclaration
-        || kind === SyntaxKind.NamespaceImport
-        || kind === SyntaxKind.NamespaceExport
-        || kind === SyntaxKind.Parameter
-        || kind === SyntaxKind.PropertyAssignment
-        || kind === SyntaxKind.PropertyDeclaration
-        || kind === SyntaxKind.PropertySignature
-        || kind === SyntaxKind.SetAccessor
-        || kind === SyntaxKind.ShorthandPropertyAssignment
-        || kind === SyntaxKind.TypeAliasDeclaration
-        || kind === SyntaxKind.TypeParameter
-        || kind === SyntaxKind.VariableDeclaration
-        || kind === SyntaxKind.JSDocTypedefTag
-        || kind === SyntaxKind.JSDocCallbackTag
-        || kind === SyntaxKind.JSDocPropertyTag
-        || kind === SyntaxKind.NamedTupleMember;
+    return !!(nodeKindFacts[kind] & NodeKindFacts.Declaration);
 }
 
-function isDeclarationStatementKind(kind: SyntaxKind) {
-    return kind === SyntaxKind.FunctionDeclaration
-        || kind === SyntaxKind.MissingDeclaration
-        || kind === SyntaxKind.ClassDeclaration
-        || kind === SyntaxKind.InterfaceDeclaration
-        || kind === SyntaxKind.TypeAliasDeclaration
-        || kind === SyntaxKind.EnumDeclaration
-        || kind === SyntaxKind.ModuleDeclaration
-        || kind === SyntaxKind.ImportDeclaration
-        || kind === SyntaxKind.ImportEqualsDeclaration
-        || kind === SyntaxKind.ExportDeclaration
-        || kind === SyntaxKind.ExportAssignment
-        || kind === SyntaxKind.NamespaceExportDeclaration;
+function initDeclarationKindFacts() {
+    nodeKindFacts[SyntaxKind.ArrowFunction] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.BindingElement] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ClassDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ClassExpression] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ClassStaticBlockDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.Constructor] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.EnumDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.EnumMember] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ExportSpecifier] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.FunctionDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.FunctionExpression] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.GetAccessor] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ImportClause] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ImportEqualsDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ImportSpecifier] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.InterfaceDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.JsxAttribute] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.MethodDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.MethodSignature] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ModuleDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.NamespaceExportDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.NamespaceImport] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.NamespaceExport] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.Parameter] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.PropertyAssignment] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.PropertyDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.PropertySignature] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.SetAccessor] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.ShorthandPropertyAssignment] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.TypeAliasDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.TypeParameter] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.VariableDeclaration] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.JSDocTypedefTag] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.JSDocCallbackTag] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.JSDocPropertyTag] |= NodeKindFacts.Declaration;
+    nodeKindFacts[SyntaxKind.NamedTupleMember] |= NodeKindFacts.Declaration;
 }
 
-function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
-    return kind === SyntaxKind.BreakStatement
-        || kind === SyntaxKind.ContinueStatement
-        || kind === SyntaxKind.DebuggerStatement
-        || kind === SyntaxKind.DoStatement
-        || kind === SyntaxKind.ExpressionStatement
-        || kind === SyntaxKind.EmptyStatement
-        || kind === SyntaxKind.ForInStatement
-        || kind === SyntaxKind.ForOfStatement
-        || kind === SyntaxKind.ForStatement
-        || kind === SyntaxKind.IfStatement
-        || kind === SyntaxKind.LabeledStatement
-        || kind === SyntaxKind.ReturnStatement
-        || kind === SyntaxKind.SwitchStatement
-        || kind === SyntaxKind.ThrowStatement
-        || kind === SyntaxKind.TryStatement
-        || kind === SyntaxKind.VariableStatement
-        || kind === SyntaxKind.WhileStatement
-        || kind === SyntaxKind.WithStatement
-        || kind === SyntaxKind.NotEmittedStatement;
+function initDeclarationStatementKindFacts() {
+    nodeKindFacts[SyntaxKind.FunctionDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.MissingDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ClassDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.InterfaceDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.TypeAliasDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.EnumDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ModuleDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ImportDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ImportEqualsDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ExportDeclaration] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.ExportAssignment] |= NodeKindFacts.DeclarationStatement;
+    nodeKindFacts[SyntaxKind.NamespaceExportDeclaration] |= NodeKindFacts.DeclarationStatement;
+}
+
+function initStatementKindButNotDeclarationKindFacts() {
+    nodeKindFacts[SyntaxKind.BreakStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ContinueStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.DebuggerStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.DoStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ExpressionStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.EmptyStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ForInStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ForOfStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ForStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.IfStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.LabeledStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ReturnStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.SwitchStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.ThrowStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.TryStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.VariableStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.WhileStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.WithStatement] |= NodeKindFacts.StrictlyStatement;
+    nodeKindFacts[SyntaxKind.NotEmittedStatement] |= NodeKindFacts.StrictlyStatement;
 }
 
 /** @internal */
@@ -2393,7 +2405,7 @@ export function isDeclaration(node: Node): node is NamedDeclaration {
 }
 
 export function isDeclarationStatement(node: Node): node is DeclarationStatement {
-    return isDeclarationStatementKind(node.kind);
+    return !!(nodeKindFacts[node.kind] & NodeKindFacts.DeclarationStatement);
 }
 
 /**
@@ -2402,13 +2414,12 @@ export function isDeclarationStatement(node: Node): node is DeclarationStatement
  * @internal
  */
 export function isStatementButNotDeclaration(node: Node): node is Statement {
-    return isStatementKindButNotDeclarationKind(node.kind);
+    return !!(nodeKindFacts[node.kind] & NodeKindFacts.StrictlyStatement);
 }
 
 export function isStatement(node: Node): node is Statement {
     const kind = node.kind;
-    return isStatementKindButNotDeclarationKind(kind)
-        || isDeclarationStatementKind(kind)
+    return (nodeKindFacts[kind] & (NodeKindFacts.StrictlyStatement | NodeKindFacts.DeclarationStatement)) !== 0
         || isBlockStatement(node);
 }
 
@@ -2430,8 +2441,7 @@ function isBlockStatement(node: Node): node is Block {
  */
 export function isStatementOrBlock(node: Node): node is Statement | Block {
     const kind = node.kind;
-    return isStatementKindButNotDeclarationKind(kind)
-        || isDeclarationStatementKind(kind)
+    return (nodeKindFacts[kind] & (NodeKindFacts.StrictlyStatement | NodeKindFacts.DeclarationStatement)) !== 0
         || kind === SyntaxKind.Block;
 }
 
