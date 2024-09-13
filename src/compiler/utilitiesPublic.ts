@@ -304,7 +304,7 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 }
 
 /** @internal */
-export const targetToLibMap: Map<ScriptTarget, string> = new Map<ScriptTarget, string>([
+export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
     [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
     [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],

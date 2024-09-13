@@ -382,7 +382,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      *
      * @internal
      */
-    cachedUnresolvedImportsPerFile: Map<Path, readonly string[]> = new Map<Path, readonly string[]>();
+    cachedUnresolvedImportsPerFile: Map<Path, readonly string[]> = new Map();
 
     /** @internal */
     lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -2027,8 +2027,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 info => info.isSourceOfProjectReferenceRedirect,
             );
 
-            const added: Map<string, boolean> = new Map<string, boolean>();
-            const removed: Map<string, boolean> = new Map<string, boolean>();
+            const added: Map<string, boolean> = new Map();
+            const removed: Map<string, boolean> = new Map();
 
             const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
             const updatedRedirects: protocol.FileWithProjectReferenceRedirectInfo[] = [];
@@ -2868,7 +2868,7 @@ export class ConfiguredProject extends Project {
     pendingUpdateReason: string | undefined;
 
     /** @internal */
-    openFileWatchTriggered: Map<string, ProgramUpdateLevel> = new Map<string, ProgramUpdateLevel>();
+    openFileWatchTriggered: Map<string, ProgramUpdateLevel> = new Map();
 
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;

@@ -118,6 +118,7 @@ export default tseslint.config(
             "@typescript-eslint/ban-ts-comment": "off",
             "@typescript-eslint/class-literal-property-style": "off",
             "@typescript-eslint/consistent-indexed-object-style": "off",
+            "@typescript-eslint/consistent-generic-constructors": "off",
             "@typescript-eslint/no-duplicate-enum-values": "off",
             "@typescript-eslint/no-empty-function": "off",
             "@typescript-eslint/no-namespace": "off",

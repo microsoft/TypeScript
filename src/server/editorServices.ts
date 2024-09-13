@@ -1194,7 +1194,7 @@ export class ProjectService {
     /**
      * projects specified by a tsconfig.json file
      */
-    readonly configuredProjects: Map<string, ConfiguredProject> = new Map<string, ConfiguredProject>();
+    readonly configuredProjects: Map<string, ConfiguredProject> = new Map();
     /** @internal */
     readonly newInferredProjectName: () => string = createProjectNameFactoryWithCounter(makeInferredProjectName);
     /** @internal */
@@ -1204,7 +1204,7 @@ export class ProjectService {
     /**
      * Open files: with value being project root path, and key being Path of the file that is open
      */
-    readonly openFiles: Map<Path, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
+    readonly openFiles: Map<Path, NormalizedPath | undefined> = new Map();
     /** Config files looked up and cached config files for open script info */
     private readonly configFileForOpenFiles = new Map<Path, ConfigFileName>();
     /** Set of open script infos that are root of inferred project */
@@ -1233,7 +1233,7 @@ export class ProjectService {
      *
      * @internal
      */
-    readonly configFileExistenceInfoCache: Map<NormalizedPath, ConfigFileExistenceInfo> = new Map<NormalizedPath, ConfigFileExistenceInfo>();
+    readonly configFileExistenceInfoCache: Map<NormalizedPath, ConfigFileExistenceInfo> = new Map();
     /** @internal */ readonly throttledOperations: ThrottledOperations;
 
     private readonly hostConfiguration: HostConfiguration;

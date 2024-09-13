@@ -210,7 +210,7 @@ interface CallbackData {
     time: number;
 }
 class Callbacks {
-    readonly map: Map<number, CallbackData> = new Map<number, CallbackData>();
+    readonly map: Map<number, CallbackData> = new Map();
     private nextId = 1;
     invoke: (invokeKey?: number) => void = invokeKey => this.invokeWorker(invokeKey);
     private hasChanges = false;

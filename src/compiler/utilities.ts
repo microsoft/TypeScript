@@ -11917,13 +11917,13 @@ const unprefixedNodeCoreModulesList = [
 ];
 
 /** @internal */
-export const unprefixedNodeCoreModules: Set<string> = new Set<string>(unprefixedNodeCoreModulesList);
+export const unprefixedNodeCoreModules: Set<string> = new Set(unprefixedNodeCoreModulesList);
 
 // await fetch('https://nodejs.org/docs/latest/api/all.json').then(r => r.text()).then(t =>
 //   new Set(t.match(/(?<=')node:.+?(?=')/g))
 //     .difference(new Set(require('module').builtinModules.map(x => `node:${x}`))))
 /** @internal */
-export const exclusivelyPrefixedNodeCoreModules: Set<string> = new Set<string>([
+export const exclusivelyPrefixedNodeCoreModules: Set<string> = new Set([
     "node:sea",
     "node:sqlite",
     "node:test",
@@ -11931,7 +11931,7 @@ export const exclusivelyPrefixedNodeCoreModules: Set<string> = new Set<string>([
 ]);
 
 /** @internal */
-export const nodeCoreModules: Set<string> = new Set<string>([
+export const nodeCoreModules: Set<string> = new Set([
     ...unprefixedNodeCoreModulesList,
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,

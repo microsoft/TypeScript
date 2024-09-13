@@ -216,7 +216,7 @@ export class TestSession extends ts.server.Session {
     public override logger!: LoggerWithInMemoryLogs;
     public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
     public serverCancellationToken: TestServerCancellationToken;
-    public watchChanges: Map<number, ts.server.protocol.WatchChangeRequestArgs> = new Map<number, ts.server.protocol.WatchChangeRequestArgs>();
+    public watchChanges: Map<number, ts.server.protocol.WatchChangeRequestArgs> = new Map();
 
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);

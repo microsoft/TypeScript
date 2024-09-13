@@ -138,7 +138,7 @@ const jsxOptionMap = new Map(Object.entries({
 }));
 
 /** @internal */
-export const inverseJsxOptionMap: Map<string, string> = new Map<string, string>(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
+export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
@@ -256,7 +256,7 @@ export const libs: string[] = libEntries.map(entry => entry[0]);
  *
  * @internal
  */
-export const libMap: Map<string, string> = new Map<string, string>(libEntries);
+export const libMap: Map<string, string> = new Map(libEntries);
 
 // Watch related options
 
