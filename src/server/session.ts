@@ -2013,7 +2013,6 @@ export class Session<TMessage = string> implements EventSender {
             };
         });
     }
-
     private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
         const formatOptions = this.getHostFormatOptions();
         const preferences = this.getHostPreferences();
@@ -2032,6 +2031,14 @@ export class Session<TMessage = string> implements EventSender {
 
         const changes = languageService.mapCode(file, args.mapping.contents, focusLocations, formatOptions, preferences);
         return this.mapTextChangesToCodeEdits(changes);
+    }
+
+    private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        return {
+             relatedFiles: languageService.getImports(file),
+             traits: []
+        }
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -3707,6 +3714,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
             return this.requiredResponse(this.mapCode(request.arguments));
+        },
+        [protocol.CommandTypes.CopilotRelated]: (request: protocol.CopilotRelatedRequest) => {
+            return this.requiredResponse(this.getCopilotRelatedInfo(request.arguments));
         },
     }));
 

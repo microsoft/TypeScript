@@ -3345,6 +3345,12 @@ export function createLanguageService(
         );
     }
 
+    function getImports(fileName: string): readonly string[] {
+        synchronizeHostData();
+        const file = getValidSourceFile(fileName)
+        return mapDefined(file.imports, i => program.getResolvedModuleFromModuleSpecifier(i, file)?.resolvedModule?.resolvedFileName);
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3418,6 +3424,7 @@ export function createLanguageService(
         getSupportedCodeFixes,
         getPasteEdits,
         mapCode,
+        getImports,
     };
 
     switch (languageServiceMode) {
