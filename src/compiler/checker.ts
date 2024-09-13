@@ -44408,26 +44408,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
         if (!strictNullChecks) return;
-        bothHelper(condExpr, body);
 
-        function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
+        bothHelper(condExpr, condType, body);
+
+        function bothHelper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
             condExpr = skipParentheses(condExpr);
-
-            helper(condExpr, body);
-
+            while (isPrefixUnaryExpression(condExpr)) {
+                condExpr = skipParentheses(condExpr.operand)
+                condType = checkTruthinessExpression(condExpr)
+            }
+            helper(condExpr, condType, body);
             while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                 condExpr = skipParentheses(condExpr.left);
-                helper(condExpr, body);
+                helper(condExpr, condType, body);
             }
         }
 
-        function helper(condExpr: Expression, body: Expression | Statement | undefined) {
+        function helper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
             const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
             if (isLogicalOrCoalescingBinaryExpression(location)) {
-                bothHelper(location, body);
+                bothHelper(location, condType, body);
                 return;
             }
             const type = location === condExpr ? condType : checkExpression(location);
