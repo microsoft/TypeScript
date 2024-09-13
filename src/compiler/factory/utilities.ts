@@ -40,6 +40,7 @@ import {
     Expression,
     ExpressionStatement,
     externalHelpersModuleNameText,
+    filter,
     first,
     firstOrUndefined,
     ForInitializer,
@@ -51,10 +52,12 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
+    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
+    getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -129,7 +132,6 @@ import {
     MultiplicativeOperator,
     MultiplicativeOperatorOrHigher,
     Mutable,
-    NamedImportBindings,
     Node,
     NodeArray,
     NodeFactory,
@@ -171,6 +173,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
+    UnscopedEmitHelper,
     WrappedExpression,
 } from "../_namespaces/ts.js";
 
@@ -628,9 +631,10 @@ export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All):
             return (kinds & OuterExpressionKinds.Parentheses) !== 0;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
-        case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.SatisfiesExpression:
             return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return (kinds & OuterExpressionKinds.ExpressionsWithTypeArguments) !== 0;
         case SyntaxKind.NonNullExpression:
             return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
         case SyntaxKind.PartiallyEmittedExpression:
@@ -685,26 +689,29 @@ export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
 /** @internal */
 export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
-        let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
-            // use named imports
-            const helpers = getEmitHelpers(sourceFile);
+        const impliedModuleKind = getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions);
+        const helpers = getImportedHelpers(sourceFile);
+        if (
+            (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) ||
+            impliedModuleKind === ModuleKind.ESNext ||
+            impliedModuleKind === undefined && moduleKind === ModuleKind.Preserve
+        ) {
+            // When we emit as an ES module, generate an `import` declaration that uses named imports for helpers.
+            // If we cannot determine the implied module kind under `module: preserve` we assume ESM.
             if (helpers) {
                 const helperNames: string[] = [];
                 for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const importName = helper.importName;
-                        if (importName) {
-                            pushIfUnique(helperNames, importName);
-                        }
+                    const importName = helper.importName;
+                    if (importName) {
+                        pushIfUnique(helperNames, importName);
                     }
                 }
                 if (some(helperNames)) {
                     helperNames.sort(compareStringsCaseSensitive);
                     // Alias the imports if the names are used somewhere in the file.
                     // NOTE: We don't need to care about global import collisions as this is a module.
-                    namedBindings = nodeFactory.createNamedImports(
+                    const namedBindings = nodeFactory.createNamedImports(
                         map(helperNames, name =>
                             isFileLevelUniqueName(sourceFile, name)
                                 ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
@@ -713,57 +720,53 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                     const parseNode = getOriginalNode(sourceFile, isSourceFile);
                     const emitNode = getOrCreateEmitNode(parseNode);
                     emitNode.externalHelpers = true;
+
+                    const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
+                        /*modifiers*/ undefined,
+                        nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
+                        nodeFactory.createStringLiteral(externalHelpersModuleNameText),
+                        /*attributes*/ undefined,
+                    );
+                    addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
+                    return externalHelpersImportDeclaration;
                 }
             }
         }
         else {
-            // use a namespace import
-            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(nodeFactory, sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+            // When we emit to a non-ES module, generate a synthetic `import tslib = require("tslib")` to be further transformed.
+            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(nodeFactory, sourceFile, compilerOptions, helpers, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
             if (externalHelpersModuleName) {
-                namedBindings = nodeFactory.createNamespaceImport(externalHelpersModuleName);
+                const externalHelpersImportDeclaration = nodeFactory.createImportEqualsDeclaration(
+                    /*modifiers*/ undefined,
+                    /*isTypeOnly*/ false,
+                    externalHelpersModuleName,
+                    nodeFactory.createExternalModuleReference(nodeFactory.createStringLiteral(externalHelpersModuleNameText)),
+                );
+                addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
             }
-        }
-        if (namedBindings) {
-            const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
-                /*modifiers*/ undefined,
-                nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                nodeFactory.createStringLiteral(externalHelpersModuleNameText),
-                /*attributes*/ undefined,
-            );
-            addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
-            return externalHelpersImportDeclaration;
         }
     }
 }
 
-function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
-    if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
-        const externalHelpersModuleName = getExternalHelpersModuleName(node);
-        if (externalHelpersModuleName) {
-            return externalHelpersModuleName;
-        }
+function getImportedHelpers(sourceFile: SourceFile) {
+    return filter(getEmitHelpers(sourceFile), helper => !helper.scoped);
+}
 
-        const moduleKind = getEmitModuleKind(compilerOptions);
-        let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && moduleKind !== ModuleKind.System
-            && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
-        if (!create) {
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        create = true;
-                        break;
-                    }
-                }
-            }
-        }
+function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, helpers: UnscopedEmitHelper[] | undefined, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+    const externalHelpersModuleName = getExternalHelpersModuleName(node);
+    if (externalHelpersModuleName) {
+        return externalHelpersModuleName;
+    }
 
-        if (create) {
-            const parseNode = getOriginalNode(node, isSourceFile);
-            const emitNode = getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
-        }
+    const create = some(helpers)
+        || (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
+            && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
+
+    if (create) {
+        const parseNode = getOriginalNode(node, isSourceFile);
+        const emitNode = getOrCreateEmitNode(parseNode);
+        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
     }
 }
 

@@ -1,12 +1,12 @@
 Program 1 Reused:: Not
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 
 
 import * as a from "a";a;
 resolvedModules:
 a: {
   "resolvedModule": {
-    "resolvedFileName": "/a.ts",
+    "resolvedFileName": "/home/src/workspaces/project/a.ts",
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
@@ -23,14 +23,14 @@ MissingPaths:: [
 
 parent pointers are updated: true
 Program 2 Reused:: Completely
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 'use strict';
 
 import * as a from "a";a;
 resolvedModules:
 a: {
   "resolvedModule": {
-    "resolvedFileName": "/a.ts",
+    "resolvedFileName": "/home/src/workspaces/project/a.ts",
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false

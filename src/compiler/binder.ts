@@ -154,7 +154,6 @@ import {
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
-    isEnumDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -1193,10 +1192,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocEnumTag:
                 bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                 break;
-            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.JSDocImportTag:
                 bindJSDocImportTag(node as JSDocImportTag);
                 break;
+            // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.SourceFile: {
                 bindEachFunctionsFirst((node as SourceFile).statements);
                 bind((node as SourceFile).endOfFileToken);
@@ -2116,7 +2115,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindJSDocImportTag(node: JSDocImportTag) {
+        // don't bind the importClause yet; that's delayed until bindJSDocImports
         bind(node.tagName);
+        bind(node.moduleSpecifier);
+        bind(node.attributes);
 
         if (typeof node.comment !== "string") {
             bindEach(node.comment);
@@ -3797,7 +3799,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
-                // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                // report errors on enums with preserved emit
+                isEnumDeclarationWithPreservedEmit(node, options) ||
+                // report error on instantiated modules
                 (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 
             if (reportError) {
@@ -3821,7 +3825,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             node.declarationList.declarations.some(d => !!d.initializer)
                         );
 
-                    eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
+                    eachUnreachableRange(node, options, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                 }
             }
         }
@@ -3829,7 +3833,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 }
 
-function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+function isEnumDeclarationWithPreservedEmit(node: Node, options: CompilerOptions): boolean {
+    return node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options));
+}
+
+function eachUnreachableRange(node: Node, options: CompilerOptions, cb: (start: Node, last: Node) => void): void {
     if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
         const { statements } = node.parent;
         const slice = sliceAfter(statements, node);
@@ -3838,26 +3846,27 @@ function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void)
     else {
         cb(node, node);
     }
-}
-// As opposed to a pure declaration like an `interface`
-function isExecutableStatement(s: Statement): boolean {
-    // Don't remove statements that can validly be used before they appear.
-    return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
-        // `var x;` may declare a variable used above
-        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
-}
 
-function isPurelyTypeDeclaration(s: Statement): boolean {
-    switch (s.kind) {
-        case SyntaxKind.InterfaceDeclaration:
-        case SyntaxKind.TypeAliasDeclaration:
-            return true;
-        case SyntaxKind.ModuleDeclaration:
-            return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
-        case SyntaxKind.EnumDeclaration:
-            return hasSyntacticModifier(s, ModifierFlags.Const);
-        default:
-            return false;
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return !isEnumDeclarationWithPreservedEmit(s, options);
+            default:
+                return false;
+        }
     }
 }
 

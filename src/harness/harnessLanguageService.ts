@@ -249,6 +249,8 @@ export abstract class LanguageServiceAdapterHost {
     }
 }
 
+/** TypeScript Typings Installer global cache location for the tests */
+export const harnessTypingInstallerCacheLocation = "/home/src/Library/Caches/typescript";
 /// Native adapter
 class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
     isKnownTypesPackageName(name: string): boolean {
@@ -256,7 +258,7 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
     }
 
     getGlobalTypingsCacheLocation() {
-        return "/Library/Caches/typescript";
+        return harnessTypingInstallerCacheLocation;
     }
 
     installPackage = ts.notImplemented;
@@ -348,12 +350,21 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     }
 }
 
+/**
+ * This is set to vscode so that in tsserver tests its what is expected
+ * and is unrelated and is error to not specify for tsc tests
+ */
+export const harnessSessionCurrentDirectory = "/home/src/Vscode/Projects/bin";
 // Server adapter
 class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
     private client!: ts.server.SessionClient;
 
     constructor(cancellationToken: ts.HostCancellationToken | undefined, settings: ts.CompilerOptions | undefined) {
         super(cancellationToken, settings);
+    }
+
+    override getCurrentDirectory(): string {
+        return harnessSessionCurrentDirectory;
     }
 
     onMessage = ts.noop;
@@ -382,6 +393,9 @@ interface ServerHostFileWatcher {
 interface ServerHostDirectoryWatcher {
     cb: ts.DirectoryWatcherCallback;
 }
+
+/** Default typescript and lib installs location for tests */
+export const harnessSessionLibLocation = "/home/src/tslibs/TS/Lib";
 class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
@@ -404,10 +418,6 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     readFile(fileName: string): string | undefined {
-        if (fileName.includes(Compiler.defaultLibFileName)) {
-            fileName = Compiler.defaultLibFileName;
-        }
-
         // System FS would follow symlinks, even though snapshots are stored by original file name
         const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
         return snapshot && ts.getSnapshotText(snapshot);
@@ -433,7 +443,7 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     getExecutingFilePath(): string {
-        return "";
+        return harnessSessionLibLocation + "/tsc.js";
     }
 
     exit = ts.noop;
@@ -631,7 +641,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
+            typingsInstaller: {
+                ...ts.server.nullTypingsInstaller,
+                globalTypingsCacheLocation: harnessTypingInstallerCacheLocation,
+            },
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: this.logger,

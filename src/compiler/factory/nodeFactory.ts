@@ -332,6 +332,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -1007,6 +1008,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -1985,10 +1987,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.parameters = createNodeArray(parameters);
         node.body = body;
 
-        node.transformFlags = propagateChildrenFlags(node.modifiers) |
-            propagateChildrenFlags(node.parameters) |
-            (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
-            TransformFlags.ContainsES2015;
+        if (!node.body) {
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+        }
+        else {
+            node.transformFlags = propagateChildrenFlags(node.modifiers) |
+                propagateChildrenFlags(node.parameters) |
+                (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
+                TransformFlags.ContainsES2015;
+        }
 
         node.typeParameters = undefined; // initialized by parser for grammar errors
         node.type = undefined; // initialized by parser for grammar errors
@@ -6258,6 +6265,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
+    }
+
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
         if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
             if (isCommaListExpression(node)) {
@@ -6553,6 +6565,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 return updateSatisfiesExpression(outerExpression, expression, outerExpression.type);
             case SyntaxKind.NonNullExpression:
                 return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return updateExpressionWithTypeArguments(outerExpression, expression, outerExpression.typeArguments);
             case SyntaxKind.PartiallyEmittedExpression:
                 return updatePartiallyEmittedExpression(outerExpression, expression);
         }

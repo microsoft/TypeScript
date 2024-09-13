@@ -1,31 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/src/hello.json]
+//// [/home/src/workspaces/solution/project/src/hello.json]
 {
   "hello": "world"
 }
 
-//// [/src/src/index.ts]
+//// [/home/src/workspaces/solution/project/src/index.ts]
 import hello from "./hello.json"
 export default hello.hello
 
 
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/solution/project/tsconfig.json]
 {
   "compilerOptions": {
     "moduleResolution": "node",
@@ -44,37 +29,50 @@ export default hello.hello
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
+/home/src/tslibs/TS/Lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
-/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
+    * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-TSFILE: /src/dist/hello.json
-TSFILE: /src/dist/index.js
-TSFILE: /src/dist/tsconfig.tsbuildinfo
-lib/lib.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-src/src/hello.json
+project/src/hello.json
   Part of 'files' list in tsconfig.json
-  Imported via "./hello.json" from file 'src/src/index.ts'
-src/src/index.ts
-  Matched by include pattern 'src/**/*' in 'src/tsconfig.json'
-exitCode:: ExitStatus.Success
+  Imported via "./hello.json" from file 'project/src/index.ts'
+project/src/index.ts
+  Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
 
 
-//// [/src/dist/hello.json]
+//// [/home/src/workspaces/solution/project/dist/hello.json]
 {
     "hello": "world"
 }
 
 
-//// [/src/dist/index.js]
+//// [/home/src/workspaces/solution/project/dist/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -84,10 +82,10 @@ var hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 
 
-//// [/src/dist/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
 {"root":["../src/hello.json","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "../src/hello.json",
@@ -97,3 +95,5 @@ exports.default = hello_json_1.default.hello;
   "size": 74
 }
 
+
+exitCode:: ExitStatus.Success

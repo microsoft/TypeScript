@@ -1,6 +1,24 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/a.ts]
+import {B} from './b'
+@((_) => {})
+export class A {
+    constructor(p: B) {}
+}
+
+//// [/user/username/workspace/solution/projects/project/b.ts]
+export class B {}
+
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es6",
+    "verbatimModuleSyntax": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,27 +30,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a.ts]
-import {B} from './b'
-@((_) => {})
-export class A {
-    constructor(p: B) {}
-}
-
-//// [/b.ts]
-export class B {}
-
-//// [/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es6",
-    "verbatimModuleSyntax": true
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -43,12 +45,14 @@ Output::
 
 
 
-//// [/b.js]
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
+//// [/user/username/workspace/solution/projects/project/b.js]
 export class B {
 }
 
 
-//// [/a.js]
+//// [/user/username/workspace/solution/projects/project/a.js]
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -110,53 +114,62 @@ export { A };
 
 
 
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/a.ts: *new*
   {}
-/b.ts: *new*
+/user/username/workspace/solution/projects/project/b.ts: *new*
   {}
-/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts",
+  "/user/username/workspace/solution/projects/project/b.ts"
 ]
 Program options: {
   "target": 2,
   "verbatimModuleSyntax": true,
   "watch": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/b.ts (used version)
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es6.d.ts (used version)
+/user/username/workspace/solution/projects/project/b.ts (used version)
+/user/username/workspace/solution/projects/project/a.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Enable experimentalDecorators
 
 Input::
-//// [/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es6",
@@ -182,8 +195,8 @@ Output::
 
 
 
-//// [/b.js] file written with same contents
-//// [/a.js]
+//// [/user/username/workspace/solution/projects/project/b.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/a.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -203,27 +216,26 @@ export { A };
 
 
 Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts",
+  "/user/username/workspace/solution/projects/project/b.ts"
 ]
 Program options: {
   "target": 2,
   "verbatimModuleSyntax": true,
   "experimentalDecorators": true,
   "watch": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 No shapes updated in the builder::
 
@@ -232,7 +244,7 @@ exitCode:: ExitStatus.undefined
 Change:: Enable emitDecoratorMetadata
 
 Input::
-//// [/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es6",
@@ -259,8 +271,8 @@ Output::
 
 
 
-//// [/b.js] file written with same contents
-//// [/a.js]
+//// [/user/username/workspace/solution/projects/project/b.js] file written with same contents
+//// [/user/username/workspace/solution/projects/project/a.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -284,9 +296,8 @@ export { A };
 
 
 Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts",
+  "/user/username/workspace/solution/projects/project/b.ts"
 ]
 Program options: {
   "target": 2,
@@ -294,18 +305,18 @@ Program options: {
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
   "watch": true,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+/user/username/workspace/solution/projects/project/b.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 No shapes updated in the builder::
 

@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /node_modules/pkg/package.json
+// @Filename: /home/src/workspaces/project/node_modules/pkg/package.json
 //// {
 ////     "name": "pkg",
 ////     "version": "1.0.0",
@@ -12,10 +12,10 @@
 ////     }
 //// }
 
-// @Filename: /node_modules/pkg/lib/core/test.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/pkg/lib/core/test.d.ts
 //// export function test(): void;
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// {
 ////     "type": "module",
 ////     "dependencies": {
@@ -23,14 +23,14 @@
 ////     }
 //// }
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////     "compilerOptions": {
 ////         "module": "nodenext"
 ////     }
 //// }
 
-// @Filename: /main.ts
+// @Filename: /home/src/workspaces/project/main.ts
 //// /**/
 
 verify.completions({

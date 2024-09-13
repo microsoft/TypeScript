@@ -5,34 +5,35 @@ import {
 import * as ts from "../../_namespaces/ts.js";
 import { stringifyIndented } from "../../_namespaces/ts.server.js";
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTestLocation } from "./contents.js";
 import { TestSession } from "./tsserver.js";
 import {
     File,
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
-export const customTypesMap = {
-    path: "/typesMap.json" as ts.Path,
-    content: `{
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
-                    "types": ["duck-types"]
-                }
+export const customTypesMap: File = {
+    path: getPathForTypeScriptTestLocation("typesMap.json"),
+    content: jsonToReadableText({
+        typesMap: {
+            jquery: {
+                match: "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+                types: ["jquery"],
             },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }`,
+            quack: {
+                match: "/duckquack-(\\d+)\\.min\\.js",
+                types: ["duck-types"],
+            },
+        },
+        simpleMap: {
+            Bacon: "baconjs",
+            bliss: "blissfuljs",
+            commander: "commander",
+            cordova: "cordova",
+            react: "react",
+            lodash: "lodash",
+        },
+    }),
 };
 
 export function loggerToTypingsInstallerLog(logger: LoggerWithInMemoryLogs): ts.server.typingsInstaller.Log {
@@ -60,7 +61,7 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHo
     }
 }
 const typesRegistryPackageName = "types-registry";
-function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
+export function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
     return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
 }
 
@@ -86,8 +87,8 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         super(
             testTypingInstaller.session.host,
             testTypingInstaller.globalTypingsCacheLocation,
-            "/safeList.json" as ts.Path,
-            customTypesMap.path,
+            getPathForTypeScriptTestLocation("typingSafeList.json") as ts.Path,
+            customTypesMap.path as ts.Path,
             testTypingInstaller.throttleLimit,
             log,
         );
@@ -96,16 +97,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 
         this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
         this.log.writeLine(`npm install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`);
-        testTypingInstaller.session.host.ensureFileOrFolder({
-            path: getTypesRegistryFileLocation(testTypingInstaller.globalTypingsCacheLocation),
-            content: jsonToReadableText(createTypesRegistryFileContent(
-                testTypingInstaller.typesRegistry ?
-                    ts.isString(testTypingInstaller.typesRegistry) ?
-                        [testTypingInstaller.typesRegistry] :
-                        testTypingInstaller.typesRegistry :
-                    ts.emptyArray,
-            )),
-        });
+        testTypingInstaller.session.host.ensureTypingRegistryFile();
         this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
 
         this.typesRegistry = loadTypesRegistryFile(
@@ -170,10 +162,8 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 export interface TestTypingsInstallerOptions {
     host: TestServerHost;
     logger?: LoggerWithInMemoryLogs;
-    globalTypingsCacheLocation?: string;
     throttleLimit?: number;
     installAction?: InstallAction;
-    typesRegistry?: string | readonly string[];
     throttledRequests?: number;
 }
 
@@ -183,25 +173,22 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
     // Options
     readonly throttleLimit: number;
     readonly installAction: InstallAction;
-    readonly typesRegistry: string | readonly string[] | undefined;
     readonly throttledRequests: number | undefined;
 
     constructor(options: TestTypingsInstallerOptions) {
-        const globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
         super(
             /*telemetryEnabled*/ false,
             options.throttledRequests === undefined ?
                 { ...options.logger!, hasLevel: ts.returnFalse } :
                 options.logger!,
             options.host,
-            globalTypingsCacheLocation,
+            options.host.globalTypingsCacheLocation,
             (...args) => this.session.event(...args),
             // Some large number so requests arent throttled
             options.throttledRequests === undefined ? 10 : options.throttledRequests,
         );
         this.throttleLimit = options.throttleLimit || 5;
         this.installAction = options.installAction !== undefined ? options.installAction : true;
-        this.typesRegistry = options.typesRegistry;
         this.throttledRequests = options.throttledRequests;
     }
 
@@ -221,7 +208,8 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
         }
     }
 }
-function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
+
+export function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
     const versionMap = {
         "latest": "1.3.0",
         "ts2.0": "1.0.0",

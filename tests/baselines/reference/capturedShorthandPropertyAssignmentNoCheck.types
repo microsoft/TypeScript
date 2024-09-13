@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/capturedShorthandPropertyAssignmentNoCheck.ts] ////
+
+=== capturedShorthandPropertyAssignmentNoCheck.ts ===
+const fns = [];
+>fns : any[]
+>    : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+for (const value of [1, 2, 3]) {
+>value : number
+>      : ^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+    fns.push(() => ({ value }));
+>fns.push(() => ({ value })) : number
+>                            : ^^^^^^
+>fns.push : (...items: any[]) => number
+>         : ^^^^     ^^^^^^^^^^^^      
+>fns : any[]
+>    : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>() => ({ value }) : () => { value: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>({ value }) : { value: number; }
+>            : ^^^^^^^^^^^^^^^^^^
+>{ value } : { value: number; }
+>          : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+}
+const result = fns.map(fn => fn());
+>result : any[]
+>       : ^^^^^
+>fns.map(fn => fn()) : any[]
+>                    : ^^^^^
+>fns.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>fns : any[]
+>    : ^^^^^
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>fn => fn() : (fn: any) => any
+>           : ^  ^^^^^^^^^^^^^
+>fn : any
+>fn() : any
+>fn : any
+
+console.log(result)
+>console.log(result) : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>result : any[]
+>       : ^^^^^
+

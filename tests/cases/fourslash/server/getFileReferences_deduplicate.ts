@@ -1,23 +1,23 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "files": [], "references": [{ "path": "tsconfig.build.json" }, { "path": "tsconfig.test.json" }] }
 
-// @Filename: /tsconfig.build.json
+// @Filename: /home/src/workspaces/project/tsconfig.build.json
 //// { "compilerOptions": { "rootDir": "src", "outDir": "dist/build", "composite": true }, "files": ["index.ts"] }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// export * from "./util";
 
-// @Filename: /tsconfig.test.json
+// @Filename: /home/src/workspaces/project/tsconfig.test.json
 //// { "compilerOptions": { "rootDir": "src", "outDir": "dist/test", "composite": true }, "files": ["test.ts", "index.ts"] }
 
-// @Filename: /test.ts
+// @Filename: /home/src/workspaces/project/test.ts
 //// import "./util";
 
-// @Filename: /util.ts
+// @Filename: /home/src/workspaces/project/util.ts
 //// export {}
 
 // util.ts is referenced by index.ts, which is included in tsconfig.build.json and tsconfig.test.json.
 // That reference will be returned from both projects' language services. Test ensures it gets deduplicated.
-verify.baselineGetFileReferences("/util.ts");
+verify.baselineGetFileReferences("/home/src/workspaces/project/util.ts");

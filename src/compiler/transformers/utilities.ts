@@ -47,6 +47,7 @@ import {
     isClassStaticBlockDeclaration,
     isDefaultImport,
     isExpressionStatement,
+    isFunctionDeclaration,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
@@ -103,7 +104,7 @@ export function getOriginalNodeId(node: Node) {
 /** @internal */
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
-    externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
+    externalHelpersImportDeclaration: ImportDeclaration | ImportEqualsDeclaration | undefined; // import of external helpers
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: ModuleExportName[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
@@ -321,7 +322,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 
     function addExportedFunctionDeclaration(node: FunctionDeclaration, name: ModuleExportName | undefined, isDefault: boolean) {
-        exportedFunctions.add(node);
+        exportedFunctions.add(getOriginalNode(node, isFunctionDeclaration));
         if (isDefault) {
             // export default function() { }
             // function x() { } + export { x as default };
