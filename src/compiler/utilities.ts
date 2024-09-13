@@ -67,6 +67,7 @@ import {
     compareValues,
     Comparison,
     CompilerOptions,
+    CompilerOptionsValue,
     ComputedPropertyName,
     computeLineAndCharacterOfPosition,
     computeLineOfPosition,
@@ -8830,109 +8831,7 @@ function createComputedCompilerOptions<T extends Record<string, CompilerOptionKe
     return options;
 }
 
-/** @internal */
-export const computedOptions: {
-    allowJs: {
-        dependencies: "checkJs"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "allowJs" | "checkJs">) => boolean;
-    };
-    allowSyntheticDefaultImports: {
-        dependencies: ("module" | "moduleResolution" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "allowSyntheticDefaultImports" | "module" | "moduleResolution" | "target">) => boolean;
-    };
-    alwaysStrict: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "alwaysStrict" | "strict">) => boolean;
-    };
-    declaration: {
-        dependencies: "composite"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "declaration" | "composite">) => boolean;
-    };
-    declarationMap: {
-        dependencies: ("declaration" | "composite")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "declaration" | "declarationMap" | "composite">) => boolean;
-    };
-    isolatedModules: {
-        dependencies: "verbatimModuleSyntax"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "isolatedModules" | "verbatimModuleSyntax">) => boolean;
-    };
-    module: {
-        dependencies: "target"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "target">) => ModuleKind;
-    };
-    moduleResolution: {
-        dependencies: ("module" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "moduleResolution" | "target">) => ModuleResolutionKind;
-    };
-    moduleDetection: {
-        dependencies: ("module" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "moduleDetection" | "target">) => ModuleDetectionKind;
-    };
-    noImplicitAny: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "noImplicitAny" | "strict">) => boolean;
-    };
-    noImplicitThis: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "noImplicitThis" | "strict">) => boolean;
-    };
-    preserveConstEnums: {
-        dependencies: ("isolatedModules" | "verbatimModuleSyntax")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "isolatedModules" | "preserveConstEnums" | "verbatimModuleSyntax">) => boolean;
-    };
-    incremental: {
-        dependencies: "composite"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "composite" | "incremental">) => boolean;
-    };
-    resolvePackageJsonExports: {
-        dependencies: "moduleResolution"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "moduleResolution" | "resolvePackageJsonExports">) => boolean;
-    };
-    resolvePackageJsonImports: {
-        dependencies: ("moduleResolution" | "resolvePackageJsonExports")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "moduleResolution" | "resolvePackageJsonExports" | "resolvePackageJsonImports">) => boolean;
-    };
-    strictFunctionTypes: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "strictFunctionTypes">) => boolean;
-    };
-    strictBindCallApply: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "strictBindCallApply">) => boolean;
-    };
-    strictNullChecks: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "strictNullChecks">) => boolean;
-    };
-    strictPropertyInitialization: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "strictPropertyInitialization">) => boolean;
-    };
-    strictBuiltinIteratorReturn: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "strictBuiltinIteratorReturn">) => boolean;
-    };
-    target: {
-        dependencies: "module"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "target">) => ScriptTarget;
-    };
-    useUnknownInCatchVariables: {
-        dependencies: "strict"[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "strict" | "useUnknownInCatchVariables">) => boolean;
-    };
-    resolveJsonModule: {
-        dependencies: ("module" | "moduleResolution" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "moduleResolution" | "target" | "resolveJsonModule">) => boolean;
-    };
-    esModuleInterop: {
-        dependencies: ("module" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "target" | "esModuleInterop">) => boolean;
-    };
-    useDefineForClassFields: {
-        dependencies: ("module" | "target")[];
-        computeValue: (compilerOptions: Pick<CompilerOptions, "module" | "target" | "useDefineForClassFields">) => boolean;
-    };
-} = createComputedCompilerOptions({
+const _computedOptions = createComputedCompilerOptions({
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
@@ -8948,7 +8847,7 @@ export const computedOptions: {
         computeValue: (compilerOptions): ModuleKind => {
             return typeof compilerOptions.module === "number" ?
                 compilerOptions.module :
-                computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+                _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
         },
     },
     moduleResolution: {
@@ -8956,7 +8855,7 @@ export const computedOptions: {
         computeValue: (compilerOptions): ModuleResolutionKind => {
             let moduleResolution = compilerOptions.moduleResolution;
             if (moduleResolution === undefined) {
-                switch (computedOptions.module.computeValue(compilerOptions)) {
+                switch (_computedOptions.module.computeValue(compilerOptions)) {
                     case ModuleKind.CommonJS:
                         moduleResolution = ModuleResolutionKind.Node10;
                         break;
@@ -8981,8 +8880,8 @@ export const computedOptions: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleDetectionKind => {
             return compilerOptions.moduleDetection ||
-                (computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
-                        computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+                (_computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
+                        _computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
         },
     },
     isolatedModules: {
@@ -8997,7 +8896,7 @@ export const computedOptions: {
             if (compilerOptions.esModuleInterop !== undefined) {
                 return compilerOptions.esModuleInterop;
             }
-            switch (computedOptions.module.computeValue(compilerOptions)) {
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
@@ -9012,15 +8911,15 @@ export const computedOptions: {
             if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
                 return compilerOptions.allowSyntheticDefaultImports;
             }
-            return computedOptions.esModuleInterop.computeValue(compilerOptions)
-                || computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
-                || computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+            return _computedOptions.esModuleInterop.computeValue(compilerOptions)
+                || _computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
+                || _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
     },
     resolvePackageJsonExports: {
         dependencies: ["moduleResolution"],
         computeValue: (compilerOptions): boolean => {
-            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
                 return false;
             }
@@ -9039,7 +8938,7 @@ export const computedOptions: {
     resolvePackageJsonImports: {
         dependencies: ["moduleResolution", "resolvePackageJsonExports"],
         computeValue: (compilerOptions): boolean => {
-            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            const moduleResolution = _computedOptions.moduleResolution.computeValue(compilerOptions);
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
                 return false;
             }
@@ -9061,7 +8960,7 @@ export const computedOptions: {
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
             }
-            return computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+            return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
     },
     declaration: {
@@ -9073,7 +8972,7 @@ export const computedOptions: {
     preserveConstEnums: {
         dependencies: ["isolatedModules", "verbatimModuleSyntax"],
         computeValue: (compilerOptions): boolean => {
-            return !!(compilerOptions.preserveConstEnums || computedOptions.isolatedModules.computeValue(compilerOptions));
+            return !!(compilerOptions.preserveConstEnums || _computedOptions.isolatedModules.computeValue(compilerOptions));
         },
     },
     incremental: {
@@ -9085,7 +8984,7 @@ export const computedOptions: {
     declarationMap: {
         dependencies: ["declaration", "composite"],
         computeValue: (compilerOptions): boolean => {
-            return !!(compilerOptions.declarationMap && computedOptions.declaration.computeValue(compilerOptions));
+            return !!(compilerOptions.declarationMap && _computedOptions.declaration.computeValue(compilerOptions));
         },
     },
     allowJs: {
@@ -9098,7 +8997,7 @@ export const computedOptions: {
         dependencies: ["target", "module"],
         computeValue: (compilerOptions): boolean => {
             return compilerOptions.useDefineForClassFields === undefined
-                ? computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2022
+                ? _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2022
                 : compilerOptions.useDefineForClassFields;
         },
     },
@@ -9159,37 +9058,40 @@ export const computedOptions: {
 });
 
 /** @internal */
-export const getEmitScriptTarget: (compilerOptions: Pick<CompilerOptions, "module" | "target">) => ScriptTarget = computedOptions.target.computeValue;
+export const computedOptions: Record<string, { dependencies: readonly string[]; computeValue: (options: CompilerOptions) => CompilerOptionsValue; }> = _computedOptions;
+
 /** @internal */
-export const getEmitModuleKind: (compilerOptions: Pick<CompilerOptions, "module" | "target">) => ModuleKind = computedOptions.module.computeValue;
+export const getEmitScriptTarget: (compilerOptions: CompilerOptions) => ScriptTarget = _computedOptions.target.computeValue;
 /** @internal */
-export const getEmitModuleResolutionKind: (compilerOptions: Pick<CompilerOptions, "module" | "moduleResolution" | "target">) => ModuleResolutionKind = computedOptions.moduleResolution.computeValue;
+export const getEmitModuleKind: (compilerOptions: Pick<CompilerOptions, "module" | "target">) => ModuleKind = _computedOptions.module.computeValue;
+/** @internal */
+export const getEmitModuleResolutionKind: (compilerOptions: CompilerOptions) => ModuleResolutionKind = _computedOptions.moduleResolution.computeValue;
 /** @internal @knipignore */
-export const getEmitModuleDetectionKind: (compilerOptions: Pick<CompilerOptions, "module" | "moduleDetection" | "target">) => ModuleDetectionKind = computedOptions.moduleDetection.computeValue;
+export const getEmitModuleDetectionKind: (compilerOptions: CompilerOptions) => ModuleDetectionKind = _computedOptions.moduleDetection.computeValue;
 /** @internal */
-export const getIsolatedModules: (compilerOptions: Pick<CompilerOptions, "isolatedModules" | "verbatimModuleSyntax">) => boolean = computedOptions.isolatedModules.computeValue;
+export const getIsolatedModules: (compilerOptions: CompilerOptions) => boolean = _computedOptions.isolatedModules.computeValue;
 /** @internal */
-export const getESModuleInterop: (compilerOptions: Pick<CompilerOptions, "module" | "target" | "esModuleInterop">) => boolean = computedOptions.esModuleInterop.computeValue;
+export const getESModuleInterop: (compilerOptions: CompilerOptions) => boolean = _computedOptions.esModuleInterop.computeValue;
 /** @internal */
-export const getAllowSyntheticDefaultImports: (compilerOptions: Pick<CompilerOptions, "allowSyntheticDefaultImports" | "module" | "moduleResolution" | "target">) => boolean = computedOptions.allowSyntheticDefaultImports.computeValue;
+export const getAllowSyntheticDefaultImports: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowSyntheticDefaultImports.computeValue;
 /** @internal */
-export const getResolvePackageJsonExports: (compilerOptions: Pick<CompilerOptions, "moduleResolution" | "resolvePackageJsonExports">) => boolean = computedOptions.resolvePackageJsonExports.computeValue;
+export const getResolvePackageJsonExports: (compilerOptions: CompilerOptions) => boolean = _computedOptions.resolvePackageJsonExports.computeValue;
 /** @internal */
-export const getResolvePackageJsonImports: (compilerOptions: Pick<CompilerOptions, "moduleResolution" | "resolvePackageJsonExports" | "resolvePackageJsonImports">) => boolean = computedOptions.resolvePackageJsonImports.computeValue;
+export const getResolvePackageJsonImports: (compilerOptions: CompilerOptions) => boolean = _computedOptions.resolvePackageJsonImports.computeValue;
 /** @internal */
-export const getResolveJsonModule: (compilerOptions: Pick<CompilerOptions, "module" | "moduleResolution" | "target" | "resolveJsonModule">) => boolean = computedOptions.resolveJsonModule.computeValue;
+export const getResolveJsonModule: (compilerOptions: CompilerOptions) => boolean = _computedOptions.resolveJsonModule.computeValue;
 /** @internal */
-export const getEmitDeclarations: (compilerOptions: Pick<CompilerOptions, "declaration" | "composite">) => boolean = computedOptions.declaration.computeValue;
+export const getEmitDeclarations: (compilerOptions: CompilerOptions) => boolean = _computedOptions.declaration.computeValue;
 /** @internal */
-export const shouldPreserveConstEnums: (compilerOptions: Pick<CompilerOptions, "isolatedModules" | "preserveConstEnums" | "verbatimModuleSyntax">) => boolean = computedOptions.preserveConstEnums.computeValue;
+export const shouldPreserveConstEnums: (compilerOptions: CompilerOptions) => boolean = _computedOptions.preserveConstEnums.computeValue;
 /** @internal */
-export const isIncrementalCompilation: (compilerOptions: Pick<CompilerOptions, "composite" | "incremental">) => boolean = computedOptions.incremental.computeValue;
+export const isIncrementalCompilation: (compilerOptions: CompilerOptions) => boolean = _computedOptions.incremental.computeValue;
 /** @internal */
-export const getAreDeclarationMapsEnabled: (compilerOptions: Pick<CompilerOptions, "declaration" | "declarationMap" | "composite">) => boolean = computedOptions.declarationMap.computeValue;
+export const getAreDeclarationMapsEnabled: (compilerOptions: CompilerOptions) => boolean = _computedOptions.declarationMap.computeValue;
 /** @internal */
-export const getAllowJSCompilerOption: (compilerOptions: Pick<CompilerOptions, "allowJs" | "checkJs">) => boolean = computedOptions.allowJs.computeValue;
+export const getAllowJSCompilerOption: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowJs.computeValue;
 /** @internal */
-export const getUseDefineForClassFields: (compilerOptions: Pick<CompilerOptions, "module" | "target" | "useDefineForClassFields">) => boolean = computedOptions.useDefineForClassFields.computeValue;
+export const getUseDefineForClassFields: (compilerOptions: CompilerOptions) => boolean = _computedOptions.useDefineForClassFields.computeValue;
 
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean {

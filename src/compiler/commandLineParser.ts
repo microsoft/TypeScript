@@ -2610,11 +2610,11 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     const providedKeys = new Set(optionMap.keys());
     const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
     for (const option in computedOptions) {
-        if (!providedKeys.has(option) && some(computedOptions[option as keyof typeof computedOptions].dependencies, dep => providedKeys.has(dep))) {
-            const implied = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
-            const defaultValue = computedOptions[option as keyof typeof computedOptions].computeValue({});
+        if (!providedKeys.has(option) && some(computedOptions[option].dependencies, dep => providedKeys.has(dep))) {
+            const implied = computedOptions[option].computeValue(configParseResult.options);
+            const defaultValue = computedOptions[option].computeValue({});
             if (implied !== defaultValue) {
-                impliedCompilerOptions[option] = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+                impliedCompilerOptions[option] = computedOptions[option].computeValue(configParseResult.options);
             }
         }
     }
