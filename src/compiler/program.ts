@@ -8,7 +8,6 @@ import {
     AsExpression,
     BuilderProgram,
     CancellationToken,
-    canEmitTsBuildInfo,
     canHaveDecorators,
     canHaveIllegalDecorators,
     chainDiagnosticMessages,
@@ -4313,12 +4312,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         const outputFile = options.outFile;
-        if (options.tsBuildInfoFile) {
-            if (!canEmitTsBuildInfo(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if_not_running_tsc_b, "tsBuildInfoFile");
-            }
-        }
-        else if (options.incremental && !outputFile && !options.configFilePath) {
+        if (!options.tsBuildInfoFile && options.incremental && !outputFile && !options.configFilePath) {
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
