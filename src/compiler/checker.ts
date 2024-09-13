@@ -35872,10 +35872,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let result: Signature | undefined;
         let argCheckMode = CheckMode.Normal;
 
-        // let args : readonly Expression[];
         let candidates: Signature[] = [];
         let typeArguments: NodeArray<TypeNode> | undefined;
-        // if (!isJsxOpenFragment) {
         if (!isDecorator && !isInstanceof && !isSuperCall(node) && !isJsxOpenFragment) {
             typeArguments = (node as CallExpression).typeArguments;
 

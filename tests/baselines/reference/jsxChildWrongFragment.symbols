@@ -7,14 +7,13 @@
 const test = () => "asd";
 >test : Symbol(test, Decl(index.tsx, 3, 5))
 
-// No Errors
+// these two should error in the same way 
 const jsxWithJsxFragment = <>{test}</>;
 >jsxWithJsxFragment : Symbol(jsxWithJsxFragment, Decl(index.tsx, 6, 5))
 >test : Symbol(test, Decl(index.tsx, 3, 5))
 
-// Type '() => string' is not assignable to type 'ReactNode'.
 const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
->jsxWithReactFragment : Symbol(jsxWithReactFragment, Decl(index.tsx, 9, 5))
+>jsxWithReactFragment : Symbol(jsxWithReactFragment, Decl(index.tsx, 7, 5))
 >React.Fragment : Symbol(React.Fragment, Decl(react18.d.ts, 390, 9))
 >React : Symbol(React, Decl(react18.d.ts, 62, 15))
 >Fragment : Symbol(React.Fragment, Decl(react18.d.ts, 390, 9))
@@ -22,4 +21,8 @@ const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
 >React.Fragment : Symbol(React.Fragment, Decl(react18.d.ts, 390, 9))
 >React : Symbol(React, Decl(react18.d.ts, 62, 15))
 >Fragment : Symbol(React.Fragment, Decl(react18.d.ts, 390, 9))
+
+const jsxNestedFragment = <><>{test}</></>;
+>jsxNestedFragment : Symbol(jsxNestedFragment, Decl(index.tsx, 9, 5))
+>test : Symbol(test, Decl(index.tsx, 3, 5))
 

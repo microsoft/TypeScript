@@ -15,7 +15,7 @@ const test = () => "asd";
 >"asd" : "asd"
 >      : ^^^^^
 
-// No Errors
+// these two should error in the same way 
 const jsxWithJsxFragment = <>{test}</>;
 >jsxWithJsxFragment : JSX.Element
 >                   : ^^^^^^^^^^^
@@ -24,7 +24,6 @@ const jsxWithJsxFragment = <>{test}</>;
 >test : () => string
 >     : ^^^^^^^^^^^^
 
-// Type '() => string' is not assignable to type 'ReactNode'.
 const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
 >jsxWithReactFragment : JSX.Element
 >                     : ^^^^^^^^^^^
@@ -44,4 +43,14 @@ const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
 >      : ^^^^^^^^^^^^
 >Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^
+
+const jsxNestedFragment = <><>{test}</></>;
+>jsxNestedFragment : JSX.Element
+>                  : ^^^^^^^^^^^
+><><>{test}</></> : JSX.Element
+>                 : ^^^^^^^^^^^
+><>{test}</> : JSX.Element
+>            : ^^^^^^^^^^^
+>test : () => string
+>     : ^^^^^^^^^^^^
 
