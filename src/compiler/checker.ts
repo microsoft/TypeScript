@@ -8378,8 +8378,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                     // try to reuse the existing annotation
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                    // explicitly add `| undefined` to optional mapped properties whose type contains `undefined` (and not `missing`)
-                    const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
+                    // explicitly add `| undefined` to mapped properties whose type contains `undefined` (and not `missing`)
+                    const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
                     const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
                         restoreFlags();
