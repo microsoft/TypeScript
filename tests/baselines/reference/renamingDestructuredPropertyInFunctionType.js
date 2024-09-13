@@ -106,15 +106,15 @@ type F3 = ({ a: string, b, c }: O) => any;
 type F4 = ({ a: string }: O) => any;
 type F5 = ({ a: string, b, c }: O) => any;
 type F6 = ({ a: string }: {
-    a: any;
+    a?: any;
 }) => typeof string;
 type F7 = ({ a: string, b: number }: {
-    a: any;
-    b: any;
+    a?: any;
+    b?: any;
 }) => typeof number;
 type F8 = ({ a, b: number }: {
-    a: any;
-    b: any;
+    a?: any;
+    b?: any;
 }) => typeof number;
 type F9 = ([a, b, c]: [any, any, any]) => void;
 type G1 = new (arg: number) => any;
@@ -123,49 +123,49 @@ type G3 = new ({ a: string, b, c }: O) => any;
 type G4 = new ({ a: string }: O) => any;
 type G5 = new ({ a: string, b, c }: O) => any;
 type G6 = new ({ a: string }: {
-    a: any;
+    a?: any;
 }) => typeof string;
 type G7 = new ({ a: string, b: number }: {
-    a: any;
-    b: any;
+    a?: any;
+    b?: any;
 }) => typeof number;
 type G8 = new ({ a, b: number }: {
-    a: any;
-    b: any;
+    a?: any;
+    b?: any;
 }) => typeof number;
 type G9 = new ([a, b, c]: [any, any, any]) => void;
 type F10 = ({ "a": string }: {
-    a: any;
+    a?: any;
 }) => void;
 type F11 = ({ 2: string }: {
-    2: any;
+    2?: any;
 }) => void;
 type F12 = ({ ["a"]: string }: O) => void;
 type F13 = ({ [2]: string }: {
-    2: any;
+    2?: any;
 }) => void;
 type G10 = new ({ "a": string }: {
-    a: any;
+    a?: any;
 }) => void;
 type G11 = new ({ 2: string }: {
-    2: any;
+    2?: any;
 }) => void;
 type G12 = new ({ ["a"]: string }: O) => void;
 type G13 = new ({ [2]: string }: {
-    2: any;
+    2?: any;
 }) => void;
 interface I {
     method1(arg: number): any;
     method2({ a: string }: {
-        a: any;
+        a?: any;
     }): any;
     (arg: number): any;
     ({ a: string }: {
-        a: any;
+        a?: any;
     }): any;
     new (arg: number): any;
     new ({ a: string }: {
-        a: any;
+        a?: any;
     }): any;
 }
 declare function f1({ a: string }: O): void;
@@ -183,10 +183,10 @@ declare function f6({ a: string }: O): void;
 declare const f7: ({ a: string, b, c }: O) => void;
 declare const f8: ({ "a": string }: O) => void;
 declare function f9({ 2: string }: {
-    2: any;
+    2?: any;
 }): void;
 declare function f10({ ["a"]: string }: O): void;
 declare const f11: ({ [2]: string }: {
-    2: any;
+    2?: any;
 }) => void;
 declare function f12({ a: string }: O): typeof string;

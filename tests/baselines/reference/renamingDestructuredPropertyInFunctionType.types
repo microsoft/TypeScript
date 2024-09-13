@@ -263,8 +263,8 @@ interface I {
 >    : ^^^^^^
 
   method2({ a: string }): any; // Error
->method2 : ({ a: string }: { a: any; }) => any
->        : ^             ^^^^^^^^^^^^^^^^^^   
+>method2 : ({ a: string }: { a?: any; }) => any
+>        : ^             ^^^^^^^^^^^^^^^^^^^   
 >a : any
 >  : ^^^
 >string : any
@@ -425,8 +425,8 @@ const f8 = ({ "a": string }: O) => { };
 >       : ^^^^^^
 
 function f9 ({ 2: string }) { };
->f9 : ({ 2: string }: { 2: any; }) => void
->   : ^             ^^^^^^^^^^^^^^^^^^^^^^
+>f9 : ({ 2: string }: { 2?: any; }) => void
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^
 >string : any
 >       : ^^^
 
@@ -439,10 +439,10 @@ function f10 ({ ["a"]: string }: O) { };
 >       : ^^^^^^
 
 const f11 =  ({ [2]: string }) => { };
->f11 : ({ [2]: string }: { 2: any; }) => void
->    : ^               ^^^^^^^^^^^^^^^^^^^^^^
->({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
->                         : ^               ^^^^^^^^^^^^^^^^^^^^^^
+>f11 : ({ [2]: string }: { 2?: any; }) => void
+>    : ^               ^^^^^^^^^^^^^^^^^^^^^^^
+>({ [2]: string }) => { } : ({ [2]: string }: { 2?: any; }) => void
+>                         : ^               ^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >string : any

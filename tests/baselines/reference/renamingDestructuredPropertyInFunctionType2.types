@@ -197,8 +197,8 @@ interface I {
 >    : ^^^^^^
 
   method2({ a: string }): any; 
->method2 : ({ a: string }: { a: any; }) => any
->        : ^             ^^^^^^^^^^^^^^^^^^   
+>method2 : ({ a: string }: { a?: any; }) => any
+>        : ^             ^^^^^^^^^^^^^^^^^^^   
 >a : any
 >  : ^^^
 >string : any
