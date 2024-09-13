@@ -8,8 +8,6 @@ file.ts(28,20): error TS2322: Type '2' is not assignable to type 'SomeInterface<
   Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
 file.ts(65,13): error TS2322: Type '1' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
 file.ts(67,9): error TS2322: Type '2' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
-file.ts(71,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-file.ts(74,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 file.ts(79,16): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
 file.ts(79,20): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
 file.ts(83,100): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
@@ -21,7 +19,7 @@ file.ts(99,60): error TS2366: Function lacks ending return statement and return 
 file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<U> | OtherCond<V>'.
 
 
-==== file.ts (16 errors) ====
+==== file.ts (14 errors) ====
     // Type parameter in outer scope
     function outer<T extends boolean>(x: T): number {
         return inner();
@@ -109,13 +107,9 @@ file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<
     }
     class Sub1 extends SomeClass {
         #sub1!: symbol;
-        ~~~~~
-!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
     };
     class Sub2 extends SomeClass {
         #sub2!: symbol;
-        ~~~~~
-!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
     };
     
     // Detection of type parameter reference in presence of typeof

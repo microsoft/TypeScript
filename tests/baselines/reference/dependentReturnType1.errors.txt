@@ -1,8 +1,8 @@
 dependentReturnType1.ts(11,9): error TS2322: Type 'number' is not assignable to type 'A[T]'.
   Type 'number' is not assignable to type 'string'.
 dependentReturnType1.ts(26,9): error TS2322: Type '""' is not assignable to type 'C[T]'.
-  Type 'string' is not assignable to type 'never'.
-dependentReturnType1.ts(35,9): error TS2322: Type 'string' is not assignable to type 'never'.
+  Type '""' is not assignable to type 'never'.
+dependentReturnType1.ts(35,9): error TS2322: Type '""' is not assignable to type 'never'.
 dependentReturnType1.ts(69,9): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
 dependentReturnType1.ts(71,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
 dependentReturnType1.ts(80,22): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Three & Four'.
@@ -41,7 +41,7 @@ dependentReturnType1.ts(470,13): error TS2322: Type 'R' is not assignable to typ
 dependentReturnType1.ts(472,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
 dependentReturnType1.ts(474,13): error TS2322: Type 'T' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
 dependentReturnType1.ts(488,9): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
-dependentReturnType1.ts(514,5): error TS2322: Type 'number' is not assignable to type 'never'.
+dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type 'never'.
 
 
 ==== dependentReturnType1.ts (39 errors) ====
@@ -76,7 +76,7 @@ dependentReturnType1.ts(514,5): error TS2322: Type 'number' is not assignable to
             return ""; // Error, returned expression needs to have type string & boolean (= never)
             ~~~~~~
 !!! error TS2322: Type '""' is not assignable to type 'C[T]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'never'.
+!!! error TS2322:   Type '""' is not assignable to type 'never'.
         }
     }
     
@@ -87,7 +87,7 @@ dependentReturnType1.ts(514,5): error TS2322: Type 'number' is not assignable to
         else {
             return ""; // Error, returned expression needs to have type string & boolean (= never)
             ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type '""' is not assignable to type 'never'.
         }
     }
     
@@ -641,5 +641,5 @@ dependentReturnType1.ts(514,5): error TS2322: Type 'number' is not assignable to
         }
         return 1;
         ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'never'.
+!!! error TS2322: Type '1' is not assignable to type 'never'.
     }
