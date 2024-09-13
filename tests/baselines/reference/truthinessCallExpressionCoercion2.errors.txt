@@ -1,5 +1,6 @@
 truthinessCallExpressionCoercion2.ts(11,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion2.ts(14,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(29,7): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion2.ts(44,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion2.ts(48,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
@@ -35,7 +36,7 @@ truthinessCallExpressionCoercion2.ts(180,9): error TS2774: This condition will a
 truthinessCallExpressionCoercion2.ts(183,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== truthinessCallExpressionCoercion2.ts (35 errors) ====
+==== truthinessCallExpressionCoercion2.ts (36 errors) ====
     declare class A {
         static from(): string;
     }
@@ -69,6 +70,8 @@ truthinessCallExpressionCoercion2.ts(183,14): error TS2774: This condition will 
     
         // ok
         !!required1 && console.log('not required');
+          ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
     
         // ok
         required1() && console.log('required call');
