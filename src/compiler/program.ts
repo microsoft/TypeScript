@@ -517,11 +517,7 @@ export interface CompilerHostLikeForCache {
 }
 
 /** @internal */
-export function changeCompilerHostLikeToUseCache(
-    host: CompilerHostLikeForCache,
-    toPath: (fileName: string) => Path,
-    getSourceFile?: CompilerHost["getSourceFile"],
-): {
+export interface CompilerHostLikeWithCache {
     originalReadFile: (fileName: string, encoding?: string) => string | undefined;
     originalFileExists: (fileName: string) => boolean;
     originalDirectoryExists: ((directory: string) => boolean) | undefined;
@@ -529,7 +525,14 @@ export function changeCompilerHostLikeToUseCache(
     originalWriteFile: WriteFileCallback | undefined;
     getSourceFileWithCache: ((fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean) => SourceFile | undefined) | undefined;
     readFileWithCache: (fileName: string) => string | undefined;
-} {
+}
+
+/** @internal */
+export function changeCompilerHostLikeToUseCache(
+    host: CompilerHostLikeForCache,
+    toPath: (fileName: string) => Path,
+    getSourceFile?: CompilerHost["getSourceFile"],
+): CompilerHostLikeWithCache {
     const originalReadFile = host.readFile;
     const originalFileExists = host.fileExists;
     const originalDirectoryExists = host.directoryExists;

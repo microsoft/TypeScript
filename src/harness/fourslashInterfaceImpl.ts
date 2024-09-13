@@ -259,20 +259,22 @@ export class VerifyNegatable {
     }
 }
 
+export interface CompletionsResult {
+    andApplyCodeAction: (options: {
+        name: string;
+        source: string;
+        description: string;
+        newFileContent?: string;
+        newRangeContent?: string;
+    }) => void;
+}
+
 export class Verify extends VerifyNegatable {
     constructor(state: FourSlash.TestState) {
         super(state);
     }
 
-    public completions(...optionsArray: VerifyCompletionsOptions[]): {
-        andApplyCodeAction: (options: {
-            name: string;
-            source: string;
-            description: string;
-            newFileContent?: string;
-            newRangeContent?: string;
-        }) => void;
-    } | undefined {
+    public completions(...optionsArray: VerifyCompletionsOptions[]): CompletionsResult | undefined {
         if (optionsArray.length === 1) {
             return this.state.verifyCompletions(optionsArray[0]);
         }

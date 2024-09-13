@@ -149,6 +149,7 @@ import {
     Msg,
     NormalizedPath,
     nullTypingsInstaller,
+    PackageJsonCache,
     PackageJsonWatcher,
     ProjectOptions,
     ProjectService,
@@ -1197,11 +1198,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getRootFilesMap(): Map<Path, ts.server.ProjectRootFile> {
+    getRootFilesMap(): Map<Path, ProjectRootFile> {
         return this.rootFilesMap;
     }
 
-    getRootScriptInfos(): ts.server.ScriptInfo[] {
+    getRootScriptInfos(): ScriptInfo[] {
         return arrayFrom(ts.mapDefinedIterator(this.rootFilesMap.values(), value => value.info));
     }
 
@@ -1221,7 +1222,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return emptyArray;
     }
 
-    getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): ts.server.NormalizedPath[] {
+    getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): NormalizedPath[] {
         if (!this.program) {
             return [];
         }
@@ -1259,7 +1260,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean): ts.server.protocol.FileWithProjectReferenceRedirectInfo[] {
+    getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean): protocol.FileWithProjectReferenceRedirectInfo[] {
         return this.getFileNames().map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
             fileName,
             isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo && this.isSourceOfProjectReferenceRedirect(fileName),
@@ -1905,7 +1906,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return scriptInfo;
     }
 
-    getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined {
+    getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined {
         return this.projectService.getScriptInfo(uncheckedFileName);
     }
 
@@ -2203,7 +2204,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getPackageJsonCache(): ts.server.PackageJsonCache {
+    getPackageJsonCache(): PackageJsonCache {
         return this.projectService.packageJsonCache;
     }
 
@@ -2339,7 +2340,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getCompilerOptionsForNoDtsResolutionProject(): ts.CompilerOptions {
+    getCompilerOptionsForNoDtsResolutionProject(): CompilerOptions {
         return {
             ...this.getCompilerOptions(),
             noDtsResolution: true,
@@ -3020,7 +3021,7 @@ export class ConfiguredProject extends Project {
         return this.directoryStructureHost as CachedDirectoryStructureHost;
     }
 
-    getConfigFilePath(): ts.server.NormalizedPath {
+    getConfigFilePath(): NormalizedPath {
         return asNormalizedPath(this.getProjectName());
     }
 
@@ -3169,7 +3170,7 @@ export class ExternalProject extends Project {
         return result;
     }
 
-    override getExcludedFiles(): readonly ts.server.NormalizedPath[] {
+    override getExcludedFiles(): readonly NormalizedPath[] {
         return this.excludedFiles;
     }
 }

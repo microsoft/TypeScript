@@ -4966,6 +4966,14 @@ export interface EmitTransformers {
     declarationTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
 }
 
+/** @internal */
+
+export interface DeclarationTransformer {
+    (node: Bundle): Bundle;
+    (node: SourceFile): SourceFile;
+    (node: SourceFile | Bundle): SourceFile | Bundle;
+}
+
 export interface SourceMapSpan {
     /** Line number in the .js file. */
     emittedLine: number;
@@ -7575,7 +7583,6 @@ export const enum ScriptKind {
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
 //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-// IF UPDATING 'ScriptTarget', ALSO UPDATE 'LanguageFeatureMinimumTarget' (if needed)
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -8335,87 +8342,98 @@ export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 
+/** @internal */
+export type LanugageFeatures =
+    // ES2015 Features
+    | "Classes"
+    | "ForOf"
+    | "Generators"
+    | "Iteration"
+    | "SpreadElements"
+    | "RestElements"
+    | "TaggedTemplates"
+    | "DestructuringAssignment"
+    | "BindingPatterns"
+    | "ArrowFunctions"
+    | "BlockScopedVariables"
+    | "ObjectAssign"
+    | "RegularExpressionFlagsUnicode"
+    | "RegularExpressionFlagsSticky"
+    // ES2016 Features
+    | "Exponentiation" // `x ** y`
+    // ES2017 Features
+    | "AsyncFunctions" // `async function f() {}`
+    // ES2018 Features
+    | "ForAwaitOf" // `for await (const x of y)`
+    | "AsyncGenerators" // `async function * f() { }`
+    | "AsyncIteration" // `Symbol.asyncIterator`
+    | "ObjectSpreadRest" // `{ ...obj }`
+    | "RegularExpressionFlagsDotAll"
+    // ES2019 Features
+    | "BindinglessCatch" // `try { } catch { }`
+    // ES2020 Features
+    | "BigInt" // `0n`
+    | "NullishCoalesce" // `a ?? b`
+    | "OptionalChaining" // `a?.b`
+    // ES2021 Features
+    | "LogicalAssignment" // `a ||= b`| `a &&= b`| `a ??= b`
+    // ES2022 Features
+    | "TopLevelAwait"
+    | "ClassFields"
+    | "PrivateNamesAndClassStaticBlocks" // `class C { static {} #x = y| #m() {} }`| `#x in y`
+    | "RegularExpressionFlagsHasIndices"
+    // ES2023 Features
+    | "ShebangComments"
+    // Upcoming Features
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+    | "UsingAndAwaitUsing"
+    | "ClassAndClassElementDecorators" // `using x = y`, `await using x = y`
+    | "RegularExpressionFlagsUnicodeSets" // `@dec class C {}`, `class C { @dec m() {} }`
+;
+
 /**
  * Indicates the minimum `ScriptTarget` (inclusive) after which a specific language feature is no longer transpiled.
  *
  * @internal
  */
-export const enum LanguageFeatureMinimumTarget {
-    // These are copied from 'ScriptTarget' since under isolatedDeclarations, enums cannot have references to external symbols.
-    // Make sure these are updated alongside any changes to 'ScriptTarget'.
-    /**@deprecated */
-    ES3 = 0,
-    ES5 = 1,
-    ES2015 = 2,
-    ES2016 = 3,
-    ES2017 = 4,
-    ES2018 = 5,
-    ES2019 = 6,
-    ES2020 = 7,
-    ES2021 = 8,
-    ES2022 = 9,
-    ES2023 = 10,
-    ESNext = 99,
-    JSON = 100,
-    Latest = ESNext,
-
-    // ES2015 Features
-    Classes = ES2015,
-    ForOf = ES2015,
-    Generators = ES2015,
-    Iteration = ES2015,
-    SpreadElements = ES2015,
-    RestElements = ES2015,
-    TaggedTemplates = ES2015,
-    DestructuringAssignment = ES2015,
-    BindingPatterns = ES2015,
-    ArrowFunctions = ES2015,
-    BlockScopedVariables = ES2015,
-    ObjectAssign = ES2015,
-    RegularExpressionFlagsUnicode = ES2015,
-    RegularExpressionFlagsSticky = ES2015,
-
-    // ES2016 Features
-    Exponentiation = ES2016, // `x ** y`
-
-    // ES2017 Features
-    AsyncFunctions = ES2017, // `async function f() {}`
-
-    // ES2018 Features
-    ForAwaitOf = ES2018, // `for await (const x of y)`
-    AsyncGenerators = ES2018, // `async function * f() { }`
-    AsyncIteration = ES2018, // `Symbol.asyncIterator`
-    ObjectSpreadRest = ES2018, // `{ ...obj }`
-    RegularExpressionFlagsDotAll = ES2018,
-
-    // ES2019 Features
-    BindinglessCatch = ES2019, // `try { } catch { }`
-
-    // ES2020 Features
-    BigInt = ES2020, // `0n`
-    NullishCoalesce = ES2020, // `a ?? b`
-    OptionalChaining = ES2020, // `a?.b`
-
-    // ES2021 Features
-    LogicalAssignment = ES2021, // `a ||= b`, `a &&= b`, `a ??= b`
-
-    // ES2022 Features
-    TopLevelAwait = ES2022,
-    ClassFields = ES2022,
-    PrivateNamesAndClassStaticBlocks = ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
-    RegularExpressionFlagsHasIndices = ES2022,
-
-    // ES2023 Features
-    ShebangComments = ESNext,
-
-    // Upcoming Features
-    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
-    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-    UsingAndAwaitUsing = ESNext, // `using x = y`, `await using x = y`
-    ClassAndClassElementDecorators = ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
-    RegularExpressionFlagsUnicodeSets = ESNext,
-}
+export const LanguageFeatureMinimumTarget: Record<LanugageFeatures, ScriptTarget> = {
+    Classes: ScriptTarget.ES2015,
+    ForOf: ScriptTarget.ES2015,
+    Generators: ScriptTarget.ES2015,
+    Iteration: ScriptTarget.ES2015,
+    SpreadElements: ScriptTarget.ES2015,
+    RestElements: ScriptTarget.ES2015,
+    TaggedTemplates: ScriptTarget.ES2015,
+    DestructuringAssignment: ScriptTarget.ES2015,
+    BindingPatterns: ScriptTarget.ES2015,
+    ArrowFunctions: ScriptTarget.ES2015,
+    BlockScopedVariables: ScriptTarget.ES2015,
+    ObjectAssign: ScriptTarget.ES2015,
+    RegularExpressionFlagsUnicode: ScriptTarget.ES2015,
+    RegularExpressionFlagsSticky: ScriptTarget.ES2015,
+    Exponentiation: ScriptTarget.ES2016,
+    AsyncFunctions: ScriptTarget.ES2017,
+    ForAwaitOf: ScriptTarget.ES2018,
+    AsyncGenerators: ScriptTarget.ES2018,
+    AsyncIteration: ScriptTarget.ES2018,
+    ObjectSpreadRest: ScriptTarget.ES2018,
+    RegularExpressionFlagsDotAll: ScriptTarget.ES2018,
+    BindinglessCatch: ScriptTarget.ES2019,
+    BigInt: ScriptTarget.ES2020,
+    NullishCoalesce: ScriptTarget.ES2020,
+    OptionalChaining: ScriptTarget.ES2020,
+    LogicalAssignment: ScriptTarget.ES2021,
+    TopLevelAwait: ScriptTarget.ES2022,
+    ClassFields: ScriptTarget.ES2022,
+    PrivateNamesAndClassStaticBlocks: ScriptTarget.ES2022,
+    RegularExpressionFlagsHasIndices: ScriptTarget.ES2022,
+    ShebangComments: ScriptTarget.ESNext,
+    UsingAndAwaitUsing: ScriptTarget.ESNext,
+    ClassAndClassElementDecorators: ScriptTarget.ESNext,
+    RegularExpressionFlagsUnicodeSets: ScriptTarget.ESNext,
+};
 
 // dprint-ignore
 /**
@@ -9683,6 +9701,12 @@ export interface BuildInfo {
     version: string;
 }
 
+/** @internal */
+export interface BuildInfoFileVersionMap {
+    fileInfos: Map<Path, string>;
+    roots: Map<Path, Path | undefined>;
+}
+
 export interface PrintHandlers {
     /**
      * A hook used by the Printer when generating unique names to avoid collisions with
@@ -10499,4 +10523,12 @@ export interface SyntacticTypeNodeBuilderResolver {
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
+}
+/** @internal */
+
+export interface SyntacticNodeBuilder {
+    typeFromExpression: (node: Expression, context: SyntacticTypeNodeBuilderContext, isConstContext?: boolean, requiresAddingUndefined?: boolean, preserveLiterals?: boolean) => boolean | undefined;
+    serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
+    serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
+    serializeTypeOfExpression: (expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => boolean;
 }

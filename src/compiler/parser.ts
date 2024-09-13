@@ -1404,10 +1404,13 @@ export function updateSourceFile(sourceFile: SourceFile, newText: string, textCh
 }
 
 /** @internal */
-export function parseIsolatedJSDocComment(content: string, start?: number, length?: number): {
+export interface JsDocWithDiagnostics {
     jsDoc: JSDoc;
     diagnostics: Diagnostic[];
-} | undefined {
+}
+
+/** @internal */
+export function parseIsolatedJSDocComment(content: string, start?: number, length?: number): JsDocWithDiagnostics | undefined {
     const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     if (result && result.jsDoc) {
         // because the jsDocComment was parsed out of the source file, it might

@@ -561,7 +561,12 @@ function getOutputPathWithoutChangingExt(
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = (): string => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)): string {
+export function getOutputDeclarationFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = (): string => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+): string {
     return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
 }
 

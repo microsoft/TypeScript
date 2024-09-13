@@ -4,6 +4,7 @@ import {
     assertType,
     BuilderProgram,
     BuildInfo,
+    BuildInfoFileVersionMap,
     CancellationToken,
     canJsonReportNoInputFiles,
     changeCompilerHostLikeToUseCache,
@@ -301,13 +302,25 @@ function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System,
     return host;
 }
 
-export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T> {
+export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system: System = sys,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportSolutionBuilderStatus?: DiagnosticReporter,
+    reportErrorSummary?: ReportEmitErrorSummary,
+): SolutionBuilderHost<T> {
     const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
     host.reportErrorSummary = reportErrorSummary;
     return host;
 }
 
-export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): SolutionBuilderWithWatchHost<T> {
+export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system: System = sys,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportSolutionBuilderStatus?: DiagnosticReporter,
+    reportWatchStatus?: WatchStatusReporter,
+): SolutionBuilderWithWatchHost<T> {
     const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
     const watchHost = createWatchHost(system, reportWatchStatus);
     copyProperties(host, watchHost);
@@ -1601,7 +1614,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     /** True if input file has changed timestamp but text is not changed, we can then do only timestamp updates on output to make it look up-to-date later */
     let pseudoInputUpToDate = false;
     const seenRoots = new Set<Path>();
-    let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
+    let buildInfoVersionMap: BuildInfoFileVersionMap | undefined;
     // Get timestamps of input files
     for (const inputFile of project.fileNames) {
         const inputTime = getModifiedTime(state, inputFile);

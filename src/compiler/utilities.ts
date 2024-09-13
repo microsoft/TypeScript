@@ -6812,16 +6812,27 @@ function emitComments(
     }
 }
 
+/** @internal */
+export interface DetachedCommentInfo {
+    nodePos: number;
+    detachedCommentEndPos: number;
+}
+
 /**
  * Detached comment is a comment at the top of file or function body that is separated from
  * the next statement by space.
  *
  * @internal
  */
-export function emitDetachedComments(text: string, lineMap: readonly number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void, node: TextRange, newLine: string, removeComments: boolean): {
-    nodePos: number;
-    detachedCommentEndPos: number;
-} | undefined {
+export function emitDetachedComments(
+    text: string,
+    lineMap: readonly number[],
+    writer: EmitTextWriter,
+    writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
+    node: TextRange,
+    newLine: string,
+    removeComments: boolean,
+): DetachedCommentInfo | undefined {
     let leadingComments: CommentRange[] | undefined;
     let currentDetachedCommentInfo: { nodePos: number; detachedCommentEndPos: number; } | undefined;
     if (removeComments) {
@@ -11319,6 +11330,32 @@ export function findConstructorDeclaration(node: ClassLikeDeclaration): Construc
 }
 
 /** @internal */
+export interface NameResolverOptions {
+    compilerOptions: CompilerOptions;
+    getSymbolOfDeclaration: (node: Declaration) => Symbol;
+    error: (location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void;
+    globals: SymbolTable;
+    argumentsSymbol: Symbol;
+    requireSymbol: Symbol;
+    lookup: (symbols: SymbolTable, name: __String, meaning: SymbolFlags) => Symbol | undefined;
+    setRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration, value: boolean) => void);
+    getRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration) => boolean | undefined);
+    onPropertyWithInvalidInitializer?: (location: Node | undefined, name: __String, declaration: PropertyDeclaration, result: Symbol | undefined) => boolean;
+    onFailedToResolveSymbol?: (location: Node | undefined, name: __String | Identifier, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage) => void;
+    onSuccessfullyResolvedSymbol?: (location: Node | undefined, result: Symbol, meaning: SymbolFlags, lastLocation: Node | undefined, associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined, withinDeferredContext: boolean) => void;
+}
+
+/** @internal */
+export type NameResolver = (
+    location: Node | undefined,
+    nameArg: __String | Identifier,
+    meaning: SymbolFlags,
+    nameNotFoundMessage: DiagnosticMessage | undefined,
+    isUse: boolean,
+    excludeGlobals?: boolean,
+) => Symbol | undefined;
+
+/** @internal */
 export function createNameResolver({
     compilerOptions,
     requireSymbol,
@@ -11332,39 +11369,7 @@ export function createNameResolver({
     onPropertyWithInvalidInitializer = returnFalse,
     onFailedToResolveSymbol = returnUndefined,
     onSuccessfullyResolvedSymbol = returnUndefined,
-}: {
-    compilerOptions: CompilerOptions;
-    getSymbolOfDeclaration: (node: Declaration) => Symbol;
-    error: (location: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void;
-    globals: SymbolTable;
-    argumentsSymbol: Symbol;
-    requireSymbol: Symbol;
-    lookup: (symbols: SymbolTable, name: __String, meaning: SymbolFlags) => Symbol | undefined;
-    setRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration, value: boolean) => void);
-    getRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration) => boolean | undefined);
-    onPropertyWithInvalidInitializer?: (location: Node | undefined, name: __String, declaration: PropertyDeclaration, result: Symbol | undefined) => boolean;
-    onFailedToResolveSymbol?: (
-        location: Node | undefined,
-        name: __String | Identifier,
-        meaning: SymbolFlags,
-        nameNotFoundMessage: DiagnosticMessage,
-    ) => void;
-    onSuccessfullyResolvedSymbol?: (
-        location: Node | undefined,
-        result: Symbol,
-        meaning: SymbolFlags,
-        lastLocation: Node | undefined,
-        associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined,
-        withinDeferredContext: boolean,
-    ) => void;
-}): (
-    location: Node | undefined,
-    nameArg: __String | Identifier,
-    meaning: SymbolFlags,
-    nameNotFoundMessage: DiagnosticMessage | undefined,
-    isUse: boolean,
-    excludeGlobals?: boolean,
-) => Symbol | undefined {
+}: NameResolverOptions): NameResolver {
     /* eslint-disable no-var */
     var isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
     /* eslint-disable no-var */

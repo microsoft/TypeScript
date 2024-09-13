@@ -213,6 +213,7 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
+import { DeclarationTransformer } from "../types.js";
 
 /** @internal */
 export function getDeclarationDiagnostics(
@@ -253,11 +254,7 @@ const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.AllowUn
  *
  * @internal
  */
-export function transformDeclarations(context: TransformationContext): {
-    (node: Bundle): Bundle;
-    (node: SourceFile): SourceFile;
-    (node: SourceFile | Bundle): SourceFile | Bundle;
-} {
+export function transformDeclarations(context: TransformationContext): DeclarationTransformer {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;

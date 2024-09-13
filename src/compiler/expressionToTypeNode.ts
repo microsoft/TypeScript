@@ -55,6 +55,7 @@ import {
     PropertySignature,
     SetAccessorDeclaration,
     SignatureDeclaration,
+    SyntacticNodeBuilder,
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
@@ -69,12 +70,7 @@ import {
 export function createSyntacticTypeNodeBuilder(
     options: CompilerOptions,
     resolver: SyntacticTypeNodeBuilderResolver,
-): {
-    typeFromExpression: (node: Expression, context: SyntacticTypeNodeBuilderContext, isConstContext?: boolean, requiresAddingUndefined?: boolean, preserveLiterals?: boolean) => boolean | undefined;
-    serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
-    serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
-    serializeTypeOfExpression: (expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => boolean;
-} {
+): SyntacticNodeBuilder {
     const strictNullChecks = getStrictOptionValue(options, "strictNullChecks");
 
     return {

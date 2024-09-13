@@ -365,7 +365,7 @@ export namespace Debug {
     export function type<T>(value: unknown): asserts value is T;
     export function type(_value: unknown) {}
 
-    export function getFunctionName(func: AnyFunction): any {
+    export function getFunctionName(func: AnyFunction): string {
         if (typeof func !== "function") {
             return "";
         }

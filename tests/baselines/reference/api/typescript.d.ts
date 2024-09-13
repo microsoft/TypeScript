@@ -2890,10 +2890,10 @@ declare namespace ts {
             isClosed(): boolean;
             hasRoots(): boolean;
             getRootFiles(): NormalizedPath[];
-            getRootScriptInfos(): ts.server.ScriptInfo[];
+            getRootScriptInfos(): ScriptInfo[];
             getScriptInfos(): ScriptInfo[];
             getExcludedFiles(): readonly NormalizedPath[];
-            getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): ts.server.NormalizedPath[];
+            getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): NormalizedPath[];
             hasConfigFile(configFilePath: NormalizedPath): boolean;
             containsScriptInfo(info: ScriptInfo): boolean;
             containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
@@ -2918,7 +2918,7 @@ declare namespace ts {
             private isValidGeneratedFileWatcher;
             private clearGeneratedFileWatch;
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
-            getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
+            getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
             filesToString(writeProjectFileNames: boolean): string;
             private filesToStringWorker;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
@@ -2973,7 +2973,7 @@ declare namespace ts {
              * @returns: true if set of files in the project stays the same and false - otherwise.
              */
             updateGraph(): boolean;
-            getConfigFilePath(): ts.server.NormalizedPath;
+            getConfigFilePath(): NormalizedPath;
             getProjectReferences(): readonly ProjectReference[] | undefined;
             updateReferences(refs: readonly ProjectReference[] | undefined): void;
             /**
@@ -2997,14 +2997,14 @@ declare namespace ts {
             compileOnSaveEnabled: boolean;
             excludedFiles: readonly NormalizedPath[];
             updateGraph(): boolean;
-            getExcludedFiles(): readonly ts.server.NormalizedPath[];
+            getExcludedFiles(): readonly NormalizedPath[];
         }
         function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
         function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
         function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
         function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
         function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
-        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
+        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind;
         const maxProgramSizeForNonTsFiles: number;
         const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
         interface ProjectsUpdatedInBackgroundEvent {

@@ -40,6 +40,7 @@ import {
     JSDocTagInfo,
     LanguageService,
     LanguageServiceHost,
+    LineAndCharacter,
     map,
     mapOneOrMany,
     NavigateToItem,
@@ -247,10 +248,7 @@ export class SessionClient implements LanguageService {
         this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
-    toLineColumnOffset(fileName: string, position: number): {
-        line: number;
-        character: number;
-    } {
+    toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
         const { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
         return { line, character: offset };
     }

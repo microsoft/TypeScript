@@ -454,10 +454,7 @@ function readPackageJsonTypesVersionPaths(jsonContent: PackageJson, state: Modul
 let typeScriptVersion: Version | undefined;
 
 /** @internal */
-export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>): {
-    version: string;
-    paths: MapLike<string[]>;
-} | undefined {
+export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>): VersionPaths | undefined {
     if (!typeScriptVersion) typeScriptVersion = new Version(version);
 
     for (const key in typesVersions) {
@@ -1386,10 +1383,7 @@ export function createTypeReferenceDirectiveResolutionCache(
 }
 
 /** @internal */
-export function getOptionsForLibraryResolution(options: CompilerOptions): {
-    moduleResolution: ModuleResolutionKind;
-    traceResolution: boolean | undefined;
-} {
+export function getOptionsForLibraryResolution(options: CompilerOptions): CompilerOptions {
     return { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution };
 }
 
@@ -2683,18 +2677,18 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
  * From https://github.com/nodejs/node/blob/8f39f51cbbd3b2de14b9ee896e26421cc5b20121/lib/internal/modules/esm/resolve.js#L722 -
  * "longest" has some nuance as to what "longest" means in the presence of pattern trailers
  */
-export function comparePatternKeys(a: string, b: string): 1 | 0 | -1 {
+export function comparePatternKeys(a: string, b: string): Comparison {
     const aPatternIndex = a.indexOf("*");
     const bPatternIndex = b.indexOf("*");
     const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
     const baseLenB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
-    if (baseLenA > baseLenB) return -1;
-    if (baseLenB > baseLenA) return 1;
-    if (aPatternIndex === -1) return 1;
-    if (bPatternIndex === -1) return -1;
-    if (a.length > b.length) return -1;
-    if (b.length > a.length) return 1;
-    return 0;
+    if (baseLenA > baseLenB) return Comparison.LessThan;
+    if (baseLenB > baseLenA) return Comparison.GreaterThan;
+    if (aPatternIndex === -1) return Comparison.GreaterThan;
+    if (bPatternIndex === -1) return Comparison.LessThan;
+    if (a.length > b.length) return Comparison.LessThan;
+    if (b.length > a.length) return Comparison.GreaterThan;
+    return Comparison.EqualTo;
 }
 
 function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {

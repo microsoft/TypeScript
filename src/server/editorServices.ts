@@ -489,7 +489,7 @@ export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName
     return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
 }
 
-export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX {
+export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind {
     switch (scriptKindName) {
         case "JS":
             return ScriptKind.JS;

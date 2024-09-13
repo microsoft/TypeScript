@@ -1836,6 +1836,14 @@ export interface OptionsBase {
 }
 
 /** @internal */
+export interface BaseParsedCommandLine {
+    options: OptionsBase;
+    watchOptions: WatchOptions | undefined;
+    fileNames: string[];
+    errors: Diagnostic[];
+}
+
+/** @internal */
 export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
     getOptionsNameMap: () => OptionsNameMap;
     optionTypeMismatchDiagnostic: DiagnosticMessage;
@@ -1875,12 +1883,7 @@ export function parseCommandLineWorker(
     diagnostics: ParseCommandLineWorkerDiagnostics,
     commandLine: readonly string[],
     readFile?: (path: string) => string | undefined,
-): {
-    options: OptionsBase;
-    watchOptions: WatchOptions | undefined;
-    fileNames: string[];
-    errors: Diagnostic[];
-} {
+): BaseParsedCommandLine {
     const options = {} as OptionsBase;
     let watchOptions: WatchOptions | undefined;
     const fileNames: string[] = [];

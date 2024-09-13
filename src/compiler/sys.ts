@@ -128,11 +128,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 /** @internal */
-export let unchangedPollThresholds: {
-    250: number;
-    500: number;
-    2000: number;
-} = createPollingIntervalBasedLevels(defaultChunkLevels);
+export let unchangedPollThresholds: { [K in PollingInterval]: number; } = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {

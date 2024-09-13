@@ -89,6 +89,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
 } from "./_namespaces/ts.js";
+import { BuildInfoFileVersionMap } from "./types.js";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
@@ -2395,10 +2396,7 @@ export function getBuildInfoFileVersionMap(
     program: IncrementalBuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">,
-): {
-    fileInfos: Map<Path, string>;
-    roots: Map<Path, Path | undefined>;
-} {
+): BuildInfoFileVersionMap {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();

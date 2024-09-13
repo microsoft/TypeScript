@@ -190,6 +190,7 @@ import {
     takeWhile,
     TextRange,
     TransformationContext,
+    Transformer,
     TransformFlags,
     VariableDeclaration,
     VariableStatement,
@@ -231,7 +232,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext): (node: SourceFile | Bundle) => SourceFile | Bundle {
+export function transformTypeScript(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

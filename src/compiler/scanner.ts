@@ -295,7 +295,7 @@ const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
     [CharacterCodes.y, RegularExpressionFlags.Sticky],
 ]);
 
-const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
+const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, ScriptTarget>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
     [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
     [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
@@ -1017,7 +1017,15 @@ const enum ClassSetExpressionType {
 }
 
 // Creates a scanner over a (possibly unspecified) range of a piece of text.
-export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant: LanguageVariant = LanguageVariant.Standard, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
+export function createScanner(
+    languageVersion: ScriptTarget,
+    skipTrivia: boolean,
+    languageVariant: LanguageVariant = LanguageVariant.Standard,
+    textInitial?: string,
+    onError?: ErrorCallback,
+    start?: number,
+    length?: number,
+): Scanner {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -3599,7 +3607,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, size: number) {
-        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
+        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag);
         if (availableFrom && languageVersion < availableFrom) {
             error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
         }

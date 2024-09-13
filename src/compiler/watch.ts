@@ -639,7 +639,7 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
     cancellationToken?: CancellationToken,
     emitOnlyDtsFiles?: boolean,
     customTransformers?: CustomTransformers,
-): ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped | ExitStatus.DiagnosticsPresent_OutputsGenerated {
+): ExitStatus {
     const { emitResult, diagnostics } = emitFilesAndReportErrors(
         program,
         reportDiagnostic,
@@ -981,8 +981,9 @@ export interface IncrementalCompilationOptions {
     afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: System;
 }
+
 /** @internal */
-export function performIncrementalCompilation(input: IncrementalCompilationOptions): ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped | ExitStatus.DiagnosticsPresent_OutputsGenerated {
+export function performIncrementalCompilation(input: IncrementalCompilationOptions): ExitStatus {
     const system = input.system || sys;
     const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
     const builderProgram = createIncrementalProgram(input);

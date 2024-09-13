@@ -1016,15 +1016,7 @@ export class TestState {
         this.baseline("Inlay Hints", annotations.join("\n\n"));
     }
 
-    public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions): {
-        andApplyCodeAction: (options: {
-            name: string;
-            source: string;
-            description: string;
-            newFileContent?: string;
-            newRangeContent?: string;
-        }) => void;
-    } | undefined {
+    public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions): FourSlashInterface.CompletionsResult | undefined {
         if (options.marker === undefined) {
             return this.verifyCompletionsWorker(options);
         }

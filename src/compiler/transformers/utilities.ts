@@ -406,7 +406,7 @@ export class IdentifierNameMap<V> {
         this._map.clear();
     }
 
-    values(): IterableIterator<V> {
+    values(): MapIterator<V> {
         return this._map.values();
     }
 
