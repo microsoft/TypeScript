@@ -14,8 +14,8 @@ wrap(({ cancelable } = {}) => {});
 >                                  : ^^^^
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
 >     : ^    ^^^^^^^^^         ^^ ^^                       ^^^^^^^^^
->({ cancelable } = {}) => {} : ({ cancelable }?: { cancelable: any; }) => void
->                            : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ cancelable } = {}) => {} : ({ cancelable }?: { cancelable?: any; }) => void
+>                            : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cancelable : any
 >           : ^^^
 >{} : {}

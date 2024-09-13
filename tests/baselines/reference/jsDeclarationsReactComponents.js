@@ -229,7 +229,7 @@ declare namespace TabbedShowLayout {
 //// [jsDeclarationsReactComponents5.d.ts]
 export default Tree;
 declare function Tree({ allowDropOnRoot }: {
-    allowDropOnRoot: any;
+    allowDropOnRoot?: any;
 }): JSX.Element;
 declare namespace Tree {
     namespace propTypes {

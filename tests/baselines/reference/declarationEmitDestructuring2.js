@@ -29,17 +29,17 @@ declare function f({ x, y: [a, b, c, d] }?: {
 declare function g([a, b, c, d]?: [number, number, number, number]): void;
 declare function h([a, [b], [[c]], { x, y: [a, b, c], z: { a1, b1 } }]: [any, [any], [[any]], {
     x?: number;
-    y: [any, any, any];
-    z: {
-        a1: any;
-        b1: any;
+    y?: [any, any, any];
+    z?: {
+        a1?: any;
+        b1?: any;
     };
 }]): void;
 declare function h1([a, [b], [[c]], { x, y, z: { a1, b1 } }]: [any, [any], [[any]], {
     x?: number;
     y?: number[];
-    z: {
-        a1: any;
-        b1: any;
+    z?: {
+        a1?: any;
+        b1?: any;
     };
 }]): void;

@@ -112,7 +112,7 @@ f6({ x: 1, y: 1 });
 // (arg?: { a: { x?: number, y?: number } }) => void
 function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
 >f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
->a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))
+>a : Symbol(a)
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 36, 18))
 >y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 36, 25))
 >a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))

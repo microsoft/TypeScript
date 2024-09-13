@@ -47,7 +47,7 @@ type T2 = ({
     a: any;
 });
 type F2 = ({ a }: {
-    a: any;
+    a?: any;
 }) => void;
 type T3 = ([{
     a: b;
@@ -55,18 +55,18 @@ type T3 = ([{
     b: a;
 }]);
 type F3 = ([{ a: b }, { b: a }]: [{
-    a: any;
+    a?: any;
 }, {
-    b: any;
+    b?: any;
 }]) => void;
 type T4 = ([{
     a: [b, c];
 }]);
 type F4 = ([{ a: [b, c] }]: [{
-    a: [any, any];
+    a?: [any, any];
 }]) => void;
 type C1 = new ([{ a: [b, c] }]: [{
-    a: [any, any];
+    a?: [any, any];
 }]) => void;
 declare var v1: ([a, b, c]: [any, any, any]) => string;
 declare var v2: ([a, b, c]: [any, any, any]) => string;

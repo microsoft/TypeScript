@@ -13,9 +13,9 @@ interface C {
 //// [paramterDestrcuturingDeclaration.d.ts]
 interface C {
     ({ p: name }: {
-        p: any;
+        p?: any;
     }): any;
     new ({ p: boolean }: {
-        p: any;
+        p?: any;
     }): any;
 }

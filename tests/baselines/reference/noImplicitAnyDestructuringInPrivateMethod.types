@@ -30,8 +30,8 @@ export declare class Bar2 {
 >     : ^^^^
 
     private bar({ a, });
->bar : ({ a, }: { a: any; }) => any
->    : ^      ^^^^^^^^^^^^^^^^^^^^^
+>bar : ({ a, }: { a?: any; }) => any
+>    : ^      ^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 }

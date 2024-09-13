@@ -4,7 +4,7 @@
 function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
 >f : Symbol(f, Decl(declarationEmitDestructuring2.ts, 0, 0))
 >x : Symbol(x, Decl(declarationEmitDestructuring2.ts, 0, 12))
->y : Symbol(y, Decl(declarationEmitDestructuring2.ts, 0, 62))
+>y : Symbol(y)
 >a : Symbol(a, Decl(declarationEmitDestructuring2.ts, 0, 24))
 >b : Symbol(b, Decl(declarationEmitDestructuring2.ts, 0, 26))
 >c : Symbol(c, Decl(declarationEmitDestructuring2.ts, 0, 29))

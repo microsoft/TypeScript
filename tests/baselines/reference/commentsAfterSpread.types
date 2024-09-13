@@ -232,8 +232,8 @@ const j = (
 >       : ^^^^^^
 
 function k ({
->k : ({ first, ...rest }: { [x: string]: any; first: any; }) => { [x: string]: any; }
->  : ^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : ({ first, ...rest }: { [x: string]: any; first?: any; }) => { [x: string]: any; }
+>  : ^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   first,
 >first : any

@@ -28,7 +28,7 @@ export default Foo;
 /// <reference path="..react16.d.ts" preserve="true" />
 export default Foo;
 declare function Foo({ bar }: {
-    bar: any;
+    bar?: any;
 }): JSX.Element;
 declare namespace Foo {
     export { propTypes };

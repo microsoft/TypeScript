@@ -2,8 +2,8 @@
 
 === arityErrorRelatedSpanBindingPattern.ts ===
 function foo(a, b, {c}): void {}
->foo : (a: any, b: any, { c }: { c: any; }) => void
->    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^    
+>foo : (a: any, b: any, { c }: { c?: any; }) => void
+>    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^^    
 >a : any
 >  : ^^^
 >b : any
@@ -24,8 +24,8 @@ function bar(a, b, [c]): void {}
 foo("", 0);
 >foo("", 0) : void
 >           : ^^^^
->foo : (a: any, b: any, { c }: { c: any; }) => void
->    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^    
+>foo : (a: any, b: any, { c }: { c?: any; }) => void
+>    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^^    
 >"" : ""
 >   : ^^
 >0 : 0
