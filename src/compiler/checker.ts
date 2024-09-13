@@ -45583,11 +45583,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let hasInvalidReference = false;
                 for (const paramDecl of container.parameters) {
                     const typeNode = paramDecl.type;
-                    if (!typeNode) {
-                        // Parameter's type could be inferred to a type that references the type parameter.
-                        hasInvalidReference = true;
-                        break;
-                    }
+                    if (!typeNode) continue;
                     if (isTypeParameterReferenced(typeParam, typeNode)) {
                         let candidateReference;
                         if (isTypeReferenceNode(typeNode) &&
@@ -45640,7 +45636,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    // A valid conditional type will have the following shape:
+    // A narrowable indexed access type is one that has the shape `A[T]`,
+    // where `T` is a narrowable type parameter.
+    // A narrowable conditional type is one that has the following shape:
     // `T extends A ? TrueBranch<T> : FalseBranch<T>`, such that:
     // (0) The conditional type's check type is a narrowable type parameter;
     // (1) `A` is a type belonging to the constraint of the type parameter,
@@ -45652,10 +45650,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeParameters: TypeParameter[],
         returnType: IndexedAccessType | ConditionalType,
     ): boolean {
-        return !isConditionalType(returnType) || isNarrowable(returnType, /*branch*/ undefined);
+        return !isConditionalType(returnType)
+            && typeParameters.includes(returnType.indexType)
+            || isNarrowableConditionalType(returnType, /*branch*/ undefined);
         // `branch` can be `true` if `type` is the true type of a conditional, `false` if it's the false type of a conditional,
         // and `undefined` if neither.
-        function isNarrowable(type: Type, branch: boolean | undefined): boolean {
+        function isNarrowableConditionalType(type: Type, branch: boolean | undefined): boolean {
             if (!isConditionalType(type)) {
                 // This is type `R` in `T extends A ? R : ...`
                 if (branch === true) {
@@ -45695,8 +45695,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return false;
             }
 
-            return isNarrowable(getTrueTypeFromConditionalType(type), /*branch*/ true) &&
-                isNarrowable(getFalseTypeFromConditionalType(type), /*branch*/ false);
+            return isNarrowableConditionalType(getTrueTypeFromConditionalType(type), /*branch*/ true) &&
+                isNarrowableConditionalType(getFalseTypeFromConditionalType(type), /*branch*/ false);
         }
     }
 

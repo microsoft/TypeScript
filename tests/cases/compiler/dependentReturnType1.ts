@@ -1,6 +1,6 @@
 // @strict: true
 // @noEmit: true
-// @target: ES2022
+// @target: esnext
 
 interface A {
     1: number;
