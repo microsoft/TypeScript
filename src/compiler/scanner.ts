@@ -21,6 +21,7 @@ import {
     KeywordSyntaxKind,
     LanguageFeatureMinimumTarget,
     LanguageVariant,
+    LanugageFeatures,
     LineAndCharacter,
     MapLike,
     parsePseudoBigInt,
@@ -295,7 +296,7 @@ const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
     [CharacterCodes.y, RegularExpressionFlags.Sticky],
 ]);
 
-const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, ScriptTarget>([
+const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, typeof LanguageFeatureMinimumTarget[LanugageFeatures]>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
     [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
     [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
