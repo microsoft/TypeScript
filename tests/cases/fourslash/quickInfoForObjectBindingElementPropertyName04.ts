@@ -9,8 +9,8 @@
 ////}
 
 verify.quickInfos({
-    1: `(property) next: {
-    next: any;
+    1: `(property) next?: {
+    next?: any;
 }`,
-    2: "(property) next: any"
+    2: "(property) next?: any"
 });

@@ -11968,7 +11968,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const flags = SymbolFlags.Property | (e.initializer || !includePatternInType && (!paddingSymbol || paddingSymbol.flags & SymbolFlags.Optional) ? SymbolFlags.Optional : 0);
             const symbol = createSymbol(flags, name);
             symbol.links.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
-            symbol.links.bindingElement = e;
             members.set(symbol.escapedName, symbol);
         });
         const result = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, stringIndexInfo ? [stringIndexInfo] : emptyArray);
@@ -40613,7 +40612,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const isOptional = e.initializer && !paddingSymbol || !members.has(name) || paddingSymbol && (paddingSymbol.flags & SymbolFlags.Optional);
             const symbol = createSymbol(SymbolFlags.Property | (isOptional || !members.has(name) ? SymbolFlags.Optional : 0), name);
             symbol.links.type = getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ true);
-            members.set(symbol.escapedName, symbol); // symbol.links.bindingElement = e;
+            members.set(symbol.escapedName, symbol);
         }
         popContextualType();
         const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, getIndexInfosOfType(type));
