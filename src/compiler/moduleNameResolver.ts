@@ -3332,7 +3332,7 @@ function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
 /** @internal */
-export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | undefined {
+export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean {
     return !!compilerOptions.allowImportingTsExtensions || !!fromFileName && isDeclarationFileName(fromFileName);
 }
 

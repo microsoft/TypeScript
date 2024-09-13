@@ -30,7 +30,6 @@ import {
     DeclarationDiagnosticProducing,
     DeclarationName,
     declarationNameToString,
-    DeclarationTransformer,
     Diagnostics,
     DiagnosticWithLocation,
     EmitFlags,
@@ -197,6 +196,7 @@ import {
     SymbolTracker,
     SyntaxKind,
     TransformationContext,
+    Transformer,
     transformNodes,
     tryCast,
     TypeAliasDeclaration,
@@ -254,7 +254,7 @@ const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.AllowUn
  *
  * @internal
  */
-export function transformDeclarations(context: TransformationContext): DeclarationTransformer {
+export function transformDeclarations(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;
@@ -437,10 +437,7 @@ export function transformDeclarations(context: TransformationContext): Declarati
         return result;
     }
 
-    function transformRoot(node: Bundle): Bundle;
-    function transformRoot(node: SourceFile): SourceFile;
-    function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
-    function transformRoot(node: SourceFile | Bundle) {
+    function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle {
         if (node.kind === SyntaxKind.SourceFile && node.isDeclarationFile) {
             return node;
         }

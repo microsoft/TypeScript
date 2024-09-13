@@ -1161,7 +1161,7 @@ export class ProjectService {
      *
      * @internal
      */
-    readonly filenameToScriptInfo: Map<Path, ScriptInfo> = new Map<Path, ScriptInfo>();
+    readonly filenameToScriptInfo: Map<Path, ScriptInfo> = new Map();
     private readonly nodeModulesWatchers = new Map<Path, NodeModulesWatcher>();
     /**
      * Contains all the deleted script info's version information so that

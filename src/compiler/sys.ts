@@ -559,7 +559,7 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number): FileW
 }
 
 /** @internal */
-export const ignoredPaths: string[] = ["/node_modules/.", "/.git", "/.#"];
+export const ignoredPaths: readonly string[] = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 

@@ -4966,13 +4966,6 @@ export interface EmitTransformers {
     declarationTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
 }
 
-/** @internal */
-export interface DeclarationTransformer {
-    (node: Bundle): Bundle;
-    (node: SourceFile): SourceFile;
-    (node: SourceFile | Bundle): SourceFile | Bundle;
-}
-
 export interface SourceMapSpan {
     /** Line number in the .js file. */
     emittedLine: number;
