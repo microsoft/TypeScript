@@ -30,6 +30,7 @@ import {
     DeclarationDiagnosticProducing,
     DeclarationName,
     declarationNameToString,
+    DeclarationTransformer,
     Diagnostics,
     DiagnosticWithLocation,
     EmitFlags,
@@ -213,7 +214,6 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts.js";
-import { DeclarationTransformer } from "../types.js";
 
 /** @internal */
 export function getDeclarationDiagnostics(

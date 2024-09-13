@@ -8,6 +8,7 @@ import {
     BuilderProgramHost,
     BuilderState,
     BuildInfo,
+    BuildInfoFileVersionMap,
     CancellationToken,
     CommandLineOption,
     compareStringsCaseSensitive,
@@ -89,7 +90,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
 } from "./_namespaces/ts.js";
-import { BuildInfoFileVersionMap } from "./types.js";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {

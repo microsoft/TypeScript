@@ -527,7 +527,7 @@ function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageService
 }
 
 /** @internal */
-export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences): ({ fileName, path }: SourceFile) => boolean {
+export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences): (sourceFile: SourceFile) => boolean {
     if (!preferences.autoImportFileExcludePatterns) return () => false;
     return getIsExcluded(getIsExcludedPatterns(preferences, hostUsesCaseSensitiveFileNames(host)), host);
 }

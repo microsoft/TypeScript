@@ -4967,7 +4967,6 @@ export interface EmitTransformers {
 }
 
 /** @internal */
-
 export interface DeclarationTransformer {
     (node: Bundle): Bundle;
     (node: SourceFile): SourceFile;
@@ -10524,8 +10523,8 @@ export interface SyntacticTypeNodeBuilderResolver {
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
 }
-/** @internal */
 
+/** @internal */
 export interface SyntacticNodeBuilder {
     typeFromExpression: (node: Expression, context: SyntacticTypeNodeBuilderContext, isConstContext?: boolean, requiresAddingUndefined?: boolean, preserveLiterals?: boolean) => boolean | undefined;
     serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
