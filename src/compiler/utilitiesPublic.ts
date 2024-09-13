@@ -2550,7 +2550,6 @@ export function hasInitializer(node: Node): node is HasInitializer {
     return !!(node as HasInitializer).initializer;
 }
 
-/** True if has initializer node attached to it. */
 export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:

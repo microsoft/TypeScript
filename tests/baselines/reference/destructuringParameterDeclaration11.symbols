@@ -1,0 +1,228 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration11.ts] ////
+
+=== destructuringParameterDeclaration11.ts ===
+function test1({ a: { b = 1 } } = { a: {} }) {}
+>test1 : Symbol(test1, Decl(destructuringParameterDeclaration11.ts, 0, 0))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 0, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 0, 35))
+
+test1({ a: { b: 42 } }); // ok
+>test1 : Symbol(test1, Decl(destructuringParameterDeclaration11.ts, 0, 0))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 1, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 1, 12))
+
+function test2({ a: { b, c = 1 } } = { a: { b: 2 } }) {}
+>test2 : Symbol(test2, Decl(destructuringParameterDeclaration11.ts, 1, 24))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 3, 21))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 3, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 3, 38))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 3, 43))
+
+test2({ a: { c: 42 } }); // error, missing b
+>test2 : Symbol(test2, Decl(destructuringParameterDeclaration11.ts, 1, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 4, 7))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 4, 12))
+
+test2({ a: { b: 100, c: 42 } }); // ok
+>test2 : Symbol(test2, Decl(destructuringParameterDeclaration11.ts, 1, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 5, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 5, 12))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 5, 20))
+
+function test3({ a: { b = 1, c = 2 } } = { a: { b: 3 } }) {}
+>test3 : Symbol(test3, Decl(destructuringParameterDeclaration11.ts, 5, 32))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 7, 21))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 7, 28))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 7, 42))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 7, 47))
+
+test3({ a: { b: 42 } }); // ok
+>test3 : Symbol(test3, Decl(destructuringParameterDeclaration11.ts, 5, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 8, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 8, 12))
+
+test3({ a: { c: 42 } }); // ok
+>test3 : Symbol(test3, Decl(destructuringParameterDeclaration11.ts, 5, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 9, 7))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 9, 12))
+
+function test4({ a: { b } } = { a: {} }) {} // implicit any
+>test4 : Symbol(test4, Decl(destructuringParameterDeclaration11.ts, 9, 24))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 11, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 11, 31))
+
+test4({ a: { b: 42 } }); // ok (implicit any reported at declaration site)
+>test4 : Symbol(test4, Decl(destructuringParameterDeclaration11.ts, 9, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 12, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 12, 12))
+
+test4({ a: {} }); // ok
+>test4 : Symbol(test4, Decl(destructuringParameterDeclaration11.ts, 9, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 13, 7))
+
+function test5({ a: { b } = { b: 1 } }) {}
+>test5 : Symbol(test5, Decl(destructuringParameterDeclaration11.ts, 13, 17))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 15, 21))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 15, 29))
+
+test5({ a: { b: 42 } }); // ok
+>test5 : Symbol(test5, Decl(destructuringParameterDeclaration11.ts, 13, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 16, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 16, 12))
+
+test5({ a: {} }); // error, missing b
+>test5 : Symbol(test5, Decl(destructuringParameterDeclaration11.ts, 13, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 17, 7))
+
+function test6({ a: { b = 1 } = {} }) {}
+>test6 : Symbol(test6, Decl(destructuringParameterDeclaration11.ts, 17, 17))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 19, 21))
+
+test6({ a: { b: 42 } }); // ok
+>test6 : Symbol(test6, Decl(destructuringParameterDeclaration11.ts, 17, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 20, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 20, 12))
+
+test6({ a: {} }); // ok
+>test6 : Symbol(test6, Decl(destructuringParameterDeclaration11.ts, 17, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 21, 7))
+
+function test7({ a: { b = 1 } = {} } = {}) {}
+>test7 : Symbol(test7, Decl(destructuringParameterDeclaration11.ts, 21, 17))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 23, 21))
+
+test7({ a: { b: 42 } }); // ok
+>test7 : Symbol(test7, Decl(destructuringParameterDeclaration11.ts, 21, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 24, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 24, 12))
+
+test7({ a: {} }); // ok
+>test7 : Symbol(test7, Decl(destructuringParameterDeclaration11.ts, 21, 17))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 25, 7))
+
+test7({}); // ok
+>test7 : Symbol(test7, Decl(destructuringParameterDeclaration11.ts, 21, 17))
+
+function test8({ a: { b, c = 1 } = {} }) {} // implicit any
+>test8 : Symbol(test8, Decl(destructuringParameterDeclaration11.ts, 26, 10))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 28, 21))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 28, 24))
+
+test8({ a: { b: 42 } }); // ok (implicit any reported at declaration site)
+>test8 : Symbol(test8, Decl(destructuringParameterDeclaration11.ts, 26, 10))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 29, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 29, 12))
+
+test8({ a: { b: 42, c: 100 } }); // ok
+>test8 : Symbol(test8, Decl(destructuringParameterDeclaration11.ts, 26, 10))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 30, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 30, 12))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 30, 19))
+
+function test9({ a: { b, c = 1 } = { b: 2 } }) {}
+>test9 : Symbol(test9, Decl(destructuringParameterDeclaration11.ts, 30, 32))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 32, 21))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 32, 24))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 32, 36))
+
+test9({ a: { b: 42 } }); // ok
+>test9 : Symbol(test9, Decl(destructuringParameterDeclaration11.ts, 30, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 33, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 33, 12))
+
+test9({ a: { b: 42, c: 100 } }); // ok
+>test9 : Symbol(test9, Decl(destructuringParameterDeclaration11.ts, 30, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 34, 7))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 34, 12))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 34, 19))
+
+function test10({ a = 1 } = { b: 2 }) {} // error, EPC
+>test10 : Symbol(test10, Decl(destructuringParameterDeclaration11.ts, 34, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 36, 17))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 36, 29))
+
+test10({ a: 42 }); // error, missing b
+>test10 : Symbol(test10, Decl(destructuringParameterDeclaration11.ts, 34, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 37, 8))
+
+test10({ b: 42 }); // ok
+>test10 : Symbol(test10, Decl(destructuringParameterDeclaration11.ts, 34, 32))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 38, 8))
+
+test10({ a: 42, b: 100 }); // ok
+>test10 : Symbol(test10, Decl(destructuringParameterDeclaration11.ts, 34, 32))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 39, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 39, 15))
+
+function test11({ a: { b = 1 } = { c: 2 } }) {} // error, EPC
+>test11 : Symbol(test11, Decl(destructuringParameterDeclaration11.ts, 39, 26))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 41, 22))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 41, 34))
+
+test11({ a: { b: 42 } }); // error, missing c
+>test11 : Symbol(test11, Decl(destructuringParameterDeclaration11.ts, 39, 26))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 42, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 42, 13))
+
+test11({ a: { c: 42 } }); // ok
+>test11 : Symbol(test11, Decl(destructuringParameterDeclaration11.ts, 39, 26))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 43, 8))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 43, 13))
+
+function test12({ a: { b = 1 } = {}, c = 2 } = { a: {} }) {}
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 45, 22))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 45, 36))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 45, 48))
+
+test12({ a: { b: 42 } }); // ok
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 46, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 46, 13))
+
+test12({ a: { b: 42 }, c: 100 }); // ok
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 47, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 47, 13))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 47, 22))
+
+test12({ a: {}, c: 100 }); // ok
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 48, 8))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 48, 15))
+
+test12({ c: 100 }); // ok
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 49, 8))
+
+test12({}); // ok
+>test12 : Symbol(test12, Decl(destructuringParameterDeclaration11.ts, 43, 25))
+
+function test13({ a: { b = 1 } = {}, c = 2 } = {}) {}
+>test13 : Symbol(test13, Decl(destructuringParameterDeclaration11.ts, 50, 11))
+>a : Symbol(a)
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 52, 22))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 52, 36))
+
+test13({ a: { b: 42 } }); // ok
+>test13 : Symbol(test13, Decl(destructuringParameterDeclaration11.ts, 50, 11))
+>a : Symbol(a, Decl(destructuringParameterDeclaration11.ts, 53, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration11.ts, 53, 13))
+
+test13({ c: 100 }); // ok
+>test13 : Symbol(test13, Decl(destructuringParameterDeclaration11.ts, 50, 11))
+>c : Symbol(c, Decl(destructuringParameterDeclaration11.ts, 54, 8))
+
+export {};
+

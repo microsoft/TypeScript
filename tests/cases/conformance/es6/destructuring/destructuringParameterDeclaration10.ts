@@ -12,3 +12,5 @@ const getUserProfileByUsername = ({
 getUserProfileByUsername({
   username: 'ly', // ok (implicit any reported at declaration site)
 });
+
+getUserProfileByUsername({}); // ok

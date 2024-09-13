@@ -11931,6 +11931,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isBindingPattern(element.name)) {
             return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
         }
+        if (isBindingPattern(element.parent)) {
+            const contextualType = getContextualPaddingType(element);
+            if (contextualType) {
+                return contextualType;
+            }
+        }
         if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
             reportImplicitAny(element, anyType);
         }
@@ -11947,21 +11953,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let stringIndexInfo: IndexInfo | undefined;
         let objectFlags = ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
         forEach(pattern.elements, e => {
-            const name = e.propertyName || e.name as Identifier;
             if (e.dotDotDotToken) {
                 stringIndexInfo = createIndexInfo(stringType, anyType, /*isReadonly*/ false);
                 return;
             }
-
-            const exprType = getLiteralTypeFromPropertyName(name);
-            if (!isTypeUsableAsPropertyName(exprType)) {
+            const name = getPropertyNameFromBindingElement(e);
+            if (!name) {
                 // do not include computed properties in the implied type
                 objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
                 return;
             }
-            const text = getPropertyNameFromType(exprType);
-            const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
-            const symbol = createSymbol(flags, text);
+            const contextualType = !includePatternInType && isBindingPattern(e.parent) ? getContextualPaddingType(e.parent) : undefined;
+            const paddingSymbol = contextualType && getPropertyOfType(contextualType, name);
+            const flags = SymbolFlags.Property | (e.initializer || !includePatternInType && (!paddingSymbol || paddingSymbol.flags & SymbolFlags.Optional) ? SymbolFlags.Optional : 0);
+            const symbol = createSymbol(flags, name);
             symbol.links.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
             symbol.links.bindingElement = e;
             members.set(symbol.escapedName, symbol);
@@ -32208,11 +32213,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
+    function getContextualPaddingType(node: BindingPattern | BindingElement): Type | undefined {
+        const index = findContextualNode(node, /*includeCaches*/ true);
+        if (index >= 0) {
+            return contextualTypes[index];
+        }
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.ObjectBindingPattern: {
+                const type = getContextualPaddingType(parent);
+                const name = type && getPropertyNameFromBindingElement(node as BindingElement);
+                return name ? getTypeOfPropertyOfType(type, name) : undefined;
+            }
+            case SyntaxKind.BindingElement: {
+                if (parent.parent.kind === SyntaxKind.ArrayBindingPattern) {
+                    break;
+                }
+                const type = getContextualPaddingType(parent.parent);
+                const name = type && getPropertyNameFromBindingElement(parent);
+                return name ? getTypeOfPropertyOfType(type, name) : undefined;
+            }
+        }
+        return undefined;
+    }
+
     function pushCachedContextualType(node: Expression) {
         pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined), /*isCache*/ true);
     }
 
-    function pushContextualType(node: Expression, type: Type | undefined, isCache: boolean) {
+    function pushContextualType(node: Node, type: Type | undefined, isCache: boolean) {
         contextualTypeNodes[contextualTypeCount] = node;
         contextualTypes[contextualTypeCount] = type;
         contextualIsCache[contextualTypeCount] = isCache;
@@ -40563,25 +40592,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function padObjectLiteralType(type: ObjectType, pattern: ObjectBindingPattern): Type {
-        let missingElements: BindingElement[] | undefined;
+        let paddableElements: BindingElement[] | undefined;
         for (const e of pattern.elements) {
             const name = getPropertyNameFromBindingElement(e);
-            if (name && !getPropertyOfType(type, name)) {
-                missingElements = append(missingElements, e);
+            if (name && (!getPropertyOfType(type, name) || isBindingPattern(e.name))) {
+                paddableElements = append(paddableElements, e);
             }
         }
-        if (!missingElements) {
+        if (!paddableElements) {
             return type;
         }
         const members = createSymbolTable();
         for (const prop of getPropertiesOfObjectType(type)) {
             members.set(prop.escapedName, prop);
         }
-        for (const e of missingElements) {
-            const symbol = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, getPropertyNameFromBindingElement(e)!);
+        pushContextualType(pattern, type, /*isCache*/ true);
+        for (const e of paddableElements) {
+            const name = getPropertyNameFromBindingElement(e)!;
+            const paddingSymbol = getPropertyOfType(type, name);
+            const isOptional = e.initializer && !paddingSymbol || !members.has(name) || paddingSymbol && (paddingSymbol.flags & SymbolFlags.Optional);
+            const symbol = createSymbol(SymbolFlags.Property | (isOptional || !members.has(name) ? SymbolFlags.Optional : 0), name);
             symbol.links.type = getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ true);
-            members.set(symbol.escapedName, symbol);
+            members.set(symbol.escapedName, symbol); // symbol.links.bindingElement = e;
         }
+        popContextualType();
         const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, getIndexInfosOfType(type));
         result.objectFlags = type.objectFlags;
         return result;

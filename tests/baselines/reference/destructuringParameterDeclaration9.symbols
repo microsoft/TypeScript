@@ -29,3 +29,6 @@ getUserProfileByUsername({
 
 });
 
+getUserProfileByUsername({}); // ok
+>getUserProfileByUsername : Symbol(getUserProfileByUsername, Decl(main.ts, 0, 8))
+

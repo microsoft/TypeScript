@@ -71,9 +71,9 @@ function b2(z = null, o = { x: 0, y: undefined }) { }
 
 function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 >b3 : Symbol(b3, Decl(destructuringParameterDeclaration1ES6.ts, 21, 53))
->z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 22, 32))
+>z : Symbol(z)
 >x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 22, 17))
->y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 22, 46))
+>y : Symbol(y)
 >j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 22, 24))
 >z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 22, 32))
 >x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 22, 37))

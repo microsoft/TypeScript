@@ -174,8 +174,8 @@ function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 
 interface F1 {
     b5(z, y, [, a, b], {p, m: { q, r}});
->b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p: any; m: { q: any; r: any; }; }) => any
->   : ^ ^^^^^^^ ^^^^^^^        ^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p?: any; m?: { q?: any; r?: any; }; }) => any
+>   : ^ ^^^^^^^ ^^^^^^^        ^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : any
 >  : ^^^
 >y : any
@@ -335,8 +335,8 @@ enum Foo { a }
 >  : ^^^^^
 
 function c0({z: {x, y: {j}}}) { }
->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
->   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c0 : ({ z: { x, y: { j } } }: { z?: { x?: any; y?: { j?: any; }; }; }) => void
+>   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : any
 >  : ^^^
 >x : any
@@ -405,8 +405,8 @@ function c6([a, b, [[c=1]]]) { }
 c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }
 >c0({z : { x: 1, y: { j: "world" } }}) : void
 >                                      : ^^^^
->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
->   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c0 : ({ z: { x, y: { j } } }: { z?: { x?: any; y?: { j?: any; }; }; }) => void
+>   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{z : { x: 1, y: { j: "world" } }} : { z: { x: number; y: { j: string; }; }; }
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; y: { j: string; }; }
@@ -429,8 +429,8 @@ c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: 
 c0({z : { x: "string", y: { j: true } }});  // Implied type is { z: {x: any, y: {j: any}} }
 >c0({z : { x: "string", y: { j: true } }}) : void
 >                                          : ^^^^
->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
->   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c0 : ({ z: { x, y: { j } } }: { z?: { x?: any; y?: { j?: any; }; }; }) => void
+>   : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{z : { x: "string", y: { j: true } }} : { z: { x: string; y: { j: boolean; }; }; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: string; y: { j: boolean; }; }
@@ -569,8 +569,8 @@ interface F2 {
 >  : ^^^
 
     d4({x, y, z}?);
->d4 : ({ x, y, z }?: { x: any; y: any; z: any; }) => any
->   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d4 : ({ x, y, z }?: { x?: any; y?: any; z?: any; }) => any
+>   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -628,8 +628,8 @@ class C3 implements F2 {
 >  : ^^^
 
     d4({x, y, z}) { }
->d4 : ({ x, y, z }: { x: any; y: any; z: any; }) => void
->   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d4 : ({ x, y, z }: { x?: any; y?: any; z?: any; }) => void
+>   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -678,8 +678,8 @@ d5();  // Parameter is optional as its declaration included an initializer
 // Type annotations must instead be written on the top- level parameter declaration
 
 function e1({x: number}) { }  // x has type any NOT number
->e1 : ({ x: number }: { x: any; }) => void
->   : ^             ^^^^^^^^^^^^^^^^^^^^^^
+>e1 : ({ x: number }: { x?: any; }) => void
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >number : any
@@ -702,8 +702,8 @@ function e3({x}: { x?: number }) { }  // x is an optional with type number
 >  : ^^^^^^
 
 function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
->e4 : ({ x: [number, string, any] }: { x: [any, any, any]; }) => void
->   : ^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e4 : ({ x: [number, string, any] }: { x?: [any, any, any]; }) => void
+>   : ^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >number : any

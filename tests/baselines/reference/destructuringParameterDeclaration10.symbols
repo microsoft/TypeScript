@@ -25,3 +25,6 @@ getUserProfileByUsername({
 
 });
 
+getUserProfileByUsername({}); // ok
+>getUserProfileByUsername : Symbol(getUserProfileByUsername, Decl(destructuringParameterDeclaration10.ts, 0, 5))
+

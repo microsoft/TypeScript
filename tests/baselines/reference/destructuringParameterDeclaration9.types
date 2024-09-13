@@ -54,3 +54,11 @@ getUserProfileByUsername({
 
 });
 
+getUserProfileByUsername({}); // ok
+>getUserProfileByUsername({}) : {}
+>                             : ^^
+>getUserProfileByUsername : ({ username, withEmail, withNotificationSettings, }?: { username?: any; withEmail?: boolean; withNotificationSettings?: boolean; }) => {}
+>                         : ^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+

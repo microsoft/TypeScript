@@ -18,3 +18,5 @@ import { getUserProfileByUsername } from './utils';
 getUserProfileByUsername({
   username: 'ly', // ok
 });
+
+getUserProfileByUsername({}); // ok

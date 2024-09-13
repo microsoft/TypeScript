@@ -16,3 +16,5 @@ destructuringParameterDeclaration10.ts(2,3): error TS7031: Binding element 'user
       username: 'ly', // ok (implicit any reported at declaration site)
     });
     
+    getUserProfileByUsername({}); // ok
+    
