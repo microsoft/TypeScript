@@ -694,9 +694,9 @@ export const runTestsAndWatch = task({
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
-            "tests/cases/**/*.*",
-            "tests/lib/**/*.*",
-            "tests/projects/**/*.*",
+            "tests/cases",
+            "tests/lib",
+            "tests/projects",
         ], {
             ignorePermissionErrors: true,
             alwaysStat: true,
