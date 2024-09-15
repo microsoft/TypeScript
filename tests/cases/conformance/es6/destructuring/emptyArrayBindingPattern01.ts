@@ -1,16 +1,20 @@
 // @module: commonjs
 // @target: es5
 
-export const cilBlurLinear: string[][] = [[]];
+export const cilBlurLinear1: string[][] = [[]];
+const [,] = cilBlurLinear1;
 
-const [,] = cilBlurLinear;
+export const cilBlurLinear2: string[][] = [[]];
+let [,] = cilBlurLinear2;
 
-let [,] = cilBlurLinear;
+export const cilBlurLinear3: string[][] = [[]];
+var [,] = cilBlurLinear3;
 
-var [,] = cilBlurLinear;
+export const cilBlurLinear4: string[][] = [[]];
+const [[]] = cilBlurLinear4;
 
-const [[]] = cilBlurLinear;
+export const cilBlurLinear5: string[][] = [[]];
+let [[]] = cilBlurLinear5;
 
-let [[]] = cilBlurLinear;
-
-var [[]] = cilBlurLinear;
+export const cilBlurLinear6: string[][] = [[]];
+var [[]] = cilBlurLinear6;
