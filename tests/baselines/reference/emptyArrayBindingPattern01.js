@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter05.ts] ////
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPattern01.ts] ////
 
-//// [emptyArrayBindingPatternParameter05.ts]
+//// [emptyArrayBindingPattern01.ts]
 export const cilBlurLinear: string[][] = [[]];
 
 const [,] = cilBlurLinear;
@@ -16,7 +16,7 @@ let [[]] = cilBlurLinear;
 var [[]] = cilBlurLinear;
 
 
-//// [emptyArrayBindingPatternParameter05.js]
+//// [emptyArrayBindingPattern01.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cilBlurLinear = void 0;

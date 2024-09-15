@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPattern01.ts] ////
+
+=== emptyArrayBindingPattern01.ts ===
+export const cilBlurLinear: string[][] = [[]];
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+const [,] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+let [,] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+var [,] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+const [[]] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+let [[]] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
+var [[]] = cilBlurLinear;
+>cilBlurLinear : Symbol(cilBlurLinear, Decl(emptyArrayBindingPattern01.ts, 0, 12))
+
