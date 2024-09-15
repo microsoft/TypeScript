@@ -1,7 +1,10 @@
 import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { patchHostForBuildInfoReadWrite } from "../helpers/baseline.js";
+import {
+    fakeTsVersion,
+    patchHostForBuildInfoReadWrite,
+} from "../helpers/baseline.js";
 import { getTypeScriptLibTestLocation } from "../helpers/contents.js";
 import {
     getSysForSampleProjectReferences,
@@ -198,7 +201,10 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             commandLineArgs: ["--b", "-i", "-v"],
             edits: [{
                 caption: "tsbuildinfo written has error",
-                edit: sys => sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string"),
+                edit: sys => {
+                    sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string");
+                    sys.replaceFileText("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"version":"${ts.version}"`, `"version":"${fakeTsVersion}"`); // build info won't parse, need to manually sterilize for baseline
+                },
             }],
         });
 
