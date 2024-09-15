@@ -11,12 +11,15 @@ import {
     ExportAssignment,
     ExportDeclaration,
     Expression,
+    ExpressionStatement,
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
     getEmitScriptTarget,
+    getExternalHelpersModuleName,
     getExternalModuleNameLiteral,
     getIsolatedModules,
+    getNodeId,
     hasSyntacticModifier,
     Identifier,
     idText,
@@ -35,6 +38,7 @@ import {
     ModuleKind,
     Node,
     NodeFlags,
+    NodeId,
     ScriptTarget,
     setOriginalNode,
     setTextRange,
@@ -45,10 +49,11 @@ import {
     SyntaxKind,
     TransformationContext,
     VariableStatement,
+    visitArray,
     visitEachChild,
     visitNodes,
     VisitResult,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -67,6 +72,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableEmitNotification(SyntaxKind.SourceFile);
     context.enableSubstitution(SyntaxKind.Identifier);
 
+    const noSubstitution = new Set<NodeId>();
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -88,7 +94,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     setTextRange(factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)), result.statements),
                 );
             }
-            if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+            if (!isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve || some(result.statements, isExternalModuleIndicator)) {
                 return result;
             }
             return factory.updateSourceFile(
@@ -105,8 +111,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (externalHelpersImportDeclaration) {
             const statements: Statement[] = [];
             const statementOffset = factory.copyPrologue(node.statements, statements);
-            append(statements, externalHelpersImportDeclaration);
-
+            addRange(statements, visitArray([externalHelpersImportDeclaration], visitor, isStatement));
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             return factory.updateSourceFile(
                 node,
@@ -146,6 +151,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (moduleName) {
             args.push(moduleName);
         }
+        if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+            return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
+        }
 
         if (!importRequireStatements) {
             const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
@@ -159,6 +167,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     ]),
                 ),
                 factory.createStringLiteral("module"),
+                /*attributes*/ undefined,
             );
             const requireHelperName = factory.createUniqueName("__require", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
             const requireStatement = factory.createVariableStatement(
@@ -237,9 +246,27 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
-        // Elide `export=` as it is not legal with --module ES6
-        return node.isExportEquals ? undefined : node;
+    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | ExpressionStatement | undefined> {
+        if (node.isExportEquals) {
+            if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+                const statement = setOriginalNode(
+                    factory.createExpressionStatement(
+                        factory.createAssignment(
+                            factory.createPropertyAccessExpression(
+                                factory.createIdentifier("module"),
+                                "exports",
+                            ),
+                            node.expression,
+                        ),
+                    ),
+                    node,
+                );
+                return statement;
+            }
+            // Elide `export=` as it is not legal with --module ES6
+            return undefined;
+        }
+        return node;
     }
 
     function visitExportDeclaration(node: ExportDeclaration) {
@@ -265,7 +292,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 ),
             ),
             node.moduleSpecifier,
-            node.assertClause,
+            node.attributes,
         );
         setOriginalNode(importDecl, node.exportClause);
 
@@ -295,7 +322,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             if ((isExternalModule(node) || getIsolatedModules(compilerOptions)) && compilerOptions.importHelpers) {
                 helperNameSubstitutions = new Map<string, Identifier>();
             }
+            currentSourceFile = node;
             previousOnEmitNode(hint, node, emitCallback);
+            currentSourceFile = undefined;
             helperNameSubstitutions = undefined;
         }
         else {
@@ -315,7 +344,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      */
     function onSubstituteNode(hint: EmitHint, node: Node) {
         node = previousOnSubstituteNode(hint, node);
-        if (helperNameSubstitutions && isIdentifier(node) && getEmitFlags(node) & EmitFlags.HelperName) {
+        if (node.id && noSubstitution.has(node.id)) {
+            return node;
+        }
+        if (isIdentifier(node) && getEmitFlags(node) & EmitFlags.HelperName) {
             return substituteHelperName(node);
         }
 
@@ -323,11 +355,19 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     }
 
     function substituteHelperName(node: Identifier): Expression {
-        const name = idText(node);
-        let substitution = helperNameSubstitutions!.get(name);
-        if (!substitution) {
-            helperNameSubstitutions!.set(name, substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
+        const externalHelpersModuleName = currentSourceFile && getExternalHelpersModuleName(currentSourceFile);
+        if (externalHelpersModuleName) {
+            noSubstitution.add(getNodeId(node));
+            return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
         }
-        return substitution;
+        if (helperNameSubstitutions) {
+            const name = idText(node);
+            let substitution = helperNameSubstitutions.get(name);
+            if (!substitution) {
+                helperNameSubstitutions.set(name, substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
+            }
+            return substitution;
+        }
+        return node;
     }
 }

@@ -14,12 +14,12 @@ export function f() {
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = exports.X = void 0;
+exports.X = void 0;
+exports.f = f;
 function f() {
     var x;
     return x;
 }
-exports.f = f;
 
 
 //// [b.d.ts]

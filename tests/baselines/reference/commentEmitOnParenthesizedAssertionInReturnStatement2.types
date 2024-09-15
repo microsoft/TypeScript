@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/commentEmitOnParenthesizedAssertionInReturnStatement2.ts] ////
+
+=== commentEmitOnParenthesizedAssertionInReturnStatement2.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    client = {
+>client : { getThing: () => Promise<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      getThing: () => Promise.resolve('')    } : { getThing: () => Promise<string>; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      getThing: () => Promise.resolve('')
+>getThing : () => Promise<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.resolve('') : () => Promise<string>
+>                          : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve('') : Promise<string>
+>                    : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>'' : ""
+>   : ^^
+    }
+  
+    foo() {
+>foo : () => Promise<string>
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+      return (
+>(        /* TODO: please refactor */ this.client          .getThing() satisfies Promise<string>) : Promise<string>
+>                                                                                                 : ^^^^^^^^^^^^^^^
+
+        /* TODO: please refactor */ this.client
+>this.client          .getThing() satisfies Promise<string> : Promise<string>
+>                                                           : ^^^^^^^^^^^^^^^
+>this.client          .getThing() : Promise<string>
+>                                 : ^^^^^^^^^^^^^^^
+>this.client          .getThing : () => Promise<string>
+>                               : ^^^^^^^^^^^^^^^^^^^^^
+>this.client : { getThing: () => Promise<string>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>client : { getThing: () => Promise<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          .getThing() satisfies Promise<string>);
+>getThing : () => Promise<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+    }
+  }

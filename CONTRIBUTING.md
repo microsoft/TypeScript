@@ -8,7 +8,7 @@ Issues that ask questions answered in the FAQ will be closed without elaboration
 
 ## 2. Search for Duplicates
 
-[Search the existing issues](https://github.com/Microsoft/TypeScript/search?type=Issues) before logging a new one.
+[Search the existing issues in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging a new one. Search engines generally list more relevant and accurate results at the top than the GitHub searching feature.
 
 Some search tips:
  * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.

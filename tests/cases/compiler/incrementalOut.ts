@@ -1,5 +1,5 @@
 // @incremental: true
-// @out: output.js
+// @outFile: output.js
 
 const x = 10;
 

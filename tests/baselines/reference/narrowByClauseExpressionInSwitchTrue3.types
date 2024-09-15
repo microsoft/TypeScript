@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue3.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue3.ts ===
+type Shape =
+>Shape : Shape
+>      : ^^^^^
+
+    | { kind: "circle", radius: number }
+>kind : "circle"
+>     : ^^^^^^^^
+>radius : number
+>       : ^^^^^^
+
+    | { kind: "square", sideLength: number }
+>kind : "square"
+>     : ^^^^^^^^
+>sideLength : number
+>           : ^^^^^^
+
+function wat(shape: Shape) {
+>wat : (shape: Shape) => number | undefined
+>    : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>shape : Shape
+>      : ^^^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case shape.kind === "circle":
+>shape.kind === "circle" : boolean
+>                        : ^^^^^^^
+>shape.kind : "circle" | "square"
+>           : ^^^^^^^^^^^^^^^^^^^
+>shape : Shape
+>      : ^^^^^
+>kind : "circle" | "square"
+>     : ^^^^^^^^^^^^^^^^^^^
+>"circle" : "circle"
+>         : ^^^^^^^^
+
+            return Math.PI * shape.radius ** 2;
+>Math.PI * shape.radius ** 2 : number
+>                            : ^^^^^^
+>Math.PI : number
+>        : ^^^^^^
+>Math : Math
+>     : ^^^^
+>PI : number
+>   : ^^^^^^
+>shape.radius ** 2 : number
+>                  : ^^^^^^
+>shape.radius : number
+>             : ^^^^^^
+>shape : { kind: "circle"; radius: number; }
+>      : ^^^^^^^^        ^^^^^^^^^^      ^^^
+>radius : number
+>       : ^^^^^^
+>2 : 2
+>  : ^
+
+        case shape.kind === "circle": // should error
+>shape.kind === "circle" : boolean
+>                        : ^^^^^^^
+>shape.kind : "circle" | "square"
+>           : ^^^^^^^^^^^^^^^^^^^
+>shape : Shape
+>      : ^^^^^
+>kind : "circle" | "square"
+>     : ^^^^^^^^^^^^^^^^^^^
+>"circle" : "circle"
+>         : ^^^^^^^^
+    }
+
+    if (shape.kind === "circle") {
+>shape.kind === "circle" : boolean
+>                        : ^^^^^^^
+>shape.kind : "square"
+>           : ^^^^^^^^
+>shape : { kind: "square"; sideLength: number; }
+>      : ^^^^^^^^        ^^^^^^^^^^^^^^      ^^^
+>kind : "square"
+>     : ^^^^^^^^
+>"circle" : "circle"
+>         : ^^^^^^^^
+
+        return Math.PI * shape.radius ** 2;
+>Math.PI * shape.radius ** 2 : number
+>                            : ^^^^^^
+>Math.PI : number
+>        : ^^^^^^
+>Math : Math
+>     : ^^^^
+>PI : number
+>   : ^^^^^^
+>shape.radius ** 2 : number
+>                  : ^^^^^^
+>shape.radius : any
+>             : ^^^
+>shape : never
+>      : ^^^^^
+>radius : any
+>       : ^^^
+>2 : 2
+>  : ^
+    }
+    else if (shape.kind === "circle") {
+>shape.kind === "circle" : boolean
+>                        : ^^^^^^^
+>shape.kind : "square"
+>           : ^^^^^^^^
+>shape : { kind: "square"; sideLength: number; }
+>      : ^^^^^^^^        ^^^^^^^^^^^^^^      ^^^
+>kind : "square"
+>     : ^^^^^^^^
+>"circle" : "circle"
+>         : ^^^^^^^^
+
+        //         ~~~~
+        // Property 'kind' does not exist on type 'never'.
+    }
+}
+

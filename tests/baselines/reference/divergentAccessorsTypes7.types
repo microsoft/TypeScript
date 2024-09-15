@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/divergentAccessorsTypes7.ts] ////
+
+=== divergentAccessorsTypes7.ts ===
+class Test<S> {
+>Test : Test<S>
+>     : ^^^^^^^
+
+    constructor() {}
+
+    set value(value: string | ((item: S) => string)) {}
+>value : string
+>      : ^^^^^^
+>value : string | ((item: S) => string)
+>      : ^^^^^^^^^^^    ^^ ^^^^^      ^
+>item : S
+>     : ^
+
+    get value(): string {
+>value : string
+>      : ^^^^^^
+
+        return null!;
+>null! : null
+>      : ^^^^
+    }
+
+    // -- Replacing the getter such that the getter/setter types match, removes the error:
+    // get value(): string | ((item: S) => string) {
+    //     return null!;
+    // }
+
+    // -- Or, replacing the setter such that a concrete type is used, removes the error:
+    // set value(value: string | ((item: { property: string }) => string)) {}
+}
+
+const a = new Test<{
+>a : Test<{ property: string; }>
+>  : ^^^^^^^^^^^^^^^^^      ^^^^
+>new Test<{    property: string}>() : Test<{ property: string; }>
+>                                   : ^^^^^^^^^^^^^^^^^      ^^^^
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+    property: string
+>property : string
+>         : ^^^^^^
+
+}>();
+
+a.value = (item) => item.property
+>a.value = (item) => item.property : (item: { property: string; }) => string
+>                                  : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>a.value : string | ((item: { property: string; }) => string)
+>        : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
+>a : Test<{ property: string; }>
+>  : ^^^^^^^^^^^^^^^^^      ^^^^
+>value : string | ((item: { property: string; }) => string)
+>      : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
+>(item) => item.property : (item: { property: string; }) => string
+>                        : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>item : { property: string; }
+>     : ^^^^^^^^^^^^      ^^^
+>item.property : string
+>              : ^^^^^^
+>item : { property: string; }
+>     : ^^^^^^^^^^^^      ^^^
+>property : string
+>         : ^^^^^^
+
+a['value'] = (item) => item.property
+>a['value'] = (item) => item.property : (item: { property: string; }) => string
+>                                     : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>a['value'] : string | ((item: { property: string; }) => string)
+>           : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
+>a : Test<{ property: string; }>
+>  : ^^^^^^^^^^^^^^^^^      ^^^^
+>'value' : "value"
+>        : ^^^^^^^
+>(item) => item.property : (item: { property: string; }) => string
+>                        : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>item : { property: string; }
+>     : ^^^^^^^^^^^^      ^^^
+>item.property : string
+>              : ^^^^^^
+>item : { property: string; }
+>     : ^^^^^^^^^^^^      ^^^
+>property : string
+>         : ^^^^^^
+

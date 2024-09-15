@@ -3,5 +3,7 @@
 === parserErrorRecovery_ExtendsOrImplementsClause2.ts ===
 class C extends A, {
 >C : C
+>  : ^
 >A : any
+>  : ^^^
 }

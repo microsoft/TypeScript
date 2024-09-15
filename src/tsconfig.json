@@ -5,7 +5,6 @@
         { "path": "./cancellationToken" },
         { "path": "./compiler" },
         { "path": "./deprecatedCompat" },
-        { "path": "./executeCommandLine" },
         { "path": "./harness" },
         { "path": "./jsTyping" },
         { "path": "./server" },
@@ -16,6 +15,6 @@
         { "path": "./typescript" },
         { "path": "./typingsInstaller" },
         { "path": "./typingsInstallerCore" },
-        { "path": "./watchGuard" },
+        { "path": "./watchGuard" }
     ]
 }

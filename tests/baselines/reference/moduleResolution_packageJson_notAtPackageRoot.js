@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleResolution_packageJson_notAtPackageRoot.ts] ////
 
 //// [package.json]
-// Loads from a "fake" nested package.json, not from the one at the root.
-
 { "types": "types.d.ts" }
 
 //// [package.json]

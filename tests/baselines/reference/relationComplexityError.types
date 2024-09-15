@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/relationComplexityError.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500,000
+Type Count: 25,000
+
+=== relationComplexityError.ts ===
+// Repro from #55630
+
+type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+>Digits : Digits
+>       : ^^^^^^
+
+type T1 = `${Digits}${Digits}${Digits}${Digits}` | undefined;
+>T1 : T1
+>   : ^^
+
+type T2 = { a: string } | { b: number };
+>T2 : T2
+>   : ^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+function f1(x: T1, y: T1 & T2) {
+>f1 : (x: T1, y: T1 & T2) => void
+>   : ^ ^^  ^^ ^^       ^^^^^^^^^
+>x : T1
+>  : ^^
+>y : T1 & T2
+>  : ^^^^^^^
+
+    x = y;
+>x = y : T1 & T2
+>      : ^^^^^^^
+>x : T1
+>  : ^^
+>y : T1 & T2
+>  : ^^^^^^^
+}
+
+function f2(x: T1 | null, y: T1 & T2) {
+>f2 : (x: T1 | null, y: T1 & T2) => void
+>   : ^ ^^         ^^ ^^       ^^^^^^^^^
+>x : T1 | null
+>  : ^^^^^^^^^
+>y : T1 & T2
+>  : ^^^^^^^
+
+    x = y;  // Complexity error
+>x = y : T1 & T2
+>      : ^^^^^^^
+>x : T1 | null
+>  : ^^^^^^^^^
+>y : T1 & T2
+>  : ^^^^^^^
+}
+

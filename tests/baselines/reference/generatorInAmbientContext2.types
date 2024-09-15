@@ -3,7 +3,9 @@
 === generatorInAmbientContext2.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     function *generator(): any;
 >generator : () => any
+>          : ^^^^^^   
 }

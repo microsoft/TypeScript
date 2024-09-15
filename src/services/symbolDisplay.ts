@@ -108,7 +108,7 @@ import {
     TypeParameter,
     typeToDisplayParts,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
@@ -557,7 +557,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         typeChecker,
                         resolvedSymbol,
                         getSourceFileOfNode(resolvedNode),
-                        resolvedNode,
+                        enclosingDeclaration,
                         declarationName,
                         type,
                         semanticMeaning,
@@ -719,11 +719,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
     if (documentation.length === 0 && isIdentifier(location) && symbol.valueDeclaration && isBindingElement(symbol.valueDeclaration)) {
         const declaration = symbol.valueDeclaration;
         const parent = declaration.parent;
-        if (isIdentifier(declaration.name) && isObjectBindingPattern(parent)) {
-            const name = getTextOfIdentifierOrLiteral(declaration.name);
+        const name = declaration.propertyName || declaration.name;
+        if (isIdentifier(name) && isObjectBindingPattern(parent)) {
+            const propertyName = getTextOfIdentifierOrLiteral(name);
             const objectType = typeChecker.getTypeAtLocation(parent);
             documentation = firstDefined(objectType.isUnion() ? objectType.types : [objectType], t => {
-                const prop = t.getProperty(name);
+                const prop = t.getProperty(propertyName);
                 return prop ? prop.getDocumentationComment(typeChecker) : undefined;
             }) || emptyArray;
         }

@@ -15,8 +15,10 @@ indexSignatures1.ts(73,5): error TS2374: Duplicate index signature for type '`fo
 indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`${string}a`' index type '"b"'.
 indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`a${string}`' index type '"a"'.
 indexSignatures1.ts(87,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexSignatures1.ts(88,5): error TS2374: Duplicate index signature for type 'T'.
 indexSignatures1.ts(88,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
 indexSignatures1.ts(89,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+indexSignatures1.ts(90,5): error TS2374: Duplicate index signature for type 'T'.
 indexSignatures1.ts(90,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
 indexSignatures1.ts(117,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I1'.
   No index signature with a parameter of type 'string' was found on type 'I1'.
@@ -69,7 +71,7 @@ indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to typ
 indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
 
 
-==== indexSignatures1.ts (50 errors) ====
+==== indexSignatures1.ts (52 errors) ====
     // Symbol index signature checking
     
     const sym = Symbol();
@@ -188,12 +190,16 @@ indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
         [key: T | number]: string;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'T'.
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
         [key: Error]: string;  // Error
          ~~~
 !!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
         [key: T & string]: string;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'T'.
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
     }

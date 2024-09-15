@@ -19,8 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 'lts/*'
       - run: |
           npm --version
           # corepack enable npm
@@ -30,18 +32,19 @@ jobs:
         run: |
           npm ci
           npm test
-      - name: Adding playwright
-        run: npm install --no-save --no-package-lock playwright
+      - name: Installing browsers
+        run: npx playwright install --with-deps
       - name: Validate the browser can import TypeScript
         run: npx hereby test-browser-integration
       - name: LKG, clean, and pack
         run: |
           npx hereby LKG
           npx hereby clean
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack ./
           mv typescript-*.tgz typescript.tgz
       - name: Upload built tarfile
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
           name: tgz
           path: typescript.tgz

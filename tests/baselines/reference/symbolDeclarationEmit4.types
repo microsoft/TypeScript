@@ -3,18 +3,29 @@
 === symbolDeclarationEmit4.ts ===
 class C {
 >C : C
+>  : ^
 
     get [Symbol.toPrimitive]() { return ""; }
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     set [Symbol.toPrimitive](x) { }
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }

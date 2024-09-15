@@ -28,7 +28,7 @@ exports.symb = Symbol();
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = void 0;
+exports.test = test;
 var types_1 = require("./types");
 /**
  * @returns {import("./types").TestSymb}
@@ -38,7 +38,6 @@ function test() {
     inner[types_1.symb] = true;
     return inner;
 }
-exports.test = test;
 
 
 //// [types.d.ts]

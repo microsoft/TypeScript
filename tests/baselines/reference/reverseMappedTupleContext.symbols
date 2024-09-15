@@ -1,0 +1,148 @@
+//// [tests/cases/compiler/reverseMappedTupleContext.ts] ////
+
+=== reverseMappedTupleContext.ts ===
+// https://github.com/microsoft/TypeScript/issues/55382
+
+declare function test1<T>(arg: {
+>test1 : Symbol(test1, Decl(reverseMappedTupleContext.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 2, 23))
+>arg : Symbol(arg, Decl(reverseMappedTupleContext.ts, 2, 26))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 3, 3))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 2, 23))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 2, 23))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 3, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 2, 23))
+
+const result1 = test1(["foo", 42]);
+>result1 : Symbol(result1, Decl(reverseMappedTupleContext.ts, 5, 5))
+>test1 : Symbol(test1, Decl(reverseMappedTupleContext.ts, 0, 0))
+
+declare function test2<T extends readonly unknown[]>(arg: {
+>test2 : Symbol(test2, Decl(reverseMappedTupleContext.ts, 5, 35))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 7, 23))
+>arg : Symbol(arg, Decl(reverseMappedTupleContext.ts, 7, 53))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 8, 3))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 7, 23))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 7, 23))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 8, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 7, 23))
+
+const result2 = test2(["foo", 42]);
+>result2 : Symbol(result2, Decl(reverseMappedTupleContext.ts, 10, 5))
+>test2 : Symbol(test2, Decl(reverseMappedTupleContext.ts, 5, 35))
+
+type Schema = Record<string, unknown> | readonly unknown[];
+>Schema : Symbol(Schema, Decl(reverseMappedTupleContext.ts, 10, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type Definition<T> = {
+>Definition : Symbol(Definition, Decl(reverseMappedTupleContext.ts, 12, 59))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 13, 16))
+
+  [K in keyof T]: (() => T[K]) | Definition<T[K]>;
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 14, 3))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 13, 16))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 13, 16))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 14, 3))
+>Definition : Symbol(Definition, Decl(reverseMappedTupleContext.ts, 12, 59))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 13, 16))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 14, 3))
+
+};
+declare function create<T extends Schema>(definition: Definition<T>): T;
+>create : Symbol(create, Decl(reverseMappedTupleContext.ts, 15, 2))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 16, 24))
+>Schema : Symbol(Schema, Decl(reverseMappedTupleContext.ts, 10, 35))
+>definition : Symbol(definition, Decl(reverseMappedTupleContext.ts, 16, 42))
+>Definition : Symbol(Definition, Decl(reverseMappedTupleContext.ts, 12, 59))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 16, 24))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 16, 24))
+
+const created1 = create([() => 1, [() => ""]]);
+>created1 : Symbol(created1, Decl(reverseMappedTupleContext.ts, 17, 5))
+>create : Symbol(create, Decl(reverseMappedTupleContext.ts, 15, 2))
+
+const created2 = create({
+>created2 : Symbol(created2, Decl(reverseMappedTupleContext.ts, 18, 5))
+>create : Symbol(create, Decl(reverseMappedTupleContext.ts, 15, 2))
+
+  a: () => 1,
+>a : Symbol(a, Decl(reverseMappedTupleContext.ts, 18, 25))
+
+  b: [() => ""],
+>b : Symbol(b, Decl(reverseMappedTupleContext.ts, 19, 13))
+
+});
+
+interface CompilerOptions {
+>CompilerOptions : Symbol(CompilerOptions, Decl(reverseMappedTupleContext.ts, 21, 3))
+
+  allowUnreachableCode?: boolean;
+>allowUnreachableCode : Symbol(CompilerOptions.allowUnreachableCode, Decl(reverseMappedTupleContext.ts, 23, 27))
+
+  allowUnusedLabels?: boolean;
+>allowUnusedLabels : Symbol(CompilerOptions.allowUnusedLabels, Decl(reverseMappedTupleContext.ts, 24, 33))
+
+  alwaysStrict?: boolean;
+>alwaysStrict : Symbol(CompilerOptions.alwaysStrict, Decl(reverseMappedTupleContext.ts, 25, 30))
+}
+type KeepLiteralStrings<T extends string[]> = {
+>KeepLiteralStrings : Symbol(KeepLiteralStrings, Decl(reverseMappedTupleContext.ts, 27, 1))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 28, 24))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 29, 3))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 28, 24))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 28, 24))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 29, 3))
+
+};
+declare function test4<T extends Record<string, string[]>>(obj: {
+>test4 : Symbol(test4, Decl(reverseMappedTupleContext.ts, 30, 2))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 31, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(reverseMappedTupleContext.ts, 31, 59))
+
+  [K in keyof T & keyof CompilerOptions]: {
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 32, 3))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 31, 23))
+>CompilerOptions : Symbol(CompilerOptions, Decl(reverseMappedTupleContext.ts, 21, 3))
+
+    dependencies: KeepLiteralStrings<T[K]>;
+>dependencies : Symbol(dependencies, Decl(reverseMappedTupleContext.ts, 32, 43))
+>KeepLiteralStrings : Symbol(KeepLiteralStrings, Decl(reverseMappedTupleContext.ts, 27, 1))
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 31, 23))
+>K : Symbol(K, Decl(reverseMappedTupleContext.ts, 32, 3))
+
+  };
+}): T;
+>T : Symbol(T, Decl(reverseMappedTupleContext.ts, 31, 23))
+
+const result4 = test4({
+>result4 : Symbol(result4, Decl(reverseMappedTupleContext.ts, 36, 5))
+>test4 : Symbol(test4, Decl(reverseMappedTupleContext.ts, 30, 2))
+
+  alwaysStrict: {
+>alwaysStrict : Symbol(alwaysStrict, Decl(reverseMappedTupleContext.ts, 36, 23))
+
+    dependencies: ["foo", "bar"],
+>dependencies : Symbol(dependencies, Decl(reverseMappedTupleContext.ts, 37, 17))
+
+  },
+  allowUnusedLabels: {
+>allowUnusedLabels : Symbol(allowUnusedLabels, Decl(reverseMappedTupleContext.ts, 39, 4))
+
+    dependencies: ["baz", "qwe"],
+>dependencies : Symbol(dependencies, Decl(reverseMappedTupleContext.ts, 40, 22))
+
+  },
+});
+

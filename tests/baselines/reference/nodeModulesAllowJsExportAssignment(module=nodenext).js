@@ -31,22 +31,21 @@ module.exports = a;
 //// [index.js]
 "use strict";
 // cjs format file
-var a = {};
+const a = {};
 module.exports = a;
 //// [file.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-var a = {};
+const a = {};
 module.exports = a;
 //// [index.js]
 // esm format file
-var a = {};
+const a = {};
 export {};
 //// [file.js]
 // esm format file
 import "fs";
-var a = {};
+const a = {};
 module.exports = a;
 
 

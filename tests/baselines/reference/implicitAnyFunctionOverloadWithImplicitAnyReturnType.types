@@ -5,12 +5,14 @@
 interface IFace {
     funcOfIFace();  // error at "f"
 >funcOfIFace : () => any
+>            : ^^^^^^^^^
 }
 
 // this should not be an error
 interface IFace1{
     f1(): any;
 >f1 : () => any
+>   : ^^^^^^   
 }
 
 

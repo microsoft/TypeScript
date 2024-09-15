@@ -1,18 +1,21 @@
-currentDirectory:: /a useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/app.ts]
+//// [/user/username/workspace/solution/projects/project/app.ts]
 let x = 1
 
-//// [/a/tsconfig.json]
-{"compiler":{},"files":[]}
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compiler": {},
+  "files": []
+}
 
-//// [/a/node_modules/@types/typings/index.d.ts]
+//// [/user/username/workspace/solution/projects/project/node_modules/@types/typings/index.d.ts]
 export * from "./lib"
 
-//// [/a/node_modules/@types/typings/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/node_modules/@types/typings/lib.d.ts]
 export const x: number
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,24 +27,47 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/a/tsconfig.json' is empty.
+[96mtsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/workspace/solution/projects/project/tsconfig.json' is empty.
 
-[7m1[0m {"compiler":{},"files":[]}
-[7m [0m [91m                       ~~[0m
+[7m3[0m   "files": []
+[7m [0m [91m           ~~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {}
 
 Program root files: []
-Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program options: {
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 
@@ -49,9 +75,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-

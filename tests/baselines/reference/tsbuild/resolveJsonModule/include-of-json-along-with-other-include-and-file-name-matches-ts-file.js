@@ -1,6 +1,29 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/solution/project/src/index.ts]
+import hello from "./index.json"
+export default hello.hello
+
+
+//// [/home/src/workspaces/solution/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,112 +38,41 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/src/index.json]
-{"hello":"world"}
-
-//// [/src/src/index.ts]
-import hello from "./index.json"
-
-export default hello.hello
-
-//// [/src/tsconfig_withFiles.json]
+//// [/home/src/workspaces/solution/project/src/index.json]
 {
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "src/index.ts", "src/hello.json"
-  ]
-}
-
-//// [/src/tsconfig_withInclude.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "include": [
-    "src/**/*"
-  ]
-}
-
-//// [/src/tsconfig_withIncludeAndFiles.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "src/hello.json"
-  ],
-  "include": [
-    "src/**/*"
-  ]
-}
-
-//// [/src/tsconfig_withIncludeOfJson.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "include": [
-    "src/**/*", "src/**/*.json"
-  ]
+  "hello": "world"
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
-/lib/tsc --b /src/tsconfig_withIncludeOfJson.json --v --explainFiles
-[[90m12:00:09 AM[0m] Projects in this build: 
-    * src/tsconfig_withIncludeOfJson.json
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * project/tsconfig.json
 
-[[90m12:00:10 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/tsconfig_withIncludeOfJson.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:11 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-lib/lib.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-src/src/index.json
-  Imported via "./index.json" from file 'src/src/index.ts'
-  Matched by include pattern 'src/**/*.json' in 'src/tsconfig_withIncludeOfJson.json'
-src/src/index.ts
-  Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeOfJson.json'
-exitCode:: ExitStatus.Success
+project/src/index.json
+  Imported via "./index.json" from file 'project/src/index.ts'
+  Matched by include pattern 'src/**/*.json' in 'project/tsconfig.json'
+project/src/index.ts
+  Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
 
 
-//// [/src/dist/src/index.d.ts]
-declare const _default: string;
-export default _default;
+//// [/home/src/workspaces/solution/project/dist/src/index.json]
+{
+    "hello": "world"
+}
 
 
-//// [/src/dist/src/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -130,81 +82,76 @@ var index_json_1 = __importDefault(require("./index.json"));
 exports.default = index_json_1.default.hello;
 
 
-//// [/src/dist/src/index.json]
-{ "hello": "world" }
+//// [/home/src/workspaces/solution/project/dist/src/index.d.ts]
+declare const _default: string;
+export default _default;
 
 
-//// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}",{"version":"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../src/index.json",
-      "../src/index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../src/index.json"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../tslibs/ts/lib/lib.d.ts",
+    "../src/index.json",
+    "../src/index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../src/index.json"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../src/index.json": {
-        "version": "-2379406821-{\"hello\":\"world\"}",
-        "signature": "-2379406821-{\"hello\":\"world\"}"
-      },
-      "../src/index.ts": {
-        "original": {
-          "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
-          "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
-        },
-        "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../src/index.json": {
+      "version": "6651571919-{\n  \"hello\": \"world\"\n}",
+      "signature": "6651571919-{\n  \"hello\": \"world\"\n}"
+    },
+    "../src/index.ts": {
+      "original": {
+        "version": "-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n",
         "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../src/index.json"
-      ],
-      [
-        3,
-        "../src/index.ts"
-      ]
-    ],
-    "options": {
-      "allowSyntheticDefaultImports": true,
-      "composite": true,
-      "esModuleInterop": true,
-      "module": 1,
-      "outDir": "./",
-      "skipDefaultLibCheck": true
-    },
-    "referencedMap": {
-      "../src/index.ts": [
-        "../src/index.json"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../src/index.json",
-      "../src/index.ts"
-    ],
-    "latestChangedDtsFile": "./src/index.d.ts"
+      },
+      "version": "-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n",
+      "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "../src/index.json"
+    ],
+    [
+      3,
+      "../src/index.ts"
+    ]
+  ],
+  "options": {
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "module": 1,
+    "outDir": "./",
+    "skipDefaultLibCheck": true
+  },
+  "referencedMap": {
+    "../src/index.ts": [
+      "../src/index.json"
+    ]
+  },
+  "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1117
+  "size": 1067
 }
 
+
+exitCode:: ExitStatus.Success

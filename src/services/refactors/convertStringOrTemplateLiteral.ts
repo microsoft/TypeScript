@@ -15,6 +15,7 @@ import {
     getTokenAtPosition,
     getTrailingCommentRanges,
     isBinaryExpression,
+    isExpressionNode,
     isNoSubstitutionTemplateLiteral,
     isParenthesizedExpression,
     isStringLiteral,
@@ -35,10 +36,8 @@ import {
     TemplateTail,
     textChanges,
     Token,
-} from "../_namespaces/ts";
-import {
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import { registerRefactor } from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert to template string";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
@@ -58,14 +57,19 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
     const { file, startPosition } = context;
     const node = getNodeOrParentOfParentheses(file, startPosition);
     const maybeBinary = getParentBinaryExpression(node);
+    const nodeIsStringLiteral = isStringLiteral(maybeBinary);
     const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
-    if (isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation) {
+    if (nodeIsStringLiteral && context.triggerReason !== "invoked") {
+        return emptyArray;
+    }
+
+    if (isExpressionNode(maybeBinary) && (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)) {
         refactorInfo.actions.push(convertStringAction);
         return [refactorInfo];
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
-        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation) });
+        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenations_and_string_literals) });
         return [refactorInfo];
     }
     return emptyArray;

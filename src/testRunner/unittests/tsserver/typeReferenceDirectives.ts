@@ -1,16 +1,15 @@
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: typeReferenceDirectives", () => {
+describe("unittests:: tsserver:: typeReferenceDirectives::", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
         const libProjectLocation = `/user/username/projects/myproject/lib`;
         const typeLib: File = {
@@ -48,17 +47,18 @@ declare class TestLib {
         };
         const testConfig: File = {
             path: `${testProjectLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "amd",
                     typeRoots: ["../lib/@types", "../lib/@app"],
+                    traceResolution: true,
                 },
             }),
         };
 
-        const files = [typeLib, appLib, testFile, testConfig, libFile];
-        const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const files = [typeLib, appLib, testFile, testConfig];
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
         openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.runQueuedTimeoutCallbacks();
@@ -73,7 +73,7 @@ declare class TestLib {
         };
         const tsconfig: File = {
             path: `${projectPath}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     types: [
                         "../typedefs/filesystem",
@@ -85,9 +85,9 @@ declare class TestLib {
             path: `/user/username/projects/myproject/typedefs/filesystem.d.ts`,
             content: `interface LocalFileSystem { someProperty: string; }`,
         };
-        const files = [file, tsconfig, filesystem, libFile];
-        const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const files = [file, tsconfig, filesystem];
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
     });

@@ -1,10 +1,10 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Fake implementations of various compiler dependencies.
@@ -153,7 +153,10 @@ export class System implements ts.System {
     }
 
     public setModifiedTime(path: string, time: Date) {
-        this.vfs.utimesSync(path, time, time);
+        try {
+            this.vfs.utimesSync(path, time, time);
+        }
+        catch { /* ignored */ }
     }
 
     public createHash(data: string): string {
@@ -245,13 +248,14 @@ export class CompilerHost implements ts.CompilerHost {
     private readonly _outputsMap: collections.SortedMap<string, number>;
     public readonly traces: string[] = [];
     public readonly shouldAssertInvariants = !Harness.lightMode;
+    public readonly jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     private _setParentNodes: boolean;
     private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
+    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
@@ -259,6 +263,7 @@ export class CompilerHost implements ts.CompilerHost {
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
+        this.jsDocParsingMode = jsDocParsingMode;
     }
 
     public get vfs() {
@@ -347,7 +352,7 @@ export class CompilerHost implements ts.CompilerHost {
         return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
+    public getSourceFile(fileName: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions): ts.SourceFile | undefined {
         const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
         if (existing) return existing;
@@ -361,7 +366,12 @@ export class CompilerHost implements ts.CompilerHost {
         // reused across multiple tests. In that case, we cache the SourceFile we parse
         // so that it can be reused across multiple tests to avoid the cost of
         // repeatedly parsing the same file over and over (such as lib.d.ts).
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+
+        // TODO(jakebailey): the below is totally wrong; languageVersionOrOptions can be an object,
+        // and so any options bag will be keyed as "[object Object]", and we'll incorrectly share
+        // SourceFiles parsed with different options. But fixing this doesn't expose any bugs and
+        // doubles the memory usage of a test run, so I'm leaving it for now.
+        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
@@ -371,7 +381,10 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+        // Set ParseForTypeErrors like tsc.
+        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : { languageVersion: languageVersionOrOptions };
+        languageVersionOrOptions = { ...languageVersionOrOptions, jsDocParsingMode: ts.JSDocParsingMode.ParseForTypeErrors };
+        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }
@@ -407,220 +420,5 @@ export class CompilerHost implements ts.CompilerHost {
         }
 
         return parsed;
-    }
-}
-
-export type ExpectedDiagnosticMessage = [ts.DiagnosticMessage, ...(string | number)[]];
-export interface ExpectedDiagnosticMessageChain {
-    message: ExpectedDiagnosticMessage;
-    next?: ExpectedDiagnosticMessageChain[];
-}
-
-export interface ExpectedDiagnosticLocation {
-    file: string;
-    start: number;
-    length: number;
-}
-export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnosticMessageChain {
-    location?: ExpectedDiagnosticLocation;
-}
-
-export enum DiagnosticKind {
-    Error = "Error",
-    Status = "Status",
-}
-export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
-    relatedInformation?: ExpectedDiagnosticRelatedInformation[];
-}
-
-export type ExpectedDiagnostic = ExpectedDiagnosticMessage | ExpectedErrorDiagnostic;
-
-interface SolutionBuilderDiagnostic {
-    kind: DiagnosticKind;
-    diagnostic: ts.Diagnostic;
-}
-
-function indentedText(indent: number, text: string) {
-    if (!indent) return text;
-    let indentText = "";
-    for (let i = 0; i < indent; i++) {
-        indentText += "  ";
-    }
-    return `
-${indentText}${text}`;
-}
-
-function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
-    let text = ts.getLocaleSpecificMessage(message);
-    if (args.length) {
-        text = ts.formatStringFromArgs(text, args);
-    }
-    return text;
-}
-
-function expectedDiagnosticMessageChainToText({ message, next }: ExpectedDiagnosticMessageChain, indent = 0) {
-    let text = indentedText(indent, expectedDiagnosticMessageToText(message));
-    if (next) {
-        indent++;
-        next.forEach(kid => text += expectedDiagnosticMessageChainToText(kid, indent));
-    }
-    return text;
-}
-
-function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
-    const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
-    if (location) {
-        const { file, start, length } = location;
-        return `${file}(${start}:${length}):: ${text}`;
-    }
-    return text;
-}
-
-function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
-    let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
-    if (relatedInformation) {
-        for (const kid of relatedInformation) {
-            text += `
-  related:: ${expectedDiagnosticRelatedInformationToText(kid)}`;
-        }
-    }
-    return text;
-}
-
-function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
-    return ts.isArray(errorOrStatus) ?
-        `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
-        expectedErrorDiagnosticToText(errorOrStatus);
-}
-
-function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessageChain, indent = 0) {
-    let text = indentedText(indent, messageText);
-    if (next) {
-        indent++;
-        next.forEach(kid => text += diagnosticMessageChainToText(kid, indent));
-    }
-    return text;
-}
-
-function diagnosticRelatedInformationToText({ file, start, length, messageText }: ts.DiagnosticRelatedInformation) {
-    const text = typeof messageText === "string" ?
-        messageText :
-        diagnosticMessageChainToText(messageText);
-    return file ?
-        `${file.fileName}(${start}:${length}):: ${text}` :
-        text;
-}
-
-function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {
-    let text = `${kind}!: ${diagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
-    if (relatedInformation) {
-        for (const kid of relatedInformation) {
-            text += `
-  related:: ${diagnosticRelatedInformationToText(kid)}`;
-        }
-    }
-    return text;
-}
-
-export const version = "FakeTSVersion";
-
-export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
-    const originalReadFile = sys.readFile;
-    sys.readFile = (path, encoding) => {
-        const value = originalReadFile.call(sys, path, encoding);
-        if (!value || !ts.isBuildInfoFile(path)) return value;
-        const buildInfo = ts.getBuildInfo(path, value);
-        if (!buildInfo) return value;
-        ts.Debug.assert(buildInfo.version === version);
-        buildInfo.version = ts.version;
-        return ts.getBuildInfoText(buildInfo);
-    };
-    return patchHostForBuildInfoWrite(sys, version);
-}
-
-export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
-    const originalWrite = sys.write;
-    sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
-    const originalWriteFile = sys.writeFile;
-    sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-        if (ts.isBuildInfoFile(fileName)) {
-            const buildInfo = ts.getBuildInfo(fileName, content);
-            if (buildInfo) {
-                buildInfo.version = version;
-                return originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
-            }
-        }
-        return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-    };
-    return sys;
-}
-
-export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-    createProgram: ts.CreateProgram<ts.BuilderProgram>;
-
-    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
-        super(sys, options, setParentNodes);
-        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
-    }
-
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
-        const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
-        patchHostForBuildInfoReadWrite(host.sys);
-        return host;
-    }
-
-    createHash(data: string) {
-        return `${ts.generateDjb2Hash(data)}-${data}`;
-    }
-
-    diagnostics: SolutionBuilderDiagnostic[] = [];
-
-    reportDiagnostic(diagnostic: ts.Diagnostic) {
-        this.diagnostics.push({ kind: DiagnosticKind.Error, diagnostic });
-    }
-
-    reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
-        this.diagnostics.push({ kind: DiagnosticKind.Status, diagnostic });
-    }
-
-    clearDiagnostics() {
-        this.diagnostics.length = 0;
-    }
-
-    assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
-        const actual = this.diagnostics.slice().map(diagnosticToText);
-        const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(
-            actual,
-            expected,
-            `Diagnostic arrays did not match:
-Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
-Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`,
-        );
-    }
-
-    assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
-        const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
-        const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(
-            actual,
-            expected,
-            `Diagnostics arrays did not match:
-Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
-Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
-Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`,
-        );
-    }
-
-    printDiagnostics(header = "== Diagnostics ==") {
-        const out = ts.createDiagnosticReporter(ts.sys);
-        ts.sys.write(header + "\r\n");
-        for (const { diagnostic } of this.diagnostics) {
-            out(diagnostic);
-        }
-    }
-
-    now() {
-        return this.sys.now();
     }
 }

@@ -3,10 +3,13 @@
 === parserClassDeclaration20.ts ===
 class C {
 >C : C
+>  : ^
 
     0();
 >0 : () => any
+>  : ^^^^^^^^^
 
     "0"() { }
 >"0" : () => any
+>    : ^^^^^^^^^
 }

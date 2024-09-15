@@ -1,4 +1,8 @@
 import {
+    getRangeOfEnclosingComment,
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -52,11 +56,7 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    getRangeOfEnclosingComment,
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export namespace SmartIndenter {
@@ -92,7 +92,7 @@ export namespace SmartIndenter {
 
         const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
         if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
             return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
@@ -150,7 +150,7 @@ export namespace SmartIndenter {
         const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
         // use list position if the preceding token is before any list items
         if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].indexOf(currentToken.parent.kind) !== -1;
+            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].includes(currentToken.parent.kind);
             const indentSize = useTheSameBaseIndentation ? 0 : options.indentSize!;
             return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
         }
@@ -721,7 +721,8 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.JsxClosingFragment;
             case SyntaxKind.IntersectionType:
             case SyntaxKind.UnionType:
-                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
+            case SyntaxKind.SatisfiesExpression:
+                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
                     return false;
                 }
                 break;

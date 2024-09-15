@@ -17,9 +17,7 @@ verify.noErrors();
 const ranges = test.ranges();
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3] = ranges;
 const importRanges = [r2, r3];
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['1', '2', '3'] },
-    { type: "findRenameLocations", markerOrRange: r0 },
-    { type: "findRenameLocations", markerOrRange: r1 },
-    { type: "findRenameLocations", markerOrRange: importRanges },
-);
+verify.baselineFindAllReferences('1', '2', '3');
+verify.baselineRename(r0);
+verify.baselineRename(r1);
+verify.baselineRename(importRanges);

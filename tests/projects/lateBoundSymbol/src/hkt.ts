@@ -1,1 +1,0 @@
-export interface HKT<T> { }

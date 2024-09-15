@@ -8,8 +8,7 @@ import {
     isArray,
     map,
     some,
-    trimString,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // https://semver.org/#spec-item-2
 // > A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative
@@ -37,7 +36,7 @@ const buildPartRegExp = /^[a-z0-9-]+$/i;
 
 // https://semver.org/#spec-item-9
 // > Numeric identifiers MUST NOT include leading zeroes.
-const numericIdentifierRegExp = /^(0|[1-9]\d*)$/;
+const numericIdentifierRegExp = /^(?:0|[1-9]\d*)$/;
 
 /**
  * Describes a precise semantic version number, https://semver.org
@@ -245,8 +244,8 @@ interface Comparator {
 // range-set    ::= range ( logical-or range ) *
 // range        ::= hyphen | simple ( ' ' simple ) * | ''
 // logical-or   ::= ( ' ' ) * '||' ( ' ' ) *
-const logicalOrRegExp = /\|\|/g;
-const whitespaceRegExp = /\s+/g;
+const logicalOrRegExp = /\|\|/;
+const whitespaceRegExp = /\s+/;
 
 // https://github.com/npm/node-semver#range-grammar
 //
@@ -258,7 +257,7 @@ const whitespaceRegExp = /\s+/g;
 // build        ::= parts
 // parts        ::= part ( '.' part ) *
 // part         ::= nr | [-0-9A-Za-z]+
-const partialRegExp = /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+const partialRegExp = /^([x*0]|[1-9]\d*)(?:\.([x*0]|[1-9]\d*)(?:\.([x*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
 
 // https://github.com/npm/node-semver#range-grammar
 //
@@ -271,21 +270,21 @@ const hyphenRegExp = /^\s*([a-z0-9-+.*]+)\s+-\s+([a-z0-9-+.*]+)\s*$/i;
 // primitive    ::= ( '<' | '>' | '>=' | '<=' | '=' ) partial
 // tilde        ::= '~' partial
 // caret        ::= '^' partial
-const rangeRegExp = /^(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
+const rangeRegExp = /^([~^<>=]|<=|>=)?\s*([a-z0-9-+.*]+)$/i;
 
 function parseRange(text: string) {
     const alternatives: Comparator[][] = [];
-    for (let range of trimString(text).split(logicalOrRegExp)) {
+    for (let range of text.trim().split(logicalOrRegExp)) {
         if (!range) continue;
         const comparators: Comparator[] = [];
-        range = trimString(range);
+        range = range.trim();
         const match = hyphenRegExp.exec(range);
         if (match) {
             if (!parseHyphen(match[1], match[2], comparators)) return undefined;
         }
         else {
             for (const simple of range.split(whitespaceRegExp)) {
-                const match = rangeRegExp.exec(trimString(simple));
+                const match = rangeRegExp.exec(simple.trim());
                 if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
             }
         }

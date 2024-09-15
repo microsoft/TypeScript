@@ -1,23 +1,20 @@
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
+import { jsonToReadableText } from "../../helpers.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openExternalProjectForSession,
     openFilesForSession,
     protocolLocationFromSubstring,
     TestSession,
     toExternalFiles,
-} from "../../helpers/tsserver";
+} from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
+describe("unittests:: tsserver:: events:: projectLoading::", () => {
     const aTs: File = {
         path: `/user/username/projects/a/a.ts`,
         content: "export class A { }",
@@ -28,7 +25,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
     };
     const bTsPath = `/user/username/projects/b/b.ts`;
     const configBPath = `/user/username/projects/b/tsconfig.json`;
-    const files = [libFile, aTs, configA];
+    const files = [aTs, configA];
 
     function verifyProjectLoadingStartAndFinish(sessionType: string, createSession: (host: TestServerHost) => TestSession) {
         describe(sessionType, () => {
@@ -41,7 +38,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     path: configBPath,
                     content: "{}",
                 };
-                const host = createServerHost(files.concat(bTs, configB));
+                const host = TestServerHost.createServerHost(files.concat(bTs, configB));
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
                 openFilesForSession([bTs], session);
@@ -49,7 +46,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
             });
 
             it("when change is detected in the config file", () => {
-                const host = createServerHost(files);
+                const host = TestServerHost.createServerHost(files);
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
 
@@ -65,11 +62,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 };
                 const configB: File = {
                     path: configBPath,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         extends: "../a/tsconfig.json",
                     }),
                 };
-                const host = createServerHost(files.concat(bTs, configB));
+                const host = TestServerHost.createServerHost(files.concat(bTs, configB));
                 const session = createSession(host);
                 openFilesForSession([bTs], session);
 
@@ -97,7 +94,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     };
                     const aDTsMap: File = {
                         path: `/user/username/projects/a/a.d.ts.map`,
-                        content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`,
+                        content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["./a.ts"], names: [], mappings: "AAAA,qBAAa,CAAC;CAAI" }),
                     };
                     const bTs: File = {
                         path: bTsPath,
@@ -105,7 +102,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     };
                     const configB: File = {
                         path: configBPath,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             ...(disableSourceOfProjectReferenceRedirect && {
                                 compilerOptions: {
                                     disableSourceOfProjectReferenceRedirect,
@@ -115,7 +112,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                         }),
                     };
 
-                    const host = createServerHost(files.concat(aDTs, aDTsMap, bTs, configB));
+                    const host = TestServerHost.createServerHost(files.concat(aDTs, aDTsMap, bTs, configB));
                     const session = createSession(host);
                     openFilesForSession([bTs], session);
 
@@ -134,7 +131,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 const projectFileName = `/user/username/projects/a/project.csproj`;
 
                 function createSessionAndOpenProject(lazyConfiguredProjectsFromExternalProject: boolean) {
-                    const host = createServerHost(files);
+                    const host = TestServerHost.createServerHost(files);
                     const session = createSession(host);
                     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                         command: ts.server.protocol.CommandTypes.Configure,
@@ -175,10 +172,6 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
         });
     }
 
-    verifyProjectLoadingStartAndFinish("when using event handler", host => createSessionWithCustomEventHandler(host));
-    verifyProjectLoadingStartAndFinish("when using default event handler", host =>
-        createSession(
-            host,
-            { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) },
-        ));
+    verifyProjectLoadingStartAndFinish("when using event handler", createSessionWithCustomEventHandler);
+    verifyProjectLoadingStartAndFinish("when using default event handler", host => new TestSession(host));
 });

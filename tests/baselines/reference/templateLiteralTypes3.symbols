@@ -588,3 +588,22 @@ type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
 >Boom : Symbol(Boom, Decl(templateLiteralTypes3.ts, 189, 1))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+>a : Symbol(a, Decl(templateLiteralTypes3.ts, 193, 61))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+>id : Symbol(id, Decl(templateLiteralTypes3.ts, 197, 22))
+
+    let x: keyof T & string | `-${keyof T & string}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 197, 11))
+
+    x = "id";
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
+
+    x = "-id";
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 198, 7))
+}
+

@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/contextuallyTypedParametersOptionalInJSDoc.ts] ////
+
+=== index.js ===
+/**
+ * 
+ * @param {number} num 
+ */
+function acceptNum(num) {}
+>acceptNum : Symbol(acceptNum, Decl(index.js, 0, 0))
+>num : Symbol(num, Decl(index.js, 4, 19))
+
+/**
+ * @typedef {(a: string, b: number) => void} Fn
+ */
+
+/** @type {Fn} */
+const fn1 =
+>fn1 : Symbol(fn1, Decl(index.js, 11, 5))
+
+  /**
+   * @param [b]
+   */
+  function self(a, b) {
+>self : Symbol(self, Decl(index.js, 11, 11))
+>a : Symbol(a, Decl(index.js, 15, 16))
+>b : Symbol(b, Decl(index.js, 15, 18))
+
+    acceptNum(b); // error
+>acceptNum : Symbol(acceptNum, Decl(index.js, 0, 0))
+>b : Symbol(b, Decl(index.js, 15, 18))
+
+    self("");
+>self : Symbol(self, Decl(index.js, 11, 11))
+
+    self("", undefined);
+>self : Symbol(self, Decl(index.js, 11, 11))
+>undefined : Symbol(undefined)
+
+  };
+
+/** @type {Fn} */
+const fn2 =
+>fn2 : Symbol(fn2, Decl(index.js, 22, 5))
+
+  /**
+   * @param {number} [b]
+   */
+  function self(a, b) {
+>self : Symbol(self, Decl(index.js, 22, 11))
+>a : Symbol(a, Decl(index.js, 26, 16))
+>b : Symbol(b, Decl(index.js, 26, 18))
+
+    acceptNum(b); // error
+>acceptNum : Symbol(acceptNum, Decl(index.js, 0, 0))
+>b : Symbol(b, Decl(index.js, 26, 18))
+
+    self("");
+>self : Symbol(self, Decl(index.js, 22, 11))
+
+    self("", undefined);
+>self : Symbol(self, Decl(index.js, 22, 11))
+>undefined : Symbol(undefined)
+
+  };
+

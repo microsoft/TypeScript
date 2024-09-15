@@ -8,8 +8,10 @@
 /** @type {AnyEffect} */
 let b;
 >b : AnyEffect
+>  : ^^^^^^^^^
 
 /** @type {Third} */
 let c;
 >c : number
+>  : ^^^^^^
 

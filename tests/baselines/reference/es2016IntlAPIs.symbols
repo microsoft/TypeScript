@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/es2016/es2016IntlAPIs.ts] ////
+
+=== es2016IntlAPIs.ts ===
+// Sample from
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales
+console.log(Intl.getCanonicalLocales('EN-US'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Intl.getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --))
+>getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+
+// Expected output: Array ["en-US"]
+
+console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Intl.getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --))
+>getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+
+// Expected output: Array ["en-US", "fr"]
+
+try {
+  Intl.getCanonicalLocales('EN_US');
+>Intl.getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --))
+>getCanonicalLocales : Symbol(Intl.getCanonicalLocales, Decl(lib.es2016.intl.d.ts, --, --))
+
+} catch (err) {
+>err : Symbol(err, Decl(es2016IntlAPIs.ts, 10, 9))
+
+  console.log(err.toString());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>err : Symbol(err, Decl(es2016IntlAPIs.ts, 10, 9))
+
+  // Expected output: RangeError: invalid language tag: EN_US
+}
+

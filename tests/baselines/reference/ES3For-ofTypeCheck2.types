@@ -3,6 +3,9 @@
 === ES3For-ofTypeCheck2.ts ===
 for (var v of [true]) { }
 >v : boolean
+>  : ^^^^^^^
 >[true] : boolean[]
+>       : ^^^^^^^^^
 >true : true
+>     : ^^^^
 

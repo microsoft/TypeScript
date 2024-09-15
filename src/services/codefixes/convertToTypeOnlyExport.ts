@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     CodeFixContextBase,
     contains,
@@ -17,12 +22,7 @@ import {
     textChanges,
     TextSpan,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
@@ -68,14 +68,14 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             /*isTypeOnly*/ false,
             factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
         const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ true,
             factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {

@@ -24,9 +24,8 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-    trimStringEnd,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {
@@ -46,7 +45,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     var rawSources: string[] = [];
     var sources: string[] = [];
     var sourceToSourceIndexMap = new Map<string, number>();
-    var sourcesContent: (string | null)[] | undefined;
+    var sourcesContent: (string | null)[] | undefined; // eslint-disable-line no-restricted-syntax
 
     var names: string[] = [];
     var nameToNameIndexMap: Map<string, number> | undefined;
@@ -99,7 +98,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         return sourceIndex;
     }
 
-    /* eslint-disable no-null/no-null */
+    /* eslint-disable no-restricted-syntax */
     function setSourceContent(sourceIndex: number, content: string | null) {
         enter();
         if (content !== null) {
@@ -111,7 +110,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         }
         exit();
     }
-    /* eslint-enable no-null/no-null */
+    /* eslint-enable no-restricted-syntax */
 
     function addName(name: string) {
         enter();
@@ -361,9 +360,9 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
 /** @internal */
-export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 /** @internal */
-export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 
 /** @internal */
 export const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
@@ -392,7 +391,7 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
         const line = lineInfo.getLineText(index);
         const comment = sourceMapCommentRegExp.exec(line);
         if (comment) {
-            return trimStringEnd(comment[1]);
+            return comment[1].trimEnd();
         }
         // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
         else if (!line.match(whitespaceOrMapCommentRegExp)) {
@@ -401,13 +400,12 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
     }
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
-/** @internal */
-export function isRawSourceMap(x: any): x is RawSourceMap {
+function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
         && x.version === 3
@@ -418,7 +416,7 @@ export function isRawSourceMap(x: any): x is RawSourceMap {
         && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
         && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 /** @internal */
 export function tryParseRawSourceMap(text: string) {

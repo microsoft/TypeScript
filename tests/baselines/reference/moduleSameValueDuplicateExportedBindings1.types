@@ -12,5 +12,7 @@ export * from "./c";
 === c.ts ===
 export var foo = 42;
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 

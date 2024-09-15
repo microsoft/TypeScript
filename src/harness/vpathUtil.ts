@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
 
 export import sep = ts.directorySeparator;
 export import normalizeSeparators = ts.normalizeSlashes;
@@ -26,7 +26,7 @@ export import changeExtension = ts.changeAnyExtension;
 export import isTypeScript = ts.hasTSFileExtension;
 export import isJavaScript = ts.hasJSFileExtension;
 
-const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
+const invalidRootComponentRegExp = /^(?!(?:\/|\/\/\w+\/|[a-z]:\/?)?$)/i;
 const invalidNavigableComponentRegExp = /[:*?"<>|]/;
 const invalidNavigableComponentWithWildcardsRegExp = /[:"<>|]/;
 const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
@@ -133,5 +133,5 @@ export function isDefaultLibrary(path: string) {
 }
 
 export function isTsConfigFile(path: string): boolean {
-    return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
+    return path.includes("tsconfig") && path.includes("json");
 }

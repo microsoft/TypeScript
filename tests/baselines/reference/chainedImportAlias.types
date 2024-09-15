@@ -3,24 +3,35 @@
 === chainedImportAlias_file1.ts ===
 import x = require('./chainedImportAlias_file0');
 >x : typeof x
+>  : ^^^^^^^^
 
 import y = x;
 >y : typeof x
+>  : ^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 
 y.m.foo();
 >y.m.foo() : void
+>          : ^^^^
 >y.m.foo : () => void
+>        : ^^^^^^^^^^
 >y.m : typeof x.m
+>    : ^^^^^^^^^^
 >y : typeof x
+>  : ^^^^^^^^
 >m : typeof x.m
+>  : ^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 === chainedImportAlias_file0.ts ===
 export module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 

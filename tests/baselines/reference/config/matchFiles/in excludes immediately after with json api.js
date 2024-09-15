@@ -1,11 +1,11 @@
 config:
 {
- "include": [
-  "**/a.ts"
- ],
- "exclude": [
-  "**/.."
- ]
+  "include": [
+    "**/a.ts"
+  ],
+  "exclude": [
+    "**/.."
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -81,33 +81,33 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/a.ts",
-  "c:/dev/x/a.ts",
-  "c:/dev/x/y/a.ts",
-  "c:/dev/z/a.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "**/a.ts"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/a.ts",
+    "c:/dev/x/a.ts",
+    "c:/dev/x/y/a.ts",
+    "c:/dev/z/a.ts"
   ],
-  "exclude": [
-   "**/.."
-  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "**/a.ts"
+    ],
+    "exclude": [
+      "**/.."
+    ],
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {
+    "c:/dev": "WatchDirectoryFlags.Recursive"
+  },
   "compileOnSave": false
- },
- "wildcardDirectories": {
-  "c:/dev": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
 }
 Errors::
 [91merror[0m[90m TS5065: [0mFile specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/..'.

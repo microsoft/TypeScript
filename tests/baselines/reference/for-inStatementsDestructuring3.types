@@ -3,11 +3,17 @@
 === for-inStatementsDestructuring3.ts ===
 var a, b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 for ([a, b] in []) { }
 >[a, b] : [any, any]
+>       : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

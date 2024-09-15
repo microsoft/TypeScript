@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsDefault.ts] ////
+
+=== a.ts ===
+export default 1 + 1;
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+
+=== b.ts ===
+export default { foo: 1 + 1 };
+>{ foo: 1 + 1 } : { foo: number; }
+>               : ^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== c.ts ===
+export default [{ foo: 1 + 1 }];
+>[{ foo: 1 + 1 }] : { foo: number; }[]
+>                 : ^^^^^^^^^^^^^^^^^^
+>{ foo: 1 + 1 } : { foo: number; }
+>               : ^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== d.ts ===
+export default [{ foo: 1 + 1 }] as const;
+>[{ foo: 1 + 1 }] as const : readonly [{ readonly foo: number; }]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ foo: 1 + 1 }] : readonly [{ readonly foo: number; }]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: 1 + 1 } : { readonly foo: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== e.ts ===
+export default [{ foo: 1 + 1 }] as const;
+>[{ foo: 1 + 1 }] as const : readonly [{ readonly foo: number; }]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ foo: 1 + 1 }] : readonly [{ readonly foo: number; }]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: 1 + 1 } : { readonly foo: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== f.ts ===
+const a = { foo: 1 };
+>a : { foo: number; }
+>  : ^^^^^^^^^^^^^^^^
+>{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+export default a;
+>a : { foo: number; }
+>  : ^^^^^^^^^^^^^^^^
+

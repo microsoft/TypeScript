@@ -1,9 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import {
-    baselineParseConfig,
-} from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
     interface VerifyWatchOptions {
@@ -18,7 +17,7 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
             subScenario,
             input: () =>
                 scenario().map(({ json, additionalFiles, existingWatchOptions }) => {
-                    const jsonText = JSON.stringify(json, undefined, " ");
+                    const jsonText = jsonToReadableText(json);
                     return {
                         createHost: () =>
                             new fakes.ParseConfigHost(
@@ -39,7 +38,7 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                         existingWatchOptions,
                         baselineParsed: (baseline, parsed) => {
                             baseline.push(`Result: WatchOptions::`);
-                            baseline.push(JSON.stringify(parsed.watchOptions, undefined, " "));
+                            baseline.push(jsonToReadableText(parsed.watchOptions));
                         },
                     };
                 }),
@@ -77,7 +76,7 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 },
             },
             additionalFiles: {
-                "/base.json": JSON.stringify({
+                "/base.json": jsonToReadableText({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
                         watchDirectory: "FixedPollingInterval",
@@ -90,10 +89,22 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 extends: "./base.json",
             },
             additionalFiles: {
-                "/base.json": JSON.stringify({
+                "/base.json": jsonToReadableText({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
                         watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
+        },
+        {
+            json: {
+                extends: "./base/tsconfig.json",
+            },
+            additionalFiles: {
+                "/base/tsconfig.json": jsonToReadableText({
+                    watchOptions: {
+                        excludeFiles: ["${configDir}/temp/*.ts"], // eslint-disable-line no-template-curly-in-string
                     },
                 }),
             },

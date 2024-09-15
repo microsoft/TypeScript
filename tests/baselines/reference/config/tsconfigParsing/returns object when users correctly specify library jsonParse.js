@@ -6,11 +6,11 @@ Input::
         }
 Config::
 {
- "compilerOptions": {
-  "lib": [
-   "es5"
-  ]
- }
+  "compilerOptions": {
+    "lib": [
+      "es5"
+    ]
+  }
 }
 Errors::
 
@@ -23,12 +23,12 @@ Input::
         }
 Config::
 {
- "compilerOptions": {
-  "lib": [
-   "es5",
-   "es6"
-  ]
- }
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es6"
+    ]
+  }
 }
 Errors::
 

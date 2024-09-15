@@ -5,7 +5,7 @@ import {
     Path,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
@@ -15,7 +15,7 @@ import {
     EventEndInstallTypes,
     EventInitializationFailed,
     EventTypesRegistry,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export interface TypingInstallerResponse {
     readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
@@ -51,6 +51,7 @@ export interface InstallPackageRequest extends TypingInstallerRequestWithProject
     readonly fileName: Path;
     readonly packageName: string;
     readonly projectRootPath: Path;
+    readonly id: number;
 }
 
 /** @internal */
@@ -61,6 +62,7 @@ export interface TypesRegistryResponse extends TypingInstallerResponse {
 
 export interface PackageInstalledResponse extends ProjectResponse {
     readonly kind: ActionPackageInstalled;
+    readonly id: number;
     readonly success: boolean;
     readonly message: string;
 }
