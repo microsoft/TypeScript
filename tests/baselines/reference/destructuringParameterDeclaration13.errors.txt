@@ -1,15 +1,15 @@
-destructuringParameterDeclaration11.ts(5,9): error TS2741: Property 'b' is missing in type '{ c: number; }' but required in type '{ b: number; c?: number | undefined; }'.
-destructuringParameterDeclaration11.ts(12,23): error TS7031: Binding element 'b' implicitly has an 'any' type.
-destructuringParameterDeclaration11.ts(18,9): error TS2741: Property 'b' is missing in type '{}' but required in type '{ b: number; }'.
-destructuringParameterDeclaration11.ts(29,23): error TS7031: Binding element 'b' implicitly has an 'any' type.
-destructuringParameterDeclaration11.ts(37,31): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a?: number | undefined; }'.
-destructuringParameterDeclaration11.ts(38,8): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ b: number; a?: number | undefined; }'.
+destructuringParameterDeclaration13.ts(5,9): error TS2741: Property 'b' is missing in type '{ c: number; }' but required in type '{ b: number; c?: number | undefined; }'.
+destructuringParameterDeclaration13.ts(12,23): error TS7031: Binding element 'b' implicitly has an 'any' type.
+destructuringParameterDeclaration13.ts(18,9): error TS2741: Property 'b' is missing in type '{}' but required in type '{ b: number; }'.
+destructuringParameterDeclaration13.ts(29,23): error TS7031: Binding element 'b' implicitly has an 'any' type.
+destructuringParameterDeclaration13.ts(37,31): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a?: number | undefined; }'.
+destructuringParameterDeclaration13.ts(38,8): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ b: number; a?: number | undefined; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; a?: number | undefined; }'.
-destructuringParameterDeclaration11.ts(42,36): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ b?: number | undefined; }'.
-destructuringParameterDeclaration11.ts(43,10): error TS2741: Property 'c' is missing in type '{ b: number; }' but required in type '{ c: number; b?: number | undefined; }'.
+destructuringParameterDeclaration13.ts(42,36): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ b?: number | undefined; }'.
+destructuringParameterDeclaration13.ts(43,10): error TS2741: Property 'c' is missing in type '{ b: number; }' but required in type '{ c: number; b?: number | undefined; }'.
 
 
-==== destructuringParameterDeclaration11.ts (8 errors) ====
+==== destructuringParameterDeclaration13.ts (8 errors) ====
     function test1({ a: { b = 1 } } = { a: {} }) {}
     test1({ a: { b: 42 } }); // ok
     
@@ -34,7 +34,7 @@ destructuringParameterDeclaration11.ts(43,10): error TS2741: Property 'c' is mis
     test5({ a: {} }); // error, missing b
             ~
 !!! error TS2741: Property 'b' is missing in type '{}' but required in type '{ b: number; }'.
-!!! related TS2728 destructuringParameterDeclaration11.ts:16:31: 'b' is declared here.
+!!! related TS2728 destructuringParameterDeclaration13.ts:16:31: 'b' is declared here.
     
     function test6({ a: { b = 1 } = {} }) {}
     test6({ a: { b: 42 } }); // ok
@@ -62,7 +62,7 @@ destructuringParameterDeclaration11.ts(43,10): error TS2741: Property 'c' is mis
            ~~~~~~~~~
 !!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ b: number; a?: number | undefined; }'.
 !!! error TS2345:   Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; a?: number | undefined; }'.
-!!! related TS2728 destructuringParameterDeclaration11.ts:37:31: 'b' is declared here.
+!!! related TS2728 destructuringParameterDeclaration13.ts:37:31: 'b' is declared here.
     test10({ b: 42 }); // ok
     test10({ a: 42, b: 100 }); // ok
     
@@ -72,7 +72,7 @@ destructuringParameterDeclaration11.ts(43,10): error TS2741: Property 'c' is mis
     test11({ a: { b: 42 } }); // error, missing c
              ~
 !!! error TS2741: Property 'c' is missing in type '{ b: number; }' but required in type '{ c: number; b?: number | undefined; }'.
-!!! related TS2728 destructuringParameterDeclaration11.ts:42:36: 'c' is declared here.
+!!! related TS2728 destructuringParameterDeclaration13.ts:42:36: 'c' is declared here.
     test11({ a: { c: 42 } }); // ok
     
     function test12({ a: { b = 1 } = {}, c = 2 } = { a: {} }) {}

@@ -1,7 +1,7 @@
-destructuringParameterDeclaration10.ts(2,3): error TS7031: Binding element 'username' implicitly has an 'any' type.
+destructuringParameterDeclaration12.ts(2,3): error TS7031: Binding element 'username' implicitly has an 'any' type.
 
 
-==== destructuringParameterDeclaration10.ts (1 errors) ====
+==== destructuringParameterDeclaration12.ts (1 errors) ====
     const getUserProfileByUsername = ({
       username,
       ~~~~~~~~

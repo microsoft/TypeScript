@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration12.ts] ////
+
+=== destructuringParameterDeclaration12.ts ===
+const getUserProfileByUsername = ({
+>getUserProfileByUsername : Symbol(getUserProfileByUsername, Decl(destructuringParameterDeclaration12.ts, 0, 5))
+
+  username,
+>username : Symbol(username, Decl(destructuringParameterDeclaration12.ts, 0, 35))
+
+  withEmail = false,
+>withEmail : Symbol(withEmail, Decl(destructuringParameterDeclaration12.ts, 1, 11))
+
+  withNotificationSettings = false,
+>withNotificationSettings : Symbol(withNotificationSettings, Decl(destructuringParameterDeclaration12.ts, 2, 20))
+
+} = {}) => {
+  return {};
+};
+
+getUserProfileByUsername({
+>getUserProfileByUsername : Symbol(getUserProfileByUsername, Decl(destructuringParameterDeclaration12.ts, 0, 5))
+
+  username: 'ly', // ok (implicit any reported at declaration site)
+>username : Symbol(username, Decl(destructuringParameterDeclaration12.ts, 8, 26))
+
+});
+
+getUserProfileByUsername({}); // ok
+>getUserProfileByUsername : Symbol(getUserProfileByUsername, Decl(destructuringParameterDeclaration12.ts, 0, 5))
+

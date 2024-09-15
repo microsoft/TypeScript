@@ -31346,11 +31346,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (index < 0) return undefined;
             return getContextualTypeForElementExpression(parentType, index);
         }
-        const nameType = getLiteralTypeFromPropertyName(name);
-        if (isTypeUsableAsPropertyName(nameType)) {
-            const text = getPropertyNameFromType(nameType);
-            return getTypeOfPropertyOfType(parentType, text);
-        }
+        const propertyName = getPropertyNameFromBindingElement(declaration);
+        return propertyName && getTypeOfPropertyOfType(parentType, propertyName);
     }
 
     function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {

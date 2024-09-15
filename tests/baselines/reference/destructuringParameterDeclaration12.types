@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration10.ts] ////
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration12.ts] ////
 
-=== destructuringParameterDeclaration10.ts ===
+=== destructuringParameterDeclaration12.ts ===
 const getUserProfileByUsername = ({
 >getUserProfileByUsername : ({ username, withEmail, withNotificationSettings, }?: { username?: any; withEmail?: boolean | undefined; withNotificationSettings?: boolean | undefined; }) => {}
 >                         : ^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
