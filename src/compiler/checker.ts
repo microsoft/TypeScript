@@ -1450,7 +1450,7 @@ export function getSymbolId(symbol: Symbol): SymbolId {
 }
 
 /** @internal */
-export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean {
     const moduleState = getModuleInstanceState(node);
     return moduleState === ModuleInstanceState.Instantiated ||
         (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
@@ -52765,7 +52765,7 @@ function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) 
 }
 
 /** @internal */
-export function signatureHasRestParameter(s: Signature) {
+export function signatureHasRestParameter(s: Signature): boolean {
     return !!(s.flags & SignatureFlags.HasRestParameter);
 }
 
