@@ -97,6 +97,7 @@ import {
     isValueSignatureDeclaration,
     isVarConstLike,
     JSDocSignature,
+    JsxAttributeValue,
     KeywordTypeSyntaxKind,
     map,
     mapDefined,
@@ -125,9 +126,9 @@ import {
     setTextRangePosEnd,
     ShorthandPropertyAssignment,
     SignatureDeclaration,
-    SyntacticNodeBuilder,
     skipTypeParentheses,
     StringLiteral,
+    SyntacticNodeBuilder,
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
@@ -144,7 +145,6 @@ import {
     visitNode,
     visitNodes,
     Visitor,
-    JsxAttributeValue,
 } from "./_namespaces/ts.js";
 
 type SyntacticResult =
@@ -159,85 +159,6 @@ function syntacticResult(type: TypeNode | undefined, reportFallback: boolean = t
 const notImplemented: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ false);
 const failed: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ true);
 
-
-// To review !
-// if (!(context.internalFlags & InternalNodeBuilderFlags.AllowUnresolvedNames && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
-//     return undefined;
-// }
-// }
-// if (
-// (isFunctionLike(node) && !node.type)
-// || (isPropertyDeclaration(node) && !node.type && !node.initializer)
-// || (isPropertySignature(node) && !node.type && !node.initializer)
-// || (isParameter(node) && !node.type && !node.initializer)
-// ) {
-// let visited = visitEachChild(node, visitExistingNodeTreeSymbols);
-// if (visited === node) {
-//     visited = setTextRange(context, factory.cloneNode(node), node);
-// }
-// (visited as Mutable<typeof visited>).type = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-// if (isParameter(node)) {
-//     (visited as Mutable<ParameterDeclaration>).modifiers = undefined;
-// }
-// return visited;
-// }
-// if (isTypeQueryNode(node)) {
-// const result = tryVisitTypeQuery(node);
-// if (!result) {
-//     hadError = true;
-//     return node;
-// }
-// return result;
-// }
-// if (isComputedPropertyName(node) && isEntityNameExpression(node.expression)) {
-// const { node: result, introducesError } = trackExistingEntityName(node.expression, context);
-// if (!introducesError) {
-//     return factory.updateComputedPropertyName(node, result);
-// }
-// else {
-//     const type = getWidenedType(getRegularTypeOfExpression(node.expression));
-//     const computedPropertyNameType = typeToTypeNodeHelper(type, context);
-//     let literal;
-//     if (isLiteralTypeNode(computedPropertyNameType)) {
-//         literal = computedPropertyNameType.literal;
-//     }
-//     else {
-//         const evaluated = evaluateEntityNameExpression(node.expression);
-//         const literalNode = typeof evaluated.value === "string" ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
-//             typeof evaluated.value === "number" ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
-//             undefined;
-//         if (!literalNode) {
-//             if (isImportTypeNode(computedPropertyNameType)) {
-//                 trackComputedName(node.expression, context.enclosingDeclaration, context);
-//             }
-//             return node;
-//         }
-//         literal = literalNode;
-//     }
-//     if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(compilerOptions))) {
-//         return factory.createIdentifier(literal.text);
-//     }
-//     if (literal.kind === SyntaxKind.NumericLiteral && !literal.text.startsWith("-")) {
-//         return literal;
-//     }
-//     return factory.updateComputedPropertyName(node, literal);
-// }
-// }
-// if (isTypePredicateNode(node)) {
-// let parameterName;
-// if (isIdentifier(node.parameterName)) {
-//     const { node: result, introducesError } = trackExistingEntityName(node.parameterName, context);
-//     // Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
-//     // /** @type {(v: unknown) => v is undefined} */
-//     // const isUndef = v => v === undefined;
-//     hadError = hadError || introducesError;
-//     parameterName = result;
-// }
-// else {
-//     parameterName = factory.cloneNode(node.parameterName);
-// }
-// return factory.updateTypePredicateNode(node, factory.cloneNode(node.assertsModifier), parameterName, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
-// }
 /** @internal */
 export function createSyntacticTypeNodeBuilder(
     options: CompilerOptions,

@@ -4286,16 +4286,16 @@ export function forEachImportClauseDeclaration<T>(node: ImportClause, action: (d
 
 /** @internal */
 export function hasQuestionToken(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.Parameter:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-                return (node as ParameterDeclaration | MethodDeclaration | PropertyDeclaration).questionToken !== undefined;
-        }
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+            return (node as ParameterDeclaration | MethodDeclaration | PropertyDeclaration).questionToken !== undefined;
+    }
     return false;
 }
 
@@ -10094,12 +10094,12 @@ export function matchPatternOrExact(parsedPatterns: ParsedPatterns, candidate: s
     const { matchableStringSet, patterns } = parsedPatterns;
 
     if (matchableStringSet?.has(candidate)) {
-            return candidate;
-        }
+        return candidate;
+    }
 
     if (patterns === undefined || patterns.length === 0) {
         return undefined;
-        }
+    }
 
     return findBestPatternMatch(patterns, _ => _, candidate);
 }

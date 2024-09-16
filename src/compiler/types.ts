@@ -10546,7 +10546,7 @@ export interface SyntacticNodeBuilder {
     serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
     serializeTypeOfExpression: (expr: Expression | JsxAttributeValue, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => TypeNode;
     serializeExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
-    serializeTypeOfAccessor: (accessor: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined
+    serializeTypeOfAccessor: (accessor: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
 }
 
 /** @internal */

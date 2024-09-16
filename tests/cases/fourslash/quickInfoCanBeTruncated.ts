@@ -574,5 +574,7 @@ verify.quickInfoIs(`type DeeplyMapped = {
         _499: [...];
     };
     ... 498 more ...;
-    _499: ...;
+    _499: {
+        ...;
+    };
 }`);
