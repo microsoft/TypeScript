@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagOverload1.ts] ////
+
+=== index.js ===
+/**
+ * @template {string} Element
+ * @overload
+ * @param {Element} element
+ * @returns {() => void}
+ */
+
+/**
+ * @template {boolean} Element
+ * @overload
+ * @param {Element} element
+ * @returns {() => void}
+ */
+
+/**
+ * @overload
+ * @param {number} element
+ * @returns {() => void}
+ */
+
+/**
+ * @param {any} element
+ */
+export function on(element) {
+>on : { <Element extends string>(element: Element): () => void; <Element extends boolean>(element: Element): () => void; (element: number): () => void; }
+>   : ^^^       ^^^^^^^^^      ^^       ^^       ^^^          ^^^       ^^^^^^^^^       ^^       ^^       ^^^          ^^^       ^^      ^^^          ^^^
+>element : any
+
+	return () => {}
+>() => {} : () => void
+>         : ^^^^^^^^^^
+}
+
