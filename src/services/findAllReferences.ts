@@ -1051,7 +1051,7 @@ export namespace Core {
         return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
     }
 
-    export function getAdjustedNode(node: Node, options: Options) {
+    export function getAdjustedNode(node: Node, options: Options): Node {
         if (options.use === FindReferencesUse.References) {
             node = getAdjustedReferenceLocation(node);
         }

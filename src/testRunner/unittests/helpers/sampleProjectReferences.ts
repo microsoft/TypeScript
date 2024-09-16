@@ -4,7 +4,7 @@ import { getProjectConfigWithNodeNext } from "./contents.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
+export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -24,7 +24,7 @@ export function getSysForSampleProjectReferences(
     withNodeNext?: boolean,
     skipReferenceCoreFromTest?: boolean,
     forTsserver?: boolean,
-) {
+): TestServerHost {
     return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
@@ -82,7 +82,7 @@ export function getSysForSampleProjectReferences(
     }, { currentDirectory: "/user/username/projects/sample1" });
 }
 
-export function getSysForSampleProjectReferencesBuilt(withNodeNext?: boolean) {
+export function getSysForSampleProjectReferencesBuilt(withNodeNext?: boolean): TestServerHost {
     return solutionBuildWithBaseline(
         getSysForSampleProjectReferences(withNodeNext),
         ["tests"],

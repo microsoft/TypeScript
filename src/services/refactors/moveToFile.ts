@@ -246,7 +246,7 @@ export function getNewStatementsAndRemoveFromOldFile(
     preferences: UserPreferences,
     importAdderForNewFile: codefix.ImportAdder,
     importAdderForOldFile: codefix.ImportAdder,
-) {
+): void {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
 
@@ -311,7 +311,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
 }
 
 /** @internal */
-export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean): void {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {
@@ -512,7 +512,7 @@ export function addImportsForMovedSymbols(
     targetFileName: string,
     importAdder: codefix.ImportAdder,
     program: Program,
-) {
+): void {
     for (const [symbol, isValidTypeOnlyUseSite] of symbols) {
         const symbolName = getNameForExportedSymbol(symbol, getEmitScriptTarget(program.getCompilerOptions()));
         const exportKind = symbol.name === "default" && symbol.parent ? ExportKind.Default : ExportKind.Named;
@@ -840,7 +840,7 @@ export function getStatementsToMove(context: RefactorContext): ToMove | undefine
 }
 
 /** @internal */
-export function containsJsx(statements: readonly Statement[] | undefined) {
+export function containsJsx(statements: readonly Statement[] | undefined): Statement | undefined {
     return find(statements, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
 }
 
@@ -1121,7 +1121,7 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
 }
 
 /** @internal */
-export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker): Set<Symbol> {
     const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);

@@ -292,11 +292,11 @@ export namespace BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
+    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined): boolean | undefined {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 
-    export function createReferencedMap(options: CompilerOptions) {
+    export function createReferencedMap(options: CompilerOptions): ManyToManyPathMap | undefined {
         return options.module !== ModuleKind.None && !options.outFile ?
             createManyToManyPathMap() :
             undefined;
@@ -346,7 +346,7 @@ export namespace BuilderState {
     /**
      * Releases needed properties
      */
-    export function releaseCache(state: BuilderState) {
+    export function releaseCache(state: BuilderState): void {
         state.allFilesExcludingDefaultLibraryFile = undefined;
         state.allFileNames = undefined;
     }
@@ -391,7 +391,7 @@ export namespace BuilderState {
         return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
     }
 
-    export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+    export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path): void {
         state.fileInfos.get(path)!.signature = signature;
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
     }
@@ -402,7 +402,7 @@ export namespace BuilderState {
         cancellationToken: CancellationToken | undefined,
         host: HostForComputeHash,
         onNewSignature: (signature: string, sourceFiles: readonly SourceFile[]) => void,
-    ) {
+    ): void {
         programOfThisState.emit(
             sourceFile,
             (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
@@ -434,8 +434,8 @@ export namespace BuilderState {
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
         host: HostForComputeHash,
-        useFileVersionAsSignature = state.useFileVersionAsSignature,
-    ) {
+        useFileVersionAsSignature: boolean | undefined = state.useFileVersionAsSignature,
+    ): boolean {
         // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
         if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
 
@@ -507,7 +507,7 @@ export namespace BuilderState {
     /**
      * Gets the files referenced by the the file path
      */
-    export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
+    export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path): Path[] {
         const keys = state.referencedMap!.getKeys(referencedFilePath);
         return keys ? arrayFrom(keys.keys()) : [];
     }

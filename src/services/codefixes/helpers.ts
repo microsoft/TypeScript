@@ -180,7 +180,7 @@ export function addNewNodeForMemberSymbol(
     importAdder: ImportAdder | undefined,
     addClassElement: (node: AddNode) => void,
     body: Block | undefined,
-    preserveOptional = PreserveOptionalFlags.All,
+    preserveOptional: PreserveOptionalFlags = PreserveOptionalFlags.All,
     isAmbient = false,
 ): void {
     const declarations = symbol.getDeclarations();
@@ -387,7 +387,7 @@ export function createSignatureDeclarationFromSignature(
     optional: boolean | undefined,
     enclosingDeclaration: Node | undefined,
     importAdder: ImportAdder | undefined,
-) {
+): FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | undefined {
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
@@ -850,7 +850,7 @@ export function setJsonCompilerOptionValues(
     changeTracker: textChanges.ChangeTracker,
     configFile: TsConfigSourceFile,
     options: [string, Expression][],
-) {
+): undefined {
     const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
     if (!tsconfigObjectLiteral) return undefined;
 
@@ -889,7 +889,7 @@ export function setJsonCompilerOptionValue(
     configFile: TsConfigSourceFile,
     optionName: string,
     optionValue: Expression,
-) {
+): void {
     setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
 }
 
@@ -908,7 +908,10 @@ function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyA
  *
  * @internal
  */
-export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
+export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget): {
+    typeNode: TypeNode;
+    symbols: Symbol[];
+} | undefined {
     let symbols: Symbol[] | undefined;
     const typeNode = visitNode(importTypeNode, visit, isTypeNode);
     if (symbols && typeNode) {
@@ -946,7 +949,7 @@ function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Ide
 }
 
 /** @internal */
-export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]): void {
     symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
 }
 

@@ -71,7 +71,7 @@ export function generateDjb2Hash(data: string): string {
  *
  * @internal
  */
-export function setStackTraceLimit() {
+export function setStackTraceLimit(): void {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
         (Error as any).stackTraceLimit = 100;
     }
@@ -104,10 +104,10 @@ export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, po
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
 /** @internal */
-export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+export const missingFileModifiedTime: Date = new Date(0); // Any subsequent modification will occur after this time
 
 /** @internal */
-export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string): Date {
     return host.getModifiedTime(fileName) || missingFileModifiedTime;
 }
 
@@ -128,7 +128,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 /** @internal */
-export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
+export let unchangedPollThresholds: { [K in PollingInterval]: number; } = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {
@@ -550,7 +550,7 @@ function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolea
 }
 
 /** @internal */
-export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+export function getFileWatcherEventKind(oldTime: number, newTime: number): FileWatcherEventKind {
     return oldTime === 0
         ? FileWatcherEventKind.Created
         : newTime === 0
@@ -559,17 +559,17 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 }
 
 /** @internal */
-export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+export const ignoredPaths: readonly string[] = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
 /** @internal */
-export function sysLog(s: string) {
+export function sysLog(s: string): void {
     return curSysLog(s);
 }
 
 /** @internal */
-export function setSysLog(logger: typeof sysLog) {
+export function setSysLog(logger: typeof sysLog): void {
     curSysLog = logger;
 }
 
@@ -1375,7 +1375,7 @@ export function createSystemWatchFunctions({
  *
  * @internal
  */
-export function patchWriteFileEnsuringDirectory(sys: System) {
+export function patchWriteFileEnsuringDirectory(sys: System): void {
     // patch writefile to create folder before writing the file
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (path, data, writeBom) =>
@@ -1997,7 +1997,7 @@ export let sys: System = (() => {
 })();
 
 /** @internal @knipignore */
-export function setSys(s: System) {
+export function setSys(s: System): void {
     sys = s;
 }
 
