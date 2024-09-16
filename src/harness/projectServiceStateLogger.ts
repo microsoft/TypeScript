@@ -9,6 +9,7 @@ import {
     isString,
     noop,
     SourceMapper,
+    toSorted,
 } from "./_namespaces/ts.js";
 import {
     AutoImportProviderProject,
@@ -66,7 +67,7 @@ enum Diff {
 type StatePropertyLog = string | string[];
 type StateItemLog = [string, StatePropertyLog[]];
 
-export function patchServiceForStateBaseline(service: ProjectService) {
+export function patchServiceForStateBaseline(service: ProjectService): void {
     if (!service.logger.isTestLogger || !service.logger.hasLevel(LogLevel.verbose)) return;
     if (service.baseline !== noop) return; // Already patched
 
@@ -93,7 +94,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function sendLogsToLogger(title: string, logs: StateItemLog[] | undefined) {
         if (!logs) return;
         logger.log(title);
-        logs.sort((a, b) => compareStringsCaseSensitive(a[0], b[0]))
+        toSorted(logs, (a, b) => compareStringsCaseSensitive(a[0], b[0]))
             .forEach(([title, propertyLogs]) => {
                 logger.log(title);
                 propertyLogs.forEach(p => isString(p) ? logger.log(p) : p.forEach(s => logger.log(s)));

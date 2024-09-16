@@ -1818,6 +1818,14 @@
         "code": 1540,
         "reportsDeprecated": true
     },
+    "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1541
+    },
+    "Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
+        "category": "Error",
+        "code": 1542
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -5716,6 +5724,14 @@
         "category": "Message",
         "code": 6361
     },
+    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6362
+    },
+    "Project '{0}' can't be built because its dependency '{1}' has errors": {
+        "category": "Message",
+        "code": 6363
+    },
     "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6364
@@ -5759,6 +5775,14 @@
     "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
         "category": "Message",
         "code": 6381
+    },
+    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6382
+    },
+    "Project '{0}' can't be built because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6383
     },
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
@@ -6095,6 +6119,10 @@
         "category": "Message",
         "code": 6639
     },
+    "Skip building downstream projects on error in upstream project.": {
+        "category": "Message",
+        "code": 6640
+    },
     "Specify a list of glob patterns that match files to be included in compilation.": {
         "category": "Message",
         "code": 6641
@@ -6419,6 +6447,10 @@
     "Check side effect imports.": {
         "category": "Message",
         "code": 6806
+    },
+    "This operation can be simplified. This shift is identical to `{0} {1} {2}`.": {
+        "category": "Error",
+        "code": 6807
     },
 
     "one of:": {
@@ -8172,6 +8204,14 @@
     "Wrap all invalid decorator expressions in parentheses": {
         "category": "Message",
         "code": 95195
+    },
+    "Add 'resolution-mode' import attribute": {
+        "category": "Message",
+        "code": 95196
+    },
+    "Add 'resolution-mode' import attribute to all type-only imports that need it": {
+        "category": "Message",
+        "code": 95197
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

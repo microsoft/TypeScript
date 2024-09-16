@@ -8290,7 +8290,11 @@
           ]
         }
       ],
-      "defaultCommitCharacters": []
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
     }
   },
   {

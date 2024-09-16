@@ -11,8 +11,8 @@ import {
     InstallPackageAction,
     isExternalModuleNameRelative,
     isStringLiteral,
-    JsTyping,
     LanguageServiceHost,
+    nodeCoreModules,
     parsePackageName,
     SourceFile,
     tryCast,
@@ -71,6 +71,6 @@ function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string 
 
 function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
     return diagCode === errorCodeCannotFindModule
-        ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
+        ? (nodeCoreModules.has(packageName) ? "@types/node" : undefined)
         : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
 }

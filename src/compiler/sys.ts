@@ -71,7 +71,7 @@ export function generateDjb2Hash(data: string): string {
  *
  * @internal
  */
-export function setStackTraceLimit() {
+export function setStackTraceLimit(): void {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
         (Error as any).stackTraceLimit = 100;
     }
@@ -104,10 +104,10 @@ export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, po
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
 /** @internal */
-export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+export const missingFileModifiedTime: Date = new Date(0); // Any subsequent modification will occur after this time
 
 /** @internal */
-export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string): Date {
     return host.getModifiedTime(fileName) || missingFileModifiedTime;
 }
 
@@ -128,7 +128,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 /** @internal */
-export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
+export let unchangedPollThresholds: { [K in PollingInterval]: number; } = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {
@@ -550,7 +550,7 @@ function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolea
 }
 
 /** @internal */
-export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+export function getFileWatcherEventKind(oldTime: number, newTime: number): FileWatcherEventKind {
     return oldTime === 0
         ? FileWatcherEventKind.Created
         : newTime === 0
@@ -559,17 +559,17 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 }
 
 /** @internal */
-export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
+export const ignoredPaths: readonly string[] = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
 /** @internal */
-export function sysLog(s: string) {
+export function sysLog(s: string): void {
     return curSysLog(s);
 }
 
 /** @internal */
-export function setSysLog(logger: typeof sysLog) {
+export function setSysLog(logger: typeof sysLog): void {
     curSysLog = logger;
 }
 
@@ -1375,7 +1375,7 @@ export function createSystemWatchFunctions({
  *
  * @internal
  */
-export function patchWriteFileEnsuringDirectory(sys: System) {
+export function patchWriteFileEnsuringDirectory(sys: System): void {
     // patch writefile to create folder before writing the file
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (path, data, writeBom) =>
@@ -1466,7 +1466,7 @@ export let sys: System = (() => {
     const byteOrderMarkIndicator = "\uFEFF";
 
     function getNodeSystem(): System {
-        const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
+        const nativePattern = /^native |^\([^)]+\)$|^(?:internal[\\/]|[\w\s]+(?:\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
         const _os = require("os");
@@ -1592,7 +1592,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(?:inspect|debug)(?:-brk)?(?:=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1792,7 +1792,7 @@ export let sys: System = (() => {
             try {
                 buffer = _fs.readFileSync(fileName);
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             let len = buffer.length;
@@ -1863,7 +1863,7 @@ export let sys: System = (() => {
                                 continue;
                             }
                         }
-                        catch (e) {
+                        catch {
                             continue;
                         }
                     }
@@ -1882,7 +1882,7 @@ export let sys: System = (() => {
                 directories.sort();
                 return { files, directories };
             }
-            catch (e) {
+            catch {
                 return emptyFileSystemEntries;
             }
         }
@@ -1911,7 +1911,7 @@ export let sys: System = (() => {
                         return false;
                 }
             }
-            catch (e) {
+            catch {
                 return false;
             }
             finally {
@@ -1952,7 +1952,7 @@ export let sys: System = (() => {
             try {
                 return statSync(path)?.mtime;
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             finally {
@@ -1964,7 +1964,7 @@ export let sys: System = (() => {
             try {
                 _fs.utimesSync(path, time, time);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -1973,7 +1973,7 @@ export let sys: System = (() => {
             try {
                 return _fs.unlinkSync(path);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -1997,7 +1997,7 @@ export let sys: System = (() => {
 })();
 
 /** @internal @knipignore */
-export function setSys(s: System) {
+export function setSys(s: System): void {
     sys = s;
 }
 

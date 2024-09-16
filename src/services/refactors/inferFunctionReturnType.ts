@@ -11,6 +11,7 @@ import {
     FunctionExpression,
     getLocaleSpecificMessage,
     getTouchingPropertyName,
+    InternalNodeBuilderFlags,
     isArrowFunction,
     isBlock,
     isInJSFile,
@@ -126,7 +127,7 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
         if (signature) {
             const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
             if (typePredicate && typePredicate.type) {
-                const typePredicateTypeNode = typeChecker.typePredicateToTypePredicateNode(typePredicate, declaration, NodeBuilderFlags.NoTruncation);
+                const typePredicateTypeNode = typeChecker.typePredicateToTypePredicateNode(typePredicate, declaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
                 if (typePredicateTypeNode) {
                     return { declaration, returnTypeNode: typePredicateTypeNode };
                 }
@@ -141,7 +142,7 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
     }
 
-    const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation);
+    const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
     if (returnTypeNode) {
         return { declaration, returnTypeNode };
     }

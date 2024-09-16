@@ -1,6 +1,35 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/project/primary/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": false,
+    "outDir": "bin"
+  },
+  "references": []
+}
+
+//// [/home/src/workspaces/project/primary/a.ts]
+export { };
+
+//// [/home/src/workspaces/project/reference/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../primary"
+    }
+  ],
+  "files": []
+}
+
+//// [/home/src/workspaces/project/reference/b.ts]
+import * as mod_0 from "../primary/a"
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,46 +44,15 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/primary/a.ts]
-export { };
 
-//// [/primary/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": false,
-    "outDir": "bin"
-  },
-  "references": []
-}
-
-//// [/reference/b.ts]
-import * as mod_0 from "../primary/a"
-
-//// [/reference/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "bin"
-  },
-  "references": [
-    {
-      "path": "../primary"
-    }
-  ],
-  "files": []
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --p reference/tsconfig.json
 Output::
-/lib/tsc --p /reference/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
-//// [/reference/bin/tsconfig.tsbuildinfo]
+//// [/home/src/workspaces/project/reference/bin/tsconfig.tsbuildinfo]
 {"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"},"version":"FakeTSVersion"}
 
-//// [/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [],
   "fileInfos": {},
@@ -67,3 +65,5 @@ exitCode:: ExitStatus.Success
   "size": 110
 }
 
+
+exitCode:: ExitStatus.Success

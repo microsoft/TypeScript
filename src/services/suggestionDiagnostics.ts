@@ -97,7 +97,8 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
 
     addRange(diags, sourceFile.bindSuggestionDiagnostics);
     addRange(diags, program.getSuggestionDiagnostics(sourceFile, cancellationToken));
-    return diags.sort((d1, d2) => d1.start - d2.start);
+    diags.sort((d1, d2) => d1.start - d2.start);
+    return diags;
 
     function check(node: Node) {
         if (isJsFile) {

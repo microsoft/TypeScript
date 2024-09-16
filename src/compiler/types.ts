@@ -445,6 +445,7 @@ export const enum SyntaxKind {
 
     // Transformation nodes
     NotEmittedStatement,
+    NotEmittedTypeElement,
     PartiallyEmittedExpression,
     CommaListExpression,
     SyntheticReferenceExpression,
@@ -3310,6 +3311,10 @@ export interface NotEmittedStatement extends Statement {
     readonly kind: SyntaxKind.NotEmittedStatement;
 }
 
+export interface NotEmittedTypeElement extends TypeElement {
+    readonly kind: SyntaxKind.NotEmittedTypeElement;
+}
+
 /**
  * A list of comma-separated expressions. This node is only created by transformations.
  */
@@ -4866,11 +4871,14 @@ export interface Program extends ScriptReferenceHost {
      */
     redirectTargetsMap: MultiMap<Path, string>;
     /**
-     * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers.
+     * Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers
+     * (except for those that are not available without the prefix).
+     * `false` indicates that an unprefixed builtin module was seen; `undefined` indicates that no
+     * builtin modules (or only modules exclusively available with the prefix) were seen.
      *
      * @internal
      */
-    readonly usesUriStyleNodeCoreModules: boolean;
+    readonly usesUriStyleNodeCoreModules: boolean | undefined;
     /**
      * Map from libFileName to actual resolved location of the lib
      * @internal
@@ -5051,7 +5059,26 @@ export interface TypeChecker {
     getWidenedLiteralType(type: Type): Type;
     /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
-    /** @internal */
+    /**
+     * Gets the "awaited type" of a type.
+     *
+     * If an expression has a Promise-like type, the "awaited type" of the expression is
+     * derived from the type of the first argument of the fulfillment callback for that
+     * Promise's `then` method. If the "awaited type" is itself a Promise-like, it is
+     * recursively unwrapped in the same manner until a non-promise type is found.
+     *
+     * If an expression does not have a Promise-like type, its "awaited type" is the type
+     * of the expression.
+     *
+     * If the resulting "awaited type" is a generic object type, then it is wrapped in
+     * an `Awaited<T>`.
+     *
+     * In the event the "awaited type" circularly references itself, or is a non-Promise
+     * object-type with a callable `then()` method, an "awaited type" cannot be determined
+     * and the value `undefined` will be returned.
+     *
+     * This is used to reflect the runtime behavior of the `await` keyword.
+     */
     getAwaitedType(type: Type): Type | undefined;
     /** @internal */
     isEmptyAnonymousObjectType(type: Type): boolean;
@@ -5073,14 +5100,14 @@ export interface TypeChecker {
     // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
     /** Note that the resulting nodes cannot be checked. */
     typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
-    /** @internal */ typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): TypeNode | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    /** @internal */ typePredicateToTypePredicateNode(typePredicate: TypePredicate, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): TypePredicateNode | undefined;
+    /** @internal */ typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags | undefined, tracker?: SymbolTracker): TypeNode | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ typePredicateToTypePredicateNode(typePredicate: TypePredicate, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags | undefined, tracker?: SymbolTracker): TypePredicateNode | undefined;
     /** Note that the resulting nodes cannot be checked. */
     signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & { typeArguments?: NodeArray<TypeNode>; } | undefined;
-    /** @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): SignatureDeclaration & { typeArguments?: NodeArray<TypeNode>; } | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags | undefined, tracker?: SymbolTracker): SignatureDeclaration & { typeArguments?: NodeArray<TypeNode>; } | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     /** Note that the resulting nodes cannot be checked. */
     indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
-    /** @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags | undefined, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     /** Note that the resulting nodes cannot be checked. */
     symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): EntityName | undefined;
     /** Note that the resulting nodes cannot be checked. */
@@ -5090,7 +5117,7 @@ export interface TypeChecker {
      *
      * @internal
      */
-    symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
+    symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags: InternalNodeBuilderFlags | undefined): Node | undefined;
     /** Note that the resulting nodes cannot be checked. */
     symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
     /** Note that the resulting nodes cannot be checked. */
@@ -5293,7 +5320,7 @@ export interface TypeChecker {
     /** @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): Diagnostic[];
     /** @internal */ getGlobalDiagnostics(): Diagnostic[];
     /** @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken, forceDts?: boolean): EmitResolver;
-    /** @internal */ requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
+    /** @internal */ requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
 
     /** @internal */ getNodeCount(): number;
     /** @internal */ getIdentifierCount(): number;
@@ -5459,11 +5486,9 @@ export const enum NodeBuilderFlags {
     AllowEmptyTuple                         = 1 << 19,
     AllowUniqueESSymbolType                 = 1 << 20,
     AllowEmptyIndexInfoType                 = 1 << 21,
-    /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
-    /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
-    /** @internal */ AllowUnresolvedNames = 1 << 32,
+
 
     IgnoreErrors = AllowThisInObjectLiteral | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
 
@@ -5471,6 +5496,16 @@ export const enum NodeBuilderFlags {
     InObjectTypeLiteral                     = 1 << 22,
     InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
     InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
+}
+
+/** @internal */
+// dprint-ignore
+export const enum InternalNodeBuilderFlags {
+    None                                    = 0,
+    WriteComputedProps                      = 1 << 0, // { [E.A]: 1 }
+    NoSyntacticPrinter                      = 1 << 1,
+    DoNotIncludeSymbolChain                 = 1 << 2,    // Skip looking up and printing an accessible symbol chain
+    AllowUnresolvedNames                    = 1 << 3,
 }
 
 // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -5806,12 +5841,12 @@ export interface EmitResolver {
     collectLinkedAliases(node: ModuleExportName, setVisibility?: boolean): Node[] | undefined;
     markLinkedReferences(node: Node): void;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
-    requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
+    requiresAddingImplicitUndefined(node: ParameterDeclaration, enclosingDeclaration: Node | undefined): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: HasInferredType, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
-    createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
-    createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: HasInferredType, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
+    createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
+    createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
     isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags | undefined, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
@@ -5828,7 +5863,7 @@ export interface EmitResolver {
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
+    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
 }
@@ -5943,7 +5978,7 @@ export interface Symbol {
     /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
-    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol
+    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
@@ -7598,7 +7633,6 @@ export interface ConfigFileSpecs {
     validatedFilesSpecBeforeSubstitution: readonly string[] | undefined;
     validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined;
     validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
-    pathPatterns: readonly (string | Pattern)[] | undefined;
     isDefaultIncludeSpec: boolean;
 }
 
@@ -7863,6 +7897,7 @@ export interface ModuleResolutionHost {
     getCurrentDirectory?(): string;
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
+    /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
 }
 
 /**
@@ -8299,69 +8334,98 @@ export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 
+/** @internal */
+export type LanugageFeatures =
+    // ES2015 Features
+    | "Classes"
+    | "ForOf"
+    | "Generators"
+    | "Iteration"
+    | "SpreadElements"
+    | "RestElements"
+    | "TaggedTemplates"
+    | "DestructuringAssignment"
+    | "BindingPatterns"
+    | "ArrowFunctions"
+    | "BlockScopedVariables"
+    | "ObjectAssign"
+    | "RegularExpressionFlagsUnicode"
+    | "RegularExpressionFlagsSticky"
+    // ES2016 Features
+    | "Exponentiation" // `x ** y`
+    // ES2017 Features
+    | "AsyncFunctions" // `async function f() {}`
+    // ES2018 Features
+    | "ForAwaitOf" // `for await (const x of y)`
+    | "AsyncGenerators" // `async function * f() { }`
+    | "AsyncIteration" // `Symbol.asyncIterator`
+    | "ObjectSpreadRest" // `{ ...obj }`
+    | "RegularExpressionFlagsDotAll"
+    // ES2019 Features
+    | "BindinglessCatch" // `try { } catch { }`
+    // ES2020 Features
+    | "BigInt" // `0n`
+    | "NullishCoalesce" // `a ?? b`
+    | "OptionalChaining" // `a?.b`
+    // ES2021 Features
+    | "LogicalAssignment" // `a ||= b`| `a &&= b`| `a ??= b`
+    // ES2022 Features
+    | "TopLevelAwait"
+    | "ClassFields"
+    | "PrivateNamesAndClassStaticBlocks" // `class C { static {} #x = y| #m() {} }`| `#x in y`
+    | "RegularExpressionFlagsHasIndices"
+    // ES2023 Features
+    | "ShebangComments"
+    // Upcoming Features
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+    | "UsingAndAwaitUsing"
+    | "ClassAndClassElementDecorators" // `using x = y`, `await using x = y`
+    | "RegularExpressionFlagsUnicodeSets" // `@dec class C {}`, `class C { @dec m() {} }`
+;
+
 /**
  * Indicates the minimum `ScriptTarget` (inclusive) after which a specific language feature is no longer transpiled.
  *
  * @internal
  */
-export const enum LanguageFeatureMinimumTarget {
-    // ES2015 Features
-    Classes = ScriptTarget.ES2015,
-    ForOf = ScriptTarget.ES2015,
-    Generators = ScriptTarget.ES2015,
-    Iteration = ScriptTarget.ES2015,
-    SpreadElements = ScriptTarget.ES2015,
-    RestElements = ScriptTarget.ES2015,
-    TaggedTemplates = ScriptTarget.ES2015,
-    DestructuringAssignment = ScriptTarget.ES2015,
-    BindingPatterns = ScriptTarget.ES2015,
-    ArrowFunctions = ScriptTarget.ES2015,
-    BlockScopedVariables = ScriptTarget.ES2015,
-    ObjectAssign = ScriptTarget.ES2015,
-    RegularExpressionFlagsUnicode = ScriptTarget.ES2015,
-    RegularExpressionFlagsSticky = ScriptTarget.ES2015,
-
-    // ES2016 Features
-    Exponentiation = ScriptTarget.ES2016, // `x ** y`
-
-    // ES2017 Features
-    AsyncFunctions = ScriptTarget.ES2017, // `async function f() {}`
-
-    // ES2018 Features
-    ForAwaitOf = ScriptTarget.ES2018, // `for await (const x of y)`
-    AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
-    AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
-    ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
-    RegularExpressionFlagsDotAll = ScriptTarget.ES2018,
-
-    // ES2019 Features
-    BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
-
-    // ES2020 Features
-    BigInt = ScriptTarget.ES2020, // `0n`
-    NullishCoalesce = ScriptTarget.ES2020, // `a ?? b`
-    OptionalChaining = ScriptTarget.ES2020, // `a?.b`
-
-    // ES2021 Features
-    LogicalAssignment = ScriptTarget.ES2021, // `a ||= b`, `a &&= b`, `a ??= b`
-
-    // ES2022 Features
-    TopLevelAwait = ScriptTarget.ES2022,
-    ClassFields = ScriptTarget.ES2022,
-    PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
-    RegularExpressionFlagsHasIndices = ScriptTarget.ES2022,
-
-    // ES2023 Features
-    ShebangComments = ScriptTarget.ESNext,
-
-    // Upcoming Features
-    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
-    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-    UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
-    ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
-    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
-}
+export const LanguageFeatureMinimumTarget: Record<LanugageFeatures, ScriptTarget> = {
+    Classes: ScriptTarget.ES2015,
+    ForOf: ScriptTarget.ES2015,
+    Generators: ScriptTarget.ES2015,
+    Iteration: ScriptTarget.ES2015,
+    SpreadElements: ScriptTarget.ES2015,
+    RestElements: ScriptTarget.ES2015,
+    TaggedTemplates: ScriptTarget.ES2015,
+    DestructuringAssignment: ScriptTarget.ES2015,
+    BindingPatterns: ScriptTarget.ES2015,
+    ArrowFunctions: ScriptTarget.ES2015,
+    BlockScopedVariables: ScriptTarget.ES2015,
+    ObjectAssign: ScriptTarget.ES2015,
+    RegularExpressionFlagsUnicode: ScriptTarget.ES2015,
+    RegularExpressionFlagsSticky: ScriptTarget.ES2015,
+    Exponentiation: ScriptTarget.ES2016,
+    AsyncFunctions: ScriptTarget.ES2017,
+    ForAwaitOf: ScriptTarget.ES2018,
+    AsyncGenerators: ScriptTarget.ES2018,
+    AsyncIteration: ScriptTarget.ES2018,
+    ObjectSpreadRest: ScriptTarget.ES2018,
+    RegularExpressionFlagsDotAll: ScriptTarget.ES2018,
+    BindinglessCatch: ScriptTarget.ES2019,
+    BigInt: ScriptTarget.ES2020,
+    NullishCoalesce: ScriptTarget.ES2020,
+    OptionalChaining: ScriptTarget.ES2020,
+    LogicalAssignment: ScriptTarget.ES2021,
+    TopLevelAwait: ScriptTarget.ES2022,
+    ClassFields: ScriptTarget.ES2022,
+    PrivateNamesAndClassStaticBlocks: ScriptTarget.ES2022,
+    RegularExpressionFlagsHasIndices: ScriptTarget.ES2022,
+    ShebangComments: ScriptTarget.ESNext,
+    UsingAndAwaitUsing: ScriptTarget.ESNext,
+    ClassAndClassElementDecorators: ScriptTarget.ESNext,
+    RegularExpressionFlagsUnicodeSets: ScriptTarget.ESNext,
+};
 
 // dprint-ignore
 /**
@@ -8475,11 +8539,12 @@ export const enum OuterExpressionKinds {
     TypeAssertions = 1 << 1,
     NonNullAssertions = 1 << 2,
     PartiallyEmittedExpressions = 1 << 3,
+    ExpressionsWithTypeArguments = 1 << 4,
 
     Assertions = TypeAssertions | NonNullAssertions,
-    All = Parentheses | Assertions | PartiallyEmittedExpressions,
+    All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
-    ExcludeJSDocTypeAssertion = 1 << 4,
+    ExcludeJSDocTypeAssertion = 1 << 31,
 }
 
 /** @internal */
@@ -8489,6 +8554,7 @@ export type OuterExpression =
     | SatisfiesExpression
     | AsExpression
     | NonNullExpression
+    | ExpressionWithTypeArguments
     | PartiallyEmittedExpression;
 
 /** @internal */
@@ -9134,6 +9200,7 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
+    createNotEmittedTypeElement(): NotEmittedTypeElement;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
@@ -9626,6 +9693,12 @@ export interface BuildInfo {
     version: string;
 }
 
+/** @internal */
+export interface BuildInfoFileVersionMap {
+    fileInfos: Map<Path, string>;
+    roots: Map<Path, Path | undefined>;
+}
+
 export interface PrintHandlers {
     /**
      * A hook used by the Printer when generating unique names to avoid collisions with
@@ -9845,6 +9918,7 @@ export interface ModulePath {
 export interface ResolvedModuleSpecifierInfo {
     kind: "node_modules" | "paths" | "redirect" | "relative" | "ambient" | undefined;
     modulePaths: readonly ModulePath[] | undefined;
+    packageName: string | undefined;
     moduleSpecifiers: readonly string[] | undefined;
     isBlockedByPackageJsonDependencies: boolean | undefined;
 }
@@ -9858,7 +9932,7 @@ export interface ModuleSpecifierOptions {
 export interface ModuleSpecifierCache {
     get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
     set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, kind: ResolvedModuleSpecifierInfo["kind"], modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-    setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
+    setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, packageName: string | undefined, isBlockedByPackageJsonDependencies: boolean): void;
     setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
     clear(): void;
     count(): number;
@@ -10054,7 +10128,7 @@ export interface PragmaDefinition<T1 extends string = string, T2 extends string 
 // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
 //  fancy effectively defining it twice, once in value-space and once in type-space
 /** @internal */
-export const commentPragmas = {
+export const commentPragmas: ConcretePragmaSpecs = {
     "reference": {
         args: [
             { name: "types", optional: true, captureSpan: true },
@@ -10150,7 +10224,78 @@ export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> = Concre
     : never;
 
 /** @internal */
-export type ConcretePragmaSpecs = typeof commentPragmas;
+export interface ConcretePragmaSpecs {
+    readonly "reference": {
+        readonly args: readonly [{
+            readonly name: "types";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "lib";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "path";
+            readonly optional: true;
+            readonly captureSpan: true;
+        }, {
+            readonly name: "no-default-lib";
+            readonly optional: true;
+        }, {
+            readonly name: "resolution-mode";
+            readonly optional: true;
+        }, {
+            readonly name: "preserve";
+            readonly optional: true;
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "amd-dependency": {
+        readonly args: readonly [{
+            readonly name: "path";
+        }, {
+            readonly name: "name";
+            readonly optional: true;
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "amd-module": {
+        readonly args: readonly [{
+            readonly name: "name";
+        }];
+        readonly kind: PragmaKindFlags.TripleSlashXML;
+    };
+    readonly "ts-check": {
+        readonly kind: PragmaKindFlags.SingleLine;
+    };
+    readonly "ts-nocheck": {
+        readonly kind: PragmaKindFlags.SingleLine;
+    };
+    readonly "jsx": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsxfrag": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsximportsource": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+    readonly "jsxruntime": {
+        readonly args: readonly [{
+            readonly name: "factory";
+        }];
+        readonly kind: PragmaKindFlags.MultiLine;
+    };
+}
 
 /** @internal */
 export type PragmaPseudoMap = { [K in keyof ConcretePragmaSpecs]: { arguments: PragmaArgumentType<K>; range: CommentRange; }; };
@@ -10250,6 +10395,7 @@ export interface UserPreferences {
     readonly interactiveInlayHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly autoImportSpecifierExcludeRegexes?: string[];
     readonly preferTypeOnlyAutoImports?: boolean;
     /**
      * Indicates whether imports should be organized in a case-insensitive manner.
@@ -10344,19 +10490,11 @@ export interface EvaluationResolver {
 
 /** @internal */
 export type HasInferredType =
-    | PropertyAssignment
-    | ShorthandPropertyAssignment
+    | Exclude<VariableLikeDeclaration, JsxAttribute | EnumMember>
     | PropertyAccessExpression
-    | BinaryExpression
     | ElementAccessExpression
-    | VariableDeclaration
-    | ParameterDeclaration
-    | BindingElement
-    | PropertyDeclaration
-    | PropertySignature
-    | ExportAssignment
-    | JSDocPropertyTag
-    | JSDocParameterTag;
+    | BinaryExpression
+    | ExportAssignment;
 
 /** @internal */
 export interface SyntacticTypeNodeBuilderContext {
@@ -10374,7 +10512,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     isUndefinedIdentifierExpression(name: Identifier): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
+    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
     isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
@@ -10400,6 +10538,15 @@ export interface SyntacticTypeNodeBuilderResolver {
         markError(): void;
         hadError(): boolean;
     };
+}
+
+/** @internal */
+export interface SyntacticNodeBuilder {
+    serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeTypeOfExpression: (expr: Expression | JsxAttributeValue, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => TypeNode;
+    serializeExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
+    serializeTypeOfAccessor: (accessor: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined
 }
 
 /** @internal */
