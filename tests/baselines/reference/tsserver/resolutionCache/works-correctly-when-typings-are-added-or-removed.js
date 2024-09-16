@@ -1,5 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/app.ts]
 let x = 1;
@@ -15,6 +17,21 @@ export let a: number
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -26,7 +43,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/app.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/username/projects/project/tsconfig.json, currentDirectory: /users/username/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -53,23 +70,26 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types/lib1/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/project/app.ts SVC-1-0 "let x = 1;"
 	/users/username/projects/project/node_modules/@types/lib1/index.d.ts Text-1 "export let a: number"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.ts
 	  Matched by default include pattern '**/*'
 	node_modules/@types/lib1/index.d.ts
@@ -103,8 +123,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 10,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 20,
+            "dts": 2,
+            "dtsSize": 433,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -134,57 +154,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/project/app.ts",
         "configFile": "/users/username/projects/project/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -204,8 +178,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/package.json: *new*
@@ -220,6 +192,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
 /users/username/projects/project/tsconfig.json: *new*
   {}
 
@@ -238,6 +212,10 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -281,6 +259,10 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -304,10 +286,13 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/project/app.ts SVC-1-0 "let x = 1;"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -325,51 +310,6 @@ Info seq  [hh:mm:ss:mss] event:
             "text": "Cannot find type definition file for 'lib1'.\n  The file is in the program because:\n    Entry point for implicit type library 'lib1'",
             "code": 2688,
             "category": "error"
-          },
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
           }
         ]
       }
@@ -377,7 +317,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -385,7 +325,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts Proj
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -406,8 +346,6 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
@@ -426,6 +364,8 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 /users/username/projects/project/tsconfig.json:
   {}
 
@@ -498,11 +438,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/project/app.ts SVC-1-0 "let x = 1;"
 	/users/username/projects/project/node_modules/@types/lib2/index.d.ts Text-1 "export let b: number"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.ts
 	  Matched by default include pattern '**/*'
 	node_modules/@types/lib2/index.d.ts
@@ -512,7 +455,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -520,7 +463,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/app.ts Proj
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -541,8 +484,6 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /users/username/projects/node_modules:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
@@ -559,6 +500,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 /users/username/projects/project/tsconfig.json:
   {}
 
@@ -580,6 +523,10 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1

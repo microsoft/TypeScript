@@ -1,77 +1,97 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/app.js]
+//// [/user/username/projects/project/a/app.js]
 var x = 1
 
-//// [/a/largefile.js]
+//// [/user/username/projects/project/a/largefile.js]
 
 
-//// [/a/lib.js]
+//// [/user/username/projects/project/a/lib.js]
 var x = 1
 
-//// [/a/tsconfig.json]
+//// [/user/username/projects/project/a/tsconfig.json]
 {
   "compilerOptions": {
     "allowJs": true
   }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/app.js"
+        "file": "/user/username/projects/project/a/app.js"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.js ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/app.js ProjectRootPath: undefined:: Result: /user/username/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/tsconfig.json, currentDirectory: /user/username/projects/project/a
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/tsconfig.json 2000 undefined Project: /user/username/projects/project/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/tsconfig.json",
-        "reason": "Creating possible configured project for /a/app.js to open"
+        "projectName": "/user/username/projects/project/a/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/a/app.js to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/tsconfig.json : {
  "rootNames": [
-  "/a/app.js",
-  "/a/largefile.js",
-  "/a/lib.js"
+  "/user/username/projects/project/a/app.js",
+  "/user/username/projects/project/a/largefile.js",
+  "/user/username/projects/project/a/lib.js"
  ],
  "options": {
   "allowJs": true,
-  "configFilePath": "/a/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/a/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971530). Largest files: /a/largefile.js:20971521, /a/app.js:9, /a/lib.js:9
+Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971530). Largest files: /user/username/projects/project/a/largefile.js:20971521, /user/username/projects/project/a/app.js:9, /user/username/projects/project/a/lib.js:9
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLanguageServiceState",
       "body": {
-        "projectName": "/a/tsconfig.json",
+        "projectName": "/user/username/projects/project/a/tsconfig.json",
         "languageServiceEnabled": false
       }
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/app.js SVC-1-0 "var x = 1"
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/largefile.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/lib.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/a/app.js SVC-1-0 "var x = 1"
 
 
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.js
 	  Matched by default include pattern '**/*'
 
@@ -82,17 +102,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/tsconfig.json"
+        "projectName": "/user/username/projects/project/a/tsconfig.json"
       }
     }
-Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a/largefile.js for info /a/largefile.js: fileSize: 20971521
+Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/project/a/largefile.js for info /user/username/projects/project/a/largefile.js: fileSize: 20971521
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "largeFileReferenced",
       "body": {
-        "file": "/a/largefile.js",
+        "file": "/user/username/projects/project/a/largefile.js",
         "fileSize": 20971521,
         "maxFileSize": 4194304
       }
@@ -105,7 +125,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "bcbb3eb9a7f46ab3b8f574ad3733f3e5a7ce50557c14c0c6192f1203aedcacca",
+          "projectId": "fe3e50c18e2a1e3eb4dd69c3b29a4a5b253a6fcc8b766043d0761f36d6b9edef",
           "fileStats": {
             "js": 3,
             "jsSize": 18,
@@ -146,69 +166,24 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/app.js",
-        "configFile": "/a/tsconfig.json",
+        "triggerFile": "/user/username/projects/project/a/app.js",
+        "configFile": "/user/username/projects/project/a/tsconfig.json",
         "diagnostics": [
           {
-            "text": "Cannot write file '/a/app.js' because it would overwrite input file.",
+            "text": "Cannot write file '/user/username/projects/project/a/app.js' because it would overwrite input file.",
             "code": 5055,
-            "category": "error"
-          },
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
             "category": "error"
           }
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/a/app.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -222,36 +197,38 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/largefile.js: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/lib.js: *new*
+/user/username/projects/project/a/largefile.js: *new*
   {}
-/a/tsconfig.json: *new*
+/user/username/projects/project/a/lib.js: *new*
+  {}
+/user/username/projects/project/a/tsconfig.json: *new*
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *new*
+/user/username/projects/project/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/app.js (Open) *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json *default*
-/a/largefile.js *new*
+        /user/username/projects/project/a/tsconfig.json *default*
+/user/username/projects/project/a/largefile.js *new*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/a/lib.js *new*
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/lib.js *new*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
+        /user/username/projects/project/a/tsconfig.json
 
 Before request
 
@@ -259,14 +236,14 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/a/app.js"
+        "file": "/user/username/projects/project/a/app.js"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/app.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/app.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -280,44 +257,46 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/app.js: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a/largefile.js:
+/user/username/projects/project/a/app.js: *new*
   {}
-/a/lib.js:
+/user/username/projects/project/a/largefile.js:
   {}
-/a/tsconfig.json:
+/user/username/projects/project/a/lib.js:
+  {}
+/user/username/projects/project/a/tsconfig.json:
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *changed*
+/user/username/projects/project/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     noOpenRef: true *changed*
 
 ScriptInfos::
-/a/app.js *changed*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/app.js *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
-/a/largefile.js
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/largefile.js
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/a/lib.js
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/lib.js
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
+        /user/username/projects/project/a/tsconfig.json
 
 Before request
-//// [/aa.js]
+//// [/user/username/projects/project/aa.js]
 var x = 1
 
 
@@ -325,68 +304,104 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/aa.js"
+        "file": "/user/username/projects/project/aa.js"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /aa.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/aa.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /user/username/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/aa.js SVC-1-0 "var x = 1"
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/aa.js SVC-1-0 "var x = 1"
 
 
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	aa.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/project/a/app.js:
+  {}
+/user/username/projects/project/a/largefile.js:
+  {}
+/user/username/projects/project/a/lib.js:
+  {}
+/user/username/projects/project/a/tsconfig.json:
+  {}
+
 Projects::
-/a/tsconfig.json (Configured)
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+/user/username/projects/project/a/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true
-/dev/null/inferredProject1* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
 
 ScriptInfos::
-/a/app.js
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/project/a/tsconfig.json
+        /dev/null/inferredProject1* *new*
+/user/username/projects/project/a/app.js
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
-/a/largefile.js
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/largefile.js
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/a/lib.js
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/a/lib.js
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
-/aa.js (Open) *new*
+        /user/username/projects/project/a/tsconfig.json
+/user/username/projects/project/aa.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -396,7 +411,8 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/aa.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/aa.js"
       ],
       "compilerOptions": {
         "target": 1,
@@ -412,10 +428,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": []
       },
       "unresolvedImports": [],
-      "projectRootPath": "/",
+      "projectRootPath": "/user/username/projects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -423,8 +439,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "cachedTypingPaths": [],
       "newTypingNames": [],
       "filesToWatch": [
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -432,14 +448,14 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::watchTypingLocations",
       "projectName": "/dev/null/inferredProject1*",
       "files": [
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -487,26 +503,28 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/app.js
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts
+	/user/username/projects/project/a/app.js
 
 
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
 	app.js
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/app.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/tsconfig.json 2000 undefined Project: /user/username/projects/project/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/app.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/largefile.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/lib.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /aa.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/aa.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -522,49 +540,64 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/bower_components: *new*
+/user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}
-/node_modules: *new*
+/user/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
 
 FsWatches *deleted*::
-/a/app.js:
+/user/username/projects/project/a/app.js:
   {}
-/a/largefile.js:
+/user/username/projects/project/a/largefile.js:
   {}
-/a/lib.js:
+/user/username/projects/project/a/lib.js:
   {}
-/a/tsconfig.json:
+/user/username/projects/project/a/tsconfig.json:
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *deleted*
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
+/user/username/projects/project/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
     noOpenRef: true
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-    autoImportProviderHost: false *changed*
 
 ScriptInfos::
-/a/app.js *deleted*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1*
+        /user/username/projects/project/a/tsconfig.json *deleted*
+/user/username/projects/project/a/app.js *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
-        /a/tsconfig.json *deleted*
-/a/largefile.js *deleted*
+        /user/username/projects/project/a/tsconfig.json *deleted*
+/user/username/projects/project/a/largefile.js *deleted*
     version: Text-1
     containingProjects: 0 *changed*
-        /a/tsconfig.json *deleted*
-/a/lib.js *deleted*
+        /user/username/projects/project/a/tsconfig.json *deleted*
+/user/username/projects/project/a/lib.js *deleted*
     version: Text-1
     containingProjects: 0 *changed*
-        /a/tsconfig.json *deleted*
-/aa.js (Open)
+        /user/username/projects/project/a/tsconfig.json *deleted*
+/user/username/projects/project/aa.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

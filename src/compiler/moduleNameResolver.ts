@@ -74,6 +74,7 @@ import {
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
     moduleResolutionSupportsPackageJsonExportsAndImports,
+    ModuleSpecifierResolutionHost,
     noop,
     normalizePath,
     normalizeSlashes,
@@ -296,7 +297,7 @@ function initializeResolutionField<T>(value: T[]): T[] | undefined {
     return value.length ? value : undefined;
 }
 /** @internal */
-export function updateResolutionField<T>(to: T[] | undefined, value: T[] | undefined) {
+export function updateResolutionField<T>(to: T[] | undefined, value: T[] | undefined): T[] | undefined {
     if (!value?.length) return to;
     if (!to?.length) return value;
     to.push(...value);
@@ -453,7 +454,7 @@ function readPackageJsonTypesVersionPaths(jsonContent: PackageJson, state: Modul
 let typeScriptVersion: Version | undefined;
 
 /** @internal */
-export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>) {
+export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>): VersionPaths | undefined {
     if (!typeScriptVersion) typeScriptVersion = new Version(version);
 
     for (const key in typesVersions) {
@@ -747,7 +748,7 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
 }
 
 /** @internal */
-export function getConditions(options: CompilerOptions, resolutionMode?: ResolutionMode) {
+export function getConditions(options: CompilerOptions, resolutionMode?: ResolutionMode): string[] {
     const moduleResolution = getEmitModuleResolutionKind(options);
     if (resolutionMode === undefined) {
         if (moduleResolution === ModuleResolutionKind.Bundler) {
@@ -788,7 +789,7 @@ export function resolvePackageNameToPackageJson(
 ): PackageJsonInfo | undefined {
     const moduleResolutionState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
 
-    return forEachAncestorDirectory(containingDirectory, ancestorDirectory => {
+    return forEachAncestorDirectoryStoppingAtGlobalCache(host, containingDirectory, ancestorDirectory => {
         if (getBaseFileName(ancestorDirectory) !== "node_modules") {
             const nodeModulesFolder = combinePaths(ancestorDirectory, "node_modules");
             const candidate = combinePaths(nodeModulesFolder, packageName);
@@ -951,7 +952,7 @@ function compilerOptionValueToString(value: unknown): string {
 }
 
 /** @internal */
-export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]) {
+export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]): string {
     return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") + `|${options.pathsBasePath}`;
 }
 
@@ -1382,7 +1383,7 @@ export function createTypeReferenceDirectiveResolutionCache(
 }
 
 /** @internal */
-export function getOptionsForLibraryResolution(options: CompilerOptions) {
+export function getOptionsForLibraryResolution(options: CompilerOptions): CompilerOptions {
     return { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution };
 }
 
@@ -2383,7 +2384,8 @@ export interface PackageJsonInfoContents {
  * @internal
  */
 export function getPackageScopeForPath(directory: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
-    return forEachAncestorDirectory(
+    return forEachAncestorDirectoryStoppingAtGlobalCache(
+        state.host,
         directory,
         dir => getPackageJsonInfo(dir, /*onlyRecordFailures*/ false, state),
     );
@@ -2554,7 +2556,7 @@ export function parsePackageName(moduleName: string): { packageName: string; res
 }
 
 /** @internal */
-export function allKeysStartWithDot(obj: MapLike<unknown>) {
+export function allKeysStartWithDot(obj: MapLike<unknown>): boolean {
     return every(getOwnKeys(obj), k => startsWith(k, "."));
 }
 
@@ -2675,18 +2677,18 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
  * From https://github.com/nodejs/node/blob/8f39f51cbbd3b2de14b9ee896e26421cc5b20121/lib/internal/modules/esm/resolve.js#L722 -
  * "longest" has some nuance as to what "longest" means in the presence of pattern trailers
  */
-export function comparePatternKeys(a: string, b: string) {
+export function comparePatternKeys(a: string, b: string): Comparison {
     const aPatternIndex = a.indexOf("*");
     const bPatternIndex = b.indexOf("*");
     const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
     const baseLenB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
-    if (baseLenA > baseLenB) return -1;
-    if (baseLenB > baseLenA) return 1;
-    if (aPatternIndex === -1) return 1;
-    if (bPatternIndex === -1) return -1;
-    if (a.length > b.length) return -1;
-    if (b.length > a.length) return 1;
-    return 0;
+    if (baseLenA > baseLenB) return Comparison.LessThan;
+    if (baseLenB > baseLenA) return Comparison.GreaterThan;
+    if (aPatternIndex === -1) return Comparison.GreaterThan;
+    if (bPatternIndex === -1) return Comparison.LessThan;
+    if (a.length > b.length) return Comparison.LessThan;
+    if (b.length > a.length) return Comparison.GreaterThan;
+    return Comparison.EqualTo;
 }
 
 function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
@@ -2963,7 +2965,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
 }
 
 /** @internal */
-export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string) {
+export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string): boolean {
     if (!conditions.includes("types")) return false; // only apply versioned types conditions if the types condition is applied
     if (!startsWith(key, "types@")) return false;
     const range = VersionRange.tryParse(key.substring("types@".length));
@@ -3003,16 +3005,39 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions,
     }
 
     function lookup(extensions: Extensions) {
-        return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
-            if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
-                if (resolutionFromCache) {
-                    return resolutionFromCache;
+        return forEachAncestorDirectoryStoppingAtGlobalCache(
+            state.host,
+            normalizeSlashes(directory),
+            ancestorDirectory => {
+                // Dont go past global cache location
+                if (getBaseFileName(ancestorDirectory) !== "node_modules") {
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
+                    if (resolutionFromCache) {
+                        return resolutionFromCache;
+                    }
+                    return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
                 }
-                return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
-            }
-        });
+            },
+        );
     }
+}
+
+/**
+ * Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result.
+ * Stops at global cache location
+ * @internal
+ */
+export function forEachAncestorDirectoryStoppingAtGlobalCache<T, P extends string>(
+    host: ModuleResolutionHost | ModuleSpecifierResolutionHost,
+    directory: P,
+    callback: (directory: P) => T | undefined,
+): T | undefined {
+    const globalCache = host?.getGlobalTypingsCacheLocation?.();
+    return forEachAncestorDirectory(directory, ancestorDirectory => {
+        const result = callback(ancestorDirectory as P);
+        if (result !== undefined) return result;
+        if (ancestorDirectory === globalCache) return false;
+    }) || undefined;
 }
 
 function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
@@ -3258,14 +3283,18 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 
         if (!isExternalModuleNameRelative(moduleName)) {
             // Climb up parent directories looking for a module.
-            const resolved = forEachAncestorDirectory(containingDirectory, directory => {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
-                if (resolutionFromCache) {
-                    return resolutionFromCache;
-                }
-                const searchName = normalizePath(combinePaths(directory, moduleName));
-                return toSearchResult(loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state));
-            });
+            const resolved = forEachAncestorDirectoryStoppingAtGlobalCache(
+                state.host,
+                containingDirectory,
+                directory => {
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
+                    if (resolutionFromCache) {
+                        return resolutionFromCache;
+                    }
+                    const searchName = normalizePath(combinePaths(directory, moduleName));
+                    return toSearchResult(loadModuleFromFileNoPackageId(extensions, searchName, /*onlyRecordFailures*/ false, state));
+                },
+            );
             if (resolved) return resolved;
             if (extensions & (Extensions.TypeScript | Extensions.Declaration)) {
                 // If we didn't find the file normally, look it up in @types.
@@ -3303,8 +3332,8 @@ function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
 /** @internal */
-export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
-    return !!compilerOptions.allowImportingTsExtensions || fromFileName && isDeclarationFileName(fromFileName);
+export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean {
+    return !!compilerOptions.allowImportingTsExtensions || !!fromFileName && isDeclarationFileName(fromFileName);
 }
 
 /**

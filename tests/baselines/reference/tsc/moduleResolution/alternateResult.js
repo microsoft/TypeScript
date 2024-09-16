@@ -1,28 +1,5 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
-//// [/home/src/projects/project/index.mts]
-import { foo } from "foo";
-import { bar } from "bar";
-import { foo2 } from "foo2";
-import { bar2 } from "bar2";
-
-
-//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
-export declare const bar: number;
-
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
   "name": "@types/bar",
@@ -35,8 +12,50 @@ export declare const bar: number;
   }
 }
 
-//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
-export declare const bar2: number;
+//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
+export declare const bar: number;
+
+//// [/home/src/projects/project/node_modules/bar/package.json]
+{
+  "name": "bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
+
+//// [/home/src/projects/project/node_modules/bar/index.js]
+module.exports = { bar: 1 };
+
+//// [/home/src/projects/project/node_modules/bar/index.mjs]
+export const bar = 1;
+
+//// [/home/src/projects/project/node_modules/foo/package.json]
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
+
+//// [/home/src/projects/project/node_modules/foo/index.js]
+module.exports = { foo: 1 };
+
+//// [/home/src/projects/project/node_modules/foo/index.mjs]
+export const foo = 1;
+
+//// [/home/src/projects/project/node_modules/foo/index.d.ts]
+export declare const foo: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
@@ -51,15 +70,12 @@ export declare const bar2: number;
   }
 }
 
-//// [/home/src/projects/project/node_modules/bar/index.js]
-module.exports = { bar: 1 };
+//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
+export declare const bar2: number;
 
-//// [/home/src/projects/project/node_modules/bar/index.mjs]
-export const bar = 1;
-
-//// [/home/src/projects/project/node_modules/bar/package.json]
+//// [/home/src/projects/project/node_modules/bar2/package.json]
 {
-  "name": "bar",
+  "name": "bar2",
   "version": "1.0.0",
   "main": "index.js",
   "exports": {
@@ -76,51 +92,6 @@ module.exports = { bar2: 1 };
 //// [/home/src/projects/project/node_modules/bar2/index.mjs]
 export const bar2 = 1;
 
-//// [/home/src/projects/project/node_modules/bar2/package.json]
-{
-  "name": "bar2",
-  "version": "1.0.0",
-  "main": "index.js",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  }
-}
-
-//// [/home/src/projects/project/node_modules/foo/index.d.ts]
-export declare const foo: number;
-
-//// [/home/src/projects/project/node_modules/foo/index.js]
-module.exports = { foo: 1 };
-
-//// [/home/src/projects/project/node_modules/foo/index.mjs]
-export const foo = 1;
-
-//// [/home/src/projects/project/node_modules/foo/package.json]
-{
-  "name": "foo",
-  "version": "1.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  }
-}
-
-//// [/home/src/projects/project/node_modules/foo2/index.d.ts]
-export declare const foo2: number;
-
-//// [/home/src/projects/project/node_modules/foo2/index.js]
-module.exports = { foo2: 1 };
-
-//// [/home/src/projects/project/node_modules/foo2/index.mjs]
-export const foo2 = 1;
-
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
   "name": "foo2",
@@ -136,6 +107,22 @@ export const foo2 = 1;
   }
 }
 
+//// [/home/src/projects/project/node_modules/foo2/index.js]
+module.exports = { foo2: 1 };
+
+//// [/home/src/projects/project/node_modules/foo2/index.mjs]
+export const foo2 = 1;
+
+//// [/home/src/projects/project/node_modules/foo2/index.d.ts]
+export declare const foo2: number;
+
+//// [/home/src/projects/project/index.mts]
+import { foo } from "foo";
+import { bar } from "bar";
+import { foo2 } from "foo2";
+import { bar2 } from "bar2";
+
+
 //// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
@@ -150,7 +137,7 @@ export const foo2 = 1;
   ]
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -166,9 +153,8 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -342,43 +328,20 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
-/home/src/projects/project/index.mts (used version)
 
 
 //// [/home/src/projects/project/index.mjs]
@@ -387,12 +350,12 @@ export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./node_modules/foo2/index.d.ts",
     "./node_modules/@types/bar2/index.d.ts",
     "./index.mts"
@@ -404,7 +367,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -460,7 +423,7 @@ export {};
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../lib/lib.d.ts",
+      "../../tslibs/ts/lib/lib.d.ts",
       "not cached or not changed"
     ],
     [
@@ -477,18 +440,45 @@ export {};
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1116
+  "size": 1120
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
+/home/src/projects/project/index.mts (used version)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: delete the alternateResult in @types
+
 Input::
-//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -674,17 +664,23 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -694,12 +690,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -708,16 +703,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: delete the ndoe10Result in package/types
+
 Input::
-//// [/home/src/projects/project/node_modules/foo/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -916,17 +910,23 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -936,12 +936,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -950,18 +949,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: add the alternateResult in @types
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
 export declare const bar: number;
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1148,17 +1146,23 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -1168,12 +1172,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1182,18 +1185,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+Change:: add the alternateResult in package/types
 
-
-Change:: add the ndoe10Result in package/types
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
 export declare const foo: number;
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1367,17 +1369,23 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -1387,12 +1395,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1401,10 +1408,10 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: update package.json from @types so error is fixed
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
@@ -1420,9 +1427,8 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1555,52 +1561,30 @@ Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/ind
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
     "./node_modules/@types/bar2/index.d.ts",
@@ -1614,7 +1598,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "fileInfos": {
-    "../../../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -1681,7 +1665,7 @@ Shape signatures in builder refreshed for::
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../lib/lib.d.ts",
+      "../../tslibs/ts/lib/lib.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1702,12 +1686,39 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1276
+  "size": 1280
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: update package.json so error is fixed
+
 Input::
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
@@ -1725,9 +1736,8 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1832,53 +1842,30 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/foo/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
@@ -1894,7 +1881,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "fileInfos": {
-    "../../../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -1971,7 +1958,7 @@ Shape signatures in builder refreshed for::
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../lib/lib.d.ts",
+      "../../tslibs/ts/lib/lib.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1996,12 +1983,40 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1390
+  "size": 1394
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/foo/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: update package.json from @types so error is introduced
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
@@ -2016,9 +2031,8 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2164,51 +2178,30 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
@@ -2222,7 +2215,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "fileInfos": {
-    "../../../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -2289,7 +2282,7 @@ Shape signatures in builder refreshed for::
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../lib/lib.d.ts",
+      "../../tslibs/ts/lib/lib.d.ts",
       "not cached or not changed"
     ],
     [
@@ -2310,12 +2303,38 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1267
+  "size": 1271
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: update package.json so error is introduced
+
 Input::
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
@@ -2332,9 +2351,8 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2508,50 +2526,30 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: [
-  "/home/src/projects/project/index.mts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "traceResolution": true,
-  "incremental": true,
-  "strict": true,
-  "types": [],
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
 
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./index.mts"
@@ -2563,7 +2561,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "fileInfos": {
-    "../../../../lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -2620,7 +2618,7 @@ Shape signatures in builder refreshed for::
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../lib/lib.d.ts",
+      "../../tslibs/ts/lib/lib.d.ts",
       "not cached or not changed"
     ],
     [
@@ -2637,18 +2635,42 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1151
+  "size": 1155
 }
 
 
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: delete the alternateResult in @types
+
 Input::
-//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2834,17 +2856,23 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -2854,12 +2882,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2868,16 +2895,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: delete the ndoe10Result in package/types
+
 Input::
-//// [/home/src/projects/project/node_modules/foo2/index.d.ts] unlink
+//// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3076,17 +3102,23 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3096,12 +3128,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3110,18 +3141,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: add the alternateResult in @types
+
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
 export declare const bar2: number;
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3308,17 +3338,23 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3328,12 +3364,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3342,18 +3377,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: add the ndoe10Result in package/types
+
 Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts]
 export declare const foo2: number;
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc -p /home/src/projects/project
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -3527,17 +3561,23 @@ Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs'
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/index.mts"
 ]
@@ -3547,12 +3587,11 @@ Program options: {
   "incremental": true,
   "strict": true,
   "types": [],
-  "project": "/home/src/projects/project",
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3561,4 +3600,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

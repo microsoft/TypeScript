@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/f.ts]
+//// [/user/username/projects/myproject/f.ts]
 
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,9 +15,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w /f.ts --preserveWatchOutput
+/home/src/tslibs/TS/Lib/tsc.js --w /user/username/projects/myproject/f.ts --preserveWatchOutput
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -25,18 +27,24 @@ Output::
 
 
 
-//// [/f.js]
+//// [/user/username/projects/myproject/f.js]
 
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/f.ts: *new*
+/user/username/projects/myproject/f.ts: *new*
   {}
 
 Program root files: [
-  "/f.ts"
+  "/user/username/projects/myproject/f.ts"
 ]
 Program options: {
   "watch": true,
@@ -44,23 +52,23 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/f.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/f.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/f.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/myproject/f.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Comment added to file f
 
 Input::
-//// [/f.ts]
+//// [/user/username/projects/myproject/f.ts]
 //
 
 
@@ -79,14 +87,14 @@ Output::
 
 
 
-//// [/f.js]
+//// [/user/username/projects/myproject/f.js]
 //
 
 
 
 
 Program root files: [
-  "/f.ts"
+  "/user/username/projects/myproject/f.ts"
 ]
 Program options: {
   "watch": true,
@@ -94,13 +102,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/f.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/f.ts
+/user/username/projects/myproject/f.ts
 
 Shape signatures in builder refreshed for::
-/f.ts (computed .d.ts)
+/user/username/projects/myproject/f.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

@@ -29,7 +29,7 @@ const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */
-export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments) {
+export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments): CodeFixAction {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
 }
 
@@ -39,7 +39,7 @@ export function createCodeFixAction(fixName: string, changes: FileTextChanges[],
 }
 
 /** @internal */
-export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand) {
+export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
 }
 
@@ -48,7 +48,7 @@ function createCodeFixActionWorker(fixName: string, description: string, changes
 }
 
 /** @internal */
-export function registerCodeFix(reg: CodeFixRegistration) {
+export function registerCodeFix(reg: CodeFixRegistration): void {
     for (const error of reg.errorCodes) {
         errorCodeToFixesArray = undefined;
         errorCodeToFixes.add(String(error), reg);

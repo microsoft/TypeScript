@@ -1,22 +1,24 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/b/controllers/vessels/client.ts]
+//// [/user/username/projects/project/a/b/controllers/vessels/client.ts]
 
                     import { Vessel } from '~/models/vessel';
                     const v = new Vessel();
                 
 
-//// [/a/b/utils/db.ts]
+//// [/user/username/projects/project/a/b/utils/db.ts]
 export class Bookshelf { }
 
-//// [/a/b/models/vessel.ts]
+//// [/user/username/projects/project/a/b/models/vessel.ts]
 
                     import { Bookshelf } from '~/utils/db';
                     export class Vessel extends Bookshelf {}
                 
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/projects/project/a/b/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es6",
@@ -39,62 +41,88 @@ export class Bookshelf { }
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/controllers/vessels/client.ts"
+        "file": "/user/username/projects/project/a/b/controllers/vessels/client.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/b/controllers/vessels/client.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/b/tsconfig.json, currentDirectory: /user/username/projects/project/a/b
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/tsconfig.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/b/tsconfig.json",
-        "reason": "Creating possible configured project for /a/b/controllers/vessels/client.ts to open"
+        "projectName": "/user/username/projects/project/a/b/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/a/b/controllers/vessels/client.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/b/tsconfig.json : {
  "rootNames": [
-  "/a/b/controllers/vessels/client.ts",
-  "/a/b/models/vessel.ts",
-  "/a/b/utils/db.ts"
+  "/user/username/projects/project/a/b/controllers/vessels/client.ts",
+  "/user/username/projects/project/a/b/models/vessel.ts",
+  "/user/username/projects/project/a/b/utils/db.ts"
  ],
  "options": {
   "target": 2,
   "module": 5,
-  "baseUrl": "/a/b",
+  "baseUrl": "/user/username/projects/project/a/b",
   "paths": {
    "~/*": [
     "*"
    ]
   },
-  "pathsBasePath": "/a/b",
-  "configFilePath": "/a/b/tsconfig.json"
+  "pathsBasePath": "/user/username/projects/project/a/b",
+  "configFilePath": "/user/username/projects/project/a/b/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/b/utils/db.ts Text-1 "export class Bookshelf { }"
-	/a/b/models/vessel.ts Text-1 "\n                    import { Bookshelf } from '~/utils/db';\n                    export class Vessel extends Bookshelf {}\n                "
-	/a/b/controllers/vessels/client.ts SVC-1-0 "\n                    import { Vessel } from '~/models/vessel';\n                    const v = new Vessel();\n                "
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 1 undefined Config: /user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 1 undefined Config: /user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/utils/db.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es6.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/TS/Lib/lib.es6.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/a/b/utils/db.ts Text-1 "export class Bookshelf { }"
+	/user/username/projects/project/a/b/models/vessel.ts Text-1 "\n                    import { Bookshelf } from '~/utils/db';\n                    export class Vessel extends Bookshelf {}\n                "
+	/user/username/projects/project/a/b/controllers/vessels/client.ts SVC-1-0 "\n                    import { Vessel } from '~/models/vessel';\n                    const v = new Vessel();\n                "
 
 
+	../../../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+	  Default library for target 'es6'
 	utils/db.ts
 	  Imported via '~/utils/db' from file 'models/vessel.ts'
 	  Matched by default include pattern '**/*'
@@ -111,7 +139,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/b/tsconfig.json"
+        "projectName": "/user/username/projects/project/a/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -122,7 +150,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "e10a1dc99ee63f16cb9b69bcee75540cdf41a1137371d3afbd4e7de507be5207",
+          "projectId": "7e3b2b8617d8e0c4d620aa844198acf13d097732523c56cc651fe4595bffe37c",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -132,8 +160,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 287,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -166,82 +194,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/b/controllers/vessels/client.ts",
-        "configFile": "/a/b/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es6'",
-            "code": 6053,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 3,
-                    "offset": 15
-                  },
-                  "end": {
-                    "line": 3,
-                    "offset": 20
-                  },
-                  "file": "/a/b/tsconfig.json"
-                },
-                "message": "File is default library for target specified here.",
-                "category": "message",
-                "code": 1426
-              }
-            ]
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "triggerFile": "/user/username/projects/project/a/b/controllers/vessels/client.ts",
+        "configFile": "/user/username/projects/project/a/b/tsconfig.json",
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/a/b/controllers/vessels/client.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -254,42 +218,56 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
 
 PolledWatches::
-/a/lib/lib.es6.d.ts: *new*
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/models/vessel.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/user/username/projects/project/a/b/models/vessel.ts: *new*
   {}
-/a/b/utils/db.ts: *new*
+/user/username/projects/project/a/b/tsconfig.json: *new*
+  {}
+/user/username/projects/project/a/b/utils/db.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/user/username/projects/project/a/b: *new*
   {}
 
 Projects::
-/a/b/tsconfig.json (Configured) *new*
+/user/username/projects/project/a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/controllers/vessels/client.ts (Open) *new*
+/home/src/tslibs/TS/Lib/lib.es6.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/a/b/tsconfig.json
+/user/username/projects/project/a/b/controllers/vessels/client.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json *default*
-/a/b/models/vessel.ts *new*
+        /user/username/projects/project/a/b/tsconfig.json *default*
+/user/username/projects/project/a/b/models/vessel.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/utils/db.ts *new*
+        /user/username/projects/project/a/b/tsconfig.json
+/user/username/projects/project/a/b/utils/db.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /user/username/projects/project/a/b/tsconfig.json
 
 Before request
 
@@ -297,7 +275,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definition",
       "arguments": {
-        "file": "/a/b/controllers/vessels/client.ts",
+        "file": "/user/username/projects/project/a/b/controllers/vessels/client.ts",
         "position": 54
       },
       "seq": 2,
@@ -307,7 +285,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "file": "/a/b/models/vessel.ts",
+          "file": "/user/username/projects/project/a/b/models/vessel.ts",
           "start": {
             "line": 2,
             "offset": 21
@@ -333,22 +311,22 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/models/vessel.ts"
+        "file": "/user/username/projects/project/a/b/models/vessel.ts"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/models/vessel.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/b/models/vessel.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/models/vessel.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/a/b/controllers/vessels/client.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/a/b/models/vessel.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -360,45 +338,57 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
-/a/b/utils/db.ts:
+/user/username/projects/project/a/b/tsconfig.json:
+  {}
+/user/username/projects/project/a/b/utils/db.ts:
   {}
 
 FsWatches *deleted*::
-/a/b/models/vessel.ts:
+/user/username/projects/project/a/b/models/vessel.ts:
   {}
 
 FsWatchesRecursive::
-/a/b:
+/user/username/projects/project/a/b:
   {}
 
 ScriptInfos::
-/a/b/controllers/vessels/client.ts (Open)
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/a/b/tsconfig.json
+/user/username/projects/project/a/b/controllers/vessels/client.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json *default*
-/a/b/models/vessel.ts (Open) *changed*
+        /user/username/projects/project/a/b/tsconfig.json *default*
+/user/username/projects/project/a/b/models/vessel.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json *default*
-/a/b/utils/db.ts
+        /user/username/projects/project/a/b/tsconfig.json *default*
+/user/username/projects/project/a/b/utils/db.ts
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /user/username/projects/project/a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {
-    "key": "/a/b/models/tsconfig.json",
+    "key": "/user/username/projects/project/a/b/models/tsconfig.json",
     "count": 1
   },
   {
-    "key": "/a/b/models/jsconfig.json",
+    "key": "/user/username/projects/project/a/b/models/jsconfig.json",
     "count": 1
   }
 ]

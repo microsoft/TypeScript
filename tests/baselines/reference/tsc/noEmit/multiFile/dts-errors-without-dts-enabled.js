@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -8,7 +8,7 @@ const a = class { private p = 10; };
   "compilerOptions": {}
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,10 +24,11 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -38,19 +39,20 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -61,22 +63,23 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -87,19 +90,20 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -110,30 +114,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Emit after fixing error
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
-/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
 
 
 //// [/home/src/projects/project/a.js]
@@ -141,14 +132,29 @@ var a = "hello";
 
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -159,22 +165,23 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -185,30 +192,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Emit when error
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
-/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
 
 
 //// [/home/src/projects/project/a.js]
@@ -221,14 +215,29 @@ var a = /** @class */ (function () {
 
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -239,7 +248,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.Success

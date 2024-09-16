@@ -6,33 +6,32 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: pasteEdits", () => {
+describe("unittests:: tsserver:: pasteEdits::", () => {
     it("adds paste edits", () => {
         const target: File = {
-            path: "/project/a/target.ts",
+            path: "/home/src/projects/project/a/target.ts",
             content: `const a = 1;
 const b = 2;
 const c = 3;`,
         };
         const file1: File = {
-            path: "/project/a/file1.ts",
+            path: "/home/src/projects/project/a/file1.ts",
             content: `export const r = 1;
 export const s = 2;`,
         };
         const tsconfig: File = {
-            path: "/project/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
         const pastedText = `const q = 1;
 function e();
 const f = r + s;`;
 
-        const host = createServerHost([target, file1, tsconfig, libFile]);
+        const host = TestServerHost.createServerHost([target, file1, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([target], session);
 

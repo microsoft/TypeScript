@@ -1,7 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: true
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
+//// [/user/username/projects/myproject/a.ts]
+let y = 10;
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,12 +21,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{}
-
-//// [/user/username/projects/myproject/a.ts]
-let y = 10;
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -33,7 +37,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Debug Failure. False expression.
-Verbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}
+Verbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/home/src/Vscode/Projects/bin","openKeys":[]}
 Dynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.
 Before request
 
@@ -48,16 +52,23 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/Vscode/Projects/bin
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js SVC-1-0 "var x = 10;"
 
 
-	a/lib/lib.d.ts
+	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js
 	  Root file specified for compilation
@@ -65,8 +76,16 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
+PolledWatches::
+/home/src/Vscode/Projects/bin/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 Projects::
@@ -75,7 +94,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -84,20 +103,20 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -107,7 +126,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/a/lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
         "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js"
       ],
       "compilerOptions": {
@@ -124,10 +143,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": []
       },
       "unresolvedImports": [],
-      "projectRootPath": "/",
+      "projectRootPath": "/home/src/Vscode/Projects/bin",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -137,8 +156,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "filesToWatch": [
         "^walkThroughSnippet:/Users/UserName/projects/someProject/out/bower_components",
         "^walkThroughSnippet:/Users/UserName/projects/someProject/out/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -148,16 +167,16 @@ TI:: [hh:mm:ss:mss] Sending response:
       "files": [
         "^walkThroughSnippet:/Users/UserName/projects/someProject/out/bower_components",
         "^walkThroughSnippet:/Users/UserName/projects/someProject/out/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: ^walkThroughSnippet: 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: ^walkThroughSnippet: 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: ^walkThroughSnippet:/Users/UserName 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: ^walkThroughSnippet:/Users/UserName 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -225,15 +244,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/^walkThroughSnippet:: *new*
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName: *new*
   {"pollingInterval":500}
-/bower_components: *new*
+/home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
-/node_modules: *new*
+/home/src/Vscode/Projects/bin/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 Projects::

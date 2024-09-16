@@ -1,16 +1,16 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "compilerOptions": { "module": "esnext" } }
 
-// @Filename: /undefined.ts
+// @Filename: /home/src/workspaces/project/undefined.ts
 ////export = undefined;
 
-// @Filename: /undefinedAlias.ts
+// @Filename: /home/src/workspaces/project/undefinedAlias.ts
 ////const x = undefined;
 ////export = x;
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// /**/
 
 // Would throw error if undefined appears twice
@@ -20,7 +20,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "/undefinedAlias"
+     source: "/home/src/workspaces/project/undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,
@@ -34,7 +34,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "/undefinedAlias"
+     source: "/home/src/workspaces/project/undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,

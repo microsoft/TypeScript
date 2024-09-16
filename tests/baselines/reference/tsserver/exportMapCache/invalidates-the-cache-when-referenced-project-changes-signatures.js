@@ -1,7 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/packages/lib/tsconfig.json]
+//// [/home/src/projects/project/packages/lib/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -9,10 +11,10 @@ Before request
   }
 }
 
-//// [/packages/lib/index.ts]
+//// [/home/src/projects/project/packages/lib/index.ts]
 export const foo = 0;
 
-//// [/packages/app/tsconfig.json]
+//// [/home/src/projects/project/packages/app/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -30,10 +32,10 @@ export const foo = 0;
   ]
 }
 
-//// [/packages/app/index.ts]
+//// [/home/src/projects/project/packages/app/index.ts]
 foo
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -45,6 +47,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -75,27 +79,27 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/packages/app/index.ts"
+        "file": "/home/src/projects/project/packages/app/index.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/index.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /packages/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/app/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/packages/app/tsconfig.json, currentDirectory: /home/src/projects/project/packages/app
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/packages/app/tsconfig.json",
-        "reason": "Creating possible configured project for /packages/app/index.ts to open"
+        "projectName": "/home/src/projects/project/packages/app/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/app/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /packages/app/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/app/tsconfig.json : {
  "rootNames": [
-  "/packages/app/index.ts"
+  "/home/src/projects/project/packages/app/index.ts"
  ],
  "options": {
   "composite": true,
@@ -105,53 +109,62 @@ Info seq  [hh:mm:ss:mss] Config: /packages/app/tsconfig.json : {
     "../lib/index.ts"
    ]
   },
-  "pathsBasePath": "/packages/app",
-  "configFilePath": "/packages/app/tsconfig.json"
+  "pathsBasePath": "/home/src/projects/project/packages/app",
+  "configFilePath": "/home/src/projects/project/packages/app/tsconfig.json"
  },
  "projectReferences": [
   {
-   "path": "/packages/lib",
+   "path": "/home/src/projects/project/packages/lib",
    "originalPath": "../lib"
   }
  ]
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app 1 undefined Config: /packages/app/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app 1 undefined Config: /packages/app/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /packages/lib/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/app 1 undefined Config: /home/src/projects/project/packages/app/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/app 1 undefined Config: /home/src/projects/project/packages/app/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/lib/tsconfig.json : {
  "rootNames": [
-  "/packages/lib/index.ts"
+  "/home/src/projects/project/packages/lib/index.ts"
  ],
  "options": {
   "composite": true,
   "module": 1,
-  "configFilePath": "/packages/lib/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/packages/lib/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/lib/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/lib 1 undefined Config: /packages/lib/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/lib 1 undefined Config: /packages/lib/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib 1 undefined Config: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib 1 undefined Config: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/app/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/app/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/packages/app/index.ts SVC-1-0 "foo"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/packages/app/index.ts SVC-1-0 "foo"
 
 
-	../../a/lib/lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 0 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/projects/project/packages/app
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/packages/lib/index.ts Text-1 "export const foo = 0;"
+	/home/src/projects/project/packages/lib/index.ts Text-1 "export const foo = 0;"
 
 
 	../lib/index.ts
@@ -164,7 +177,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/packages/app/tsconfig.json"
+        "projectName": "/home/src/projects/project/packages/app/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -175,7 +188,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "41bc5dc776489701ec6802cff9284d4bf8ffe94b17414e97e9c5e657c1583d81",
+          "projectId": "33329ab3f1098b4e69b8d4af3b152f00ced62fdaa7bc2af65370a6ba677abca6",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -186,7 +199,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -218,13 +231,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/packages/app/index.ts",
-        "configFile": "/packages/app/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/packages/app/index.ts",
+        "configFile": "/home/src/projects/project/packages/app/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -233,8 +246,8 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/app/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -249,44 +262,54 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/project/packages/app/tsconfig.json: *new*
   {}
-/packages/app/tsconfig.json: *new*
+/home/src/projects/project/packages/lib/index.ts: *new*
   {}
-/packages/lib/index.ts: *new*
+/home/src/projects/project/packages/lib/tsconfig.json: *new*
   {}
-/packages/lib/tsconfig.json: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/packages/app: *new*
+/home/src/projects/project/packages/app: *new*
   {}
-/packages/lib: *new*
+/home/src/projects/project/packages/lib: *new*
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/packages/app/tsconfig.json (Configured) *new*
+/home/src/projects/project/packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /packages/app/tsconfig.json
-/packages/app/index.ts (Open) *new*
+/home/src/projects/project/packages/app/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/app/tsconfig.json *default*
-/packages/lib/index.ts *new*
+        /home/src/projects/project/packages/app/tsconfig.json *default*
+/home/src/projects/project/packages/lib/index.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/app/tsconfig.json
 
 Before request
 
@@ -294,33 +317,41 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/packages/lib/index.ts"
+        "file": "/home/src/projects/project/packages/lib/index.ts"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/lib/index.ts ProjectRootPath: undefined:: Result: /packages/lib/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /packages/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/lib/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/lib/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/packages/lib/tsconfig.json, currentDirectory: /home/src/projects/project/packages/lib
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/packages/lib/tsconfig.json",
-        "reason": "Creating possible configured project for /packages/lib/index.ts to open"
+        "projectName": "/home/src/projects/project/packages/lib/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/lib/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/lib/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/lib/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/lib/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/packages/lib/index.ts Text-1 "export const foo = 0;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/packages/lib/index.ts Text-1 "export const foo = 0;"
 
 
-	../../a/lib/lib.d.ts
+	../../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -332,7 +363,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/packages/lib/tsconfig.json"
+        "projectName": "/home/src/projects/project/packages/lib/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -343,7 +374,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "7f43865a88af5eec469de22d728bcd7e465169a53d03a9c0ba2e3a754ffbdcef",
+          "projectId": "5a56b3df92fb212cb5392de0e0f3933492d7e09278b915b4d4088f6cce340f5a",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -354,7 +385,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -385,13 +416,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/packages/lib/index.ts",
-        "configFile": "/packages/lib/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/packages/lib/index.ts",
+        "configFile": "/home/src/projects/project/packages/lib/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/lib/tsconfig.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/lib/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -399,15 +430,15 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/packages/lib/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/lib/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/autoImportProviderProject1*,/packages/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/app/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/lib/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/autoImportProviderProject1*,/home/src/projects/project/packages/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -421,53 +452,65 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/app/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/lib/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/project/packages/app/tsconfig.json:
   {}
-/packages/app/tsconfig.json:
+/home/src/projects/project/packages/lib/tsconfig.json:
   {}
-/packages/lib/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatches *deleted*::
-/packages/lib/index.ts:
+/home/src/projects/project/packages/lib/index.ts:
   {}
 
 FsWatchesRecursive::
-/packages/app:
+/home/src/projects/project/packages/app:
   {}
-/packages/lib:
+/home/src/projects/project/packages/lib:
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
     projectStateVersion: 1
     projectProgramVersion: 1
-/packages/app/tsconfig.json (Configured)
+/home/src/projects/project/packages/app/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/packages/lib/tsconfig.json (Configured) *new*
+/home/src/projects/project/packages/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /packages/app/tsconfig.json
-        /packages/lib/tsconfig.json *new*
-/packages/app/index.ts (Open)
+/home/src/projects/project/packages/app/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /packages/app/tsconfig.json *default*
-/packages/lib/index.ts (Open) *changed*
+        /home/src/projects/project/packages/app/tsconfig.json *default*
+/home/src/projects/project/packages/lib/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/autoImportProviderProject1*
-        /packages/lib/tsconfig.json *default* *new*
+        /home/src/projects/project/packages/lib/tsconfig.json *default* *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /home/src/projects/project/packages/app/tsconfig.json
+        /home/src/projects/project/packages/lib/tsconfig.json *new*
 
 Before request
 
@@ -475,7 +518,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/packages/app/index.ts",
+        "file": "/home/src/projects/project/packages/app/index.ts",
         "line": 1,
         "offset": 1,
         "prefix": "foo"
@@ -517,13 +560,13 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/packages/lib/index",
+            "source": "/home/src/projects/project/packages/lib/index",
             "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "foo",
               "exportMapKey": "3 * foo ",
-              "fileName": "/packages/lib/index.ts",
+              "fileName": "/home/src/projects/project/packages/lib/index.ts",
               "isPackageJsonImport": true
             }
           }
@@ -546,7 +589,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "changedFiles": [
           {
-            "fileName": "/packages/lib/index.ts",
+            "fileName": "/home/src/projects/project/packages/lib/index.ts",
             "textChanges": [
               {
                 "newText": "export const food = 0;",
@@ -578,38 +621,38 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
-/packages/app/tsconfig.json (Configured)
+/home/src/projects/project/packages/app/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/packages/lib/tsconfig.json (Configured) *changed*
+/home/src/projects/project/packages/lib/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /packages/app/tsconfig.json
-        /packages/lib/tsconfig.json
-/packages/app/index.ts (Open)
+/home/src/projects/project/packages/app/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /packages/app/tsconfig.json *default*
-/packages/lib/index.ts (Open) *changed*
+        /home/src/projects/project/packages/app/tsconfig.json *default*
+/home/src/projects/project/packages/lib/index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 2
         /dev/null/autoImportProviderProject1*
-        /packages/lib/tsconfig.json *default*
+        /home/src/projects/project/packages/lib/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/packages/app/tsconfig.json
+        /home/src/projects/project/packages/lib/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 0 dependencies 1 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/packages/lib/index.ts SVC-2-1 "export const food = 0;port const foo = 0;"
+	/home/src/projects/project/packages/lib/index.ts SVC-2-1 "export const food = 0;port const foo = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Before request
@@ -619,11 +662,11 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
-/packages/app/tsconfig.json (Configured)
+/home/src/projects/project/packages/app/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/packages/lib/tsconfig.json (Configured)
+/home/src/projects/project/packages/lib/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
@@ -633,7 +676,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/packages/app/index.ts",
+        "file": "/home/src/projects/project/packages/app/index.ts",
         "line": 1,
         "offset": 1,
         "prefix": "foo"
@@ -675,13 +718,13 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/packages/lib/index",
+            "source": "/home/src/projects/project/packages/lib/index",
             "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "food",
               "exportMapKey": "4 * food ",
-              "fileName": "/packages/lib/index.ts",
+              "fileName": "/home/src/projects/project/packages/lib/index.ts",
               "isPackageJsonImport": true
             }
           }
