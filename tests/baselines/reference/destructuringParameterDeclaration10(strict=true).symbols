@@ -37,3 +37,25 @@ export function prepareConfigWithoutAnnotation({
 >json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 11, 22))
 }
 
+export const prepareConfigWithContextualSignature: (param:{
+>prepareConfigWithContextualSignature : Symbol(prepareConfigWithContextualSignature, Decl(destructuringParameterDeclaration10.ts, 18, 12))
+>param : Symbol(param, Decl(destructuringParameterDeclaration10.ts, 18, 52))
+
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 18, 59))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+}) => void = ({
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 18, 59))
+
+        json = []
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 21, 22))
+
+    } = {}
+} = {}) => {
+    json // string[]
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 21, 22))
+}
+

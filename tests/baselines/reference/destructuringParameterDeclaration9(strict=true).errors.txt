@@ -24,3 +24,14 @@ index.js(15,9): error TS7031: Binding element 'json' implicitly has an 'any[]' t
         json
     }
     
+    /** @type {(param: {
+      additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+    }) => void} */
+    export const prepareConfigWithContextualSignature = ({
+        additionalFiles: {
+            json = []
+        } = {}
+    } = {})=>  {
+        json // string[]
+    }
+    

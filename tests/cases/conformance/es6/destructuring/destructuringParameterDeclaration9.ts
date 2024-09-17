@@ -26,3 +26,14 @@ export function prepareConfigWithoutAnnotation({
 } = {}) {
     json
 }
+
+/** @type {(param: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+}) => void} */
+export const prepareConfigWithContextualSignature = ({
+    additionalFiles: {
+        json = []
+    } = {}
+} = {})=>  {
+    json // string[]
+}

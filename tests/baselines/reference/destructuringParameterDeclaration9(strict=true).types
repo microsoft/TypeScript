@@ -59,3 +59,35 @@ export function prepareConfigWithoutAnnotation({
 >     : ^^^^^
 }
 
+/** @type {(param: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+}) => void} */
+export const prepareConfigWithContextualSignature = ({
+>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                     : ^     ^^                                                                            ^^^^^    
+>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+>                                                                                     : ^                             ^^^^^^^^^^^^^^^^^^^^^^^                                                     ^^^^^^^^    
+
+    additionalFiles: {
+>additionalFiles : any
+>                : ^^^
+
+        json = []
+>json : string[]
+>     : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    } = {}
+>{} : {}
+>   : ^^
+
+} = {})=>  {
+>{} : {}
+>   : ^^
+
+    json // string[]
+>json : string[]
+>     : ^^^^^^^^
+}
+

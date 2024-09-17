@@ -40553,7 +40553,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkExpressionCached(initializer, checkMode));
 
         const rootDeclaration = getRootDeclaration(declaration);
-        if (isParameter(rootDeclaration) && !getEffectiveTypeAnnotationNode(rootDeclaration)) {
+        if (isParameter(rootDeclaration) && !getEffectiveTypeAnnotationNode(rootDeclaration) && (!isFunctionLikeDeclaration(rootDeclaration.parent) || !getContextualSignatureForFunctionLikeDeclaration(rootDeclaration.parent))) {
             if (declaration.name.kind === SyntaxKind.ObjectBindingPattern && isObjectLiteralType(type)) {
                 return padObjectLiteralType(type as ObjectType, declaration.name);
             }

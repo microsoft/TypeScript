@@ -33,3 +33,21 @@ export function prepareConfigWithoutAnnotation({
 >json : Symbol(json, Decl(index.js, 13, 22))
 }
 
+/** @type {(param: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+}) => void} */
+export const prepareConfigWithContextualSignature = ({
+>prepareConfigWithContextualSignature : Symbol(prepareConfigWithContextualSignature, Decl(index.js, 23, 12))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(index.js, 20, 20))
+
+        json = []
+>json : Symbol(json, Decl(index.js, 24, 22))
+
+    } = {}
+} = {})=>  {
+    json // string[]
+>json : Symbol(json, Decl(index.js, 24, 22))
+}
+
