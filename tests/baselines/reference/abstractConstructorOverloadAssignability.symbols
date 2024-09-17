@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/abstractConstructorOverloadAssignability.ts] ////
+
+=== abstractConstructorOverloadAssignability.ts ===
+type AbstractConstructor = abstract new (arg: "abstract") => "abstract";
+>AbstractConstructor : Symbol(AbstractConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 0))
+>arg : Symbol(arg, Decl(abstractConstructorOverloadAssignability.ts, 0, 41))
+
+type ConcreteConstructor = new (arg: "concrete") => "concrete";
+>ConcreteConstructor : Symbol(ConcreteConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 72))
+>arg : Symbol(arg, Decl(abstractConstructorOverloadAssignability.ts, 1, 32))
+
+type MixedConstructorAbstractFirst =
+>MixedConstructorAbstractFirst : Symbol(MixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 1, 63))
+
+    & AbstractConstructor
+>AbstractConstructor : Symbol(AbstractConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 0))
+
+    & ConcreteConstructor;
+>ConcreteConstructor : Symbol(ConcreteConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 72))
+
+type MixedConstructorAbstractLast =
+>MixedConstructorAbstractLast : Symbol(MixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 5, 26))
+
+    & ConcreteConstructor
+>ConcreteConstructor : Symbol(ConcreteConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 72))
+
+    & AbstractConstructor;
+>AbstractConstructor : Symbol(AbstractConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 0))
+
+declare let mixedConstructorAbstractFirst: MixedConstructorAbstractFirst;
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+>MixedConstructorAbstractFirst : Symbol(MixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 1, 63))
+
+declare let mixedConstructorAbstractLast: MixedConstructorAbstractLast;
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+>MixedConstructorAbstractLast : Symbol(MixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 5, 26))
+
+mixedConstructorAbstractFirst = mixedConstructorAbstractLast; // should work
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+
+mixedConstructorAbstractLast = mixedConstructorAbstractFirst; // should work
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+
+interface MixedConstructorInterface1 extends AbstractConstructor { // should work
+>MixedConstructorInterface1 : Symbol(MixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 15, 61))
+>AbstractConstructor : Symbol(AbstractConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 0))
+
+    new (arg: "concrete"): "concrete";
+>arg : Symbol(arg, Decl(abstractConstructorOverloadAssignability.ts, 18, 9))
+}
+
+interface MixedConstructorInterface2 extends AbstractConstructor, ConcreteConstructor { // should work
+>MixedConstructorInterface2 : Symbol(MixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 19, 1))
+>AbstractConstructor : Symbol(AbstractConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 0))
+>ConcreteConstructor : Symbol(ConcreteConstructor, Decl(abstractConstructorOverloadAssignability.ts, 0, 72))
+
+}
+
+declare let mixedConstructorInterface1: MixedConstructorInterface1;
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+>MixedConstructorInterface1 : Symbol(MixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 15, 61))
+
+declare let mixedConstructorInterface2: MixedConstructorInterface2;
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+>MixedConstructorInterface2 : Symbol(MixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 19, 1))
+
+mixedConstructorInterface2 = mixedConstructorInterface1; // should work
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+
+mixedConstructorInterface1 = mixedConstructorInterface2; // should work
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+
+mixedConstructorAbstractFirst = mixedConstructorInterface1; // should work
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+
+mixedConstructorInterface1 = mixedConstructorAbstractFirst; // should work
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+
+mixedConstructorAbstractLast = mixedConstructorInterface1; // should work
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+
+mixedConstructorInterface1 = mixedConstructorAbstractLast; // should work
+>mixedConstructorInterface1 : Symbol(mixedConstructorInterface1, Decl(abstractConstructorOverloadAssignability.ts, 25, 11))
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+
+mixedConstructorAbstractFirst = mixedConstructorInterface2; // should work
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+
+mixedConstructorInterface2 = mixedConstructorAbstractFirst; // should work
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+>mixedConstructorAbstractFirst : Symbol(mixedConstructorAbstractFirst, Decl(abstractConstructorOverloadAssignability.ts, 11, 11))
+
+mixedConstructorAbstractLast = mixedConstructorInterface2; // should work
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+
+mixedConstructorInterface2 = mixedConstructorAbstractLast; // should work
+>mixedConstructorInterface2 : Symbol(mixedConstructorInterface2, Decl(abstractConstructorOverloadAssignability.ts, 26, 11))
+>mixedConstructorAbstractLast : Symbol(mixedConstructorAbstractLast, Decl(abstractConstructorOverloadAssignability.ts, 12, 11))
+
