@@ -425,7 +425,7 @@ export const enum NodeFactoryFlags {
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
 /** @internal @knipignore */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -4487,7 +4487,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
  * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind): TransformFlags {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }
@@ -4559,7 +4559,7 @@ export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     }
 }
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess | NodeFactoryFlags.Synthesized);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess | NodeFactoryFlags.Synthesized);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
@@ -4584,7 +4584,7 @@ export function setOriginalNode<T extends Node>(node: T, original: Node | undefi
 }
 
 /** @internal */
-export function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined) {
+export function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined): EmitNode {
     const {
         flags,
         internalFlags,

@@ -3364,7 +3364,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function createTemplateHead(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
         text = checkTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText, templateFlags);
-        return createTemplateHeadUnchecked(text, rawText, templateFlags) as AstTemplateHead;
+        return createTemplateHeadUnchecked(text, rawText, templateFlags);
     }
 
     function createTemplateHeadUnchecked(text: string, rawText?: string, templateFlags?: TokenFlags) {
@@ -3378,7 +3378,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function createTemplateMiddle(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
         text = checkTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText, templateFlags);
-        return createTemplateMiddleUnchecked(text, rawText, templateFlags) as AstTemplateMiddle;
+        return createTemplateMiddleUnchecked(text, rawText, templateFlags);
     }
 
     function createTemplateMiddleUnchecked(text: string, rawText?: string, templateFlags?: TokenFlags) {
@@ -3392,7 +3392,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function createTemplateTail(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
         text = checkTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText, templateFlags);
-        return createTemplateTailUnchecked(text, rawText, templateFlags) as AstTemplateTail;
+        return createTemplateTailUnchecked(text, rawText, templateFlags);
     }
 
     function createTemplateTailUnchecked(text: string, rawText?: string, templateFlags?: TokenFlags) {
@@ -3406,7 +3406,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
         text = checkTemplateLiteralLikeNode(SyntaxKind.TemplateHead, text, rawText, templateFlags);
-        return createNoSubstitutionTemplateLiteralUnchecked(text, rawText, templateFlags) as AstNoSubstitutionTemplateLiteral;
+        return createNoSubstitutionTemplateLiteralUnchecked(text, rawText, templateFlags);
     }
 
     function createNoSubstitutionTemplateLiteralUnchecked(text: string, rawText?: string, templateFlags?: TokenFlags) {

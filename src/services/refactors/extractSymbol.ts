@@ -387,17 +387,17 @@ export namespace Messages {
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
     export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
-    export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
-    export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-    export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
-    export const cannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
-    export const cannotWriteInExpression = createMessage("Cannot write back side-effects when extracting an expression");
-    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
-    export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
-    export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
-    export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
-    export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
-    export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
+    export const typeWillNotBeVisibleInTheNewScope: DiagnosticMessage = createMessage("Type will not visible in the new scope.");
+    export const functionWillNotBeVisibleInTheNewScope: DiagnosticMessage = createMessage("Function will not visible in the new scope.");
+    export const cannotExtractIdentifier: DiagnosticMessage = createMessage("Select more than a single identifier.");
+    export const cannotExtractExportedEntity: DiagnosticMessage = createMessage("Cannot extract exported declaration");
+    export const cannotWriteInExpression: DiagnosticMessage = createMessage("Cannot write back side-effects when extracting an expression");
+    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor: DiagnosticMessage = createMessage("Cannot move initialization of read-only class property outside of the constructor");
+    export const cannotExtractAmbientBlock: DiagnosticMessage = createMessage("Cannot extract code from ambient contexts");
+    export const cannotAccessVariablesFromNestedScopes: DiagnosticMessage = createMessage("Cannot access variables from nested scopes");
+    export const cannotExtractToJSClass: DiagnosticMessage = createMessage("Cannot extract constant to a class scope in JS");
+    export const cannotExtractToExpressionArrowFunction: DiagnosticMessage = createMessage("Cannot extract constant to an arrow function without a block");
+    export const cannotExtractFunctionsContainingThisToMethod: DiagnosticMessage = createMessage("Cannot extract functions containing this to method");
 }
 
 /** @internal */
