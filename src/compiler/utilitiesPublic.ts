@@ -9,6 +9,7 @@ import {
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentPattern,
+    ast,
     AutoAccessorPropertyDeclaration,
     BinaryExpression,
     BindableObjectDefinePropertyCall,
@@ -290,7 +291,6 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
-    ast,
 } from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {

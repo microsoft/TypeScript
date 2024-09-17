@@ -236,7 +236,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                     if (flags) {
                         o[propertyName] = getNodeFlagName(flags);
                     }
-                     break;
+                    break;
 
                 case "parseDiagnostics":
                     o[propertyName] = convertDiagnostics(obj[propertyName]);
@@ -247,7 +247,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                         o[propertyName] = {
                             kind: (obj as ts.HasLocals).nextContainer!.kind,
                             pos: (obj as ts.HasLocals).nextContainer!.pos,
-                            end: (obj as ts.HasLocals).nextContainer!.end
+                            end: (obj as ts.HasLocals).nextContainer!.end,
                         };
                     }
                     break;
@@ -273,7 +273,6 @@ export function sourceFileToJSON(file: ts.Node): string {
                 }
             }
         }
-
     }
 
     function serializeNode(n: ts.Node | ts.NodeArray<ts.Node>): any {

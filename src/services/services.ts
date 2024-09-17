@@ -295,7 +295,8 @@ import {
     UnionOrIntersectionType,
     UnionType,
     updateSourceFile,
-    UserPreferences} from "./_namespaces/ts.js";
+    UserPreferences,
+} from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
 import {

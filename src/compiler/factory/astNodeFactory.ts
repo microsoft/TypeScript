@@ -929,7 +929,7 @@ export interface AstNodeFactory {
 
     cloneNode<T extends AstNode>(node: T): T;
     restoreOuterExpressions(outerExpression: AstExpression | undefined, innerExpression: AstExpression, kinds?: OuterExpressionKinds): AstExpression;
-    
+
     // //
     // // Common operators
     // //
@@ -1668,7 +1668,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         return new AstNodeArray(elements ?? [], hasTrailingComma);
     }
 
-    function finishUpdateBaseSignatureDeclaration<T extends AstNode & { readonly data: { typeArguments: unknown } }>(updated: T, original: T) {
+    function finishUpdateBaseSignatureDeclaration<T extends AstNode & { readonly data: { typeArguments: unknown; }; }>(updated: T, original: T) {
         if (updated !== original) {
             // copy children used for quick info
             updated.data.typeArguments = original.data.typeArguments;
@@ -2676,7 +2676,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
 
         // TODO: remove this? 'assertions' is never defined here
         if (node.data.assertions && node.data.assertions.data.assertClause && node.data.attributes) {
-            (node.data.assertions).data.assertClause = node.data.attributes;
+            node.data.assertions.data.assertClause = node.data.attributes;
         }
 
         node.data.qualifier = qualifier;
@@ -3009,7 +3009,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         node.data.typeArguments = asNodeArray(typeArguments);
         node.data.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray));
         return finish(node);
-     }
+    }
 
     // @api
     function updateCallChain(node: AstCallChain, expression: AstExpression, questionDotToken: AstQuestionDotToken | undefined, typeArguments: AstNodeArrayLike<AstTypeNode> | undefined, argumentsArray: AstNodeArrayLike<AstExpression>) {
@@ -4951,7 +4951,6 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
             ? update(createJSDocImplementsTag(tagName, className, comment), node)
             : node;
     }
-
 
     // @api
     // createJSDocAuthorTag

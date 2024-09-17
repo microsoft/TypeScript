@@ -58,15 +58,14 @@ import {
     sameMap,
     setTextRange,
     SyntaxKind,
-    TextRange
+    TextRange,
 } from "../_namespaces/ts.js";
 
 /** @internal */
 export interface AstParenthesizerRules {
     getParenthesizeLeftSideOfBinaryForOperator(binaryOperator: SyntaxKind): (leftSide: AstExpression) => AstExpression;
     getParenthesizeRightSideOfBinaryForOperator(binaryOperator: SyntaxKind): (rightSide: AstExpression) => AstExpression;
-    parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, 
-        leftSide: AstExpression): AstExpression;
+    parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, leftSide: AstExpression): AstExpression;
     parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: AstExpression | undefined, rightSide: AstExpression): AstExpression;
     parenthesizeExpressionOfComputedPropertyName(expression: AstExpression): AstExpression;
     parenthesizeConditionOfConditionalExpression(condition: AstExpression): AstExpression;
@@ -556,7 +555,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
         return parenthesizeCheckTypeOfConditionalType(type);
     }
 
-    function parenthesizeConstituentTypesOfUnionType(members:AstNodeArrayLike<AstTypeNode>): AstNodeArray<AstTypeNode> {
+    function parenthesizeConstituentTypesOfUnionType(members: AstNodeArrayLike<AstTypeNode>): AstNodeArray<AstTypeNode> {
         return factory.createNodeArray(sameMap(items(members), parenthesizeConstituentTypeOfUnionType));
     }
 

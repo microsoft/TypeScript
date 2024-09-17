@@ -1,3 +1,4 @@
+import * as ast from "../_namespaces/ts.ast.js";
 import {
     AccessorDeclaration,
     addRange,
@@ -403,7 +404,6 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts.js";
-import * as ast from "../_namespaces/ts.ast.js";
 
 let nextAutoGenerateId = 0;
 
@@ -1556,7 +1556,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
     ): IndexSignatureDeclaration {
-        return astFactory.createIndexSignature(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node
+        return astFactory.createIndexSignature(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
     }
 
     // @api
@@ -3351,7 +3351,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         return astFactory.updateJSDocSatisfiesTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
-
     //
     // JSX
     //
@@ -4419,8 +4418,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         }
     }
 
-    type ToNode<T extends Node> =
-        Expression extends T ? ast.Expression :
+    type ToNode<T extends Node> = Expression extends T ? ast.Expression :
         Statement extends T ? ast.Statement :
         TypeNode extends T ? ast.TypeNode :
         TypeElement extends T ? ast.TypeElement :

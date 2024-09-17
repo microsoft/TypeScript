@@ -1,3 +1,4 @@
+import { isAstParenthesizedExpression } from "./_namespaces/ts.ast.js";
 import * as ts from "./_namespaces/ts.js";
 import {
     __String,
@@ -73,7 +74,6 @@ import {
     TypeNodeSyntaxKind,
     updateSourceFile,
 } from "./_namespaces/ts.js";
-import { isAstParenthesizedExpression } from "./_namespaces/ts.ast.js";
 
 /** @internal */
 export type NextContainer = AstNode<HasLocals>;
@@ -126,14 +126,28 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         this._nodeConstructor = nodeConstructor;
     }
 
-    get node(): N { return this._node ??= new this._nodeConstructor(this); }
+    get node(): N {
+        return this._node ??= new this._nodeConstructor(this);
+    }
 
-    get id(): number { return this._extra?.id.id ?? 0; }
-    set id(value) { this.extra.id.id = value; }
-    get original(): AstNode<Node<ts.SyntaxKind, AstData>> | undefined { return this._extra?.original; }
-    set original(value) { this.extra.original = value; }
-    get emitNode(): ts.EmitNode | undefined { return this._extra?.emitNode; }
-    set emitNode(value) { this.extra.emitNode = value; }
+    get id(): number {
+        return this._extra?.id.id ?? 0;
+    }
+    set id(value) {
+        this.extra.id.id = value;
+    }
+    get original(): AstNode<Node<ts.SyntaxKind, AstData>> | undefined {
+        return this._extra?.original;
+    }
+    set original(value) {
+        this.extra.original = value;
+    }
+    get emitNode(): ts.EmitNode | undefined {
+        return this._extra?.emitNode;
+    }
+    set emitNode(value) {
+        this.extra.emitNode = value;
+    }
     get transformFlags(): ts.TransformFlags {
         const transformFlags = this._extra?.transformFlags;
         if (transformFlags === undefined) {
@@ -142,12 +156,20 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         }
         return transformFlags;
     }
-    set transformFlags(value) { this.extra.transformFlags = value; }
+    set transformFlags(value) {
+        this.extra.transformFlags = value;
+    }
 
-    get modifierFlagsCache(): ts.ModifierFlags { return this._extra?.modifierFlagsCache ?? ModifierFlags.None; }
-    set modifierFlagsCache(value) { this.extra.modifierFlagsCache = value; }
+    get modifierFlagsCache(): ts.ModifierFlags {
+        return this._extra?.modifierFlagsCache ?? ModifierFlags.None;
+    }
+    set modifierFlagsCache(value) {
+        this.extra.modifierFlagsCache = value;
+    }
 
-    /*private*/ get extra(): AstNodeExtraFields { return this._extra ??= new AstNodeExtraFields(); }
+    /*private*/ get extra(): AstNodeExtraFields {
+        return this._extra ??= new AstNodeExtraFields();
+    }
 
     /**
      * Creates a shallow data-only clone of this node.
@@ -222,221 +244,649 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         [SyntaxKind.FalseKeyword, this.FalseLiteral],
     ]);
 
-    static EndOfFileToken(): AstEndOfFileToken { return new AstNode(SyntaxKind.EndOfFileToken, new AstEndOfFileTokenData(), EndOfFileToken); }
-    static ThisExpression(): AstThisExpression { return new AstNode(SyntaxKind.ThisKeyword, new AstThisExpressionData(), ThisExpression); }
-    static SuperExpression(): AstSuperExpression { return new AstNode(SyntaxKind.SuperKeyword, new AstSuperExpressionData(), SuperExpression); }
-    static ImportExpression(): AstImportExpression { return new AstNode(SyntaxKind.ImportKeyword, new AstTokenData(), ImportExpression); }
-    static NullLiteral(): AstNullLiteral { return new AstNode(SyntaxKind.NullKeyword, new AstTokenData(), NullLiteral); }
-    static TrueLiteral(): AstTrueLiteral { return new AstNode(SyntaxKind.TrueKeyword, new AstTokenData(), TrueLiteral); }
-    static FalseLiteral(): AstFalseLiteral { return new AstNode(SyntaxKind.FalseKeyword, new AstTokenData(), FalseLiteral); }
-    static Identifier(): AstIdentifier { return new AstNode(SyntaxKind.Identifier, new AstIdentifierData(), Identifier); }
-    static QualifiedName(): AstQualifiedName { return new AstNode(SyntaxKind.QualifiedName, new AstQualifiedNameData(), QualifiedName); }
-    static ComputedPropertyName(): AstComputedPropertyName { return new AstNode(SyntaxKind.ComputedPropertyName, new AstComputedPropertyNameData(), ComputedPropertyName); }
-    static PrivateIdentifier(): AstPrivateIdentifier { return new AstNode(SyntaxKind.PrivateIdentifier, new AstPrivateIdentifierData(), PrivateIdentifier); }
-    static TypeParameterDeclaration(): AstTypeParameterDeclaration { return new AstNode(SyntaxKind.TypeParameter, new AstTypeParameterDeclarationData(), TypeParameterDeclaration); }
-    static ParameterDeclaration(): AstParameterDeclaration { return new AstNode(SyntaxKind.Parameter, new AstParameterDeclarationData(), ParameterDeclaration); }
-    static Decorator(): AstDecorator { return new AstNode(SyntaxKind.Decorator, new AstDecoratorData(), Decorator); }
-    static PropertySignature(): AstPropertySignature { return new AstNode(SyntaxKind.PropertySignature, new AstPropertySignatureData(), PropertySignature); }
-    static CallSignatureDeclaration(): AstCallSignatureDeclaration { return new AstNode(SyntaxKind.CallSignature, new AstCallSignatureDeclarationData(), CallSignatureDeclaration); }
-    static ConstructSignatureDeclaration(): AstConstructSignatureDeclaration { return new AstNode(SyntaxKind.ConstructSignature, new AstConstructSignatureDeclarationData(), ConstructSignatureDeclaration); }
-    static VariableDeclaration(): AstVariableDeclaration { return new AstNode(SyntaxKind.VariableDeclaration, new AstVariableDeclarationData(), VariableDeclaration); }
-    static VariableDeclarationList(): AstVariableDeclarationList { return new AstNode(SyntaxKind.VariableDeclarationList, new AstVariableDeclarationListData(), VariableDeclarationList); }
-    static BindingElement(): AstBindingElement { return new AstNode(SyntaxKind.BindingElement, new AstBindingElementData(), BindingElement); }
-    static PropertyDeclaration(): AstPropertyDeclaration { return new AstNode(SyntaxKind.PropertyDeclaration, new AstPropertyDeclarationData(), PropertyDeclaration); }
-    static PropertyAssignment(): AstPropertyAssignment { return new AstNode(SyntaxKind.PropertyAssignment, new AstPropertyAssignmentData(), PropertyAssignment); }
-    static ShorthandPropertyAssignment(): AstShorthandPropertyAssignment { return new AstNode(SyntaxKind.ShorthandPropertyAssignment, new AstShorthandPropertyAssignmentData(), ShorthandPropertyAssignment); }
-    static SpreadAssignment(): AstSpreadAssignment { return new AstNode(SyntaxKind.SpreadAssignment, new AstSpreadAssignmentData(), SpreadAssignment); }
-    static ObjectBindingPattern(): AstObjectBindingPattern { return new AstNode(SyntaxKind.ObjectBindingPattern, new AstObjectBindingPatternData(), ObjectBindingPattern); }
-    static ArrayBindingPattern(): AstArrayBindingPattern { return new AstNode(SyntaxKind.ArrayBindingPattern, new AstArrayBindingPatternData(), ArrayBindingPattern); }
-    static FunctionDeclaration(): AstFunctionDeclaration { return new AstNode(SyntaxKind.FunctionDeclaration, new AstFunctionDeclarationData(), FunctionDeclaration); }
-    static MethodSignature(): AstMethodSignature { return new AstNode(SyntaxKind.MethodSignature, new AstMethodSignatureData(), MethodSignature); }
-    static MethodDeclaration(): AstMethodDeclaration { return new AstNode(SyntaxKind.MethodDeclaration, new AstMethodDeclarationData(), MethodDeclaration); }
-    static ConstructorDeclaration(): AstConstructorDeclaration { return new AstNode(SyntaxKind.Constructor, new AstConstructorDeclarationData(), ConstructorDeclaration); }
-    static SemicolonClassElement(): AstSemicolonClassElement { return new AstNode(SyntaxKind.SemicolonClassElement, new AstSemicolonClassElementData(), SemicolonClassElement); }
-    static GetAccessorDeclaration(): AstGetAccessorDeclaration { return new AstNode(SyntaxKind.GetAccessor, new AstGetAccessorDeclarationData(), GetAccessorDeclaration); }
-    static SetAccessorDeclaration(): AstSetAccessorDeclaration { return new AstNode(SyntaxKind.SetAccessor, new AstSetAccessorDeclarationData(), SetAccessorDeclaration); }
-    static IndexSignatureDeclaration(): AstIndexSignatureDeclaration { return new AstNode(SyntaxKind.IndexSignature, new AstIndexSignatureDeclarationData(), IndexSignatureDeclaration); }
-    static ClassStaticBlockDeclaration(): AstClassStaticBlockDeclaration { return new AstNode(SyntaxKind.ClassStaticBlockDeclaration, new AstClassStaticBlockDeclarationData(), ClassStaticBlockDeclaration); }
+    static EndOfFileToken(): AstEndOfFileToken {
+        return new AstNode(SyntaxKind.EndOfFileToken, new AstEndOfFileTokenData(), EndOfFileToken);
+    }
+    static ThisExpression(): AstThisExpression {
+        return new AstNode(SyntaxKind.ThisKeyword, new AstThisExpressionData(), ThisExpression);
+    }
+    static SuperExpression(): AstSuperExpression {
+        return new AstNode(SyntaxKind.SuperKeyword, new AstSuperExpressionData(), SuperExpression);
+    }
+    static ImportExpression(): AstImportExpression {
+        return new AstNode(SyntaxKind.ImportKeyword, new AstTokenData(), ImportExpression);
+    }
+    static NullLiteral(): AstNullLiteral {
+        return new AstNode(SyntaxKind.NullKeyword, new AstTokenData(), NullLiteral);
+    }
+    static TrueLiteral(): AstTrueLiteral {
+        return new AstNode(SyntaxKind.TrueKeyword, new AstTokenData(), TrueLiteral);
+    }
+    static FalseLiteral(): AstFalseLiteral {
+        return new AstNode(SyntaxKind.FalseKeyword, new AstTokenData(), FalseLiteral);
+    }
+    static Identifier(): AstIdentifier {
+        return new AstNode(SyntaxKind.Identifier, new AstIdentifierData(), Identifier);
+    }
+    static QualifiedName(): AstQualifiedName {
+        return new AstNode(SyntaxKind.QualifiedName, new AstQualifiedNameData(), QualifiedName);
+    }
+    static ComputedPropertyName(): AstComputedPropertyName {
+        return new AstNode(SyntaxKind.ComputedPropertyName, new AstComputedPropertyNameData(), ComputedPropertyName);
+    }
+    static PrivateIdentifier(): AstPrivateIdentifier {
+        return new AstNode(SyntaxKind.PrivateIdentifier, new AstPrivateIdentifierData(), PrivateIdentifier);
+    }
+    static TypeParameterDeclaration(): AstTypeParameterDeclaration {
+        return new AstNode(SyntaxKind.TypeParameter, new AstTypeParameterDeclarationData(), TypeParameterDeclaration);
+    }
+    static ParameterDeclaration(): AstParameterDeclaration {
+        return new AstNode(SyntaxKind.Parameter, new AstParameterDeclarationData(), ParameterDeclaration);
+    }
+    static Decorator(): AstDecorator {
+        return new AstNode(SyntaxKind.Decorator, new AstDecoratorData(), Decorator);
+    }
+    static PropertySignature(): AstPropertySignature {
+        return new AstNode(SyntaxKind.PropertySignature, new AstPropertySignatureData(), PropertySignature);
+    }
+    static CallSignatureDeclaration(): AstCallSignatureDeclaration {
+        return new AstNode(SyntaxKind.CallSignature, new AstCallSignatureDeclarationData(), CallSignatureDeclaration);
+    }
+    static ConstructSignatureDeclaration(): AstConstructSignatureDeclaration {
+        return new AstNode(SyntaxKind.ConstructSignature, new AstConstructSignatureDeclarationData(), ConstructSignatureDeclaration);
+    }
+    static VariableDeclaration(): AstVariableDeclaration {
+        return new AstNode(SyntaxKind.VariableDeclaration, new AstVariableDeclarationData(), VariableDeclaration);
+    }
+    static VariableDeclarationList(): AstVariableDeclarationList {
+        return new AstNode(SyntaxKind.VariableDeclarationList, new AstVariableDeclarationListData(), VariableDeclarationList);
+    }
+    static BindingElement(): AstBindingElement {
+        return new AstNode(SyntaxKind.BindingElement, new AstBindingElementData(), BindingElement);
+    }
+    static PropertyDeclaration(): AstPropertyDeclaration {
+        return new AstNode(SyntaxKind.PropertyDeclaration, new AstPropertyDeclarationData(), PropertyDeclaration);
+    }
+    static PropertyAssignment(): AstPropertyAssignment {
+        return new AstNode(SyntaxKind.PropertyAssignment, new AstPropertyAssignmentData(), PropertyAssignment);
+    }
+    static ShorthandPropertyAssignment(): AstShorthandPropertyAssignment {
+        return new AstNode(SyntaxKind.ShorthandPropertyAssignment, new AstShorthandPropertyAssignmentData(), ShorthandPropertyAssignment);
+    }
+    static SpreadAssignment(): AstSpreadAssignment {
+        return new AstNode(SyntaxKind.SpreadAssignment, new AstSpreadAssignmentData(), SpreadAssignment);
+    }
+    static ObjectBindingPattern(): AstObjectBindingPattern {
+        return new AstNode(SyntaxKind.ObjectBindingPattern, new AstObjectBindingPatternData(), ObjectBindingPattern);
+    }
+    static ArrayBindingPattern(): AstArrayBindingPattern {
+        return new AstNode(SyntaxKind.ArrayBindingPattern, new AstArrayBindingPatternData(), ArrayBindingPattern);
+    }
+    static FunctionDeclaration(): AstFunctionDeclaration {
+        return new AstNode(SyntaxKind.FunctionDeclaration, new AstFunctionDeclarationData(), FunctionDeclaration);
+    }
+    static MethodSignature(): AstMethodSignature {
+        return new AstNode(SyntaxKind.MethodSignature, new AstMethodSignatureData(), MethodSignature);
+    }
+    static MethodDeclaration(): AstMethodDeclaration {
+        return new AstNode(SyntaxKind.MethodDeclaration, new AstMethodDeclarationData(), MethodDeclaration);
+    }
+    static ConstructorDeclaration(): AstConstructorDeclaration {
+        return new AstNode(SyntaxKind.Constructor, new AstConstructorDeclarationData(), ConstructorDeclaration);
+    }
+    static SemicolonClassElement(): AstSemicolonClassElement {
+        return new AstNode(SyntaxKind.SemicolonClassElement, new AstSemicolonClassElementData(), SemicolonClassElement);
+    }
+    static GetAccessorDeclaration(): AstGetAccessorDeclaration {
+        return new AstNode(SyntaxKind.GetAccessor, new AstGetAccessorDeclarationData(), GetAccessorDeclaration);
+    }
+    static SetAccessorDeclaration(): AstSetAccessorDeclaration {
+        return new AstNode(SyntaxKind.SetAccessor, new AstSetAccessorDeclarationData(), SetAccessorDeclaration);
+    }
+    static IndexSignatureDeclaration(): AstIndexSignatureDeclaration {
+        return new AstNode(SyntaxKind.IndexSignature, new AstIndexSignatureDeclarationData(), IndexSignatureDeclaration);
+    }
+    static ClassStaticBlockDeclaration(): AstClassStaticBlockDeclaration {
+        return new AstNode(SyntaxKind.ClassStaticBlockDeclaration, new AstClassStaticBlockDeclarationData(), ClassStaticBlockDeclaration);
+    }
     /** @deprecated */
-    static ImportTypeAssertionContainer(): AstImportTypeAssertionContainer { return new AstNode(SyntaxKind.ImportTypeAssertionContainer, new AstImportTypeAssertionContainerData(), ImportTypeAssertionContainer); }
-    static ImportTypeNode(): AstImportTypeNode { return new AstNode(SyntaxKind.ImportType, new AstImportTypeNodeData(), ImportTypeNode); }
-    static ThisTypeNode(): AstThisTypeNode { return new AstNode(SyntaxKind.ThisType, new AstThisTypeNodeData(), ThisTypeNode); }
-    static FunctionTypeNode(): AstFunctionTypeNode { return new AstNode(SyntaxKind.FunctionType, new AstFunctionTypeNodeData(), FunctionTypeNode); }
-    static ConstructorTypeNode(): AstConstructorTypeNode { return new AstNode(SyntaxKind.ConstructorType, new AstConstructorTypeNodeData(), ConstructorTypeNode); }
-    static TypeReferenceNode(): AstTypeReferenceNode { return new AstNode(SyntaxKind.TypeReference, new AstTypeReferenceNodeData(), TypeReferenceNode); }
-    static TypePredicateNode(): AstTypePredicateNode { return new AstNode(SyntaxKind.TypePredicate, new AstTypePredicateNodeData(), TypePredicateNode); }
-    static TypeQueryNode(): AstTypeQueryNode { return new AstNode(SyntaxKind.TypeQuery, new AstTypeQueryNodeData(), TypeQueryNode); }
-    static TypeLiteralNode(): AstTypeLiteralNode { return new AstNode(SyntaxKind.TypeLiteral, new AstTypeLiteralNodeData(), TypeLiteralNode); }
-    static ArrayTypeNode(): AstArrayTypeNode { return new AstNode(SyntaxKind.ArrayType, new AstArrayTypeNodeData(), ArrayTypeNode); }
-    static TupleTypeNode(): AstTupleTypeNode { return new AstNode(SyntaxKind.TupleType, new AstTupleTypeNodeData(), TupleTypeNode); }
-    static NamedTupleMember(): AstNamedTupleMember { return new AstNode(SyntaxKind.NamedTupleMember, new AstNamedTupleMemberData(), NamedTupleMember); }
-    static OptionalTypeNode(): AstOptionalTypeNode { return new AstNode(SyntaxKind.OptionalType, new AstOptionalTypeNodeData(), OptionalTypeNode); }
-    static RestTypeNode(): AstRestTypeNode { return new AstNode(SyntaxKind.RestType, new AstRestTypeNodeData(), RestTypeNode); }
-    static UnionTypeNode(): AstUnionTypeNode { return new AstNode(SyntaxKind.UnionType, new AstUnionTypeNodeData(), UnionTypeNode); }
-    static IntersectionTypeNode(): AstIntersectionTypeNode { return new AstNode(SyntaxKind.IntersectionType, new AstIntersectionTypeNodeData(), IntersectionTypeNode); }
-    static ConditionalTypeNode(): AstConditionalTypeNode { return new AstNode(SyntaxKind.ConditionalType, new AstConditionalTypeNodeData(), ConditionalTypeNode); }
-    static InferTypeNode(): AstInferTypeNode { return new AstNode(SyntaxKind.InferType, new AstInferTypeNodeData(), InferTypeNode); }
-    static ParenthesizedTypeNode(): AstParenthesizedTypeNode { return new AstNode(SyntaxKind.ParenthesizedType, new AstParenthesizedTypeNodeData(), ParenthesizedTypeNode); }
-    static TypeOperatorNode(): AstTypeOperatorNode { return new AstNode(SyntaxKind.TypeOperator, new AstTypeOperatorNodeData(), TypeOperatorNode); }
-    static IndexedAccessTypeNode(): AstIndexedAccessTypeNode { return new AstNode(SyntaxKind.IndexedAccessType, new AstIndexedAccessTypeNodeData(), IndexedAccessTypeNode); }
-    static MappedTypeNode(): AstMappedTypeNode { return new AstNode(SyntaxKind.MappedType, new AstMappedTypeNodeData(), MappedTypeNode); }
-    static LiteralTypeNode(): AstLiteralTypeNode { return new AstNode(SyntaxKind.LiteralType, new AstLiteralTypeNodeData(), LiteralTypeNode); }
-    static StringLiteral(): AstStringLiteral { return new AstNode(SyntaxKind.StringLiteral, new AstStringLiteralData(), StringLiteral); }
-    static TemplateLiteralTypeNode(): AstTemplateLiteralTypeNode { return new AstNode(SyntaxKind.TemplateLiteralType, new AstTemplateLiteralTypeNodeData(), TemplateLiteralTypeNode); }
-    static TemplateLiteralTypeSpan(): AstTemplateLiteralTypeSpan { return new AstNode(SyntaxKind.TemplateLiteralTypeSpan, new AstTemplateLiteralTypeSpanData(), TemplateLiteralTypeSpan); }
-    static OmittedExpression(): AstOmittedExpression { return new AstNode(SyntaxKind.OmittedExpression, new AstOmittedExpressionData(), OmittedExpression); }
-    static PrefixUnaryExpression(): AstPrefixUnaryExpression { return new AstNode(SyntaxKind.PrefixUnaryExpression, new AstPrefixUnaryExpressionData(), PrefixUnaryExpression); }
-    static PostfixUnaryExpression(): AstPostfixUnaryExpression { return new AstNode(SyntaxKind.PostfixUnaryExpression, new AstPostfixUnaryExpressionData(), PostfixUnaryExpression); }
-    static DeleteExpression(): AstDeleteExpression { return new AstNode(SyntaxKind.DeleteExpression, new AstDeleteExpressionData(), DeleteExpression); }
-    static TypeOfExpression(): AstTypeOfExpression { return new AstNode(SyntaxKind.TypeOfExpression, new AstTypeOfExpressionData(), TypeOfExpression); }
-    static VoidExpression(): AstVoidExpression { return new AstNode(SyntaxKind.VoidExpression, new AstVoidExpressionData(), VoidExpression); }
-    static AwaitExpression(): AstAwaitExpression { return new AstNode(SyntaxKind.AwaitExpression, new AstAwaitExpressionData(), AwaitExpression); }
-    static YieldExpression(): AstYieldExpression { return new AstNode(SyntaxKind.YieldExpression, new AstYieldExpressionData(), YieldExpression); }
-    static BinaryExpression(): AstBinaryExpression { return new AstNode(SyntaxKind.BinaryExpression, new AstBinaryExpressionData(), BinaryExpression); }
-    static ConditionalExpression(): AstConditionalExpression { return new AstNode(SyntaxKind.ConditionalExpression, new AstConditionalExpressionData(), ConditionalExpression); }
-    static FunctionExpression(): AstFunctionExpression { return new AstNode(SyntaxKind.FunctionExpression, new AstFunctionExpressionData(), FunctionExpression); }
-    static ArrowFunction(): AstArrowFunction { return new AstNode(SyntaxKind.ArrowFunction, new AstArrowFunctionData(), ArrowFunction); }
-    static RegularExpressionLiteral(): AstRegularExpressionLiteral { return new AstNode(SyntaxKind.RegularExpressionLiteral, new AstRegularExpressionLiteralData(), RegularExpressionLiteral); }
-    static NoSubstitutionTemplateLiteral(): AstNoSubstitutionTemplateLiteral { return new AstNode(SyntaxKind.NoSubstitutionTemplateLiteral, new AstNoSubstitutionTemplateLiteralData(), NoSubstitutionTemplateLiteral); }
-    static NumericLiteral(): AstNumericLiteral { return new AstNode(SyntaxKind.NumericLiteral, new AstNumericLiteralData(), NumericLiteral); }
-    static BigIntLiteral(): AstBigIntLiteral { return new AstNode(SyntaxKind.BigIntLiteral, new AstBigIntLiteralData(), BigIntLiteral); }
-    static TemplateHead(): AstTemplateHead { return new AstNode(SyntaxKind.TemplateHead, new AstTemplateHeadData(), TemplateHead); }
-    static TemplateMiddle(): AstTemplateMiddle { return new AstNode(SyntaxKind.TemplateMiddle, new AstTemplateMiddleData(), TemplateMiddle); }
-    static TemplateTail(): AstTemplateTail { return new AstNode(SyntaxKind.TemplateTail, new AstTemplateTailData(), TemplateTail); }
-    static TemplateExpression(): AstTemplateExpression { return new AstNode(SyntaxKind.TemplateExpression, new AstTemplateExpressionData(), TemplateExpression); }
-    static TemplateSpan(): AstTemplateSpan { return new AstNode(SyntaxKind.TemplateSpan, new AstTemplateSpanData(), TemplateSpan); }
-    static ParenthesizedExpression(): AstParenthesizedExpression { return new AstNode(SyntaxKind.ParenthesizedExpression, new AstParenthesizedExpressionData(), ParenthesizedExpression); }
-    static ArrayLiteralExpression(): AstArrayLiteralExpression { return new AstNode(SyntaxKind.ArrayLiteralExpression, new AstArrayLiteralExpressionData(), ArrayLiteralExpression); }
-    static SpreadElement(): AstSpreadElement { return new AstNode(SyntaxKind.SpreadElement, new AstSpreadElementData(), SpreadElement); }
-    static ObjectLiteralExpression(): AstObjectLiteralExpression { return new AstNode(SyntaxKind.ObjectLiteralExpression, new AstObjectLiteralExpressionData(), ObjectLiteralExpression); }
-    static PropertyAccessExpression(): AstPropertyAccessExpression { return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression); }
-    static PropertyAccessChain(): AstPropertyAccessChain { return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression, NodeFlags.OptionalChain) as AstPropertyAccessChain; }
-    static ElementAccessExpression(): AstElementAccessExpression { return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression); }
-    static ElementAccessChain(): AstElementAccessChain { return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression, NodeFlags.OptionalChain) as AstElementAccessChain; }
-    static CallExpression(): AstCallExpression { return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression); }
-    static CallChain(): AstCallChain { return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression, NodeFlags.OptionalChain) as AstCallChain; }
-    static ExpressionWithTypeArguments(): AstExpressionWithTypeArguments { return new AstNode(SyntaxKind.ExpressionWithTypeArguments, new AstExpressionWithTypeArgumentsData(), ExpressionWithTypeArguments); }
-    static NewExpression(): AstNewExpression { return new AstNode(SyntaxKind.NewExpression, new AstNewExpressionData(), NewExpression); }
-    static TaggedTemplateExpression(): AstTaggedTemplateExpression { return new AstNode(SyntaxKind.TaggedTemplateExpression, new AstTaggedTemplateExpressionData(), TaggedTemplateExpression); }
-    static AsExpression(): AstAsExpression { return new AstNode(SyntaxKind.AsExpression, new AstAsExpressionData(), AsExpression); }
-    static TypeAssertion(): AstTypeAssertion { return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionData(), TypeAssertion); }
-    static SatisfiesExpression(): AstSatisfiesExpression { return new AstNode(SyntaxKind.SatisfiesExpression, new AstSatisfiesExpressionData(), SatisfiesExpression); }
-    static NonNullExpression(): AstNonNullExpression { return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression); }
-    static NonNullChain(): AstNonNullChain { return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression, NodeFlags.OptionalChain) as AstNonNullChain; }
-    static MetaProperty(): AstMetaProperty { return new AstNode(SyntaxKind.MetaProperty, new AstMetaPropertyData(), MetaProperty); }
-    static JsxElement(): AstJsxElement { return new AstNode(SyntaxKind.JsxElement, new AstJsxElementData(), JsxElement); }
-    static JsxAttributes(): AstJsxAttributes { return new AstNode(SyntaxKind.JsxAttributes, new AstJsxAttributesData(), JsxAttributes); }
-    static JsxNamespacedName(): AstJsxNamespacedName { return new AstNode(SyntaxKind.JsxNamespacedName, new AstJsxNamespacedNameData(), JsxNamespacedName); }
-    static JsxOpeningElement(): AstJsxOpeningElement { return new AstNode(SyntaxKind.JsxOpeningElement, new AstJsxOpeningElementData(), JsxOpeningElement); }
-    static JsxSelfClosingElement(): AstJsxSelfClosingElement { return new AstNode(SyntaxKind.JsxSelfClosingElement, new AstJsxSelfClosingElementData(), JsxSelfClosingElement); }
-    static JsxFragment(): AstJsxFragment { return new AstNode(SyntaxKind.JsxFragment, new AstJsxFragmentData(), JsxFragment); }
-    static JsxOpeningFragment(): AstJsxOpeningFragment { return new AstNode(SyntaxKind.JsxOpeningFragment, new AstJsxOpeningFragmentData(), JsxOpeningFragment); }
-    static JsxClosingFragment(): AstJsxClosingFragment { return new AstNode(SyntaxKind.JsxClosingFragment, new AstJsxClosingFragmentData(), JsxClosingFragment); }
-    static JsxAttribute(): AstJsxAttribute { return new AstNode(SyntaxKind.JsxAttribute, new AstJsxAttributeData(), JsxAttribute); }
-    static JsxSpreadAttribute(): AstJsxSpreadAttribute { return new AstNode(SyntaxKind.JsxSpreadAttribute, new AstJsxSpreadAttributeData(), JsxSpreadAttribute); }
-    static JsxClosingElement(): AstJsxClosingElement { return new AstNode(SyntaxKind.JsxClosingElement, new AstJsxClosingElementData(), JsxClosingElement); }
-    static JsxExpression(): AstJsxExpression { return new AstNode(SyntaxKind.JsxExpression, new AstJsxExpressionData(), JsxExpression); }
-    static JsxText(): AstJsxText { return new AstNode(SyntaxKind.JsxText, new AstJsxTextData(), JsxText); }
-    static EmptyStatement(): AstEmptyStatement { return new AstNode(SyntaxKind.EmptyStatement, new AstEmptyStatementData(), EmptyStatement); }
-    static DebuggerStatement(): AstDebuggerStatement { return new AstNode(SyntaxKind.DebuggerStatement, new AstDebuggerStatementData(), DebuggerStatement); }
-    static MissingDeclaration(): AstMissingDeclaration { return new AstNode(SyntaxKind.MissingDeclaration, new AstMissingDeclarationData(), MissingDeclaration); }
-    static Block(): AstBlock { return new AstNode(SyntaxKind.Block, new AstBlockData(), Block); }
-    static VariableStatement(): AstVariableStatement { return new AstNode(SyntaxKind.VariableStatement, new AstVariableStatementData(), VariableStatement); }
-    static ExpressionStatement(): AstExpressionStatement { return new AstNode(SyntaxKind.ExpressionStatement, new AstExpressionStatementData(), ExpressionStatement); }
-    static IfStatement(): AstIfStatement { return new AstNode(SyntaxKind.IfStatement, new AstIfStatementData(), IfStatement); }
-    static DoStatement(): AstDoStatement { return new AstNode(SyntaxKind.DoStatement, new AstDoStatementData(), DoStatement); }
-    static WhileStatement(): AstWhileStatement { return new AstNode(SyntaxKind.WhileStatement, new AstWhileStatementData(), WhileStatement); }
-    static ForStatement(): AstForStatement { return new AstNode(SyntaxKind.ForStatement, new AstForStatementData(), ForStatement); }
-    static ForInStatement(): AstForInStatement { return new AstNode(SyntaxKind.ForInStatement, new AstForInStatementData(), ForInStatement); }
-    static ForOfStatement(): AstForOfStatement { return new AstNode(SyntaxKind.ForOfStatement, new AstForOfStatementData(), ForOfStatement); }
-    static BreakStatement(): AstBreakStatement { return new AstNode(SyntaxKind.BreakStatement, new AstBreakStatementData(), BreakStatement); }
-    static ContinueStatement(): AstContinueStatement { return new AstNode(SyntaxKind.ContinueStatement, new AstContinueStatementData(), ContinueStatement); }
-    static ReturnStatement(): AstReturnStatement { return new AstNode(SyntaxKind.ReturnStatement, new AstReturnStatementData(), ReturnStatement); }
-    static WithStatement(): AstWithStatement { return new AstNode(SyntaxKind.WithStatement, new AstWithStatementData(), WithStatement); }
-    static SwitchStatement(): AstSwitchStatement { return new AstNode(SyntaxKind.SwitchStatement, new AstSwitchStatementData(), SwitchStatement); }
-    static CaseBlock(): AstCaseBlock { return new AstNode(SyntaxKind.CaseBlock, new AstCaseBlockData(), CaseBlock); }
-    static CaseClause(): AstCaseClause { return new AstNode(SyntaxKind.CaseClause, new AstCaseClauseData(), CaseClause); }
-    static DefaultClause(): AstDefaultClause { return new AstNode(SyntaxKind.DefaultClause, new AstDefaultClauseData(), DefaultClause); }
-    static LabeledStatement(): AstLabeledStatement { return new AstNode(SyntaxKind.LabeledStatement, new AstLabeledStatementData(), LabeledStatement); }
-    static ThrowStatement(): AstThrowStatement { return new AstNode(SyntaxKind.ThrowStatement, new AstThrowStatementData(), ThrowStatement); }
-    static TryStatement(): AstTryStatement { return new AstNode(SyntaxKind.TryStatement, new AstTryStatementData(), TryStatement); }
-    static CatchClause(): AstCatchClause { return new AstNode(SyntaxKind.CatchClause, new AstCatchClauseData(), CatchClause); }
-    static ClassDeclaration(): AstClassDeclaration { return new AstNode(SyntaxKind.ClassDeclaration, new AstClassDeclarationData(), ClassDeclaration); }
-    static ClassExpression(): AstClassExpression { return new AstNode(SyntaxKind.ClassExpression, new AstClassExpressionData(), ClassExpression); }
-    static InterfaceDeclaration(): AstInterfaceDeclaration { return new AstNode(SyntaxKind.InterfaceDeclaration, new AstInterfaceDeclarationData(), InterfaceDeclaration); }
-    static HeritageClause(): AstHeritageClause { return new AstNode(SyntaxKind.HeritageClause, new AstHeritageClauseData(), HeritageClause); }
-    static TypeAliasDeclaration(): AstTypeAliasDeclaration { return new AstNode(SyntaxKind.TypeAliasDeclaration, new AstTypeAliasDeclarationData(), TypeAliasDeclaration); }
-    static EnumMember(): AstEnumMember { return new AstNode(SyntaxKind.EnumMember, new AstEnumMemberData(), EnumMember); }
-    static EnumDeclaration(): AstEnumDeclaration { return new AstNode(SyntaxKind.EnumDeclaration, new AstEnumDeclarationData(), EnumDeclaration); }
-    static ModuleDeclaration(): AstModuleDeclaration { return new AstNode(SyntaxKind.ModuleDeclaration, new AstModuleDeclarationData(), ModuleDeclaration); }
-    static ModuleBlock(): AstModuleBlock { return new AstNode(SyntaxKind.ModuleBlock, new AstModuleBlockData(), ModuleBlock); }
-    static ImportEqualsDeclaration(): AstImportEqualsDeclaration { return new AstNode(SyntaxKind.ImportEqualsDeclaration, new AstImportEqualsDeclarationData(), ImportEqualsDeclaration); }
-    static ExternalModuleReference(): AstExternalModuleReference { return new AstNode(SyntaxKind.ExternalModuleReference, new AstExternalModuleReferenceData(), ExternalModuleReference); }
-    static ImportDeclaration(): AstImportDeclaration { return new AstNode(SyntaxKind.ImportDeclaration, new AstImportDeclarationData(), ImportDeclaration); }
-    static ImportClause(): AstImportClause { return new AstNode(SyntaxKind.ImportClause, new AstImportClauseData(), ImportClause); }
-    static ImportAttribute(): AstImportAttribute { return new AstNode(SyntaxKind.ImportAttribute, new AstImportAttributeData(), ImportAttribute); }
-    static ImportAttributes(): AstImportAttributes { return new AstNode(SyntaxKind.ImportAttributes, new AstImportAttributesData(), ImportAttributes); }
-    static NamespaceImport(): AstNamespaceImport { return new AstNode(SyntaxKind.NamespaceImport, new AstNamespaceImportData(), NamespaceImport); }
-    static NamespaceExport(): AstNamespaceExport { return new AstNode(SyntaxKind.NamespaceExport, new AstNamespaceExportData(), NamespaceExport); }
-    static NamespaceExportDeclaration(): AstNamespaceExportDeclaration { return new AstNode(SyntaxKind.NamespaceExportDeclaration, new AstNamespaceExportDeclarationData(), NamespaceExportDeclaration); }
-    static ExportDeclaration(): AstExportDeclaration { return new AstNode(SyntaxKind.ExportDeclaration, new AstExportDeclarationData(), ExportDeclaration); }
-    static NamedImports(): AstNamedImports { return new AstNode(SyntaxKind.NamedImports, new AstNamedImportsData(), NamedImports); }
-    static NamedExports(): AstNamedExports { return new AstNode(SyntaxKind.NamedExports, new AstNamedExportsData(), NamedExports); }
-    static ImportSpecifier(): AstImportSpecifier { return new AstNode(SyntaxKind.ImportSpecifier, new AstImportSpecifierData(), ImportSpecifier); }
-    static ExportSpecifier(): AstExportSpecifier { return new AstNode(SyntaxKind.ExportSpecifier, new AstExportSpecifierData(), ExportSpecifier); }
-    static ExportAssignment(): AstExportAssignment { return new AstNode(SyntaxKind.ExportAssignment, new AstExportAssignmentData(), ExportAssignment); }
-    static JSDocTypeExpression(): AstJSDocTypeExpression { return new AstNode(SyntaxKind.JSDocTypeExpression, new AstJSDocTypeExpressionData(), JSDocTypeExpression); }
-    static JSDocNameReference(): AstJSDocNameReference { return new AstNode(SyntaxKind.JSDocNameReference, new AstJSDocNameReferenceData(), JSDocNameReference); }
-    static JSDocMemberName(): AstJSDocMemberName { return new AstNode(SyntaxKind.JSDocMemberName, new AstJSDocMemberNameData(), JSDocMemberName); }
-    static JSDocAllType(): AstJSDocAllType { return new AstNode(SyntaxKind.JSDocAllType, new AstJSDocAllTypeData(), JSDocAllType); }
-    static JSDocUnknownType(): AstJSDocUnknownType { return new AstNode(SyntaxKind.JSDocUnknownType, new AstJSDocUnknownTypeData(), JSDocUnknownType); }
-    static JSDocNonNullableType(): AstJSDocNonNullableType { return new AstNode(SyntaxKind.JSDocNonNullableType, new AstJSDocNonNullableTypeData(), JSDocNonNullableType); }
-    static JSDocNullableType(): AstJSDocNullableType { return new AstNode(SyntaxKind.JSDocNullableType, new AstJSDocNullableTypeData(), JSDocNullableType); }
-    static JSDocOptionalType(): AstJSDocOptionalType { return new AstNode(SyntaxKind.JSDocOptionalType, new AstJSDocOptionalTypeData(), JSDocOptionalType); }
-    static JSDocFunctionType(): AstJSDocFunctionType { return new AstNode(SyntaxKind.JSDocFunctionType, new AstJSDocFunctionTypeData(), JSDocFunctionType); }
-    static JSDocVariadicType(): AstJSDocVariadicType { return new AstNode(SyntaxKind.JSDocVariadicType, new AstJSDocVariadicTypeData(), JSDocVariadicType); }
-    static JSDocNamepathType(): AstJSDocNamepathType { return new AstNode(SyntaxKind.JSDocNamepathType, new AstJSDocNamepathTypeData(), JSDocNamepathType); }
-    static JSDocNode(): AstJSDocNode { return new AstNode(SyntaxKind.JSDoc, new AstJSDocNodeData(), JSDocNode); }
-    static JSDocLink(): AstJSDocLink { return new AstNode(SyntaxKind.JSDocLink, new AstJSDocLinkData(), JSDocLink); }
-    static JSDocLinkCode(): AstJSDocLinkCode { return new AstNode(SyntaxKind.JSDocLinkCode, new AstJSDocLinkCodeData(), JSDocLinkCode); }
-    static JSDocLinkPlain(): AstJSDocLinkPlain { return new AstNode(SyntaxKind.JSDocLinkPlain, new AstJSDocLinkPlainData(), JSDocLinkPlain); }
-    static JSDocText(): AstJSDocText { return new AstNode(SyntaxKind.JSDocText, new AstJSDocTextData(), JSDocText); }
-    static JSDocUnknownTag(): AstJSDocUnknownTag { return new AstNode(SyntaxKind.JSDocTag, new AstJSDocUnknownTagData(), JSDocUnknownTag); }
-    static JSDocAugmentsTag(): AstJSDocAugmentsTag { return new AstNode(SyntaxKind.JSDocAugmentsTag, new AstJSDocAugmentsTagData(), JSDocAugmentsTag); }
-    static JSDocImplementsTag(): AstJSDocImplementsTag { return new AstNode(SyntaxKind.JSDocImplementsTag, new AstJSDocImplementsTagData(), JSDocImplementsTag); }
-    static JSDocAuthorTag(): AstJSDocAuthorTag { return new AstNode(SyntaxKind.JSDocAuthorTag, new AstJSDocAuthorTagData(), JSDocAuthorTag); }
-    static JSDocDeprecatedTag(): AstJSDocDeprecatedTag { return new AstNode(SyntaxKind.JSDocDeprecatedTag, new AstJSDocDeprecatedTagData(), JSDocDeprecatedTag); }
-    static JSDocClassTag(): AstJSDocClassTag { return new AstNode(SyntaxKind.JSDocClassTag, new AstJSDocClassTagData(), JSDocClassTag); }
-    static JSDocPublicTag(): AstJSDocPublicTag { return new AstNode(SyntaxKind.JSDocPublicTag, new AstJSDocPublicTagData(), JSDocPublicTag); }
-    static JSDocPrivateTag(): AstJSDocPrivateTag { return new AstNode(SyntaxKind.JSDocPrivateTag, new AstJSDocPrivateTagData(), JSDocPrivateTag); }
-    static JSDocProtectedTag(): AstJSDocProtectedTag { return new AstNode(SyntaxKind.JSDocProtectedTag, new AstJSDocProtectedTagData(), JSDocProtectedTag); }
-    static JSDocReadonlyTag(): AstJSDocReadonlyTag { return new AstNode(SyntaxKind.JSDocReadonlyTag, new AstJSDocReadonlyTagData(), JSDocReadonlyTag); }
-    static JSDocOverrideTag(): AstJSDocOverrideTag { return new AstNode(SyntaxKind.JSDocOverrideTag, new AstJSDocOverrideTagData(), JSDocOverrideTag); }
-    static JSDocEnumTag(): AstJSDocEnumTag { return new AstNode(SyntaxKind.JSDocEnumTag, new AstJSDocEnumTagData(), JSDocEnumTag); }
-    static JSDocThisTag(): AstJSDocThisTag { return new AstNode(SyntaxKind.JSDocThisTag, new AstJSDocThisTagData(), JSDocThisTag); }
-    static JSDocTemplateTag(): AstJSDocTemplateTag { return new AstNode(SyntaxKind.JSDocTemplateTag, new AstJSDocTemplateTagData(), JSDocTemplateTag); }
-    static JSDocSeeTag(): AstJSDocSeeTag { return new AstNode(SyntaxKind.JSDocSeeTag, new AstJSDocSeeTagData(), JSDocSeeTag); }
-    static JSDocReturnTag(): AstJSDocReturnTag { return new AstNode(SyntaxKind.JSDocReturnTag, new AstJSDocReturnTagData(), JSDocReturnTag); }
-    static JSDocTypeTag(): AstJSDocTypeTag { return new AstNode(SyntaxKind.JSDocTypeTag, new AstJSDocTypeTagData(), JSDocTypeTag); }
-    static JSDocTypedefTag(): AstJSDocTypedefTag { return new AstNode(SyntaxKind.JSDocTypedefTag, new AstJSDocTypedefTagData(), JSDocTypedefTag); }
-    static JSDocCallbackTag(): AstJSDocCallbackTag { return new AstNode(SyntaxKind.JSDocCallbackTag, new AstJSDocCallbackTagData(), JSDocCallbackTag); }
-    static JSDocOverloadTag(): AstJSDocOverloadTag { return new AstNode(SyntaxKind.JSDocOverloadTag, new AstJSDocOverloadTagData(), JSDocOverloadTag); }
-    static JSDocThrowsTag(): AstJSDocThrowsTag { return new AstNode(SyntaxKind.JSDocThrowsTag, new AstJSDocThrowsTagData(), JSDocThrowsTag); }
-    static JSDocSignature(): AstJSDocSignature { return new AstNode(SyntaxKind.JSDocSignature, new AstJSDocSignatureData(), JSDocSignature); }
-    static JSDocPropertyTag(): AstJSDocPropertyTag { return new AstNode(SyntaxKind.JSDocPropertyTag, new AstJSDocPropertyTagData(), JSDocPropertyTag); }
-    static JSDocParameterTag(): AstJSDocParameterTag { return new AstNode(SyntaxKind.JSDocParameterTag, new AstJSDocParameterTagData(), JSDocParameterTag); }
-    static JSDocTypeLiteral(): AstJSDocTypeLiteral { return new AstNode(SyntaxKind.JSDocTypeLiteral, new AstJSDocTypeLiteralData(), JSDocTypeLiteral); }
-    static JSDocSatisfiesTag(): AstJSDocSatisfiesTag { return new AstNode(SyntaxKind.JSDocSatisfiesTag, new AstJSDocSatisfiesTagData(), JSDocSatisfiesTag); }
-    static JSDocImportTag(): AstJSDocImportTag { return new AstNode(SyntaxKind.JSDocImportTag, new AstJSDocImportTagData(), JSDocImportTag); }
-    static SourceFile(): AstSourceFile { return new AstNode(SyntaxKind.SourceFile, new AstSourceFileData(), SourceFile); }
-    static SyntheticExpression(): AstSyntheticExpression { return new AstNode(SyntaxKind.SyntheticExpression, new AstSyntheticExpressionData(), SyntheticExpression); }
-    static Bundle(): AstBundle { return new AstNode(SyntaxKind.Bundle, new AstBundleData(), Bundle); }
-    static SyntaxList(): AstSyntaxList { return new AstNode(SyntaxKind.SyntaxList, new AstSyntaxListData(), SyntaxList); }
-    static NotEmittedStatement(): AstNotEmittedStatement { return new AstNode(SyntaxKind.NotEmittedStatement, new AstNotEmittedStatementData(), NotEmittedStatement); }
-    static NotEmittedTypeElement(): AstNotEmittedTypeElement { return new AstNode(SyntaxKind.NotEmittedTypeElement, new AstNotEmittedTypeElementData(), NotEmittedTypeElement); }
-    static PartiallyEmittedExpression(): AstPartiallyEmittedExpression { return new AstNode(SyntaxKind.PartiallyEmittedExpression, new AstPartiallyEmittedExpressionData(), PartiallyEmittedExpression); }
-    static CommaListExpression(): AstCommaListExpression { return new AstNode(SyntaxKind.CommaListExpression, new AstCommaListExpressionData(), CommaListExpression); }
-    static SyntheticReferenceExpression(): AstSyntheticReferenceExpression { return new AstNode(SyntaxKind.SyntheticReferenceExpression, new AstSyntheticReferenceExpressionData(), SyntheticReferenceExpression); }
+    static ImportTypeAssertionContainer(): AstImportTypeAssertionContainer {
+        return new AstNode(SyntaxKind.ImportTypeAssertionContainer, new AstImportTypeAssertionContainerData(), ImportTypeAssertionContainer);
+    }
+    static ImportTypeNode(): AstImportTypeNode {
+        return new AstNode(SyntaxKind.ImportType, new AstImportTypeNodeData(), ImportTypeNode);
+    }
+    static ThisTypeNode(): AstThisTypeNode {
+        return new AstNode(SyntaxKind.ThisType, new AstThisTypeNodeData(), ThisTypeNode);
+    }
+    static FunctionTypeNode(): AstFunctionTypeNode {
+        return new AstNode(SyntaxKind.FunctionType, new AstFunctionTypeNodeData(), FunctionTypeNode);
+    }
+    static ConstructorTypeNode(): AstConstructorTypeNode {
+        return new AstNode(SyntaxKind.ConstructorType, new AstConstructorTypeNodeData(), ConstructorTypeNode);
+    }
+    static TypeReferenceNode(): AstTypeReferenceNode {
+        return new AstNode(SyntaxKind.TypeReference, new AstTypeReferenceNodeData(), TypeReferenceNode);
+    }
+    static TypePredicateNode(): AstTypePredicateNode {
+        return new AstNode(SyntaxKind.TypePredicate, new AstTypePredicateNodeData(), TypePredicateNode);
+    }
+    static TypeQueryNode(): AstTypeQueryNode {
+        return new AstNode(SyntaxKind.TypeQuery, new AstTypeQueryNodeData(), TypeQueryNode);
+    }
+    static TypeLiteralNode(): AstTypeLiteralNode {
+        return new AstNode(SyntaxKind.TypeLiteral, new AstTypeLiteralNodeData(), TypeLiteralNode);
+    }
+    static ArrayTypeNode(): AstArrayTypeNode {
+        return new AstNode(SyntaxKind.ArrayType, new AstArrayTypeNodeData(), ArrayTypeNode);
+    }
+    static TupleTypeNode(): AstTupleTypeNode {
+        return new AstNode(SyntaxKind.TupleType, new AstTupleTypeNodeData(), TupleTypeNode);
+    }
+    static NamedTupleMember(): AstNamedTupleMember {
+        return new AstNode(SyntaxKind.NamedTupleMember, new AstNamedTupleMemberData(), NamedTupleMember);
+    }
+    static OptionalTypeNode(): AstOptionalTypeNode {
+        return new AstNode(SyntaxKind.OptionalType, new AstOptionalTypeNodeData(), OptionalTypeNode);
+    }
+    static RestTypeNode(): AstRestTypeNode {
+        return new AstNode(SyntaxKind.RestType, new AstRestTypeNodeData(), RestTypeNode);
+    }
+    static UnionTypeNode(): AstUnionTypeNode {
+        return new AstNode(SyntaxKind.UnionType, new AstUnionTypeNodeData(), UnionTypeNode);
+    }
+    static IntersectionTypeNode(): AstIntersectionTypeNode {
+        return new AstNode(SyntaxKind.IntersectionType, new AstIntersectionTypeNodeData(), IntersectionTypeNode);
+    }
+    static ConditionalTypeNode(): AstConditionalTypeNode {
+        return new AstNode(SyntaxKind.ConditionalType, new AstConditionalTypeNodeData(), ConditionalTypeNode);
+    }
+    static InferTypeNode(): AstInferTypeNode {
+        return new AstNode(SyntaxKind.InferType, new AstInferTypeNodeData(), InferTypeNode);
+    }
+    static ParenthesizedTypeNode(): AstParenthesizedTypeNode {
+        return new AstNode(SyntaxKind.ParenthesizedType, new AstParenthesizedTypeNodeData(), ParenthesizedTypeNode);
+    }
+    static TypeOperatorNode(): AstTypeOperatorNode {
+        return new AstNode(SyntaxKind.TypeOperator, new AstTypeOperatorNodeData(), TypeOperatorNode);
+    }
+    static IndexedAccessTypeNode(): AstIndexedAccessTypeNode {
+        return new AstNode(SyntaxKind.IndexedAccessType, new AstIndexedAccessTypeNodeData(), IndexedAccessTypeNode);
+    }
+    static MappedTypeNode(): AstMappedTypeNode {
+        return new AstNode(SyntaxKind.MappedType, new AstMappedTypeNodeData(), MappedTypeNode);
+    }
+    static LiteralTypeNode(): AstLiteralTypeNode {
+        return new AstNode(SyntaxKind.LiteralType, new AstLiteralTypeNodeData(), LiteralTypeNode);
+    }
+    static StringLiteral(): AstStringLiteral {
+        return new AstNode(SyntaxKind.StringLiteral, new AstStringLiteralData(), StringLiteral);
+    }
+    static TemplateLiteralTypeNode(): AstTemplateLiteralTypeNode {
+        return new AstNode(SyntaxKind.TemplateLiteralType, new AstTemplateLiteralTypeNodeData(), TemplateLiteralTypeNode);
+    }
+    static TemplateLiteralTypeSpan(): AstTemplateLiteralTypeSpan {
+        return new AstNode(SyntaxKind.TemplateLiteralTypeSpan, new AstTemplateLiteralTypeSpanData(), TemplateLiteralTypeSpan);
+    }
+    static OmittedExpression(): AstOmittedExpression {
+        return new AstNode(SyntaxKind.OmittedExpression, new AstOmittedExpressionData(), OmittedExpression);
+    }
+    static PrefixUnaryExpression(): AstPrefixUnaryExpression {
+        return new AstNode(SyntaxKind.PrefixUnaryExpression, new AstPrefixUnaryExpressionData(), PrefixUnaryExpression);
+    }
+    static PostfixUnaryExpression(): AstPostfixUnaryExpression {
+        return new AstNode(SyntaxKind.PostfixUnaryExpression, new AstPostfixUnaryExpressionData(), PostfixUnaryExpression);
+    }
+    static DeleteExpression(): AstDeleteExpression {
+        return new AstNode(SyntaxKind.DeleteExpression, new AstDeleteExpressionData(), DeleteExpression);
+    }
+    static TypeOfExpression(): AstTypeOfExpression {
+        return new AstNode(SyntaxKind.TypeOfExpression, new AstTypeOfExpressionData(), TypeOfExpression);
+    }
+    static VoidExpression(): AstVoidExpression {
+        return new AstNode(SyntaxKind.VoidExpression, new AstVoidExpressionData(), VoidExpression);
+    }
+    static AwaitExpression(): AstAwaitExpression {
+        return new AstNode(SyntaxKind.AwaitExpression, new AstAwaitExpressionData(), AwaitExpression);
+    }
+    static YieldExpression(): AstYieldExpression {
+        return new AstNode(SyntaxKind.YieldExpression, new AstYieldExpressionData(), YieldExpression);
+    }
+    static BinaryExpression(): AstBinaryExpression {
+        return new AstNode(SyntaxKind.BinaryExpression, new AstBinaryExpressionData(), BinaryExpression);
+    }
+    static ConditionalExpression(): AstConditionalExpression {
+        return new AstNode(SyntaxKind.ConditionalExpression, new AstConditionalExpressionData(), ConditionalExpression);
+    }
+    static FunctionExpression(): AstFunctionExpression {
+        return new AstNode(SyntaxKind.FunctionExpression, new AstFunctionExpressionData(), FunctionExpression);
+    }
+    static ArrowFunction(): AstArrowFunction {
+        return new AstNode(SyntaxKind.ArrowFunction, new AstArrowFunctionData(), ArrowFunction);
+    }
+    static RegularExpressionLiteral(): AstRegularExpressionLiteral {
+        return new AstNode(SyntaxKind.RegularExpressionLiteral, new AstRegularExpressionLiteralData(), RegularExpressionLiteral);
+    }
+    static NoSubstitutionTemplateLiteral(): AstNoSubstitutionTemplateLiteral {
+        return new AstNode(SyntaxKind.NoSubstitutionTemplateLiteral, new AstNoSubstitutionTemplateLiteralData(), NoSubstitutionTemplateLiteral);
+    }
+    static NumericLiteral(): AstNumericLiteral {
+        return new AstNode(SyntaxKind.NumericLiteral, new AstNumericLiteralData(), NumericLiteral);
+    }
+    static BigIntLiteral(): AstBigIntLiteral {
+        return new AstNode(SyntaxKind.BigIntLiteral, new AstBigIntLiteralData(), BigIntLiteral);
+    }
+    static TemplateHead(): AstTemplateHead {
+        return new AstNode(SyntaxKind.TemplateHead, new AstTemplateHeadData(), TemplateHead);
+    }
+    static TemplateMiddle(): AstTemplateMiddle {
+        return new AstNode(SyntaxKind.TemplateMiddle, new AstTemplateMiddleData(), TemplateMiddle);
+    }
+    static TemplateTail(): AstTemplateTail {
+        return new AstNode(SyntaxKind.TemplateTail, new AstTemplateTailData(), TemplateTail);
+    }
+    static TemplateExpression(): AstTemplateExpression {
+        return new AstNode(SyntaxKind.TemplateExpression, new AstTemplateExpressionData(), TemplateExpression);
+    }
+    static TemplateSpan(): AstTemplateSpan {
+        return new AstNode(SyntaxKind.TemplateSpan, new AstTemplateSpanData(), TemplateSpan);
+    }
+    static ParenthesizedExpression(): AstParenthesizedExpression {
+        return new AstNode(SyntaxKind.ParenthesizedExpression, new AstParenthesizedExpressionData(), ParenthesizedExpression);
+    }
+    static ArrayLiteralExpression(): AstArrayLiteralExpression {
+        return new AstNode(SyntaxKind.ArrayLiteralExpression, new AstArrayLiteralExpressionData(), ArrayLiteralExpression);
+    }
+    static SpreadElement(): AstSpreadElement {
+        return new AstNode(SyntaxKind.SpreadElement, new AstSpreadElementData(), SpreadElement);
+    }
+    static ObjectLiteralExpression(): AstObjectLiteralExpression {
+        return new AstNode(SyntaxKind.ObjectLiteralExpression, new AstObjectLiteralExpressionData(), ObjectLiteralExpression);
+    }
+    static PropertyAccessExpression(): AstPropertyAccessExpression {
+        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression);
+    }
+    static PropertyAccessChain(): AstPropertyAccessChain {
+        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression, NodeFlags.OptionalChain) as AstPropertyAccessChain;
+    }
+    static ElementAccessExpression(): AstElementAccessExpression {
+        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression);
+    }
+    static ElementAccessChain(): AstElementAccessChain {
+        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression, NodeFlags.OptionalChain) as AstElementAccessChain;
+    }
+    static CallExpression(): AstCallExpression {
+        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression);
+    }
+    static CallChain(): AstCallChain {
+        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression, NodeFlags.OptionalChain) as AstCallChain;
+    }
+    static ExpressionWithTypeArguments(): AstExpressionWithTypeArguments {
+        return new AstNode(SyntaxKind.ExpressionWithTypeArguments, new AstExpressionWithTypeArgumentsData(), ExpressionWithTypeArguments);
+    }
+    static NewExpression(): AstNewExpression {
+        return new AstNode(SyntaxKind.NewExpression, new AstNewExpressionData(), NewExpression);
+    }
+    static TaggedTemplateExpression(): AstTaggedTemplateExpression {
+        return new AstNode(SyntaxKind.TaggedTemplateExpression, new AstTaggedTemplateExpressionData(), TaggedTemplateExpression);
+    }
+    static AsExpression(): AstAsExpression {
+        return new AstNode(SyntaxKind.AsExpression, new AstAsExpressionData(), AsExpression);
+    }
+    static TypeAssertion(): AstTypeAssertion {
+        return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionData(), TypeAssertion);
+    }
+    static SatisfiesExpression(): AstSatisfiesExpression {
+        return new AstNode(SyntaxKind.SatisfiesExpression, new AstSatisfiesExpressionData(), SatisfiesExpression);
+    }
+    static NonNullExpression(): AstNonNullExpression {
+        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression);
+    }
+    static NonNullChain(): AstNonNullChain {
+        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression, NodeFlags.OptionalChain) as AstNonNullChain;
+    }
+    static MetaProperty(): AstMetaProperty {
+        return new AstNode(SyntaxKind.MetaProperty, new AstMetaPropertyData(), MetaProperty);
+    }
+    static JsxElement(): AstJsxElement {
+        return new AstNode(SyntaxKind.JsxElement, new AstJsxElementData(), JsxElement);
+    }
+    static JsxAttributes(): AstJsxAttributes {
+        return new AstNode(SyntaxKind.JsxAttributes, new AstJsxAttributesData(), JsxAttributes);
+    }
+    static JsxNamespacedName(): AstJsxNamespacedName {
+        return new AstNode(SyntaxKind.JsxNamespacedName, new AstJsxNamespacedNameData(), JsxNamespacedName);
+    }
+    static JsxOpeningElement(): AstJsxOpeningElement {
+        return new AstNode(SyntaxKind.JsxOpeningElement, new AstJsxOpeningElementData(), JsxOpeningElement);
+    }
+    static JsxSelfClosingElement(): AstJsxSelfClosingElement {
+        return new AstNode(SyntaxKind.JsxSelfClosingElement, new AstJsxSelfClosingElementData(), JsxSelfClosingElement);
+    }
+    static JsxFragment(): AstJsxFragment {
+        return new AstNode(SyntaxKind.JsxFragment, new AstJsxFragmentData(), JsxFragment);
+    }
+    static JsxOpeningFragment(): AstJsxOpeningFragment {
+        return new AstNode(SyntaxKind.JsxOpeningFragment, new AstJsxOpeningFragmentData(), JsxOpeningFragment);
+    }
+    static JsxClosingFragment(): AstJsxClosingFragment {
+        return new AstNode(SyntaxKind.JsxClosingFragment, new AstJsxClosingFragmentData(), JsxClosingFragment);
+    }
+    static JsxAttribute(): AstJsxAttribute {
+        return new AstNode(SyntaxKind.JsxAttribute, new AstJsxAttributeData(), JsxAttribute);
+    }
+    static JsxSpreadAttribute(): AstJsxSpreadAttribute {
+        return new AstNode(SyntaxKind.JsxSpreadAttribute, new AstJsxSpreadAttributeData(), JsxSpreadAttribute);
+    }
+    static JsxClosingElement(): AstJsxClosingElement {
+        return new AstNode(SyntaxKind.JsxClosingElement, new AstJsxClosingElementData(), JsxClosingElement);
+    }
+    static JsxExpression(): AstJsxExpression {
+        return new AstNode(SyntaxKind.JsxExpression, new AstJsxExpressionData(), JsxExpression);
+    }
+    static JsxText(): AstJsxText {
+        return new AstNode(SyntaxKind.JsxText, new AstJsxTextData(), JsxText);
+    }
+    static EmptyStatement(): AstEmptyStatement {
+        return new AstNode(SyntaxKind.EmptyStatement, new AstEmptyStatementData(), EmptyStatement);
+    }
+    static DebuggerStatement(): AstDebuggerStatement {
+        return new AstNode(SyntaxKind.DebuggerStatement, new AstDebuggerStatementData(), DebuggerStatement);
+    }
+    static MissingDeclaration(): AstMissingDeclaration {
+        return new AstNode(SyntaxKind.MissingDeclaration, new AstMissingDeclarationData(), MissingDeclaration);
+    }
+    static Block(): AstBlock {
+        return new AstNode(SyntaxKind.Block, new AstBlockData(), Block);
+    }
+    static VariableStatement(): AstVariableStatement {
+        return new AstNode(SyntaxKind.VariableStatement, new AstVariableStatementData(), VariableStatement);
+    }
+    static ExpressionStatement(): AstExpressionStatement {
+        return new AstNode(SyntaxKind.ExpressionStatement, new AstExpressionStatementData(), ExpressionStatement);
+    }
+    static IfStatement(): AstIfStatement {
+        return new AstNode(SyntaxKind.IfStatement, new AstIfStatementData(), IfStatement);
+    }
+    static DoStatement(): AstDoStatement {
+        return new AstNode(SyntaxKind.DoStatement, new AstDoStatementData(), DoStatement);
+    }
+    static WhileStatement(): AstWhileStatement {
+        return new AstNode(SyntaxKind.WhileStatement, new AstWhileStatementData(), WhileStatement);
+    }
+    static ForStatement(): AstForStatement {
+        return new AstNode(SyntaxKind.ForStatement, new AstForStatementData(), ForStatement);
+    }
+    static ForInStatement(): AstForInStatement {
+        return new AstNode(SyntaxKind.ForInStatement, new AstForInStatementData(), ForInStatement);
+    }
+    static ForOfStatement(): AstForOfStatement {
+        return new AstNode(SyntaxKind.ForOfStatement, new AstForOfStatementData(), ForOfStatement);
+    }
+    static BreakStatement(): AstBreakStatement {
+        return new AstNode(SyntaxKind.BreakStatement, new AstBreakStatementData(), BreakStatement);
+    }
+    static ContinueStatement(): AstContinueStatement {
+        return new AstNode(SyntaxKind.ContinueStatement, new AstContinueStatementData(), ContinueStatement);
+    }
+    static ReturnStatement(): AstReturnStatement {
+        return new AstNode(SyntaxKind.ReturnStatement, new AstReturnStatementData(), ReturnStatement);
+    }
+    static WithStatement(): AstWithStatement {
+        return new AstNode(SyntaxKind.WithStatement, new AstWithStatementData(), WithStatement);
+    }
+    static SwitchStatement(): AstSwitchStatement {
+        return new AstNode(SyntaxKind.SwitchStatement, new AstSwitchStatementData(), SwitchStatement);
+    }
+    static CaseBlock(): AstCaseBlock {
+        return new AstNode(SyntaxKind.CaseBlock, new AstCaseBlockData(), CaseBlock);
+    }
+    static CaseClause(): AstCaseClause {
+        return new AstNode(SyntaxKind.CaseClause, new AstCaseClauseData(), CaseClause);
+    }
+    static DefaultClause(): AstDefaultClause {
+        return new AstNode(SyntaxKind.DefaultClause, new AstDefaultClauseData(), DefaultClause);
+    }
+    static LabeledStatement(): AstLabeledStatement {
+        return new AstNode(SyntaxKind.LabeledStatement, new AstLabeledStatementData(), LabeledStatement);
+    }
+    static ThrowStatement(): AstThrowStatement {
+        return new AstNode(SyntaxKind.ThrowStatement, new AstThrowStatementData(), ThrowStatement);
+    }
+    static TryStatement(): AstTryStatement {
+        return new AstNode(SyntaxKind.TryStatement, new AstTryStatementData(), TryStatement);
+    }
+    static CatchClause(): AstCatchClause {
+        return new AstNode(SyntaxKind.CatchClause, new AstCatchClauseData(), CatchClause);
+    }
+    static ClassDeclaration(): AstClassDeclaration {
+        return new AstNode(SyntaxKind.ClassDeclaration, new AstClassDeclarationData(), ClassDeclaration);
+    }
+    static ClassExpression(): AstClassExpression {
+        return new AstNode(SyntaxKind.ClassExpression, new AstClassExpressionData(), ClassExpression);
+    }
+    static InterfaceDeclaration(): AstInterfaceDeclaration {
+        return new AstNode(SyntaxKind.InterfaceDeclaration, new AstInterfaceDeclarationData(), InterfaceDeclaration);
+    }
+    static HeritageClause(): AstHeritageClause {
+        return new AstNode(SyntaxKind.HeritageClause, new AstHeritageClauseData(), HeritageClause);
+    }
+    static TypeAliasDeclaration(): AstTypeAliasDeclaration {
+        return new AstNode(SyntaxKind.TypeAliasDeclaration, new AstTypeAliasDeclarationData(), TypeAliasDeclaration);
+    }
+    static EnumMember(): AstEnumMember {
+        return new AstNode(SyntaxKind.EnumMember, new AstEnumMemberData(), EnumMember);
+    }
+    static EnumDeclaration(): AstEnumDeclaration {
+        return new AstNode(SyntaxKind.EnumDeclaration, new AstEnumDeclarationData(), EnumDeclaration);
+    }
+    static ModuleDeclaration(): AstModuleDeclaration {
+        return new AstNode(SyntaxKind.ModuleDeclaration, new AstModuleDeclarationData(), ModuleDeclaration);
+    }
+    static ModuleBlock(): AstModuleBlock {
+        return new AstNode(SyntaxKind.ModuleBlock, new AstModuleBlockData(), ModuleBlock);
+    }
+    static ImportEqualsDeclaration(): AstImportEqualsDeclaration {
+        return new AstNode(SyntaxKind.ImportEqualsDeclaration, new AstImportEqualsDeclarationData(), ImportEqualsDeclaration);
+    }
+    static ExternalModuleReference(): AstExternalModuleReference {
+        return new AstNode(SyntaxKind.ExternalModuleReference, new AstExternalModuleReferenceData(), ExternalModuleReference);
+    }
+    static ImportDeclaration(): AstImportDeclaration {
+        return new AstNode(SyntaxKind.ImportDeclaration, new AstImportDeclarationData(), ImportDeclaration);
+    }
+    static ImportClause(): AstImportClause {
+        return new AstNode(SyntaxKind.ImportClause, new AstImportClauseData(), ImportClause);
+    }
+    static ImportAttribute(): AstImportAttribute {
+        return new AstNode(SyntaxKind.ImportAttribute, new AstImportAttributeData(), ImportAttribute);
+    }
+    static ImportAttributes(): AstImportAttributes {
+        return new AstNode(SyntaxKind.ImportAttributes, new AstImportAttributesData(), ImportAttributes);
+    }
+    static NamespaceImport(): AstNamespaceImport {
+        return new AstNode(SyntaxKind.NamespaceImport, new AstNamespaceImportData(), NamespaceImport);
+    }
+    static NamespaceExport(): AstNamespaceExport {
+        return new AstNode(SyntaxKind.NamespaceExport, new AstNamespaceExportData(), NamespaceExport);
+    }
+    static NamespaceExportDeclaration(): AstNamespaceExportDeclaration {
+        return new AstNode(SyntaxKind.NamespaceExportDeclaration, new AstNamespaceExportDeclarationData(), NamespaceExportDeclaration);
+    }
+    static ExportDeclaration(): AstExportDeclaration {
+        return new AstNode(SyntaxKind.ExportDeclaration, new AstExportDeclarationData(), ExportDeclaration);
+    }
+    static NamedImports(): AstNamedImports {
+        return new AstNode(SyntaxKind.NamedImports, new AstNamedImportsData(), NamedImports);
+    }
+    static NamedExports(): AstNamedExports {
+        return new AstNode(SyntaxKind.NamedExports, new AstNamedExportsData(), NamedExports);
+    }
+    static ImportSpecifier(): AstImportSpecifier {
+        return new AstNode(SyntaxKind.ImportSpecifier, new AstImportSpecifierData(), ImportSpecifier);
+    }
+    static ExportSpecifier(): AstExportSpecifier {
+        return new AstNode(SyntaxKind.ExportSpecifier, new AstExportSpecifierData(), ExportSpecifier);
+    }
+    static ExportAssignment(): AstExportAssignment {
+        return new AstNode(SyntaxKind.ExportAssignment, new AstExportAssignmentData(), ExportAssignment);
+    }
+    static JSDocTypeExpression(): AstJSDocTypeExpression {
+        return new AstNode(SyntaxKind.JSDocTypeExpression, new AstJSDocTypeExpressionData(), JSDocTypeExpression);
+    }
+    static JSDocNameReference(): AstJSDocNameReference {
+        return new AstNode(SyntaxKind.JSDocNameReference, new AstJSDocNameReferenceData(), JSDocNameReference);
+    }
+    static JSDocMemberName(): AstJSDocMemberName {
+        return new AstNode(SyntaxKind.JSDocMemberName, new AstJSDocMemberNameData(), JSDocMemberName);
+    }
+    static JSDocAllType(): AstJSDocAllType {
+        return new AstNode(SyntaxKind.JSDocAllType, new AstJSDocAllTypeData(), JSDocAllType);
+    }
+    static JSDocUnknownType(): AstJSDocUnknownType {
+        return new AstNode(SyntaxKind.JSDocUnknownType, new AstJSDocUnknownTypeData(), JSDocUnknownType);
+    }
+    static JSDocNonNullableType(): AstJSDocNonNullableType {
+        return new AstNode(SyntaxKind.JSDocNonNullableType, new AstJSDocNonNullableTypeData(), JSDocNonNullableType);
+    }
+    static JSDocNullableType(): AstJSDocNullableType {
+        return new AstNode(SyntaxKind.JSDocNullableType, new AstJSDocNullableTypeData(), JSDocNullableType);
+    }
+    static JSDocOptionalType(): AstJSDocOptionalType {
+        return new AstNode(SyntaxKind.JSDocOptionalType, new AstJSDocOptionalTypeData(), JSDocOptionalType);
+    }
+    static JSDocFunctionType(): AstJSDocFunctionType {
+        return new AstNode(SyntaxKind.JSDocFunctionType, new AstJSDocFunctionTypeData(), JSDocFunctionType);
+    }
+    static JSDocVariadicType(): AstJSDocVariadicType {
+        return new AstNode(SyntaxKind.JSDocVariadicType, new AstJSDocVariadicTypeData(), JSDocVariadicType);
+    }
+    static JSDocNamepathType(): AstJSDocNamepathType {
+        return new AstNode(SyntaxKind.JSDocNamepathType, new AstJSDocNamepathTypeData(), JSDocNamepathType);
+    }
+    static JSDocNode(): AstJSDocNode {
+        return new AstNode(SyntaxKind.JSDoc, new AstJSDocNodeData(), JSDocNode);
+    }
+    static JSDocLink(): AstJSDocLink {
+        return new AstNode(SyntaxKind.JSDocLink, new AstJSDocLinkData(), JSDocLink);
+    }
+    static JSDocLinkCode(): AstJSDocLinkCode {
+        return new AstNode(SyntaxKind.JSDocLinkCode, new AstJSDocLinkCodeData(), JSDocLinkCode);
+    }
+    static JSDocLinkPlain(): AstJSDocLinkPlain {
+        return new AstNode(SyntaxKind.JSDocLinkPlain, new AstJSDocLinkPlainData(), JSDocLinkPlain);
+    }
+    static JSDocText(): AstJSDocText {
+        return new AstNode(SyntaxKind.JSDocText, new AstJSDocTextData(), JSDocText);
+    }
+    static JSDocUnknownTag(): AstJSDocUnknownTag {
+        return new AstNode(SyntaxKind.JSDocTag, new AstJSDocUnknownTagData(), JSDocUnknownTag);
+    }
+    static JSDocAugmentsTag(): AstJSDocAugmentsTag {
+        return new AstNode(SyntaxKind.JSDocAugmentsTag, new AstJSDocAugmentsTagData(), JSDocAugmentsTag);
+    }
+    static JSDocImplementsTag(): AstJSDocImplementsTag {
+        return new AstNode(SyntaxKind.JSDocImplementsTag, new AstJSDocImplementsTagData(), JSDocImplementsTag);
+    }
+    static JSDocAuthorTag(): AstJSDocAuthorTag {
+        return new AstNode(SyntaxKind.JSDocAuthorTag, new AstJSDocAuthorTagData(), JSDocAuthorTag);
+    }
+    static JSDocDeprecatedTag(): AstJSDocDeprecatedTag {
+        return new AstNode(SyntaxKind.JSDocDeprecatedTag, new AstJSDocDeprecatedTagData(), JSDocDeprecatedTag);
+    }
+    static JSDocClassTag(): AstJSDocClassTag {
+        return new AstNode(SyntaxKind.JSDocClassTag, new AstJSDocClassTagData(), JSDocClassTag);
+    }
+    static JSDocPublicTag(): AstJSDocPublicTag {
+        return new AstNode(SyntaxKind.JSDocPublicTag, new AstJSDocPublicTagData(), JSDocPublicTag);
+    }
+    static JSDocPrivateTag(): AstJSDocPrivateTag {
+        return new AstNode(SyntaxKind.JSDocPrivateTag, new AstJSDocPrivateTagData(), JSDocPrivateTag);
+    }
+    static JSDocProtectedTag(): AstJSDocProtectedTag {
+        return new AstNode(SyntaxKind.JSDocProtectedTag, new AstJSDocProtectedTagData(), JSDocProtectedTag);
+    }
+    static JSDocReadonlyTag(): AstJSDocReadonlyTag {
+        return new AstNode(SyntaxKind.JSDocReadonlyTag, new AstJSDocReadonlyTagData(), JSDocReadonlyTag);
+    }
+    static JSDocOverrideTag(): AstJSDocOverrideTag {
+        return new AstNode(SyntaxKind.JSDocOverrideTag, new AstJSDocOverrideTagData(), JSDocOverrideTag);
+    }
+    static JSDocEnumTag(): AstJSDocEnumTag {
+        return new AstNode(SyntaxKind.JSDocEnumTag, new AstJSDocEnumTagData(), JSDocEnumTag);
+    }
+    static JSDocThisTag(): AstJSDocThisTag {
+        return new AstNode(SyntaxKind.JSDocThisTag, new AstJSDocThisTagData(), JSDocThisTag);
+    }
+    static JSDocTemplateTag(): AstJSDocTemplateTag {
+        return new AstNode(SyntaxKind.JSDocTemplateTag, new AstJSDocTemplateTagData(), JSDocTemplateTag);
+    }
+    static JSDocSeeTag(): AstJSDocSeeTag {
+        return new AstNode(SyntaxKind.JSDocSeeTag, new AstJSDocSeeTagData(), JSDocSeeTag);
+    }
+    static JSDocReturnTag(): AstJSDocReturnTag {
+        return new AstNode(SyntaxKind.JSDocReturnTag, new AstJSDocReturnTagData(), JSDocReturnTag);
+    }
+    static JSDocTypeTag(): AstJSDocTypeTag {
+        return new AstNode(SyntaxKind.JSDocTypeTag, new AstJSDocTypeTagData(), JSDocTypeTag);
+    }
+    static JSDocTypedefTag(): AstJSDocTypedefTag {
+        return new AstNode(SyntaxKind.JSDocTypedefTag, new AstJSDocTypedefTagData(), JSDocTypedefTag);
+    }
+    static JSDocCallbackTag(): AstJSDocCallbackTag {
+        return new AstNode(SyntaxKind.JSDocCallbackTag, new AstJSDocCallbackTagData(), JSDocCallbackTag);
+    }
+    static JSDocOverloadTag(): AstJSDocOverloadTag {
+        return new AstNode(SyntaxKind.JSDocOverloadTag, new AstJSDocOverloadTagData(), JSDocOverloadTag);
+    }
+    static JSDocThrowsTag(): AstJSDocThrowsTag {
+        return new AstNode(SyntaxKind.JSDocThrowsTag, new AstJSDocThrowsTagData(), JSDocThrowsTag);
+    }
+    static JSDocSignature(): AstJSDocSignature {
+        return new AstNode(SyntaxKind.JSDocSignature, new AstJSDocSignatureData(), JSDocSignature);
+    }
+    static JSDocPropertyTag(): AstJSDocPropertyTag {
+        return new AstNode(SyntaxKind.JSDocPropertyTag, new AstJSDocPropertyTagData(), JSDocPropertyTag);
+    }
+    static JSDocParameterTag(): AstJSDocParameterTag {
+        return new AstNode(SyntaxKind.JSDocParameterTag, new AstJSDocParameterTagData(), JSDocParameterTag);
+    }
+    static JSDocTypeLiteral(): AstJSDocTypeLiteral {
+        return new AstNode(SyntaxKind.JSDocTypeLiteral, new AstJSDocTypeLiteralData(), JSDocTypeLiteral);
+    }
+    static JSDocSatisfiesTag(): AstJSDocSatisfiesTag {
+        return new AstNode(SyntaxKind.JSDocSatisfiesTag, new AstJSDocSatisfiesTagData(), JSDocSatisfiesTag);
+    }
+    static JSDocImportTag(): AstJSDocImportTag {
+        return new AstNode(SyntaxKind.JSDocImportTag, new AstJSDocImportTagData(), JSDocImportTag);
+    }
+    static SourceFile(): AstSourceFile {
+        return new AstNode(SyntaxKind.SourceFile, new AstSourceFileData(), SourceFile);
+    }
+    static SyntheticExpression(): AstSyntheticExpression {
+        return new AstNode(SyntaxKind.SyntheticExpression, new AstSyntheticExpressionData(), SyntheticExpression);
+    }
+    static Bundle(): AstBundle {
+        return new AstNode(SyntaxKind.Bundle, new AstBundleData(), Bundle);
+    }
+    static SyntaxList(): AstSyntaxList {
+        return new AstNode(SyntaxKind.SyntaxList, new AstSyntaxListData(), SyntaxList);
+    }
+    static NotEmittedStatement(): AstNotEmittedStatement {
+        return new AstNode(SyntaxKind.NotEmittedStatement, new AstNotEmittedStatementData(), NotEmittedStatement);
+    }
+    static NotEmittedTypeElement(): AstNotEmittedTypeElement {
+        return new AstNode(SyntaxKind.NotEmittedTypeElement, new AstNotEmittedTypeElementData(), NotEmittedTypeElement);
+    }
+    static PartiallyEmittedExpression(): AstPartiallyEmittedExpression {
+        return new AstNode(SyntaxKind.PartiallyEmittedExpression, new AstPartiallyEmittedExpressionData(), PartiallyEmittedExpression);
+    }
+    static CommaListExpression(): AstCommaListExpression {
+        return new AstNode(SyntaxKind.CommaListExpression, new AstCommaListExpressionData(), CommaListExpression);
+    }
+    static SyntheticReferenceExpression(): AstSyntheticReferenceExpression {
+        return new AstNode(SyntaxKind.SyntheticReferenceExpression, new AstSyntheticReferenceExpressionData(), SyntheticReferenceExpression);
+    }
 }
 
 type AstNodeOneOf<N extends Node> = N extends unknown ? AstNode<N> : never;
@@ -517,30 +967,78 @@ export class Node<K extends SyntaxKind = SyntaxKind, T extends AstData = AstData
         Object.preventExtensions(this);
     }
 
-    get kind(): K { return this.ast.kind; }
-    get data(): T { return this.ast.data; }
-    get pos(): number { return this.ast.pos; }
-    set pos(value) { this.ast.pos = value; }
-    get end(): number { return this.ast.end; }
-    set end(value) { this.ast.end = value; }
-    get flags(): NodeFlags { return this.ast.flags; }
-    set flags(value) { this.ast.flags = value; }
-    get modifierFlagsCache(): ModifierFlags { return this.ast.modifierFlagsCache; }
-    set modifierFlagsCache(value) { this.ast.modifierFlagsCache = value; }
-    get transformFlags(): TransformFlags { return this.ast.transformFlags; }
-    set transformFlags(value) { this.ast.transformFlags = value; }
-    get parent(): Node { return this.ast.parent?.node!; } // TODO: remove `!`
-    set parent(value) { this.ast.parent = value?.ast; }
-    get id(): number { return this.ast.id; }
-    set id(value) { this.ast.id = value; }
-    get original(): Node | undefined { return this.ast.original?.node; }
-    set original(value) { this.ast.original = value?.ast; }
-    get emitNode(): EmitNode | undefined { return this.ast.emitNode; }
-    set emitNode(value) { this.ast.emitNode = value; }
-    get __pos(): number | undefined { return astNodeMaybeExtra(this.ast)?.__pos; } // eslint-disable-line @typescript-eslint/naming-convention
-    set __pos(value) { this.ast.extra.__pos = value; } // eslint-disable-line @typescript-eslint/naming-convention
-    get __end(): number | undefined { return astNodeMaybeExtra(this.ast)?.__end; } // eslint-disable-line @typescript-eslint/naming-convention
-    set __end(value) { this.ast.extra.__end = value; } // eslint-disable-line @typescript-eslint/naming-convention
+    get kind(): K {
+        return this.ast.kind;
+    }
+    get data(): T {
+        return this.ast.data;
+    }
+    get pos(): number {
+        return this.ast.pos;
+    }
+    set pos(value) {
+        this.ast.pos = value;
+    }
+    get end(): number {
+        return this.ast.end;
+    }
+    set end(value) {
+        this.ast.end = value;
+    }
+    get flags(): NodeFlags {
+        return this.ast.flags;
+    }
+    set flags(value) {
+        this.ast.flags = value;
+    }
+    get modifierFlagsCache(): ModifierFlags {
+        return this.ast.modifierFlagsCache;
+    }
+    set modifierFlagsCache(value) {
+        this.ast.modifierFlagsCache = value;
+    }
+    get transformFlags(): TransformFlags {
+        return this.ast.transformFlags;
+    }
+    set transformFlags(value) {
+        this.ast.transformFlags = value;
+    }
+    get parent(): Node {
+        return this.ast.parent?.node!; // TODO: remove `!`
+    }
+    set parent(value) {
+        this.ast.parent = value?.ast;
+    }
+    get id(): number {
+        return this.ast.id;
+    }
+    set id(value) {
+        this.ast.id = value;
+    }
+    get original(): Node | undefined {
+        return this.ast.original?.node;
+    }
+    set original(value) {
+        this.ast.original = value?.ast;
+    }
+    get emitNode(): EmitNode | undefined {
+        return this.ast.emitNode;
+    }
+    set emitNode(value) {
+        this.ast.emitNode = value;
+    }
+    get __pos(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        return astNodeMaybeExtra(this.ast)?.__pos;
+    }
+    set __pos(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        this.ast.extra.__pos = value;
+    }
+    get __end(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        return astNodeMaybeExtra(this.ast)?.__end;
+    }
+    set __end(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        this.ast.extra.__end = value;
+    }
 
     private assertHasRealPosition(message?: string) {
         // eslint-disable-next-line local/debug-assert
@@ -645,8 +1143,7 @@ Debug.registerDebugInfo(() => {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Node) {
-                    const nodeHeader =
-                        ts.isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
+                    const nodeHeader = ts.isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
                         ts.isIdentifier(this) ? `Identifier '${idText(this)}'` :
                         ts.isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
                         ts.isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
@@ -765,11 +1262,19 @@ export class AstNodeArray<N extends AstNode> {
         this.hasTrailingComma = hasTrailingComma;
     }
 
-    /** @private */ get extra(): AstNodeArrayExtraFields<N> { return this._extra ??= new AstNodeArrayExtraFields(); }
+    /** @private */ get extra(): AstNodeArrayExtraFields<N> {
+        return this._extra ??= new AstNodeArrayExtraFields();
+    }
 
-    get nodes(): NodeArray<N["node"]> { return this.extra.nodes ??= new NodeArray(this); }
-    get hasTrailingComma(): boolean { return this._extra?.hasTrailingComma ?? false; }
-    set hasTrailingComma(value) { this.extra.hasTrailingComma = value; }
+    get nodes(): NodeArray<N["node"]> {
+        return this.extra.nodes ??= new NodeArray(this);
+    }
+    get hasTrailingComma(): boolean {
+        return this._extra?.hasTrailingComma ?? false;
+    }
+    set hasTrailingComma(value) {
+        this.extra.hasTrailingComma = value;
+    }
 
     get transformFlags(): ts.TransformFlags {
         let transformFlags = this._extra?.transformFlags;
@@ -782,7 +1287,9 @@ export class AstNodeArray<N extends AstNode> {
         }
         return transformFlags;
     }
-    set transformFlags(value) { this.extra.transformFlags = value; }
+    set transformFlags(value) {
+        this.extra.transformFlags = value;
+    }
 }
 
 /** @internal */
@@ -797,21 +1304,47 @@ export class NodeArray<N extends Node> extends Array<N> implements ts.NodeArray<
         Object.preventExtensions(this);
     }
 
-    static override get [globalThis.Symbol.species](): ArrayConstructor { return Array; }
+    static override get [globalThis.Symbol.species](): ArrayConstructor {
+        return Array;
+    }
 
-    get pos(): number { return this.ast.pos; }
-    set pos(value) { this.ast.pos = value; }
-    get end(): number { return this.ast.end; }
-    set end(value) { this.ast.end = value; }
-    get hasTrailingComma(): boolean { return this.ast.hasTrailingComma; }
-    set hasTrailingComma(value) { this.ast.hasTrailingComma = value; }
-    get transformFlags(): ts.TransformFlags { return this.ast.transformFlags; }
-    set transformFlags(value) { this.ast.transformFlags = value; }
+    get pos(): number {
+        return this.ast.pos;
+    }
+    set pos(value) {
+        this.ast.pos = value;
+    }
+    get end(): number {
+        return this.ast.end;
+    }
+    set end(value) {
+        this.ast.end = value;
+    }
+    get hasTrailingComma(): boolean {
+        return this.ast.hasTrailingComma;
+    }
+    set hasTrailingComma(value) {
+        this.ast.hasTrailingComma = value;
+    }
+    get transformFlags(): ts.TransformFlags {
+        return this.ast.transformFlags;
+    }
+    set transformFlags(value) {
+        this.ast.transformFlags = value;
+    }
 
-    get __pos(): number | undefined { return astNodeArrayMaybeExtra(this.ast)?.__pos; } // eslint-disable-line @typescript-eslint/naming-convention
-    set __pos(value) { this.ast.extra.__pos = value; } // eslint-disable-line @typescript-eslint/naming-convention
-    get __end(): number | undefined { return astNodeArrayMaybeExtra(this.ast)?.__end; } // eslint-disable-line @typescript-eslint/naming-convention
-    set __end(value) { this.ast.extra.__end = value; } // eslint-disable-line @typescript-eslint/naming-convention
+    get __pos(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        return astNodeArrayMaybeExtra(this.ast)?.__pos;
+    } 
+    set __pos(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        this.ast.extra.__pos = value;
+    }
+    get __end(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        return astNodeArrayMaybeExtra(this.ast)?.__end;
+    }
+    set __end(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        this.ast.extra.__end = value;
+    }
 }
 
 Debug.registerDebugInfo(() => {
@@ -1121,8 +1654,12 @@ export class EndOfFileToken extends Token<SyntaxKind.EndOfFileToken, AstEndOfFil
 
     declare _jsdocContainerBrand: any;
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -1142,8 +1679,12 @@ export class ThisExpression extends Token<SyntaxKind.ThisKeyword, AstThisExpress
     declare _expressionBrand: any;
     declare _flowContainerBrand: any;
 
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -1163,8 +1704,12 @@ export class SuperExpression extends Token<SyntaxKind.SuperKeyword, AstSuperExpr
     declare _expressionBrand: any;
     declare _flowContainerBrand: any;
 
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -1223,8 +1768,7 @@ export class FalseLiteral extends Token<SyntaxKind.FalseKeyword> implements Prim
 /** @internal */
 export type BooleanLiteral =
     | TrueLiteral
-    | FalseLiteral
-    ;
+    | FalseLiteral;
 
 /** @internal */
 export type AstBooleanLiteral = AstNodeOneOf<BooleanLiteral>;
@@ -1232,7 +1776,7 @@ export type AstBooleanLiteral = AstNodeOneOf<BooleanLiteral>;
 // Punctuation
 
 /** @internal */
-export interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> { }
+export interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> {}
 
 /** @internal */
 export type DotToken = PunctuationToken<SyntaxKind.DotToken>;
@@ -1298,7 +1842,7 @@ export type AstQuestionDotToken = AstNode<QuestionDotToken>;
 // Keywords
 
 /** @internal */
-export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> { }
+export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {}
 
 /** @internal */
 export type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
@@ -1324,7 +1868,7 @@ export type AstCaseKeyword = AstNode<CaseKeyword>;
 // Modifiers
 
 /** @internal */
-export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> { }
+export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {}
 
 /** @internal */
 export type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
@@ -1434,20 +1978,46 @@ export class Identifier extends Token<SyntaxKind.Identifier, AstIdentifierData> 
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get escapedText(): __String { return this.ast.data.escapedText; }
-    set escapedText(value: __String) { this.ast.data.escapedText = value; }
-    get resolvedSymbol(): Symbol { return this.ast.data.resolvedSymbol; }
-    set resolvedSymbol(value: Symbol) { this.ast.data.resolvedSymbol = value; }
-    get symbol(): Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value) { this.ast.data.flowNode = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
+    get escapedText(): __String {
+        return this.ast.data.escapedText;
+    }
+    set escapedText(value: __String) {
+        this.ast.data.escapedText = value;
+    }
+    get resolvedSymbol(): Symbol {
+        return this.ast.data.resolvedSymbol;
+    }
+    set resolvedSymbol(value: Symbol) {
+        this.ast.data.resolvedSymbol = value;
+    }
+    get symbol(): Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value) {
+        this.ast.data.flowNode = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value) {
+        this.ast.data.jsDoc = value;
+    }
 
-    get text(): string { return idText(this); }
+    get text(): string {
+        return idText(this);
+    }
 }
 
 /** @internal */
@@ -1477,12 +2047,24 @@ export class QualifiedName extends Node<SyntaxKind.QualifiedName, AstQualifiedNa
 
     declare _flowContainerBrand: any;
 
-    get left(): EntityName { return this.ast.data.left?.node; }
-    set left(value: EntityName) { this.ast.data.left = value?.ast; }
-    get right(): Identifier { return this.ast.data.right?.node; }
-    set right(value: Identifier) { this.ast.data.right = value?.ast; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value) { this.ast.data.flowNode = value; }
+    get left(): EntityName {
+        return this.ast.data.left?.node;
+    }
+    set left(value: EntityName) {
+        this.ast.data.left = value?.ast;
+    }
+    get right(): Identifier {
+        return this.ast.data.right?.node;
+    }
+    set right(value: Identifier) {
+        this.ast.data.right = value?.ast;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -1550,11 +2132,19 @@ export type AstDeclarationName = AstNodeOneOf<DeclarationName>;
 export class ComputedPropertyName extends Node<SyntaxKind.ComputedPropertyName, AstComputedPropertyNameData> implements ts.ComputedPropertyName {
     declare readonly ast: AstComputedPropertyName;
 
-    override get parent() { return super.parent as Declaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as Declaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value: Expression) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: Expression) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -1579,10 +2169,16 @@ export class PrivateIdentifier extends Token<SyntaxKind.PrivateIdentifier, AstPr
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get escapedText(): __String { return this.ast.data.escapedText; }
-    set escapedText(value: __String) { this.ast.data.escapedText = value; }
+    get escapedText(): __String {
+        return this.ast.data.escapedText;
+    }
+    set escapedText(value: __String) {
+        this.ast.data.escapedText = value;
+    }
 
-    get text(): string { return idText(this); }
+    get text(): string {
+        return idText(this);
+    }
 }
 
 /** @internal */
@@ -1601,25 +2197,61 @@ export class TypeParameterDeclaration extends Node<SyntaxKind.TypeParameter, Ast
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as DeclarationWithTypeParameterChildren | InferTypeNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as DeclarationWithTypeParameterChildren | InferTypeNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value: NodeArray<Modifier> | undefined) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value: Identifier) { this.ast.data.name = value?.ast; }
-    get constraint(): TypeNode | undefined { return this.ast.data.constraint?.node; }
-    set constraint(value: TypeNode | undefined) { this.ast.data.constraint = value?.ast; }
-    get default(): TypeNode | undefined { return this.ast.data.default?.node; }
-    set default(value: TypeNode | undefined) { this.ast.data.default = value?.ast; }
-    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
-    set expression(value: Expression | undefined) { this.ast.data.expression = value?.ast; }
-    get symbol(): Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value: NodeArray<Modifier> | undefined) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value: Identifier) {
+        this.ast.data.name = value?.ast;
+    }
+    get constraint(): TypeNode | undefined {
+        return this.ast.data.constraint?.node;
+    }
+    set constraint(value: TypeNode | undefined) {
+        this.ast.data.constraint = value?.ast;
+    }
+    get default(): TypeNode | undefined {
+        return this.ast.data.default?.node;
+    }
+    set default(value: TypeNode | undefined) {
+        this.ast.data.default = value?.ast;
+    }
+    get expression(): Expression | undefined {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: Expression | undefined) {
+        this.ast.data.expression = value?.ast;
+    }
+    get symbol(): Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -1642,27 +2274,67 @@ export class ParameterDeclaration extends Node<SyntaxKind.Parameter, AstParamete
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as SignatureDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as SignatureDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value: NodeArray<ModifierLike> | undefined) { this.ast.data.modifiers = value?.ast; }
-    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
-    set dotDotDotToken(value: DotDotDotToken | undefined) { this.ast.data.dotDotDotToken = value?.ast; }
-    get name(): BindingName { return this.ast.data.name?.node; }
-    set name(value: BindingName) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value: QuestionToken | undefined) { this.ast.data.questionToken = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value: TypeNode | undefined) { this.ast.data.type = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value: Expression | undefined) { this.ast.data.initializer = value?.ast; }
-    get symbol(): Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value: NodeArray<ModifierLike> | undefined) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get dotDotDotToken(): DotDotDotToken | undefined {
+        return this.ast.data.dotDotDotToken?.node;
+    }
+    set dotDotDotToken(value: DotDotDotToken | undefined) {
+        this.ast.data.dotDotDotToken = value?.ast;
+    }
+    get name(): BindingName {
+        return this.ast.data.name?.node;
+    }
+    set name(value: BindingName) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value: QuestionToken | undefined) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value: TypeNode | undefined) {
+        this.ast.data.type = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value: Expression | undefined) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get symbol(): Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -1698,11 +2370,19 @@ export class AstParameterDeclarationData extends AstData {
 export class Decorator extends Node<SyntaxKind.Decorator, AstDecoratorData> implements ts.Decorator {
     declare readonly ast: AstDecorator;
 
-    override get parent() { return super.parent as Declaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as Declaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value: LeftHandSideExpression) { this.ast.data.expression = value?.ast; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: LeftHandSideExpression) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -1725,25 +2405,61 @@ export class PropertySignature extends Node<SyntaxKind.PropertySignature, AstPro
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as TypeLiteralNode | InterfaceDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TypeLiteralNode | InterfaceDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value: NodeArray<Modifier> | undefined) { this.ast.data.modifiers = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value: NodeArray<Modifier> | undefined) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -1787,24 +2503,60 @@ export class CallSignatureDeclaration extends Node<SyntaxKind.CallSignature, Ast
     declare _typeElementBrand: any;
     declare _localsContainerBrand: any;
 
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -1829,24 +2581,60 @@ export class ConstructSignatureDeclaration extends Node<SyntaxKind.ConstructSign
     declare _typeElementBrand: any;
     declare _localsContainerBrand: any;
 
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -1869,23 +2657,55 @@ export class VariableDeclaration extends Node<SyntaxKind.VariableDeclaration, As
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as VariableDeclarationList | CatchClause; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as VariableDeclarationList | CatchClause;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): BindingName { return this.ast.data.name?.node; }
-    set name(value: BindingName) { this.ast.data.name = value?.ast; }
-    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
-    set exclamationToken(value: ExclamationToken | undefined) { this.ast.data.exclamationToken = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value: TypeNode | undefined) { this.ast.data.type = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value: Expression | undefined) { this.ast.data.initializer = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): BindingName {
+        return this.ast.data.name?.node;
+    }
+    set name(value: BindingName) {
+        this.ast.data.name = value?.ast;
+    }
+    get exclamationToken(): ExclamationToken | undefined {
+        return this.ast.data.exclamationToken?.node;
+    }
+    set exclamationToken(value: ExclamationToken | undefined) {
+        this.ast.data.exclamationToken = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value: TypeNode | undefined) {
+        this.ast.data.type = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value: Expression | undefined) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -1910,11 +2730,19 @@ export class AstVariableDeclarationData extends AstData {
 export class VariableDeclarationList extends Node<SyntaxKind.VariableDeclarationList, AstVariableDeclarationListData> implements ts.VariableDeclarationList {
     declare readonly ast: AstVariableDeclarationList;
 
-    override get parent() { return super.parent as VariableStatement | ForStatement | ForOfStatement | ForInStatement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as VariableStatement | ForStatement | ForOfStatement | ForInStatement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get declarations(): NodeArray<VariableDeclaration> { return this.ast.data.declarations.nodes; }
-    set declarations(value) { this.ast.data.declarations = value?.ast; }
+    get declarations(): NodeArray<VariableDeclaration> {
+        return this.ast.data.declarations.nodes;
+    }
+    set declarations(value) {
+        this.ast.data.declarations = value?.ast;
+    }
 }
 
 /** @internal */
@@ -1942,23 +2770,55 @@ export class BindingElement extends Node<SyntaxKind.BindingElement, AstBindingEl
     declare _declarationBrand: any;
     declare _flowContainerBrand: any;
 
-    override get parent() { return super.parent as BindingPattern; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as BindingPattern;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get propertyName(): PropertyName | undefined { return this.ast.data.propertyName?.node; }
-    set propertyName(value) { this.ast.data.propertyName = value?.ast; }
-    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
-    set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
-    get name(): Identifier | ObjectBindingPattern | ArrayBindingPattern { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get propertyName(): PropertyName | undefined {
+        return this.ast.data.propertyName?.node;
+    }
+    set propertyName(value) {
+        this.ast.data.propertyName = value?.ast;
+    }
+    get dotDotDotToken(): DotDotDotToken | undefined {
+        return this.ast.data.dotDotDotToken?.node;
+    }
+    set dotDotDotToken(value) {
+        this.ast.data.dotDotDotToken = value?.ast;
+    }
+    get name(): Identifier | ObjectBindingPattern | ArrayBindingPattern {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -1990,27 +2850,67 @@ export class PropertyDeclaration extends Node<SyntaxKind.PropertyDeclaration, As
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
-    set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get exclamationToken(): ExclamationToken | undefined {
+        return this.ast.data.exclamationToken?.node;
+    }
+    set exclamationToken(value) {
+        this.ast.data.exclamationToken = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -2047,25 +2947,61 @@ export class PropertyAssignment extends Node<SyntaxKind.PropertyAssignment, AstP
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get initializer(): Expression { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
-    set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get initializer(): Expression {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get exclamationToken(): ExclamationToken | undefined {
+        return this.ast.data.exclamationToken?.node;
+    }
+    set exclamationToken(value) {
+        this.ast.data.exclamationToken = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -2094,27 +3030,67 @@ export class ShorthandPropertyAssignment extends Node<SyntaxKind.ShorthandProper
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get equalsToken(): EqualsToken | undefined { return this.ast.data.equalsToken?.node; }
-    set equalsToken(value) { this.ast.data.equalsToken = value?.ast; }
-    get objectAssignmentInitializer(): Expression | undefined { return this.ast.data.objectAssignmentInitializer?.node; }
-    set objectAssignmentInitializer(value) { this.ast.data.objectAssignmentInitializer = value?.ast; }
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
-    set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get equalsToken(): EqualsToken | undefined {
+        return this.ast.data.equalsToken?.node;
+    }
+    set equalsToken(value) {
+        this.ast.data.equalsToken = value?.ast;
+    }
+    get objectAssignmentInitializer(): Expression | undefined {
+        return this.ast.data.objectAssignmentInitializer?.node;
+    }
+    set objectAssignmentInitializer(value) {
+        this.ast.data.objectAssignmentInitializer = value?.ast;
+    }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get exclamationToken(): ExclamationToken | undefined {
+        return this.ast.data.exclamationToken?.node;
+    }
+    set exclamationToken(value) {
+        this.ast.data.exclamationToken = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -2145,17 +3121,37 @@ export class SpreadAssignment extends Node<SyntaxKind.SpreadAssignment, AstSprea
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -2176,8 +3172,7 @@ export class AstSpreadAssignmentData extends AstData {
 /** @internal */
 export type BindingPattern =
     | ObjectBindingPattern
-    | ArrayBindingPattern
-    ;
+    | ArrayBindingPattern;
 
 /** @internal */
 export type AstBindingPattern = AstNodeOneOf<BindingPattern>;
@@ -2185,8 +3180,7 @@ export type AstBindingPattern = AstNodeOneOf<BindingPattern>;
 /** @internal */
 export type ArrayBindingElement =
     | BindingElement
-    | OmittedExpression
-    ;
+    | OmittedExpression;
 
 /** @internal */
 export type AstArrayBindingElement = AstNodeOneOf<ArrayBindingElement>;
@@ -2195,11 +3189,19 @@ export type AstArrayBindingElement = AstNodeOneOf<ArrayBindingElement>;
 export class ObjectBindingPattern extends Node<SyntaxKind.ObjectBindingPattern, AstObjectBindingPatternData> implements ts.ObjectBindingPattern {
     declare readonly ast: AstObjectBindingPattern;
 
-    override get parent() { return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get elements(): NodeArray<BindingElement> { return this.ast.data.elements?.nodes!; } // TODO: remove `!`
-    set elements(value) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<BindingElement> {
+        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+    }
+    set elements(value) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -2221,11 +3223,19 @@ export class AstObjectBindingPatternData extends AstData {
 export class ArrayBindingPattern extends Node<SyntaxKind.ArrayBindingPattern, AstArrayBindingPatternData> implements ts.ArrayBindingPattern {
     declare readonly ast: AstArrayBindingPattern;
 
-    override get parent() { return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get elements(): NodeArray<ArrayBindingElement> { return this.ast.data.elements?.nodes!; } // TODO: remove `!`
-    set elements(value) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<ArrayBindingElement> {
+        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+    }
+    set elements(value) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -2249,37 +3259,97 @@ export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, As
     declare _statementBrand: any;
     declare _localsContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
-    set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get body(): Block | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get asteriskToken(): AsteriskToken | undefined {
+        return this.ast.data.asteriskToken?.node;
+    }
+    set asteriskToken(value) {
+        this.ast.data.asteriskToken = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get body(): Block | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; } // Used for quick info, replaces typeParameters for instantiated signatures
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    } // Used for quick info, replaces typeParameters for instantiated signatures
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
 }
 
 /** @internal */
@@ -2337,33 +3407,85 @@ export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodS
     declare _typeElementBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as TypeLiteralNode | InterfaceDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TypeLiteralNode | InterfaceDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -2395,45 +3517,121 @@ export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMet
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
-    set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
-    set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get body(): Block | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get asteriskToken(): AsteriskToken | undefined {
+        return this.ast.data.asteriskToken?.node;
+    }
+    set asteriskToken(value) {
+        this.ast.data.asteriskToken = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get exclamationToken(): ExclamationToken | undefined {
+        return this.ast.data.exclamationToken?.node;
+    }
+    set exclamationToken(value) {
+        this.ast.data.exclamationToken = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get body(): Block | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -2495,35 +3693,91 @@ export class ConstructorDeclaration extends Node<SyntaxKind.Constructor, AstCons
     declare _classElementBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get body(): Block | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get body(): Block | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -2566,11 +3820,19 @@ export class SemicolonClassElement extends Node<SyntaxKind.SemicolonClassElement
     declare symbol: never;
     declare localSymbol: never;
 
-    override get parent() { return super.parent as ClassLikeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -2595,39 +3857,103 @@ export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetA
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get body(): Block | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get body(): Block | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -2661,7 +3987,6 @@ export class AstGetAccessorDeclarationData extends AstData {
                 (propagateChildFlags(this.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
                 (this.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
         }
-
     }
 }
 
@@ -2678,39 +4003,103 @@ export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetA
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get body(): Block | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get body(): Block | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -2749,8 +4138,7 @@ export class AstSetAccessorDeclarationData extends AstData {
 /** @internal */
 export type AccessorDeclaration =
     | GetAccessorDeclaration
-    | SetAccessorDeclaration
-    ;
+    | SetAccessorDeclaration;
 
 /** @internal */
 export type AstAccessorDeclaration = AstNodeOneOf<AccessorDeclaration>;
@@ -2765,29 +4153,73 @@ export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, A
     declare _typeElementBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as ObjectTypeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ObjectTypeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node!; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node!;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -2814,27 +4246,67 @@ export class ClassStaticBlockDeclaration extends Node<SyntaxKind.ClassStaticBloc
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as ClassLikeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ClassLikeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get body(): Block { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get body(): Block {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -2862,14 +4334,26 @@ export class AstClassStaticBlockDeclarationData extends AstData {
 export class ImportTypeAssertionContainer extends Node<SyntaxKind.ImportTypeAssertionContainer, AstImportTypeAssertionContainerData> implements ts.ImportTypeAssertionContainer {
     declare readonly ast: AstImportTypeAssertionContainer;
 
-    override get parent() { return super.parent as ImportTypeNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportTypeNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
     /** @deprecated */
-    get assertClause(): ImportAttributes { return this.ast.data.assertClause?.node; }
-    set assertClause(value) { this.ast.data.assertClause = value?.ast; }
-    get multiLine(): boolean { return this.ast.data.multiLine; }
-    set multiLine(value) { this.ast.data.multiLine = value; }
+    get assertClause(): ImportAttributes {
+        return this.ast.data.assertClause?.node;
+    }
+    set assertClause(value) {
+        this.ast.data.assertClause = value?.ast;
+    }
+    get multiLine(): boolean {
+        return this.ast.data.multiLine;
+    }
+    set multiLine(value) {
+        this.ast.data.multiLine = value;
+    }
 }
 
 /**
@@ -2893,19 +4377,43 @@ export class ImportTypeNode extends Node<SyntaxKind.ImportType, AstImportTypeNod
 
     declare _typeNodeBrand: any;
 
-    get isTypeOf(): boolean { return this.ast.data.isTypeOf; }
-    set isTypeOf(value) { this.ast.data.isTypeOf = value; }
-    get argument(): TypeNode { return this.ast.data.argument?.node; }
-    set argument(value) { this.ast.data.argument = value?.ast; }
+    get isTypeOf(): boolean {
+        return this.ast.data.isTypeOf;
+    }
+    set isTypeOf(value) {
+        this.ast.data.isTypeOf = value;
+    }
+    get argument(): TypeNode {
+        return this.ast.data.argument?.node;
+    }
+    set argument(value) {
+        this.ast.data.argument = value?.ast;
+    }
     /** @deprecated */
-    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
-    get assertions(): ImportTypeAssertionContainer | undefined { return this.ast.data.assertions?.node; }
-    set assertions(value) { this.ast.data.assertions = value?.ast; }
-    get qualifier(): Identifier | QualifiedName | undefined { return this.ast.data.qualifier?.node; }
-    set qualifier(value) { this.ast.data.qualifier = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get attributes(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
+    get assertions(): ImportTypeAssertionContainer | undefined {
+        return this.ast.data.assertions?.node;
+    }
+    set assertions(value) {
+        this.ast.data.assertions = value?.ast;
+    }
+    get qualifier(): Identifier | QualifiedName | undefined {
+        return this.ast.data.qualifier?.node;
+    }
+    set qualifier(value) {
+        this.ast.data.qualifier = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
 }
 
 /** @internal */
@@ -2948,26 +4456,66 @@ export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionT
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -2994,26 +4542,66 @@ export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstCon
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -3037,10 +4625,18 @@ export class TypeReferenceNode extends Node<SyntaxKind.TypeReference, AstTypeRef
 
     declare _typeNodeBrand: any;
 
-    get typeName(): Identifier | QualifiedName { return this.ast.data.typeName?.node; }
-    set typeName(value) { this.ast.data.typeName = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get typeName(): Identifier | QualifiedName {
+        return this.ast.data.typeName?.node;
+    }
+    set typeName(value) {
+        this.ast.data.typeName = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3055,15 +4651,31 @@ export class TypePredicateNode extends Node<SyntaxKind.TypePredicate, AstTypePre
 
     declare _typeNodeBrand: any;
 
-    override get parent() { return super.parent as SignatureDeclaration | JSDocTypeExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as SignatureDeclaration | JSDocTypeExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get assertsModifier(): AssertsKeyword | undefined { return this.ast.data.assertsModifier?.node; }
-    set assertsModifier(value) { this.ast.data.assertsModifier = value?.ast; }
-    get parameterName(): Identifier | ThisTypeNode { return this.ast.data.parameterName?.node; }
-    set parameterName(value) { this.ast.data.parameterName = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get assertsModifier(): AssertsKeyword | undefined {
+        return this.ast.data.assertsModifier?.node;
+    }
+    set assertsModifier(value) {
+        this.ast.data.assertsModifier = value?.ast;
+    }
+    get parameterName(): Identifier | ThisTypeNode {
+        return this.ast.data.parameterName?.node;
+    }
+    set parameterName(value) {
+        this.ast.data.parameterName = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3079,10 +4691,18 @@ export class TypeQueryNode extends Node<SyntaxKind.TypeQuery, AstTypeQueryNodeDa
 
     declare _typeNodeBrand: any;
 
-    get exprName(): Identifier | QualifiedName { return this.ast.data.exprName?.node; }
-    set exprName(value) { this.ast.data.exprName = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get exprName(): Identifier | QualifiedName {
+        return this.ast.data.exprName?.node;
+    }
+    set exprName(value) {
+        this.ast.data.exprName = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3098,12 +4718,24 @@ export class TypeLiteralNode extends Node<SyntaxKind.TypeLiteral, AstTypeLiteral
     declare _typeNodeBrand: any;
     declare _declarationBrand: any;
 
-    get members(): NodeArray<TypeElement> { return this.ast.data.members?.nodes!; } // TODO: remove '!'
-    set members(value) { this.ast.data.members = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get members(): NodeArray<TypeElement> {
+        return this.ast.data.members?.nodes!;
+    } // TODO: remove '!'
+    set members(value) {
+        this.ast.data.members = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -3119,8 +4751,12 @@ export class ArrayTypeNode extends Node<SyntaxKind.ArrayType, AstArrayTypeNodeDa
 
     declare _typeNodeBrand: any;
 
-    get elementType(): TypeNode { return this.ast.data.elementType?.node; }
-    set elementType(value) { this.ast.data.elementType = value?.ast; }
+    get elementType(): TypeNode {
+        return this.ast.data.elementType?.node;
+    }
+    set elementType(value) {
+        this.ast.data.elementType = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3134,8 +4770,12 @@ export class TupleTypeNode extends Node<SyntaxKind.TupleType, AstTupleTypeNodeDa
 
     declare _typeNodeBrand: any;
 
-    get elements(): NodeArray<TypeNode | NamedTupleMember> { return this.ast.data.elements?.nodes!; } // TODO: remove '!'
-    set elements(value: NodeArray<TypeNode | NamedTupleMember>) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<TypeNode | NamedTupleMember> {
+        return this.ast.data.elements?.nodes!;
+    } // TODO: remove '!'
+    set elements(value: NodeArray<TypeNode | NamedTupleMember>) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3151,20 +4791,48 @@ export class NamedTupleMember extends Node<SyntaxKind.NamedTupleMember, AstNamed
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
-    set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get dotDotDotToken(): DotDotDotToken | undefined {
+        return this.ast.data.dotDotDotToken?.node;
+    }
+    set dotDotDotToken(value) {
+        this.ast.data.dotDotDotToken = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -3185,8 +4853,12 @@ export class OptionalTypeNode extends Node<SyntaxKind.OptionalType, AstOptionalT
 
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3200,8 +4872,12 @@ export class RestTypeNode extends Node<SyntaxKind.RestType, AstRestTypeNodeData>
 
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3215,8 +4891,12 @@ export class UnionTypeNode extends Node<SyntaxKind.UnionType, AstUnionTypeNodeDa
 
     declare _typeNodeBrand: any;
 
-    get types(): NodeArray<TypeNode> { return this.ast.data.types?.nodes!; } // TODO: remove '!'
-    set types(value) { this.ast.data.types = value?.ast; }
+    get types(): NodeArray<TypeNode> {
+        return this.ast.data.types?.nodes!;
+    } // TODO: remove '!'
+    set types(value) {
+        this.ast.data.types = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3230,8 +4910,12 @@ export class IntersectionTypeNode extends Node<SyntaxKind.IntersectionType, AstI
 
     declare _typeNodeBrand: any;
 
-    get types(): NodeArray<TypeNode> { return this.ast.data.types?.nodes!; } // TODO: remove '!'
-    set types(value) { this.ast.data.types = value?.ast; }
+    get types(): NodeArray<TypeNode> {
+        return this.ast.data.types?.nodes!;
+    } // TODO: remove '!'
+    set types(value) {
+        this.ast.data.types = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3246,18 +4930,42 @@ export class ConditionalTypeNode extends Node<SyntaxKind.ConditionalType, AstCon
     declare _typeNodeBrand: any;
     declare _localsContainerBrand: any;
 
-    get checkType(): TypeNode { return this.ast.data.checkType?.node; }
-    set checkType(value) { this.ast.data.checkType = value?.ast; }
-    get extendsType(): TypeNode { return this.ast.data.extendsType?.node; }
-    set extendsType(value) { this.ast.data.extendsType = value?.ast; }
-    get trueType(): TypeNode { return this.ast.data.trueType?.node; }
-    set trueType(value) { this.ast.data.trueType = value?.ast; }
-    get falseType(): TypeNode { return this.ast.data.falseType?.node; }
-    set falseType(value) { this.ast.data.falseType = value?.ast; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get checkType(): TypeNode {
+        return this.ast.data.checkType?.node;
+    }
+    set checkType(value) {
+        this.ast.data.checkType = value?.ast;
+    }
+    get extendsType(): TypeNode {
+        return this.ast.data.extendsType?.node;
+    }
+    set extendsType(value) {
+        this.ast.data.extendsType = value?.ast;
+    }
+    get trueType(): TypeNode {
+        return this.ast.data.trueType?.node;
+    }
+    set trueType(value) {
+        this.ast.data.trueType = value?.ast;
+    }
+    get falseType(): TypeNode {
+        return this.ast.data.falseType?.node;
+    }
+    set falseType(value) {
+        this.ast.data.falseType = value?.ast;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -3276,8 +4984,12 @@ export class InferTypeNode extends Node<SyntaxKind.InferType, AstInferTypeNodeDa
 
     declare _typeNodeBrand: any;
 
-    get typeParameter(): TypeParameterDeclaration { return this.ast.data.typeParameter?.node; }
-    set typeParameter(value) { this.ast.data.typeParameter = value?.ast; }
+    get typeParameter(): TypeParameterDeclaration {
+        return this.ast.data.typeParameter?.node;
+    }
+    set typeParameter(value) {
+        this.ast.data.typeParameter = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3291,8 +5003,12 @@ export class ParenthesizedTypeNode extends Node<SyntaxKind.ParenthesizedType, As
 
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3306,10 +5022,18 @@ export class TypeOperatorNode extends Node<SyntaxKind.TypeOperator, AstTypeOpera
 
     declare _typeNodeBrand: any;
 
-    get operator(): ts.SyntaxKind.KeyOfKeyword | ts.SyntaxKind.ReadonlyKeyword | ts.SyntaxKind.UniqueKeyword { return this.ast.data.operator; }
-    set operator(value) { this.ast.data.operator = value; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get operator(): ts.SyntaxKind.KeyOfKeyword | ts.SyntaxKind.ReadonlyKeyword | ts.SyntaxKind.UniqueKeyword {
+        return this.ast.data.operator;
+    }
+    set operator(value) {
+        this.ast.data.operator = value;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3324,10 +5048,18 @@ export class IndexedAccessTypeNode extends Node<SyntaxKind.IndexedAccessType, As
 
     declare _typeNodeBrand: any;
 
-    get objectType(): TypeNode { return this.ast.data.objectType?.node; }
-    set objectType(value) { this.ast.data.objectType = value?.ast; }
-    get indexType(): TypeNode { return this.ast.data.indexType?.node; }
-    set indexType(value) { this.ast.data.indexType = value?.ast; }
+    get objectType(): TypeNode {
+        return this.ast.data.objectType?.node;
+    }
+    set objectType(value) {
+        this.ast.data.objectType = value?.ast;
+    }
+    get indexType(): TypeNode {
+        return this.ast.data.indexType?.node;
+    }
+    set indexType(value) {
+        this.ast.data.indexType = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3344,26 +5076,66 @@ export class MappedTypeNode extends Node<SyntaxKind.MappedType, AstMappedTypeNod
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
 
-    get readonlyToken(): PlusToken | MinusToken | ReadonlyKeyword | undefined { return this.ast.data.readonlyToken?.node; }
-    set readonlyToken(value) { this.ast.data.readonlyToken = value?.ast; }
-    get typeParameter(): TypeParameterDeclaration { return this.ast.data.typeParameter?.node; }
-    set typeParameter(value) { this.ast.data.typeParameter = value?.ast; }
-    get nameType(): TypeNode | undefined { return this.ast.data.nameType?.node; }
-    set nameType(value) { this.ast.data.nameType = value?.ast; }
-    get questionToken(): QuestionToken | PlusToken | MinusToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get members(): NodeArray<TypeElement> | undefined { return this.ast.data.members?.nodes; }
-    set members(value) { this.ast.data.members = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get readonlyToken(): PlusToken | MinusToken | ReadonlyKeyword | undefined {
+        return this.ast.data.readonlyToken?.node;
+    }
+    set readonlyToken(value) {
+        this.ast.data.readonlyToken = value?.ast;
+    }
+    get typeParameter(): TypeParameterDeclaration {
+        return this.ast.data.typeParameter?.node;
+    }
+    set typeParameter(value) {
+        this.ast.data.typeParameter = value?.ast;
+    }
+    get nameType(): TypeNode | undefined {
+        return this.ast.data.nameType?.node;
+    }
+    set nameType(value) {
+        this.ast.data.nameType = value?.ast;
+    }
+    get questionToken(): QuestionToken | PlusToken | MinusToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get members(): NodeArray<TypeElement> | undefined {
+        return this.ast.data.members?.nodes;
+    }
+    set members(value) {
+        this.ast.data.members = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -3386,8 +5158,12 @@ export class LiteralTypeNode extends Node<SyntaxKind.LiteralType, AstLiteralType
 
     declare _typeNodeBrand: any;
 
-    get literal(): NullLiteral | TrueLiteral | FalseLiteral | PrefixUnaryExpression | LiteralExpression { return this.ast.data.literal?.node; }
-    set literal(value) { this.ast.data.literal = value?.ast; }
+    get literal(): NullLiteral | TrueLiteral | FalseLiteral | PrefixUnaryExpression | LiteralExpression {
+        return this.ast.data.literal?.node;
+    }
+    set literal(value) {
+        this.ast.data.literal = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3412,10 +5188,18 @@ export class TemplateLiteralTypeNode extends Node<SyntaxKind.TemplateLiteralType
 
     declare _typeNodeBrand: any;
 
-    get head(): TemplateHead { return this.ast.data.head?.node; }
-    set head(value) { this.ast.data.head = value?.ast; }
-    get templateSpans(): NodeArray<TemplateLiteralTypeSpan> { return this.ast.data.templateSpans?.nodes!; } // TODO: remove '!'
-    set templateSpans(value) { this.ast.data.templateSpans = value?.ast; }
+    get head(): TemplateHead {
+        return this.ast.data.head?.node;
+    }
+    set head(value) {
+        this.ast.data.head = value?.ast;
+    }
+    get templateSpans(): NodeArray<TemplateLiteralTypeSpan> {
+        return this.ast.data.templateSpans?.nodes!;
+    } // TODO: remove '!'
+    set templateSpans(value) {
+        this.ast.data.templateSpans = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3430,13 +5214,25 @@ export class TemplateLiteralTypeSpan extends Node<SyntaxKind.TemplateLiteralType
 
     declare _typeNodeBrand: any;
 
-    override get parent() { return super.parent as TemplateLiteralTypeNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TemplateLiteralTypeNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get literal(): TemplateMiddle | TemplateTail { return this.ast.data.literal?.node; }
-    set literal(value) { this.ast.data.literal = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get literal(): TemplateMiddle | TemplateTail {
+        return this.ast.data.literal?.node;
+    }
+    set literal(value) {
+        this.ast.data.literal = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3452,8 +5248,7 @@ export type Literal =
     | StringLiteral
     | JsxText
     | RegularExpressionLiteral
-    | NoSubstitutionTemplateLiteral
-    ;
+    | NoSubstitutionTemplateLiteral;
 
 /** @internal */
 export type AstLiteral = AstNodeOneOf<Literal>;
@@ -3480,10 +5275,18 @@ export class PrefixUnaryExpression extends Node<SyntaxKind.PrefixUnaryExpression
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get operator(): ts.PrefixUnaryOperator { return this.ast.data.operator; }
-    set operator(value) { this.ast.data.operator = value; }
-    get operand(): UnaryExpression { return this.ast.data.operand?.node; }
-    set operand(value) { this.ast.data.operand = value?.ast; }
+    get operator(): ts.PrefixUnaryOperator {
+        return this.ast.data.operator;
+    }
+    set operator(value) {
+        this.ast.data.operator = value;
+    }
+    get operand(): UnaryExpression {
+        return this.ast.data.operand?.node;
+    }
+    set operand(value) {
+        this.ast.data.operand = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3500,7 +5303,7 @@ export class AstPrefixUnaryExpressionData extends AstData {
             this.operand.kind === SyntaxKind.Identifier &&
             (!this.operand.emitNode ||
                 !this.operand.emitNode.autoGenerate &&
-                !(this.operand.emitNode.flags & EmitFlags.LocalName))
+                    !(this.operand.emitNode.flags & EmitFlags.LocalName))
         ) {
             transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
         }
@@ -3516,10 +5319,18 @@ export class PostfixUnaryExpression extends Node<SyntaxKind.PostfixUnaryExpressi
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get operand(): LeftHandSideExpression { return this.ast.data.operand?.node; }
-    set operand(value) { this.ast.data.operand = value?.ast; }
-    get operator(): ts.PostfixUnaryOperator { return this.ast.data.operator; }
-    set operator(value) { this.ast.data.operator = value; }
+    get operand(): LeftHandSideExpression {
+        return this.ast.data.operand?.node;
+    }
+    set operand(value) {
+        this.ast.data.operand = value?.ast;
+    }
+    get operator(): ts.PostfixUnaryOperator {
+        return this.ast.data.operator;
+    }
+    set operator(value) {
+        this.ast.data.operator = value;
+    }
 }
 
 /** @internal */
@@ -3535,7 +5346,7 @@ export class AstPostfixUnaryExpressionData extends AstData {
             this.operand.kind === SyntaxKind.Identifier &&
             (!this.operand.emitNode ||
                 !this.operand.emitNode.autoGenerate &&
-                !(this.operand.emitNode.flags & EmitFlags.LocalName))
+                    !(this.operand.emitNode.flags & EmitFlags.LocalName))
         ) {
             transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
         }
@@ -3550,8 +5361,12 @@ export class DeleteExpression extends Node<SyntaxKind.DeleteExpression, AstDelet
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): UnaryExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): UnaryExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3570,8 +5385,12 @@ export class TypeOfExpression extends Node<SyntaxKind.TypeOfExpression, AstTypeO
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): UnaryExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): UnaryExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3590,8 +5409,12 @@ export class VoidExpression extends Node<SyntaxKind.VoidExpression, AstVoidExpre
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): UnaryExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): UnaryExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3610,8 +5433,12 @@ export class AwaitExpression extends Node<SyntaxKind.AwaitExpression, AstAwaitEx
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): UnaryExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): UnaryExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3632,10 +5459,18 @@ export class YieldExpression extends Node<SyntaxKind.YieldExpression, AstYieldEx
 
     declare _expressionBrand: any;
 
-    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
-    set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
-    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get asteriskToken(): AsteriskToken | undefined {
+        return this.ast.data.asteriskToken?.node;
+    }
+    set asteriskToken(value) {
+        this.ast.data.asteriskToken = value?.ast;
+    }
+    get expression(): Expression | undefined {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3666,18 +5501,42 @@ export class BinaryExpression extends Node<SyntaxKind.BinaryExpression, AstBinar
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get left(): Expression { return this.ast.data.left?.node; }
-    set left(value) { this.ast.data.left = value?.ast; }
-    get operatorToken(): BinaryOperatorToken { return this.ast.data.operatorToken?.node; }
-    set operatorToken(value) { this.ast.data.operatorToken = value?.ast; }
-    get right(): Expression { return this.ast.data.right?.node; }
-    set right(value) { this.ast.data.right = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get left(): Expression {
+        return this.ast.data.left?.node;
+    }
+    set left(value) {
+        this.ast.data.left = value?.ast;
+    }
+    get operatorToken(): BinaryOperatorToken {
+        return this.ast.data.operatorToken?.node;
+    }
+    set operatorToken(value) {
+        this.ast.data.operatorToken = value?.ast;
+    }
+    get right(): Expression {
+        return this.ast.data.right?.node;
+    }
+    set right(value) {
+        this.ast.data.right = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -3758,16 +5617,36 @@ export class ConditionalExpression extends Node<SyntaxKind.ConditionalExpression
 
     declare _expressionBrand: any;
 
-    get condition(): Expression { return this.ast.data.condition?.node; }
-    set condition(value) { this.ast.data.condition = value?.ast; }
-    get questionToken(): QuestionToken { return this.ast.data.questionToken?.node; }
-    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
-    get whenTrue(): Expression { return this.ast.data.whenTrue?.node; }
-    set whenTrue(value) { this.ast.data.whenTrue = value?.ast; }
-    get colonToken(): Token<ts.SyntaxKind.ColonToken, AstTokenData> { return this.ast.data.colonToken?.node; }
-    set colonToken(value) { this.ast.data.colonToken = value?.ast; }
-    get whenFalse(): Expression { return this.ast.data.whenFalse?.node; }
-    set whenFalse(value) { this.ast.data.whenFalse = value?.ast; }
+    get condition(): Expression {
+        return this.ast.data.condition?.node;
+    }
+    set condition(value) {
+        this.ast.data.condition = value?.ast;
+    }
+    get questionToken(): QuestionToken {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get whenTrue(): Expression {
+        return this.ast.data.whenTrue?.node;
+    }
+    set whenTrue(value) {
+        this.ast.data.whenTrue = value?.ast;
+    }
+    get colonToken(): Token<ts.SyntaxKind.ColonToken, AstTokenData> {
+        return this.ast.data.colonToken?.node;
+    }
+    set colonToken(value) {
+        this.ast.data.colonToken = value?.ast;
+    }
+    get whenFalse(): Expression {
+        return this.ast.data.whenFalse?.node;
+    }
+    set whenFalse(value) {
+        this.ast.data.whenFalse = value?.ast;
+    }
 }
 
 /** @internal */
@@ -3788,8 +5667,7 @@ export class AstConditionalExpressionData extends AstData {
 }
 
 /** @internal */
-export type FunctionBody =
-    | Block;
+export type FunctionBody = Block;
 
 /** @internal */
 export type AstFunctionBody = AstNodeOneOf<FunctionBody>;
@@ -3818,38 +5696,102 @@ export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstF
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
-    set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get body(): Block { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get asteriskToken(): AsteriskToken | undefined {
+        return this.ast.data.asteriskToken?.node;
+    }
+    set asteriskToken(value) {
+        this.ast.data.asteriskToken = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    /** @internal */ set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get body(): Block {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -3907,36 +5849,96 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
     declare _flowContainerBrand: any;
     declare name: never;
 
-    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get equalsGreaterThanToken(): EqualsGreaterThanToken { return this.ast.data.equalsGreaterThanToken?.node; }
-    set equalsGreaterThanToken(value) { this.ast.data.equalsGreaterThanToken = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get body(): Block | Expression { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get returnFlowNode(): ts.FlowNode | undefined { return this.ast.data.returnFlowNode; }
-    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get modifiers(): NodeArray<Modifier> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get equalsGreaterThanToken(): EqualsGreaterThanToken {
+        return this.ast.data.equalsGreaterThanToken?.node;
+    }
+    set equalsGreaterThanToken(value) {
+        this.ast.data.equalsGreaterThanToken = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get body(): Block | Expression {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get returnFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.returnFlowNode;
+    }
+    set returnFlowNode(value) {
+        this.ast.data.returnFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -3987,12 +5989,24 @@ export class RegularExpressionLiteral extends Token<SyntaxKind.RegularExpression
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
 }
 
 /** @internal */
@@ -4019,20 +6033,48 @@ export class StringLiteral extends Token<SyntaxKind.StringLiteral, AstStringLite
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get singleQuote(): boolean | undefined { return this.ast.data.singleQuote; }
-    set singleQuote(value) { this.ast.data.singleQuote = value; }
-    get isUnterminated(): boolean { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get textSourceNode(): Identifier | PrivateIdentifier | NumericLiteral | BigIntLiteral | JsxNamespacedName | StringLiteralLike | undefined { return this.ast.data.textSourceNode?.node; }
-    set textSourceNode(value) { this.ast.data.textSourceNode = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get singleQuote(): boolean | undefined {
+        return this.ast.data.singleQuote;
+    }
+    set singleQuote(value) {
+        this.ast.data.singleQuote = value;
+    }
+    get isUnterminated(): boolean {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get textSourceNode(): Identifier | PrivateIdentifier | NumericLiteral | BigIntLiteral | JsxNamespacedName | StringLiteralLike | undefined {
+        return this.ast.data.textSourceNode?.node;
+    }
+    set textSourceNode(value) {
+        this.ast.data.textSourceNode = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4064,20 +6106,48 @@ export class NoSubstitutionTemplateLiteral extends Token<SyntaxKind.NoSubstituti
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get rawText(): string | undefined { return this.ast.data.rawText; }
-    set rawText(value) { this.ast.data.rawText = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get templateFlags(): ts.TokenFlags { return this.ast.data.templateFlags; }
-    set templateFlags(value) { this.ast.data.templateFlags = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get rawText(): string | undefined {
+        return this.ast.data.rawText;
+    }
+    set rawText(value) {
+        this.ast.data.rawText = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get templateFlags(): ts.TokenFlags {
+        return this.ast.data.templateFlags;
+    }
+    set templateFlags(value) {
+        this.ast.data.templateFlags = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4134,14 +6204,30 @@ export class NumericLiteral extends Token<SyntaxKind.NumericLiteral, AstNumericL
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get numericLiteralFlags(): ts.TokenFlags { return this.ast.data.numericLiteralFlags; }
-    set numericLiteralFlags(value) { this.ast.data.numericLiteralFlags = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get numericLiteralFlags(): ts.TokenFlags {
+        return this.ast.data.numericLiteralFlags;
+    }
+    set numericLiteralFlags(value) {
+        this.ast.data.numericLiteralFlags = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4168,8 +6254,12 @@ export class BigIntLiteral extends Token<SyntaxKind.BigIntLiteral, AstBigIntLite
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
 }
 
 /** @internal */
@@ -4197,19 +6287,43 @@ export type AstLiteralToken = AstNodeOneOf<LiteralToken>;
 export class TemplateHead extends Token<SyntaxKind.TemplateHead, AstTemplateHeadData> implements ts.TemplateHead {
     declare readonly ast: AstTemplateHead;
 
-    override get parent() { return super.parent as TemplateExpression | TemplateLiteralTypeNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TemplateExpression | TemplateLiteralTypeNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get rawText(): string | undefined { return this.ast.data.rawText; }
-    set rawText(value) { this.ast.data.rawText = value; }
-    get templateFlags(): ts.TokenFlags { return this.ast.data.templateFlags; }
-    set templateFlags(value) { this.ast.data.templateFlags = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get rawText(): string | undefined {
+        return this.ast.data.rawText;
+    }
+    set rawText(value) {
+        this.ast.data.rawText = value;
+    }
+    get templateFlags(): ts.TokenFlags {
+        return this.ast.data.templateFlags;
+    }
+    set templateFlags(value) {
+        this.ast.data.templateFlags = value;
+    }
 }
 
 /** @internal */
@@ -4229,19 +6343,43 @@ export class AstTemplateHeadData extends AstTokenData {
 export class TemplateMiddle extends Token<SyntaxKind.TemplateMiddle, AstTemplateMiddleData> implements ts.TemplateMiddle {
     declare readonly ast: AstTemplateMiddle;
 
-    override get parent() { return super.parent as TemplateSpan | TemplateLiteralTypeSpan; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TemplateSpan | TemplateLiteralTypeSpan;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get rawText(): string | undefined { return this.ast.data.rawText; }
-    set rawText(value) { this.ast.data.rawText = value; }
-    get templateFlags(): ts.TokenFlags { return this.ast.data.templateFlags; }
-    set templateFlags(value) { this.ast.data.templateFlags = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get rawText(): string | undefined {
+        return this.ast.data.rawText;
+    }
+    set rawText(value) {
+        this.ast.data.rawText = value;
+    }
+    get templateFlags(): ts.TokenFlags {
+        return this.ast.data.templateFlags;
+    }
+    set templateFlags(value) {
+        this.ast.data.templateFlags = value;
+    }
 }
 
 /** @internal */
@@ -4261,19 +6399,43 @@ export class AstTemplateMiddleData extends AstTokenData {
 export class TemplateTail extends Token<SyntaxKind.TemplateTail, AstTemplateTailData> implements ts.TemplateTail {
     declare readonly ast: AstTemplateTail;
 
-    override get parent() { return super.parent as TemplateSpan | TemplateLiteralTypeSpan; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TemplateSpan | TemplateLiteralTypeSpan;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get rawText(): string | undefined { return this.ast.data.rawText; }
-    set rawText(value) { this.ast.data.rawText = value; }
-    get templateFlags(): ts.TokenFlags { return this.ast.data.templateFlags; }
-    set templateFlags(value) { this.ast.data.templateFlags = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get rawText(): string | undefined {
+        return this.ast.data.rawText;
+    }
+    set rawText(value) {
+        this.ast.data.rawText = value;
+    }
+    get templateFlags(): ts.TokenFlags {
+        return this.ast.data.templateFlags;
+    }
+    set templateFlags(value) {
+        this.ast.data.templateFlags = value;
+    }
 }
 
 /** @internal */
@@ -4300,10 +6462,18 @@ export class TemplateExpression extends Node<SyntaxKind.TemplateExpression, AstT
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get head(): TemplateHead { return this.ast.data.head?.node; }
-    set head(value) { this.ast.data.head = value?.ast; }
-    get templateSpans(): NodeArray<TemplateSpan> { return this.ast.data.templateSpans?.nodes!; } // TODO: remove `!`
-    set templateSpans(value) { this.ast.data.templateSpans = value?.ast; }
+    get head(): TemplateHead {
+        return this.ast.data.head?.node;
+    }
+    set head(value) {
+        this.ast.data.head = value?.ast;
+    }
+    get templateSpans(): NodeArray<TemplateSpan> {
+        return this.ast.data.templateSpans?.nodes!; // TODO: remove `!`
+    }
+    set templateSpans(value) {
+        this.ast.data.templateSpans = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4322,13 +6492,25 @@ export class AstTemplateExpressionData extends AstData {
 export class TemplateSpan extends Node<SyntaxKind.TemplateSpan, AstTemplateSpanData> implements ts.TemplateSpan {
     declare readonly ast: AstTemplateSpan;
 
-    override get parent() { return super.parent as TemplateExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TemplateExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get literal(): TemplateMiddle | TemplateTail { return this.ast.data.literal?.node; }
-    set literal(value) { this.ast.data.literal = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get literal(): TemplateMiddle | TemplateTail {
+        return this.ast.data.literal?.node;
+    }
+    set literal(value) {
+        this.ast.data.literal = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4355,10 +6537,18 @@ export class ParenthesizedExpression extends Node<SyntaxKind.ParenthesizedExpres
     declare _expressionBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -4391,10 +6581,18 @@ export class ArrayLiteralExpression extends Node<SyntaxKind.ArrayLiteralExpressi
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get elements(): NodeArray<Expression> { return this.ast.data.elements?.nodes!; } // TODO: remove '!'
-    set elements(value: NodeArray<Expression>) { this.ast.data.elements = value?.ast; }
-    get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
-    set multiLine(value) { this.ast.data.multiLine = value; }
+    get elements(): NodeArray<Expression> {
+        return this.ast.data.elements?.nodes!;
+    } // TODO: remove '!'
+    set elements(value: NodeArray<Expression>) {
+        this.ast.data.elements = value?.ast;
+    }
+    get multiLine(): boolean | undefined {
+        return this.ast.data.multiLine;
+    }
+    set multiLine(value) {
+        this.ast.data.multiLine = value;
+    }
 }
 
 /** @internal */
@@ -4413,11 +6611,19 @@ export class SpreadElement extends Node<SyntaxKind.SpreadElement, AstSpreadEleme
 
     declare _expressionBrand: any;
 
-    override get parent() { return super.parent as ArrayLiteralExpression | CallExpression | NewExpression; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ArrayLiteralExpression | CallExpression | NewExpression;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4446,8 +6652,7 @@ export type ObjectLiteralElementLike =
     | ShorthandPropertyAssignment
     | SpreadAssignment
     | MethodDeclaration
-    | AccessorDeclaration
-    ;
+    | AccessorDeclaration;
 
 /** @internal */
 export type AstObjectLiteralElementLike = AstNodeOneOf<ObjectLiteralElementLike>;
@@ -4465,16 +6670,36 @@ export class ObjectLiteralExpression extends Node<SyntaxKind.ObjectLiteralExpres
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get properties(): NodeArray<ObjectLiteralElementLike> { return this.ast.data.properties?.nodes!; } // TODO: remove '!'
-    set properties(value) { this.ast.data.properties = value?.ast; }
-    get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
-    set multiLine(value) { this.ast.data.multiLine = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get properties(): NodeArray<ObjectLiteralElementLike> {
+        return this.ast.data.properties?.nodes!;
+    } // TODO: remove '!'
+    set properties(value) {
+        this.ast.data.properties = value?.ast;
+    }
+    get multiLine(): boolean | undefined {
+        return this.ast.data.multiLine;
+    }
+    set multiLine(value) {
+        this.ast.data.multiLine = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4504,20 +6729,48 @@ export class PropertyAccessExpression extends Node<SyntaxKind.PropertyAccessExpr
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
-    set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
-    get name(): Identifier | PrivateIdentifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get questionDotToken(): QuestionDotToken | undefined {
+        return this.ast.data.questionDotToken?.node;
+    }
+    set questionDotToken(value) {
+        this.ast.data.questionDotToken = value?.ast;
+    }
+    get name(): Identifier | PrivateIdentifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -4538,7 +6791,7 @@ export class AstPropertyAccessExpressionData extends AstData {
                 propagateIdentifierNameFlags(this.name as AstIdentifier) :
                 propagateChildFlags(this.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsES2020;;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
         else if (this.expression.kind === SyntaxKind.SuperKeyword) {
             // super method calls require a lexical 'this'
@@ -4607,21 +6860,49 @@ export class ElementAccessExpression extends Node<SyntaxKind.ElementAccessExpres
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
-    set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
-    get argumentExpression(): Expression { return this.ast.data.argumentExpression?.node; }
-    set argumentExpression(value) { this.ast.data.argumentExpression = value?.ast; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get questionDotToken(): QuestionDotToken | undefined {
+        return this.ast.data.questionDotToken?.node;
+    }
+    set questionDotToken(value) {
+        this.ast.data.questionDotToken = value?.ast;
+    }
+    get argumentExpression(): Expression {
+        return this.ast.data.argumentExpression?.node;
+    }
+    set argumentExpression(value) {
+        this.ast.data.argumentExpression = value?.ast;
+    }
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -4679,18 +6960,42 @@ export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpre
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
-    set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get arguments(): NodeArray<Expression> { return this.ast.data.arguments?.nodes!; } // TODO: remove `!`
-    set arguments(value) { this.ast.data.arguments = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get questionDotToken(): QuestionDotToken | undefined {
+        return this.ast.data.questionDotToken?.node;
+    }
+    set questionDotToken(value) {
+        this.ast.data.questionDotToken = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get arguments(): NodeArray<Expression> {
+        return this.ast.data.arguments?.nodes!; // TODO: remove `!`
+    }
+    set arguments(value) {
+        this.ast.data.arguments = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4711,8 +7016,9 @@ export class AstCallExpressionData extends AstData {
         if (this.typeArguments) {
             transformFlags |= TransformFlags.ContainsTypeScript;
         }
-        if ((this.expression.kind === SyntaxKind.PropertyAccessExpression ||
-            this.expression.kind === SyntaxKind.ElementAccessExpression) &&
+        if (
+            (this.expression.kind === SyntaxKind.PropertyAccessExpression ||
+                this.expression.kind === SyntaxKind.ElementAccessExpression) &&
             (this.expression as AstNode<PropertyAccessExpression | ElementAccessExpression>).data.expression.kind === SyntaxKind.SuperKeyword
         ) {
             transformFlags |= TransformFlags.ContainsLexicalThis;
@@ -4764,10 +7070,18 @@ export class ExpressionWithTypeArguments extends Node<SyntaxKind.ExpressionWithT
     declare _expressionBrand: any;
     declare _typeNodeBrand: any;
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4794,16 +7108,36 @@ export class NewExpression extends Node<SyntaxKind.NewExpression, AstNewExpressi
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    get expression(): LeftHandSideExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get arguments(): NodeArray<Expression> | undefined { return this.ast.data.arguments?.nodes; }
-    set arguments(value) { this.ast.data.arguments = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get expression(): LeftHandSideExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get arguments(): NodeArray<Expression> | undefined {
+        return this.ast.data.arguments?.nodes;
+    }
+    set arguments(value) {
+        this.ast.data.arguments = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -4830,8 +7164,7 @@ export class AstNewExpressionData extends AstData {
 /** @internal */
 export type TemplateLiteral =
     | TemplateExpression
-    | NoSubstitutionTemplateLiteral
-    ;
+    | NoSubstitutionTemplateLiteral;
 
 /** @internal */
 export type AstTemplateLiteral = AstNodeOneOf<TemplateLiteral>;
@@ -4846,14 +7179,30 @@ export class TaggedTemplateExpression extends Node<SyntaxKind.TaggedTemplateExpr
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get tag(): LeftHandSideExpression { return this.ast.data.tag?.node; }
-    set tag(value) { this.ast.data.tag = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get template(): NoSubstitutionTemplateLiteral | TemplateExpression { return this.ast.data.template?.node; }
-    set template(value) { this.ast.data.template = value?.ast; }
-    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
-    set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
+    get tag(): LeftHandSideExpression {
+        return this.ast.data.tag?.node;
+    }
+    set tag(value) {
+        this.ast.data.tag = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get template(): NoSubstitutionTemplateLiteral | TemplateExpression {
+        return this.ast.data.template?.node;
+    }
+    set template(value) {
+        this.ast.data.template = value?.ast;
+    }
+    get questionDotToken(): QuestionDotToken | undefined {
+        return this.ast.data.questionDotToken?.node;
+    }
+    set questionDotToken(value) {
+        this.ast.data.questionDotToken = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4884,10 +7233,18 @@ export class AsExpression extends Node<SyntaxKind.AsExpression, AstAsExpressionD
 
     declare _expressionBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4909,10 +7266,18 @@ export class TypeAssertion extends Node<SyntaxKind.TypeAssertionExpression, AstT
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get expression(): UnaryExpression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get expression(): UnaryExpression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4933,10 +7298,18 @@ export class SatisfiesExpression extends Node<SyntaxKind.SatisfiesExpression, As
 
     declare _expressionBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4960,8 +7333,12 @@ export class NonNullExpression extends Node<SyntaxKind.NonNullExpression, AstNon
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value: Expression) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: Expression) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -4995,12 +7372,24 @@ export class MetaProperty extends Node<SyntaxKind.MetaProperty, AstMetaPropertyD
     declare _expressionBrand: any;
     declare _flowContainerBrand: any;
 
-    get keywordToken(): SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword { return this.ast.data.keywordToken; }
-    set keywordToken(value: SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword) { this.ast.data.keywordToken = value; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value: Identifier) { this.ast.data.name = value?.ast; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value) { this.ast.data.flowNode = value; }
+    get keywordToken(): SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword {
+        return this.ast.data.keywordToken;
+    }
+    set keywordToken(value: SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword) {
+        this.ast.data.keywordToken = value;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value: Identifier) {
+        this.ast.data.name = value?.ast;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5037,12 +7426,24 @@ export class JsxElement extends Node<SyntaxKind.JsxElement, AstJsxElementData> i
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get openingElement(): JsxOpeningElement { return this.ast.data.openingElement?.node; }
-    set openingElement(value: JsxOpeningElement) { this.ast.data.openingElement = value?.ast; }
-    get children(): NodeArray<JsxChild> { return this.ast.data.children.nodes; }
-    set children(value: NodeArray<JsxChild>) { this.ast.data.children = value?.ast; }
-    get closingElement(): JsxClosingElement { return this.ast.data.closingElement?.node; }
-    set closingElement(value: JsxClosingElement) { this.ast.data.closingElement = value?.ast; }
+    get openingElement(): JsxOpeningElement {
+        return this.ast.data.openingElement?.node;
+    }
+    set openingElement(value: JsxOpeningElement) {
+        this.ast.data.openingElement = value?.ast;
+    }
+    get children(): NodeArray<JsxChild> {
+        return this.ast.data.children.nodes;
+    }
+    set children(value: NodeArray<JsxChild>) {
+        this.ast.data.children = value?.ast;
+    }
+    get closingElement(): JsxClosingElement {
+        return this.ast.data.closingElement?.node;
+    }
+    set closingElement(value: JsxClosingElement) {
+        this.ast.data.closingElement = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5062,8 +7463,7 @@ export class AstJsxElementData extends AstData {
 /** @internal */
 export type JsxOpeningLikeElement =
     | JsxSelfClosingElement
-    | JsxOpeningElement
-    ;
+    | JsxOpeningElement;
 
 /** @internal */
 export type AstJsxOpeningLikeElement = AstNodeOneOf<JsxOpeningLikeElement>;
@@ -5121,15 +7521,31 @@ export class JsxAttributes extends Node<SyntaxKind.JsxAttributes, AstJsxAttribut
     declare _expressionBrand: any;
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as JsxOpeningLikeElement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxOpeningLikeElement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get properties(): NodeArray<JsxAttributeLike> { return this.ast.data.properties.nodes; }
-    set properties(value) { this.ast.data.properties = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get properties(): NodeArray<JsxAttributeLike> {
+        return this.ast.data.properties.nodes;
+    }
+    set properties(value) {
+        this.ast.data.properties = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -5149,10 +7565,18 @@ export class AstJsxAttributesData extends AstData {
 export class JsxNamespacedName extends Node<SyntaxKind.JsxNamespacedName, AstJsxNamespacedNameData> implements ts.JsxNamespacedName {
     declare readonly ast: AstJsxNamespacedName;
 
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get namespace(): Identifier { return this.ast.data.namespace?.node; }
-    set namespace(value) { this.ast.data.namespace = value?.ast; }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get namespace(): Identifier {
+        return this.ast.data.namespace?.node;
+    }
+    set namespace(value) {
+        this.ast.data.namespace = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5173,15 +7597,31 @@ export class JsxOpeningElement extends Node<SyntaxKind.JsxOpeningElement, AstJsx
 
     declare _expressionBrand: any;
 
-    override get parent() { return super.parent as JsxElement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxElement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get tagName(): JsxTagNameExpression { return this.ast.data.tagName?.node; }
-    set tagName(value) { this.ast.data.tagName = value.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get attributes(): JsxAttributes { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get tagName(): JsxTagNameExpression {
+        return this.ast.data.tagName?.node;
+    }
+    set tagName(value) {
+        this.ast.data.tagName = value.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get attributes(): JsxAttributes {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5206,11 +7646,19 @@ export class AstJsxOpeningElementData extends AstData {
 export class JsxClosingElement extends Node<SyntaxKind.JsxClosingElement, AstJsxClosingElementData> implements ts.JsxClosingElement {
     declare readonly ast: AstJsxClosingElement;
 
-    override get parent() { return super.parent as JsxElement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxElement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get tagName(): JsxTagNameExpression { return this.ast.data.tagName?.node; }
-    set tagName(value) { this.ast.data.tagName = value.ast; }
+    get tagName(): JsxTagNameExpression {
+        return this.ast.data.tagName?.node;
+    }
+    set tagName(value) {
+        this.ast.data.tagName = value.ast;
+    }
 }
 
 /** @internal */
@@ -5234,12 +7682,24 @@ export class JsxSelfClosingElement extends Node<SyntaxKind.JsxSelfClosingElement
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get tagName(): JsxTagNameExpression { return this.ast.data.tagName?.node; }
-    set tagName(value) { this.ast.data.tagName = value.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get attributes(): JsxAttributes { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get tagName(): JsxTagNameExpression {
+        return this.ast.data.tagName?.node;
+    }
+    set tagName(value) {
+        this.ast.data.tagName = value.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get attributes(): JsxAttributes {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5271,12 +7731,24 @@ export class JsxFragment extends Node<SyntaxKind.JsxFragment, AstJsxFragmentData
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get openingFragment(): JsxOpeningFragment { return this.ast.data.openingFragment?.node; }
-    set openingFragment(value: JsxOpeningFragment) { this.ast.data.openingFragment = value?.ast; }
-    get children(): NodeArray<JsxChild> { return this.ast.data.children.nodes; }
-    set children(value: NodeArray<JsxChild>) { this.ast.data.children = value?.ast; }
-    get closingFragment(): JsxClosingFragment { return this.ast.data.closingFragment?.node; }
-    set closingFragment(value: JsxClosingFragment) { this.ast.data.closingFragment = value?.ast; }
+    get openingFragment(): JsxOpeningFragment {
+        return this.ast.data.openingFragment?.node;
+    }
+    set openingFragment(value: JsxOpeningFragment) {
+        this.ast.data.openingFragment = value?.ast;
+    }
+    get children(): NodeArray<JsxChild> {
+        return this.ast.data.children.nodes;
+    }
+    set children(value: NodeArray<JsxChild>) {
+        this.ast.data.children = value?.ast;
+    }
+    get closingFragment(): JsxClosingFragment {
+        return this.ast.data.closingFragment?.node;
+    }
+    set closingFragment(value: JsxClosingFragment) {
+        this.ast.data.closingFragment = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5299,8 +7771,12 @@ export class JsxOpeningFragment extends Node<SyntaxKind.JsxOpeningFragment, AstJ
 
     declare _expressionBrand: any; // TODO: is this accurate?
 
-    override get parent() { return super.parent as JsxFragment; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxFragment;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 }
 
 /** @internal */
@@ -5316,8 +7792,12 @@ export class JsxClosingFragment extends Node<SyntaxKind.JsxClosingFragment, AstJ
 
     declare _expressionBrand: any; // TODO: is this accurate?
 
-    override get parent() { return super.parent as JsxFragment; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxFragment;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 }
 
 /** @internal */
@@ -5333,17 +7813,37 @@ export class JsxAttribute extends Node<SyntaxKind.JsxAttribute, AstJsxAttributeD
 
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as JsxAttributes; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxAttributes;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): JsxAttributeName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get initializer(): JsxAttributeValue | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): JsxAttributeName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get initializer(): JsxAttributeValue | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -5381,11 +7881,19 @@ export class JsxSpreadAttribute extends Node<SyntaxKind.JsxSpreadAttribute, AstJ
     declare symbol: never;
     declare localSymbol: never;
 
-    override get parent() { return super.parent as JsxAttributes; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxAttributes;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5404,13 +7912,25 @@ export class JsxExpression extends Node<SyntaxKind.JsxExpression, AstJsxExpressi
 
     declare _expressionBrand: any; // TODO: is this accurate?
 
-    override get parent() { return super.parent as JsxElement | JsxFragment | JsxAttributeLike; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxElement | JsxFragment | JsxAttributeLike;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
-    set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
-    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get dotDotDotToken(): DotDotDotToken | undefined {
+        return this.ast.data.dotDotDotToken?.node;
+    }
+    set dotDotDotToken(value) {
+        this.ast.data.dotDotDotToken = value?.ast;
+    }
+    get expression(): Expression | undefined {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -5429,17 +7949,37 @@ export class AstJsxExpressionData extends AstData {
 export class JsxText extends Token<SyntaxKind.JsxText, AstJsxTextData> implements ts.JsxText {
     declare readonly ast: AstJsxText;
 
-    override get parent() { return super.parent as JsxElement | JsxFragment; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JsxElement | JsxFragment;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
-    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
-    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
-    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
-    get containsOnlyTriviaWhiteSpaces(): boolean { return this.ast.data.containsOnlyTriviaWhiteSpaces; }
-    set containsOnlyTriviaWhiteSpaces(value) { this.ast.data.containsOnlyTriviaWhiteSpaces = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get isUnterminated(): boolean | undefined {
+        return this.ast.data.isUnterminated;
+    }
+    set isUnterminated(value) {
+        this.ast.data.isUnterminated = value;
+    }
+    get hasExtendedUnicodeEscape(): boolean | undefined {
+        return this.ast.data.hasExtendedUnicodeEscape;
+    }
+    set hasExtendedUnicodeEscape(value) {
+        this.ast.data.hasExtendedUnicodeEscape = value;
+    }
+    get containsOnlyTriviaWhiteSpaces(): boolean {
+        return this.ast.data.containsOnlyTriviaWhiteSpaces;
+    }
+    set containsOnlyTriviaWhiteSpaces(value) {
+        this.ast.data.containsOnlyTriviaWhiteSpaces = value;
+    }
 }
 
 /** @internal */
@@ -5460,20 +8000,17 @@ export type JsxChild =
     | JsxExpression
     | JsxElement
     | JsxSelfClosingElement
-    | JsxFragment
-    ;
+    | JsxFragment;
 
 /** @internal */
 export type AstJsxChild = AstNodeOneOf<JsxChild>;
-
 
 /** @internal */
 export type IterationStatement =
     | DoStatement
     | WhileStatement
     | ForStatement
-    | ForInOrOfStatement
-    ;
+    | ForInOrOfStatement;
 
 /** @internal */
 export type AstIterationStatement = AstNodeOneOf<IterationStatement>;
@@ -5485,8 +8022,12 @@ export class EmptyStatement extends Node<SyntaxKind.EmptyStatement, AstEmptyStat
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -5506,10 +8047,18 @@ export class DebuggerStatement extends Node<SyntaxKind.DebuggerStatement, AstDeb
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5536,16 +8085,36 @@ export class MissingDeclaration extends Node<SyntaxKind.MissingDeclaration, AstM
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -5570,16 +8139,36 @@ export class Block extends Node<SyntaxKind.Block, AstBlockData> implements JSDoc
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    get statements(): NodeArray<Statement> { return this.ast.data.statements?.nodes!; } // TODO: remove `!`
-    set statements(value) { this.ast.data.statements = value?.ast; }
-    get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
-    set multiLine(value) { this.ast.data.multiLine = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get statements(): NodeArray<Statement> {
+        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+    }
+    set statements(value) {
+        this.ast.data.statements = value?.ast;
+    }
+    get multiLine(): boolean | undefined {
+        return this.ast.data.multiLine;
+    }
+    set multiLine(value) {
+        this.ast.data.multiLine = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -5604,14 +8193,30 @@ export class VariableStatement extends Node<SyntaxKind.VariableStatement, AstVar
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get declarationList(): VariableDeclarationList { return this.ast.data.declarationList?.node; }
-    set declarationList(value) { this.ast.data.declarationList = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get declarationList(): VariableDeclarationList {
+        return this.ast.data.declarationList?.node;
+    }
+    set declarationList(value) {
+        this.ast.data.declarationList = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5640,12 +8245,24 @@ export class ExpressionStatement extends Node<SyntaxKind.ExpressionStatement, As
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5672,16 +8289,36 @@ export class IfStatement extends Node<SyntaxKind.IfStatement, AstIfStatementData
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get thenStatement(): Statement { return this.ast.data.thenStatement?.node; }
-    set thenStatement(value) { this.ast.data.thenStatement = value?.ast; }
-    get elseStatement(): Statement | undefined { return this.ast.data.elseStatement?.node; }
-    set elseStatement(value) { this.ast.data.elseStatement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get thenStatement(): Statement {
+        return this.ast.data.thenStatement?.node;
+    }
+    set thenStatement(value) {
+        this.ast.data.thenStatement = value?.ast;
+    }
+    get elseStatement(): Statement | undefined {
+        return this.ast.data.elseStatement?.node;
+    }
+    set elseStatement(value) {
+        this.ast.data.elseStatement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5707,14 +8344,30 @@ export class DoStatement extends Node<SyntaxKind.DoStatement, AstDoStatementData
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5739,14 +8392,30 @@ export class WhileStatement extends Node<SyntaxKind.WhileStatement, AstWhileStat
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5766,12 +8435,10 @@ export class AstWhileStatementData extends AstData {
 /** @internal */
 export type ForInitializer =
     | VariableDeclarationList
-    | Expression
-    ;
+    | Expression;
 
 /** @internal */
 export type AstForInitializer = AstNodeOneOf<ForInitializer>;
-
 
 /** @internal */
 export class ForStatement extends Node<SyntaxKind.ForStatement, AstForStatementData> implements JSDocContainer, LocalsContainer, FlowContainer, ts.ForStatement {
@@ -5782,22 +8449,54 @@ export class ForStatement extends Node<SyntaxKind.ForStatement, AstForStatementD
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get initializer(): ForInitializer | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get condition(): Expression | undefined { return this.ast.data.condition?.node; }
-    set condition(value) { this.ast.data.condition = value?.ast; }
-    get incrementor(): Expression | undefined { return this.ast.data.incrementor?.node; }
-    set incrementor(value) { this.ast.data.incrementor = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get initializer(): ForInitializer | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get condition(): Expression | undefined {
+        return this.ast.data.condition?.node;
+    }
+    set condition(value) {
+        this.ast.data.condition = value?.ast;
+    }
+    get incrementor(): Expression | undefined {
+        return this.ast.data.incrementor?.node;
+    }
+    set incrementor(value) {
+        this.ast.data.incrementor = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5823,8 +8522,7 @@ export class AstForStatementData extends AstData {
 /** @internal */
 export type ForInOrOfStatement =
     | ForInStatement
-    | ForOfStatement
-    ;
+    | ForOfStatement;
 
 /** @internal */
 export type AstForInOrOfStatement = AstNodeOneOf<ForInOrOfStatement>;
@@ -5838,20 +8536,48 @@ export class ForInStatement extends Node<SyntaxKind.ForInStatement, AstForInStat
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get initializer(): ForInitializer { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get initializer(): ForInitializer {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5881,22 +8607,54 @@ export class ForOfStatement extends Node<SyntaxKind.ForOfStatement, AstForOfStat
     declare _localsContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get awaitModifier(): AwaitKeyword | undefined { return this.ast.data.awaitModifier?.node; }
-    set awaitModifier(value) { this.ast.data.awaitModifier = value?.ast; }
-    get initializer(): ForInitializer { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get awaitModifier(): AwaitKeyword | undefined {
+        return this.ast.data.awaitModifier?.node;
+    }
+    set awaitModifier(value) {
+        this.ast.data.awaitModifier = value?.ast;
+    }
+    get initializer(): ForInitializer {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5932,12 +8690,24 @@ export class BreakStatement extends Node<SyntaxKind.BreakStatement, AstBreakStat
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get label(): Identifier | undefined { return this.ast.data.label?.node; }
-    set label(value) { this.ast.data.label = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get label(): Identifier | undefined {
+        return this.ast.data.label?.node;
+    }
+    set label(value) {
+        this.ast.data.label = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5961,12 +8731,24 @@ export class ContinueStatement extends Node<SyntaxKind.ContinueStatement, AstCon
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get label(): Identifier | undefined { return this.ast.data.label?.node; }
-    set label(value) { this.ast.data.label = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get label(): Identifier | undefined {
+        return this.ast.data.label?.node;
+    }
+    set label(value) {
+        this.ast.data.label = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -5997,12 +8779,24 @@ export class ReturnStatement extends Node<SyntaxKind.ReturnStatement, AstReturnS
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression | undefined {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6027,14 +8821,30 @@ export class WithStatement extends Node<SyntaxKind.WithStatement, AstWithStateme
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6059,16 +8869,36 @@ export class SwitchStatement extends Node<SyntaxKind.SwitchStatement, AstSwitchS
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get caseBlock(): CaseBlock { return this.ast.data.caseBlock?.node; }
-    set caseBlock(value) { this.ast.data.caseBlock = value?.ast; }
-    get possiblyExhaustive(): boolean { return this.ast.data.possiblyExhaustive; }
-    set possiblyExhaustive(value) { this.ast.data.possiblyExhaustive = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get caseBlock(): CaseBlock {
+        return this.ast.data.caseBlock?.node;
+    }
+    set caseBlock(value) {
+        this.ast.data.caseBlock = value?.ast;
+    }
+    get possiblyExhaustive(): boolean {
+        return this.ast.data.possiblyExhaustive;
+    }
+    set possiblyExhaustive(value) {
+        this.ast.data.possiblyExhaustive = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6092,15 +8922,31 @@ export class CaseBlock extends Node<SyntaxKind.CaseBlock, AstCaseBlockData> impl
 
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as SwitchStatement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as SwitchStatement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get clauses(): NodeArray<CaseOrDefaultClause> { return this.ast.data.clauses?.nodes!; } // TODO: remove '!'
-    set clauses(value) { this.ast.data.clauses = value?.ast; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get clauses(): NodeArray<CaseOrDefaultClause> {
+        return this.ast.data.clauses?.nodes!;
+    } // TODO: remove '!'
+    set clauses(value) {
+        this.ast.data.clauses = value?.ast;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -6121,17 +8967,37 @@ export class CaseClause extends Node<SyntaxKind.CaseClause, AstCaseClauseData> i
 
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as CaseBlock; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as CaseBlock;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get statements(): NodeArray<Statement> { return this.ast.data.statements?.nodes!; } // TODO: remove `!`
-    set statements(value) { this.ast.data.statements = value?.ast; }
-    get fallthroughFlowNode(): ts.FlowNode | undefined { return this.ast.data.fallthroughFlowNode; }
-    set fallthroughFlowNode(value) { this.ast.data.fallthroughFlowNode = value; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get statements(): NodeArray<Statement> {
+        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+    }
+    set statements(value) {
+        this.ast.data.statements = value?.ast;
+    }
+    get fallthroughFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.fallthroughFlowNode;
+    }
+    set fallthroughFlowNode(value) {
+        this.ast.data.fallthroughFlowNode = value;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -6152,13 +9018,25 @@ export class AstCaseClauseData extends AstData {
 export class DefaultClause extends Node<SyntaxKind.DefaultClause, AstDefaultClauseData> implements ts.DefaultClause {
     declare readonly ast: AstDefaultClause;
 
-    override get parent() { return super.parent as CaseBlock; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as CaseBlock;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get statements(): NodeArray<Statement> { return this.ast.data.statements?.nodes!; } // TODO: remove `!`
-    set statements(value) { this.ast.data.statements = value?.ast; }
-    get fallthroughFlowNode(): ts.FlowNode | undefined { return this.ast.data.fallthroughFlowNode; }
-    set fallthroughFlowNode(value) { this.ast.data.fallthroughFlowNode = value; }
+    get statements(): NodeArray<Statement> {
+        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+    }
+    set statements(value) {
+        this.ast.data.statements = value?.ast;
+    }
+    get fallthroughFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.fallthroughFlowNode;
+    }
+    set fallthroughFlowNode(value) {
+        this.ast.data.fallthroughFlowNode = value;
+    }
 }
 
 /** @internal */
@@ -6175,8 +9053,7 @@ export class AstDefaultClauseData extends AstData {
 /** @internal */
 export type CaseOrDefaultClause =
     | CaseClause
-    | DefaultClause
-    ;
+    | DefaultClause;
 
 /** @internal */
 export type AstCaseOrDefaultClause = AstNodeOneOf<CaseOrDefaultClause>;
@@ -6189,14 +9066,30 @@ export class LabeledStatement extends Node<SyntaxKind.LabeledStatement, AstLabel
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get label(): Identifier { return this.ast.data.label?.node; }
-    set label(value) { this.ast.data.label = value?.ast; }
-    get statement(): Statement { return this.ast.data.statement?.node; }
-    set statement(value) { this.ast.data.statement = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get label(): Identifier {
+        return this.ast.data.label?.node;
+    }
+    set label(value) {
+        this.ast.data.label = value?.ast;
+    }
+    get statement(): Statement {
+        return this.ast.data.statement?.node;
+    }
+    set statement(value) {
+        this.ast.data.statement = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6221,12 +9114,24 @@ export class ThrowStatement extends Node<SyntaxKind.ThrowStatement, AstThrowStat
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6249,16 +9154,36 @@ export class TryStatement extends Node<SyntaxKind.TryStatement, AstTryStatementD
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    get tryBlock(): Block { return this.ast.data.tryBlock?.node; }
-    set tryBlock(value) { this.ast.data.tryBlock = value?.ast; }
-    get catchClause(): CatchClause | undefined { return this.ast.data.catchClause?.node; }
-    set catchClause(value) { this.ast.data.catchClause = value?.ast; }
-    get finallyBlock(): Block | undefined { return this.ast.data.finallyBlock?.node; }
-    set finallyBlock(value) { this.ast.data.finallyBlock = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
-    set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    get tryBlock(): Block {
+        return this.ast.data.tryBlock?.node;
+    }
+    set tryBlock(value) {
+        this.ast.data.tryBlock = value?.ast;
+    }
+    get catchClause(): CatchClause | undefined {
+        return this.ast.data.catchClause?.node;
+    }
+    set catchClause(value) {
+        this.ast.data.catchClause = value?.ast;
+    }
+    get finallyBlock(): Block | undefined {
+        return this.ast.data.finallyBlock?.node;
+    }
+    set finallyBlock(value) {
+        this.ast.data.finallyBlock = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get flowNode(): FlowNode | undefined {
+        return this.ast.data.flowNode;
+    }
+    set flowNode(value: FlowNode | undefined) {
+        this.ast.data.flowNode = value;
+    }
 }
 
 /** @internal */
@@ -6283,17 +9208,37 @@ export class CatchClause extends Node<SyntaxKind.CatchClause, AstCatchClauseData
 
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as TryStatement; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as TryStatement;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get variableDeclaration(): VariableDeclaration | undefined { return this.ast.data.variableDeclaration?.node; }
-    set variableDeclaration(value) { this.ast.data.variableDeclaration = value?.ast; }
-    get block(): Block { return this.ast.data.block?.node; }
-    set block(value) { this.ast.data.block = value?.ast; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get variableDeclaration(): VariableDeclaration | undefined {
+        return this.ast.data.variableDeclaration?.node;
+    }
+    set variableDeclaration(value) {
+        this.ast.data.variableDeclaration = value?.ast;
+    }
+    get block(): Block {
+        return this.ast.data.block?.node;
+    }
+    set block(value) {
+        this.ast.data.block = value?.ast;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -6339,8 +9284,7 @@ export type ClassElement =
     | SemicolonClassElement
     | AccessorDeclaration
     | IndexSignatureDeclaration
-    | ClassStaticBlockDeclaration
-    ;
+    | ClassStaticBlockDeclaration;
 
 /** @internal */
 export type AstClassElement = AstNodeOneOf<ClassElement>;
@@ -6361,22 +9305,54 @@ export class ClassDeclaration extends Node<SyntaxKind.ClassDeclaration, AstClass
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
-    set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
-    get members(): NodeArray<ClassElement> { return this.ast.data.members?.nodes!; } // TODO: remove `!`
-    set members(value: NodeArray<ClassElement>) { this.ast.data.members = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined {
+        return this.ast.data.heritageClauses?.nodes;
+    }
+    set heritageClauses(value) {
+        this.ast.data.heritageClauses = value?.ast;
+    }
+    get members(): NodeArray<ClassElement> {
+        return this.ast.data.members?.nodes!; // TODO: remove `!`
+    }
+    set members(value: NodeArray<ClassElement>) {
+        this.ast.data.members = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6424,22 +9400,54 @@ export class ClassExpression extends Node<SyntaxKind.ClassExpression, AstClassEx
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
-    set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
-    get members(): NodeArray<ClassElement> { return this.ast.data.members?.nodes!; } // TODO: remove `!`
-    set members(value) { this.ast.data.members = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined {
+        return this.ast.data.heritageClauses?.nodes;
+    }
+    set heritageClauses(value) {
+        this.ast.data.heritageClauses = value?.ast;
+    }
+    get members(): NodeArray<ClassElement> {
+        return this.ast.data.members?.nodes!; // TODO: remove `!`
+    }
+    set members(value) {
+        this.ast.data.members = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6491,22 +9499,54 @@ export class InterfaceDeclaration extends Node<SyntaxKind.InterfaceDeclaration, 
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
-    set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
-    get members(): NodeArray<TypeElement> { return this.ast.data.members?.nodes!; } // TODO: remove '!'
-    set members(value) { this.ast.data.members = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined {
+        return this.ast.data.heritageClauses?.nodes;
+    }
+    set heritageClauses(value) {
+        this.ast.data.heritageClauses = value?.ast;
+    }
+    get members(): NodeArray<TypeElement> {
+        return this.ast.data.members?.nodes!;
+    } // TODO: remove '!'
+    set members(value) {
+        this.ast.data.members = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6526,13 +9566,25 @@ export class AstInterfaceDeclarationData extends AstTypeScriptNodeData {
 export class HeritageClause extends Node<SyntaxKind.HeritageClause, AstHeritageClauseData> implements ts.HeritageClause {
     declare readonly ast: AstHeritageClause;
 
-    override get parent() { return super.parent as InterfaceDeclaration | ClassLikeDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as InterfaceDeclaration | ClassLikeDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get token(): ts.SyntaxKind.ExtendsKeyword | ts.SyntaxKind.ImplementsKeyword { return this.ast.data.token; }
-    set token(value) { this.ast.data.token = value; }
-    get types(): NodeArray<ExpressionWithTypeArguments> { return this.ast.data.types?.nodes!; } // TODO: remove '!'
-    set types(value) { this.ast.data.types = value?.ast; }
+    get token(): ts.SyntaxKind.ExtendsKeyword | ts.SyntaxKind.ImplementsKeyword {
+        return this.ast.data.token;
+    }
+    set token(value) {
+        this.ast.data.token = value;
+    }
+    get types(): NodeArray<ExpressionWithTypeArguments> {
+        return this.ast.data.types?.nodes!;
+    } // TODO: remove '!'
+    set types(value) {
+        this.ast.data.types = value?.ast;
+    }
 }
 
 /** @internal */
@@ -6561,24 +9613,60 @@ export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, 
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -6603,18 +9691,42 @@ export class EnumDeclaration extends Node<SyntaxKind.EnumDeclaration, AstEnumDec
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get members(): NodeArray<EnumMember> { return this.ast.data.members?.nodes!; } // TODO: remove '!'
-    set members(value) { this.ast.data.members = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get members(): NodeArray<EnumMember> {
+        return this.ast.data.members?.nodes!;
+    } // TODO: remove '!'
+    set members(value) {
+        this.ast.data.members = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6644,19 +9756,43 @@ export class EnumMember extends Node<SyntaxKind.EnumMember, AstEnumMemberData> i
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as EnumDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as EnumDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): PropertyName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
-    set initializer(value) { this.ast.data.initializer = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): PropertyName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get initializer(): Expression | undefined {
+        return this.ast.data.initializer?.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6678,8 +9814,7 @@ export class AstEnumMemberData extends AstData {
 /** @internal */
 export type ModuleName =
     | Identifier
-    | StringLiteral
-    ;
+    | StringLiteral;
 
 /** @internal */
 export type AstModuleName = AstNodeOneOf<ModuleName>;
@@ -6687,8 +9822,7 @@ export type AstModuleName = AstNodeOneOf<ModuleName>;
 /** @internal */
 export type ModuleBody =
     | NamespaceBody
-    | JSDocNamespaceBody
-    ;
+    | JSDocNamespaceBody;
 
 /** @internal */
 export type AstModuleBody = AstNodeOneOf<ModuleBody>;
@@ -6702,25 +9836,61 @@ export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstMod
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as ModuleBlock | SourceFile; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ModuleBlock | SourceFile;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): ModuleName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get body(): ModuleBody | JSDocNamespaceDeclaration | undefined { return this.ast.data.body?.node; }
-    set body(value) { this.ast.data.body = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): ModuleName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get body(): ModuleBody | JSDocNamespaceDeclaration | undefined {
+        return this.ast.data.body?.node;
+    }
+    set body(value) {
+        this.ast.data.body = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -6753,8 +9923,7 @@ export class AstModuleDeclarationData extends AstData {
 /** @internal */
 export type NamespaceBody =
     | ModuleBlock
-    | NamespaceDeclaration
-    ;
+    | NamespaceDeclaration;
 
 /** @internal */
 export type AstNamespaceBody = AstNodeOneOf<NamespaceBody>;
@@ -6779,8 +9948,7 @@ export interface AstNamespaceDeclarationData extends AstModuleDeclarationData {
 /** @internal */
 export type JSDocNamespaceBody =
     | Identifier
-    | JSDocNamespaceDeclaration
-    ;
+    | JSDocNamespaceDeclaration;
 
 /** @internal */
 export type AstJSDocNamespaceBody = AstNodeOneOf<JSDocNamespaceBody>;
@@ -6809,13 +9977,25 @@ export class ModuleBlock extends Node<SyntaxKind.ModuleBlock, AstModuleBlockData
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ModuleDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ModuleDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get statements(): NodeArray<Statement> { return this.ast.data.statements?.nodes!; } // TODO: remove `!`
-    set statements(value) { this.ast.data.statements = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get statements(): NodeArray<Statement> {
+        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+    }
+    set statements(value) {
+        this.ast.data.statements = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -6831,8 +10011,7 @@ export class AstModuleBlockData extends AstData {
 /** @internal */
 export type ModuleReference =
     | EntityName
-    | ExternalModuleReference
-    ;
+    | ExternalModuleReference;
 
 /** @internal */
 export type AstModuleReference = AstNodeOneOf<ModuleReference>;
@@ -6845,23 +10024,55 @@ export class ImportEqualsDeclaration extends Node<SyntaxKind.ImportEqualsDeclara
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ModuleBlock | SourceFile; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ModuleBlock | SourceFile;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
-    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
-    get moduleReference(): ModuleReference { return this.ast.data.moduleReference?.node; }
-    set moduleReference(value) { this.ast.data.moduleReference = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get isTypeOnly(): boolean {
+        return this.ast.data.isTypeOnly;
+    }
+    set isTypeOnly(value) {
+        this.ast.data.isTypeOnly = value;
+    }
+    get moduleReference(): ModuleReference {
+        return this.ast.data.moduleReference?.node;
+    }
+    set moduleReference(value) {
+        this.ast.data.moduleReference = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6892,11 +10103,19 @@ export class AstImportEqualsDeclarationData extends AstData {
 export class ExternalModuleReference extends Node<SyntaxKind.ExternalModuleReference, AstExternalModuleReferenceData> implements ts.ExternalModuleReference {
     declare readonly ast: AstExternalModuleReference;
 
-    override get parent() { return super.parent as ImportEqualsDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportEqualsDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -6917,26 +10136,62 @@ export class ImportDeclaration extends Node<SyntaxKind.ImportDeclaration, AstImp
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as ModuleBlock | SourceFile; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ModuleBlock | SourceFile;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get importClause(): ImportClause | undefined { return this.ast.data.importClause?.node; }
-    set importClause(value) { this.ast.data.importClause = value?.ast; }
-    get moduleSpecifier(): Expression { return this.ast.data.moduleSpecifier?.node; }
-    set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value?.ast; }
-    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get importClause(): ImportClause | undefined {
+        return this.ast.data.importClause?.node;
+    }
+    set importClause(value) {
+        this.ast.data.importClause = value?.ast;
+    }
+    get moduleSpecifier(): Expression {
+        return this.ast.data.moduleSpecifier?.node;
+    }
+    set moduleSpecifier(value) {
+        this.ast.data.moduleSpecifier = value?.ast;
+    }
+    get attributes(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
     /** @deprecated */
-    get assertClause(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set assertClause(value) { this.ast.data.attributes = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get assertClause(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set assertClause(value) {
+        this.ast.data.attributes = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -6961,8 +10216,7 @@ export class AstImportDeclarationData extends AstData {
 /** @internal */
 export type NamedImportBindings =
     | NamespaceImport
-    | NamedImports
-    ;
+    | NamedImports;
 
 /** @internal */
 export type AstNamedImportBindings = AstNodeOneOf<NamedImportBindings>;
@@ -6970,8 +10224,7 @@ export type AstNamedImportBindings = AstNodeOneOf<NamedImportBindings>;
 /** @internal */
 export type NamedExportBindings =
     | NamespaceExport
-    | NamedExports
-    ;
+    | NamedExports;
 
 /** @internal */
 export type AstNamedExportBindings = AstNodeOneOf<NamedExportBindings>;
@@ -6982,19 +10235,43 @@ export class ImportClause extends Node<SyntaxKind.ImportClause, AstImportClauseD
 
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as ImportDeclaration | JSDocImportTag; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportDeclaration | JSDocImportTag;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
-    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get namedBindings(): NamedImportBindings | undefined { return this.ast.data.namedBindings?.node; }
-    set namedBindings(value) { this.ast.data.namedBindings = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get isTypeOnly(): boolean {
+        return this.ast.data.isTypeOnly;
+    }
+    set isTypeOnly(value) {
+        this.ast.data.isTypeOnly = value;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get namedBindings(): NamedImportBindings | undefined {
+        return this.ast.data.namedBindings?.node;
+    }
+    set namedBindings(value) {
+        this.ast.data.namedBindings = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7020,8 +10297,7 @@ export class AstImportClauseData extends AstData {
 /** @internal */
 export type AssertionKey =
     | Identifier
-    | StringLiteral
-    ;
+    | StringLiteral;
 
 /** @internal */
 export type AstAssertionKey = AstNodeOneOf<AssertionKey>;
@@ -7050,13 +10326,25 @@ export type AstImportAttributeName = AstNodeOneOf<ImportAttributeName>;
 export class ImportAttribute extends Node<SyntaxKind.ImportAttribute, AstImportAttributeData> implements ts.ImportAttribute {
     declare readonly ast: AstImportAttribute;
 
-    override get parent() { return super.parent as ImportAttributes; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportAttributes;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): ImportAttributeName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get value(): Expression { return this.ast.data.value?.node; }
-    set value(value) { this.ast.data.value = value?.ast; }
+    get name(): ImportAttributeName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get value(): Expression {
+        return this.ast.data.value?.node;
+    }
+    set value(value) {
+        this.ast.data.value = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7085,15 +10373,31 @@ export type AstAssertClause = AstNode<AssertClause>;
 export class ImportAttributes extends Node<SyntaxKind.ImportAttributes, AstImportAttributesData> implements ts.ImportAttributes {
     declare readonly ast: AstImportAttributes;
 
-    override get parent() { return super.parent as ImportDeclaration | ExportDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportDeclaration | ExportDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get token(): ts.SyntaxKind.WithKeyword | ts.SyntaxKind.AssertKeyword { return this.ast.data.token; }
-    set token(value) { this.ast.data.token = value; }
-    get elements(): NodeArray<ImportAttribute> { return this.ast.data.elements?.nodes!; } // TODO: remove `!`
-    set elements(value) { this.ast.data.elements = value?.ast; }
-    get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
-    set multiLine(value) { this.ast.data.multiLine = value; }
+    get token(): ts.SyntaxKind.WithKeyword | ts.SyntaxKind.AssertKeyword {
+        return this.ast.data.token;
+    }
+    set token(value) {
+        this.ast.data.token = value;
+    }
+    get elements(): NodeArray<ImportAttribute> {
+        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+    }
+    set elements(value) {
+        this.ast.data.elements = value?.ast;
+    }
+    get multiLine(): boolean | undefined {
+        return this.ast.data.multiLine;
+    }
+    set multiLine(value) {
+        this.ast.data.multiLine = value;
+    }
 }
 
 /** @internal */
@@ -7113,15 +10417,31 @@ export class NamespaceImport extends Node<SyntaxKind.NamespaceImport, AstNamespa
 
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as ImportClause; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportClause;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7143,15 +10463,31 @@ export class NamespaceExport extends Node<SyntaxKind.NamespaceExport, AstNamespa
 
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as ExportDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ExportDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): ModuleExportName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): ModuleExportName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7177,16 +10513,36 @@ export class NamespaceExportDeclaration extends Node<SyntaxKind.NamespaceExportD
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7211,28 +10567,68 @@ export class ExportDeclaration extends Node<SyntaxKind.ExportDeclaration, AstExp
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as SourceFile | ModuleBlock; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as SourceFile | ModuleBlock;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
-    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
-    get exportClause(): NamedExportBindings | undefined { return this.ast.data.exportClause?.node; }
-    set exportClause(value) { this.ast.data.exportClause = value?.ast; }
-    get moduleSpecifier(): Expression | undefined { return this.ast.data.moduleSpecifier?.node; }
-    set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value?.ast; }
-    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get isTypeOnly(): boolean {
+        return this.ast.data.isTypeOnly;
+    }
+    set isTypeOnly(value) {
+        this.ast.data.isTypeOnly = value;
+    }
+    get exportClause(): NamedExportBindings | undefined {
+        return this.ast.data.exportClause?.node;
+    }
+    set exportClause(value) {
+        this.ast.data.exportClause = value?.ast;
+    }
+    get moduleSpecifier(): Expression | undefined {
+        return this.ast.data.moduleSpecifier?.node;
+    }
+    set moduleSpecifier(value) {
+        this.ast.data.moduleSpecifier = value?.ast;
+    }
+    get attributes(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
     /** @deprecated */
-    get assertClause(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set assertClause(value) { this.ast.data.attributes = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get assertClause(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set assertClause(value) {
+        this.ast.data.attributes = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7260,11 +10656,19 @@ export class AstExportDeclarationData extends AstData {
 export class NamedImports extends Node<SyntaxKind.NamedImports, AstNamedImportsData> implements ts.NamedImports {
     declare readonly ast: AstNamedImports;
 
-    override get parent() { return super.parent as ImportClause; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ImportClause;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get elements(): NodeArray<ImportSpecifier> { return this.ast.data.elements.nodes; }
-    set elements(value) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<ImportSpecifier> {
+        return this.ast.data.elements.nodes;
+    }
+    set elements(value) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7282,11 +10686,19 @@ export class AstNamedImportsData extends AstData {
 export class NamedExports extends Node<SyntaxKind.NamedExports, AstNamedExportsData> implements ts.NamedExports {
     declare readonly ast: AstNamedExports;
 
-    override get parent() { return super.parent as ExportDeclaration; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as ExportDeclaration;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get elements(): NodeArray<ExportSpecifier> { return this.ast.data.elements?.nodes!; } // TODO: remove '!'
-    set elements(value) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<ExportSpecifier> {
+        return this.ast.data.elements?.nodes!;
+    } // TODO: remove '!'
+    set elements(value) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7306,19 +10718,43 @@ export class ImportSpecifier extends Node<SyntaxKind.ImportSpecifier, AstImportS
 
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as NamedImports; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as NamedImports;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get propertyName(): ModuleExportName | undefined { return this.ast.data.propertyName?.node; }
-    set propertyName(value) { this.ast.data.propertyName = value?.ast; }
-    get name(): Identifier { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
-    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get propertyName(): ModuleExportName | undefined {
+        return this.ast.data.propertyName?.node;
+    }
+    set propertyName(value) {
+        this.ast.data.propertyName = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get isTypeOnly(): boolean {
+        return this.ast.data.isTypeOnly;
+    }
+    set isTypeOnly(value) {
+        this.ast.data.isTypeOnly = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7345,22 +10781,50 @@ export class ExportSpecifier extends Node<SyntaxKind.ExportSpecifier, AstExportS
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
 
-    override get parent() { return super.parent as NamedExports; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as NamedExports;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
-    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
-    get propertyName(): ModuleExportName | undefined { return this.ast.data.propertyName?.node; }
-    set propertyName(value) { this.ast.data.propertyName = value?.ast; }
-    get name(): ModuleExportName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get isTypeOnly(): boolean {
+        return this.ast.data.isTypeOnly;
+    }
+    set isTypeOnly(value) {
+        this.ast.data.isTypeOnly = value;
+    }
+    get propertyName(): ModuleExportName | undefined {
+        return this.ast.data.propertyName?.node;
+    }
+    set propertyName(value) {
+        this.ast.data.propertyName = value?.ast;
+    }
+    get name(): ModuleExportName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7398,21 +10862,49 @@ export class ExportAssignment extends Node<SyntaxKind.ExportAssignment, AstExpor
     declare _jsdocContainerBrand: any;
     declare name: never;
 
-    override get parent() { return super.parent as SourceFile; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as SourceFile;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
-    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get isExportEquals(): boolean | undefined { return this.ast.data.isExportEquals; }
-    set isExportEquals(value) { this.ast.data.isExportEquals = value; }
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value) { this.ast.data.expression = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get modifiers(): NodeArray<ModifierLike> | undefined {
+        return this.ast.data.modifiers?.nodes;
+    }
+    set modifiers(value) {
+        this.ast.data.modifiers = value?.ast;
+    }
+    get isExportEquals(): boolean | undefined {
+        return this.ast.data.isExportEquals;
+    }
+    set isExportEquals(value) {
+        this.ast.data.isExportEquals = value;
+    }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value) {
+        this.ast.data.expression = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -7438,8 +10930,12 @@ export class JSDocTypeExpression extends Node<SyntaxKind.JSDocTypeExpression, As
 
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7451,8 +10947,12 @@ export class AstJSDocTypeExpressionData extends AstData {
 export class JSDocNameReference extends Node<SyntaxKind.JSDocNameReference, AstJSDocNameReferenceData> implements ts.JSDocNameReference {
     declare readonly ast: AstJSDocNameReference;
 
-    get name(): EntityName | JSDocMemberName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
+    get name(): EntityName | JSDocMemberName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7464,10 +10964,18 @@ export class AstJSDocNameReferenceData extends AstData {
 export class JSDocMemberName extends Node<SyntaxKind.JSDocMemberName, AstJSDocMemberNameData> implements ts.JSDocMemberName {
     declare readonly ast: AstJSDocMemberName;
 
-    get left(): EntityName | JSDocMemberName { return this.ast.data.left?.node; }
-    set left(value) { this.ast.data.left = value?.ast; }
-    get right(): Identifier { return this.ast.data.right?.node; }
-    set right(value) { this.ast.data.right = value?.ast; }
+    get left(): EntityName | JSDocMemberName {
+        return this.ast.data.left?.node;
+    }
+    set left(value) {
+        this.ast.data.left = value?.ast;
+    }
+    get right(): Identifier {
+        return this.ast.data.right?.node;
+    }
+    set right(value) {
+        this.ast.data.right = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7521,10 +11029,18 @@ export class JSDocNonNullableType extends Node<SyntaxKind.JSDocNonNullableType, 
     declare _jsDocTypeBrand: any;
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get postfix(): boolean { return this.ast.data.postfix; }
-    set postfix(value) { this.ast.data.postfix = value; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get postfix(): boolean {
+        return this.ast.data.postfix;
+    }
+    set postfix(value) {
+        this.ast.data.postfix = value;
+    }
 }
 
 /** @internal */
@@ -7540,10 +11056,18 @@ export class JSDocNullableType extends Node<SyntaxKind.JSDocNullableType, AstJSD
     declare _jsDocTypeBrand: any;
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get postfix(): boolean { return this.ast.data.postfix; }
-    set postfix(value) { this.ast.data.postfix = value; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get postfix(): boolean {
+        return this.ast.data.postfix;
+    }
+    set postfix(value) {
+        this.ast.data.postfix = value;
+    }
 }
 
 /** @internal */
@@ -7559,8 +11083,12 @@ export class JSDocOptionalType extends Node<SyntaxKind.JSDocOptionalType, AstJSD
     declare _jsDocTypeBrand: any;
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7579,24 +11107,60 @@ export class JSDocFunctionType extends Node<SyntaxKind.JSDocFunctionType, AstJSD
     declare _localsContainerBrand: any;
     declare name: never;
 
-    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters?.nodes!; } // TODO: remove `!`
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
-    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<ParameterDeclaration> {
+        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): TypeNode | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get typeArguments(): NodeArray<TypeNode> | undefined {
+        return this.ast.data.typeArguments?.nodes;
+    }
+    set typeArguments(value) {
+        this.ast.data.typeArguments = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -7619,8 +11183,12 @@ export class JSDocVariadicType extends Node<SyntaxKind.JSDocVariadicType, AstJSD
     declare _jsDocTypeBrand: any;
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7635,8 +11203,12 @@ export class JSDocNamepathType extends Node<SyntaxKind.JSDocNamepathType, AstJSD
     declare _jsDocTypeBrand: any;
     declare _typeNodeBrand: any;
 
-    get type(): TypeNode { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
+    get type(): TypeNode {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
 }
 
 /** @internal */
@@ -7648,16 +11220,26 @@ export class AstJSDocNamepathTypeData extends AstData {
 export class JSDocNode extends Node<SyntaxKind.JSDoc, AstJSDocNodeData> implements ts.JSDoc {
     declare readonly ast: AstJSDocNode;
 
-    override get parent() { return super.parent as HasJSDoc; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as HasJSDoc;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get tags(): NodeArray<BaseJSDocTag> | undefined { return this.ast.data.tags?.nodes; }
-    set tags(value) { this.ast.data.tags = value?.ast; }
+    get tags(): NodeArray<BaseJSDocTag> | undefined {
+        return this.ast.data.tags?.nodes;
+    }
+    set tags(value) {
+        this.ast.data.tags = value?.ast;
+    }
     get comment(): string | NodeArray<JSDocComment> | undefined {
         const comment = this.ast.data.comment;
         return typeof comment === "string" ? comment : comment?.nodes;
     }
-    set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
+    set comment(value) {
+        this.ast.data.comment = typeof value === "string" ? value : value?.ast;
+    }
 }
 
 /** @internal */
@@ -7762,8 +11344,7 @@ export type JSDocTag =
     | JSDocPropertyTag
     | JSDocParameterTag
     | JSDocSatisfiesTag
-    | JSDocImportTag
-    ;
+    | JSDocImportTag;
 
 /** @internal */
 export type AstJSDocTag = AstNodeOneOf<JSDocTag>;
@@ -7772,10 +11353,18 @@ export type AstJSDocTag = AstNodeOneOf<JSDocTag>;
 export class JSDocLink extends Node<SyntaxKind.JSDocLink, AstJSDocLinkData> implements ts.JSDocLink {
     declare readonly ast: AstJSDocLink;
 
-    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
+    get name(): EntityName | JSDocMemberName | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
 }
 
 /** @internal */
@@ -7788,10 +11377,18 @@ export class AstJSDocLinkData extends AstData {
 export class JSDocLinkCode extends Node<SyntaxKind.JSDocLinkCode, AstJSDocLinkCodeData> implements ts.JSDocLinkCode {
     declare readonly ast: AstJSDocLinkCode;
 
-    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
+    get name(): EntityName | JSDocMemberName | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
 }
 
 /** @internal */
@@ -7804,10 +11401,18 @@ export class AstJSDocLinkCodeData extends AstData {
 export class JSDocLinkPlain extends Node<SyntaxKind.JSDocLinkPlain, AstJSDocLinkPlainData> implements ts.JSDocLinkPlain {
     declare readonly ast: AstJSDocLinkPlain;
 
-    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
+    get name(): EntityName | JSDocMemberName | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
 }
 
 /** @internal */
@@ -7821,8 +11426,7 @@ export type JSDocComment =
     | JSDocText
     | JSDocLink
     | JSDocLinkCode
-    | JSDocLinkPlain
-    ;
+    | JSDocLinkPlain;
 
 /** @internal */
 export type AstJSDocComment = AstNodeOneOf<JSDocComment>;
@@ -7831,8 +11435,12 @@ export type AstJSDocComment = AstNodeOneOf<JSDocComment>;
 export class JSDocText extends Node<SyntaxKind.JSDocText, AstJSDocTextData> implements ts.JSDocText {
     declare readonly ast: AstJSDocText;
 
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
 }
 
 /** @internal */
@@ -7844,16 +11452,26 @@ export class AstJSDocTextData extends AstData {
 export class BaseJSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJSDocTagData = AstJSDocTagData> extends Node<TKind, T> implements ts.JSDocTag {
     declare readonly ast: AstBaseJSDocTag<TKind, T>;
 
-    override get parent() { return super.parent as JSDocNode | JSDocTypeLiteral; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode | JSDocTypeLiteral;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get tagName(): Identifier { return this.ast.data.tagName?.node; }
-    set tagName(value) { this.ast.data.tagName = value?.ast; }
+    get tagName(): Identifier {
+        return this.ast.data.tagName?.node;
+    }
+    set tagName(value) {
+        this.ast.data.tagName = value?.ast;
+    }
     get comment(): string | NodeArray<JSDocLink | JSDocLinkCode | JSDocLinkPlain | JSDocText> | undefined {
         const comment = this.ast.data.comment;
         return typeof comment === "string" ? comment : comment?.nodes;
     }
-    set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
+    set comment(value) {
+        this.ast.data.comment = typeof value === "string" ? value : value?.ast;
+    }
 }
 
 /** @internal */
@@ -7896,8 +11514,12 @@ export interface AstJSDocClassReferenceData extends AstExpressionWithTypeArgumen
 /** @internal */
 export class JSDocAugmentsTag extends BaseJSDocTag<SyntaxKind.JSDocAugmentsTag, AstJSDocAugmentsTagData> implements ts.JSDocAugmentsTag {
     declare readonly ast: AstJSDocAugmentsTag;
-    get class(): JSDocClassReference { return this.ast.data.class.node; }
-    set class(value) { this.ast.data.class = value.ast; }
+    get class(): JSDocClassReference {
+        return this.ast.data.class.node;
+    }
+    set class(value) {
+        this.ast.data.class = value.ast;
+    }
 }
 
 /** @internal */
@@ -7908,8 +11530,12 @@ export class AstJSDocAugmentsTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocImplementsTag extends BaseJSDocTag<SyntaxKind.JSDocImplementsTag, AstJSDocImplementsTagData> implements ts.JSDocImplementsTag {
     declare readonly ast: AstJSDocImplementsTag;
-    get class(): JSDocClassReference { return this.ast.data.class.node; }
-    set class(value) { this.ast.data.class = value.ast; }
+    get class(): JSDocClassReference {
+        return this.ast.data.class.node;
+    }
+    set class(value) {
+        this.ast.data.class = value.ast;
+    }
 }
 
 /** @internal */
@@ -7995,19 +11621,43 @@ export class JSDocEnumTag extends BaseJSDocTag<SyntaxKind.JSDocEnumTag, AstJSDoc
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get typeExpression(): JSDocTypeExpression {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -8023,8 +11673,12 @@ export class AstJSDocEnumTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocThisTag extends BaseJSDocTag<SyntaxKind.JSDocThisTag, AstJSDocThisTagData> implements ts.JSDocThisTag {
     declare readonly ast: AstJSDocThisTag;
-    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocTypeExpression {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8035,10 +11689,18 @@ export class AstJSDocThisTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocTemplateTag extends BaseJSDocTag<SyntaxKind.JSDocTemplateTag, AstJSDocTemplateTagData> implements ts.JSDocTemplateTag {
     declare readonly ast: AstJSDocTemplateTag;
-    get constraint(): JSDocTypeExpression | undefined { return this.ast.data.constraint?.node; }
-    set constraint(value) { this.ast.data.constraint = value?.ast; }
-    get typeParameters(): NodeArray<TypeParameterDeclaration> { return this.ast.data.typeParameters?.nodes!; } // TODO: remove `!`
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    get constraint(): JSDocTypeExpression | undefined {
+        return this.ast.data.constraint?.node;
+    }
+    set constraint(value) {
+        this.ast.data.constraint = value?.ast;
+    }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> {
+        return this.ast.data.typeParameters?.nodes!; // TODO: remove `!`
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8050,8 +11712,12 @@ export class AstJSDocTemplateTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocSeeTag extends BaseJSDocTag<SyntaxKind.JSDocSeeTag, AstJSDocSeeTagData> implements ts.JSDocSeeTag {
     declare readonly ast: AstJSDocSeeTag;
-    get name(): JSDocNameReference | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
+    get name(): JSDocNameReference | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8062,8 +11728,12 @@ export class AstJSDocSeeTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocReturnTag extends BaseJSDocTag<SyntaxKind.JSDocReturnTag, AstJSDocReturnTagData> implements ts.JSDocReturnTag {
     declare readonly ast: AstJSDocReturnTag;
-    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocTypeExpression | undefined {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8074,8 +11744,12 @@ export class AstJSDocReturnTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocTypeTag extends BaseJSDocTag<SyntaxKind.JSDocTypeTag, AstJSDocTypeTagData> implements ts.JSDocTypeTag {
     declare readonly ast: AstJSDocTypeTag;
-    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocTypeExpression {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8089,23 +11763,55 @@ export class JSDocTypedefTag extends BaseJSDocTag<SyntaxKind.JSDocTypedefTag, As
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined { return this.ast.data.fullName?.node; }
-    set fullName(value) { this.ast.data.fullName = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeExpression(): JSDocTypeLiteral | JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined {
+        return this.ast.data.fullName?.node;
+    }
+    set fullName(value) {
+        this.ast.data.fullName = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeExpression(): JSDocTypeLiteral | JSDocTypeExpression | undefined {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -8126,23 +11832,55 @@ export class JSDocCallbackTag extends BaseJSDocTag<SyntaxKind.JSDocCallbackTag, 
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined { return this.ast.data.fullName?.node; }
-    set fullName(value) { this.ast.data.fullName = value?.ast; }
-    get name(): Identifier | undefined { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeExpression(): JSDocSignature { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined {
+        return this.ast.data.fullName?.node;
+    }
+    set fullName(value) {
+        this.ast.data.fullName = value?.ast;
+    }
+    get name(): Identifier | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeExpression(): JSDocSignature {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -8161,11 +11899,19 @@ export class AstJSDocCallbackTagData extends AstJSDocTagData {
 export class JSDocOverloadTag extends BaseJSDocTag<SyntaxKind.JSDocOverloadTag, AstJSDocOverloadTagData> implements ts.JSDocOverloadTag {
     declare readonly ast: AstJSDocOverloadTag;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get typeExpression(): JSDocSignature { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocSignature {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8176,8 +11922,12 @@ export class AstJSDocOverloadTagData extends AstJSDocTagData {
 /** @internal */
 export class JSDocThrowsTag extends BaseJSDocTag<SyntaxKind.JSDocThrowsTag, AstJSDocThrowsTagData> implements ts.JSDocThrowsTag {
     declare readonly ast: AstJSDocThrowsTag;
-    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocTypeExpression | undefined {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8195,22 +11945,54 @@ export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSign
     declare _jsdocContainerBrand: any;
     declare _localsContainerBrand: any;
 
-    get typeParameters(): NodeArray<JSDocTemplateTag> | undefined { return this.ast.data.typeParameters?.nodes; }
-    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters(): NodeArray<JSDocParameterTag> { return this.ast.data.parameters.nodes; }
-    set parameters(value) { this.ast.data.parameters = value?.ast; }
-    get type(): JSDocReturnTag | undefined { return this.ast.data.type?.node; }
-    set type(value) { this.ast.data.type = value?.ast; }
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get typeParameters(): NodeArray<JSDocTemplateTag> | undefined {
+        return this.ast.data.typeParameters?.nodes;
+    }
+    set typeParameters(value) {
+        this.ast.data.typeParameters = value?.ast;
+    }
+    get parameters(): NodeArray<JSDocParameterTag> {
+        return this.ast.data.parameters.nodes;
+    }
+    set parameters(value) {
+        this.ast.data.parameters = value?.ast;
+    }
+    get type(): JSDocReturnTag | undefined {
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        this.ast.data.type = value?.ast;
+    }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value) {
+        this.ast.data.jsDoc = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 }
 
 /** @internal */
@@ -8231,21 +12013,49 @@ export class JSDocPropertyTag extends BaseJSDocTag<SyntaxKind.JSDocPropertyTag, 
     declare readonly ast: AstJSDocPropertyTag;
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): Identifier | QualifiedName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
-    get isNameFirst(): boolean { return this.ast.data.isNameFirst; }
-    set isNameFirst(value) { this.ast.data.isNameFirst = value; }
-    get isBracketed(): boolean { return this.ast.data.isBracketed; }
-    set isBracketed(value) { this.ast.data.isBracketed = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier | QualifiedName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeExpression(): JSDocTypeExpression | undefined {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
+    get isNameFirst(): boolean {
+        return this.ast.data.isNameFirst;
+    }
+    set isNameFirst(value) {
+        this.ast.data.isNameFirst = value;
+    }
+    get isBracketed(): boolean {
+        return this.ast.data.isBracketed;
+    }
+    set isBracketed(value) {
+        this.ast.data.isBracketed = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -8264,21 +12074,49 @@ export class JSDocParameterTag extends BaseJSDocTag<SyntaxKind.JSDocParameterTag
     declare readonly ast: AstJSDocParameterTag;
     declare _declarationBrand: any;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get name(): Identifier | QualifiedName { return this.ast.data.name?.node; }
-    set name(value) { this.ast.data.name = value?.ast; }
-    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
-    get isNameFirst(): boolean { return this.ast.data.isNameFirst; }
-    set isNameFirst(value) { this.ast.data.isNameFirst = value; }
-    get isBracketed(): boolean { return this.ast.data.isBracketed; }
-    set isBracketed(value) { this.ast.data.isBracketed = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get name(): Identifier | QualifiedName {
+        return this.ast.data.name?.node;
+    }
+    set name(value) {
+        this.ast.data.name = value?.ast;
+    }
+    get typeExpression(): JSDocTypeExpression | undefined {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
+    get isNameFirst(): boolean {
+        return this.ast.data.isNameFirst;
+    }
+    set isNameFirst(value) {
+        this.ast.data.isNameFirst = value;
+    }
+    get isBracketed(): boolean {
+        return this.ast.data.isBracketed;
+    }
+    set isBracketed(value) {
+        this.ast.data.isBracketed = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -8295,8 +12133,7 @@ export class AstJSDocParameterTagData extends AstJSDocTagData {
 /** @internal */
 export type JSDocPropertyLikeTag =
     | JSDocPropertyTag
-    | JSDocParameterTag
-    ;
+    | JSDocParameterTag;
 
 /** @internal */
 export type AstJSDocPropertyLikeTag = AstNodeOneOf<JSDocPropertyLikeTag>;
@@ -8309,14 +12146,30 @@ export class JSDocTypeLiteral extends Node<SyntaxKind.JSDocTypeLiteral, AstJSDoc
     declare _typeNodeBrand: any;
     declare _declarationBrand: any;
 
-    get jsDocPropertyTags(): NodeArray<JSDocPropertyLikeTag> | undefined { return this.ast.data.jsDocPropertyTags?.nodes; }
-    set jsDocPropertyTags(value) { this.ast.data.jsDocPropertyTags = value?.ast; }
-    get isArrayType(): boolean { return this.ast.data.isArrayType; }
-    set isArrayType(value) { this.ast.data.isArrayType = value; }
-    get symbol(): ts.Symbol { return this.ast.data.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get jsDocPropertyTags(): NodeArray<JSDocPropertyLikeTag> | undefined {
+        return this.ast.data.jsDocPropertyTags?.nodes;
+    }
+    set jsDocPropertyTags(value) {
+        this.ast.data.jsDocPropertyTags = value?.ast;
+    }
+    get isArrayType(): boolean {
+        return this.ast.data.isArrayType;
+    }
+    set isArrayType(value) {
+        this.ast.data.isArrayType = value;
+    }
+    get symbol(): ts.Symbol {
+        return this.ast.data.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -8330,8 +12183,12 @@ export class AstJSDocTypeLiteralData extends AstData {
 /** @internal */
 export class JSDocSatisfiesTag extends BaseJSDocTag<SyntaxKind.JSDocSatisfiesTag, AstJSDocSatisfiesTagData> implements ts.JSDocSatisfiesTag {
     declare readonly ast: AstJSDocSatisfiesTag;
-    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression?.node; }
-    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get typeExpression(): JSDocTypeExpression {
+        return this.ast.data.typeExpression?.node;
+    }
+    set typeExpression(value) {
+        this.ast.data.typeExpression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8343,15 +12200,31 @@ export class AstJSDocSatisfiesTagData extends AstJSDocTagData {
 export class JSDocImportTag extends BaseJSDocTag<SyntaxKind.JSDocImportTag, AstJSDocImportTagData> implements ts.JSDocImportTag {
     declare readonly ast: AstJSDocImportTag;
 
-    override get parent() { return super.parent as JSDocNode; }
-    override set parent(value) { super.parent = value; }
+    override get parent() {
+        return super.parent as JSDocNode;
+    }
+    override set parent(value) {
+        super.parent = value;
+    }
 
-    get importClause(): ImportClause | undefined { return this.ast.data.importClause?.node; }
-    set importClause(value) { this.ast.data.importClause = value?.ast; }
-    get moduleSpecifier(): Expression { return this.ast.data.moduleSpecifier?.node; }
-    set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value?.ast; }
-    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
-    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get importClause(): ImportClause | undefined {
+        return this.ast.data.importClause?.node;
+    }
+    set importClause(value) {
+        this.ast.data.importClause = value?.ast;
+    }
+    get moduleSpecifier(): Expression {
+        return this.ast.data.moduleSpecifier?.node;
+    }
+    set moduleSpecifier(value) {
+        this.ast.data.moduleSpecifier = value?.ast;
+    }
+    get attributes(): ImportAttributes | undefined {
+        return this.ast.data.attributes?.node;
+    }
+    set attributes(value) {
+        this.ast.data.attributes = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8366,12 +12239,24 @@ export class SyntheticExpression extends Node<SyntaxKind.SyntheticExpression, As
     declare readonly ast: AstSyntheticExpression;
     declare _expressionBrand: any;
 
-    get isSpread(): boolean { return this.ast.data.isSpread; }
-    set isSpread(value: boolean) { this.ast.data.isSpread = value; }
-    get type(): ts.Type { return this.ast.data.type; }
-    set type(value: ts.Type) { this.ast.data.type = value; }
-    get tupleNameSource(): ParameterDeclaration | NamedTupleMember | undefined { return this.ast.data.tupleNameSource?.node; }
-    set tupleNameSource(value: ParameterDeclaration | NamedTupleMember | undefined) { this.ast.data.tupleNameSource = value?.ast; }
+    get isSpread(): boolean {
+        return this.ast.data.isSpread;
+    }
+    set isSpread(value: boolean) {
+        this.ast.data.isSpread = value;
+    }
+    get type(): ts.Type {
+        return this.ast.data.type;
+    }
+    set type(value: ts.Type) {
+        this.ast.data.type = value;
+    }
+    get tupleNameSource(): ParameterDeclaration | NamedTupleMember | undefined {
+        return this.ast.data.tupleNameSource?.node;
+    }
+    set tupleNameSource(value: ParameterDeclaration | NamedTupleMember | undefined) {
+        this.ast.data.tupleNameSource = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8385,16 +12270,36 @@ export class AstSyntheticExpressionData extends AstData {
 export class Bundle extends Node<SyntaxKind.Bundle, AstBundleData> implements ts.Bundle {
     declare readonly ast: AstBundle;
 
-    get sourceFiles(): readonly SourceFile[] { return this.ast.data.sourceFiles; }
-    set sourceFiles(value: readonly SourceFile[]) { this.ast.data.sourceFiles = value; }
-    get syntheticFileReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticFileReferences; }
-    set syntheticFileReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticFileReferences = value; }
-    get syntheticTypeReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticTypeReferences; }
-    set syntheticTypeReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticTypeReferences = value; }
-    get syntheticLibReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticLibReferences; }
-    set syntheticLibReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticLibReferences = value; }
-    get hasNoDefaultLib(): boolean | undefined { return this.ast.data.hasNoDefaultLib; }
-    set hasNoDefaultLib(value: boolean | undefined) { this.ast.data.hasNoDefaultLib = value; }
+    get sourceFiles(): readonly SourceFile[] {
+        return this.ast.data.sourceFiles;
+    }
+    set sourceFiles(value: readonly SourceFile[]) {
+        this.ast.data.sourceFiles = value;
+    }
+    get syntheticFileReferences(): readonly FileReference[] | undefined {
+        return this.ast.data.syntheticFileReferences;
+    }
+    set syntheticFileReferences(value: readonly FileReference[] | undefined) {
+        this.ast.data.syntheticFileReferences = value;
+    }
+    get syntheticTypeReferences(): readonly FileReference[] | undefined {
+        return this.ast.data.syntheticTypeReferences;
+    }
+    set syntheticTypeReferences(value: readonly FileReference[] | undefined) {
+        this.ast.data.syntheticTypeReferences = value;
+    }
+    get syntheticLibReferences(): readonly FileReference[] | undefined {
+        return this.ast.data.syntheticLibReferences;
+    }
+    set syntheticLibReferences(value: readonly FileReference[] | undefined) {
+        this.ast.data.syntheticLibReferences = value;
+    }
+    get hasNoDefaultLib(): boolean | undefined {
+        return this.ast.data.hasNoDefaultLib;
+    }
+    set hasNoDefaultLib(value: boolean | undefined) {
+        this.ast.data.hasNoDefaultLib = value;
+    }
 }
 
 /** @internal */
@@ -8408,8 +12313,12 @@ export class AstBundleData extends AstData {
 
 /** @internal */
 export class SyntaxList extends Node<SyntaxKind.SyntaxList, AstSyntaxListData> implements ts.SyntaxList {
-    get _children(): readonly Node[] { return this.ast.data._children; }
-    set _children(value: readonly Node[]) { this.ast.data._children = value; }
+    get _children(): readonly Node[] {
+        return this.ast.data._children;
+    }
+    set _children(value: readonly Node[]) {
+        this.ast.data._children = value;
+    }
 }
 
 /** @internal */
@@ -8424,8 +12333,12 @@ export class NotEmittedStatement extends Node<SyntaxKind.NotEmittedStatement, As
     declare _statementBrand: any;
     declare _jsdocContainerBrand: any;
 
-    get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
-    set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    get jsDoc(): JSDocArray | undefined {
+        return this.ast.data.jsDoc;
+    }
+    set jsDoc(value: JSDocArray | undefined) {
+        this.ast.data.jsDoc = value;
+    }
 }
 
 /** @internal */
@@ -8440,14 +12353,30 @@ export class NotEmittedTypeElement extends Node<SyntaxKind.NotEmittedTypeElement
     declare _typeElementBrand: any;
     declare _declarationBrand: any;
 
-    get name(): PropertyName | undefined { return this.ast.data.name?.node; }
-    set name(value: PropertyName | undefined) { this.ast.data.name = value?.ast; }
-    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
-    set questionToken(value: QuestionToken | undefined) { this.ast.data.questionToken = value?.ast; }
-    get symbol(): Symbol { return this.ast.data.symbol; }
-    set symbol(value: Symbol) { this.ast.data.symbol = value; }
-    get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
-    set localSymbol(value: Symbol | undefined) { this.ast.data.localSymbol = value; }
+    get name(): PropertyName | undefined {
+        return this.ast.data.name?.node;
+    }
+    set name(value: PropertyName | undefined) {
+        this.ast.data.name = value?.ast;
+    }
+    get questionToken(): QuestionToken | undefined {
+        return this.ast.data.questionToken?.node;
+    }
+    set questionToken(value: QuestionToken | undefined) {
+        this.ast.data.questionToken = value?.ast;
+    }
+    get symbol(): Symbol {
+        return this.ast.data.symbol;
+    }
+    set symbol(value: Symbol) {
+        this.ast.data.symbol = value;
+    }
+    get localSymbol(): Symbol | undefined {
+        return this.ast.data.localSymbol;
+    }
+    set localSymbol(value: Symbol | undefined) {
+        this.ast.data.localSymbol = value;
+    }
 }
 
 /** @internal */
@@ -8467,8 +12396,12 @@ export class PartiallyEmittedExpression extends Node<SyntaxKind.PartiallyEmitted
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value: Expression) { this.ast.data.expression = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: Expression) {
+        this.ast.data.expression = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8486,8 +12419,12 @@ export class CommaListExpression extends Node<SyntaxKind.CommaListExpression, As
 
     declare _expressionBrand: any;
 
-    get elements(): NodeArray<Expression> { return this.ast.data.elements.nodes; }
-    set elements(value: NodeArray<Expression>) { this.ast.data.elements = value?.ast; }
+    get elements(): NodeArray<Expression> {
+        return this.ast.data.elements.nodes;
+    }
+    set elements(value: NodeArray<Expression>) {
+        this.ast.data.elements = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8508,10 +12445,18 @@ export class SyntheticReferenceExpression extends Node<SyntaxKind.SyntheticRefer
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
 
-    get expression(): Expression { return this.ast.data.expression?.node; }
-    set expression(value: Expression) { this.ast.data.expression = value?.ast; }
-    get thisArg(): Expression { return this.ast.data.thisArg?.node; }
-    set thisArg(value: Expression) { this.ast.data.thisArg = value?.ast; }
+    get expression(): Expression {
+        return this.ast.data.expression?.node;
+    }
+    set expression(value: Expression) {
+        this.ast.data.expression = value?.ast;
+    }
+    get thisArg(): Expression {
+        return this.ast.data.thisArg?.node;
+    }
+    set thisArg(value: Expression) {
+        this.ast.data.thisArg = value?.ast;
+    }
 }
 
 /** @internal */
@@ -8532,129 +12477,365 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
 
-    get statements(): NodeArray<Statement> { return this.ast.data.statements?.nodes!; } // TODO: remove `!`
-    set statements(value) { this.ast.data.statements = value?.ast; }
-    get endOfFileToken(): EndOfFileToken { return this.ast.data.endOfFileToken?.node; }
-    set endOfFileToken(value) { this.ast.data.endOfFileToken = value?.ast; }
-    get fileName(): string { return this.ast.data.fileName; }
-    set fileName(value) { this.ast.data.fileName = value; }
+    get statements(): NodeArray<Statement> {
+        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+    }
+    set statements(value) {
+        this.ast.data.statements = value?.ast;
+    }
+    get endOfFileToken(): EndOfFileToken {
+        return this.ast.data.endOfFileToken?.node;
+    }
+    set endOfFileToken(value) {
+        this.ast.data.endOfFileToken = value?.ast;
+    }
+    get fileName(): string {
+        return this.ast.data.fileName;
+    }
+    set fileName(value) {
+        this.ast.data.fileName = value;
+    }
 
-    get path(): ts.Path { return this.ast.data.path; }
-    set path(value) { this.ast.data.path = value; }
-    get text(): string { return this.ast.data.text; }
-    set text(value) { this.ast.data.text = value; }
-    get resolvedPath(): ts.Path { return this.ast.data.resolvedPath; }
-    set resolvedPath(value) { this.ast.data.resolvedPath = value; }
-    get originalFileName(): string { return this.ast.data.originalFileName; }
-    set originalFileName(value) { this.ast.data.originalFileName = value; }
-    get amdDependencies(): ts.AmdDependency[] { return this.ast.data.amdDependencies; }
-    set amdDependencies(value) { this.ast.data.amdDependencies = value; }
-    get moduleName(): string | undefined { return this.ast.data.moduleName; }
-    set moduleName(value) { this.ast.data.moduleName = value; }
-    get referencedFiles(): readonly ts.FileReference[] { return this.ast.data.referencedFiles; }
-    set referencedFiles(value) { this.ast.data.referencedFiles = value; }
-    get typeReferenceDirectives(): readonly ts.FileReference[] { return this.ast.data.typeReferenceDirectives; }
-    set typeReferenceDirectives(value) { this.ast.data.typeReferenceDirectives = value; }
-    get libReferenceDirectives(): readonly ts.FileReference[] { return this.ast.data.libReferenceDirectives; }
-    set libReferenceDirectives(value) { this.ast.data.libReferenceDirectives = value; }
-    get languageVariant(): ts.LanguageVariant { return this.ast.data.languageVariant; }
-    set languageVariant(value) { this.ast.data.languageVariant = value; }
-    get isDeclarationFile(): boolean { return this.ast.data.isDeclarationFile; }
-    set isDeclarationFile(value) { this.ast.data.isDeclarationFile = value; }
-    get renamedDependencies(): Map<string, string> { return this.ast.data.renamedDependencies; }
-    set renamedDependencies(value) { this.ast.data.renamedDependencies = value; }
-    get hasNoDefaultLib(): boolean { return this.ast.data.hasNoDefaultLib; }
-    set hasNoDefaultLib(value) { this.ast.data.hasNoDefaultLib = value; }
-    get languageVersion(): ts.ScriptTarget { return this.ast.data.languageVersion; }
-    set languageVersion(value) { this.ast.data.languageVersion = value; }
-    get impliedNodeFormat(): ts.ResolutionMode { return this.ast.data.impliedNodeFormat; }
-    set impliedNodeFormat(value) { this.ast.data.impliedNodeFormat = value; }
-    get scriptKind(): ts.ScriptKind { return this.ast.data.scriptKind; }
-    set scriptKind(value) { this.ast.data.scriptKind = value; }
-    get pragmas(): ts.ReadonlyPragmaMap { return this.ast.data.pragmas; }
-    set pragmas(value) { this.ast.data.pragmas = value; }
-    get externalModuleIndicator(): true | Node | undefined { return this.ast.data.externalModuleIndicator; }
-    set externalModuleIndicator(value) { this.ast.data.externalModuleIndicator = value; }
-    get commonJsModuleIndicator(): Node | undefined { return this.ast.data.commonJsModuleIndicator; }
-    set commonJsModuleIndicator(value) { this.ast.data.commonJsModuleIndicator = value; }
-    get identifiers(): Map<string, string> { return this.ast.data.identifiers; }
-    set identifiers(value) { this.ast.data.identifiers = value; }
-    get parseDiagnostics(): ts.DiagnosticWithLocation[] { return this.ast.data.parseDiagnostics; }
-    set parseDiagnostics(value) { this.ast.data.parseDiagnostics = value; }
-    get bindDiagnostics(): ts.DiagnosticWithLocation[] { return this.ast.data.bindDiagnostics; }
-    set bindDiagnostics(value) { this.ast.data.bindDiagnostics = value; }
-    get bindSuggestionDiagnostics(): ts.DiagnosticWithLocation[] | undefined { return this.ast.data.bindSuggestionDiagnostics; }
-    set bindSuggestionDiagnostics(value) { this.ast.data.bindSuggestionDiagnostics = value; }
-    get lineMap(): readonly number[] { return this.ast.data.lineMap; }
-    set lineMap(value) { this.ast.data.lineMap = value; }
-    get jsDocDiagnostics(): ts.DiagnosticWithLocation[] | undefined { return this.ast.data.jsDocDiagnostics; }
-    set jsDocDiagnostics(value) { this.ast.data.jsDocDiagnostics = value; }
-    get commentDirectives(): ts.CommentDirective[] | undefined { return this.ast.data.commentDirectives; }
-    set commentDirectives(value) { this.ast.data.commentDirectives = value; }
-    get checkJsDirective(): ts.CheckJsDirective | undefined { return this.ast.data.checkJsDirective; }
-    set checkJsDirective(value) { this.ast.data.checkJsDirective = value; }
-    get version(): string { return this.ast.data.version; }
-    set version(value) { this.ast.data.version = value; }
+    get path(): ts.Path {
+        return this.ast.data.path;
+    }
+    set path(value) {
+        this.ast.data.path = value;
+    }
+    get text(): string {
+        return this.ast.data.text;
+    }
+    set text(value) {
+        this.ast.data.text = value;
+    }
+    get resolvedPath(): ts.Path {
+        return this.ast.data.resolvedPath;
+    }
+    set resolvedPath(value) {
+        this.ast.data.resolvedPath = value;
+    }
+    get originalFileName(): string {
+        return this.ast.data.originalFileName;
+    }
+    set originalFileName(value) {
+        this.ast.data.originalFileName = value;
+    }
+    get amdDependencies(): ts.AmdDependency[] {
+        return this.ast.data.amdDependencies;
+    }
+    set amdDependencies(value) {
+        this.ast.data.amdDependencies = value;
+    }
+    get moduleName(): string | undefined {
+        return this.ast.data.moduleName;
+    }
+    set moduleName(value) {
+        this.ast.data.moduleName = value;
+    }
+    get referencedFiles(): readonly ts.FileReference[] {
+        return this.ast.data.referencedFiles;
+    }
+    set referencedFiles(value) {
+        this.ast.data.referencedFiles = value;
+    }
+    get typeReferenceDirectives(): readonly ts.FileReference[] {
+        return this.ast.data.typeReferenceDirectives;
+    }
+    set typeReferenceDirectives(value) {
+        this.ast.data.typeReferenceDirectives = value;
+    }
+    get libReferenceDirectives(): readonly ts.FileReference[] {
+        return this.ast.data.libReferenceDirectives;
+    }
+    set libReferenceDirectives(value) {
+        this.ast.data.libReferenceDirectives = value;
+    }
+    get languageVariant(): ts.LanguageVariant {
+        return this.ast.data.languageVariant;
+    }
+    set languageVariant(value) {
+        this.ast.data.languageVariant = value;
+    }
+    get isDeclarationFile(): boolean {
+        return this.ast.data.isDeclarationFile;
+    }
+    set isDeclarationFile(value) {
+        this.ast.data.isDeclarationFile = value;
+    }
+    get renamedDependencies(): Map<string, string> {
+        return this.ast.data.renamedDependencies;
+    }
+    set renamedDependencies(value) {
+        this.ast.data.renamedDependencies = value;
+    }
+    get hasNoDefaultLib(): boolean {
+        return this.ast.data.hasNoDefaultLib;
+    }
+    set hasNoDefaultLib(value) {
+        this.ast.data.hasNoDefaultLib = value;
+    }
+    get languageVersion(): ts.ScriptTarget {
+        return this.ast.data.languageVersion;
+    }
+    set languageVersion(value) {
+        this.ast.data.languageVersion = value;
+    }
+    get impliedNodeFormat(): ts.ResolutionMode {
+        return this.ast.data.impliedNodeFormat;
+    }
+    set impliedNodeFormat(value) {
+        this.ast.data.impliedNodeFormat = value;
+    }
+    get scriptKind(): ts.ScriptKind {
+        return this.ast.data.scriptKind;
+    }
+    set scriptKind(value) {
+        this.ast.data.scriptKind = value;
+    }
+    get pragmas(): ts.ReadonlyPragmaMap {
+        return this.ast.data.pragmas;
+    }
+    set pragmas(value) {
+        this.ast.data.pragmas = value;
+    }
+    get externalModuleIndicator(): true | Node | undefined {
+        return this.ast.data.externalModuleIndicator;
+    }
+    set externalModuleIndicator(value) {
+        this.ast.data.externalModuleIndicator = value;
+    }
+    get commonJsModuleIndicator(): Node | undefined {
+        return this.ast.data.commonJsModuleIndicator;
+    }
+    set commonJsModuleIndicator(value) {
+        this.ast.data.commonJsModuleIndicator = value;
+    }
+    get identifiers(): Map<string, string> {
+        return this.ast.data.identifiers;
+    }
+    set identifiers(value) {
+        this.ast.data.identifiers = value;
+    }
+    get parseDiagnostics(): ts.DiagnosticWithLocation[] {
+        return this.ast.data.parseDiagnostics;
+    }
+    set parseDiagnostics(value) {
+        this.ast.data.parseDiagnostics = value;
+    }
+    get bindDiagnostics(): ts.DiagnosticWithLocation[] {
+        return this.ast.data.bindDiagnostics;
+    }
+    set bindDiagnostics(value) {
+        this.ast.data.bindDiagnostics = value;
+    }
+    get bindSuggestionDiagnostics(): ts.DiagnosticWithLocation[] | undefined {
+        return this.ast.data.bindSuggestionDiagnostics;
+    }
+    set bindSuggestionDiagnostics(value) {
+        this.ast.data.bindSuggestionDiagnostics = value;
+    }
+    get lineMap(): readonly number[] {
+        return this.ast.data.lineMap;
+    }
+    set lineMap(value) {
+        this.ast.data.lineMap = value;
+    }
+    get jsDocDiagnostics(): ts.DiagnosticWithLocation[] | undefined {
+        return this.ast.data.jsDocDiagnostics;
+    }
+    set jsDocDiagnostics(value) {
+        this.ast.data.jsDocDiagnostics = value;
+    }
+    get commentDirectives(): ts.CommentDirective[] | undefined {
+        return this.ast.data.commentDirectives;
+    }
+    set commentDirectives(value) {
+        this.ast.data.commentDirectives = value;
+    }
+    get checkJsDirective(): ts.CheckJsDirective | undefined {
+        return this.ast.data.checkJsDirective;
+    }
+    set checkJsDirective(value) {
+        this.ast.data.checkJsDirective = value;
+    }
+    get version(): string {
+        return this.ast.data.version;
+    }
+    set version(value) {
+        this.ast.data.version = value;
+    }
 
-    get symbol(): ts.Symbol { return this.ast.data.declaration.symbol!; } // TODO: remove `!`
-    set symbol(value) { this.ast.data.declaration.symbol = value; }
-    get localSymbol(): ts.Symbol | undefined { return this.ast.data.declaration.localSymbol; }
-    set localSymbol(value) { this.ast.data.declaration.localSymbol = value; }
-    get locals(): ts.SymbolTable | undefined { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get redirectInfo(): ts.RedirectInfo | undefined { return this.ast.data.redirectInfo; }
-    set redirectInfo(value) { this.ast.data.redirectInfo = value; }
-    get packageJsonLocations(): readonly string[] | undefined { return this.ast.data.packageJsonLocations; }
-    set packageJsonLocations(value) { this.ast.data.packageJsonLocations = value; }
-    get packageJsonScope(): ts.PackageJsonInfo | undefined { return this.ast.data.packageJsonScope; }
-    set packageJsonScope(value) { this.ast.data.packageJsonScope = value; }
-    get setExternalModuleIndicator(): ((file: ts.SourceFile) => void) | undefined { return this.ast.data.setExternalModuleIndicator; }
-    set setExternalModuleIndicator(value) { this.ast.data.setExternalModuleIndicator = value; }
-    get jsGlobalAugmentations(): ts.SymbolTable | undefined { return this.ast.data.jsGlobalAugmentations; }
-    set jsGlobalAugmentations(value) { this.ast.data.jsGlobalAugmentations = value; }
-    get nodeCount(): number { return this.ast.data.nodeCount; }
-    set nodeCount(value) { this.ast.data.nodeCount = value; }
-    get identifierCount(): number { return this.ast.data.identifierCount; }
-    set identifierCount(value) { this.ast.data.identifierCount = value; }
-    get symbolCount(): number { return this.ast.data.symbolCount; }
-    set symbolCount(value) { this.ast.data.symbolCount = value; }
-    get additionalSyntacticDiagnostics(): readonly ts.DiagnosticWithLocation[] | undefined { return this.ast.data.additionalSyntacticDiagnostics; }
-    set additionalSyntacticDiagnostics(value) { this.ast.data.additionalSyntacticDiagnostics = value; }
-    get classifiableNames(): ReadonlySet<ts.__String> | undefined { return this.ast.data.classifiableNames; }
-    set classifiableNames(value) { this.ast.data.classifiableNames = value; }
-    get imports(): readonly ts.StringLiteralLike[] { return this.ast.data.imports; }
-    set imports(value) { this.ast.data.imports = value; }
-    get moduleAugmentations(): readonly (ts.Identifier | ts.StringLiteral)[] { return this.ast.data.moduleAugmentations; }
-    set moduleAugmentations(value) { this.ast.data.moduleAugmentations = value; }
-    get patternAmbientModules(): ts.PatternAmbientModule[] | undefined { return this.ast.data.patternAmbientModules; }
-    set patternAmbientModules(value) { this.ast.data.patternAmbientModules = value; }
-    get ambientModuleNames(): readonly string[] { return this.ast.data.ambientModuleNames; }
-    set ambientModuleNames(value) { this.ast.data.ambientModuleNames = value; }
-    get localJsxNamespace(): ts.__String | undefined { return this.ast.data.localJsxNamespace; }
-    set localJsxNamespace(value) { this.ast.data.localJsxNamespace = value; }
-    get localJsxFragmentNamespace(): ts.__String | undefined { return this.ast.data.localJsxFragmentNamespace; }
-    set localJsxFragmentNamespace(value) { this.ast.data.localJsxFragmentNamespace = value; }
-    get localJsxFactory(): ts.EntityName | undefined { return this.ast.data.localJsxFactory; }
-    set localJsxFactory(value) { this.ast.data.localJsxFactory = value; }
-    get localJsxFragmentFactory(): ts.EntityName | undefined { return this.ast.data.localJsxFragmentFactory; }
-    set localJsxFragmentFactory(value) { this.ast.data.localJsxFragmentFactory = value; }
-    get endFlowNode(): ts.FlowNode | undefined { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
-    get jsDocParsingMode(): ts.JSDocParsingMode | undefined { return this.ast.data.jsDocParsingMode; }
-    set jsDocParsingMode(value) { this.ast.data.jsDocParsingMode = value; }
+    get symbol(): ts.Symbol {
+        return this.ast.data.declaration.symbol!; // TODO: remove `!`
+    }
+    set symbol(value) {
+        this.ast.data.declaration.symbol = value;
+    }
+    get localSymbol(): ts.Symbol | undefined {
+        return this.ast.data.declaration.localSymbol;
+    }
+    set localSymbol(value) {
+        this.ast.data.declaration.localSymbol = value;
+    }
+    get locals(): ts.SymbolTable | undefined {
+        return this.ast.data.locals;
+    }
+    set locals(value) {
+        this.ast.data.locals = value;
+    }
+    get redirectInfo(): ts.RedirectInfo | undefined {
+        return this.ast.data.redirectInfo;
+    }
+    set redirectInfo(value) {
+        this.ast.data.redirectInfo = value;
+    }
+    get packageJsonLocations(): readonly string[] | undefined {
+        return this.ast.data.packageJsonLocations;
+    }
+    set packageJsonLocations(value) {
+        this.ast.data.packageJsonLocations = value;
+    }
+    get packageJsonScope(): ts.PackageJsonInfo | undefined {
+        return this.ast.data.packageJsonScope;
+    }
+    set packageJsonScope(value) {
+        this.ast.data.packageJsonScope = value;
+    }
+    get setExternalModuleIndicator(): ((file: ts.SourceFile) => void) | undefined {
+        return this.ast.data.setExternalModuleIndicator;
+    }
+    set setExternalModuleIndicator(value) {
+        this.ast.data.setExternalModuleIndicator = value;
+    }
+    get jsGlobalAugmentations(): ts.SymbolTable | undefined {
+        return this.ast.data.jsGlobalAugmentations;
+    }
+    set jsGlobalAugmentations(value) {
+        this.ast.data.jsGlobalAugmentations = value;
+    }
+    get nodeCount(): number {
+        return this.ast.data.nodeCount;
+    }
+    set nodeCount(value) {
+        this.ast.data.nodeCount = value;
+    }
+    get identifierCount(): number {
+        return this.ast.data.identifierCount;
+    }
+    set identifierCount(value) {
+        this.ast.data.identifierCount = value;
+    }
+    get symbolCount(): number {
+        return this.ast.data.symbolCount;
+    }
+    set symbolCount(value) {
+        this.ast.data.symbolCount = value;
+    }
+    get additionalSyntacticDiagnostics(): readonly ts.DiagnosticWithLocation[] | undefined {
+        return this.ast.data.additionalSyntacticDiagnostics;
+    }
+    set additionalSyntacticDiagnostics(value) {
+        this.ast.data.additionalSyntacticDiagnostics = value;
+    }
+    get classifiableNames(): ReadonlySet<ts.__String> | undefined {
+        return this.ast.data.classifiableNames;
+    }
+    set classifiableNames(value) {
+        this.ast.data.classifiableNames = value;
+    }
+    get imports(): readonly ts.StringLiteralLike[] {
+        return this.ast.data.imports;
+    }
+    set imports(value) {
+        this.ast.data.imports = value;
+    }
+    get moduleAugmentations(): readonly (ts.Identifier | ts.StringLiteral)[] {
+        return this.ast.data.moduleAugmentations;
+    }
+    set moduleAugmentations(value) {
+        this.ast.data.moduleAugmentations = value;
+    }
+    get patternAmbientModules(): ts.PatternAmbientModule[] | undefined {
+        return this.ast.data.patternAmbientModules;
+    }
+    set patternAmbientModules(value) {
+        this.ast.data.patternAmbientModules = value;
+    }
+    get ambientModuleNames(): readonly string[] {
+        return this.ast.data.ambientModuleNames;
+    }
+    set ambientModuleNames(value) {
+        this.ast.data.ambientModuleNames = value;
+    }
+    get localJsxNamespace(): ts.__String | undefined {
+        return this.ast.data.localJsxNamespace;
+    }
+    set localJsxNamespace(value) {
+        this.ast.data.localJsxNamespace = value;
+    }
+    get localJsxFragmentNamespace(): ts.__String | undefined {
+        return this.ast.data.localJsxFragmentNamespace;
+    }
+    set localJsxFragmentNamespace(value) {
+        this.ast.data.localJsxFragmentNamespace = value;
+    }
+    get localJsxFactory(): ts.EntityName | undefined {
+        return this.ast.data.localJsxFactory;
+    }
+    set localJsxFactory(value) {
+        this.ast.data.localJsxFactory = value;
+    }
+    get localJsxFragmentFactory(): ts.EntityName | undefined {
+        return this.ast.data.localJsxFragmentFactory;
+    }
+    set localJsxFragmentFactory(value) {
+        this.ast.data.localJsxFragmentFactory = value;
+    }
+    get endFlowNode(): ts.FlowNode | undefined {
+        return this.ast.data.endFlowNode;
+    }
+    set endFlowNode(value) {
+        this.ast.data.endFlowNode = value;
+    }
+    get jsDocParsingMode(): ts.JSDocParsingMode | undefined {
+        return this.ast.data.jsDocParsingMode;
+    }
+    set jsDocParsingMode(value) {
+        this.ast.data.jsDocParsingMode = value;
+    }
 
-    get scriptSnapshot(): any { return this.ast.data.scriptSnapshot; }
-    set scriptSnapshot(value) { this.ast.data.scriptSnapshot = value; }
-    get nameTable(): Map<ts.__String, number> | undefined { return this.ast.data.nameTable; }
-    set nameTable(value) { this.ast.data.nameTable = value; }
+    get scriptSnapshot(): any {
+        return this.ast.data.scriptSnapshot;
+    }
+    set scriptSnapshot(value) {
+        this.ast.data.scriptSnapshot = value;
+    }
+    get nameTable(): Map<ts.__String, number> | undefined {
+        return this.ast.data.nameTable;
+    }
+    set nameTable(value) {
+        this.ast.data.nameTable = value;
+    }
 
-    get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast as NextContainer | undefined; }
+    get nextContainer(): HasLocals | undefined {
+        return this.ast.data.nextContainer?.node;
+    }
+    set nextContainer(value) {
+        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+    }
 
-    get extendedSourceFiles(): string[] | undefined { return this.ast.data.extendedSourceFiles; }
-    set extendedSourceFiles(value) { this.ast.data.extendedSourceFiles = value; }
-    get configFileSpecs(): ts.ConfigFileSpecs | undefined { return this.ast.data.configFileSpecs; }
-    set configFileSpecs(value) { this.ast.data.configFileSpecs = value; }
+    get extendedSourceFiles(): string[] | undefined {
+        return this.ast.data.extendedSourceFiles;
+    }
+    set extendedSourceFiles(value) {
+        this.ast.data.extendedSourceFiles = value;
+    }
+    get configFileSpecs(): ts.ConfigFileSpecs | undefined {
+        return this.ast.data.configFileSpecs;
+    }
+    set configFileSpecs(value) {
+        this.ast.data.configFileSpecs = value;
+    }
 
     public update(newText: string, textChangeRange: ts.TextChangeRange): ts.SourceFile {
         return updateSourceFile(this, newText, textChangeRange);
@@ -9492,7 +13673,7 @@ function hasInvalidEscape(template: AstTemplateLiteral): boolean {
 }
 
 function isNoSubstitutionTemplateLiteral(template: AstTemplateLiteral): template is AstNoSubstitutionTemplateLiteral {
-    return template.kind ===  SyntaxKind.NoSubstitutionTemplateLiteral;
+    return template.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
 }
 
 // copied from services/utilities.ts
@@ -9668,728 +13849,728 @@ export function skipAstOuterExpressions(node: AstNode, kinds: ts.OuterExpression
 
 /** @internal */
 export interface NodeType {
-    [SyntaxKind.Unknown]: Token<SyntaxKind.Unknown, AstTokenData>,
-    [SyntaxKind.EndOfFileToken]: EndOfFileToken,
-    [SyntaxKind.SingleLineCommentTrivia]: Token<SyntaxKind.SingleLineCommentTrivia, AstTokenData>,
-    [SyntaxKind.MultiLineCommentTrivia]: Token<SyntaxKind.MultiLineCommentTrivia, AstTokenData>,
-    [SyntaxKind.NewLineTrivia]: Token<SyntaxKind.NewLineTrivia, AstTokenData>,
-    [SyntaxKind.WhitespaceTrivia]: Token<SyntaxKind.WhitespaceTrivia, AstTokenData>,
-    [SyntaxKind.ShebangTrivia]: Token<SyntaxKind.ShebangTrivia, AstTokenData>,
-    [SyntaxKind.ConflictMarkerTrivia]: Token<SyntaxKind.ConflictMarkerTrivia, AstTokenData>,
-    [SyntaxKind.NonTextFileMarkerTrivia]: never,
-    [SyntaxKind.NumericLiteral]: NumericLiteral,
-    [SyntaxKind.BigIntLiteral]: BigIntLiteral,
-    [SyntaxKind.StringLiteral]: StringLiteral,
-    [SyntaxKind.JsxText]: JsxText,
-    [SyntaxKind.JsxTextAllWhiteSpaces]: never,
-    [SyntaxKind.RegularExpressionLiteral]: RegularExpressionLiteral,
-    [SyntaxKind.NoSubstitutionTemplateLiteral]: NoSubstitutionTemplateLiteral,
-    [SyntaxKind.TemplateHead]: TemplateHead,
-    [SyntaxKind.TemplateMiddle]: TemplateMiddle,
-    [SyntaxKind.TemplateTail]: TemplateTail,
-    [SyntaxKind.OpenBraceToken]: Token<SyntaxKind.OpenBraceToken, AstTokenData>,
-    [SyntaxKind.CloseBraceToken]: Token<SyntaxKind.CloseBraceToken, AstTokenData>,
-    [SyntaxKind.OpenParenToken]: Token<SyntaxKind.OpenParenToken, AstTokenData>,
-    [SyntaxKind.CloseParenToken]: Token<SyntaxKind.CloseParenToken, AstTokenData>,
-    [SyntaxKind.OpenBracketToken]: Token<SyntaxKind.OpenBracketToken, AstTokenData>,
-    [SyntaxKind.CloseBracketToken]: Token<SyntaxKind.CloseBracketToken, AstTokenData>,
-    [SyntaxKind.DotToken]: Token<SyntaxKind.DotToken, AstTokenData>,
-    [SyntaxKind.DotDotDotToken]: Token<SyntaxKind.DotDotDotToken, AstTokenData>,
-    [SyntaxKind.SemicolonToken]: Token<SyntaxKind.SemicolonToken, AstTokenData>,
-    [SyntaxKind.CommaToken]: Token<SyntaxKind.CommaToken, AstTokenData>,
-    [SyntaxKind.QuestionDotToken]: Token<SyntaxKind.QuestionDotToken, AstTokenData>,
-    [SyntaxKind.LessThanToken]: Token<SyntaxKind.LessThanToken, AstTokenData>,
-    [SyntaxKind.LessThanSlashToken]: Token<SyntaxKind.LessThanSlashToken, AstTokenData>,
-    [SyntaxKind.GreaterThanToken]: Token<SyntaxKind.GreaterThanToken, AstTokenData>,
-    [SyntaxKind.LessThanEqualsToken]: Token<SyntaxKind.LessThanEqualsToken, AstTokenData>,
-    [SyntaxKind.GreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanEqualsToken, AstTokenData>,
-    [SyntaxKind.EqualsEqualsToken]: Token<SyntaxKind.EqualsEqualsToken, AstTokenData>,
-    [SyntaxKind.ExclamationEqualsToken]: Token<SyntaxKind.ExclamationEqualsToken, AstTokenData>,
-    [SyntaxKind.EqualsEqualsEqualsToken]: Token<SyntaxKind.EqualsEqualsEqualsToken, AstTokenData>,
-    [SyntaxKind.ExclamationEqualsEqualsToken]: Token<SyntaxKind.ExclamationEqualsEqualsToken, AstTokenData>,
-    [SyntaxKind.EqualsGreaterThanToken]: Token<SyntaxKind.EqualsGreaterThanToken, AstTokenData>,
-    [SyntaxKind.PlusToken]: Token<SyntaxKind.PlusToken, AstTokenData>,
-    [SyntaxKind.MinusToken]: Token<SyntaxKind.MinusToken, AstTokenData>,
-    [SyntaxKind.AsteriskToken]: Token<SyntaxKind.AsteriskToken, AstTokenData>,
-    [SyntaxKind.AsteriskAsteriskToken]: Token<SyntaxKind.AsteriskAsteriskToken, AstTokenData>,
-    [SyntaxKind.SlashToken]: Token<SyntaxKind.SlashToken, AstTokenData>,
-    [SyntaxKind.PercentToken]: Token<SyntaxKind.PercentToken, AstTokenData>,
-    [SyntaxKind.PlusPlusToken]: Token<SyntaxKind.PlusPlusToken, AstTokenData>,
-    [SyntaxKind.MinusMinusToken]: Token<SyntaxKind.MinusMinusToken, AstTokenData>,
-    [SyntaxKind.LessThanLessThanToken]: Token<SyntaxKind.LessThanLessThanToken, AstTokenData>,
-    [SyntaxKind.GreaterThanGreaterThanToken]: Token<SyntaxKind.GreaterThanGreaterThanToken, AstTokenData>,
-    [SyntaxKind.GreaterThanGreaterThanGreaterThanToken]: Token<SyntaxKind.GreaterThanGreaterThanGreaterThanToken, AstTokenData>,
-    [SyntaxKind.AmpersandToken]: Token<SyntaxKind.AmpersandToken, AstTokenData>,
-    [SyntaxKind.BarToken]: Token<SyntaxKind.BarToken, AstTokenData>,
-    [SyntaxKind.CaretToken]: Token<SyntaxKind.CaretToken, AstTokenData>,
-    [SyntaxKind.ExclamationToken]: Token<SyntaxKind.ExclamationToken, AstTokenData>,
-    [SyntaxKind.TildeToken]: Token<SyntaxKind.TildeToken, AstTokenData>,
-    [SyntaxKind.AmpersandAmpersandToken]: Token<SyntaxKind.AmpersandAmpersandToken, AstTokenData>,
-    [SyntaxKind.BarBarToken]: Token<SyntaxKind.BarBarToken, AstTokenData>,
-    [SyntaxKind.QuestionToken]: Token<SyntaxKind.QuestionToken, AstTokenData>,
-    [SyntaxKind.ColonToken]: Token<SyntaxKind.ColonToken, AstTokenData>,
-    [SyntaxKind.AtToken]: Token<SyntaxKind.AtToken, AstTokenData>,
-    [SyntaxKind.QuestionQuestionToken]: Token<SyntaxKind.QuestionQuestionToken, AstTokenData>,
-    [SyntaxKind.BacktickToken]: Token<SyntaxKind.BacktickToken, AstTokenData>,
-    [SyntaxKind.HashToken]: Token<SyntaxKind.HashToken, AstTokenData>,
-    [SyntaxKind.EqualsToken]: Token<SyntaxKind.EqualsToken, AstTokenData>,
-    [SyntaxKind.PlusEqualsToken]: Token<SyntaxKind.PlusEqualsToken, AstTokenData>,
-    [SyntaxKind.MinusEqualsToken]: Token<SyntaxKind.MinusEqualsToken, AstTokenData>,
-    [SyntaxKind.AsteriskEqualsToken]: Token<SyntaxKind.AsteriskEqualsToken, AstTokenData>,
-    [SyntaxKind.AsteriskAsteriskEqualsToken]: Token<SyntaxKind.AsteriskAsteriskEqualsToken, AstTokenData>,
-    [SyntaxKind.SlashEqualsToken]: Token<SyntaxKind.SlashEqualsToken, AstTokenData>,
-    [SyntaxKind.PercentEqualsToken]: Token<SyntaxKind.PercentEqualsToken, AstTokenData>,
-    [SyntaxKind.LessThanLessThanEqualsToken]: Token<SyntaxKind.LessThanLessThanEqualsToken, AstTokenData>,
-    [SyntaxKind.GreaterThanGreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanGreaterThanEqualsToken, AstTokenData>,
-    [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken, AstTokenData>,
-    [SyntaxKind.AmpersandEqualsToken]: Token<SyntaxKind.AmpersandEqualsToken, AstTokenData>,
-    [SyntaxKind.BarEqualsToken]: Token<SyntaxKind.BarEqualsToken, AstTokenData>,
-    [SyntaxKind.BarBarEqualsToken]: Token<SyntaxKind.BarBarEqualsToken, AstTokenData>,
-    [SyntaxKind.AmpersandAmpersandEqualsToken]: Token<SyntaxKind.AmpersandAmpersandEqualsToken, AstTokenData>,
-    [SyntaxKind.QuestionQuestionEqualsToken]: Token<SyntaxKind.QuestionQuestionEqualsToken, AstTokenData>,
-    [SyntaxKind.CaretEqualsToken]: Token<SyntaxKind.CaretEqualsToken, AstTokenData>,
-    [SyntaxKind.Identifier]: Identifier,
-    [SyntaxKind.PrivateIdentifier]: PrivateIdentifier,
-    [SyntaxKind.JSDocCommentTextToken]: never,
-    [SyntaxKind.BreakKeyword]: Token<SyntaxKind.BreakKeyword, AstTokenData>,
-    [SyntaxKind.CaseKeyword]: Token<SyntaxKind.CaseKeyword, AstTokenData>,
-    [SyntaxKind.CatchKeyword]: Token<SyntaxKind.CatchKeyword, AstTokenData>,
-    [SyntaxKind.ClassKeyword]: Token<SyntaxKind.ClassKeyword, AstTokenData>,
-    [SyntaxKind.ConstKeyword]: Token<SyntaxKind.ConstKeyword, AstTokenData>,
-    [SyntaxKind.ContinueKeyword]: Token<SyntaxKind.ContinueKeyword, AstTokenData>,
-    [SyntaxKind.DebuggerKeyword]: Token<SyntaxKind.DebuggerKeyword, AstTokenData>,
-    [SyntaxKind.DefaultKeyword]: Token<SyntaxKind.DefaultKeyword, AstTokenData>,
-    [SyntaxKind.DeleteKeyword]: Token<SyntaxKind.DeleteKeyword, AstTokenData>,
-    [SyntaxKind.DoKeyword]: Token<SyntaxKind.DoKeyword, AstTokenData>,
-    [SyntaxKind.ElseKeyword]: Token<SyntaxKind.ElseKeyword, AstTokenData>,
-    [SyntaxKind.EnumKeyword]: Token<SyntaxKind.EnumKeyword, AstTokenData>,
-    [SyntaxKind.ExportKeyword]: Token<SyntaxKind.ExportKeyword, AstTokenData>,
-    [SyntaxKind.ExtendsKeyword]: Token<SyntaxKind.ExtendsKeyword, AstTokenData>,
-    [SyntaxKind.FalseKeyword]: FalseLiteral,
-    [SyntaxKind.FinallyKeyword]: Token<SyntaxKind.FinallyKeyword, AstTokenData>,
-    [SyntaxKind.ForKeyword]: Token<SyntaxKind.ForKeyword, AstTokenData>,
-    [SyntaxKind.FunctionKeyword]: Token<SyntaxKind.FunctionKeyword, AstTokenData>,
-    [SyntaxKind.IfKeyword]: Token<SyntaxKind.IfKeyword, AstTokenData>,
-    [SyntaxKind.ImportKeyword]: ImportExpression,
-    [SyntaxKind.InKeyword]: Token<SyntaxKind.InKeyword, AstTokenData>,
-    [SyntaxKind.InstanceOfKeyword]: Token<SyntaxKind.InstanceOfKeyword, AstTokenData>,
-    [SyntaxKind.NewKeyword]: Token<SyntaxKind.NewKeyword, AstTokenData>,
-    [SyntaxKind.NullKeyword]: NullLiteral,
-    [SyntaxKind.ReturnKeyword]: Token<SyntaxKind.ReturnKeyword, AstTokenData>,
-    [SyntaxKind.SuperKeyword]: SuperExpression,
-    [SyntaxKind.SwitchKeyword]: Token<SyntaxKind.SwitchKeyword, AstTokenData>,
-    [SyntaxKind.ThisKeyword]: ThisExpression,
-    [SyntaxKind.ThrowKeyword]: Token<SyntaxKind.ThrowKeyword, AstTokenData>,
-    [SyntaxKind.TrueKeyword]: TrueLiteral,
-    [SyntaxKind.TryKeyword]: Token<SyntaxKind.TryKeyword, AstTokenData>,
-    [SyntaxKind.TypeOfKeyword]: Token<SyntaxKind.TypeOfKeyword, AstTokenData>,
-    [SyntaxKind.VarKeyword]: Token<SyntaxKind.VarKeyword, AstTokenData>,
-    [SyntaxKind.VoidKeyword]: Token<SyntaxKind.VoidKeyword, AstTokenData>,
-    [SyntaxKind.WhileKeyword]: Token<SyntaxKind.WhileKeyword, AstTokenData>,
-    [SyntaxKind.WithKeyword]: Token<SyntaxKind.WithKeyword, AstTokenData>,
-    [SyntaxKind.ImplementsKeyword]: Token<SyntaxKind.ImplementsKeyword, AstTokenData>,
-    [SyntaxKind.InterfaceKeyword]: Token<SyntaxKind.InterfaceKeyword, AstTokenData>,
-    [SyntaxKind.LetKeyword]: Token<SyntaxKind.LetKeyword, AstTokenData>,
-    [SyntaxKind.PackageKeyword]: Token<SyntaxKind.PackageKeyword, AstTokenData>,
-    [SyntaxKind.PrivateKeyword]: Token<SyntaxKind.PrivateKeyword, AstTokenData>,
-    [SyntaxKind.ProtectedKeyword]: Token<SyntaxKind.ProtectedKeyword, AstTokenData>,
-    [SyntaxKind.PublicKeyword]: Token<SyntaxKind.PublicKeyword, AstTokenData>,
-    [SyntaxKind.StaticKeyword]: Token<SyntaxKind.StaticKeyword, AstTokenData>,
-    [SyntaxKind.YieldKeyword]: Token<SyntaxKind.YieldKeyword, AstTokenData>,
-    [SyntaxKind.AbstractKeyword]: Token<SyntaxKind.AbstractKeyword, AstTokenData>,
-    [SyntaxKind.AccessorKeyword]: Token<SyntaxKind.AccessorKeyword, AstTokenData>,
-    [SyntaxKind.AsKeyword]: Token<SyntaxKind.AsKeyword, AstTokenData>,
-    [SyntaxKind.AssertsKeyword]: Token<SyntaxKind.AssertsKeyword, AstTokenData>,
-    [SyntaxKind.AssertKeyword]: Token<SyntaxKind.AssertKeyword, AstTokenData>,
-    [SyntaxKind.AnyKeyword]: Token<SyntaxKind.AnyKeyword, AstTokenData>,
-    [SyntaxKind.AsyncKeyword]: Token<SyntaxKind.AsyncKeyword, AstTokenData>,
-    [SyntaxKind.AwaitKeyword]: Token<SyntaxKind.AwaitKeyword, AstTokenData>,
-    [SyntaxKind.BooleanKeyword]: Token<SyntaxKind.BooleanKeyword, AstTokenData>,
-    [SyntaxKind.ConstructorKeyword]: Token<SyntaxKind.ConstructorKeyword, AstTokenData>,
-    [SyntaxKind.DeclareKeyword]: Token<SyntaxKind.DeclareKeyword, AstTokenData>,
-    [SyntaxKind.GetKeyword]: Token<SyntaxKind.GetKeyword, AstTokenData>,
-    [SyntaxKind.InferKeyword]: Token<SyntaxKind.InferKeyword, AstTokenData>,
-    [SyntaxKind.IntrinsicKeyword]: Token<SyntaxKind.IntrinsicKeyword, AstTokenData>,
-    [SyntaxKind.IsKeyword]: Token<SyntaxKind.IsKeyword, AstTokenData>,
-    [SyntaxKind.KeyOfKeyword]: Token<SyntaxKind.KeyOfKeyword, AstTokenData>,
-    [SyntaxKind.ModuleKeyword]: Token<SyntaxKind.ModuleKeyword, AstTokenData>,
-    [SyntaxKind.NamespaceKeyword]: Token<SyntaxKind.NamespaceKeyword, AstTokenData>,
-    [SyntaxKind.NeverKeyword]: Token<SyntaxKind.NeverKeyword, AstTokenData>,
-    [SyntaxKind.OutKeyword]: Token<SyntaxKind.OutKeyword, AstTokenData>,
-    [SyntaxKind.ReadonlyKeyword]: Token<SyntaxKind.ReadonlyKeyword, AstTokenData>,
-    [SyntaxKind.RequireKeyword]: Token<SyntaxKind.RequireKeyword, AstTokenData>,
-    [SyntaxKind.NumberKeyword]: Token<SyntaxKind.NumberKeyword, AstTokenData>,
-    [SyntaxKind.ObjectKeyword]: Token<SyntaxKind.ObjectKeyword, AstTokenData>,
-    [SyntaxKind.SatisfiesKeyword]: Token<SyntaxKind.SatisfiesKeyword, AstTokenData>,
-    [SyntaxKind.SetKeyword]: Token<SyntaxKind.SetKeyword, AstTokenData>,
-    [SyntaxKind.StringKeyword]: Token<SyntaxKind.StringKeyword, AstTokenData>,
-    [SyntaxKind.SymbolKeyword]: Token<SyntaxKind.SymbolKeyword, AstTokenData>,
-    [SyntaxKind.TypeKeyword]: Token<SyntaxKind.TypeKeyword, AstTokenData>,
-    [SyntaxKind.UndefinedKeyword]: Token<SyntaxKind.UndefinedKeyword, AstTokenData>,
-    [SyntaxKind.UniqueKeyword]: Token<SyntaxKind.UniqueKeyword, AstTokenData>,
-    [SyntaxKind.UnknownKeyword]: Token<SyntaxKind.UnknownKeyword, AstTokenData>,
-    [SyntaxKind.UsingKeyword]: Token<SyntaxKind.UsingKeyword, AstTokenData>,
-    [SyntaxKind.FromKeyword]: Token<SyntaxKind.FromKeyword, AstTokenData>,
-    [SyntaxKind.GlobalKeyword]: Token<SyntaxKind.GlobalKeyword, AstTokenData>,
-    [SyntaxKind.BigIntKeyword]: Token<SyntaxKind.BigIntKeyword, AstTokenData>,
-    [SyntaxKind.OverrideKeyword]: Token<SyntaxKind.OverrideKeyword, AstTokenData>,
-    [SyntaxKind.OfKeyword]: Token<SyntaxKind.OfKeyword, AstTokenData>,
-    [SyntaxKind.QualifiedName]: QualifiedName,
-    [SyntaxKind.ComputedPropertyName]: ComputedPropertyName,
-    [SyntaxKind.Decorator]: Decorator,
-    [SyntaxKind.TypeParameter]: TypeParameterDeclaration,
-    [SyntaxKind.CallSignature]: CallSignatureDeclaration,
-    [SyntaxKind.ConstructSignature]: ConstructSignatureDeclaration,
-    [SyntaxKind.VariableDeclaration]: VariableDeclaration,
-    [SyntaxKind.VariableDeclarationList]: VariableDeclarationList,
-    [SyntaxKind.Parameter]: ParameterDeclaration,
-    [SyntaxKind.BindingElement]: BindingElement,
-    [SyntaxKind.PropertySignature]: PropertySignature,
-    [SyntaxKind.PropertyDeclaration]: PropertyDeclaration,
-    [SyntaxKind.PropertyAssignment]: PropertyAssignment,
-    [SyntaxKind.ShorthandPropertyAssignment]: ShorthandPropertyAssignment,
-    [SyntaxKind.SpreadAssignment]: SpreadAssignment,
-    [SyntaxKind.ObjectBindingPattern]: ObjectBindingPattern,
-    [SyntaxKind.ArrayBindingPattern]: ArrayBindingPattern,
-    [SyntaxKind.FunctionDeclaration]: FunctionDeclaration,
-    [SyntaxKind.MethodSignature]: MethodSignature,
-    [SyntaxKind.MethodDeclaration]: MethodDeclaration,
-    [SyntaxKind.Constructor]: ConstructorDeclaration,
-    [SyntaxKind.SemicolonClassElement]: SemicolonClassElement,
-    [SyntaxKind.GetAccessor]: GetAccessorDeclaration,
-    [SyntaxKind.SetAccessor]: SetAccessorDeclaration,
-    [SyntaxKind.IndexSignature]: IndexSignatureDeclaration,
-    [SyntaxKind.ClassStaticBlockDeclaration]: ClassStaticBlockDeclaration,
-    [SyntaxKind.ImportTypeAssertionContainer]: ImportTypeAssertionContainer,
-    [SyntaxKind.ImportType]: ImportTypeNode,
-    [SyntaxKind.ThisType]: ThisTypeNode,
-    [SyntaxKind.FunctionType]: FunctionTypeNode,
-    [SyntaxKind.ConstructorType]: ConstructorTypeNode,
-    [SyntaxKind.TypeReference]: TypeReferenceNode,
-    [SyntaxKind.TypePredicate]: TypePredicateNode,
-    [SyntaxKind.TypeQuery]: TypeQueryNode,
-    [SyntaxKind.TypeLiteral]: TypeLiteralNode,
-    [SyntaxKind.ArrayType]: ArrayTypeNode,
-    [SyntaxKind.TupleType]: TupleTypeNode,
-    [SyntaxKind.NamedTupleMember]: NamedTupleMember,
-    [SyntaxKind.OptionalType]: OptionalTypeNode,
-    [SyntaxKind.RestType]: RestTypeNode,
-    [SyntaxKind.UnionType]: UnionTypeNode,
-    [SyntaxKind.IntersectionType]: IntersectionTypeNode,
-    [SyntaxKind.ConditionalType]: ConditionalTypeNode,
-    [SyntaxKind.InferType]: InferTypeNode,
-    [SyntaxKind.ParenthesizedType]: ParenthesizedTypeNode,
-    [SyntaxKind.TypeOperator]: TypeOperatorNode,
-    [SyntaxKind.IndexedAccessType]: IndexedAccessTypeNode,
-    [SyntaxKind.MappedType]: MappedTypeNode,
-    [SyntaxKind.LiteralType]: LiteralTypeNode,
-    [SyntaxKind.TemplateLiteralType]: TemplateLiteralTypeNode,
-    [SyntaxKind.TemplateLiteralTypeSpan]: TemplateLiteralTypeSpan,
-    [SyntaxKind.OmittedExpression]: OmittedExpression,
-    [SyntaxKind.PrefixUnaryExpression]: PrefixUnaryExpression,
-    [SyntaxKind.PostfixUnaryExpression]: PostfixUnaryExpression,
-    [SyntaxKind.DeleteExpression]: DeleteExpression,
-    [SyntaxKind.TypeOfExpression]: TypeOfExpression,
-    [SyntaxKind.VoidExpression]: VoidExpression,
-    [SyntaxKind.AwaitExpression]: AwaitExpression,
-    [SyntaxKind.YieldExpression]: YieldExpression,
-    [SyntaxKind.BinaryExpression]: BinaryExpression,
-    [SyntaxKind.ConditionalExpression]: ConditionalExpression,
-    [SyntaxKind.FunctionExpression]: FunctionExpression,
-    [SyntaxKind.ArrowFunction]: ArrowFunction,
-    [SyntaxKind.TemplateExpression]: TemplateExpression,
-    [SyntaxKind.TemplateSpan]: TemplateSpan,
-    [SyntaxKind.ParenthesizedExpression]: ParenthesizedExpression,
-    [SyntaxKind.ArrayLiteralExpression]: ArrayLiteralExpression,
-    [SyntaxKind.SpreadElement]: SpreadElement,
-    [SyntaxKind.ObjectLiteralExpression]: ObjectLiteralExpression,
-    [SyntaxKind.PropertyAccessExpression]: PropertyAccessExpression,
-    [SyntaxKind.ElementAccessExpression]: ElementAccessExpression,
-    [SyntaxKind.CallExpression]: CallExpression,
-    [SyntaxKind.ExpressionWithTypeArguments]: ExpressionWithTypeArguments,
-    [SyntaxKind.NewExpression]: NewExpression,
-    [SyntaxKind.TaggedTemplateExpression]: TaggedTemplateExpression,
-    [SyntaxKind.AsExpression]: AsExpression,
-    [SyntaxKind.TypeAssertionExpression]: TypeAssertion,
-    [SyntaxKind.SyntheticExpression]: SyntheticExpression,
-    [SyntaxKind.SatisfiesExpression]: SatisfiesExpression,
-    [SyntaxKind.NonNullExpression]: NonNullExpression,
-    [SyntaxKind.MetaProperty]: MetaProperty,
-    [SyntaxKind.JsxElement]: JsxElement,
-    [SyntaxKind.JsxAttributes]: JsxAttributes,
-    [SyntaxKind.JsxNamespacedName]: JsxNamespacedName,
-    [SyntaxKind.JsxOpeningElement]: JsxOpeningElement,
-    [SyntaxKind.JsxSelfClosingElement]: JsxSelfClosingElement,
-    [SyntaxKind.JsxFragment]: JsxFragment,
-    [SyntaxKind.JsxOpeningFragment]: JsxOpeningFragment,
-    [SyntaxKind.JsxClosingFragment]: JsxClosingFragment,
-    [SyntaxKind.JsxAttribute]: JsxAttribute,
-    [SyntaxKind.JsxSpreadAttribute]: JsxSpreadAttribute,
-    [SyntaxKind.JsxClosingElement]: JsxClosingElement,
-    [SyntaxKind.JsxExpression]: JsxExpression,
-    [SyntaxKind.EmptyStatement]: EmptyStatement,
-    [SyntaxKind.DebuggerStatement]: DebuggerStatement,
-    [SyntaxKind.MissingDeclaration]: MissingDeclaration,
-    [SyntaxKind.Block]: Block,
-    [SyntaxKind.VariableStatement]: VariableStatement,
-    [SyntaxKind.ExpressionStatement]: ExpressionStatement,
-    [SyntaxKind.IfStatement]: IfStatement,
-    [SyntaxKind.DoStatement]: DoStatement,
-    [SyntaxKind.WhileStatement]: WhileStatement,
-    [SyntaxKind.ForStatement]: ForStatement,
-    [SyntaxKind.ForInStatement]: ForInStatement,
-    [SyntaxKind.ForOfStatement]: ForOfStatement,
-    [SyntaxKind.BreakStatement]: BreakStatement,
-    [SyntaxKind.ContinueStatement]: ContinueStatement,
-    [SyntaxKind.ReturnStatement]: ReturnStatement,
-    [SyntaxKind.WithStatement]: WithStatement,
-    [SyntaxKind.SwitchStatement]: SwitchStatement,
-    [SyntaxKind.CaseBlock]: CaseBlock,
-    [SyntaxKind.CaseClause]: CaseClause,
-    [SyntaxKind.DefaultClause]: DefaultClause,
-    [SyntaxKind.LabeledStatement]: LabeledStatement,
-    [SyntaxKind.ThrowStatement]: ThrowStatement,
-    [SyntaxKind.TryStatement]: TryStatement,
-    [SyntaxKind.CatchClause]: CatchClause,
-    [SyntaxKind.ClassDeclaration]: ClassDeclaration,
-    [SyntaxKind.ClassExpression]: ClassExpression,
-    [SyntaxKind.InterfaceDeclaration]: InterfaceDeclaration,
-    [SyntaxKind.HeritageClause]: HeritageClause,
-    [SyntaxKind.TypeAliasDeclaration]: TypeAliasDeclaration,
-    [SyntaxKind.EnumMember]: EnumMember,
-    [SyntaxKind.EnumDeclaration]: EnumDeclaration,
-    [SyntaxKind.ModuleDeclaration]: ModuleDeclaration,
-    [SyntaxKind.ModuleBlock]: ModuleBlock,
-    [SyntaxKind.ImportEqualsDeclaration]: ImportEqualsDeclaration,
-    [SyntaxKind.ExternalModuleReference]: ExternalModuleReference,
-    [SyntaxKind.ImportDeclaration]: ImportDeclaration,
-    [SyntaxKind.ImportClause]: ImportClause,
-    [SyntaxKind.ImportAttribute]: ImportAttribute,
-    [SyntaxKind.ImportAttributes]: ImportAttributes,
-    [SyntaxKind.NamespaceImport]: NamespaceImport,
-    [SyntaxKind.NamespaceExport]: NamespaceExport,
-    [SyntaxKind.NamespaceExportDeclaration]: NamespaceExportDeclaration,
-    [SyntaxKind.ExportDeclaration]: ExportDeclaration,
-    [SyntaxKind.NamedImports]: NamedImports,
-    [SyntaxKind.NamedExports]: NamedExports,
-    [SyntaxKind.ImportSpecifier]: ImportSpecifier,
-    [SyntaxKind.ExportSpecifier]: ExportSpecifier,
-    [SyntaxKind.ExportAssignment]: ExportAssignment,
-    [SyntaxKind.JSDocTypeExpression]: JSDocTypeExpression,
-    [SyntaxKind.JSDocNameReference]: JSDocNameReference,
-    [SyntaxKind.JSDocMemberName]: JSDocMemberName,
-    [SyntaxKind.JSDocAllType]: JSDocAllType,
-    [SyntaxKind.JSDocUnknownType]: JSDocUnknownType,
-    [SyntaxKind.JSDocNonNullableType]: JSDocNonNullableType,
-    [SyntaxKind.JSDocNullableType]: JSDocNullableType,
-    [SyntaxKind.JSDocOptionalType]: JSDocOptionalType,
-    [SyntaxKind.JSDocFunctionType]: JSDocFunctionType,
-    [SyntaxKind.JSDocVariadicType]: JSDocVariadicType,
-    [SyntaxKind.JSDocNamepathType]: JSDocNamepathType,
-    [SyntaxKind.JSDoc]: JSDocNode,
-    [SyntaxKind.JSDocLink]: JSDocLink,
-    [SyntaxKind.JSDocLinkCode]: JSDocLinkCode,
-    [SyntaxKind.JSDocLinkPlain]: JSDocLinkPlain,
-    [SyntaxKind.JSDocText]: JSDocText,
-    [SyntaxKind.JSDocTag]: JSDocUnknownTag,
-    [SyntaxKind.JSDocAugmentsTag]: JSDocAugmentsTag,
-    [SyntaxKind.JSDocImplementsTag]: JSDocImplementsTag,
-    [SyntaxKind.JSDocAuthorTag]: JSDocAuthorTag,
-    [SyntaxKind.JSDocDeprecatedTag]: JSDocDeprecatedTag,
-    [SyntaxKind.JSDocClassTag]: JSDocClassTag,
-    [SyntaxKind.JSDocPublicTag]: JSDocPublicTag,
-    [SyntaxKind.JSDocPrivateTag]: JSDocPrivateTag,
-    [SyntaxKind.JSDocProtectedTag]: JSDocProtectedTag,
-    [SyntaxKind.JSDocReadonlyTag]: JSDocReadonlyTag,
-    [SyntaxKind.JSDocOverrideTag]: JSDocOverrideTag,
-    [SyntaxKind.JSDocEnumTag]: JSDocEnumTag,
-    [SyntaxKind.JSDocThisTag]: JSDocThisTag,
-    [SyntaxKind.JSDocTemplateTag]: JSDocTemplateTag,
-    [SyntaxKind.JSDocSeeTag]: JSDocSeeTag,
-    [SyntaxKind.JSDocReturnTag]: JSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: JSDocTypeTag,
-    [SyntaxKind.JSDocTypedefTag]: JSDocTypedefTag,
-    [SyntaxKind.JSDocCallbackTag]: JSDocCallbackTag,
-    [SyntaxKind.JSDocOverloadTag]: JSDocOverloadTag,
-    [SyntaxKind.JSDocThrowsTag]: JSDocThrowsTag,
-    [SyntaxKind.JSDocSignature]: JSDocSignature,
-    [SyntaxKind.JSDocPropertyTag]: JSDocPropertyTag,
-    [SyntaxKind.JSDocParameterTag]: JSDocParameterTag,
-    [SyntaxKind.JSDocTypeLiteral]: JSDocTypeLiteral,
-    [SyntaxKind.JSDocSatisfiesTag]: JSDocSatisfiesTag,
-    [SyntaxKind.JSDocImportTag]: JSDocImportTag,
-    [SyntaxKind.SourceFile]: SourceFile,
-    [SyntaxKind.Bundle]: Bundle,
-    [SyntaxKind.SyntaxList]: SyntaxList,
-    [SyntaxKind.NotEmittedStatement]: NotEmittedStatement,
-    [SyntaxKind.NotEmittedTypeElement]: NotEmittedTypeElement,
-    [SyntaxKind.PartiallyEmittedExpression]: PartiallyEmittedExpression,
-    [SyntaxKind.CommaListExpression]: CommaListExpression,
-    [SyntaxKind.SyntheticReferenceExpression]: SyntheticReferenceExpression,
-    [SyntaxKind.Count]: never,
-    [SyntaxKind.NonTextFileMarkerTrivia]: never,
+    [SyntaxKind.Unknown]: Token<SyntaxKind.Unknown, AstTokenData>;
+    [SyntaxKind.EndOfFileToken]: EndOfFileToken;
+    [SyntaxKind.SingleLineCommentTrivia]: Token<SyntaxKind.SingleLineCommentTrivia, AstTokenData>;
+    [SyntaxKind.MultiLineCommentTrivia]: Token<SyntaxKind.MultiLineCommentTrivia, AstTokenData>;
+    [SyntaxKind.NewLineTrivia]: Token<SyntaxKind.NewLineTrivia, AstTokenData>;
+    [SyntaxKind.WhitespaceTrivia]: Token<SyntaxKind.WhitespaceTrivia, AstTokenData>;
+    [SyntaxKind.ShebangTrivia]: Token<SyntaxKind.ShebangTrivia, AstTokenData>;
+    [SyntaxKind.ConflictMarkerTrivia]: Token<SyntaxKind.ConflictMarkerTrivia, AstTokenData>;
+    [SyntaxKind.NonTextFileMarkerTrivia]: never;
+    [SyntaxKind.NumericLiteral]: NumericLiteral;
+    [SyntaxKind.BigIntLiteral]: BigIntLiteral;
+    [SyntaxKind.StringLiteral]: StringLiteral;
+    [SyntaxKind.JsxText]: JsxText;
+    [SyntaxKind.JsxTextAllWhiteSpaces]: never;
+    [SyntaxKind.RegularExpressionLiteral]: RegularExpressionLiteral;
+    [SyntaxKind.NoSubstitutionTemplateLiteral]: NoSubstitutionTemplateLiteral;
+    [SyntaxKind.TemplateHead]: TemplateHead;
+    [SyntaxKind.TemplateMiddle]: TemplateMiddle;
+    [SyntaxKind.TemplateTail]: TemplateTail;
+    [SyntaxKind.OpenBraceToken]: Token<SyntaxKind.OpenBraceToken, AstTokenData>;
+    [SyntaxKind.CloseBraceToken]: Token<SyntaxKind.CloseBraceToken, AstTokenData>;
+    [SyntaxKind.OpenParenToken]: Token<SyntaxKind.OpenParenToken, AstTokenData>;
+    [SyntaxKind.CloseParenToken]: Token<SyntaxKind.CloseParenToken, AstTokenData>;
+    [SyntaxKind.OpenBracketToken]: Token<SyntaxKind.OpenBracketToken, AstTokenData>;
+    [SyntaxKind.CloseBracketToken]: Token<SyntaxKind.CloseBracketToken, AstTokenData>;
+    [SyntaxKind.DotToken]: Token<SyntaxKind.DotToken, AstTokenData>;
+    [SyntaxKind.DotDotDotToken]: Token<SyntaxKind.DotDotDotToken, AstTokenData>;
+    [SyntaxKind.SemicolonToken]: Token<SyntaxKind.SemicolonToken, AstTokenData>;
+    [SyntaxKind.CommaToken]: Token<SyntaxKind.CommaToken, AstTokenData>;
+    [SyntaxKind.QuestionDotToken]: Token<SyntaxKind.QuestionDotToken, AstTokenData>;
+    [SyntaxKind.LessThanToken]: Token<SyntaxKind.LessThanToken, AstTokenData>;
+    [SyntaxKind.LessThanSlashToken]: Token<SyntaxKind.LessThanSlashToken, AstTokenData>;
+    [SyntaxKind.GreaterThanToken]: Token<SyntaxKind.GreaterThanToken, AstTokenData>;
+    [SyntaxKind.LessThanEqualsToken]: Token<SyntaxKind.LessThanEqualsToken, AstTokenData>;
+    [SyntaxKind.GreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanEqualsToken, AstTokenData>;
+    [SyntaxKind.EqualsEqualsToken]: Token<SyntaxKind.EqualsEqualsToken, AstTokenData>;
+    [SyntaxKind.ExclamationEqualsToken]: Token<SyntaxKind.ExclamationEqualsToken, AstTokenData>;
+    [SyntaxKind.EqualsEqualsEqualsToken]: Token<SyntaxKind.EqualsEqualsEqualsToken, AstTokenData>;
+    [SyntaxKind.ExclamationEqualsEqualsToken]: Token<SyntaxKind.ExclamationEqualsEqualsToken, AstTokenData>;
+    [SyntaxKind.EqualsGreaterThanToken]: Token<SyntaxKind.EqualsGreaterThanToken, AstTokenData>;
+    [SyntaxKind.PlusToken]: Token<SyntaxKind.PlusToken, AstTokenData>;
+    [SyntaxKind.MinusToken]: Token<SyntaxKind.MinusToken, AstTokenData>;
+    [SyntaxKind.AsteriskToken]: Token<SyntaxKind.AsteriskToken, AstTokenData>;
+    [SyntaxKind.AsteriskAsteriskToken]: Token<SyntaxKind.AsteriskAsteriskToken, AstTokenData>;
+    [SyntaxKind.SlashToken]: Token<SyntaxKind.SlashToken, AstTokenData>;
+    [SyntaxKind.PercentToken]: Token<SyntaxKind.PercentToken, AstTokenData>;
+    [SyntaxKind.PlusPlusToken]: Token<SyntaxKind.PlusPlusToken, AstTokenData>;
+    [SyntaxKind.MinusMinusToken]: Token<SyntaxKind.MinusMinusToken, AstTokenData>;
+    [SyntaxKind.LessThanLessThanToken]: Token<SyntaxKind.LessThanLessThanToken, AstTokenData>;
+    [SyntaxKind.GreaterThanGreaterThanToken]: Token<SyntaxKind.GreaterThanGreaterThanToken, AstTokenData>;
+    [SyntaxKind.GreaterThanGreaterThanGreaterThanToken]: Token<SyntaxKind.GreaterThanGreaterThanGreaterThanToken, AstTokenData>;
+    [SyntaxKind.AmpersandToken]: Token<SyntaxKind.AmpersandToken, AstTokenData>;
+    [SyntaxKind.BarToken]: Token<SyntaxKind.BarToken, AstTokenData>;
+    [SyntaxKind.CaretToken]: Token<SyntaxKind.CaretToken, AstTokenData>;
+    [SyntaxKind.ExclamationToken]: Token<SyntaxKind.ExclamationToken, AstTokenData>;
+    [SyntaxKind.TildeToken]: Token<SyntaxKind.TildeToken, AstTokenData>;
+    [SyntaxKind.AmpersandAmpersandToken]: Token<SyntaxKind.AmpersandAmpersandToken, AstTokenData>;
+    [SyntaxKind.BarBarToken]: Token<SyntaxKind.BarBarToken, AstTokenData>;
+    [SyntaxKind.QuestionToken]: Token<SyntaxKind.QuestionToken, AstTokenData>;
+    [SyntaxKind.ColonToken]: Token<SyntaxKind.ColonToken, AstTokenData>;
+    [SyntaxKind.AtToken]: Token<SyntaxKind.AtToken, AstTokenData>;
+    [SyntaxKind.QuestionQuestionToken]: Token<SyntaxKind.QuestionQuestionToken, AstTokenData>;
+    [SyntaxKind.BacktickToken]: Token<SyntaxKind.BacktickToken, AstTokenData>;
+    [SyntaxKind.HashToken]: Token<SyntaxKind.HashToken, AstTokenData>;
+    [SyntaxKind.EqualsToken]: Token<SyntaxKind.EqualsToken, AstTokenData>;
+    [SyntaxKind.PlusEqualsToken]: Token<SyntaxKind.PlusEqualsToken, AstTokenData>;
+    [SyntaxKind.MinusEqualsToken]: Token<SyntaxKind.MinusEqualsToken, AstTokenData>;
+    [SyntaxKind.AsteriskEqualsToken]: Token<SyntaxKind.AsteriskEqualsToken, AstTokenData>;
+    [SyntaxKind.AsteriskAsteriskEqualsToken]: Token<SyntaxKind.AsteriskAsteriskEqualsToken, AstTokenData>;
+    [SyntaxKind.SlashEqualsToken]: Token<SyntaxKind.SlashEqualsToken, AstTokenData>;
+    [SyntaxKind.PercentEqualsToken]: Token<SyntaxKind.PercentEqualsToken, AstTokenData>;
+    [SyntaxKind.LessThanLessThanEqualsToken]: Token<SyntaxKind.LessThanLessThanEqualsToken, AstTokenData>;
+    [SyntaxKind.GreaterThanGreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanGreaterThanEqualsToken, AstTokenData>;
+    [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: Token<SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken, AstTokenData>;
+    [SyntaxKind.AmpersandEqualsToken]: Token<SyntaxKind.AmpersandEqualsToken, AstTokenData>;
+    [SyntaxKind.BarEqualsToken]: Token<SyntaxKind.BarEqualsToken, AstTokenData>;
+    [SyntaxKind.BarBarEqualsToken]: Token<SyntaxKind.BarBarEqualsToken, AstTokenData>;
+    [SyntaxKind.AmpersandAmpersandEqualsToken]: Token<SyntaxKind.AmpersandAmpersandEqualsToken, AstTokenData>;
+    [SyntaxKind.QuestionQuestionEqualsToken]: Token<SyntaxKind.QuestionQuestionEqualsToken, AstTokenData>;
+    [SyntaxKind.CaretEqualsToken]: Token<SyntaxKind.CaretEqualsToken, AstTokenData>;
+    [SyntaxKind.Identifier]: Identifier;
+    [SyntaxKind.PrivateIdentifier]: PrivateIdentifier;
+    [SyntaxKind.JSDocCommentTextToken]: never;
+    [SyntaxKind.BreakKeyword]: Token<SyntaxKind.BreakKeyword, AstTokenData>;
+    [SyntaxKind.CaseKeyword]: Token<SyntaxKind.CaseKeyword, AstTokenData>;
+    [SyntaxKind.CatchKeyword]: Token<SyntaxKind.CatchKeyword, AstTokenData>;
+    [SyntaxKind.ClassKeyword]: Token<SyntaxKind.ClassKeyword, AstTokenData>;
+    [SyntaxKind.ConstKeyword]: Token<SyntaxKind.ConstKeyword, AstTokenData>;
+    [SyntaxKind.ContinueKeyword]: Token<SyntaxKind.ContinueKeyword, AstTokenData>;
+    [SyntaxKind.DebuggerKeyword]: Token<SyntaxKind.DebuggerKeyword, AstTokenData>;
+    [SyntaxKind.DefaultKeyword]: Token<SyntaxKind.DefaultKeyword, AstTokenData>;
+    [SyntaxKind.DeleteKeyword]: Token<SyntaxKind.DeleteKeyword, AstTokenData>;
+    [SyntaxKind.DoKeyword]: Token<SyntaxKind.DoKeyword, AstTokenData>;
+    [SyntaxKind.ElseKeyword]: Token<SyntaxKind.ElseKeyword, AstTokenData>;
+    [SyntaxKind.EnumKeyword]: Token<SyntaxKind.EnumKeyword, AstTokenData>;
+    [SyntaxKind.ExportKeyword]: Token<SyntaxKind.ExportKeyword, AstTokenData>;
+    [SyntaxKind.ExtendsKeyword]: Token<SyntaxKind.ExtendsKeyword, AstTokenData>;
+    [SyntaxKind.FalseKeyword]: FalseLiteral;
+    [SyntaxKind.FinallyKeyword]: Token<SyntaxKind.FinallyKeyword, AstTokenData>;
+    [SyntaxKind.ForKeyword]: Token<SyntaxKind.ForKeyword, AstTokenData>;
+    [SyntaxKind.FunctionKeyword]: Token<SyntaxKind.FunctionKeyword, AstTokenData>;
+    [SyntaxKind.IfKeyword]: Token<SyntaxKind.IfKeyword, AstTokenData>;
+    [SyntaxKind.ImportKeyword]: ImportExpression;
+    [SyntaxKind.InKeyword]: Token<SyntaxKind.InKeyword, AstTokenData>;
+    [SyntaxKind.InstanceOfKeyword]: Token<SyntaxKind.InstanceOfKeyword, AstTokenData>;
+    [SyntaxKind.NewKeyword]: Token<SyntaxKind.NewKeyword, AstTokenData>;
+    [SyntaxKind.NullKeyword]: NullLiteral;
+    [SyntaxKind.ReturnKeyword]: Token<SyntaxKind.ReturnKeyword, AstTokenData>;
+    [SyntaxKind.SuperKeyword]: SuperExpression;
+    [SyntaxKind.SwitchKeyword]: Token<SyntaxKind.SwitchKeyword, AstTokenData>;
+    [SyntaxKind.ThisKeyword]: ThisExpression;
+    [SyntaxKind.ThrowKeyword]: Token<SyntaxKind.ThrowKeyword, AstTokenData>;
+    [SyntaxKind.TrueKeyword]: TrueLiteral;
+    [SyntaxKind.TryKeyword]: Token<SyntaxKind.TryKeyword, AstTokenData>;
+    [SyntaxKind.TypeOfKeyword]: Token<SyntaxKind.TypeOfKeyword, AstTokenData>;
+    [SyntaxKind.VarKeyword]: Token<SyntaxKind.VarKeyword, AstTokenData>;
+    [SyntaxKind.VoidKeyword]: Token<SyntaxKind.VoidKeyword, AstTokenData>;
+    [SyntaxKind.WhileKeyword]: Token<SyntaxKind.WhileKeyword, AstTokenData>;
+    [SyntaxKind.WithKeyword]: Token<SyntaxKind.WithKeyword, AstTokenData>;
+    [SyntaxKind.ImplementsKeyword]: Token<SyntaxKind.ImplementsKeyword, AstTokenData>;
+    [SyntaxKind.InterfaceKeyword]: Token<SyntaxKind.InterfaceKeyword, AstTokenData>;
+    [SyntaxKind.LetKeyword]: Token<SyntaxKind.LetKeyword, AstTokenData>;
+    [SyntaxKind.PackageKeyword]: Token<SyntaxKind.PackageKeyword, AstTokenData>;
+    [SyntaxKind.PrivateKeyword]: Token<SyntaxKind.PrivateKeyword, AstTokenData>;
+    [SyntaxKind.ProtectedKeyword]: Token<SyntaxKind.ProtectedKeyword, AstTokenData>;
+    [SyntaxKind.PublicKeyword]: Token<SyntaxKind.PublicKeyword, AstTokenData>;
+    [SyntaxKind.StaticKeyword]: Token<SyntaxKind.StaticKeyword, AstTokenData>;
+    [SyntaxKind.YieldKeyword]: Token<SyntaxKind.YieldKeyword, AstTokenData>;
+    [SyntaxKind.AbstractKeyword]: Token<SyntaxKind.AbstractKeyword, AstTokenData>;
+    [SyntaxKind.AccessorKeyword]: Token<SyntaxKind.AccessorKeyword, AstTokenData>;
+    [SyntaxKind.AsKeyword]: Token<SyntaxKind.AsKeyword, AstTokenData>;
+    [SyntaxKind.AssertsKeyword]: Token<SyntaxKind.AssertsKeyword, AstTokenData>;
+    [SyntaxKind.AssertKeyword]: Token<SyntaxKind.AssertKeyword, AstTokenData>;
+    [SyntaxKind.AnyKeyword]: Token<SyntaxKind.AnyKeyword, AstTokenData>;
+    [SyntaxKind.AsyncKeyword]: Token<SyntaxKind.AsyncKeyword, AstTokenData>;
+    [SyntaxKind.AwaitKeyword]: Token<SyntaxKind.AwaitKeyword, AstTokenData>;
+    [SyntaxKind.BooleanKeyword]: Token<SyntaxKind.BooleanKeyword, AstTokenData>;
+    [SyntaxKind.ConstructorKeyword]: Token<SyntaxKind.ConstructorKeyword, AstTokenData>;
+    [SyntaxKind.DeclareKeyword]: Token<SyntaxKind.DeclareKeyword, AstTokenData>;
+    [SyntaxKind.GetKeyword]: Token<SyntaxKind.GetKeyword, AstTokenData>;
+    [SyntaxKind.InferKeyword]: Token<SyntaxKind.InferKeyword, AstTokenData>;
+    [SyntaxKind.IntrinsicKeyword]: Token<SyntaxKind.IntrinsicKeyword, AstTokenData>;
+    [SyntaxKind.IsKeyword]: Token<SyntaxKind.IsKeyword, AstTokenData>;
+    [SyntaxKind.KeyOfKeyword]: Token<SyntaxKind.KeyOfKeyword, AstTokenData>;
+    [SyntaxKind.ModuleKeyword]: Token<SyntaxKind.ModuleKeyword, AstTokenData>;
+    [SyntaxKind.NamespaceKeyword]: Token<SyntaxKind.NamespaceKeyword, AstTokenData>;
+    [SyntaxKind.NeverKeyword]: Token<SyntaxKind.NeverKeyword, AstTokenData>;
+    [SyntaxKind.OutKeyword]: Token<SyntaxKind.OutKeyword, AstTokenData>;
+    [SyntaxKind.ReadonlyKeyword]: Token<SyntaxKind.ReadonlyKeyword, AstTokenData>;
+    [SyntaxKind.RequireKeyword]: Token<SyntaxKind.RequireKeyword, AstTokenData>;
+    [SyntaxKind.NumberKeyword]: Token<SyntaxKind.NumberKeyword, AstTokenData>;
+    [SyntaxKind.ObjectKeyword]: Token<SyntaxKind.ObjectKeyword, AstTokenData>;
+    [SyntaxKind.SatisfiesKeyword]: Token<SyntaxKind.SatisfiesKeyword, AstTokenData>;
+    [SyntaxKind.SetKeyword]: Token<SyntaxKind.SetKeyword, AstTokenData>;
+    [SyntaxKind.StringKeyword]: Token<SyntaxKind.StringKeyword, AstTokenData>;
+    [SyntaxKind.SymbolKeyword]: Token<SyntaxKind.SymbolKeyword, AstTokenData>;
+    [SyntaxKind.TypeKeyword]: Token<SyntaxKind.TypeKeyword, AstTokenData>;
+    [SyntaxKind.UndefinedKeyword]: Token<SyntaxKind.UndefinedKeyword, AstTokenData>;
+    [SyntaxKind.UniqueKeyword]: Token<SyntaxKind.UniqueKeyword, AstTokenData>;
+    [SyntaxKind.UnknownKeyword]: Token<SyntaxKind.UnknownKeyword, AstTokenData>;
+    [SyntaxKind.UsingKeyword]: Token<SyntaxKind.UsingKeyword, AstTokenData>;
+    [SyntaxKind.FromKeyword]: Token<SyntaxKind.FromKeyword, AstTokenData>;
+    [SyntaxKind.GlobalKeyword]: Token<SyntaxKind.GlobalKeyword, AstTokenData>;
+    [SyntaxKind.BigIntKeyword]: Token<SyntaxKind.BigIntKeyword, AstTokenData>;
+    [SyntaxKind.OverrideKeyword]: Token<SyntaxKind.OverrideKeyword, AstTokenData>;
+    [SyntaxKind.OfKeyword]: Token<SyntaxKind.OfKeyword, AstTokenData>;
+    [SyntaxKind.QualifiedName]: QualifiedName;
+    [SyntaxKind.ComputedPropertyName]: ComputedPropertyName;
+    [SyntaxKind.Decorator]: Decorator;
+    [SyntaxKind.TypeParameter]: TypeParameterDeclaration;
+    [SyntaxKind.CallSignature]: CallSignatureDeclaration;
+    [SyntaxKind.ConstructSignature]: ConstructSignatureDeclaration;
+    [SyntaxKind.VariableDeclaration]: VariableDeclaration;
+    [SyntaxKind.VariableDeclarationList]: VariableDeclarationList;
+    [SyntaxKind.Parameter]: ParameterDeclaration;
+    [SyntaxKind.BindingElement]: BindingElement;
+    [SyntaxKind.PropertySignature]: PropertySignature;
+    [SyntaxKind.PropertyDeclaration]: PropertyDeclaration;
+    [SyntaxKind.PropertyAssignment]: PropertyAssignment;
+    [SyntaxKind.ShorthandPropertyAssignment]: ShorthandPropertyAssignment;
+    [SyntaxKind.SpreadAssignment]: SpreadAssignment;
+    [SyntaxKind.ObjectBindingPattern]: ObjectBindingPattern;
+    [SyntaxKind.ArrayBindingPattern]: ArrayBindingPattern;
+    [SyntaxKind.FunctionDeclaration]: FunctionDeclaration;
+    [SyntaxKind.MethodSignature]: MethodSignature;
+    [SyntaxKind.MethodDeclaration]: MethodDeclaration;
+    [SyntaxKind.Constructor]: ConstructorDeclaration;
+    [SyntaxKind.SemicolonClassElement]: SemicolonClassElement;
+    [SyntaxKind.GetAccessor]: GetAccessorDeclaration;
+    [SyntaxKind.SetAccessor]: SetAccessorDeclaration;
+    [SyntaxKind.IndexSignature]: IndexSignatureDeclaration;
+    [SyntaxKind.ClassStaticBlockDeclaration]: ClassStaticBlockDeclaration;
+    [SyntaxKind.ImportTypeAssertionContainer]: ImportTypeAssertionContainer;
+    [SyntaxKind.ImportType]: ImportTypeNode;
+    [SyntaxKind.ThisType]: ThisTypeNode;
+    [SyntaxKind.FunctionType]: FunctionTypeNode;
+    [SyntaxKind.ConstructorType]: ConstructorTypeNode;
+    [SyntaxKind.TypeReference]: TypeReferenceNode;
+    [SyntaxKind.TypePredicate]: TypePredicateNode;
+    [SyntaxKind.TypeQuery]: TypeQueryNode;
+    [SyntaxKind.TypeLiteral]: TypeLiteralNode;
+    [SyntaxKind.ArrayType]: ArrayTypeNode;
+    [SyntaxKind.TupleType]: TupleTypeNode;
+    [SyntaxKind.NamedTupleMember]: NamedTupleMember;
+    [SyntaxKind.OptionalType]: OptionalTypeNode;
+    [SyntaxKind.RestType]: RestTypeNode;
+    [SyntaxKind.UnionType]: UnionTypeNode;
+    [SyntaxKind.IntersectionType]: IntersectionTypeNode;
+    [SyntaxKind.ConditionalType]: ConditionalTypeNode;
+    [SyntaxKind.InferType]: InferTypeNode;
+    [SyntaxKind.ParenthesizedType]: ParenthesizedTypeNode;
+    [SyntaxKind.TypeOperator]: TypeOperatorNode;
+    [SyntaxKind.IndexedAccessType]: IndexedAccessTypeNode;
+    [SyntaxKind.MappedType]: MappedTypeNode;
+    [SyntaxKind.LiteralType]: LiteralTypeNode;
+    [SyntaxKind.TemplateLiteralType]: TemplateLiteralTypeNode;
+    [SyntaxKind.TemplateLiteralTypeSpan]: TemplateLiteralTypeSpan;
+    [SyntaxKind.OmittedExpression]: OmittedExpression;
+    [SyntaxKind.PrefixUnaryExpression]: PrefixUnaryExpression;
+    [SyntaxKind.PostfixUnaryExpression]: PostfixUnaryExpression;
+    [SyntaxKind.DeleteExpression]: DeleteExpression;
+    [SyntaxKind.TypeOfExpression]: TypeOfExpression;
+    [SyntaxKind.VoidExpression]: VoidExpression;
+    [SyntaxKind.AwaitExpression]: AwaitExpression;
+    [SyntaxKind.YieldExpression]: YieldExpression;
+    [SyntaxKind.BinaryExpression]: BinaryExpression;
+    [SyntaxKind.ConditionalExpression]: ConditionalExpression;
+    [SyntaxKind.FunctionExpression]: FunctionExpression;
+    [SyntaxKind.ArrowFunction]: ArrowFunction;
+    [SyntaxKind.TemplateExpression]: TemplateExpression;
+    [SyntaxKind.TemplateSpan]: TemplateSpan;
+    [SyntaxKind.ParenthesizedExpression]: ParenthesizedExpression;
+    [SyntaxKind.ArrayLiteralExpression]: ArrayLiteralExpression;
+    [SyntaxKind.SpreadElement]: SpreadElement;
+    [SyntaxKind.ObjectLiteralExpression]: ObjectLiteralExpression;
+    [SyntaxKind.PropertyAccessExpression]: PropertyAccessExpression;
+    [SyntaxKind.ElementAccessExpression]: ElementAccessExpression;
+    [SyntaxKind.CallExpression]: CallExpression;
+    [SyntaxKind.ExpressionWithTypeArguments]: ExpressionWithTypeArguments;
+    [SyntaxKind.NewExpression]: NewExpression;
+    [SyntaxKind.TaggedTemplateExpression]: TaggedTemplateExpression;
+    [SyntaxKind.AsExpression]: AsExpression;
+    [SyntaxKind.TypeAssertionExpression]: TypeAssertion;
+    [SyntaxKind.SyntheticExpression]: SyntheticExpression;
+    [SyntaxKind.SatisfiesExpression]: SatisfiesExpression;
+    [SyntaxKind.NonNullExpression]: NonNullExpression;
+    [SyntaxKind.MetaProperty]: MetaProperty;
+    [SyntaxKind.JsxElement]: JsxElement;
+    [SyntaxKind.JsxAttributes]: JsxAttributes;
+    [SyntaxKind.JsxNamespacedName]: JsxNamespacedName;
+    [SyntaxKind.JsxOpeningElement]: JsxOpeningElement;
+    [SyntaxKind.JsxSelfClosingElement]: JsxSelfClosingElement;
+    [SyntaxKind.JsxFragment]: JsxFragment;
+    [SyntaxKind.JsxOpeningFragment]: JsxOpeningFragment;
+    [SyntaxKind.JsxClosingFragment]: JsxClosingFragment;
+    [SyntaxKind.JsxAttribute]: JsxAttribute;
+    [SyntaxKind.JsxSpreadAttribute]: JsxSpreadAttribute;
+    [SyntaxKind.JsxClosingElement]: JsxClosingElement;
+    [SyntaxKind.JsxExpression]: JsxExpression;
+    [SyntaxKind.EmptyStatement]: EmptyStatement;
+    [SyntaxKind.DebuggerStatement]: DebuggerStatement;
+    [SyntaxKind.MissingDeclaration]: MissingDeclaration;
+    [SyntaxKind.Block]: Block;
+    [SyntaxKind.VariableStatement]: VariableStatement;
+    [SyntaxKind.ExpressionStatement]: ExpressionStatement;
+    [SyntaxKind.IfStatement]: IfStatement;
+    [SyntaxKind.DoStatement]: DoStatement;
+    [SyntaxKind.WhileStatement]: WhileStatement;
+    [SyntaxKind.ForStatement]: ForStatement;
+    [SyntaxKind.ForInStatement]: ForInStatement;
+    [SyntaxKind.ForOfStatement]: ForOfStatement;
+    [SyntaxKind.BreakStatement]: BreakStatement;
+    [SyntaxKind.ContinueStatement]: ContinueStatement;
+    [SyntaxKind.ReturnStatement]: ReturnStatement;
+    [SyntaxKind.WithStatement]: WithStatement;
+    [SyntaxKind.SwitchStatement]: SwitchStatement;
+    [SyntaxKind.CaseBlock]: CaseBlock;
+    [SyntaxKind.CaseClause]: CaseClause;
+    [SyntaxKind.DefaultClause]: DefaultClause;
+    [SyntaxKind.LabeledStatement]: LabeledStatement;
+    [SyntaxKind.ThrowStatement]: ThrowStatement;
+    [SyntaxKind.TryStatement]: TryStatement;
+    [SyntaxKind.CatchClause]: CatchClause;
+    [SyntaxKind.ClassDeclaration]: ClassDeclaration;
+    [SyntaxKind.ClassExpression]: ClassExpression;
+    [SyntaxKind.InterfaceDeclaration]: InterfaceDeclaration;
+    [SyntaxKind.HeritageClause]: HeritageClause;
+    [SyntaxKind.TypeAliasDeclaration]: TypeAliasDeclaration;
+    [SyntaxKind.EnumMember]: EnumMember;
+    [SyntaxKind.EnumDeclaration]: EnumDeclaration;
+    [SyntaxKind.ModuleDeclaration]: ModuleDeclaration;
+    [SyntaxKind.ModuleBlock]: ModuleBlock;
+    [SyntaxKind.ImportEqualsDeclaration]: ImportEqualsDeclaration;
+    [SyntaxKind.ExternalModuleReference]: ExternalModuleReference;
+    [SyntaxKind.ImportDeclaration]: ImportDeclaration;
+    [SyntaxKind.ImportClause]: ImportClause;
+    [SyntaxKind.ImportAttribute]: ImportAttribute;
+    [SyntaxKind.ImportAttributes]: ImportAttributes;
+    [SyntaxKind.NamespaceImport]: NamespaceImport;
+    [SyntaxKind.NamespaceExport]: NamespaceExport;
+    [SyntaxKind.NamespaceExportDeclaration]: NamespaceExportDeclaration;
+    [SyntaxKind.ExportDeclaration]: ExportDeclaration;
+    [SyntaxKind.NamedImports]: NamedImports;
+    [SyntaxKind.NamedExports]: NamedExports;
+    [SyntaxKind.ImportSpecifier]: ImportSpecifier;
+    [SyntaxKind.ExportSpecifier]: ExportSpecifier;
+    [SyntaxKind.ExportAssignment]: ExportAssignment;
+    [SyntaxKind.JSDocTypeExpression]: JSDocTypeExpression;
+    [SyntaxKind.JSDocNameReference]: JSDocNameReference;
+    [SyntaxKind.JSDocMemberName]: JSDocMemberName;
+    [SyntaxKind.JSDocAllType]: JSDocAllType;
+    [SyntaxKind.JSDocUnknownType]: JSDocUnknownType;
+    [SyntaxKind.JSDocNonNullableType]: JSDocNonNullableType;
+    [SyntaxKind.JSDocNullableType]: JSDocNullableType;
+    [SyntaxKind.JSDocOptionalType]: JSDocOptionalType;
+    [SyntaxKind.JSDocFunctionType]: JSDocFunctionType;
+    [SyntaxKind.JSDocVariadicType]: JSDocVariadicType;
+    [SyntaxKind.JSDocNamepathType]: JSDocNamepathType;
+    [SyntaxKind.JSDoc]: JSDocNode;
+    [SyntaxKind.JSDocLink]: JSDocLink;
+    [SyntaxKind.JSDocLinkCode]: JSDocLinkCode;
+    [SyntaxKind.JSDocLinkPlain]: JSDocLinkPlain;
+    [SyntaxKind.JSDocText]: JSDocText;
+    [SyntaxKind.JSDocTag]: JSDocUnknownTag;
+    [SyntaxKind.JSDocAugmentsTag]: JSDocAugmentsTag;
+    [SyntaxKind.JSDocImplementsTag]: JSDocImplementsTag;
+    [SyntaxKind.JSDocAuthorTag]: JSDocAuthorTag;
+    [SyntaxKind.JSDocDeprecatedTag]: JSDocDeprecatedTag;
+    [SyntaxKind.JSDocClassTag]: JSDocClassTag;
+    [SyntaxKind.JSDocPublicTag]: JSDocPublicTag;
+    [SyntaxKind.JSDocPrivateTag]: JSDocPrivateTag;
+    [SyntaxKind.JSDocProtectedTag]: JSDocProtectedTag;
+    [SyntaxKind.JSDocReadonlyTag]: JSDocReadonlyTag;
+    [SyntaxKind.JSDocOverrideTag]: JSDocOverrideTag;
+    [SyntaxKind.JSDocEnumTag]: JSDocEnumTag;
+    [SyntaxKind.JSDocThisTag]: JSDocThisTag;
+    [SyntaxKind.JSDocTemplateTag]: JSDocTemplateTag;
+    [SyntaxKind.JSDocSeeTag]: JSDocSeeTag;
+    [SyntaxKind.JSDocReturnTag]: JSDocReturnTag;
+    [SyntaxKind.JSDocTypeTag]: JSDocTypeTag;
+    [SyntaxKind.JSDocTypedefTag]: JSDocTypedefTag;
+    [SyntaxKind.JSDocCallbackTag]: JSDocCallbackTag;
+    [SyntaxKind.JSDocOverloadTag]: JSDocOverloadTag;
+    [SyntaxKind.JSDocThrowsTag]: JSDocThrowsTag;
+    [SyntaxKind.JSDocSignature]: JSDocSignature;
+    [SyntaxKind.JSDocPropertyTag]: JSDocPropertyTag;
+    [SyntaxKind.JSDocParameterTag]: JSDocParameterTag;
+    [SyntaxKind.JSDocTypeLiteral]: JSDocTypeLiteral;
+    [SyntaxKind.JSDocSatisfiesTag]: JSDocSatisfiesTag;
+    [SyntaxKind.JSDocImportTag]: JSDocImportTag;
+    [SyntaxKind.SourceFile]: SourceFile;
+    [SyntaxKind.Bundle]: Bundle;
+    [SyntaxKind.SyntaxList]: SyntaxList;
+    [SyntaxKind.NotEmittedStatement]: NotEmittedStatement;
+    [SyntaxKind.NotEmittedTypeElement]: NotEmittedTypeElement;
+    [SyntaxKind.PartiallyEmittedExpression]: PartiallyEmittedExpression;
+    [SyntaxKind.CommaListExpression]: CommaListExpression;
+    [SyntaxKind.SyntheticReferenceExpression]: SyntheticReferenceExpression;
+    [SyntaxKind.Count]: never;
+    [SyntaxKind.NonTextFileMarkerTrivia]: never;
 }
 
-/** @internal */
+/** @internal @knipignore  */
 export interface AstNodeType {
-    [SyntaxKind.Unknown]: AstToken<SyntaxKind.Unknown>,
-    [SyntaxKind.EndOfFileToken]: AstEndOfFileToken,
-    [SyntaxKind.SingleLineCommentTrivia]: AstToken<SyntaxKind.SingleLineCommentTrivia>,
-    [SyntaxKind.MultiLineCommentTrivia]: AstToken<SyntaxKind.MultiLineCommentTrivia>,
-    [SyntaxKind.NewLineTrivia]: AstToken<SyntaxKind.NewLineTrivia>,
-    [SyntaxKind.WhitespaceTrivia]: AstToken<SyntaxKind.WhitespaceTrivia>,
-    [SyntaxKind.ShebangTrivia]: AstToken<SyntaxKind.ShebangTrivia>,
-    [SyntaxKind.ConflictMarkerTrivia]: AstToken<SyntaxKind.ConflictMarkerTrivia>,
-    [SyntaxKind.NonTextFileMarkerTrivia]: never,
-    [SyntaxKind.NumericLiteral]: AstNumericLiteral,
-    [SyntaxKind.BigIntLiteral]: AstBigIntLiteral,
-    [SyntaxKind.StringLiteral]: AstStringLiteral,
-    [SyntaxKind.JsxText]: AstJsxText,
-    [SyntaxKind.JsxTextAllWhiteSpaces]: never,
-    [SyntaxKind.RegularExpressionLiteral]: AstRegularExpressionLiteral,
-    [SyntaxKind.NoSubstitutionTemplateLiteral]: AstNoSubstitutionTemplateLiteral,
-    [SyntaxKind.TemplateHead]: AstTemplateHead,
-    [SyntaxKind.TemplateMiddle]: AstTemplateMiddle,
-    [SyntaxKind.TemplateTail]: AstTemplateTail,
-    [SyntaxKind.OpenBraceToken]: AstToken<SyntaxKind.OpenBraceToken>,
-    [SyntaxKind.CloseBraceToken]: AstToken<SyntaxKind.CloseBraceToken>,
-    [SyntaxKind.OpenParenToken]: AstToken<SyntaxKind.OpenParenToken>,
-    [SyntaxKind.CloseParenToken]: AstToken<SyntaxKind.CloseParenToken>,
-    [SyntaxKind.OpenBracketToken]: AstToken<SyntaxKind.OpenBracketToken>,
-    [SyntaxKind.CloseBracketToken]: AstToken<SyntaxKind.CloseBracketToken>,
-    [SyntaxKind.DotToken]: AstDotToken,
-    [SyntaxKind.DotDotDotToken]: AstDotDotDotToken,
-    [SyntaxKind.SemicolonToken]: AstToken<SyntaxKind.SemicolonToken>,
-    [SyntaxKind.CommaToken]: AstToken<SyntaxKind.CommaToken>,
-    [SyntaxKind.QuestionDotToken]: AstQuestionDotToken,
-    [SyntaxKind.LessThanToken]: AstToken<SyntaxKind.LessThanToken>,
-    [SyntaxKind.LessThanSlashToken]: AstToken<SyntaxKind.LessThanSlashToken>,
-    [SyntaxKind.GreaterThanToken]: AstToken<SyntaxKind.GreaterThanToken>,
-    [SyntaxKind.LessThanEqualsToken]: AstToken<SyntaxKind.LessThanEqualsToken>,
-    [SyntaxKind.GreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanEqualsToken>,
-    [SyntaxKind.EqualsEqualsToken]: AstToken<SyntaxKind.EqualsEqualsToken>,
-    [SyntaxKind.ExclamationEqualsToken]: AstToken<SyntaxKind.ExclamationEqualsToken>,
-    [SyntaxKind.EqualsEqualsEqualsToken]: AstToken<SyntaxKind.EqualsEqualsEqualsToken>,
-    [SyntaxKind.ExclamationEqualsEqualsToken]: AstToken<SyntaxKind.ExclamationEqualsEqualsToken>,
-    [SyntaxKind.EqualsGreaterThanToken]: AstEqualsGreaterThanToken,
-    [SyntaxKind.PlusToken]: AstPlusToken,
-    [SyntaxKind.MinusToken]: AstMinusToken,
-    [SyntaxKind.AsteriskToken]: AstAsteriskToken,
-    [SyntaxKind.AsteriskAsteriskToken]: AstToken<SyntaxKind.AsteriskAsteriskToken>,
-    [SyntaxKind.SlashToken]: AstToken<SyntaxKind.SlashToken>,
-    [SyntaxKind.PercentToken]: AstToken<SyntaxKind.PercentToken>,
-    [SyntaxKind.PlusPlusToken]: AstToken<SyntaxKind.PlusPlusToken>,
-    [SyntaxKind.MinusMinusToken]: AstToken<SyntaxKind.MinusMinusToken>,
-    [SyntaxKind.LessThanLessThanToken]: AstToken<SyntaxKind.LessThanLessThanToken>,
-    [SyntaxKind.GreaterThanGreaterThanToken]: AstToken<SyntaxKind.GreaterThanGreaterThanToken>,
-    [SyntaxKind.GreaterThanGreaterThanGreaterThanToken]: AstToken<SyntaxKind.GreaterThanGreaterThanGreaterThanToken>,
-    [SyntaxKind.AmpersandToken]: AstToken<SyntaxKind.AmpersandToken>,
-    [SyntaxKind.BarToken]: AstToken<SyntaxKind.BarToken>,
-    [SyntaxKind.CaretToken]: AstToken<SyntaxKind.CaretToken>,
-    [SyntaxKind.ExclamationToken]: AstExclamationToken,
-    [SyntaxKind.TildeToken]: AstToken<SyntaxKind.TildeToken>,
-    [SyntaxKind.AmpersandAmpersandToken]: AstToken<SyntaxKind.AmpersandAmpersandToken>,
-    [SyntaxKind.BarBarToken]: AstToken<SyntaxKind.BarBarToken>,
-    [SyntaxKind.QuestionToken]: AstQuestionToken,
-    [SyntaxKind.ColonToken]: AstColonToken,
-    [SyntaxKind.AtToken]: AstToken<SyntaxKind.AtToken>,
-    [SyntaxKind.QuestionQuestionToken]: AstToken<SyntaxKind.QuestionQuestionToken>,
-    [SyntaxKind.BacktickToken]: AstToken<SyntaxKind.BacktickToken>,
-    [SyntaxKind.HashToken]: AstToken<SyntaxKind.HashToken>,
-    [SyntaxKind.EqualsToken]: AstEqualsToken,
-    [SyntaxKind.PlusEqualsToken]: AstToken<SyntaxKind.PlusEqualsToken>,
-    [SyntaxKind.MinusEqualsToken]: AstToken<SyntaxKind.MinusEqualsToken>,
-    [SyntaxKind.AsteriskEqualsToken]: AstToken<SyntaxKind.AsteriskEqualsToken>,
-    [SyntaxKind.AsteriskAsteriskEqualsToken]: AstToken<SyntaxKind.AsteriskAsteriskEqualsToken>,
-    [SyntaxKind.SlashEqualsToken]: AstToken<SyntaxKind.SlashEqualsToken>,
-    [SyntaxKind.PercentEqualsToken]: AstToken<SyntaxKind.PercentEqualsToken>,
-    [SyntaxKind.LessThanLessThanEqualsToken]: AstToken<SyntaxKind.LessThanLessThanEqualsToken>,
-    [SyntaxKind.GreaterThanGreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanGreaterThanEqualsToken>,
-    [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>,
-    [SyntaxKind.AmpersandEqualsToken]: AstToken<SyntaxKind.AmpersandEqualsToken>,
-    [SyntaxKind.BarEqualsToken]: AstToken<SyntaxKind.BarEqualsToken>,
-    [SyntaxKind.BarBarEqualsToken]: AstBarBarEqualsToken,
-    [SyntaxKind.AmpersandAmpersandEqualsToken]: AstAmpersandAmpersandEqualsToken,
-    [SyntaxKind.QuestionQuestionEqualsToken]: AstQuestionQuestionEqualsToken,
-    [SyntaxKind.CaretEqualsToken]: AstToken<SyntaxKind.CaretEqualsToken>,
-    [SyntaxKind.Identifier]: AstIdentifier,
-    [SyntaxKind.PrivateIdentifier]: AstPrivateIdentifier,
-    [SyntaxKind.JSDocCommentTextToken]: never,
-    [SyntaxKind.BreakKeyword]: AstToken<SyntaxKind.BreakKeyword>,
-    [SyntaxKind.CaseKeyword]: AstCaseKeyword,
-    [SyntaxKind.CatchKeyword]: AstToken<SyntaxKind.CatchKeyword>,
-    [SyntaxKind.ClassKeyword]: AstToken<SyntaxKind.ClassKeyword>,
-    [SyntaxKind.ConstKeyword]: AstToken<SyntaxKind.ConstKeyword>,
-    [SyntaxKind.ContinueKeyword]: AstToken<SyntaxKind.ContinueKeyword>,
-    [SyntaxKind.DebuggerKeyword]: AstToken<SyntaxKind.DebuggerKeyword>,
-    [SyntaxKind.DefaultKeyword]: AstDefaultKeyword,
-    [SyntaxKind.DeleteKeyword]: AstToken<SyntaxKind.DeleteKeyword>,
-    [SyntaxKind.DoKeyword]: AstToken<SyntaxKind.DoKeyword>,
-    [SyntaxKind.ElseKeyword]: AstToken<SyntaxKind.ElseKeyword>,
-    [SyntaxKind.EnumKeyword]: AstToken<SyntaxKind.EnumKeyword>,
-    [SyntaxKind.ExportKeyword]: AstExportKeyword,
-    [SyntaxKind.ExtendsKeyword]: AstToken<SyntaxKind.ExtendsKeyword>,
-    [SyntaxKind.FalseKeyword]: AstFalseLiteral,
-    [SyntaxKind.FinallyKeyword]: AstToken<SyntaxKind.FinallyKeyword>,
-    [SyntaxKind.ForKeyword]: AstToken<SyntaxKind.ForKeyword>,
-    [SyntaxKind.FunctionKeyword]: AstToken<SyntaxKind.FunctionKeyword>,
-    [SyntaxKind.IfKeyword]: AstToken<SyntaxKind.IfKeyword>,
-    [SyntaxKind.ImportKeyword]: AstImportExpression,
-    [SyntaxKind.InKeyword]: AstInKeyword,
-    [SyntaxKind.InstanceOfKeyword]: AstToken<SyntaxKind.InstanceOfKeyword>,
-    [SyntaxKind.NewKeyword]: AstToken<SyntaxKind.NewKeyword>,
-    [SyntaxKind.NullKeyword]: AstNullLiteral,
-    [SyntaxKind.ReturnKeyword]: AstToken<SyntaxKind.ReturnKeyword>,
-    [SyntaxKind.SuperKeyword]: AstSuperExpression,
-    [SyntaxKind.SwitchKeyword]: AstToken<SyntaxKind.SwitchKeyword>,
-    [SyntaxKind.ThisKeyword]: AstThisExpression,
-    [SyntaxKind.ThrowKeyword]: AstToken<SyntaxKind.ThrowKeyword>,
-    [SyntaxKind.TrueKeyword]: AstTrueLiteral,
-    [SyntaxKind.TryKeyword]: AstToken<SyntaxKind.TryKeyword>,
-    [SyntaxKind.TypeOfKeyword]: AstToken<SyntaxKind.TypeOfKeyword>,
-    [SyntaxKind.VarKeyword]: AstToken<SyntaxKind.VarKeyword>,
-    [SyntaxKind.VoidKeyword]: AstToken<SyntaxKind.VoidKeyword>,
-    [SyntaxKind.WhileKeyword]: AstToken<SyntaxKind.WhileKeyword>,
-    [SyntaxKind.WithKeyword]: AstToken<SyntaxKind.WithKeyword>,
-    [SyntaxKind.ImplementsKeyword]: AstToken<SyntaxKind.ImplementsKeyword>,
-    [SyntaxKind.InterfaceKeyword]: AstToken<SyntaxKind.InterfaceKeyword>,
-    [SyntaxKind.LetKeyword]: AstToken<SyntaxKind.LetKeyword>,
-    [SyntaxKind.PackageKeyword]: AstToken<SyntaxKind.PackageKeyword>,
-    [SyntaxKind.PrivateKeyword]: AstPrivateKeyword,
-    [SyntaxKind.ProtectedKeyword]: AstProtectedKeyword,
-    [SyntaxKind.PublicKeyword]: AstPublicKeyword,
-    [SyntaxKind.StaticKeyword]: AstStaticKeyword,
-    [SyntaxKind.YieldKeyword]: AstToken<SyntaxKind.YieldKeyword>,
-    [SyntaxKind.AbstractKeyword]: AstAbstractKeyword,
-    [SyntaxKind.AccessorKeyword]: AstAccessorKeyword,
-    [SyntaxKind.AsKeyword]: AstToken<SyntaxKind.AsKeyword>,
-    [SyntaxKind.AssertsKeyword]: AstAssertsKeyword,
-    [SyntaxKind.AssertKeyword]: AstAssertKeyword,
-    [SyntaxKind.AnyKeyword]: AstToken<SyntaxKind.AnyKeyword>,
-    [SyntaxKind.AsyncKeyword]: AstAsyncKeyword,
-    [SyntaxKind.AwaitKeyword]: AstAwaitKeyword,
-    [SyntaxKind.BooleanKeyword]: AstToken<SyntaxKind.BooleanKeyword>,
-    [SyntaxKind.ConstructorKeyword]: AstToken<SyntaxKind.ConstructorKeyword>,
-    [SyntaxKind.DeclareKeyword]: AstDeclareKeyword,
-    [SyntaxKind.GetKeyword]: AstToken<SyntaxKind.GetKeyword>,
-    [SyntaxKind.InferKeyword]: AstToken<SyntaxKind.InferKeyword>,
-    [SyntaxKind.IntrinsicKeyword]: AstToken<SyntaxKind.IntrinsicKeyword>,
-    [SyntaxKind.IsKeyword]: AstToken<SyntaxKind.IsKeyword>,
-    [SyntaxKind.KeyOfKeyword]: AstToken<SyntaxKind.KeyOfKeyword>,
-    [SyntaxKind.ModuleKeyword]: AstToken<SyntaxKind.ModuleKeyword>,
-    [SyntaxKind.NamespaceKeyword]: AstToken<SyntaxKind.NamespaceKeyword>,
-    [SyntaxKind.NeverKeyword]: AstToken<SyntaxKind.NeverKeyword>,
-    [SyntaxKind.OutKeyword]: AstOutKeyword,
-    [SyntaxKind.ReadonlyKeyword]: AstReadonlyKeyword,
-    [SyntaxKind.RequireKeyword]: AstToken<SyntaxKind.RequireKeyword>,
-    [SyntaxKind.NumberKeyword]: AstToken<SyntaxKind.NumberKeyword>,
-    [SyntaxKind.ObjectKeyword]: AstToken<SyntaxKind.ObjectKeyword>,
-    [SyntaxKind.SatisfiesKeyword]: AstToken<SyntaxKind.SatisfiesKeyword>,
-    [SyntaxKind.SetKeyword]: AstToken<SyntaxKind.SetKeyword>,
-    [SyntaxKind.StringKeyword]: AstToken<SyntaxKind.StringKeyword>,
-    [SyntaxKind.SymbolKeyword]: AstToken<SyntaxKind.SymbolKeyword>,
-    [SyntaxKind.TypeKeyword]: AstToken<SyntaxKind.TypeKeyword>,
-    [SyntaxKind.UndefinedKeyword]: AstToken<SyntaxKind.UndefinedKeyword>,
-    [SyntaxKind.UniqueKeyword]: AstToken<SyntaxKind.UniqueKeyword>,
-    [SyntaxKind.UnknownKeyword]: AstToken<SyntaxKind.UnknownKeyword>,
-    [SyntaxKind.UsingKeyword]: AstToken<SyntaxKind.UsingKeyword>,
-    [SyntaxKind.FromKeyword]: AstToken<SyntaxKind.FromKeyword>,
-    [SyntaxKind.GlobalKeyword]: AstToken<SyntaxKind.GlobalKeyword>,
-    [SyntaxKind.BigIntKeyword]: AstToken<SyntaxKind.BigIntKeyword>,
-    [SyntaxKind.OverrideKeyword]: AstOverrideKeyword,
-    [SyntaxKind.OfKeyword]: AstToken<SyntaxKind.OfKeyword>,
-    [SyntaxKind.QualifiedName]: AstQualifiedName,
-    [SyntaxKind.ComputedPropertyName]: AstComputedPropertyName,
-    [SyntaxKind.Decorator]: AstDecorator,
-    [SyntaxKind.TypeParameter]: AstTypeParameterDeclaration,
-    [SyntaxKind.CallSignature]: AstCallSignatureDeclaration,
-    [SyntaxKind.ConstructSignature]: AstConstructSignatureDeclaration,
-    [SyntaxKind.VariableDeclaration]: AstVariableDeclaration,
-    [SyntaxKind.VariableDeclarationList]: AstVariableDeclarationList,
-    [SyntaxKind.Parameter]: AstParameterDeclaration,
-    [SyntaxKind.BindingElement]: AstBindingElement,
-    [SyntaxKind.PropertySignature]: AstPropertySignature,
-    [SyntaxKind.PropertyDeclaration]: AstPropertyDeclaration,
-    [SyntaxKind.PropertyAssignment]: AstPropertyAssignment,
-    [SyntaxKind.ShorthandPropertyAssignment]: AstShorthandPropertyAssignment,
-    [SyntaxKind.SpreadAssignment]: AstSpreadAssignment,
-    [SyntaxKind.ObjectBindingPattern]: AstObjectBindingPattern,
-    [SyntaxKind.ArrayBindingPattern]: AstArrayBindingPattern,
-    [SyntaxKind.FunctionDeclaration]: AstFunctionDeclaration,
-    [SyntaxKind.MethodSignature]: AstMethodSignature,
-    [SyntaxKind.MethodDeclaration]: AstMethodDeclaration,
-    [SyntaxKind.Constructor]: AstConstructorDeclaration,
-    [SyntaxKind.SemicolonClassElement]: AstSemicolonClassElement,
-    [SyntaxKind.GetAccessor]: AstGetAccessorDeclaration,
-    [SyntaxKind.SetAccessor]: AstSetAccessorDeclaration,
-    [SyntaxKind.IndexSignature]: AstIndexSignatureDeclaration,
-    [SyntaxKind.ClassStaticBlockDeclaration]: AstClassStaticBlockDeclaration,
-    [SyntaxKind.ImportTypeAssertionContainer]: AstImportTypeAssertionContainer,
-    [SyntaxKind.ImportType]: AstImportTypeNode,
-    [SyntaxKind.ThisType]: AstThisTypeNode,
-    [SyntaxKind.FunctionType]: AstFunctionTypeNode,
-    [SyntaxKind.ConstructorType]: AstConstructorTypeNode,
-    [SyntaxKind.TypeReference]: AstTypeReferenceNode,
-    [SyntaxKind.TypePredicate]: AstTypePredicateNode,
-    [SyntaxKind.TypeQuery]: AstTypeQueryNode,
-    [SyntaxKind.TypeLiteral]: AstTypeLiteralNode,
-    [SyntaxKind.ArrayType]: AstArrayTypeNode,
-    [SyntaxKind.TupleType]: AstTupleTypeNode,
-    [SyntaxKind.NamedTupleMember]: AstNamedTupleMember,
-    [SyntaxKind.OptionalType]: AstOptionalTypeNode,
-    [SyntaxKind.RestType]: AstRestTypeNode,
-    [SyntaxKind.UnionType]: AstUnionTypeNode,
-    [SyntaxKind.IntersectionType]: AstIntersectionTypeNode,
-    [SyntaxKind.ConditionalType]: AstConditionalTypeNode,
-    [SyntaxKind.InferType]: AstInferTypeNode,
-    [SyntaxKind.ParenthesizedType]: AstParenthesizedTypeNode,
-    [SyntaxKind.TypeOperator]: AstTypeOperatorNode,
-    [SyntaxKind.IndexedAccessType]: AstIndexedAccessTypeNode,
-    [SyntaxKind.MappedType]: AstMappedTypeNode,
-    [SyntaxKind.LiteralType]: AstLiteralTypeNode,
-    [SyntaxKind.TemplateLiteralType]: AstTemplateLiteralTypeNode,
-    [SyntaxKind.TemplateLiteralTypeSpan]: AstTemplateLiteralTypeSpan,
-    [SyntaxKind.OmittedExpression]: AstOmittedExpression,
-    [SyntaxKind.PrefixUnaryExpression]: AstPrefixUnaryExpression,
-    [SyntaxKind.PostfixUnaryExpression]: AstPostfixUnaryExpression,
-    [SyntaxKind.DeleteExpression]: AstDeleteExpression,
-    [SyntaxKind.TypeOfExpression]: AstTypeOfExpression,
-    [SyntaxKind.VoidExpression]: AstVoidExpression,
-    [SyntaxKind.AwaitExpression]: AstAwaitExpression,
-    [SyntaxKind.YieldExpression]: AstYieldExpression,
-    [SyntaxKind.BinaryExpression]: AstBinaryExpression,
-    [SyntaxKind.ConditionalExpression]: AstConditionalExpression,
-    [SyntaxKind.FunctionExpression]: AstFunctionExpression,
-    [SyntaxKind.ArrowFunction]: AstArrowFunction,
-    [SyntaxKind.TemplateExpression]: AstTemplateExpression,
-    [SyntaxKind.TemplateSpan]: AstTemplateSpan,
-    [SyntaxKind.ParenthesizedExpression]: AstParenthesizedExpression,
-    [SyntaxKind.ArrayLiteralExpression]: AstArrayLiteralExpression,
-    [SyntaxKind.SpreadElement]: AstSpreadElement,
-    [SyntaxKind.ObjectLiteralExpression]: AstObjectLiteralExpression,
-    [SyntaxKind.PropertyAccessExpression]: AstPropertyAccessExpression,
-    [SyntaxKind.ElementAccessExpression]: AstElementAccessExpression,
-    [SyntaxKind.CallExpression]: AstCallExpression,
-    [SyntaxKind.ExpressionWithTypeArguments]: AstExpressionWithTypeArguments,
-    [SyntaxKind.NewExpression]: AstNewExpression,
-    [SyntaxKind.TaggedTemplateExpression]: AstTaggedTemplateExpression,
-    [SyntaxKind.AsExpression]: AstAsExpression,
-    [SyntaxKind.TypeAssertionExpression]: AstTypeAssertion,
-    [SyntaxKind.SyntheticExpression]: AstSyntheticExpression,
-    [SyntaxKind.SatisfiesExpression]: AstSatisfiesExpression,
-    [SyntaxKind.NonNullExpression]: AstNonNullExpression,
-    [SyntaxKind.MetaProperty]: AstMetaProperty,
-    [SyntaxKind.JsxElement]: AstJsxElement,
-    [SyntaxKind.JsxAttributes]: AstJsxAttributes,
-    [SyntaxKind.JsxNamespacedName]: AstJsxNamespacedName,
-    [SyntaxKind.JsxOpeningElement]: AstJsxOpeningElement,
-    [SyntaxKind.JsxSelfClosingElement]: AstJsxSelfClosingElement,
-    [SyntaxKind.JsxFragment]: AstJsxFragment,
-    [SyntaxKind.JsxOpeningFragment]: AstJsxOpeningFragment,
-    [SyntaxKind.JsxClosingFragment]: AstJsxClosingFragment,
-    [SyntaxKind.JsxAttribute]: AstJsxAttribute,
-    [SyntaxKind.JsxSpreadAttribute]: AstJsxSpreadAttribute,
-    [SyntaxKind.JsxClosingElement]: AstJsxClosingElement,
-    [SyntaxKind.JsxExpression]: AstJsxExpression,
-    [SyntaxKind.EmptyStatement]: AstEmptyStatement,
-    [SyntaxKind.DebuggerStatement]: AstDebuggerStatement,
-    [SyntaxKind.MissingDeclaration]: AstMissingDeclaration,
-    [SyntaxKind.Block]: AstBlock,
-    [SyntaxKind.VariableStatement]: AstVariableStatement,
-    [SyntaxKind.ExpressionStatement]: AstExpressionStatement,
-    [SyntaxKind.IfStatement]: AstIfStatement,
-    [SyntaxKind.DoStatement]: AstDoStatement,
-    [SyntaxKind.WhileStatement]: AstWhileStatement,
-    [SyntaxKind.ForStatement]: AstForStatement,
-    [SyntaxKind.ForInStatement]: AstForInStatement,
-    [SyntaxKind.ForOfStatement]: AstForOfStatement,
-    [SyntaxKind.BreakStatement]: AstBreakStatement,
-    [SyntaxKind.ContinueStatement]: AstContinueStatement,
-    [SyntaxKind.ReturnStatement]: AstReturnStatement,
-    [SyntaxKind.WithStatement]: AstWithStatement,
-    [SyntaxKind.SwitchStatement]: AstSwitchStatement,
-    [SyntaxKind.CaseBlock]: AstCaseBlock,
-    [SyntaxKind.CaseClause]: AstCaseClause,
-    [SyntaxKind.DefaultClause]: AstDefaultClause,
-    [SyntaxKind.LabeledStatement]: AstLabeledStatement,
-    [SyntaxKind.ThrowStatement]: AstThrowStatement,
-    [SyntaxKind.TryStatement]: AstTryStatement,
-    [SyntaxKind.CatchClause]: AstCatchClause,
-    [SyntaxKind.ClassDeclaration]: AstClassDeclaration,
-    [SyntaxKind.ClassExpression]: AstClassExpression,
-    [SyntaxKind.InterfaceDeclaration]: AstInterfaceDeclaration,
-    [SyntaxKind.HeritageClause]: AstHeritageClause,
-    [SyntaxKind.TypeAliasDeclaration]: AstTypeAliasDeclaration,
-    [SyntaxKind.EnumMember]: AstEnumMember,
-    [SyntaxKind.EnumDeclaration]: AstEnumDeclaration,
-    [SyntaxKind.ModuleDeclaration]: AstModuleDeclaration,
-    [SyntaxKind.ModuleBlock]: AstModuleBlock,
-    [SyntaxKind.ImportEqualsDeclaration]: AstImportEqualsDeclaration,
-    [SyntaxKind.ExternalModuleReference]: AstExternalModuleReference,
-    [SyntaxKind.ImportDeclaration]: AstImportDeclaration,
-    [SyntaxKind.ImportClause]: AstImportClause,
-    [SyntaxKind.ImportAttribute]: AstImportAttribute,
-    [SyntaxKind.ImportAttributes]: AstImportAttributes,
-    [SyntaxKind.NamespaceImport]: AstNamespaceImport,
-    [SyntaxKind.NamespaceExport]: AstNamespaceExport,
-    [SyntaxKind.NamespaceExportDeclaration]: AstNamespaceExportDeclaration,
-    [SyntaxKind.ExportDeclaration]: AstExportDeclaration,
-    [SyntaxKind.NamedImports]: AstNamedImports,
-    [SyntaxKind.NamedExports]: AstNamedExports,
-    [SyntaxKind.ImportSpecifier]: AstImportSpecifier,
-    [SyntaxKind.ExportSpecifier]: AstExportSpecifier,
-    [SyntaxKind.ExportAssignment]: AstExportAssignment,
-    [SyntaxKind.JSDocTypeExpression]: AstJSDocTypeExpression,
-    [SyntaxKind.JSDocNameReference]: AstJSDocNameReference,
-    [SyntaxKind.JSDocMemberName]: AstJSDocMemberName,
-    [SyntaxKind.JSDocAllType]: AstJSDocAllType,
-    [SyntaxKind.JSDocUnknownType]: AstJSDocUnknownType,
-    [SyntaxKind.JSDocNonNullableType]: AstJSDocNonNullableType,
-    [SyntaxKind.JSDocNullableType]: AstJSDocNullableType,
-    [SyntaxKind.JSDocOptionalType]: AstJSDocOptionalType,
-    [SyntaxKind.JSDocFunctionType]: AstJSDocFunctionType,
-    [SyntaxKind.JSDocVariadicType]: AstJSDocVariadicType,
-    [SyntaxKind.JSDocNamepathType]: AstJSDocNamepathType,
-    [SyntaxKind.JSDoc]: AstJSDocNode,
-    [SyntaxKind.JSDocLink]: AstJSDocLink,
-    [SyntaxKind.JSDocLinkCode]: AstJSDocLinkCode,
-    [SyntaxKind.JSDocLinkPlain]: AstJSDocLinkPlain,
-    [SyntaxKind.JSDocText]: AstJSDocText,
-    [SyntaxKind.JSDocTag]: AstJSDocUnknownTag,
-    [SyntaxKind.JSDocAugmentsTag]: AstJSDocAugmentsTag,
-    [SyntaxKind.JSDocImplementsTag]: AstJSDocImplementsTag,
-    [SyntaxKind.JSDocAuthorTag]: AstJSDocAuthorTag,
-    [SyntaxKind.JSDocDeprecatedTag]: AstJSDocDeprecatedTag,
-    [SyntaxKind.JSDocClassTag]: AstJSDocClassTag,
-    [SyntaxKind.JSDocPublicTag]: AstJSDocPublicTag,
-    [SyntaxKind.JSDocPrivateTag]: AstJSDocPrivateTag,
-    [SyntaxKind.JSDocProtectedTag]: AstJSDocProtectedTag,
-    [SyntaxKind.JSDocReadonlyTag]: AstJSDocReadonlyTag,
-    [SyntaxKind.JSDocOverrideTag]: AstJSDocOverrideTag,
-    [SyntaxKind.JSDocEnumTag]: AstJSDocEnumTag,
-    [SyntaxKind.JSDocThisTag]: AstJSDocThisTag,
-    [SyntaxKind.JSDocTemplateTag]: AstJSDocTemplateTag,
-    [SyntaxKind.JSDocSeeTag]: AstJSDocSeeTag,
-    [SyntaxKind.JSDocReturnTag]: AstJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: AstJSDocTypeTag,
-    [SyntaxKind.JSDocTypedefTag]: AstJSDocTypedefTag,
-    [SyntaxKind.JSDocCallbackTag]: AstJSDocCallbackTag,
-    [SyntaxKind.JSDocOverloadTag]: AstJSDocOverloadTag,
-    [SyntaxKind.JSDocThrowsTag]: AstJSDocThrowsTag,
-    [SyntaxKind.JSDocSignature]: AstJSDocSignature,
-    [SyntaxKind.JSDocPropertyTag]: AstJSDocPropertyTag,
-    [SyntaxKind.JSDocParameterTag]: AstJSDocParameterTag,
-    [SyntaxKind.JSDocTypeLiteral]: AstJSDocTypeLiteral,
-    [SyntaxKind.JSDocSatisfiesTag]: AstJSDocSatisfiesTag,
-    [SyntaxKind.JSDocImportTag]: AstJSDocImportTag,
-    [SyntaxKind.SourceFile]: AstSourceFile,
-    [SyntaxKind.Bundle]: AstBundle,
-    [SyntaxKind.SyntaxList]: AstSyntaxList,
-    [SyntaxKind.NotEmittedStatement]: AstNotEmittedStatement,
-    [SyntaxKind.NotEmittedTypeElement]: AstNotEmittedTypeElement,
-    [SyntaxKind.PartiallyEmittedExpression]: AstPartiallyEmittedExpression,
-    [SyntaxKind.CommaListExpression]: AstCommaListExpression,
-    [SyntaxKind.SyntheticReferenceExpression]: AstSyntheticReferenceExpression,
-    [SyntaxKind.Count]: never,
-    [SyntaxKind.NonTextFileMarkerTrivia]: never,
+    [SyntaxKind.Unknown]: AstToken<SyntaxKind.Unknown>;
+    [SyntaxKind.EndOfFileToken]: AstEndOfFileToken;
+    [SyntaxKind.SingleLineCommentTrivia]: AstToken<SyntaxKind.SingleLineCommentTrivia>;
+    [SyntaxKind.MultiLineCommentTrivia]: AstToken<SyntaxKind.MultiLineCommentTrivia>;
+    [SyntaxKind.NewLineTrivia]: AstToken<SyntaxKind.NewLineTrivia>;
+    [SyntaxKind.WhitespaceTrivia]: AstToken<SyntaxKind.WhitespaceTrivia>;
+    [SyntaxKind.ShebangTrivia]: AstToken<SyntaxKind.ShebangTrivia>;
+    [SyntaxKind.ConflictMarkerTrivia]: AstToken<SyntaxKind.ConflictMarkerTrivia>;
+    [SyntaxKind.NonTextFileMarkerTrivia]: never;
+    [SyntaxKind.NumericLiteral]: AstNumericLiteral;
+    [SyntaxKind.BigIntLiteral]: AstBigIntLiteral;
+    [SyntaxKind.StringLiteral]: AstStringLiteral;
+    [SyntaxKind.JsxText]: AstJsxText;
+    [SyntaxKind.JsxTextAllWhiteSpaces]: never;
+    [SyntaxKind.RegularExpressionLiteral]: AstRegularExpressionLiteral;
+    [SyntaxKind.NoSubstitutionTemplateLiteral]: AstNoSubstitutionTemplateLiteral;
+    [SyntaxKind.TemplateHead]: AstTemplateHead;
+    [SyntaxKind.TemplateMiddle]: AstTemplateMiddle;
+    [SyntaxKind.TemplateTail]: AstTemplateTail;
+    [SyntaxKind.OpenBraceToken]: AstToken<SyntaxKind.OpenBraceToken>;
+    [SyntaxKind.CloseBraceToken]: AstToken<SyntaxKind.CloseBraceToken>;
+    [SyntaxKind.OpenParenToken]: AstToken<SyntaxKind.OpenParenToken>;
+    [SyntaxKind.CloseParenToken]: AstToken<SyntaxKind.CloseParenToken>;
+    [SyntaxKind.OpenBracketToken]: AstToken<SyntaxKind.OpenBracketToken>;
+    [SyntaxKind.CloseBracketToken]: AstToken<SyntaxKind.CloseBracketToken>;
+    [SyntaxKind.DotToken]: AstDotToken;
+    [SyntaxKind.DotDotDotToken]: AstDotDotDotToken;
+    [SyntaxKind.SemicolonToken]: AstToken<SyntaxKind.SemicolonToken>;
+    [SyntaxKind.CommaToken]: AstToken<SyntaxKind.CommaToken>;
+    [SyntaxKind.QuestionDotToken]: AstQuestionDotToken;
+    [SyntaxKind.LessThanToken]: AstToken<SyntaxKind.LessThanToken>;
+    [SyntaxKind.LessThanSlashToken]: AstToken<SyntaxKind.LessThanSlashToken>;
+    [SyntaxKind.GreaterThanToken]: AstToken<SyntaxKind.GreaterThanToken>;
+    [SyntaxKind.LessThanEqualsToken]: AstToken<SyntaxKind.LessThanEqualsToken>;
+    [SyntaxKind.GreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanEqualsToken>;
+    [SyntaxKind.EqualsEqualsToken]: AstToken<SyntaxKind.EqualsEqualsToken>;
+    [SyntaxKind.ExclamationEqualsToken]: AstToken<SyntaxKind.ExclamationEqualsToken>;
+    [SyntaxKind.EqualsEqualsEqualsToken]: AstToken<SyntaxKind.EqualsEqualsEqualsToken>;
+    [SyntaxKind.ExclamationEqualsEqualsToken]: AstToken<SyntaxKind.ExclamationEqualsEqualsToken>;
+    [SyntaxKind.EqualsGreaterThanToken]: AstEqualsGreaterThanToken;
+    [SyntaxKind.PlusToken]: AstPlusToken;
+    [SyntaxKind.MinusToken]: AstMinusToken;
+    [SyntaxKind.AsteriskToken]: AstAsteriskToken;
+    [SyntaxKind.AsteriskAsteriskToken]: AstToken<SyntaxKind.AsteriskAsteriskToken>;
+    [SyntaxKind.SlashToken]: AstToken<SyntaxKind.SlashToken>;
+    [SyntaxKind.PercentToken]: AstToken<SyntaxKind.PercentToken>;
+    [SyntaxKind.PlusPlusToken]: AstToken<SyntaxKind.PlusPlusToken>;
+    [SyntaxKind.MinusMinusToken]: AstToken<SyntaxKind.MinusMinusToken>;
+    [SyntaxKind.LessThanLessThanToken]: AstToken<SyntaxKind.LessThanLessThanToken>;
+    [SyntaxKind.GreaterThanGreaterThanToken]: AstToken<SyntaxKind.GreaterThanGreaterThanToken>;
+    [SyntaxKind.GreaterThanGreaterThanGreaterThanToken]: AstToken<SyntaxKind.GreaterThanGreaterThanGreaterThanToken>;
+    [SyntaxKind.AmpersandToken]: AstToken<SyntaxKind.AmpersandToken>;
+    [SyntaxKind.BarToken]: AstToken<SyntaxKind.BarToken>;
+    [SyntaxKind.CaretToken]: AstToken<SyntaxKind.CaretToken>;
+    [SyntaxKind.ExclamationToken]: AstExclamationToken;
+    [SyntaxKind.TildeToken]: AstToken<SyntaxKind.TildeToken>;
+    [SyntaxKind.AmpersandAmpersandToken]: AstToken<SyntaxKind.AmpersandAmpersandToken>;
+    [SyntaxKind.BarBarToken]: AstToken<SyntaxKind.BarBarToken>;
+    [SyntaxKind.QuestionToken]: AstQuestionToken;
+    [SyntaxKind.ColonToken]: AstColonToken;
+    [SyntaxKind.AtToken]: AstToken<SyntaxKind.AtToken>;
+    [SyntaxKind.QuestionQuestionToken]: AstToken<SyntaxKind.QuestionQuestionToken>;
+    [SyntaxKind.BacktickToken]: AstToken<SyntaxKind.BacktickToken>;
+    [SyntaxKind.HashToken]: AstToken<SyntaxKind.HashToken>;
+    [SyntaxKind.EqualsToken]: AstEqualsToken;
+    [SyntaxKind.PlusEqualsToken]: AstToken<SyntaxKind.PlusEqualsToken>;
+    [SyntaxKind.MinusEqualsToken]: AstToken<SyntaxKind.MinusEqualsToken>;
+    [SyntaxKind.AsteriskEqualsToken]: AstToken<SyntaxKind.AsteriskEqualsToken>;
+    [SyntaxKind.AsteriskAsteriskEqualsToken]: AstToken<SyntaxKind.AsteriskAsteriskEqualsToken>;
+    [SyntaxKind.SlashEqualsToken]: AstToken<SyntaxKind.SlashEqualsToken>;
+    [SyntaxKind.PercentEqualsToken]: AstToken<SyntaxKind.PercentEqualsToken>;
+    [SyntaxKind.LessThanLessThanEqualsToken]: AstToken<SyntaxKind.LessThanLessThanEqualsToken>;
+    [SyntaxKind.GreaterThanGreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanGreaterThanEqualsToken>;
+    [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: AstToken<SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>;
+    [SyntaxKind.AmpersandEqualsToken]: AstToken<SyntaxKind.AmpersandEqualsToken>;
+    [SyntaxKind.BarEqualsToken]: AstToken<SyntaxKind.BarEqualsToken>;
+    [SyntaxKind.BarBarEqualsToken]: AstBarBarEqualsToken;
+    [SyntaxKind.AmpersandAmpersandEqualsToken]: AstAmpersandAmpersandEqualsToken;
+    [SyntaxKind.QuestionQuestionEqualsToken]: AstQuestionQuestionEqualsToken;
+    [SyntaxKind.CaretEqualsToken]: AstToken<SyntaxKind.CaretEqualsToken>;
+    [SyntaxKind.Identifier]: AstIdentifier;
+    [SyntaxKind.PrivateIdentifier]: AstPrivateIdentifier;
+    [SyntaxKind.JSDocCommentTextToken]: never;
+    [SyntaxKind.BreakKeyword]: AstToken<SyntaxKind.BreakKeyword>;
+    [SyntaxKind.CaseKeyword]: AstCaseKeyword;
+    [SyntaxKind.CatchKeyword]: AstToken<SyntaxKind.CatchKeyword>;
+    [SyntaxKind.ClassKeyword]: AstToken<SyntaxKind.ClassKeyword>;
+    [SyntaxKind.ConstKeyword]: AstToken<SyntaxKind.ConstKeyword>;
+    [SyntaxKind.ContinueKeyword]: AstToken<SyntaxKind.ContinueKeyword>;
+    [SyntaxKind.DebuggerKeyword]: AstToken<SyntaxKind.DebuggerKeyword>;
+    [SyntaxKind.DefaultKeyword]: AstDefaultKeyword;
+    [SyntaxKind.DeleteKeyword]: AstToken<SyntaxKind.DeleteKeyword>;
+    [SyntaxKind.DoKeyword]: AstToken<SyntaxKind.DoKeyword>;
+    [SyntaxKind.ElseKeyword]: AstToken<SyntaxKind.ElseKeyword>;
+    [SyntaxKind.EnumKeyword]: AstToken<SyntaxKind.EnumKeyword>;
+    [SyntaxKind.ExportKeyword]: AstExportKeyword;
+    [SyntaxKind.ExtendsKeyword]: AstToken<SyntaxKind.ExtendsKeyword>;
+    [SyntaxKind.FalseKeyword]: AstFalseLiteral;
+    [SyntaxKind.FinallyKeyword]: AstToken<SyntaxKind.FinallyKeyword>;
+    [SyntaxKind.ForKeyword]: AstToken<SyntaxKind.ForKeyword>;
+    [SyntaxKind.FunctionKeyword]: AstToken<SyntaxKind.FunctionKeyword>;
+    [SyntaxKind.IfKeyword]: AstToken<SyntaxKind.IfKeyword>;
+    [SyntaxKind.ImportKeyword]: AstImportExpression;
+    [SyntaxKind.InKeyword]: AstInKeyword;
+    [SyntaxKind.InstanceOfKeyword]: AstToken<SyntaxKind.InstanceOfKeyword>;
+    [SyntaxKind.NewKeyword]: AstToken<SyntaxKind.NewKeyword>;
+    [SyntaxKind.NullKeyword]: AstNullLiteral;
+    [SyntaxKind.ReturnKeyword]: AstToken<SyntaxKind.ReturnKeyword>;
+    [SyntaxKind.SuperKeyword]: AstSuperExpression;
+    [SyntaxKind.SwitchKeyword]: AstToken<SyntaxKind.SwitchKeyword>;
+    [SyntaxKind.ThisKeyword]: AstThisExpression;
+    [SyntaxKind.ThrowKeyword]: AstToken<SyntaxKind.ThrowKeyword>;
+    [SyntaxKind.TrueKeyword]: AstTrueLiteral;
+    [SyntaxKind.TryKeyword]: AstToken<SyntaxKind.TryKeyword>;
+    [SyntaxKind.TypeOfKeyword]: AstToken<SyntaxKind.TypeOfKeyword>;
+    [SyntaxKind.VarKeyword]: AstToken<SyntaxKind.VarKeyword>;
+    [SyntaxKind.VoidKeyword]: AstToken<SyntaxKind.VoidKeyword>;
+    [SyntaxKind.WhileKeyword]: AstToken<SyntaxKind.WhileKeyword>;
+    [SyntaxKind.WithKeyword]: AstToken<SyntaxKind.WithKeyword>;
+    [SyntaxKind.ImplementsKeyword]: AstToken<SyntaxKind.ImplementsKeyword>;
+    [SyntaxKind.InterfaceKeyword]: AstToken<SyntaxKind.InterfaceKeyword>;
+    [SyntaxKind.LetKeyword]: AstToken<SyntaxKind.LetKeyword>;
+    [SyntaxKind.PackageKeyword]: AstToken<SyntaxKind.PackageKeyword>;
+    [SyntaxKind.PrivateKeyword]: AstPrivateKeyword;
+    [SyntaxKind.ProtectedKeyword]: AstProtectedKeyword;
+    [SyntaxKind.PublicKeyword]: AstPublicKeyword;
+    [SyntaxKind.StaticKeyword]: AstStaticKeyword;
+    [SyntaxKind.YieldKeyword]: AstToken<SyntaxKind.YieldKeyword>;
+    [SyntaxKind.AbstractKeyword]: AstAbstractKeyword;
+    [SyntaxKind.AccessorKeyword]: AstAccessorKeyword;
+    [SyntaxKind.AsKeyword]: AstToken<SyntaxKind.AsKeyword>;
+    [SyntaxKind.AssertsKeyword]: AstAssertsKeyword;
+    [SyntaxKind.AssertKeyword]: AstAssertKeyword;
+    [SyntaxKind.AnyKeyword]: AstToken<SyntaxKind.AnyKeyword>;
+    [SyntaxKind.AsyncKeyword]: AstAsyncKeyword;
+    [SyntaxKind.AwaitKeyword]: AstAwaitKeyword;
+    [SyntaxKind.BooleanKeyword]: AstToken<SyntaxKind.BooleanKeyword>;
+    [SyntaxKind.ConstructorKeyword]: AstToken<SyntaxKind.ConstructorKeyword>;
+    [SyntaxKind.DeclareKeyword]: AstDeclareKeyword;
+    [SyntaxKind.GetKeyword]: AstToken<SyntaxKind.GetKeyword>;
+    [SyntaxKind.InferKeyword]: AstToken<SyntaxKind.InferKeyword>;
+    [SyntaxKind.IntrinsicKeyword]: AstToken<SyntaxKind.IntrinsicKeyword>;
+    [SyntaxKind.IsKeyword]: AstToken<SyntaxKind.IsKeyword>;
+    [SyntaxKind.KeyOfKeyword]: AstToken<SyntaxKind.KeyOfKeyword>;
+    [SyntaxKind.ModuleKeyword]: AstToken<SyntaxKind.ModuleKeyword>;
+    [SyntaxKind.NamespaceKeyword]: AstToken<SyntaxKind.NamespaceKeyword>;
+    [SyntaxKind.NeverKeyword]: AstToken<SyntaxKind.NeverKeyword>;
+    [SyntaxKind.OutKeyword]: AstOutKeyword;
+    [SyntaxKind.ReadonlyKeyword]: AstReadonlyKeyword;
+    [SyntaxKind.RequireKeyword]: AstToken<SyntaxKind.RequireKeyword>;
+    [SyntaxKind.NumberKeyword]: AstToken<SyntaxKind.NumberKeyword>;
+    [SyntaxKind.ObjectKeyword]: AstToken<SyntaxKind.ObjectKeyword>;
+    [SyntaxKind.SatisfiesKeyword]: AstToken<SyntaxKind.SatisfiesKeyword>;
+    [SyntaxKind.SetKeyword]: AstToken<SyntaxKind.SetKeyword>;
+    [SyntaxKind.StringKeyword]: AstToken<SyntaxKind.StringKeyword>;
+    [SyntaxKind.SymbolKeyword]: AstToken<SyntaxKind.SymbolKeyword>;
+    [SyntaxKind.TypeKeyword]: AstToken<SyntaxKind.TypeKeyword>;
+    [SyntaxKind.UndefinedKeyword]: AstToken<SyntaxKind.UndefinedKeyword>;
+    [SyntaxKind.UniqueKeyword]: AstToken<SyntaxKind.UniqueKeyword>;
+    [SyntaxKind.UnknownKeyword]: AstToken<SyntaxKind.UnknownKeyword>;
+    [SyntaxKind.UsingKeyword]: AstToken<SyntaxKind.UsingKeyword>;
+    [SyntaxKind.FromKeyword]: AstToken<SyntaxKind.FromKeyword>;
+    [SyntaxKind.GlobalKeyword]: AstToken<SyntaxKind.GlobalKeyword>;
+    [SyntaxKind.BigIntKeyword]: AstToken<SyntaxKind.BigIntKeyword>;
+    [SyntaxKind.OverrideKeyword]: AstOverrideKeyword;
+    [SyntaxKind.OfKeyword]: AstToken<SyntaxKind.OfKeyword>;
+    [SyntaxKind.QualifiedName]: AstQualifiedName;
+    [SyntaxKind.ComputedPropertyName]: AstComputedPropertyName;
+    [SyntaxKind.Decorator]: AstDecorator;
+    [SyntaxKind.TypeParameter]: AstTypeParameterDeclaration;
+    [SyntaxKind.CallSignature]: AstCallSignatureDeclaration;
+    [SyntaxKind.ConstructSignature]: AstConstructSignatureDeclaration;
+    [SyntaxKind.VariableDeclaration]: AstVariableDeclaration;
+    [SyntaxKind.VariableDeclarationList]: AstVariableDeclarationList;
+    [SyntaxKind.Parameter]: AstParameterDeclaration;
+    [SyntaxKind.BindingElement]: AstBindingElement;
+    [SyntaxKind.PropertySignature]: AstPropertySignature;
+    [SyntaxKind.PropertyDeclaration]: AstPropertyDeclaration;
+    [SyntaxKind.PropertyAssignment]: AstPropertyAssignment;
+    [SyntaxKind.ShorthandPropertyAssignment]: AstShorthandPropertyAssignment;
+    [SyntaxKind.SpreadAssignment]: AstSpreadAssignment;
+    [SyntaxKind.ObjectBindingPattern]: AstObjectBindingPattern;
+    [SyntaxKind.ArrayBindingPattern]: AstArrayBindingPattern;
+    [SyntaxKind.FunctionDeclaration]: AstFunctionDeclaration;
+    [SyntaxKind.MethodSignature]: AstMethodSignature;
+    [SyntaxKind.MethodDeclaration]: AstMethodDeclaration;
+    [SyntaxKind.Constructor]: AstConstructorDeclaration;
+    [SyntaxKind.SemicolonClassElement]: AstSemicolonClassElement;
+    [SyntaxKind.GetAccessor]: AstGetAccessorDeclaration;
+    [SyntaxKind.SetAccessor]: AstSetAccessorDeclaration;
+    [SyntaxKind.IndexSignature]: AstIndexSignatureDeclaration;
+    [SyntaxKind.ClassStaticBlockDeclaration]: AstClassStaticBlockDeclaration;
+    [SyntaxKind.ImportTypeAssertionContainer]: AstImportTypeAssertionContainer;
+    [SyntaxKind.ImportType]: AstImportTypeNode;
+    [SyntaxKind.ThisType]: AstThisTypeNode;
+    [SyntaxKind.FunctionType]: AstFunctionTypeNode;
+    [SyntaxKind.ConstructorType]: AstConstructorTypeNode;
+    [SyntaxKind.TypeReference]: AstTypeReferenceNode;
+    [SyntaxKind.TypePredicate]: AstTypePredicateNode;
+    [SyntaxKind.TypeQuery]: AstTypeQueryNode;
+    [SyntaxKind.TypeLiteral]: AstTypeLiteralNode;
+    [SyntaxKind.ArrayType]: AstArrayTypeNode;
+    [SyntaxKind.TupleType]: AstTupleTypeNode;
+    [SyntaxKind.NamedTupleMember]: AstNamedTupleMember;
+    [SyntaxKind.OptionalType]: AstOptionalTypeNode;
+    [SyntaxKind.RestType]: AstRestTypeNode;
+    [SyntaxKind.UnionType]: AstUnionTypeNode;
+    [SyntaxKind.IntersectionType]: AstIntersectionTypeNode;
+    [SyntaxKind.ConditionalType]: AstConditionalTypeNode;
+    [SyntaxKind.InferType]: AstInferTypeNode;
+    [SyntaxKind.ParenthesizedType]: AstParenthesizedTypeNode;
+    [SyntaxKind.TypeOperator]: AstTypeOperatorNode;
+    [SyntaxKind.IndexedAccessType]: AstIndexedAccessTypeNode;
+    [SyntaxKind.MappedType]: AstMappedTypeNode;
+    [SyntaxKind.LiteralType]: AstLiteralTypeNode;
+    [SyntaxKind.TemplateLiteralType]: AstTemplateLiteralTypeNode;
+    [SyntaxKind.TemplateLiteralTypeSpan]: AstTemplateLiteralTypeSpan;
+    [SyntaxKind.OmittedExpression]: AstOmittedExpression;
+    [SyntaxKind.PrefixUnaryExpression]: AstPrefixUnaryExpression;
+    [SyntaxKind.PostfixUnaryExpression]: AstPostfixUnaryExpression;
+    [SyntaxKind.DeleteExpression]: AstDeleteExpression;
+    [SyntaxKind.TypeOfExpression]: AstTypeOfExpression;
+    [SyntaxKind.VoidExpression]: AstVoidExpression;
+    [SyntaxKind.AwaitExpression]: AstAwaitExpression;
+    [SyntaxKind.YieldExpression]: AstYieldExpression;
+    [SyntaxKind.BinaryExpression]: AstBinaryExpression;
+    [SyntaxKind.ConditionalExpression]: AstConditionalExpression;
+    [SyntaxKind.FunctionExpression]: AstFunctionExpression;
+    [SyntaxKind.ArrowFunction]: AstArrowFunction;
+    [SyntaxKind.TemplateExpression]: AstTemplateExpression;
+    [SyntaxKind.TemplateSpan]: AstTemplateSpan;
+    [SyntaxKind.ParenthesizedExpression]: AstParenthesizedExpression;
+    [SyntaxKind.ArrayLiteralExpression]: AstArrayLiteralExpression;
+    [SyntaxKind.SpreadElement]: AstSpreadElement;
+    [SyntaxKind.ObjectLiteralExpression]: AstObjectLiteralExpression;
+    [SyntaxKind.PropertyAccessExpression]: AstPropertyAccessExpression;
+    [SyntaxKind.ElementAccessExpression]: AstElementAccessExpression;
+    [SyntaxKind.CallExpression]: AstCallExpression;
+    [SyntaxKind.ExpressionWithTypeArguments]: AstExpressionWithTypeArguments;
+    [SyntaxKind.NewExpression]: AstNewExpression;
+    [SyntaxKind.TaggedTemplateExpression]: AstTaggedTemplateExpression;
+    [SyntaxKind.AsExpression]: AstAsExpression;
+    [SyntaxKind.TypeAssertionExpression]: AstTypeAssertion;
+    [SyntaxKind.SyntheticExpression]: AstSyntheticExpression;
+    [SyntaxKind.SatisfiesExpression]: AstSatisfiesExpression;
+    [SyntaxKind.NonNullExpression]: AstNonNullExpression;
+    [SyntaxKind.MetaProperty]: AstMetaProperty;
+    [SyntaxKind.JsxElement]: AstJsxElement;
+    [SyntaxKind.JsxAttributes]: AstJsxAttributes;
+    [SyntaxKind.JsxNamespacedName]: AstJsxNamespacedName;
+    [SyntaxKind.JsxOpeningElement]: AstJsxOpeningElement;
+    [SyntaxKind.JsxSelfClosingElement]: AstJsxSelfClosingElement;
+    [SyntaxKind.JsxFragment]: AstJsxFragment;
+    [SyntaxKind.JsxOpeningFragment]: AstJsxOpeningFragment;
+    [SyntaxKind.JsxClosingFragment]: AstJsxClosingFragment;
+    [SyntaxKind.JsxAttribute]: AstJsxAttribute;
+    [SyntaxKind.JsxSpreadAttribute]: AstJsxSpreadAttribute;
+    [SyntaxKind.JsxClosingElement]: AstJsxClosingElement;
+    [SyntaxKind.JsxExpression]: AstJsxExpression;
+    [SyntaxKind.EmptyStatement]: AstEmptyStatement;
+    [SyntaxKind.DebuggerStatement]: AstDebuggerStatement;
+    [SyntaxKind.MissingDeclaration]: AstMissingDeclaration;
+    [SyntaxKind.Block]: AstBlock;
+    [SyntaxKind.VariableStatement]: AstVariableStatement;
+    [SyntaxKind.ExpressionStatement]: AstExpressionStatement;
+    [SyntaxKind.IfStatement]: AstIfStatement;
+    [SyntaxKind.DoStatement]: AstDoStatement;
+    [SyntaxKind.WhileStatement]: AstWhileStatement;
+    [SyntaxKind.ForStatement]: AstForStatement;
+    [SyntaxKind.ForInStatement]: AstForInStatement;
+    [SyntaxKind.ForOfStatement]: AstForOfStatement;
+    [SyntaxKind.BreakStatement]: AstBreakStatement;
+    [SyntaxKind.ContinueStatement]: AstContinueStatement;
+    [SyntaxKind.ReturnStatement]: AstReturnStatement;
+    [SyntaxKind.WithStatement]: AstWithStatement;
+    [SyntaxKind.SwitchStatement]: AstSwitchStatement;
+    [SyntaxKind.CaseBlock]: AstCaseBlock;
+    [SyntaxKind.CaseClause]: AstCaseClause;
+    [SyntaxKind.DefaultClause]: AstDefaultClause;
+    [SyntaxKind.LabeledStatement]: AstLabeledStatement;
+    [SyntaxKind.ThrowStatement]: AstThrowStatement;
+    [SyntaxKind.TryStatement]: AstTryStatement;
+    [SyntaxKind.CatchClause]: AstCatchClause;
+    [SyntaxKind.ClassDeclaration]: AstClassDeclaration;
+    [SyntaxKind.ClassExpression]: AstClassExpression;
+    [SyntaxKind.InterfaceDeclaration]: AstInterfaceDeclaration;
+    [SyntaxKind.HeritageClause]: AstHeritageClause;
+    [SyntaxKind.TypeAliasDeclaration]: AstTypeAliasDeclaration;
+    [SyntaxKind.EnumMember]: AstEnumMember;
+    [SyntaxKind.EnumDeclaration]: AstEnumDeclaration;
+    [SyntaxKind.ModuleDeclaration]: AstModuleDeclaration;
+    [SyntaxKind.ModuleBlock]: AstModuleBlock;
+    [SyntaxKind.ImportEqualsDeclaration]: AstImportEqualsDeclaration;
+    [SyntaxKind.ExternalModuleReference]: AstExternalModuleReference;
+    [SyntaxKind.ImportDeclaration]: AstImportDeclaration;
+    [SyntaxKind.ImportClause]: AstImportClause;
+    [SyntaxKind.ImportAttribute]: AstImportAttribute;
+    [SyntaxKind.ImportAttributes]: AstImportAttributes;
+    [SyntaxKind.NamespaceImport]: AstNamespaceImport;
+    [SyntaxKind.NamespaceExport]: AstNamespaceExport;
+    [SyntaxKind.NamespaceExportDeclaration]: AstNamespaceExportDeclaration;
+    [SyntaxKind.ExportDeclaration]: AstExportDeclaration;
+    [SyntaxKind.NamedImports]: AstNamedImports;
+    [SyntaxKind.NamedExports]: AstNamedExports;
+    [SyntaxKind.ImportSpecifier]: AstImportSpecifier;
+    [SyntaxKind.ExportSpecifier]: AstExportSpecifier;
+    [SyntaxKind.ExportAssignment]: AstExportAssignment;
+    [SyntaxKind.JSDocTypeExpression]: AstJSDocTypeExpression;
+    [SyntaxKind.JSDocNameReference]: AstJSDocNameReference;
+    [SyntaxKind.JSDocMemberName]: AstJSDocMemberName;
+    [SyntaxKind.JSDocAllType]: AstJSDocAllType;
+    [SyntaxKind.JSDocUnknownType]: AstJSDocUnknownType;
+    [SyntaxKind.JSDocNonNullableType]: AstJSDocNonNullableType;
+    [SyntaxKind.JSDocNullableType]: AstJSDocNullableType;
+    [SyntaxKind.JSDocOptionalType]: AstJSDocOptionalType;
+    [SyntaxKind.JSDocFunctionType]: AstJSDocFunctionType;
+    [SyntaxKind.JSDocVariadicType]: AstJSDocVariadicType;
+    [SyntaxKind.JSDocNamepathType]: AstJSDocNamepathType;
+    [SyntaxKind.JSDoc]: AstJSDocNode;
+    [SyntaxKind.JSDocLink]: AstJSDocLink;
+    [SyntaxKind.JSDocLinkCode]: AstJSDocLinkCode;
+    [SyntaxKind.JSDocLinkPlain]: AstJSDocLinkPlain;
+    [SyntaxKind.JSDocText]: AstJSDocText;
+    [SyntaxKind.JSDocTag]: AstJSDocUnknownTag;
+    [SyntaxKind.JSDocAugmentsTag]: AstJSDocAugmentsTag;
+    [SyntaxKind.JSDocImplementsTag]: AstJSDocImplementsTag;
+    [SyntaxKind.JSDocAuthorTag]: AstJSDocAuthorTag;
+    [SyntaxKind.JSDocDeprecatedTag]: AstJSDocDeprecatedTag;
+    [SyntaxKind.JSDocClassTag]: AstJSDocClassTag;
+    [SyntaxKind.JSDocPublicTag]: AstJSDocPublicTag;
+    [SyntaxKind.JSDocPrivateTag]: AstJSDocPrivateTag;
+    [SyntaxKind.JSDocProtectedTag]: AstJSDocProtectedTag;
+    [SyntaxKind.JSDocReadonlyTag]: AstJSDocReadonlyTag;
+    [SyntaxKind.JSDocOverrideTag]: AstJSDocOverrideTag;
+    [SyntaxKind.JSDocEnumTag]: AstJSDocEnumTag;
+    [SyntaxKind.JSDocThisTag]: AstJSDocThisTag;
+    [SyntaxKind.JSDocTemplateTag]: AstJSDocTemplateTag;
+    [SyntaxKind.JSDocSeeTag]: AstJSDocSeeTag;
+    [SyntaxKind.JSDocReturnTag]: AstJSDocReturnTag;
+    [SyntaxKind.JSDocTypeTag]: AstJSDocTypeTag;
+    [SyntaxKind.JSDocTypedefTag]: AstJSDocTypedefTag;
+    [SyntaxKind.JSDocCallbackTag]: AstJSDocCallbackTag;
+    [SyntaxKind.JSDocOverloadTag]: AstJSDocOverloadTag;
+    [SyntaxKind.JSDocThrowsTag]: AstJSDocThrowsTag;
+    [SyntaxKind.JSDocSignature]: AstJSDocSignature;
+    [SyntaxKind.JSDocPropertyTag]: AstJSDocPropertyTag;
+    [SyntaxKind.JSDocParameterTag]: AstJSDocParameterTag;
+    [SyntaxKind.JSDocTypeLiteral]: AstJSDocTypeLiteral;
+    [SyntaxKind.JSDocSatisfiesTag]: AstJSDocSatisfiesTag;
+    [SyntaxKind.JSDocImportTag]: AstJSDocImportTag;
+    [SyntaxKind.SourceFile]: AstSourceFile;
+    [SyntaxKind.Bundle]: AstBundle;
+    [SyntaxKind.SyntaxList]: AstSyntaxList;
+    [SyntaxKind.NotEmittedStatement]: AstNotEmittedStatement;
+    [SyntaxKind.NotEmittedTypeElement]: AstNotEmittedTypeElement;
+    [SyntaxKind.PartiallyEmittedExpression]: AstPartiallyEmittedExpression;
+    [SyntaxKind.CommaListExpression]: AstCommaListExpression;
+    [SyntaxKind.SyntheticReferenceExpression]: AstSyntheticReferenceExpression;
+    [SyntaxKind.Count]: never;
+    [SyntaxKind.NonTextFileMarkerTrivia]: never;
 }

@@ -30,7 +30,7 @@ import {
     SyntaxKind,
     TypeElement,
     TypeNode,
-    UnaryExpression
+    UnaryExpression,
 } from "../_namespaces/ts.js";
 
 /** @internal */
@@ -207,8 +207,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return astRules.parenthesizeTypeArguments(asNodeArray(typeArguments)?.ast)?.nodes;
     }
 
-    type ToNode<T extends Node> =
-        Expression extends T ? ast.Expression :
+    type ToNode<T extends Node> = Expression extends T ? ast.Expression :
         Statement extends T ? ast.Statement :
         TypeNode extends T ? ast.TypeNode :
         TypeElement extends T ? ast.TypeElement :

@@ -439,8 +439,8 @@ export function isAstTypeParameterDeclaration(node: AstNode<Node>): node is AstN
     return node.kind === SyntaxKind.TypeParameter;
 }
 
-
-/** @internal */// TODO(rbuckton): Rename to 'isParameterDeclaration'
+/** @internal */
+// TODO(rbuckton): Rename to 'isParameterDeclaration'
 export function isAstParameter(node: AstNode<Node>): node is AstNode<ParameterDeclaration> {
     return node.kind === SyntaxKind.Parameter;
 }
@@ -1193,8 +1193,8 @@ export function isAstEnumMember(node: AstNode<Node>): node is AstNode<EnumMember
     return node.kind === SyntaxKind.EnumMember;
 }
 
-
-/** @internal */// Top-level nodes
+/** @internal */
+// Top-level nodes
 export function isAstSourceFile(node: AstNode<Node>): node is AstNode<SourceFile> {
     return node.kind === SyntaxKind.SourceFile;
 }

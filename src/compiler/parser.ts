@@ -1422,7 +1422,9 @@ namespace Parser {
 
     var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
-    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, _ => { nodeCount++; });
+    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, _ => {
+        nodeCount++;
+    });
 
     var {
         createNodeArray: factoryCreateNodeArray,
