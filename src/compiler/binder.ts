@@ -509,7 +509,7 @@ export function createFlowNode(flags: FlowFlags, node: unknown, antecedent: Flow
 const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
-export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+export function bindSourceFile(file: SourceFile, options: CompilerOptions): void {
     performance.mark("beforeBind");
     binder(file, options);
     performance.mark("afterBind");
