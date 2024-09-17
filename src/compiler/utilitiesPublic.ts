@@ -290,6 +290,7 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
+    ast,
 } from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
@@ -795,7 +796,10 @@ export function findAncestor(node: Node | undefined, callback: (element: Node) =
  *
  * @param node The node to test.
  */
-export function isParseTreeNode(node: Node): boolean {
+export function isParseTreeNode(node: Node): boolean;
+/** @internal */
+export function isParseTreeNode(node: Node | ast.AstNode<ast.Node>): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
+export function isParseTreeNode(node: Node | ast.AstNode<ast.Node>): boolean {
     return (node.flags & NodeFlags.Synthesized) === 0;
 }
 
@@ -1476,7 +1480,7 @@ export function isToken(n: Node): boolean {
 
 /** @internal */
 export function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T> {
-    return hasProperty(array, "pos") && hasProperty(array, "end");
+    return hasProperty(array, "pos") && hasProperty(array, "end") || array instanceof ast.NodeArray;
 }
 
 // Literals
@@ -1979,7 +1983,8 @@ export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpres
     return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }
 
-function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+/** @internal */
+export function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.PropertyAccessExpression:
         case SyntaxKind.ElementAccessExpression:
@@ -2023,7 +2028,8 @@ export function isUnaryExpression(node: Node): node is UnaryExpression {
     return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }
 
-function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+/** @internal */
+export function isUnaryExpressionKind(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.PrefixUnaryExpression:
         case SyntaxKind.PostfixUnaryExpression:

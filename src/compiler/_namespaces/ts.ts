@@ -13,7 +13,6 @@ export * from "../diagnosticInformationMap.generated.js";
 export * from "../scanner.js";
 export * from "../utilitiesPublic.js";
 export * from "../utilities.js";
-export * from "../factory/baseNodeFactory.js";
 export * from "../factory/parenthesizerRules.js";
 export * from "../factory/nodeConverters.js";
 export * from "../factory/nodeFactory.js";
@@ -76,3 +75,7 @@ import * as moduleSpecifiers from "./ts.moduleSpecifiers.js";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance.js";
 export { performance };
+/** @internal */
+import * as ast from "./ts.ast.js";
+/** @internal */
+export { ast };

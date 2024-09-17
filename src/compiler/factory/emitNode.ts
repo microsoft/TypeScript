@@ -2,6 +2,7 @@ import {
     AccessExpression,
     append,
     appendIfUnique,
+    ast,
     AutoGenerateInfo,
     Debug,
     EmitFlags,
@@ -33,7 +34,7 @@ import {
  * various transient transformation properties.
  * @internal
  */
-export function getOrCreateEmitNode(node: Node): EmitNode {
+export function getOrCreateEmitNode(node: Node | ast.AstNode<ast.Node>): EmitNode {
     if (!node.emitNode) {
         if (isParseTreeNode(node)) {
             // To avoid holding onto transformation artifacts, we keep track of any
@@ -43,8 +44,14 @@ export function getOrCreateEmitNode(node: Node): EmitNode {
                 return node.emitNode = { annotatedNodes: [node] } as EmitNode;
             }
 
-            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
-            getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
+            if (node instanceof ast.AstNode) {
+                const sourceFile = ast.getAstSourceFileNodeOfNode(ast.getAstParseTreeNode(ast.getAstSourceFileNodeOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
+                getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node.node);
+            }
+            else {
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
+                getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
+            }
         }
 
         node.emitNode = {} as EmitNode;
@@ -89,7 +96,10 @@ export function removeAllComments<T extends Node>(node: T): T {
 /**
  * Sets flags that control emit behavior of a node.
  */
-export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
+/** @internal */
+export function setEmitFlags<T extends Node | ast.AstNode<ast.Node>>(node: T, emitFlags: EmitFlags): T;
+export function setEmitFlags<T extends Node | ast.AstNode<ast.Node>>(node: T, emitFlags: EmitFlags) {
     getOrCreateEmitNode(node).flags = emitFlags;
     return node;
 }
@@ -129,7 +139,10 @@ export function addInternalEmitFlags<T extends Node>(node: T, emitFlags: Interna
 /**
  * Gets a custom text range to use when emitting source maps.
  */
-export function getSourceMapRange(node: Node): SourceMapRange {
+export function getSourceMapRange(node: Node): SourceMapRange;
+/** @internal */
+export function getSourceMapRange(node: Node | ast.AstNode): SourceMapRange; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getSourceMapRange(node: Node | ast.AstNode): SourceMapRange {
     return node.emitNode?.sourceMapRange ?? node;
 }
 
@@ -180,7 +193,10 @@ export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
 /**
  * Gets a custom text range to use when emitting comments.
  */
-export function getCommentRange(node: Node): TextRange {
+export function getCommentRange(node: Node): TextRange;
+/** @internal */
+export function getCommentRange(node: Node | ast.AstNode): TextRange; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getCommentRange(node: Node | ast.AstNode): TextRange {
     return node.emitNode?.commentRange ?? node;
 }
 
@@ -192,7 +208,10 @@ export function setCommentRange<T extends Node>(node: T, range: TextRange) {
     return node;
 }
 
-export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
+export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined;
+/** @internal */
+export function getSyntheticLeadingComments(node: Node | ast.AstNode): SynthesizedComment[] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getSyntheticLeadingComments(node: Node | ast.AstNode): SynthesizedComment[] | undefined {
     return node.emitNode?.leadingComments;
 }
 
@@ -205,7 +224,10 @@ export function addSyntheticLeadingComment<T extends Node>(node: T, kind: Syntax
     return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
 }
 
-export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
+export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined;
+/** @internal */
+export function getSyntheticTrailingComments(node: Node | ast.AstNode): SynthesizedComment[] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getSyntheticTrailingComments(node: Node | ast.AstNode): SynthesizedComment[] | undefined {
     return node.emitNode?.trailingComments;
 }
 
@@ -348,24 +370,24 @@ export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
 }
 
 /** @internal */
-export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
+export function setIdentifierTypeArguments<T extends Identifier | ast.AstIdentifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
     getOrCreateEmitNode(node).identifierTypeArguments = typeArguments;
     return node;
 }
 
 /** @internal */
-export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
+export function getIdentifierTypeArguments(node: Identifier | ast.AstIdentifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
     return node.emitNode?.identifierTypeArguments;
 }
 
 /** @internal */
-export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
+export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier | ast.AstIdentifier | ast.AstPrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
     getOrCreateEmitNode(node).autoGenerate = autoGenerate;
     return node;
 }
 
 /** @internal @knipignore */
-export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
+export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier | ast.AstIdentifier | ast.AstPrivateIdentifier): AutoGenerateInfo | undefined {
     return node.emitNode?.autoGenerate;
 }
 

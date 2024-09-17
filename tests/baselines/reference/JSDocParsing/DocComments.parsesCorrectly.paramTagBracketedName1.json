@@ -10,12 +10,14 @@
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 59,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -24,12 +26,14 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
                     "end": 22,
+                    "flags": "JSDoc",
                     "transformFlags": 1
                 }
             },
@@ -37,6 +41,7 @@
                 "kind": "Identifier",
                 "pos": 25,
                 "end": 30,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "name1"
             },

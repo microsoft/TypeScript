@@ -24,6 +24,7 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
+    ast,
     BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
@@ -5467,9 +5468,9 @@ export const enum Associativity {
 }
 
 /** @internal */
-export function getExpressionAssociativity(expression: Expression) {
+export function getExpressionAssociativity(expression: Expression | ast.AstExpression) {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression as NewExpression).arguments !== undefined;
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof ast.AstNode ? (expression as ast.AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorAssociativity(expression.kind, operator, hasArguments);
 }
 
@@ -5514,18 +5515,18 @@ export function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind,
 }
 
 /** @internal */
-export function getExpressionPrecedence(expression: Expression) {
+export function getExpressionPrecedence(expression: Expression | ast.AstExpression) {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression as NewExpression).arguments !== undefined;
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof ast.AstNode ? (expression as ast.AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorPrecedence(expression.kind, operator, hasArguments);
 }
 
-function getOperator(expression: Expression): SyntaxKind {
+function getOperator(expression: Expression | ast.AstExpression): SyntaxKind {
     if (expression.kind === SyntaxKind.BinaryExpression) {
-        return (expression as BinaryExpression).operatorToken.kind;
+        return expression instanceof ast.AstNode ? (expression as ast.AstBinaryExpression).data.operatorToken.kind : (expression as BinaryExpression).operatorToken.kind;
     }
     else if (expression.kind === SyntaxKind.PrefixUnaryExpression || expression.kind === SyntaxKind.PostfixUnaryExpression) {
-        return (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
+        return expression instanceof ast.AstNode ? (expression as ast.AstPrefixUnaryExpression | ast.AstPostfixUnaryExpression).data.operator : (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
     }
     else {
         return expression.kind;
@@ -8246,11 +8247,6 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
 
 /** @internal */
 export interface ObjectAllocator {
-    getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
-    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
-    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
-    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
-    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
     getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
     getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
     getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
@@ -8291,45 +8287,6 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
     }
 }
 
-function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    // Note: if modifying this, be sure to update NodeObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.emitNode = undefined;
-}
-
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     // Note: if modifying this, be sure to update SourceMapSourceObject in src/services/services.ts
     this.fileName = fileName;
@@ -8339,11 +8296,6 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
 
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
-    getNodeConstructor: () => Node as any,
-    getTokenConstructor: () => Token as any,
-    getIdentifierConstructor: () => Identifier as any,
-    getPrivateIdentifierConstructor: () => Node as any,
-    getSourceFileConstructor: () => Node as any,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => Type as any,
     getSignatureConstructor: () => Signature as any,

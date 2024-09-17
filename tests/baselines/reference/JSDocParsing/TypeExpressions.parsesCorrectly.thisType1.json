@@ -4,7 +4,7 @@
     "end": 19,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 1,
+    "transformFlags": 0,
     "parameters": {
         "0": {
             "kind": "Parameter",

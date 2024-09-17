@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseForTypeInfo
-@@ -8,9 +8,8 @@
+@@ -9,9 +9,8 @@
          "0": {
              "kind": "FunctionDeclaration",
              "pos": 0,
@@ -11,7 +11,7 @@
              "transformFlags": 4194304,
              "name": {
                  "kind": "Identifier",
-@@ -39,42 +38,9 @@
+@@ -40,42 +39,9 @@
                      "hasTrailingComma": false,
                      "transformFlags": 0
                  },
@@ -55,7 +55,7 @@
          "1": {
              "kind": "ExpressionStatement",
              "pos": 46,
-@@ -106,9 +72,8 @@
+@@ -107,9 +73,8 @@
          "2": {
              "kind": "FunctionDeclaration",
              "pos": 61,
@@ -65,7 +65,7 @@
              "transformFlags": 4194304,
              "name": {
                  "kind": "Identifier",
-@@ -137,43 +102,9 @@
+@@ -138,43 +103,9 @@
                      "hasTrailingComma": false,
                      "transformFlags": 0
                  },
@@ -110,7 +110,7 @@
          "3": {
              "kind": "ExpressionStatement",
              "pos": 135,
-@@ -230,6 +161,6 @@
+@@ -231,6 +162,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

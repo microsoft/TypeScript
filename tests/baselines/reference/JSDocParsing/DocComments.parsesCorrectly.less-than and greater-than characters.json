@@ -10,12 +10,14 @@
             "kind": "JSDocParameterTag",
             "pos": 7,
             "end": 59,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 13,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -24,6 +26,7 @@
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 15,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "x"
             },

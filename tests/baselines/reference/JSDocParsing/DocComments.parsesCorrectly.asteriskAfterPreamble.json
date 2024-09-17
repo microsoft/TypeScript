@@ -11,12 +11,14 @@
             "kind": "JSDocTypeTag",
             "pos": 6,
             "end": 21,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
                 "end": 11,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "type"
             },
@@ -24,12 +26,14 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 12,
                 "end": 20,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 13,
                     "end": 19,
+                    "flags": "JSDoc",
                     "transformFlags": 1
                 }
             }

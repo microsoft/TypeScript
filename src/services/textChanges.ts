@@ -1,6 +1,7 @@
 import {
     addToSeen,
     ArrowFunction,
+    ast,
     BindingElement,
     CharacterCodes,
     ClassElement,
@@ -1376,7 +1377,6 @@ const textChangesTransformationContext: TransformationContext = {
     ...nullTransformationContext,
     factory: createNodeFactory(
         nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
-        nullTransformationContext.factory.baseFactory,
     ),
 };
 
@@ -1384,7 +1384,7 @@ const textChangesTransformationContext: TransformationContext = {
 export function assignPositionsToNode(node: Node): Node {
     const visited = visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
     // create proxy node for non synthesized nodes
-    const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
+    const newNode = nodeIsSynthesized(visited) ? visited : (visited as ast.Node).ast.shadow().node;
     setTextRangePosEnd(newNode, getPos(node), getEnd(node));
     return newNode;
 }

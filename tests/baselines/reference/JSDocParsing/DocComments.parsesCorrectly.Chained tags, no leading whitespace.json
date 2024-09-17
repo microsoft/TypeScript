@@ -10,12 +10,14 @@
             "kind": "JSDocTag",
             "pos": 3,
             "end": 6,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 4,
                 "end": 5,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "a"
             }
@@ -24,12 +26,14 @@
             "kind": "JSDocTag",
             "pos": 6,
             "end": 9,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
                 "end": 8,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "b"
             }
@@ -38,12 +42,14 @@
             "kind": "JSDocTag",
             "pos": 9,
             "end": 11,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 10,
                 "end": 11,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "c"
             }
@@ -52,12 +58,14 @@
             "kind": "JSDocTag",
             "pos": 11,
             "end": 13,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 12,
                 "end": 13,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "d"
             }

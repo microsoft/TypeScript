@@ -10,12 +10,14 @@
             "kind": "JSDocTypedefTag",
             "pos": 8,
             "end": 100,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "typedef"
             },
@@ -23,6 +25,7 @@
                 "kind": "JSDocTypeLiteral",
                 "pos": 8,
                 "end": 100,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "jsDocPropertyTags": {
@@ -30,12 +33,14 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
+                        "flags": "JSDoc",
                         "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 48,
                             "end": 56,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "property"
                         },
@@ -43,12 +48,14 @@
                             "kind": "JSDocTypeExpression",
                             "pos": 57,
                             "end": 65,
+                            "flags": "JSDoc",
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "type": {
                                 "kind": "NumberKeyword",
                                 "pos": 58,
                                 "end": 64,
+                                "flags": "JSDoc",
                                 "transformFlags": 1
                             }
                         },
@@ -56,6 +63,7 @@
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "age"
                         },
@@ -66,12 +74,14 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
+                        "flags": "JSDoc",
                         "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 75,
                             "end": 83,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "property"
                         },
@@ -79,12 +89,14 @@
                             "kind": "JSDocTypeExpression",
                             "pos": 84,
                             "end": 92,
+                            "flags": "JSDoc",
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "type": {
                                 "kind": "StringKeyword",
                                 "pos": 85,
                                 "end": 91,
+                                "flags": "JSDoc",
                                 "transformFlags": 1
                             }
                         },
@@ -92,6 +104,7 @@
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "name"
                         },
@@ -110,6 +123,7 @@
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "People"
             },
@@ -117,6 +131,7 @@
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "People"
             }

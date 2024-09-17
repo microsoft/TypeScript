@@ -98,6 +98,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         args.push(mochaJs);
+        if (cmdLineOptions.bail) args.push("--bail");
         args.push("-R", findUpFile("scripts/failed-tests.cjs"));
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {

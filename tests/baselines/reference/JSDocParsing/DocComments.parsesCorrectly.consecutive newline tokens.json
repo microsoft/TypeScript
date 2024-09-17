@@ -10,12 +10,14 @@
             "kind": "JSDocTag",
             "pos": 7,
             "end": 53,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 15,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "example"
             },

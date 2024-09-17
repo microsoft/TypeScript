@@ -13,7 +13,6 @@ import {
     AsteriskToken,
     attachFileToDiagnostics,
     AwaitExpression,
-    BaseNodeFactory,
     BigIntLiteral,
     BinaryExpression,
     BinaryOperatorToken,
@@ -283,7 +282,6 @@ import {
     NoSubstitutionTemplateLiteral,
     NullLiteral,
     NumericLiteral,
-    objectAllocator,
     ObjectBindingPattern,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -416,28 +414,8 @@ const enum SpeculationKind {
     Reparse,
 }
 
-let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
-let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
-let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
-
-/**
- * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
- *
- * @internal
- * @knipignore
- */
-export const parseBaseNodeFactory: BaseNodeFactory = {
-    createBaseSourceFileNode: kind => new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, -1, -1),
-    createBaseIdentifierNode: kind => new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, -1, -1),
-    createBasePrivateIdentifierNode: kind => new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, -1, -1),
-    createBaseTokenNode: kind => new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, -1, -1),
-    createBaseNode: kind => new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, -1, -1),
-};
-
 /** @internal */
-export const parseNodeFactory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
+export const parseNodeFactory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules);
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
     return node && cbNode(node);
@@ -1435,29 +1413,7 @@ namespace Parser {
 
     var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
-    // capture constructors in 'initializeState' to avoid null checks
-    var NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    var TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    var IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
-    var PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
-    var SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
-
-    function countNode(node: Node) {
-        nodeCount++;
-        return node;
-    }
-
-    // Rather than using `createBaseNodeFactory` here, we establish a `BaseNodeFactory` that closes over the
-    // constructors above, which are reset each time `initializeState` is called.
-    var baseNodeFactory: BaseNodeFactory = {
-        createBaseSourceFileNode: kind => countNode(new SourceFileConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseTokenNode: kind => countNode(new TokenConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-    };
-
-    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
+    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, _ => { nodeCount++; });
 
     var {
         createNodeArray: factoryCreateNodeArray,
@@ -1588,6 +1544,8 @@ namespace Parser {
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
     var parseErrorBeforeNextFinishedNode = false;
+
+    var missingLists: Set<NodeArray<Node>>;
     /* eslint-enable no-var */
 
     export function parseSourceFile(
@@ -1723,12 +1681,6 @@ namespace Parser {
     }
 
     function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind, _jsDocParsingMode: JSDocParsingMode) {
-        NodeConstructor = objectAllocator.getNodeConstructor();
-        TokenConstructor = objectAllocator.getTokenConstructor();
-        IdentifierConstructor = objectAllocator.getIdentifierConstructor();
-        PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
-        SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-
         fileName = normalizePath(_fileName);
         sourceText = _sourceText;
         languageVersion = _languageVersion;
@@ -1739,6 +1691,7 @@ namespace Parser {
         parseDiagnostics = [];
         parsingContext = 0;
         identifiers = new Map<string, string>();
+        missingLists = new Set();
         identifierCount = 0;
         nodeCount = 0;
         sourceFlags = 0;
@@ -1786,6 +1739,7 @@ namespace Parser {
         jsDocDiagnostics = undefined!;
         parsingContext = 0;
         identifiers = undefined!;
+        missingLists = undefined!;
         notParenthesizedArrow = undefined;
         topLevel = true;
     }
@@ -3545,18 +3499,14 @@ namespace Parser {
         return kind === ParsingContext.EnumMembers ? Diagnostics.An_enum_member_name_must_be_followed_by_a_or : undefined;
     }
 
-    interface MissingList<T extends Node> extends NodeArray<T> {
-        isMissingList: true;
-    }
-
-    function createMissingList<T extends Node>(): MissingList<T> {
-        const list = createNodeArray<T>([], getNodePos()) as MissingList<T>;
-        list.isMissingList = true;
+    function createMissingList<T extends Node>(): NodeArray<T> {
+        const list = createNodeArray<T>([], getNodePos());
+        missingLists.add(list);
         return list;
     }
 
     function isMissingList(arr: NodeArray<Node>): boolean {
-        return !!(arr as MissingList<Node>).isMissingList;
+        return missingLists.has(arr);
     }
 
     function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: PunctuationSyntaxKind, close: PunctuationSyntaxKind): NodeArray<T> {

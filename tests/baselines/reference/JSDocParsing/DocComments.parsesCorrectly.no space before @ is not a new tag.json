@@ -10,12 +10,14 @@
             "kind": "JSDocParameterTag",
             "pos": 7,
             "end": 29,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 13,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -24,6 +26,7 @@
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 18,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "this"
             },
@@ -34,12 +37,14 @@
             "kind": "JSDocParameterTag",
             "pos": 29,
             "end": 50,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 30,
                 "end": 35,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -48,6 +53,7 @@
                 "kind": "Identifier",
                 "pos": 36,
                 "end": 40,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "fine"
             },
@@ -58,12 +64,14 @@
             "kind": "JSDocTag",
             "pos": 50,
             "end": 62,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 51,
                 "end": 60,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "zerowidth"
             }
@@ -72,12 +80,14 @@
             "kind": "JSDocTag",
             "pos": 62,
             "end": 89,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 63,
                 "end": 73,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "singlestar"
             },

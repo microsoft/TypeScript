@@ -4733,6 +4733,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): SpreadSegment {
+        if (last(chunk).kind === SyntaxKind.OmittedExpression) {
+            hasTrailingComma = true;
+        }
         const expression = factory.createArrayLiteralExpression(
             visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
             multiLine,
