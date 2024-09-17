@@ -6,7 +6,7 @@ export function encodeString(s: string): string {
     return Buffer.from(s).toString("utf8");
 }
 
-export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
+export function evalFile(fileContents: string, fileName: string, nodeContext?: any): void {
     if (nodeContext) {
         vm.runInNewContext(fileContents, nodeContext, fileName);
     }
@@ -16,7 +16,7 @@ export function evalFile(fileContents: string, fileName: string, nodeContext?: a
 }
 
 /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
-export function splitContentByNewlines(content: string) {
+export function splitContentByNewlines(content: string): string[] {
     // Split up the input file by line
     // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
     // we have to use string-based splitting instead and try to figure out the delimiting chars
@@ -32,7 +32,7 @@ export function splitContentByNewlines(content: string) {
 }
 
 /** Reads a file under /tests */
-export function readTestFile(path: string) {
+export function readTestFile(path: string): string | undefined {
     if (!path.includes("tests")) {
         path = "tests/" + path;
     }
@@ -64,9 +64,9 @@ export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: a
     } as any);
 }
 
-export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false); // This is done so tests work on windows _and_ linux
+export const canonicalizeForHarness: ts.GetCanonicalFileName = ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false); // This is done so tests work on windows _and_ linux
 
-export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined) {
+export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined): void {
     const queue: [ts.Node | undefined, ts.Node | undefined][] = [[node, parent]];
     for (const [node, parent] of queue) {
         assertInvariantsWorker(node, parent);
@@ -149,7 +149,13 @@ function isNodeOrArray(a: any): boolean {
     return a !== undefined && typeof a.pos === "number";
 }
 
-export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
+export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]): {
+    start: number | undefined;
+    length: number | undefined;
+    messageText: string;
+    category: string;
+    code: number;
+}[] {
     return diagnostics.map(convertDiagnostic);
 }
 
@@ -247,7 +253,7 @@ export function sourceFileToJSON(file: ts.Node): string {
     }
 }
 
-export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2: readonly ts.Diagnostic[]) {
+export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2: readonly ts.Diagnostic[]): void {
     if (array1 === array2) {
         return;
     }
@@ -273,7 +279,7 @@ export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2
     }
 }
 
-export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
+export function assertStructuralEquals(node1: ts.Node, node2: ts.Node): void {
     if (node1 === node2) {
         return;
     }
@@ -330,7 +336,7 @@ function findChildName(parent: any, child: any) {
 
 const maxHarnessFrames = 1;
 
-export function filterStack(error: Error, stackTraceLimit = Infinity) {
+export function filterStack(error: Error, stackTraceLimit: number = Infinity): Error {
     const stack = (error as any).stack as string;
     if (stack) {
         const lines = stack.split(/\r\n?|\n/);

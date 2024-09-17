@@ -173,7 +173,7 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
  *
  * @internal
  */
-export function getLocaleTimeString(system: System) {
+export function getLocaleTimeString(system: System): string {
     return !system.now ?
         new Date().toLocaleTimeString() :
         // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
@@ -225,7 +225,7 @@ export function parseConfigFileWithSystem(configFileName: string, optionsToExten
 }
 
 /** @internal */
-export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]) {
+export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]): number {
     return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 }
 
@@ -256,7 +256,7 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
 }
 
 /** @internal */
-export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
+export function getWatchErrorSummaryDiagnosticMessage(errorCount: number): DiagnosticMessage {
     return errorCount === 1 ?
         Diagnostics.Found_1_error_Watching_for_file_changes :
         Diagnostics.Found_0_errors_Watching_for_file_changes;
@@ -277,7 +277,7 @@ export function getErrorSummaryText(
     filesInError: readonly (ReportFileInError | undefined)[],
     newLine: string,
     host: HasCurrentDirectory,
-) {
+): string {
     if (errorCount === 0) return "";
     const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
     const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError.fileName}:${fileInError.line}`)
@@ -347,7 +347,7 @@ function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: st
 }
 
 /** @internal */
-export function explainFiles(program: Program, write: (s: string) => void) {
+export function explainFiles(program: Program, write: (s: string) => void): void {
     const reasons = program.getFileIncludeReasons();
     const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
@@ -412,7 +412,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
 }
 
 /** @internal */
-export function getMatchedFileSpec(program: Program, fileName: string) {
+export function getMatchedFileSpec(program: Program, fileName: string): string | undefined {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
@@ -423,7 +423,7 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 }
 
 /** @internal */
-export function getMatchedIncludeSpec(program: Program, fileName: string) {
+export function getMatchedIncludeSpec(program: Program, fileName: string): string | true | undefined {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
 
@@ -639,7 +639,7 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
     cancellationToken?: CancellationToken,
     emitOnlyDtsFiles?: boolean,
     customTransformers?: CustomTransformers,
-) {
+): ExitStatus {
     const { emitResult, diagnostics } = emitFilesAndReportErrors(
         program,
         reportDiagnostic,
@@ -666,10 +666,10 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
 /** @internal */
 export const noopFileWatcher: FileWatcher = { close: noop };
 /** @internal */
-export const returnNoopFileWatcher = () => noopFileWatcher;
+export const returnNoopFileWatcher = (): FileWatcher => noopFileWatcher;
 
 /** @internal */
-export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
+export function createWatchHost(system: System = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
     const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
     return {
         onWatchStatusChange,
@@ -741,7 +741,7 @@ export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y
 }
 
 /** @internal */
-export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }): WatchFactoryWithLog<WatchType, Y> {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
@@ -784,7 +784,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 }
 
 /** @internal */
-export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string): string {
     // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
     if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
         let lineEnd = text.length;
@@ -823,7 +823,7 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 }
 
 /** @internal */
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost): void {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
         const result = originalGetSourceFile.call(compilerHost, ...args);
@@ -981,8 +981,9 @@ export interface IncrementalCompilationOptions {
     afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: System;
 }
+
 /** @internal */
-export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
+export function performIncrementalCompilation(input: IncrementalCompilationOptions): ExitStatus {
     const system = input.system || sys;
     const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
     const builderProgram = createIncrementalProgram(input);

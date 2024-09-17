@@ -138,7 +138,7 @@ const jsxOptionMap = new Map(Object.entries({
 }));
 
 /** @internal */
-export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
+export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
@@ -248,7 +248,7 @@ const libEntries: [string, string][] = [
  *
  * @internal
  */
-export const libs = libEntries.map(entry => entry[0]);
+export const libs: string[] = libEntries.map(entry => entry[0]);
 
 /**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
@@ -256,7 +256,7 @@ export const libs = libEntries.map(entry => entry[0]);
  *
  * @internal
  */
-export const libMap = new Map(libEntries);
+export const libMap: Map<string, string> = new Map(libEntries);
 
 // Watch related options
 
@@ -1809,7 +1809,7 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]): string | number | undefined {
     return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
@@ -1842,6 +1842,14 @@ export function parseListTypeOption(opt: CommandLineOptionOfListType, value = ""
 /** @internal */
 export interface OptionsBase {
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+}
+
+/** @internal */
+export interface BaseParsedCommandLine {
+    options: OptionsBase;
+    watchOptions: WatchOptions | undefined;
+    fileNames: string[];
+    errors: Diagnostic[];
 }
 
 /** @internal */
@@ -1884,7 +1892,7 @@ export function parseCommandLineWorker(
     diagnostics: ParseCommandLineWorkerDiagnostics,
     commandLine: readonly string[],
     readFile?: (path: string) => string | undefined,
-) {
+): BaseParsedCommandLine {
     const options = {} as OptionsBase;
     let watchOptions: WatchOptions | undefined;
     const fileNames: string[] = [];
@@ -2611,11 +2619,11 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     const providedKeys = new Set(optionMap.keys());
     const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
     for (const option in computedOptions) {
-        if (!providedKeys.has(option) && some(computedOptions[option as keyof typeof computedOptions].dependencies, dep => providedKeys.has(dep))) {
-            const implied = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
-            const defaultValue = computedOptions[option as keyof typeof computedOptions].computeValue({});
+        if (!providedKeys.has(option) && some(computedOptions[option].dependencies, dep => providedKeys.has(dep))) {
+            const implied = computedOptions[option].computeValue(configParseResult.options);
+            const defaultValue = computedOptions[option].computeValue({});
             if (implied !== defaultValue) {
-                impliedCompilerOptions[option] = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+                impliedCompilerOptions[option] = computedOptions[option].computeValue(configParseResult.options);
             }
         }
     }
@@ -2875,7 +2883,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
 }
 
 /** @internal */
-export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
+export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string): CompilerOptions {
     const result: CompilerOptions = {};
     const optionsNameMap = getOptionsNameMap().optionsNameMap;
 
@@ -2936,7 +2944,7 @@ export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceF
 }
 
 /** @internal */
-export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile | undefined) {
+export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile | undefined): void {
     if (configFile) {
         Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
     }
@@ -3252,12 +3260,12 @@ function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles:
 }
 
 /** @internal */
-export function canJsonReportNoInputFiles(raw: any) {
+export function canJsonReportNoInputFiles(raw: any): boolean {
     return !hasProperty(raw, "files") && !hasProperty(raw, "references");
 }
 
 /** @internal */
-export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean): boolean {
     const existingErrors = configParseDiagnostics.length;
     if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
         configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
@@ -3952,7 +3960,7 @@ export function matchesExclude(
     excludeSpecs: readonly string[] | undefined,
     useCaseSensitiveFileNames: boolean,
     currentDirectory: string,
-) {
+): boolean {
     return matchesExcludeWorker(
         pathToCheck,
         filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcard(spec)),
