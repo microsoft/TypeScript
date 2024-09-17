@@ -320,6 +320,7 @@ import {
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
+    rangeContainsRange,
     RefactorContext,
     removeFileExtension,
     removeSuffix,
@@ -918,11 +919,6 @@ export function getLineStartPositionForPosition(position: number, sourceFile: So
 }
 
 /** @internal */
-export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-    return startEndContainsRange(r1.pos, r1.end, r2);
-}
-
-/** @internal */
 export function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean {
     return rangeContainsPositionExclusive(r1, r2.pos) && rangeContainsPositionExclusive(r1, r2.end);
 }
@@ -935,11 +931,6 @@ export function rangeContainsPosition(r: TextRange, pos: number): boolean {
 /** @internal */
 export function rangeContainsPositionExclusive(r: TextRange, pos: number) {
     return r.pos < pos && pos < r.end;
-}
-
-/** @internal */
-export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-    return start <= range.pos && end >= range.end;
 }
 
 /** @internal */

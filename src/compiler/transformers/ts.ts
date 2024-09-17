@@ -12,7 +12,6 @@ import {
     Bundle,
     CallExpression,
     CaseBlock,
-    changeExtension,
     childIsDecorated,
     ClassDeclaration,
     ClassElement,
@@ -56,7 +55,6 @@ import {
     getInitializedVariables,
     getIsolatedModules,
     getOriginalNode,
-    getOutputExtension,
     getParseTreeNode,
     getProperties,
     getStrictOptionValue,
@@ -124,7 +122,6 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
-    isStringLiteral,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -180,7 +177,6 @@ import {
     setTypeNode,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
-    shouldRewriteModuleSpecifier,
     skipOuterExpressions,
     skipPartiallyEmittedExpressions,
     skipTrivia,
@@ -2259,14 +2255,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (!node.importClause) {
             // Do not elide a side-effect only import declaration.
             //  import "foo";
-            const specifier = rewriteModuleSpecifier(node.moduleSpecifier);
-            return specifier === node.moduleSpecifier ? node : factory.updateImportDeclaration(
-                node,
-                /*modifiers*/ undefined,
-                /*importClause*/ undefined,
-                specifier,
-                node.attributes,
-            );
+            return node;
         }
         if (node.importClause.isTypeOnly) {
             // Always elide type-only imports
@@ -2280,20 +2269,10 @@ export function transformTypeScript(context: TransformationContext) {
                 node,
                 /*modifiers*/ undefined,
                 importClause,
-                rewriteModuleSpecifier(node.moduleSpecifier),
+                node.moduleSpecifier,
                 node.attributes,
             )
             : undefined;
-    }
-
-    function rewriteModuleSpecifier(node: Expression): Expression;
-    function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined;
-    function rewriteModuleSpecifier(node: Expression | undefined): Expression | undefined {
-        if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
-            return node;
-        }
-        const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));
-        return updatedText !== node.text ? setOriginalNode(setTextRange(factory.createStringLiteral(updatedText, node.singleQuote), node), node) : node;
     }
 
     /**
@@ -2368,7 +2347,7 @@ export function transformTypeScript(context: TransformationContext) {
                 node.modifiers,
                 node.isTypeOnly,
                 node.exportClause,
-                rewriteModuleSpecifier(node.moduleSpecifier),
+                node.moduleSpecifier,
                 node.attributes,
             );
         }
@@ -2387,7 +2366,7 @@ export function transformTypeScript(context: TransformationContext) {
                 /*modifiers*/ undefined,
                 node.isTypeOnly,
                 exportClause,
-                rewriteModuleSpecifier(node.moduleSpecifier),
+                node.moduleSpecifier,
                 node.attributes,
             )
             : undefined;
@@ -2451,20 +2430,6 @@ export function transformTypeScript(context: TransformationContext) {
         if (isExternalModuleImportEqualsDeclaration(node)) {
             if (!shouldEmitAliasDeclaration(node)) {
                 return undefined;
-            }
-            const updatedModuleSpecifier = rewriteModuleSpecifier(node.moduleReference.expression);
-            if (updatedModuleSpecifier !== node.moduleReference.expression) {
-                return visitEachChild(
-                    factory.updateImportEqualsDeclaration(
-                        node,
-                        node.modifiers,
-                        node.isTypeOnly,
-                        node.name,
-                        factory.updateExternalModuleReference(node.moduleReference, updatedModuleSpecifier),
-                    ),
-                    visitor,
-                    context,
-                );
             }
             return visitEachChild(node, visitor, context);
         }

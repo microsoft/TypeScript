@@ -7779,6 +7779,16 @@ export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number
     return getLinesBetweenPositions(sourceFile, pos, Math.min(stopPos, nextPos));
 }
 
+/** @internal */
+export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
+    return startEndContainsRange(r1.pos, r1.end, r2);
+}
+
+/** @internal */
+export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
+    return start <= range.pos && end >= range.end;
+}
+
 function getPreviousNonWhitespacePosition(pos: number, stopPos = 0, sourceFile: SourceFile) {
     while (pos-- > stopPos) {
         if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {

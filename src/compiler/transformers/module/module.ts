@@ -136,6 +136,7 @@ import {
     PrefixUnaryExpression,
     reduceLeft,
     removeAllComments,
+    rewriteModuleSpecifier,
     ScriptTarget,
     setEmitFlags,
     setOriginalNode,
@@ -1177,7 +1178,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
+        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text)
+            ? externalModuleName
+            : rewriteModuleSpecifier(firstArgument, compilerOptions);
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
@@ -1500,7 +1503,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const moduleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
         const args: Expression[] = [];
         if (moduleName) {
-            args.push(moduleName);
+            args.push(rewriteModuleSpecifier(moduleName, compilerOptions));
         }
 
         return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);

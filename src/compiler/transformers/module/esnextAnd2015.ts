@@ -23,6 +23,7 @@ import {
     hasSyntacticModifier,
     Identifier,
     idText,
+    ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
     insertStatementsAfterCustomPrologue,
@@ -31,17 +32,22 @@ import {
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleIndicator,
     isIdentifier,
+    isImportCall,
     isNamespaceExport,
     isSourceFile,
     isStatement,
+    mapDefined,
     ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
     NodeId,
+    rangeContainsRange,
+    rewriteModuleSpecifier,
     ScriptTarget,
     setOriginalNode,
     setTextRange,
+    shouldRewriteModuleSpecifier,
     singleOrMany,
     some,
     SourceFile,
@@ -73,6 +79,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableSubstitution(SyntaxKind.Identifier);
 
     const noSubstitution = new Set<NodeId>();
+    let importCallsToRewrite: ImportCall[] | undefined;
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -86,6 +93,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
             currentSourceFile = node;
             importRequireStatements = undefined;
+            importCallsToRewrite = compilerOptions.rewriteRelativeImportExtensions
+                ? mapDefined(node.imports, name => isImportCall(name.parent) && shouldRewriteModuleSpecifier(name.text, compilerOptions) ? name.parent : undefined)
+                : undefined;
             let result = updateExternalModule(node);
             currentSourceFile = undefined;
             if (importRequireStatements) {
@@ -135,9 +145,47 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ExportDeclaration:
                 const exportDecl = node as ExportDeclaration;
                 return visitExportDeclaration(exportDecl);
+            case SyntaxKind.ImportDeclaration:
+                return visitImportDeclaration(node as ImportDeclaration);
+            case SyntaxKind.CallExpression:
+                if (node === importCallsToRewrite?.[0]) {
+                    importCallsToRewrite.shift();
+                    return visitImportCall(node as ImportCall);
+                }
+                break;
+            default:
+                if (importCallsToRewrite?.length && rangeContainsRange(node, importCallsToRewrite[0])) {
+                    return visitEachChild(node, visitor, context);
+                }
         }
 
         return node;
+    }
+
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<ImportDeclaration> {
+        if (!compilerOptions.rewriteRelativeImportExtensions) {
+            return node;
+        }
+        const updatedModuleSpecifier = rewriteModuleSpecifier(node.moduleSpecifier, compilerOptions);
+        if (updatedModuleSpecifier === node.moduleSpecifier) {
+            return node;
+        }
+        return factory.updateImportDeclaration(
+            node,
+            node.modifiers,
+            node.importClause,
+            updatedModuleSpecifier,
+            node.attributes,
+        );
+    }
+
+    function visitImportCall(node: ImportCall): VisitResult<Expression> {
+        return factory.updateCallExpression(
+            node,
+            node.expression,
+            node.typeArguments,
+            [rewriteModuleSpecifier(node.arguments[0], compilerOptions), ...node.arguments.slice(1)],
+        );
     }
 
     /**
@@ -149,7 +197,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);
         const args: Expression[] = [];
         if (moduleName) {
-            args.push(moduleName);
+            args.push(rewriteModuleSpecifier(moduleName, compilerOptions));
         }
         if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
             return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
@@ -270,14 +318,21 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     }
 
     function visitExportDeclaration(node: ExportDeclaration) {
-        // `export * as ns` only needs to be transformed in ES2015
-        if (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015) {
-            return node;
-        }
-
-        // Either ill-formed or don't need to be tranformed.
-        if (!node.exportClause || !isNamespaceExport(node.exportClause) || !node.moduleSpecifier) {
-            return node;
+        const updatedModuleSpecifier = rewriteModuleSpecifier(node.moduleSpecifier, compilerOptions);
+        if (
+            (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015)
+            || !node.exportClause || !isNamespaceExport(node.exportClause) || !node.moduleSpecifier
+        ) {
+            // Either ill-formed or don't need to be tranformed.
+            return (!node.moduleSpecifier || updatedModuleSpecifier === node.moduleSpecifier) ? node :
+                factory.updateExportDeclaration(
+                    node,
+                    node.modifiers,
+                    node.isTypeOnly,
+                    node.exportClause,
+                    updatedModuleSpecifier,
+                    node.attributes,
+                );
         }
 
         const oldIdentifier = node.exportClause.name;
@@ -291,7 +346,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     synthName,
                 ),
             ),
-            node.moduleSpecifier,
+            updatedModuleSpecifier!,
             node.attributes,
         );
         setOriginalNode(importDecl, node.exportClause);
