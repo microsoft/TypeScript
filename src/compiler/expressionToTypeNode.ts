@@ -43,6 +43,7 @@ import {
     isComputedPropertyName,
     isConditionalTypeNode,
     isConstTypeReference,
+    isDeclaration,
     isDeclarationReadonly,
     isEntityName,
     isEntityNameExpression,
@@ -150,6 +151,7 @@ import {
     visitNode,
     visitNodes,
     Visitor,
+    walkUpParenthesizedExpressions,
 } from "./_namespaces/ts.js";
 
 type SyntacticResult =
@@ -162,6 +164,7 @@ function syntacticResult(type: TypeNode | undefined, reportFallback: boolean = t
     return { type, reportFallback } as SyntacticResult;
 }
 const notImplemented: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ false);
+const alreadyReported: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ false);
 const failed: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ true);
 
 /** @internal */
@@ -857,7 +860,7 @@ export function createSyntacticTypeNodeBuilder(
                 context.tracker.reportInferenceFallback(node);
             }
             const result = allAccessors.getAccessor && createReturnFromSignature(allAccessors.getAccessor, context, reportFallback);
-            return result ?? resolver.serializeTypeOfDeclaration(context,node, symbol) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return result ?? resolver.serializeTypeOfDeclaration(context, node, symbol) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
     }
 
@@ -976,8 +979,8 @@ export function createSyntacticTypeNodeBuilder(
     }
     function typeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean, requiresAddingUndefined: boolean): SyntacticResult {
         if (!canGetTypeFromArrayLiteral(arrayLiteral, context, isConstContext)) {
-            if (requiresAddingUndefined) {
-                return failed;
+            if (requiresAddingUndefined || isDeclaration(walkUpParenthesizedExpressions(arrayLiteral).parent)) {
+                return alreadyReported;
             }
             return syntacticResult(inferExpressionType(arrayLiteral, context, /*reportFallback*/ false, requiresAddingUndefined));
         }
@@ -1034,8 +1037,8 @@ export function createSyntacticTypeNodeBuilder(
     }
     function typeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean, requiresAddingUndefined: boolean) {
         if (!canGetTypeFromObjectLiteral(objectLiteral, context)) {
-            if (requiresAddingUndefined) {
-                return failed;
+            if (requiresAddingUndefined || isDeclaration(walkUpParenthesizedExpressions(objectLiteral).parent)) {
+                return alreadyReported;
             }
             return syntacticResult(inferExpressionType(objectLiteral, context, /*reportFallback*/ false, requiresAddingUndefined));
         }
@@ -1179,7 +1182,7 @@ export function createSyntacticTypeNodeBuilder(
             const foundType = getAccessorType ? withNewScope(context, allAccessors.getAccessor!, () => serializeExistingTypeAnnotationWithFallback(getAccessorType, context)) :
                 setAccessorType ? withNewScope(context, allAccessors.setAccessor!, () => serializeExistingTypeAnnotationWithFallback(setAccessorType, context)) :
                 undefined;
-            const propertyType = foundType ?? inferAccessorType(accessor, allAccessors, context, undefined);
+            const propertyType = foundType ?? inferAccessorType(accessor, allAccessors, context, /*symbol*/ undefined);
 
             const propertySignature = factory.createPropertySignature(
                 allAccessors.setAccessor === undefined ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
