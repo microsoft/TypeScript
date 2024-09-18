@@ -37,18 +37,15 @@ import {
     isNamespaceExport,
     isSourceFile,
     isStatement,
-    mapDefined,
     ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
     NodeId,
-    rangeContainsRange,
     rewriteModuleSpecifier,
     ScriptTarget,
     setOriginalNode,
     setTextRange,
-    shouldRewriteModuleSpecifier,
     singleOrMany,
     some,
     SourceFile,
@@ -80,7 +77,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableSubstitution(SyntaxKind.Identifier);
 
     const noSubstitution = new Set<NodeId>();
-    let importCallsToRewrite: ImportCall[] | undefined;
+    let possiblyContainsDynamicImport = false;
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -94,9 +91,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
             currentSourceFile = node;
             importRequireStatements = undefined;
-            importCallsToRewrite = compilerOptions.rewriteRelativeImportExtensions
-                ? mapDefined(node.imports, name => isImportCall(name.parent) && shouldRewriteModuleSpecifier(name.text, compilerOptions) ? name.parent : undefined)
-                : undefined;
+            possiblyContainsDynamicImport = !!(currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport);
             let result = updateExternalModule(node);
             addEmitHelpers(result, context.readEmitHelpers());
             currentSourceFile = undefined;
@@ -150,13 +145,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
             case SyntaxKind.CallExpression:
-                if (node === importCallsToRewrite?.[0]) {
-                    importCallsToRewrite.shift();
-                    return visitImportCall(node as ImportCall);
+                if (isImportCall(node)) {
+                    return visitImportCall(node);
                 }
                 break;
             default:
-                if (importCallsToRewrite?.length && rangeContainsRange(node, importCallsToRewrite[0])) {
+                if (possiblyContainsDynamicImport && compilerOptions.rewriteRelativeImportExtensions) {
                     return visitEachChild(node, visitor, context);
                 }
         }
