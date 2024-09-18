@@ -652,7 +652,7 @@ export function createSyntacticTypeNodeBuilder(
         return resolver.serializeExistingTypeNode(context, typeNode, addUndefined) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
     function serializeTypeOfAccessor(accessor: AccessorDeclaration, symbol: Symbol | undefined, context: SyntacticTypeNodeBuilderContext) {
-        return typeFromAccessor(accessor, symbol, context) ?? inferAccessorType(accessor, resolver.getAllAccessorDeclarations(accessor), context);
+        return typeFromAccessor(accessor, symbol, context) ?? inferAccessorType(accessor, resolver.getAllAccessorDeclarations(accessor), context, symbol);
     }
 
     function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
@@ -848,7 +848,7 @@ export function createSyntacticTypeNodeBuilder(
         return resolver.serializeReturnTypeForSignature(context, node) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration, allAccessors: AllAccessorDeclarations, context: SyntacticTypeNodeBuilderContext, reportFallback: boolean = true): TypeNode | undefined {
+    function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration, allAccessors: AllAccessorDeclarations, context: SyntacticTypeNodeBuilderContext, symbol: Symbol | undefined, reportFallback: boolean = true): TypeNode | undefined {
         if (node.kind === SyntaxKind.GetAccessor) {
             return createReturnFromSignature(node, context, reportFallback);
         }
@@ -857,7 +857,7 @@ export function createSyntacticTypeNodeBuilder(
                 context.tracker.reportInferenceFallback(node);
             }
             const result = allAccessors.getAccessor && createReturnFromSignature(allAccessors.getAccessor, context, reportFallback);
-            return result ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return result ?? resolver.serializeTypeOfDeclaration(context,node, symbol) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
     }
 
@@ -1179,7 +1179,7 @@ export function createSyntacticTypeNodeBuilder(
             const foundType = getAccessorType ? withNewScope(context, allAccessors.getAccessor!, () => serializeExistingTypeAnnotationWithFallback(getAccessorType, context)) :
                 setAccessorType ? withNewScope(context, allAccessors.setAccessor!, () => serializeExistingTypeAnnotationWithFallback(setAccessorType, context)) :
                 undefined;
-            const propertyType = foundType ?? inferAccessorType(accessor, allAccessors, context);
+            const propertyType = foundType ?? inferAccessorType(accessor, allAccessors, context, undefined);
 
             const propertySignature = factory.createPropertySignature(
                 allAccessors.setAccessor === undefined ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
