@@ -462,6 +462,20 @@ export function openFilesForSession(
     }
 }
 
+export function projectInfoForSession(
+    session: TestSession,
+    file: string | File,
+) {
+    return session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
+        command: ts.server.protocol.CommandTypes.ProjectInfo,
+        arguments: {
+            file: ts.isString(file) ? file : file.path,
+            needFileNameList: false,
+            needDefaultConfiguredProjectInfo: true,
+        },
+    }).response as ts.server.protocol.ProjectInfo;
+}
+
 export function closeFilesForSession(files: readonly (File | string)[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({

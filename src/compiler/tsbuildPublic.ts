@@ -80,6 +80,7 @@ import {
     isIncrementalBuildInfo,
     isIncrementalCompilation,
     isPackageJsonInfo,
+    isSolutionConfig,
     loadWithModeAwareCache,
     maybeBind,
     missingFileModifiedTime,
@@ -1236,7 +1237,13 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         else if (updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
             // Update file names
             config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-            updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
+            updateErrorForNoInputFiles(
+                config.fileNames,
+                project,
+                config.options.configFile!.configFileSpecs!,
+                config.errors,
+                canJsonReportNoInputFiles(config.raw),
+            );
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
         }
@@ -1461,11 +1468,7 @@ function checkConfigFileUpToDateStatus<T extends BuilderProgram>(state: Solution
 
 function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
     // Container if no files are specified in the project
-    if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
-        return {
-            type: UpToDateStatusType.ContainerOnly,
-        };
-    }
+    if (isSolutionConfig(project)) return { type: UpToDateStatusType.ContainerOnly };
 
     // Fast check to see if reference projects are upto date and error free
     let referenceStatuses;
