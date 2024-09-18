@@ -793,8 +793,8 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
     static JSDocNamepathType(): AstJSDocNamepathType {
         return new AstNode(SyntaxKind.JSDocNamepathType, new AstJSDocNamepathTypeData(), JSDocNamepathType);
     }
-    static JSDocNode(): AstJSDocNode {
-        return new AstNode(SyntaxKind.JSDoc, new AstJSDocNodeData(), JSDocNode);
+    static JSDocNode(): AstJSDoc {
+        return new AstNode(SyntaxKind.JSDoc, new AstJSDocData(), JSDoc);
     }
     static JSDocLink(): AstJSDocLink {
         return new AstNode(SyntaxKind.JSDocLink, new AstJSDocLinkData(), JSDocLink);
@@ -1511,6 +1511,196 @@ export type HasModifiers =
 
 /** @internal */
 export type AstHasModifiers = AstNodeOneOf<HasModifiers>;
+
+/** @internal */
+export type HasChildren =
+    | QualifiedName
+    | ComputedPropertyName
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | Decorator
+    | PropertySignature
+    | PropertyDeclaration
+    | MethodSignature
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | ClassStaticBlockDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | IndexSignatureDeclaration
+    | TypePredicateNode
+    | TypeReferenceNode
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | TypeQueryNode
+    | TypeLiteralNode
+    | ArrayTypeNode
+    | TupleTypeNode
+    | OptionalTypeNode
+    | RestTypeNode
+    | UnionTypeNode
+    | IntersectionTypeNode
+    | ConditionalTypeNode
+    | InferTypeNode
+    | ImportTypeNode
+    | ImportTypeAssertionContainer
+    | NamedTupleMember
+    | ParenthesizedTypeNode
+    | TypeOperatorNode
+    | IndexedAccessTypeNode
+    | MappedTypeNode
+    | LiteralTypeNode
+    | TemplateLiteralTypeNode
+    | TemplateLiteralTypeSpan
+    | ObjectBindingPattern
+    | ArrayBindingPattern
+    | BindingElement
+    | ArrayLiteralExpression
+    | ObjectLiteralExpression
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | TaggedTemplateExpression
+    | TypeAssertion
+    | ParenthesizedExpression
+    | FunctionExpression
+    | ArrowFunction
+    | DeleteExpression
+    | TypeOfExpression
+    | VoidExpression
+    | AwaitExpression
+    | PrefixUnaryExpression
+    | PostfixUnaryExpression
+    | BinaryExpression
+    | ConditionalExpression
+    | TemplateExpression
+    | YieldExpression
+    | SpreadElement
+    | ClassExpression
+    | ExpressionWithTypeArguments
+    | AsExpression
+    | NonNullExpression
+    | SatisfiesExpression
+    | MetaProperty
+    | TemplateSpan
+    | Block
+    | VariableStatement
+    | ExpressionStatement
+    | IfStatement
+    | DoStatement
+    | WhileStatement
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | ContinueStatement
+    | BreakStatement
+    | ReturnStatement
+    | WithStatement
+    | SwitchStatement
+    | LabeledStatement
+    | ThrowStatement
+    | TryStatement
+    | VariableDeclaration
+    | VariableDeclarationList
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | ModuleBlock
+    | CaseBlock
+    | NamespaceExportDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | AssertClause
+    | AssertEntry
+    | ImportAttributes
+    | ImportAttribute
+    | ImportClause
+    | NamespaceImport
+    | NamespaceExport
+    | NamedImports
+    | ImportSpecifier
+    | ExportAssignment
+    | ExportDeclaration
+    | NamedExports
+    | ExportSpecifier
+    | ExternalModuleReference
+    | JsxElement
+    | JsxSelfClosingElement
+    | JsxOpeningElement
+    | JsxClosingElement
+    | JsxFragment
+    | JsxAttribute
+    | JsxAttributes
+    | JsxSpreadAttribute
+    | JsxExpression
+    | JsxNamespacedName
+    | CaseClause
+    | DefaultClause
+    | HeritageClause
+    | CatchClause
+    | PropertyAssignment
+    | ShorthandPropertyAssignment
+    | SpreadAssignment
+    | EnumMember
+    | SourceFile
+    | PartiallyEmittedExpression
+    | CommaListExpression;
+
+/** @internal */
+export type AstHasChildren = AstNodeOneOf<HasChildren>;
+
+/** @internal */
+export type ForEachChildNodes =
+    | HasChildren
+    | MissingDeclaration
+    | JSDocTypeExpression
+    | JSDocNonNullableType
+    | JSDocNullableType
+    | JSDocOptionalType
+    | JSDocVariadicType
+    | JSDocFunctionType
+    | JSDoc
+    | JSDocSeeTag
+    | JSDocNameReference
+    | JSDocMemberName
+    | JSDocParameterTag
+    | JSDocPropertyTag
+    | JSDocAuthorTag
+    | JSDocImplementsTag
+    | JSDocAugmentsTag
+    | JSDocTemplateTag
+    | JSDocTypedefTag
+    | JSDocCallbackTag
+    | JSDocReturnTag
+    | JSDocTypeTag
+    | JSDocThisTag
+    | JSDocEnumTag
+    | JSDocSignature
+    | JSDocLink
+    | JSDocLinkCode
+    | JSDocLinkPlain
+    | JSDocTypeLiteral
+    | JSDocUnknownTag
+    | JSDocClassTag
+    | JSDocPublicTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocReadonlyTag
+    | JSDocDeprecatedTag
+    | JSDocThrowsTag
+    | JSDocOverrideTag
+    | JSDocSatisfiesTag
+    | JSDocOverloadTag
+    | JSDocImportTag;
+
+/** @internal */
+export type AstForEachChildNodes = AstNodeOneOf<ForEachChildNodes>;
 
 /** @internal */
 export interface Declaration extends Node {
@@ -11318,8 +11508,8 @@ export class AstJSDocNamepathTypeData extends AstData {
 }
 
 /** @internal */
-export class JSDocNode extends Node<SyntaxKind.JSDoc, AstJSDocNodeData> implements ts.JSDoc {
-    declare readonly ast: AstJSDocNode;
+export class JSDoc extends Node<SyntaxKind.JSDoc, AstJSDocData> implements ts.JSDoc {
+    declare readonly ast: AstJSDoc;
 
     override get parent() {
         return super.parent as HasJSDoc;
@@ -11344,7 +11534,7 @@ export class JSDocNode extends Node<SyntaxKind.JSDoc, AstJSDocNodeData> implemen
 }
 
 /** @internal */
-export class AstJSDocNodeData extends AstData {
+export class AstJSDocData extends AstData {
     comment: string | AstNodeArray<AstJSDocComment> | undefined = undefined;
     tags: AstNodeArray<AstBaseJSDocTag> | undefined = undefined;
 }
@@ -11554,7 +11744,7 @@ export class BaseJSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJS
     declare readonly ast: AstBaseJSDocTag<TKind, T>;
 
     override get parent() {
-        return super.parent as JSDocNode | JSDocTypeLiteral;
+        return super.parent as JSDoc | JSDocTypeLiteral;
     }
     override set parent(value) {
         super.parent = value;
@@ -11723,7 +11913,7 @@ export class JSDocEnumTag extends BaseJSDocTag<SyntaxKind.JSDocEnumTag, AstJSDoc
     declare _localsContainerBrand: any;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -11865,7 +12055,7 @@ export class JSDocTypedefTag extends BaseJSDocTag<SyntaxKind.JSDocTypedefTag, As
     declare _localsContainerBrand: any;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -11934,7 +12124,7 @@ export class JSDocCallbackTag extends BaseJSDocTag<SyntaxKind.JSDocCallbackTag, 
     declare _localsContainerBrand: any;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -12001,7 +12191,7 @@ export class JSDocOverloadTag extends BaseJSDocTag<SyntaxKind.JSDocOverloadTag, 
     declare readonly ast: AstJSDocOverloadTag;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -12115,7 +12305,7 @@ export class JSDocPropertyTag extends BaseJSDocTag<SyntaxKind.JSDocPropertyTag, 
     declare _declarationBrand: any;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -12176,7 +12366,7 @@ export class JSDocParameterTag extends BaseJSDocTag<SyntaxKind.JSDocParameterTag
     declare _declarationBrand: any;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -12302,7 +12492,7 @@ export class JSDocImportTag extends BaseJSDocTag<SyntaxKind.JSDocImportTag, AstJ
     declare readonly ast: AstJSDocImportTag;
 
     override get parent() {
-        return super.parent as JSDocNode;
+        return super.parent as JSDoc;
     }
     override set parent(value) {
         super.parent = value;
@@ -13554,7 +13744,7 @@ export type AstJSDocVariadicType = AstNode<JSDocVariadicType>;
 /** @internal */
 export type AstJSDocNamepathType = AstNode<JSDocNamepathType>;
 /** @internal */
-export type AstJSDocNode = AstNode<JSDocNode>;
+export type AstJSDoc = AstNode<JSDoc>;
 /** @internal */
 export type AstJSDocLink = AstNode<JSDocLink>;
 /** @internal */
@@ -14330,7 +14520,7 @@ export interface NodeType {
     [SyntaxKind.JSDocFunctionType]: JSDocFunctionType;
     [SyntaxKind.JSDocVariadicType]: JSDocVariadicType;
     [SyntaxKind.JSDocNamepathType]: JSDocNamepathType;
-    [SyntaxKind.JSDoc]: JSDocNode;
+    [SyntaxKind.JSDoc]: JSDoc;
     [SyntaxKind.JSDocLink]: JSDocLink;
     [SyntaxKind.JSDocLinkCode]: JSDocLinkCode;
     [SyntaxKind.JSDocLinkPlain]: JSDocLinkPlain;
@@ -14694,7 +14884,7 @@ export interface AstNodeType {
     [SyntaxKind.JSDocFunctionType]: AstJSDocFunctionType;
     [SyntaxKind.JSDocVariadicType]: AstJSDocVariadicType;
     [SyntaxKind.JSDocNamepathType]: AstJSDocNamepathType;
-    [SyntaxKind.JSDoc]: AstJSDocNode;
+    [SyntaxKind.JSDoc]: AstJSDoc;
     [SyntaxKind.JSDocLink]: AstJSDocLink;
     [SyntaxKind.JSDocLinkCode]: AstJSDocLinkCode;
     [SyntaxKind.JSDocLinkPlain]: AstJSDocLinkPlain;

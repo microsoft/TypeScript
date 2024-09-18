@@ -111,7 +111,7 @@ import {
     AstJSDocNameReference,
     AstJSDocNamespaceBody,
     AstJSDocNamespaceDeclaration,
-    AstJSDocNode,
+    AstJSDoc,
     AstJSDocNonNullableType,
     AstJSDocNullableType,
     AstJSDocOptionalType,
@@ -835,8 +835,8 @@ export interface AstNodeFactory {
     updateJSDocImportTag(node: AstJSDocImportTag, tagName: AstIdentifier | undefined, importClause: AstImportClause | undefined, moduleSpecifier: AstExpression, attributes: AstImportAttributes | undefined, comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocImportTag;
     createJSDocText(text: string): AstJSDocText;
     updateJSDocText(node: AstJSDocText, text: string): AstJSDocText;
-    createJSDocComment(comment?: string | AstNodeArray<AstJSDocComment> | undefined, tags?: AstNodeArrayLike<AstBaseJSDocTag> | undefined): AstJSDocNode;
-    updateJSDocComment(node: AstJSDocNode, comment: string | AstNodeArray<AstJSDocComment> | undefined, tags: AstNodeArrayLike<AstBaseJSDocTag> | undefined): AstJSDocNode;
+    createJSDocComment(comment?: string | AstNodeArray<AstJSDocComment> | undefined, tags?: AstNodeArrayLike<AstBaseJSDocTag> | undefined): AstJSDoc;
+    updateJSDocComment(node: AstJSDoc, comment: string | AstNodeArray<AstJSDocComment> | undefined, tags: AstNodeArrayLike<AstBaseJSDocTag> | undefined): AstJSDoc;
 
     //
     // JSX
@@ -5084,7 +5084,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     }
 
     // @api
-    function updateJSDocComment(node: AstJSDocNode, comment: string | AstNodeArray<AstJSDocComment> | undefined, tags: AstNodeArrayLike<AstJSDocTag> | undefined) {
+    function updateJSDocComment(node: AstJSDoc, comment: string | AstNodeArray<AstJSDocComment> | undefined, tags: AstNodeArrayLike<AstJSDocTag> | undefined) {
         return node.data.comment !== comment
                 || !sameNodeArray(node.data.tags, tags)
             ? update(createJSDocComment(comment, tags), node)

@@ -6,3 +6,5 @@ export * from "../factory/astNodeTests.js";
 export * from "../factory/astNodeFactory.js";
 /** @internal */
 export * from "../factory/astParenthesizerRules.js";
+/** @internal */
+export * from "../astForEachChild.js";

@@ -80,7 +80,7 @@ import {
     AstJSDocMemberName,
     AstJSDocNameReference,
     AstJSDocNamespaceDeclaration,
-    AstJSDocNode,
+    AstJSDoc,
     AstJSDocNullableType,
     AstJSDocOptionalType,
     AstJSDocOverloadTag,
@@ -214,7 +214,7 @@ import {
     AstWithStatement,
     AstYieldExpression,
     createAstNodeFactory,
-    hasAstJSDocNodes,
+    astHasJSDocNodes,
     isAstAsyncModifier,
     isAstDeclareKeyword,
     isAstExportModifier,
@@ -235,6 +235,15 @@ import {
     isAstStringOrNumericLiteralLike,
     isAstTaggedTemplateExpression,
     isAstTypeReferenceNode,
+    astForEachChild,
+    isAstMetaProperty,
+    astCanHaveModifiers,
+    AstHasModifiers,
+    isAstImportEqualsDeclaration,
+    isAstImportDeclaration,
+    isAstExportAssignment,
+    isAstExportDeclaration,
+    isAstExternalModuleReference,
 } from "./_namespaces/ts.ast.js";
 import {
     addRange,
@@ -401,35 +410,36 @@ export function isJSDocLikeText(text: string, start: number): boolean {
 export function isFileProbablyExternalModule(sourceFile: SourceFile): Node | undefined {
     // Try to use the first top-level import/export when available, then
     // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
-    return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
-        getImportMetaIfNecessary(sourceFile);
+    // TODO(rbuckton): do not instantiate .node
+    return forEach((sourceFile as AstSourceFile["node"]).ast.data.statements.items, isAnExternalModuleIndicatorNode)?.node ||
+        getImportMetaIfNecessary(sourceFile)?.node;
 }
 
-function isAnExternalModuleIndicatorNode(node: Node) {
-    return canHaveModifiers(node) && hasModifierOfKind(node, SyntaxKind.ExportKeyword)
-            || isImportEqualsDeclaration(node) && isExternalModuleReference(node.moduleReference)
-            || isImportDeclaration(node)
-            || isExportAssignment(node)
-            || isExportDeclaration(node) ? node : undefined;
+function isAnExternalModuleIndicatorNode(node: AstNode) {
+    return astCanHaveModifiers(node) && hasModifierOfKind(node, SyntaxKind.ExportKeyword)
+            || isAstImportEqualsDeclaration(node) && isAstExternalModuleReference(node.data.moduleReference)
+            || isAstImportDeclaration(node)
+            || isAstExportAssignment(node)
+            || isAstExportDeclaration(node) ? node : undefined;
 }
 
 function getImportMetaIfNecessary(sourceFile: SourceFile) {
     return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
-        walkTreeForImportMeta(sourceFile) :
+        walkTreeForImportMeta((sourceFile as AstSourceFile["node"]).ast) :
         undefined;
 }
 
-function walkTreeForImportMeta(node: Node): Node | undefined {
-    return isImportMeta(node) ? node : forEachChild(node, walkTreeForImportMeta);
+function walkTreeForImportMeta(node: AstNode): AstNode | undefined {
+    return isImportMeta(node) ? node : astForEachChild(node, walkTreeForImportMeta);
 }
 
 /** Do not use hasModifier inside the parser; it relies on parent pointers. Use this instead. */
-function hasModifierOfKind(node: HasModifiers, kind: SyntaxKind) {
-    return some(node.modifiers, m => m.kind === kind);
+function hasModifierOfKind(node: AstHasModifiers, kind: SyntaxKind) {
+    return some(node.data.modifiers?.items, m => m.kind === kind);
 }
 
-function isImportMeta(node: Node): boolean {
-    return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
+function isImportMeta(node: AstNode): boolean {
+    return isAstMetaProperty(node) && node.data.keywordToken === SyntaxKind.ImportKeyword && node.data.name.data.escapedText === "meta";
 }
 
 export interface CreateSourceFileOptions {
@@ -530,7 +540,7 @@ export function parseIsolatedJSDocComment(content: string, start?: number, lengt
     if (result && result.jsDoc) {
         // because the jsDocComment was parsed out of the source file, it might
         // not be covered by the fixupParentReferences.
-        Parser.fixupParentReferences((result.jsDoc as AstJSDocNode["node"]).ast);
+        Parser.fixupParentReferences((result.jsDoc as AstJSDoc["node"]).ast);
     }
 
     return result;
@@ -7902,7 +7912,7 @@ namespace Parser {
             return jsDoc ? { jsDoc: jsDoc.node, diagnostics } : undefined;
         }
 
-        export function parseJSDocComment(parent: AstHasJSDoc, start: number, length: number): AstJSDocNode | undefined {
+        export function parseJSDocComment(parent: AstHasJSDoc, start: number, length: number): AstJSDoc | undefined {
             const saveToken = currentToken;
             const saveParseDiagnosticsLength = parseDiagnostics.length;
             const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
@@ -7935,7 +7945,7 @@ namespace Parser {
             CallbackParameter = 1 << 2,
         }
 
-        function parseJSDocCommentWorker(start = 0, length: number | undefined): AstJSDocNode | undefined {
+        function parseJSDocCommentWorker(start = 0, length: number | undefined): AstJSDoc | undefined {
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
             length = end - start;
@@ -9144,11 +9154,7 @@ namespace IncrementalParser {
         }
         return;
 
-        function visitNode(node: Node | AstNode) {
-            if (!(node instanceof AstNode)) {
-                node = (node as AstNode["node"]).ast;
-            }
-
+        function visitNode(node: AstNode) {
             let text = "";
             if (aggressiveChecks && shouldCheckNode(node)) {
                 text = oldText.substring(node.pos, node.end);
@@ -9164,20 +9170,16 @@ namespace IncrementalParser {
                 Debug.assert(text === newText.substring(node.pos, node.end));
             }
 
-            forEachChild(node.node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void); // TODO(rbuckton): do not instantiate .node
-            if (hasAstJSDocNodes(node)) {
+            astForEachChild(node, visitNode, visitArray);
+            if (astHasJSDocNodes(node)) {
                 for (const jsDocComment of node.data.jsDoc!) {
-                    visitNode(jsDocComment);
+                    visitNode((jsDocComment as AstJSDoc["node"]).ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
                 }
             }
             checkNodePositions(node, aggressiveChecks);
         }
 
-        function visitArray(array: NodeArray<Node> | AstNodeArray<AstNode>) {
-            if (!(array instanceof AstNodeArray)) {
-                array = (array as AstNodeArray<AstNode>["nodes"]).ast;
-            }
-
+        function visitArray(array: AstNodeArray<AstNode>) {
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
             for (const node of array.items) {
@@ -9275,16 +9277,16 @@ namespace IncrementalParser {
     function checkNodePositions(node: AstNode, aggressiveChecks: boolean) {
         if (aggressiveChecks) {
             let pos = node.pos;
-            const visitNode = (child: Node) => {
+            const visitNode = (child: AstNode) => {
                 Debug.assert(child.pos >= pos);
                 pos = child.end;
             };
-            if (hasAstJSDocNodes(node)) {
+            if (astHasJSDocNodes(node)) {
                 for (const jsDocComment of node.data.jsDoc!) {
-                    visitNode(jsDocComment);
+                    visitNode((jsDocComment as AstJSDoc["node"]).ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
                 }
             }
-            forEachChild(node.node, visitNode); // TODO: do not instantiate .node
+            astForEachChild(node, visitNode);
             Debug.assert(pos <= node.end);
         }
     }
@@ -9302,11 +9304,7 @@ namespace IncrementalParser {
         visitNode(sourceFile);
         return;
 
-        function visitNode(child: Node | AstNode) {
-            if (!(child instanceof AstNode)) {
-                child = (child as AstNode["node"]).ast;
-            }
-
+        function visitNode(child: AstNode) {
             Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
@@ -9325,10 +9323,10 @@ namespace IncrementalParser {
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child.node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void); // TODO: do not instantiate .node
-                if (hasAstJSDocNodes(child)) { // TODO: do not instantiate .node
+                astForEachChild(child, visitNode, visitArray);
+                if (astHasJSDocNodes(child)) {
                     for (const jsDocComment of child.data.jsDoc!) {
-                        visitNode((jsDocComment as AstJSDocNode["node"]).ast);
+                        visitNode((jsDocComment as AstJSDoc["node"]).ast);
                     }
                 }
                 checkNodePositions(child, aggressiveChecks);
@@ -9339,11 +9337,7 @@ namespace IncrementalParser {
             Debug.assert(fullEnd < changeStart);
         }
 
-        function visitArray(array: NodeArray<Node> | AstNodeArray<AstNode>) {
-            if (!(array instanceof AstNodeArray)) {
-                array = (array as AstNodeArray<AstNode>["nodes"]).ast;
-            }
-
+        function visitArray(array: AstNodeArray<AstNode>) {
             Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
@@ -9408,7 +9402,7 @@ namespace IncrementalParser {
         let bestResult: AstNode = sourceFile;
         let lastNodeEntirelyBeforePosition: AstNode | undefined;
 
-        forEachChild(sourceFile.node, visit); // TODO(rbuckton): do not instantiate .node
+        astForEachChild(sourceFile, visit);
 
         if (lastNodeEntirelyBeforePosition) {
             const lastChildOfLastEntireNodeBeforePosition = getLastDescendant(lastNodeEntirelyBeforePosition);
@@ -9431,11 +9425,7 @@ namespace IncrementalParser {
             }
         }
 
-        function visit(child: Node | AstNode) {
-            if (!(child instanceof AstNode)) {
-                child = (child as AstNode["node"]).ast;
-            }
-
+        function visit(child: AstNode) {
             if (nodeIsMissing(child)) {
                 // Missing nodes are effectively invisible to us.  We never even consider them
                 // When trying to find the nearest node before us.
@@ -9459,7 +9449,7 @@ namespace IncrementalParser {
                     // The nearest node is either this child, or one of the children inside
                     // of it.  We've already marked this child as the best so far.  Recurse
                     // in case one of the children is better.
-                    forEachChild(child.node, visit); // TODO(rbuckton): do not instantiate .node
+                    astForEachChild(child, visit);
 
                     // Once we look at the children of this node, then there's no need to
                     // continue any further.
@@ -9570,13 +9560,13 @@ namespace IncrementalParser {
             current = undefined!;
 
             // Recurse into the source file to find the highest node at this position.
-            forEachChild(sourceFile.node, visitNode, visitArray); // TODO(rbuckton): do not instantiate .node
+            astForEachChild(sourceFile, visitNode, visitArray);
             return;
 
-            function visitNode(node: Node) { // TODO(rbuckton): use AstNode
+            function visitNode(node: AstNode) {
                 if (position >= node.pos && position < node.end) {
                     // Position was within this node.  Keep searching deeper to find the node.
-                    forEachChild(node, visitNode, visitArray);
+                    astForEachChild(node, visitNode, visitArray);
 
                     // don't proceed any further in the search.
                     return true;
@@ -9586,11 +9576,7 @@ namespace IncrementalParser {
                 return false;
             }
 
-            function visitArray(array: NodeArray<Node> | AstNodeArray<AstNode>) {
-                if (!(array instanceof AstNodeArray)) {
-                    array = (array as AstNodeArray<AstNode>["nodes"]).ast;
-                }
-
+            function visitArray(array: AstNodeArray<AstNode>) {
                 if (position >= array.pos && position < array.end) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
@@ -9608,7 +9594,7 @@ namespace IncrementalParser {
                                 if (child.pos < position && position < child.end) {
                                     // Position in somewhere within this child.  Search in it and
                                     // stop searching in this array.
-                                    forEachChild(child.node, visitNode, visitArray); // TODO(rbuckton): do not instantiate .node
+                                    astForEachChild(child, visitNode, visitArray);
                                     return true;
                                 }
                             }

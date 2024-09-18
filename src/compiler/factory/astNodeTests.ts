@@ -109,7 +109,7 @@ import {
     JSDocMemberName,
     JSDocNamepathType,
     JSDocNameReference,
-    JSDocNode,
+    JSDoc,
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
@@ -240,6 +240,8 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
+    AstHasModifiers,
+    AstHasDecorators,
 } from "../_namespaces/ts.ast.js";
 import {
     canHaveJSDoc,
@@ -1293,7 +1295,7 @@ export function isAstJSDocNamepathType(node: AstNode): node is AstNode<JSDocName
 }
 
 /** @internal */
-export function isAstJSDoc(node: AstNode): node is AstNode<JSDocNode> {
+export function isAstJSDoc(node: AstNode): node is AstNode<JSDoc> {
     return node.kind === SyntaxKind.JSDoc;
 }
 
@@ -1508,9 +1510,51 @@ export function isAstStringLiteralLike(node: AstNode): node is AstStringLiteralL
  *
  * @internal
  */
-export function hasAstJSDocNodes(node: AstNode): node is AstHasJSDoc {
+export function astHasJSDocNodes(node: AstNode): node is AstHasJSDoc {
     if (!canHaveJSDoc(node)) return false;
 
     const { data: { jsDoc } } = node;
     return !!jsDoc && jsDoc.length > 0;
+}
+
+/** @internal */
+export function astCanHaveModifiers(node: AstNode): node is AstHasModifiers {
+    const kind = node.kind;
+    return kind === SyntaxKind.TypeParameter
+        || kind === SyntaxKind.Parameter
+        || kind === SyntaxKind.PropertySignature
+        || kind === SyntaxKind.PropertyDeclaration
+        || kind === SyntaxKind.MethodSignature
+        || kind === SyntaxKind.MethodDeclaration
+        || kind === SyntaxKind.Constructor
+        || kind === SyntaxKind.GetAccessor
+        || kind === SyntaxKind.SetAccessor
+        || kind === SyntaxKind.IndexSignature
+        || kind === SyntaxKind.ConstructorType
+        || kind === SyntaxKind.FunctionExpression
+        || kind === SyntaxKind.ArrowFunction
+        || kind === SyntaxKind.ClassExpression
+        || kind === SyntaxKind.VariableStatement
+        || kind === SyntaxKind.FunctionDeclaration
+        || kind === SyntaxKind.ClassDeclaration
+        || kind === SyntaxKind.InterfaceDeclaration
+        || kind === SyntaxKind.TypeAliasDeclaration
+        || kind === SyntaxKind.EnumDeclaration
+        || kind === SyntaxKind.ModuleDeclaration
+        || kind === SyntaxKind.ImportEqualsDeclaration
+        || kind === SyntaxKind.ImportDeclaration
+        || kind === SyntaxKind.ExportAssignment
+        || kind === SyntaxKind.ExportDeclaration;
+}
+
+/** @internal */
+export function astCanHaveDecorators(node: AstNode): node is AstHasDecorators {
+    const kind = node.kind;
+    return kind === SyntaxKind.Parameter
+        || kind === SyntaxKind.PropertyDeclaration
+        || kind === SyntaxKind.MethodDeclaration
+        || kind === SyntaxKind.GetAccessor
+        || kind === SyntaxKind.SetAccessor
+        || kind === SyntaxKind.ClassExpression
+        || kind === SyntaxKind.ClassDeclaration;
 }
