@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/setMethods.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === setMethods.ts ===
 let numberSet = new Set([0, 1, 2]);
 >numberSet : Set<number>

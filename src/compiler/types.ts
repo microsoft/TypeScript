@@ -10544,9 +10544,9 @@ export interface SyntacticTypeNodeBuilderResolver {
 /** @internal */
 export interface SyntacticNodeBuilder {
     serializeTypeOfDeclaration: (node: HasInferredType, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
-    serializeReturnTypeForSignature: (signature: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeReturnTypeForSignature: (signature: SignatureDeclaration | JSDocSignature, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
     serializeTypeOfExpression: (expr: Expression | JsxAttributeValue, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => TypeNode;
-    serializeExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
+    tryReuseExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
     serializeTypeOfAccessor: (accessor: AccessorDeclaration, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
 }
 
