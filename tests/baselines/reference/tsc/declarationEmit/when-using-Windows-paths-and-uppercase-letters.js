@@ -97,7 +97,9 @@ declare const console: { log(msg: any): void; };
 D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
 [96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Cannot assign an abstract constructor type to a non-abstract constructor type.
+  Types of construct signatures are incompatible.
+    Type 'abstract new () => PartialClassType' is not assignable to type 'new (...args: any[]) => any'.
+      Cannot assign an abstract constructor type to a non-abstract constructor type.
 
 [7m8[0m     return PartialClassType as MyReturnType;
 [7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m

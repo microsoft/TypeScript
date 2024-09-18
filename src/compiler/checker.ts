@@ -21374,13 +21374,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return Ternary.True;
         }
 
-        if (!(checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source)) && isTopSignature(target)) {
-            return Ternary.True;
-        }
-        if (checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source) && !isTopSignature(target)) {
-            return Ternary.False;
-        }
-
         const sourceIsAbstract = !!(source.flags & SignatureFlags.Abstract);
         const targetIsAbstract = !!(target.flags & SignatureFlags.Abstract);
 
@@ -21392,6 +21385,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (reportErrors) {
                 errorReporter!(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
             }
+            return Ternary.False;
+        }
+
+        if (!(checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source)) && isTopSignature(target)) {
+            return Ternary.True;
+        }
+        if (checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source) && !isTopSignature(target)) {
             return Ternary.False;
         }
 
