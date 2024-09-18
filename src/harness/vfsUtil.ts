@@ -111,14 +111,14 @@ export class FileSystem {
     /**
      * Gets a value indicating whether the file system is read-only.
      */
-    public get isReadonly() {
+    public get isReadonly(): boolean {
         return Object.isFrozen(this);
     }
 
     /**
      * Makes the file system read-only.
      */
-    public makeReadonly() {
+    public makeReadonly(): this {
         Object.freeze(this);
         return this;
     }
@@ -126,7 +126,7 @@ export class FileSystem {
     /**
      * Gets the file system shadowed by this file system.
      */
-    public get shadowRoot() {
+    public get shadowRoot(): FileSystem | undefined {
         return this._shadowRoot;
     }
 
@@ -135,7 +135,7 @@ export class FileSystem {
      * generating file system patches using `.diff()` from one snapshot to the next. Performs
      * no action if this file system is read-only.
      */
-    public snapshot() {
+    public snapshot(): void {
         if (this.isReadonly) return;
         const fs = new FileSystem(this.ignoreCase, { time: this._time });
         fs._lazy = this._lazy;
@@ -153,7 +153,7 @@ export class FileSystem {
      * original, allowing multiple copies of the same core file system without multiple copies
      * of the same data.
      */
-    public shadow(ignoreCase = this.ignoreCase) {
+    public shadow(ignoreCase: boolean = this.ignoreCase): FileSystem {
         if (!this.isReadonly) throw new Error("Cannot shadow a mutable file system.");
         if (ignoreCase && !this.ignoreCase) throw new Error("Cannot create a case-insensitive file system from a case-sensitive one.");
         const fs = new FileSystem(ignoreCase, { time: this._time });
@@ -201,7 +201,7 @@ export class FileSystem {
      *
      * @link - http://pubs.opengroup.org/onlinepubs/9699919799/functions/getcwd.html
      */
-    public cwd() {
+    public cwd(): string {
         if (!this._cwd) throw new Error("The current working directory has not been set.");
         const { node } = this._walk(this._cwd);
         if (!node) throw createIOError("ENOENT");
@@ -214,7 +214,7 @@ export class FileSystem {
      *
      * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html
      */
-    public chdir(path: string) {
+    public chdir(path: string): void {
         if (this.isReadonly) throw createIOError("EPERM");
         path = this._resolve(path);
         const { node } = this._walk(path);
@@ -226,7 +226,7 @@ export class FileSystem {
     /**
      * Pushes the current directory onto the directory stack and changes the current working directory to the supplied path.
      */
-    public pushd(path?: string) {
+    public pushd(path?: string): void {
         if (this.isReadonly) throw createIOError("EPERM");
         if (path) path = this._resolve(path);
         if (this._cwd) {
@@ -241,7 +241,7 @@ export class FileSystem {
     /**
      * Pops the previous directory from the location stack and changes the current directory to that directory.
      */
-    public popd() {
+    public popd(): void {
         if (this.isReadonly) throw createIOError("EPERM");
         const path = this._dirStack && this._dirStack.pop();
         if (path) {
@@ -252,7 +252,7 @@ export class FileSystem {
     /**
      * Update the file system with a set of files.
      */
-    public apply(files: FileSet) {
+    public apply(files: FileSet): void {
         this._applyFiles(files, this._cwd);
     }
 
@@ -262,7 +262,7 @@ export class FileSystem {
      * @param axis The axis along which to traverse.
      * @param traversal The traversal scheme to use.
      */
-    public scanSync(path: string, axis: Axis, traversal: Traversal) {
+    public scanSync(path: string, axis: Axis, traversal: Traversal): string[] {
         path = this._resolve(path);
         const results: string[] = [];
         this._scan(path, this._stat(this._walk(path)), axis, traversal, /*noFollow*/ false, results);
@@ -275,7 +275,7 @@ export class FileSystem {
      * @param axis The axis along which to traverse.
      * @param traversal The traversal scheme to use.
      */
-    public lscanSync(path: string, axis: Axis, traversal: Traversal) {
+    public lscanSync(path: string, axis: Axis, traversal: Traversal): string[] {
         path = this._resolve(path);
         const results: string[] = [];
         this._scan(path, this._stat(this._walk(path, /*noFollow*/ true)), axis, traversal, /*noFollow*/ true, results);
@@ -321,7 +321,7 @@ export class FileSystem {
      * @param target The path in this virtual file system.
      * @param resolver An object used to resolve files in `source`.
      */
-    public mountSync(source: string, target: string, resolver: FileSystemResolver) {
+    public mountSync(source: string, target: string, resolver: FileSystemResolver): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         source = vpath.validate(source, vpath.ValidationFlags.Absolute);
@@ -339,7 +339,7 @@ export class FileSystem {
     /**
      * Recursively remove all files and directories underneath the provided path.
      */
-    public rimrafSync(path: string) {
+    public rimrafSync(path: string): void {
         try {
             const stats = this.lstatSync(path);
             if (stats.isFile() || stats.isSymbolicLink()) {
@@ -361,7 +361,7 @@ export class FileSystem {
     /**
      * Make a directory and all of its parent paths (if they don't exist).
      */
-    public mkdirpSync(path: string) {
+    public mkdirpSync(path: string): void {
         path = this._resolve(path);
         const result = this._walk(path, /*noFollow*/ true, (error, result) => {
             if (error.code === "ENOENT") {
@@ -410,7 +410,7 @@ export class FileSystem {
     /**
      * Determines whether a path exists.
      */
-    public existsSync(path: string) {
+    public existsSync(path: string): boolean {
         const result = this._walk(this._resolve(path), /*noFollow*/ true, () => "stop");
         return result !== undefined && result.node !== undefined;
     }
@@ -422,7 +422,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public statSync(path: string) {
+    public statSync(path: string): Stats {
         return this._stat(this._walk(this._resolve(path)));
     }
 
@@ -431,7 +431,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public utimesSync(path: string, atime: Date, mtime: Date) {
+    public utimesSync(path: string, atime: Date, mtime: Date): void {
         if (this.isReadonly) throw createIOError("EROFS");
         if (!isFinite(+atime) || !isFinite(+mtime)) throw createIOError("EINVAL");
 
@@ -451,7 +451,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public lstatSync(path: string) {
+    public lstatSync(path: string): Stats {
         return this._stat(this._walk(this._resolve(path), /*noFollow*/ true));
     }
 
@@ -481,7 +481,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readdirSync(path: string) {
+    public readdirSync(path: string): string[] {
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (!isDirectory(node)) throw createIOError("ENOTDIR");
@@ -495,7 +495,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public mkdirSync(path: string) {
+    public mkdirSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         this._mkdir(this._walk(this._resolve(path), /*noFollow*/ true));
@@ -515,7 +515,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public rmdirSync(path: string) {
+    public rmdirSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
         path = this._resolve(path);
 
@@ -534,7 +534,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public linkSync(oldpath: string, newpath: string) {
+    public linkSync(oldpath: string, newpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { node } = this._walk(this._resolve(oldpath));
@@ -555,7 +555,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public unlinkSync(path: string) {
+    public unlinkSync(path: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node, basename } = this._walk(this._resolve(path), /*noFollow*/ true);
@@ -573,7 +573,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public renameSync(oldpath: string, newpath: string) {
+    public renameSync(oldpath: string, newpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent: oldParent, links: oldParentLinks, node, basename: oldBasename } = this._walk(this._resolve(oldpath), /*noFollow*/ true);
@@ -607,7 +607,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public symlinkSync(target: string, linkpath: string) {
+    public symlinkSync(target: string, linkpath: string): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node: existingNode, basename } = this._walk(this._resolve(linkpath), /*noFollow*/ true);
@@ -627,7 +627,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public realpathSync(path: string) {
+    public realpathSync(path: string): string {
         const { realpath } = this._walk(this._resolve(path));
         return realpath;
     }
@@ -666,7 +666,7 @@ export class FileSystem {
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
     // eslint-disable-next-line no-restricted-syntax
-    public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
+    public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null): void {
         if (this.isReadonly) throw createIOError("EROFS");
 
         const { parent, links, node: existingNode, basename } = this._walk(this._resolve(path), /*noFollow*/ false);
@@ -694,7 +694,7 @@ export class FileSystem {
      * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
      * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
      */
-    public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+    public diff(base?: FileSystem | undefined, options: DiffOptions = {}): FileSet | undefined {
         if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
         const differences: FileSet = {};
         const hasDifferences = base ?
@@ -707,7 +707,7 @@ export class FileSystem {
     /**
      * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
      */
-    public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
+    public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}): FileSet | undefined {
         const differences: FileSet = {};
         return FileSystem.rootDiff(differences, changed, base, options) ?
             differences :
@@ -1253,7 +1253,7 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
  *
  * Unless overridden, `/.src` will be the current working directory for the virtual file system.
  */
-export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}) {
+export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}): FileSystem {
     const fs = getBuiltLocal(host, ignoreCase).shadow();
     if (meta) {
         for (const key of Object.keys(meta)) {
@@ -1331,30 +1331,31 @@ export class Stats {
         this.birthtime = new Date(this.birthtimeMs);
     }
 
-    public isFile() {
+    public isFile(): boolean {
         return (this.mode & S_IFMT) === S_IFREG;
     }
-    public isDirectory() {
+    public isDirectory(): boolean {
         return (this.mode & S_IFMT) === S_IFDIR;
     }
-    public isSymbolicLink() {
+    public isSymbolicLink(): boolean {
         return (this.mode & S_IFMT) === S_IFLNK;
     }
-    public isBlockDevice() {
+    public isBlockDevice(): boolean {
         return (this.mode & S_IFMT) === S_IFBLK;
     }
-    public isCharacterDevice() {
+    public isCharacterDevice(): boolean {
         return (this.mode & S_IFMT) === S_IFCHR;
     }
-    public isFIFO() {
+    public isFIFO(): boolean {
         return (this.mode & S_IFMT) === S_IFIFO;
     }
-    public isSocket() {
+    public isSocket(): boolean {
         return (this.mode & S_IFMT) === S_IFSOCK;
     }
 }
 
-export const IOErrorMessages = Object.freeze({
+// IOErrorMessages is defined like this to reduce duplication for --isolatedDeclarations
+const TemplateIOErrorMessages = {
     EACCES: "access denied",
     EIO: "an I/O error occurred",
     ENOENT: "no such file or directory",
@@ -1367,9 +1368,10 @@ export const IOErrorMessages = Object.freeze({
     ENOTEMPTY: "directory not empty",
     EPERM: "operation not permitted",
     EROFS: "file system is read-only",
-});
+} as const;
+export const IOErrorMessages: typeof TemplateIOErrorMessages = Object.freeze(TemplateIOErrorMessages);
 
-export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
+export function createIOError(code: keyof typeof IOErrorMessages, details = ""): NodeJS.ErrnoException {
     const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]} ${details}`);
     err.code = code;
     if (Error.captureStackTrace) Error.captureStackTrace(err, createIOError);

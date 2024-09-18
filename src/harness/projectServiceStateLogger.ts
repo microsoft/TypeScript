@@ -68,7 +68,7 @@ enum Diff {
 type StatePropertyLog = string | string[];
 type StateItemLog = [string, StatePropertyLog[]];
 
-export function patchServiceForStateBaseline(service: ProjectService) {
+export function patchServiceForStateBaseline(service: ProjectService): void {
     if (!service.logger.isTestLogger || !service.logger.hasLevel(LogLevel.verbose)) return;
     if (service.baseline !== noop) return; // Already patched
 

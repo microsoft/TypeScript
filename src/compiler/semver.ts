@@ -44,7 +44,7 @@ const numericIdentifierRegExp = /^(?:0|[1-9]\d*)$/;
  * @internal
  */
 export class Version {
-    static readonly zero = new Version(0, 0, 0, ["0"]);
+    static readonly zero: Version = new Version(0, 0, 0, ["0"]);
 
     readonly major: number;
     readonly minor: number;
@@ -77,7 +77,7 @@ export class Version {
         this.build = buildArray;
     }
 
-    static tryParse(text: string) {
+    static tryParse(text: string): Version | undefined {
         const result = tryParseComponents(text);
         if (!result) return undefined;
 
@@ -85,7 +85,7 @@ export class Version {
         return new Version(major, minor, patch, prerelease, build);
     }
 
-    compareTo(other: Version | undefined) {
+    compareTo(other: Version | undefined): Comparison {
         // https://semver.org/#spec-item-11
         // > Precedence is determined by the first difference when comparing each of these
         // > identifiers from left to right as follows: Major, minor, and patch versions are
@@ -106,7 +106,7 @@ export class Version {
             || comparePrereleaseIdentifiers(this.prerelease, other.prerelease);
     }
 
-    increment(field: "major" | "minor" | "patch") {
+    increment(field: "major" | "minor" | "patch"): Version {
         switch (field) {
             case "major":
                 return new Version(this.major + 1, 0, 0);
@@ -119,7 +119,7 @@ export class Version {
         }
     }
 
-    with(fields: { major?: number; minor?: number; patch?: number; prerelease?: string | readonly string[]; build?: string | readonly string[]; }) {
+    with(fields: { major?: number; minor?: number; patch?: number; prerelease?: string | readonly string[]; build?: string | readonly string[]; }): Version {
         const {
             major = this.major,
             minor = this.minor,
@@ -130,7 +130,7 @@ export class Version {
         return new Version(major, minor, patch, prerelease, build);
     }
 
-    toString() {
+    toString(): string {
         let result = `${this.major}.${this.minor}.${this.patch}`;
         if (some(this.prerelease)) result += `-${this.prerelease.join(".")}`;
         if (some(this.build)) result += `+${this.build.join(".")}`;
@@ -210,7 +210,7 @@ export class VersionRange {
         this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
     }
 
-    static tryParse(text: string) {
+    static tryParse(text: string): VersionRange | undefined {
         const sets = parseRange(text);
         if (sets) {
             const range = new VersionRange("");
@@ -224,12 +224,12 @@ export class VersionRange {
      * Tests whether a version matches the range. This is equivalent to `satisfies(version, range, { includePrerelease: true })`.
      * in `node-semver`.
      */
-    test(version: Version | string) {
+    test(version: Version | string): boolean {
         if (typeof version === "string") version = new Version(version);
         return testDisjunction(version, this._alternatives);
     }
 
-    toString() {
+    toString(): string {
         return formatDisjunction(this._alternatives);
     }
 }

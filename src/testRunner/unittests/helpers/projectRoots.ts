@@ -66,7 +66,7 @@ export function forEachScenarioForRootsFromReferencedProject(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
     ) => void,
-) {
+): void {
     [true, false].forEach(serverFirst =>
         action(
             `when root file is from referenced project${!serverFirst ? " and shared is first" : ""}`,

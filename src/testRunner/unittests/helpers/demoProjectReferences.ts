@@ -2,7 +2,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
+export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object): string {
     return jsonToReadableText({
         extends: "../tsconfig-base.json",
         compilerOptions: {
@@ -12,7 +12,7 @@ export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: obj
         ...additional,
     });
 }
-export function getSysForDemoProjectReferences() {
+export function getSysForDemoProjectReferences(): TestServerHost {
     return TestServerHost.createWatchedSystem({
         "/user/username/projects/demo/animals/animal.ts": dedent`
             export type Size = "small" | "medium" | "large";

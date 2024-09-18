@@ -80,7 +80,7 @@ function tscWatchCompile(input: TscWatchCompile) {
     });
 }
 
-export function createSolutionBuilderWithWatchHostForBaseline(sys: TestServerHost, cb: ts.ExecuteCommandLineCallbacks) {
+export function createSolutionBuilderWithWatchHostForBaseline(sys: TestServerHost, cb: ts.ExecuteCommandLineCallbacks): ts.SolutionBuilderWithWatchHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     const host = ts.createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true), ts.createWatchStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
     return host;
@@ -93,7 +93,7 @@ interface CreateWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderPro
 
 export function createWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
     input: CreateWatchCompilerHostOfConfigFileForBaseline<T>,
-) {
+): ts.WatchCompilerHostOfConfigFile<T> {
     const host = ts.createWatchCompilerHostOfConfigFile({
         ...input,
         reportDiagnostic: ts.createDiagnosticReporter(input.system, /*pretty*/ true),
@@ -109,7 +109,7 @@ interface CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends 
 }
 export function createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
     input: CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T>,
-) {
+): ts.WatchCompilerHostOfFilesAndCompilerOptions<T> {
     const host = ts.createWatchCompilerHostOfFilesAndCompilerOptions({
         ...input,
         reportDiagnostic: ts.createDiagnosticReporter(input.system, /*pretty*/ true),
@@ -146,7 +146,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     edits,
     watchOrSolution,
     useSourceOfProjectReferenceRedirect,
-}: RunWatchBaseline<T>) {
+}: RunWatchBaseline<T>): void {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({
         baseline,
@@ -194,7 +194,7 @@ export function watchBaseline({
     caption,
     resolutionCache,
     useSourceOfProjectReferenceRedirect,
-}: WatchBaseline) {
+}: WatchBaseline): readonly CommandLineProgram[] {
     const programs = baselineAfterTscCompile(
         sys,
         baseline,
@@ -262,7 +262,7 @@ function verifyProgramStructureAndResolutionCache(
 export interface VerifyTscWatch extends TscWatchCompile {
     baselineIncremental?: boolean;
 }
-export function verifyTscWatch(input: VerifyTscWatch) {
+export function verifyTscWatch(input: VerifyTscWatch): void {
     describe(input.scenario, () => {
         describe(input.subScenario, () => {
             tscWatchCompile(input);
