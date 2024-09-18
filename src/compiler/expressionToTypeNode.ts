@@ -78,6 +78,7 @@ import {
     isModifier,
     isNamedDeclaration,
     isNewScopeNode,
+    isOptionalDeclaration,
     isParameter,
     isPrimitiveLiteralValue,
     isPropertyDeclaration,
@@ -621,7 +622,7 @@ export function createSyntacticTypeNodeBuilder(
         ) {
             result = serializeExistingTypeNode(context, typeNode);
             if (result !== undefined) {
-                result = addUndefinedIfNeeded(result, addUndefined, context);
+                result = addUndefinedIfNeeded(result, addUndefined, undefined, context);
             }
         }
         return result;
@@ -890,7 +891,7 @@ export function createSyntacticTypeNodeBuilder(
                 break;
             case SyntaxKind.NullKeyword:
                 if (strictNullChecks) {
-                    return syntacticResult(addUndefinedIfNeeded(factory.createLiteralTypeNode(factory.createNull()), requiresAddingUndefined, context));
+                    return syntacticResult(addUndefinedIfNeeded(factory.createLiteralTypeNode(factory.createNull()), requiresAddingUndefined, node, context));
                 }
                 else {
                     return syntacticResult(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
@@ -1212,11 +1213,13 @@ export function createSyntacticTypeNodeBuilder(
         else {
             result = factory.createKeywordTypeNode(baseType);
         }
-        return syntacticResult(addUndefinedIfNeeded(result, requiresAddingUndefined, context));
+        return syntacticResult(addUndefinedIfNeeded(result, requiresAddingUndefined, node, context));
     }
 
-    function addUndefinedIfNeeded(node: TypeNode, addUndefined: boolean | undefined, context: SyntacticTypeNodeBuilderContext) {
-        if (!strictNullChecks || !addUndefined) return node;
+    function addUndefinedIfNeeded(node: TypeNode, addUndefined: boolean | undefined, owner: Node | undefined, context: SyntacticTypeNodeBuilderContext) {
+        const parentDeclaration = owner && walkUpParenthesizedExpressions(owner).parent;
+        const optionalDeclaration =  parentDeclaration &&isDeclaration(parentDeclaration) && isOptionalDeclaration(parentDeclaration);
+        if (!strictNullChecks || !(addUndefined || optionalDeclaration)) return node;
         if (!canAddUndefined(node)) {
             context.tracker.reportInferenceFallback(node);
         }

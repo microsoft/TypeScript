@@ -142,7 +142,7 @@ declare class Bar {
     e: number;
     a: number;
     b?: number;
-    c?: number;
+    c?: number | undefined;
     constructor(d?: number | undefined, e?: number);
     f(): number;
     g?(): number;
