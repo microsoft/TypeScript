@@ -769,6 +769,18 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
     return nodeTest(node) ? node : undefined;
 }
 
+interface AncestorTraversable<T extends AncestorTraversable<T>> {
+    parent: T | undefined;
+}
+
+/**
+ * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+ * returns a truthy value, then returns that value.
+ * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+ * At that point findAncestor returns undefined.
+ * @internal
+ */
+export function findAncestor<T extends ast.AstNode>(node: ast.AstNode | undefined, callback: (element: ast.AstNode) => element is T): T | undefined;
 /**
  * Iterates through the parent chain of a node and performs the callback on each parent until the callback
  * returns a truthy value, then returns that value.
@@ -776,8 +788,10 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
  * At that point findAncestor returns undefined.
  */
 export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+/** @internal */
+export function findAncestor(node: ast.AstNode | undefined, callback: (element: ast.AstNode) => boolean | "quit"): ast.AstNode | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined {
+export function findAncestor<T extends AncestorTraversable<T>>(node: T | T | undefined, callback: (element: T) => boolean | "quit"): T | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {

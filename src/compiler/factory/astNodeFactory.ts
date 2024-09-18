@@ -347,6 +347,7 @@ import {
     SyntaxKind,
     TokenFlags,
     TokenSyntaxKind,
+    TransformFlags,
     Type,
 } from "../_namespaces/ts.js";
 
@@ -5482,7 +5483,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         node.data.typeReferenceDirectives = typeReferences;
         node.data.hasNoDefaultLib = hasNoDefaultLib;
         node.data.libReferenceDirectives = libReferences;
-        node.extra.transformFlags = undefined;
+        node.extra.transformFlags = -1 as TransformFlags;
         return finish(node);
     }
 

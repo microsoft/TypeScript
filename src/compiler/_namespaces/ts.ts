@@ -22,6 +22,7 @@ export * from "../factory/nodeTests.js";
 export * from "../factory/nodeChildren.js";
 export * from "../factory/utilities.js";
 export * from "../factory/utilitiesPublic.js";
+export * from "../forEachChild.js";
 export * from "../parser.js";
 export * from "../commandLineParser.js";
 export * from "../moduleNameResolver.js";

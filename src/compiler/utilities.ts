@@ -777,7 +777,7 @@ export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => 
 }
 
 /** @internal */
-export function getFullWidth(node: Node): number {
+export function getFullWidth(node: Node | ast.AstNode): number {
     return node.end - node.pos;
 }
 
@@ -933,8 +933,8 @@ export function hasChangesInResolutions<K, V>(
 
 // Returns true if this node contains a parse error anywhere underneath it.
 /** @internal */
-export function containsParseError(node: Node): boolean {
-    aggregateChildData(node);
+export function containsParseError(node: Node | ast.AstNode): boolean {
+    aggregateChildData(node instanceof ast.AstNode ? node.node : node); // TODO(rbuckton): do not instantiate node
     return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
 }
 
@@ -1058,7 +1058,7 @@ export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasG
 // However, this node will be 'missing' in the sense that no actual source-code/tokens are
 // contained within it.
 /** @internal */
-export function nodeIsMissing(node: Node | undefined): boolean {
+export function nodeIsMissing(node: Node | ast.AstNode | undefined): boolean {
     if (node === undefined) {
         return true;
     }
@@ -1067,7 +1067,7 @@ export function nodeIsMissing(node: Node | undefined): boolean {
 }
 
 /** @internal */
-export function nodeIsPresent(node: Node | undefined): boolean {
+export function nodeIsPresent(node: Node | ast.AstNode | undefined): boolean {
     return !nodeIsMissing(node);
 }
 
@@ -1279,8 +1279,10 @@ export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: 
     return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
 }
 
-function isJSDocTypeExpressionOrChild(node: Node): boolean {
-    return !!findAncestor(node, isJSDocTypeExpression);
+function isJSDocTypeExpressionOrChild(node: Node | ast.AstNode): boolean {
+    return node instanceof ast.AstNode ?
+        !!findAncestor(node, ast.isAstJSDocTypeExpression) :
+        !!findAncestor(node, isJSDocTypeExpression);
 }
 
 /** @internal */
@@ -1310,7 +1312,7 @@ export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
 }
 
 /** @internal */
-export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
+export function getTextOfNodeFromSourceText(sourceText: string, node: Node | ast.AstNode, includeTrivia = false): string {
     if (nodeIsMissing(node)) {
         return "";
     }
@@ -2608,7 +2610,7 @@ export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: Sour
 }
 
 /** @internal */
-export function getJSDocCommentRanges(node: Node, text: string): CommentRange[] | undefined {
+export function getJSDocCommentRanges(node: Node | ast.AstNode, text: string): CommentRange[] | undefined {
     const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
@@ -4390,7 +4392,10 @@ export function canHaveFlowNode(node: Node): node is HasFlowNode {
 }
 
 /** @internal */
-export function canHaveJSDoc(node: Node): node is HasJSDoc {
+export function canHaveJSDoc(node: Node): node is HasJSDoc;
+/** @internal */
+export function canHaveJSDoc(node: ast.AstNode): node is ast.AstHasJSDoc;
+export function canHaveJSDoc(node: Node | ast.AstNode) {
     switch (node.kind) {
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.BinaryExpression:
@@ -7167,7 +7172,7 @@ export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
 }
 
 /** @internal */
-export function modifiersToFlags(modifiers: readonly ModifierLike[] | undefined): ModifierFlags {
+export function modifiersToFlags(modifiers: readonly ModifierLike[] | readonly ast.AstModifierLike[] | undefined): ModifierFlags {
     let flags = ModifierFlags.None;
     if (modifiers) {
         for (const modifier of modifiers) {
@@ -10419,11 +10424,11 @@ export function setNodeFlags<T extends Node>(node: T | undefined, newFlags: Node
  *
  * @internal
  */
-export function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+export function setParent<T extends Node | ast.AstNode>(child: T, parent: T["parent"] | undefined): T;
 /** @internal */
-export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
+export function setParent<T extends Node | ast.AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
 /** @internal */
-export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
+export function setParent<T extends Node | ast.AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
     if (child && parent) {
         (child as Mutable<T>).parent = parent;
     }

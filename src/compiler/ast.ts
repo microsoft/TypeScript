@@ -90,21 +90,19 @@ export class AstNodeExtraFields {
     original: AstNode | undefined = undefined;
     emitNode: EmitNode | undefined = undefined;
     modifierFlagsCache: ts.ModifierFlags = ModifierFlags.None;
-    transformFlags: TransformFlags | undefined = undefined;
-    __pos: number | undefined = undefined;
-    __end: number | undefined = undefined;
+    transformFlags: TransformFlags = (-1 as TransformFlags);
+    __pos: number = -1;
+    __end: number = -1;
 }
 
 let astNodeCloneCore: (node: AstNode) => AstNode;
 let astNodeShadowCore: (node: AstNode) => AstNode;
-let astNodeMaybeExtra: (node: AstNode) => AstNodeExtraFields | undefined;
 
 /** @internal */
 export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstData>> {
     static {
         astNodeCloneCore = node => node.cloneCore();
         astNodeShadowCore = node => node.shadowCore();
-        astNodeMaybeExtra = node => node._extra;
     }
 
     private _node: N | undefined = undefined;
@@ -115,11 +113,14 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
     readonly data: N["data"] = undefined!;
 
     parent: AstNode<NonNullable<N["parent"]>> | undefined = undefined;
-    flags: NodeFlags;
+    flags: NodeFlags = NodeFlags.None;
     pos = -1;
     end = -1;
 
     constructor(kind: N["kind"], data: N["data"], nodeConstructor: NodeConstructor<N>, flags: ts.NodeFlags = NodeFlags.None) {
+        // catch any excess properties assigned to the Node
+        Object.preventExtensions(this);
+
         this.kind = kind;
         this.data = data;
         this.flags = flags;
@@ -149,22 +150,50 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         this.extra.emitNode = value;
     }
     get transformFlags(): ts.TransformFlags {
-        const transformFlags = this._extra?.transformFlags;
-        if (transformFlags === undefined) {
-            this.extra.transformFlags = TransformFlags.None;
-            return this.extra.transformFlags = this.data.computeTransformFlags(this);
+        const extra = this.extra;
+        if (extra.transformFlags === (-1 as TransformFlags)) {
+            extra.transformFlags = this.data.computeTransformFlags(this);
         }
-        return transformFlags;
+        return extra.transformFlags;
     }
     set transformFlags(value) {
         this.extra.transformFlags = value;
     }
-
     get modifierFlagsCache(): ts.ModifierFlags {
         return this._extra?.modifierFlagsCache ?? ModifierFlags.None;
     }
     set modifierFlagsCache(value) {
         this.extra.modifierFlagsCache = value;
+    }
+    get __pos(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        const pos = this._extra?.__pos;
+        return pos === -1 ? undefined : pos;
+    }
+    set __pos(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        if (value === undefined) {
+            if (this._extra !== undefined) {
+                this._extra.__pos = -1;
+            }
+        }
+        else {
+            if (value < 0) throw new RangeError();
+            this.extra.__pos = value;
+        }
+    }
+    get __end(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
+        const end = this._extra?.__end;
+        return end === -1 ? undefined : end;
+    }
+    set __end(value) { // eslint-disable-line @typescript-eslint/naming-convention
+        if (value === undefined) {
+            if (this._extra !== undefined) {
+                this._extra.__end = -1;
+            }
+        }
+        else {
+            if (value < 0) throw new RangeError();
+            this.extra.__end = value;
+        }
     }
 
     /*private*/ get extra(): AstNodeExtraFields {
@@ -958,13 +987,13 @@ export class AstTypeScriptNodeData extends AstData {
 
 /** @internal */
 export class Node<K extends SyntaxKind = SyntaxKind, T extends AstData = AstData> implements ts.Node {
-    readonly ast: AstNode<Node<K, T>>;
+    readonly ast: AstNode<Node<K, T>> = undefined!;
 
     constructor(ast: AstNode<Node<K, T>>) {
-        this.ast = ast;
-
         // catch any excess properties assigned to the Node
         Object.preventExtensions(this);
+
+        this.ast = ast;
     }
 
     get kind(): K {
@@ -1028,16 +1057,16 @@ export class Node<K extends SyntaxKind = SyntaxKind, T extends AstData = AstData
         this.ast.emitNode = value;
     }
     get __pos(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
-        return astNodeMaybeExtra(this.ast)?.__pos;
+        return this.ast.__pos;
     }
     set __pos(value) { // eslint-disable-line @typescript-eslint/naming-convention
-        this.ast.extra.__pos = value;
+        this.ast.__pos = value;
     }
     get __end(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
-        return astNodeMaybeExtra(this.ast)?.__end;
+        return this.ast.__end;
     }
     set __end(value) { // eslint-disable-line @typescript-eslint/naming-convention
-        this.ast.extra.__end = value;
+        this.ast.__end = value;
     }
 
     private assertHasRealPosition(message?: string) {
@@ -1258,6 +1287,9 @@ export class AstNodeArray<N extends AstNode> {
     private _extra: AstNodeArrayExtraFields<N> | undefined = undefined;
 
     constructor(items: readonly N[], hasTrailingComma = false) {
+        // catch any excess properties assigned to the NodeArray
+        Object.preventExtensions(this);
+
         this.items = items;
         this.hasTrailingComma = hasTrailingComma;
     }
@@ -1273,7 +1305,9 @@ export class AstNodeArray<N extends AstNode> {
         return this._extra?.hasTrailingComma ?? false;
     }
     set hasTrailingComma(value) {
-        this.extra.hasTrailingComma = value;
+        if (value !== this.hasTrailingComma) {
+            this.extra.hasTrailingComma = value;
+        }
     }
 
     get transformFlags(): ts.TransformFlags {
@@ -1335,7 +1369,7 @@ export class NodeArray<N extends Node> extends Array<N> implements ts.NodeArray<
 
     get __pos(): number | undefined { // eslint-disable-line @typescript-eslint/naming-convention
         return astNodeArrayMaybeExtra(this.ast)?.__pos;
-    } 
+    }
     set __pos(value) { // eslint-disable-line @typescript-eslint/naming-convention
         this.ast.extra.__pos = value;
     }
@@ -1565,8 +1599,57 @@ export interface PrimaryExpression extends MemberExpression {
 export type AstPrimaryExpression = AstNode<PrimaryExpression>;
 
 /** @internal */
-export interface LiteralExpression extends PrimaryExpression {
+export interface KeywordExpression<TKind extends KeywordSyntaxKind = KeywordSyntaxKind> extends PrimaryExpression, KeywordToken<TKind> {
+    readonly ast: AstKeywordExpression<TKind>;
+    readonly kind: TKind;
+}
+
+/** @internal */
+export type AstKeywordExpression<TKind extends KeywordSyntaxKind = KeywordSyntaxKind> = AstNode<KeywordExpression<TKind>>;
+
+/** @internal */
+export interface LiteralLikeNode extends Node {
+    readonly ast: AstLiteralLikeNode;
+    readonly data: AstLiteralLikeNodeData;
+
+    text: string;
+    isUnterminated?: boolean | undefined;
+    hasExtendedUnicodeEscape?: boolean | undefined;
+}
+
+/** @internal */
+export type AstLiteralLikeNode = AstNode<LiteralLikeNode>;
+
+/** @internal */
+export interface AstLiteralLikeNodeData extends AstData {
+    text: string;
+    isUnterminated?: boolean | undefined;
+    hasExtendedUnicodeEscape?: boolean | undefined;
+}
+
+/** @internal */
+export interface TemplateLiteralLikeNode extends LiteralLikeNode {
+    readonly ast: AstTemplateLiteralLikeNode;
+    readonly data: AstTemplateLiteralLikeNodeData;
+    rawText?: string | undefined;
+    /** @internal */
+    templateFlags?: TokenFlags | undefined;
+}
+
+/** @internal */
+export interface AstTemplateLiteralLikeNodeData extends AstLiteralLikeNodeData {
+    rawText?: string | undefined;
+    /** @internal */
+    templateFlags?: TokenFlags | undefined;
+}
+
+/** @internal */
+export type AstTemplateLiteralLikeNode = AstNode<TemplateLiteralLikeNode>;
+
+/** @internal */
+export interface LiteralExpression extends PrimaryExpression, LiteralLikeNode {
     readonly ast: AstLiteralExpression;
+    readonly data: AstLiteralExpressionData;
     _literalExpressionBrand: any;
 
     get text(): string;
@@ -1575,6 +1658,10 @@ export interface LiteralExpression extends PrimaryExpression {
 
 /** @internal */
 export type AstLiteralExpression = AstNode<LiteralExpression>;
+
+/** @internal */
+export interface AstLiteralExpressionData extends AstLiteralLikeNodeData {
+}
 
 /** @internal */
 export class Token<K extends TokenSyntaxKind = TokenSyntaxKind, T extends AstTokenData = AstTokenData> extends Node<K, T> implements ts.Token<K> {
@@ -1668,7 +1755,7 @@ export class AstEndOfFileTokenData extends AstTokenData {
 }
 
 /** @internal */
-export class ThisExpression extends Token<SyntaxKind.ThisKeyword, AstThisExpressionData> implements PrimaryExpression, FlowContainer, ts.ThisExpression {
+export class ThisExpression extends Token<SyntaxKind.ThisKeyword, AstThisExpressionData> implements KeywordExpression<SyntaxKind.ThisKeyword>, FlowContainer, ts.ThisExpression {
     declare readonly ast: AstThisExpression;
 
     declare _primaryExpressionBrand: any;
@@ -1693,7 +1780,7 @@ export class AstThisExpressionData extends AstTokenData {
 }
 
 /** @internal */
-export class SuperExpression extends Token<SyntaxKind.SuperKeyword, AstSuperExpressionData> implements PrimaryExpression, FlowContainer, ts.SuperExpression {
+export class SuperExpression extends Token<SyntaxKind.SuperKeyword, AstSuperExpressionData> implements KeywordExpression<SyntaxKind.SuperKeyword>, FlowContainer, ts.SuperExpression {
     declare readonly ast: AstSuperExpression;
 
     declare _primaryExpressionBrand: any;
@@ -1718,7 +1805,7 @@ export class AstSuperExpressionData extends AstTokenData {
 }
 
 /** @internal */
-export class ImportExpression extends Token<SyntaxKind.ImportKeyword> implements PrimaryExpression, ts.ImportExpression {
+export class ImportExpression extends Token<SyntaxKind.ImportKeyword> implements KeywordExpression<SyntaxKind.ImportKeyword>, ts.ImportExpression {
     declare readonly ast: AstImportExpression;
 
     declare _primaryExpressionBrand: any;
@@ -1730,7 +1817,7 @@ export class ImportExpression extends Token<SyntaxKind.ImportKeyword> implements
 }
 
 /** @internal */
-export class NullLiteral extends Token<SyntaxKind.NullKeyword> implements PrimaryExpression, ts.NullLiteral {
+export class NullLiteral extends Token<SyntaxKind.NullKeyword> implements KeywordExpression<SyntaxKind.NullKeyword>, ts.NullLiteral {
     declare readonly ast: AstNullLiteral;
 
     declare _primaryExpressionBrand: any;
@@ -1742,7 +1829,7 @@ export class NullLiteral extends Token<SyntaxKind.NullKeyword> implements Primar
 }
 
 /** @internal */
-export class TrueLiteral extends Token<SyntaxKind.TrueKeyword> implements PrimaryExpression, ts.TrueLiteral {
+export class TrueLiteral extends Token<SyntaxKind.TrueKeyword> implements KeywordExpression<SyntaxKind.TrueKeyword>, ts.TrueLiteral {
     declare readonly ast: AstTrueLiteral;
 
     declare _primaryExpressionBrand: any;
@@ -1754,7 +1841,7 @@ export class TrueLiteral extends Token<SyntaxKind.TrueKeyword> implements Primar
 }
 
 /** @internal */
-export class FalseLiteral extends Token<SyntaxKind.FalseKeyword> implements PrimaryExpression, ts.FalseLiteral {
+export class FalseLiteral extends Token<SyntaxKind.FalseKeyword> implements KeywordExpression<SyntaxKind.FalseKeyword>, ts.FalseLiteral {
     declare readonly ast: AstFalseLiteral;
 
     declare _primaryExpressionBrand: any;
@@ -4446,6 +4533,14 @@ export class AstThisTypeNodeData extends AstTypeScriptNodeData {
 }
 
 /** @internal */
+export type FunctionOrConstructorTypeNode =
+    | FunctionTypeNode
+    | ConstructorTypeNode;
+
+/** @internal */
+export type AstFunctionOrConstructorTypeNode = AstNodeOneOf<FunctionOrConstructorTypeNode>;
+
+/** @internal */
 export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionTypeNodeData> implements JSDocContainer, Declaration, LocalsContainer, ts.FunctionTypeNode {
     declare readonly ast: AstFunctionTypeNode;
 
@@ -4518,11 +4613,11 @@ export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionT
 
 /** @internal */
 export class AstFunctionTypeNodeData extends AstTypeScriptNodeData {
+    modifiers: AstNodeArray<AstModifier> | undefined = undefined; // initialized by parser (grammar error)
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
     parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
-    modifiers: AstNodeArray<AstModifier> | undefined = undefined; // initialized by parser (grammar error)
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     symbol: Symbol = undefined!; // initialized by binder (Declaration)
@@ -4882,6 +4977,14 @@ export class RestTypeNode extends Node<SyntaxKind.RestType, AstRestTypeNodeData>
 export class AstRestTypeNodeData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
 }
+
+/** @internal */
+export type UnionOrIntersectionTypeNode =
+    | UnionTypeNode
+    | IntersectionTypeNode;
+
+/** @internal */
+export type AstUnionOrIntersectionTypeNode = AstNodeOneOf<UnionOrIntersectionTypeNode>;
 
 /** @internal */
 export class UnionTypeNode extends Node<SyntaxKind.UnionType, AstUnionTypeNodeData> implements ts.UnionTypeNode {
@@ -7944,7 +8047,7 @@ export class AstJsxExpressionData extends AstData {
 }
 
 /** @internal */
-export class JsxText extends Token<SyntaxKind.JsxText, AstJsxTextData> implements ts.JsxText {
+export class JsxText extends Token<SyntaxKind.JsxText, AstJsxTextData> implements ts.JsxText, LiteralLikeNode {
     declare readonly ast: AstJsxText;
 
     override get parent() {
@@ -13532,6 +13635,69 @@ export type AstPartiallyEmittedExpression = AstNode<PartiallyEmittedExpression>;
 export type AstCommaListExpression = AstNode<CommaListExpression>;
 /** @internal */
 export type AstSyntheticReferenceExpression = AstNode<SyntheticReferenceExpression>;
+
+// JSON
+
+/** @internal */
+export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
+    readonly ast: AstJsonMinusNumericLiteral;
+    readonly data: AstJsonMinusNumericLiteralData;
+
+    readonly operator: SyntaxKind.MinusToken;
+    readonly operand: NumericLiteral;
+}
+
+/** @internal */
+export interface AstJsonMinusNumericLiteralData extends AstPrefixUnaryExpressionData {
+    operator: SyntaxKind.MinusToken;
+    operand: AstNumericLiteral;
+}
+
+/** @internal */
+export type AstJsonMinusNumericLiteral = AstNode<JsonMinusNumericLiteral>;
+
+/** @internal */
+export type JsonObjectExpression =
+    | ObjectLiteralExpression
+    | ArrayLiteralExpression
+    | JsonMinusNumericLiteral
+    | NumericLiteral
+    | StringLiteral
+    | BooleanLiteral
+    | NullLiteral;
+
+/** @internal */
+export type AstJsonObjectExpression = AstNodeOneOf<JsonObjectExpression>;
+
+/** @internal */
+export interface JsonObjectExpressionStatement extends ExpressionStatement {
+    readonly ast: AstJsonObjectExpressionStatement;
+    readonly data: AstJsonObjectExpressionStatementData;
+    readonly expression: JsonObjectExpression;
+}
+
+/** @internal */
+export type AstJsonObjectExpressionStatement = AstNode<JsonObjectExpressionStatement>;
+
+/** @internal */
+export interface AstJsonObjectExpressionStatementData extends AstExpressionStatementData {
+    expression: AstJsonObjectExpression;
+}
+
+/** @internal */
+export interface JsonSourceFile extends SourceFile {
+    readonly ast: AstJsonSourceFile;
+    readonly data: AstJsonSourceFileData;
+    readonly statements: NodeArray<JsonObjectExpressionStatement>;
+}
+
+/** @internal */
+export type AstJsonSourceFile = AstNode<JsonSourceFile>;
+
+/** @internal */
+export interface AstJsonSourceFileData extends AstSourceFileData {
+    statements: AstNodeArray<AstJsonObjectExpressionStatement>;
+}
 
 function propagateNameFlags(node: AstPropertyName | AstBindingPattern | AstNoSubstitutionTemplateLiteral | undefined) {
     return node?.kind === SyntaxKind.Identifier ? propagateIdentifierNameFlags(node) : propagateChildFlags(node);
