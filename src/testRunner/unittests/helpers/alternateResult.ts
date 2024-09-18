@@ -91,7 +91,7 @@ export function verifyAlternateResultScenario(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
     ) => void,
-) {
+): void {
     action(
         "alternateResult",
         () => getSysForAlternateResult(forTsserver),

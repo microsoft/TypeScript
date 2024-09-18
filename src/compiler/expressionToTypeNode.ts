@@ -55,6 +55,7 @@ import {
     PropertySignature,
     SetAccessorDeclaration,
     SignatureDeclaration,
+    SyntacticNodeBuilder,
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
@@ -66,7 +67,10 @@ import {
 } from "./_namespaces/ts.js";
 
 /** @internal */
-export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolver: SyntacticTypeNodeBuilderResolver) {
+export function createSyntacticTypeNodeBuilder(
+    options: CompilerOptions,
+    resolver: SyntacticTypeNodeBuilderResolver,
+): SyntacticNodeBuilder {
     const strictNullChecks = getStrictOptionValue(options, "strictNullChecks");
 
     return {

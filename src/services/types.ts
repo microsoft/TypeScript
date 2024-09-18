@@ -1232,7 +1232,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;
