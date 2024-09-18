@@ -83,6 +83,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/index.ts ProjectRootPath: undefined:: Result: c:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: c:/temp/test/project1/tsconfig.json, currentDirectory: c:/temp/test/project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/tsconfig.json 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: c:/temp/test/project1/tsconfig.json : {
+ "rootNames": [
+  "c:/temp/test/project1/index.ts"
+ ],
+ "options": {
+  "composite": true,
+  "configFilePath": "c:/temp/test/project1/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -93,15 +102,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for c:/temp/test/project1/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: c:/temp/test/project1/tsconfig.json : {
- "rootNames": [
-  "c:/temp/test/project1/index.ts"
- ],
- "options": {
-  "composite": true,
-  "configFilePath": "c:/temp/test/project1/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1 1 undefined Config: c:/temp/test/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1 1 undefined Config: c:/temp/test/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/temp/test/project1/tsconfig.json
@@ -248,6 +248,7 @@ c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 C:/home/src/tslibs/TS/Lib/lib.d.ts *new*
@@ -630,6 +631,7 @@ c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 
 ScriptInfos::
 C:/home/src/tslibs/TS/Lib/lib.d.ts *changed*

@@ -506,6 +506,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 0:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 0:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Invoking sourceFileChange on /home/src/projects/project/a/b/lib.ts:: 1
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Before request
 //// [/home/src/projects/project/a/b/lib.ts]

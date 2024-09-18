@@ -6,6 +6,7 @@ import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
+    projectInfoForSession,
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
@@ -152,6 +153,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 const { host, session, commonFile1, commonFile2, configFile } = setup(parentOrSiblingConfigFile);
 
                 openFilesForSession([commonFile1], session);
+                projectInfoForSession(session, commonFile1);
 
                 session.logger.log("1: When config file is deleted and then another file is opened");
                 // remove the tsconfig file
@@ -236,6 +238,27 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 openFilesForSession([commonFile1, commonFile2], session);
                 closeFilesForSession([commonFile2], session);
                 openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+
+                session.logger.log("7: When config file is deleted and then another file is opened and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                projectInfoForSession(session, commonFile1);
+                projectInfoForSession(session, commonFile2);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                session.logger.log("8: When both files are open and config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+
+                projectInfoForSession(session, commonFile1);
+                projectInfoForSession(session, commonFile2);
 
                 baselineTsserverLogs("configuredProjects", `add and then remove a config file ${scenario}`, session);
             });
@@ -243,6 +266,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             it(`add and then remove a config file ${scenario} and file from first config is not open`, () => {
                 const { host, session, commonFile2, configFile } = setup(parentOrSiblingConfigFile);
                 openFilesForSession([commonFile2], session);
+                projectInfoForSession(session, commonFile2);
 
                 session.logger.log("1: When config file is deleted");
                 // remove the tsconfig file
@@ -270,6 +294,27 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 // State after open files are closed
                 closeFilesForSession([commonFile2], session);
                 openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile2], session);
+
+                session.logger.log("3: When config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+                projectInfoForSession(session, commonFile2);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                session.logger.log("4: Check when file is closed when config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                projectInfoForSession(session, commonFile2);
 
                 baselineTsserverLogs("configuredProjects", `add and then remove a config file ${scenario} and file from first config is not open`, session);
             });
@@ -995,7 +1040,7 @@ foo();`,
                 endOffset: 1,
             },
         });
-        session.logger.log(`Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`);
+        projectInfoForSession(session, fooDts);
         baselineTsserverLogs("configuredProjects", "when default configured project does not contain the file", session);
     });
 

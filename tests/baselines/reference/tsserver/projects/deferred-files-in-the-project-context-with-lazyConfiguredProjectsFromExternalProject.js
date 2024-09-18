@@ -130,6 +130,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Info seq  [hh:mm:ss:mss] Calling ensureInferredProjectsUpToDate_TestOnly
 Info seq  [hh:mm:ss:mss] event:
