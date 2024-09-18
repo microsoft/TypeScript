@@ -1180,7 +1180,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
         const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text)
             ? externalModuleName
-            : rewriteModuleSpecifier(firstArgument, compilerOptions);
+            : firstArgument && emitHelpers().createRewriteRelativeImportExtensionsHelper(firstArgument);
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:

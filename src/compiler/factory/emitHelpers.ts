@@ -23,6 +23,7 @@ import {
     isCallExpression,
     isComputedPropertyName,
     isIdentifier,
+    JsxEmit,
     memoize,
     ObjectLiteralElementLike,
     ParameterDeclaration,
@@ -139,6 +140,8 @@ export interface EmitHelperFactory {
     // 'using' helpers
     createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
     createDisposeResourcesHelper(envBinding: Expression): Expression;
+    // --rewriteRelativeImportExtensions helpers
+    createRewriteRelativeImportExtensionsHelper(expression: Expression): Expression;
 }
 
 /** @internal */
@@ -189,6 +192,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // 'using' helpers
         createAddDisposableResourceHelper,
         createDisposeResourcesHelper,
+        // --rewriteRelativeImportExtensions helpers
+        createRewriteRelativeImportExtensionsHelper,
     };
 
     /**
@@ -681,6 +686,17 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     function createDisposeResourcesHelper(envBinding: Expression) {
         context.requestEmitHelper(disposeResourcesHelper);
         return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
+    }
+
+    function createRewriteRelativeImportExtensionsHelper(expression: Expression) {
+        context.requestEmitHelper(rewriteRelativeImportExtensionsHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__rewriteRelativeImportExtension"),
+            /*typeArguments*/ undefined,
+            context.getCompilerOptions().jsx === JsxEmit.Preserve
+                ? [expression, factory.createTrue()]
+                : [expression],
+        );
     }
 }
 
@@ -1420,6 +1436,28 @@ const disposeResourcesHelper: UnscopedEmitHelper = {
             var e = new Error(message);
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
+};
+
+const rewriteRelativeImportExtensionsHelper: UnscopedEmitHelper = {
+    name: "typescript:rewriteRelativeImportExtensions",
+    importName: "__rewriteRelativeImportExtension",
+    scoped: false,
+    text: `
+        var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+        if (typeof path === "string" && path[0] === "." && (path[1] === "/" || path[1] === "." && path[2] === "/")) {
+            if (path.substring(path.length - 4) === ".tsx") {
+                return path.substring(0, path.length - 4) + (preserveJsx ? ".jsx" : ".js");
+            }
+            if (path.substring(path.length - 3) === ".ts") {
+                var dot = path.lastIndexOf(".", path.length - 4);
+                if (dot >= 0 && (path.substring(dot - 2, dot) === ".d" || path.substring(dot, dot + 2) === ".d")) {
+                    return path;
+                }
+            }
+            return path.replace(/(?<!\\.d)\\.[cm]ts$/, function (ext) { return ext === ".mts" ? ".mjs" : ".cjs"; });
+        }
+        return path;
+    };`,
 };
 
 /** @internal */

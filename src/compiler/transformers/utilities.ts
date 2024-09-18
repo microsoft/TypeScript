@@ -874,7 +874,9 @@ export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>): b
 
 /** @internal */
 export function rewriteModuleSpecifier(node: Expression, compilerOptions: CompilerOptions): Expression;
+/** @internal */
 export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined;
+/** @internal */
 export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined {
     if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
         return node;

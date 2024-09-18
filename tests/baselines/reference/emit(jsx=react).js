@@ -45,6 +45,21 @@ import("" + "./foo.ts");
 
 
 //// [main.js]
+    var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+    if (typeof path === "string" && path[0] === "." && (path[1] === "/" || path[1] === "." && path[2] === "/")) {
+        if (path.substring(path.length - 4) === ".tsx") {
+            return path.substring(0, path.length - 4) + (preserveJsx ? ".jsx" : ".js");
+        }
+        if (path.substring(path.length - 3) === ".ts") {
+            var dot = path.lastIndexOf(".", path.length - 4);
+            if (dot >= 0 && (path.substring(dot - 2, dot) === ".d" || path.substring(dot, dot + 2) === ".d")) {
+                return path;
+            }
+        }
+        return path.replace(/(?<!\.d)\.[cm]ts$/, function (ext) { return ext === ".mts" ? ".mjs" : ".cjs"; });
+    }
+    return path;
+};
 import {} from "./foo.js";
 import {} from "../foo.mjs";
 import {} from "../../foo.cjs";
@@ -52,17 +67,32 @@ import {} from "./foo.js";
 const foo = require("./foo.js");
 import "./foo.js";
 export * from "./foo.js";
-import("./foo.js");
-import("./foo.js", { with: { attr: "value" } });
+import(__rewriteRelativeImportExtension("./foo.ts"));
+import(__rewriteRelativeImportExtension("./foo.ts"), { with: { attr: "value" } });
 //// [js.js]
+    var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+    if (typeof path === "string" && path[0] === "." && (path[1] === "/" || path[1] === "." && path[2] === "/")) {
+        if (path.substring(path.length - 4) === ".tsx") {
+            return path.substring(0, path.length - 4) + (preserveJsx ? ".jsx" : ".js");
+        }
+        if (path.substring(path.length - 3) === ".ts") {
+            var dot = path.lastIndexOf(".", path.length - 4);
+            if (dot >= 0 && (path.substring(dot - 2, dot) === ".d" || path.substring(dot, dot + 2) === ".d")) {
+                return path;
+            }
+        }
+        return path.replace(/(?<!\.d)\.[cm]ts$/, function (ext) { return ext === ".mts" ? ".mjs" : ".cjs"; });
+    }
+    return path;
+};
 import {} from "./foo.js";
 import {} from "../foo.mjs";
 import {} from "../../foo.cjs";
 import {} from "./foo.js";
 import "./foo.js";
 export * from "./foo.js";
-import("./foo.js");
-import("./foo.js", { with: { attr: "value" } });
+import(__rewriteRelativeImportExtension("./foo.ts"));
+import(__rewriteRelativeImportExtension("./foo.ts"), { with: { attr: "value" } });
 require("./foo.ts");
 {
     require("./foo.ts");

@@ -1,4 +1,5 @@
 import {
+    addEmitHelpers,
     addRange,
     append,
     Bundle,
@@ -97,6 +98,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 ? mapDefined(node.imports, name => isImportCall(name.parent) && shouldRewriteModuleSpecifier(name.text, compilerOptions) ? name.parent : undefined)
                 : undefined;
             let result = updateExternalModule(node);
+            addEmitHelpers(result, context.readEmitHelpers());
             currentSourceFile = undefined;
             if (importRequireStatements) {
                 result = factory.updateSourceFile(
@@ -184,7 +186,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             node,
             node.expression,
             node.typeArguments,
-            [rewriteModuleSpecifier(node.arguments[0], compilerOptions), ...node.arguments.slice(1)],
+            [emitHelpers().createRewriteRelativeImportExtensionsHelper(node.arguments[0]), ...node.arguments.slice(1)],
         );
     }
 
