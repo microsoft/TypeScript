@@ -15,6 +15,7 @@ no.ts(6,16): error TS2307: Cannot find module './foo.d.mts' or its corresponding
 no.ts(7,16): error TS2307: Cannot find module './foo.d.css.ts' or its corresponding type declarations.
 no.ts(8,16): error TS2307: Cannot find module '#internal/foo.ts' or its corresponding type declarations.
 no.ts(9,16): error TS2307: Cannot find module 'node:foo.ts' or its corresponding type declarations.
+no.ts(11,8): error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
 
 
 ==== globals.d.ts (0 errors) ====
@@ -67,7 +68,7 @@ no.ts(9,16): error TS2307: Cannot find module 'node:foo.ts' or its corresponding
     }
     
     // No rewrite or shim
-==== no.ts (9 errors) ====
+==== no.ts (10 errors) ====
     import {} from "./foo.ts/foo.js";
                    ~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './foo.ts/foo.js' or its corresponding type declarations.
@@ -96,6 +97,10 @@ no.ts(9,16): error TS2307: Cannot find module 'node:foo.ts' or its corresponding
                    ~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'node:foo.ts' or its corresponding type declarations.
     (require)("./foo.ts");
+    import("node:path");
+           ~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+    require("node:path");
     
 ==== lol.ts (0 errors) ====
     // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

@@ -3,6 +3,7 @@ import {
     addRange,
     append,
     Bundle,
+    CallExpression,
     chainBundle,
     createEmptyExports,
     createExternalHelpersImportDeclarationIfNeeded,
@@ -13,6 +14,7 @@ import {
     ExportDeclaration,
     Expression,
     ExpressionStatement,
+    forEachDynamicImportOrRequireCall,
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
@@ -24,7 +26,6 @@ import {
     hasSyntacticModifier,
     Identifier,
     idText,
-    ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
     insertStatementsAfterCustomPrologue,
@@ -33,19 +34,22 @@ import {
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleIndicator,
     isIdentifier,
-    isImportCall,
+    isInJSFile,
     isNamespaceExport,
     isSourceFile,
     isStatement,
+    isStringLiteralLike,
     ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
     NodeId,
+    rangeContainsRange,
     rewriteModuleSpecifier,
     ScriptTarget,
     setOriginalNode,
     setTextRange,
+    shouldRewriteModuleSpecifier,
     singleOrMany,
     some,
     SourceFile,
@@ -77,7 +81,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableSubstitution(SyntaxKind.Identifier);
 
     const noSubstitution = new Set<NodeId>();
-    let possiblyContainsDynamicImport = false;
+    let possibleImportsAndRequires: CallExpression[] | undefined;
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -91,7 +95,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
             currentSourceFile = node;
             importRequireStatements = undefined;
-            possiblyContainsDynamicImport = !!(currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport);
+            if (compilerOptions.rewriteRelativeImportExtensions && (currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport || isInJSFile(node))) {
+                forEachDynamicImportOrRequireCall(node, /*includeJsDocImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
+                    possibleImportsAndRequires = append(possibleImportsAndRequires, node);
+                });
+            }
             let result = updateExternalModule(node);
             addEmitHelpers(result, context.readEmitHelpers());
             currentSourceFile = undefined;
@@ -145,12 +153,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node)) {
-                    return visitImportCall(node);
+                if (node === possibleImportsAndRequires?.[0]) {
+                    return visitImportOrRequireCall(possibleImportsAndRequires.shift()!);
                 }
                 break;
             default:
-                if (possiblyContainsDynamicImport && compilerOptions.rewriteRelativeImportExtensions) {
+                if (possibleImportsAndRequires?.length && rangeContainsRange(node, possibleImportsAndRequires[0])) {
                     return visitEachChild(node, visitor, context);
                 }
         }
@@ -175,7 +183,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         );
     }
 
-    function visitImportCall(node: ImportCall): VisitResult<Expression> {
+    function visitImportOrRequireCall(node: CallExpression): VisitResult<Expression> {
+        const moduleNameArgument = node.arguments[0];
+        if (isStringLiteralLike(moduleNameArgument) && !shouldRewriteModuleSpecifier(moduleNameArgument.text, compilerOptions)) {
+            return node;
+        }
         return factory.updateCallExpression(
             node,
             node.expression,

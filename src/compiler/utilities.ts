@@ -298,6 +298,7 @@ import {
     isJSDocAugmentsTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocImportTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -11959,3 +11960,47 @@ export const nodeCoreModules: Set<string> = new Set([
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,
 ]);
+
+/** @internal */
+export function forEachDynamicImportOrRequireCall<IncludeJsDocImports extends boolean, RequireStringLiteralLikeArgument extends boolean>(
+    file: SourceFile,
+    includeJsDocImports: IncludeJsDocImports,
+    requireStringLiteralLikeArgument: RequireStringLiteralLikeArgument,
+    cb: (node: CallExpression | (IncludeJsDocImports extends false ? never : JSDocImportTag), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
+): void {
+    const isJavaScriptFile = isInJSFile(file);
+    const r = /import|require/g;
+    while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
+        const node = getNodeAtPosition(file, r.lastIndex);
+        if (isJavaScriptFile && isRequireCall(node, requireStringLiteralLikeArgument)) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (isImportCall(node) && node.arguments.length >= 1 && (!requireStringLiteralLikeArgument || isStringLiteralLike(node.arguments[0]))) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (includeJsDocImports && isJSDocImportTag(node)) {
+            const moduleNameExpr = getExternalModuleName(node);
+            if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
+                (cb as (node: CallExpression | JSDocImportTag, argument: StringLiteralLike) => void)(node, moduleNameExpr);
+            }
+        }
+    }
+}
+
+/** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
+function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
+    const isJavaScriptFile = isInJSFile(sourceFile);
+    let current: Node = sourceFile;
+    const getContainingChild = (child: Node) => {
+        if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+            return child;
+        }
+    };
+    while (true) {
+        const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        if (!child) {
+            return current;
+        }
+        current = child;
+    }
+}

@@ -45,6 +45,8 @@ import {} from "./foo.d.css.ts";
 import {} from "#internal/foo.ts";
 import {} from "node:foo.ts";
 (require)("./foo.ts");
+import("node:path");
+require("node:path");
 
 //// [lol.ts]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
@@ -104,10 +106,10 @@ export * from "./foo.js";
 // Shim
 import(__rewriteRelativeImportExtension("./foo.ts", true));
 import(__rewriteRelativeImportExtension("./foo.ts", true), { with: { attr: "value" } });
-require("./foo.ts");
+require(__rewriteRelativeImportExtension("./foo.ts", true));
 {
-    require("./foo.ts");
-    require(getPath());
+    require(__rewriteRelativeImportExtension("./foo.ts", true));
+    require(__rewriteRelativeImportExtension(getPath(), true));
 }
 // No rewrite or shim
 //// [no.js]
@@ -121,5 +123,7 @@ import {} from "./foo.d.css.ts";
 import {} from "#internal/foo.ts";
 import {} from "node:foo.ts";
 (require)("./foo.ts");
+import("node:path");
+require("node:path");
 //// [lol.js]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

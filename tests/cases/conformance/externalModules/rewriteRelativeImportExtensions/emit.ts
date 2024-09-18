@@ -52,6 +52,8 @@ import {} from "./foo.d.css.ts";
 import {} from "#internal/foo.ts";
 import {} from "node:foo.ts";
 (require)("./foo.ts");
+import("node:path");
+require("node:path");
 
 // @Filename: lol.ts
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
