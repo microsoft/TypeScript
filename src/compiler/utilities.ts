@@ -11962,33 +11962,36 @@ export const nodeCoreModules: Set<string> = new Set([
 ]);
 
 /** @internal */
-export function forEachDynamicImportOrRequireCall<IncludeJsDocImports extends boolean, RequireStringLiteralLikeArgument extends boolean>(
+export function forEachDynamicImportOrRequireCall<IncludeTypeSpaceImports extends boolean, RequireStringLiteralLikeArgument extends boolean>(
     file: SourceFile,
-    includeJsDocImports: IncludeJsDocImports,
+    includeTypeSpaceImports: IncludeTypeSpaceImports,
     requireStringLiteralLikeArgument: RequireStringLiteralLikeArgument,
-    cb: (node: CallExpression | (IncludeJsDocImports extends false ? never : JSDocImportTag), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
+    cb: (node: CallExpression | (IncludeTypeSpaceImports extends false ? never : JSDocImportTag | ImportTypeNode), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
 ): void {
     const isJavaScriptFile = isInJSFile(file);
     const r = /import|require/g;
     while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
-        const node = getNodeAtPosition(file, r.lastIndex);
+        const node = getNodeAtPosition(file, r.lastIndex, /*includeJSDoc*/ includeTypeSpaceImports);
         if (isJavaScriptFile && isRequireCall(node, requireStringLiteralLikeArgument)) {
             cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
         }
         else if (isImportCall(node) && node.arguments.length >= 1 && (!requireStringLiteralLikeArgument || isStringLiteralLike(node.arguments[0]))) {
             cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
         }
-        else if (includeJsDocImports && isJSDocImportTag(node)) {
+        else if (includeTypeSpaceImports && isLiteralImportTypeNode(node)) {
+            (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, node.argument.literal);
+        }
+        else if (includeTypeSpaceImports && isJSDocImportTag(node)) {
             const moduleNameExpr = getExternalModuleName(node);
             if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
-                (cb as (node: CallExpression | JSDocImportTag, argument: StringLiteralLike) => void)(node, moduleNameExpr);
+                (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, moduleNameExpr);
             }
         }
     }
 }
 
 /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
-function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
+function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDoc: boolean): Node {
     const isJavaScriptFile = isInJSFile(sourceFile);
     let current: Node = sourceFile;
     const getContainingChild = (child: Node) => {
@@ -11997,7 +12000,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
         }
     };
     while (true) {
-        const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
         if (!child) {
             return current;
         }

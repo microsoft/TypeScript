@@ -96,7 +96,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             currentSourceFile = node;
             importRequireStatements = undefined;
             if (compilerOptions.rewriteRelativeImportExtensions && (currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport || isInJSFile(node))) {
-                forEachDynamicImportOrRequireCall(node, /*includeJsDocImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
+                forEachDynamicImportOrRequireCall(node, /*includeTypeSpaceImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
                     possibleImportsAndRequires = append(possibleImportsAndRequires, node);
                 });
             }

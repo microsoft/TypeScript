@@ -3493,7 +3493,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-            forEachDynamicImportOrRequireCall(file, /*includeJsDocImports*/ true, /*requireStringLiteralLikeArgument*/ true, (node, moduleSpecifier) => {
+            forEachDynamicImportOrRequireCall(file, /*includeTypeSpaceImports*/ true, /*requireStringLiteralLikeArgument*/ true, (node, moduleSpecifier) => {
                 setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                 imports = append(imports, moduleSpecifier);
             });
