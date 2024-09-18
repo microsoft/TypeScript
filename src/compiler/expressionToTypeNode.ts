@@ -9,6 +9,7 @@ import {
     CompilerOptions,
     ConditionalTypeNode,
     Debug,
+    Declaration,
     ElementAccessExpression,
     EmitFlags,
     Expression,
@@ -96,6 +97,8 @@ import {
     isUnionTypeNode,
     isValueSignatureDeclaration,
     isVarConstLike,
+    JSDocParameterTag,
+    JSDocPropertyTag,
     JSDocSignature,
     JsxAttributeValue,
     KeywordTypeSyntaxKind,
@@ -119,6 +122,7 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
+    PropertySignature,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -128,6 +132,7 @@ import {
     SignatureDeclaration,
     skipTypeParentheses,
     StringLiteral,
+    Symbol,
     SyntacticNodeBuilder,
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
@@ -618,6 +623,25 @@ export function createSyntacticTypeNodeBuilder(
         }
         return result;
     }
+    function serializeTypeAnnotationOfDeclaration(declaredType: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext, node: Declaration, symbol: Symbol | undefined, requiresAddingUndefined?: boolean) {
+        if (!declaredType) return undefined;
+        if (!resolver.canReuseTypeNodeAnnotation(context, node, declaredType, symbol, requiresAddingUndefined)) {
+            // If we need to add undefined, can add undefined, and the resolver says we can reuse the type, we reuse the type
+            // If we don't know syntactically that we can add the undefined, we will report the fallback below.
+            if (!requiresAddingUndefined || !resolver.canReuseTypeNodeAnnotation(context, node, declaredType, symbol, /*requiresAddingUndefined*/ false)) {
+                return undefined;
+            }
+        }
+        let result;
+        if (!requiresAddingUndefined || canAddUndefined(declaredType)) {
+            result = serializeExistingTypeAnnotation(declaredType, context, requiresAddingUndefined);
+        }
+        if (result !== undefined) {
+            return result;
+        }
+        context.tracker.reportInferenceFallback(node);
+        return resolver.serializeExistingTypeNode(context, declaredType, requiresAddingUndefined) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+    }
     function serializeExistingTypeAnnotationWithFallback(typeNode: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, targetNode?: Node) {
         if (!typeNode) return undefined;
         const result = serializeExistingTypeAnnotation(typeNode, context, addUndefined);
@@ -627,45 +651,47 @@ export function createSyntacticTypeNodeBuilder(
         context.tracker.reportInferenceFallback(targetNode ?? typeNode);
         return resolver.serializeExistingTypeNode(context, typeNode, addUndefined) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
-    function serializeTypeOfAccessor(accessor: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) {
-        return typeFromAccessor(accessor, context) ?? inferAccessorType(accessor, resolver.getAllAccessorDeclarations(accessor), context);
+    function serializeTypeOfAccessor(accessor: AccessorDeclaration, symbol: Symbol | undefined, context: SyntacticTypeNodeBuilderContext) {
+        return typeFromAccessor(accessor, symbol, context) ?? inferAccessorType(accessor, resolver.getAllAccessorDeclarations(accessor), context);
     }
 
     function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
         const result = typeFromExpression(expr, context, /*isConstContext*/ false, addUndefined, preserveLiterals);
         return result.type !== undefined ? result.type : inferExpressionType(expr, context, result.reportFallback);
     }
-    function serializeTypeOfDeclaration(node: HasInferredType, context: SyntacticTypeNodeBuilderContext) {
+    function serializeTypeOfDeclaration(node: HasInferredType, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         switch (node.kind) {
+            case SyntaxKind.Parameter:
+            case SyntaxKind.JSDocParameterTag:
+                return typeFromParameter(node, symbol, context);
+            case SyntaxKind.VariableDeclaration:
+                return typeFromVariable(node, symbol, context);
             case SyntaxKind.PropertySignature:
             case SyntaxKind.JSDocPropertyTag:
-            case SyntaxKind.JSDocParameterTag:
-                return serializeExistingTypeAnnotationWithFallback(getEffectiveTypeAnnotationNode(node), context);
-            case SyntaxKind.Parameter:
-                return typeFromParameter(node, context);
-            case SyntaxKind.VariableDeclaration:
-                return typeFromVariable(node, context);
             case SyntaxKind.PropertyDeclaration:
-                return typeFromProperty(node, context);
+                return typeFromProperty(node, symbol, context);
             case SyntaxKind.BindingElement:
-                return inferTypeOfDeclaration(node, context);
+                return inferTypeOfDeclaration(node, symbol, context);
             case SyntaxKind.ExportAssignment:
                 return serializeTypeOfExpression(node.expression, context, /*addUndefined*/ undefined, /*preserveLiterals*/ true);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.BinaryExpression:
-                return typeFromExpandoProperty(node, context);
+                return typeFromExpandoProperty(node, symbol, context);
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                return typeFromPropertyAssignment(node, context);
+                return typeFromPropertyAssignment(node, symbol, context);
             default:
                 Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
     }
 
-    function typeFromPropertyAssignment(node: PropertyAssignment | ShorthandPropertyAssignment, context: SyntacticTypeNodeBuilderContext) {
+    function typeFromPropertyAssignment(node: PropertyAssignment | ShorthandPropertyAssignment, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         const typeAnnotation = getEffectiveTypeAnnotationNode(node);
-        let result = serializeExistingTypeAnnotation(typeAnnotation, context);
+        let result;
+        if (typeAnnotation && resolver.canReuseTypeNodeAnnotation(context, node, typeAnnotation, symbol)) {
+            result = serializeExistingTypeAnnotation(typeAnnotation, context);
+        }
         if (!result && node.kind === SyntaxKind.PropertyAssignment) {
             const initializer = node.initializer;
             const type = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
@@ -676,12 +702,12 @@ export function createSyntacticTypeNodeBuilder(
                 result = serializeExistingTypeAnnotation(type, context);
             }
         }
-        return result ?? inferTypeOfDeclaration(node, context, /*reportFallback*/ false);
+        return result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
     }
     function serializeReturnTypeForSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) {
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
-                return serializeTypeOfAccessor(node, context);
+                return serializeTypeOfAccessor(node, /*symbol*/ undefined, context);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ConstructSignature:
@@ -719,71 +745,76 @@ export function createSyntacticTypeNodeBuilder(
         return accessorType;
     }
 
-    function typeFromAccessor(node: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
+    function typeFromAccessor(node: AccessorDeclaration, symbol: Symbol | undefined, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
         const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
         if (accessorType && !isTypePredicateNode(accessorType)) {
-            return withNewScope(context, node, () => serializeExistingTypeAnnotationWithFallback(accessorType, context));
+            return withNewScope(context, node, () => serializeTypeAnnotationOfDeclaration(accessorType, context, node, symbol));
         }
         if (accessorDeclarations.getAccessor) {
             return withNewScope(context, accessorDeclarations.getAccessor, () => createReturnFromSignature(accessorDeclarations.getAccessor!, context));
         }
         return undefined;
     }
-    function typeFromVariable(node: VariableDeclaration, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
+    function typeFromVariable(node: VariableDeclaration, symbol: Symbol, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        if (declaredType) {
-            return serializeExistingTypeAnnotationWithFallback(declaredType, context);
-        }
         let resultType = failed;
-        if (node.initializer) {
+        if (declaredType) {
+            resultType = syntacticResult(serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol));
+        }
+        else if (node.initializer) {
             if (!resolver.isExpandoFunctionDeclaration(node) && !isContextuallyTyped(node)) {
                 resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isVarConstLike(node));
             }
         }
-        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, context, resultType.reportFallback);
+        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, symbol, context, resultType.reportFallback);
     }
-    function typeFromParameter(node: ParameterDeclaration, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
+    function typeFromParameter(node: ParameterDeclaration | JSDocParameterTag, symbol: Symbol | undefined, context: SyntacticTypeNodeBuilderContext): TypeNode | undefined {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.SetAccessor) {
-            return serializeTypeOfAccessor(parent, context);
+            return serializeTypeOfAccessor(parent, symbol, context);
         }
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        const addUndefined = resolver.requiresAddingImplicitUndefined(node, context.enclosingDeclaration);
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node, symbol, context.enclosingDeclaration);
         let resultType = failed;
         if (declaredType) {
-            resultType = syntacticResult(serializeExistingTypeAnnotationWithFallback(declaredType, context, addUndefined, node));
+            resultType = syntacticResult(serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol, addUndefined));
         }
-        else if (node.initializer && isIdentifier(node.name) && !isContextuallyTyped(node)) {
+        else if (isParameter(node) && node.initializer && isIdentifier(node.name) && !isContextuallyTyped(node)) {
             resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, addUndefined);
         }
-        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, context, resultType.reportFallback);
+        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, symbol, context, resultType.reportFallback);
     }
     /**
      * While expando poperies are errors in TSC, in JS we try to extract the type from the binary expression;
      */
-    function typeFromExpandoProperty(node: PropertyAccessExpression | BinaryExpression | ElementAccessExpression, context: SyntacticTypeNodeBuilderContext) {
+    function typeFromExpandoProperty(node: PropertyAccessExpression | BinaryExpression | ElementAccessExpression, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
         if (declaredType) {
-            return serializeExistingTypeAnnotationWithFallback(declaredType, context);
+            return serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol);
         }
-        return inferTypeOfDeclaration(node, context, /*reportFallback*/ false);
+        return inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
     }
-    function typeFromProperty(node: PropertyDeclaration, context: SyntacticTypeNodeBuilderContext) {
+    function typeFromProperty(node: PropertyDeclaration | PropertySignature | JSDocPropertyTag, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        if (declaredType) {
-            return serializeExistingTypeAnnotationWithFallback(declaredType, context);
-        }
+        const requiresAddingUndefined = resolver.requiresAddingImplicitUndefined(node, symbol, context.enclosingDeclaration);
         let resultType = failed;
-        if (node.initializer && !isContextuallyTyped(node)) {
-            const isReadonly = isDeclarationReadonly(node);
-            resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isReadonly);
+        if (declaredType) {
+            resultType = syntacticResult(serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol, requiresAddingUndefined));
         }
-        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, context, resultType.reportFallback);
+        else {
+            const initializer = isPropertyDeclaration(node) ? node.initializer : undefined;
+            if (initializer && !isContextuallyTyped(node)) {
+                const isReadonly = isDeclarationReadonly(node);
+                resultType = typeFromExpression(initializer, context, /*isConstContext*/ undefined, requiresAddingUndefined, isReadonly);
+            }
+        }
+        return resultType.type !== undefined ? resultType.type : inferTypeOfDeclaration(node, symbol, context, resultType.reportFallback);
     }
 
     function inferTypeOfDeclaration(
         node: HasInferredType,
+        symbol: Symbol | undefined,
         context: SyntacticTypeNodeBuilderContext,
         reportFallback = true,
     ) {
@@ -793,7 +824,7 @@ export function createSyntacticTypeNodeBuilder(
         if (context.noInferenceFallback === true) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
-        return resolver.serializeTypeOfDeclaration(context, node);
+        return resolver.serializeTypeOfDeclaration(context, node, symbol);
     }
 
     function inferExpressionType(node: Expression, context: SyntacticTypeNodeBuilderContext, reportFallback = true, requiresAddingUndefined?: boolean) {
@@ -1051,7 +1082,7 @@ export function createSyntacticTypeNodeBuilder(
             [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
             [];
         const expressionResult = typeFromExpression(prop.initializer, context, isConstContext);
-        const typeNode = expressionResult.type !== undefined ? expressionResult.type : inferTypeOfDeclaration(prop, context, expressionResult.reportFallback);
+        const typeNode = expressionResult.type !== undefined ? expressionResult.type : inferTypeOfDeclaration(prop, /*symbol*/ undefined, context, expressionResult.reportFallback);
 
         return factory.createPropertySignature(
             modifiers,
@@ -1068,7 +1099,7 @@ export function createSyntacticTypeNodeBuilder(
             reuseNode(context, p.dotDotDotToken),
             resolver.serializeNameOfParameter(context, p),
             resolver.isOptionalParameter(p) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            typeFromParameter(p, context), // Ignore private param props, since this type is going straight back into a param
+            typeFromParameter(p, /*symbol*/ undefined, context), // Ignore private param props, since this type is going straight back into a param
             /*initializer*/ undefined,
         );
     }

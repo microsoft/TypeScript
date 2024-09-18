@@ -10512,13 +10512,13 @@ export interface SyntacticTypeNodeBuilderResolver {
     isUndefinedIdentifierExpression(name: Identifier): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
+    requiresAddingImplicitUndefined(declaration: ParameterDeclaration | PropertySignature | JSDocParameterTag | JSDocPropertyTag | PropertyDeclaration, symbol: Symbol | undefined, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
     isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
     serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
-    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType): TypeNode | undefined;
+    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType, symbol: Symbol | undefined): TypeNode | undefined;
     serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;
     serializeTypeName(context: SyntacticTypeNodeBuilderContext, node: EntityName, isTypeOf?: boolean, typeArguments?: readonly TypeNode[]): TypeNode | undefined;
     serializeEntityName(context: SyntacticTypeNodeBuilderContext, node: EntityNameExpression): Expression | undefined;
@@ -10530,6 +10530,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     evaluateEntityNameExpression(expression: EntityNameExpression): EvaluatorResult;
     getModuleSpecifierOverride(context: SyntacticTypeNodeBuilderContext, parent: ImportTypeNode, lit: StringLiteral): string | undefined;
     canReuseTypeNode(context: SyntacticTypeNodeBuilderContext, existing: TypeNode): boolean;
+    canReuseTypeNodeAnnotation(context: SyntacticTypeNodeBuilderContext, node: Declaration, existing: TypeNode, symbol: Symbol | undefined, requiresAddingUndefined?: boolean): boolean;
     shouldRemoveDeclaration(context: SyntacticTypeNodeBuilderContext, node: DynamicNamedDeclaration): boolean;
     hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration;
     createRecoveryBoundary(context: SyntacticTypeNodeBuilderContext): {
@@ -10542,11 +10543,11 @@ export interface SyntacticTypeNodeBuilderResolver {
 
 /** @internal */
 export interface SyntacticNodeBuilder {
-    serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
-    serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeTypeOfDeclaration: (node: HasInferredType, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeReturnTypeForSignature: (signature: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
     serializeTypeOfExpression: (expr: Expression | JsxAttributeValue, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => TypeNode;
     serializeExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
-    serializeTypeOfAccessor: (accessor: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeTypeOfAccessor: (accessor: AccessorDeclaration, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
 }
 
 /** @internal */

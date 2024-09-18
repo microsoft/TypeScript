@@ -46,7 +46,7 @@ declare class Test {
 //// [index.d.ts]
 export default X;
 export type Options = {
-    test?: typeof import("./Test.js").default;
+    test?: typeof import("./Test.js").default | undefined;
 };
 /**
  * @typedef {Object} Options
