@@ -76,7 +76,7 @@ import {
 } from "./_namespaces/ts.js";
 
 /** @internal */
-export type NextContainer = AstNode<HasLocals>;
+export type AstNextContainer = AstHasLocals;
 
 /** @internal */
 export class AstNodeId {
@@ -1991,7 +1991,7 @@ export class Identifier extends Token<SyntaxKind.Identifier, AstIdentifierData> 
         this.ast.data.resolvedSymbol = value;
     }
     get symbol(): Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2025,7 +2025,7 @@ export class AstIdentifierData extends AstTokenData {
     escapedText: __String = undefined!;
     resolvedSymbol: Symbol = undefined!; // TransientIdentifier
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -2140,10 +2140,10 @@ export class ComputedPropertyName extends Node<SyntaxKind.ComputedPropertyName, 
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value: Expression) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -2211,10 +2211,10 @@ export class TypeParameterDeclaration extends Node<SyntaxKind.TypeParameter, Ast
         this.ast.data.modifiers = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value: Identifier) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get constraint(): TypeNode | undefined {
         return this.ast.data.constraint?.node;
@@ -2235,7 +2235,7 @@ export class TypeParameterDeclaration extends Node<SyntaxKind.TypeParameter, Ast
         this.ast.data.expression = value?.ast;
     }
     get symbol(): Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2263,7 +2263,7 @@ export class AstTypeParameterDeclarationData extends AstTypeScriptNodeData {
     expression: AstExpression | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -2293,7 +2293,7 @@ export class ParameterDeclaration extends Node<SyntaxKind.Parameter, AstParamete
     set dotDotDotToken(value: DotDotDotToken | undefined) {
         this.ast.data.dotDotDotToken = value?.ast;
     }
-    get name(): BindingName {
+    get name(): BindingName { // TODO(rbuckton): `name` can be undefined for JSDoc signature parameters
         return this.ast.data.name?.node;
     }
     set name(value: BindingName) {
@@ -2318,7 +2318,7 @@ export class ParameterDeclaration extends Node<SyntaxKind.Parameter, AstParamete
         this.ast.data.initializer = value?.ast;
     }
     get symbol(): Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2341,12 +2341,12 @@ export class ParameterDeclaration extends Node<SyntaxKind.Parameter, AstParamete
 export class AstParameterDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;
     dotDotDotToken: AstDotDotDotToken | undefined = undefined;
-    name: AstBindingName = undefined!;
+    name: AstBindingName = undefined!; // TODO(rbuckton): `name` can be undefined for JSDoc signature parameters
     questionToken: AstQuestionToken | undefined = undefined;
     type: AstTypeNode | undefined = undefined;
     initializer: AstExpression | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 
@@ -2378,10 +2378,10 @@ export class Decorator extends Node<SyntaxKind.Decorator, AstDecoratorData> impl
     }
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value: LeftHandSideExpression) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -2419,10 +2419,10 @@ export class PropertySignature extends Node<SyntaxKind.PropertySignature, AstPro
         this.ast.data.modifiers = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -2443,7 +2443,7 @@ export class PropertySignature extends Node<SyntaxKind.PropertySignature, AstPro
         this.ast.data.initializer = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2470,7 +2470,7 @@ export class AstPropertySignatureData extends AstTypeScriptNodeData {
     type: AstTypeNode | undefined = undefined;
     initializer: AstExpression | undefined = undefined; // initialized by parser (grammar error)
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 }
@@ -2510,10 +2510,10 @@ export class CallSignatureDeclaration extends Node<SyntaxKind.CallSignature, Ast
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -2534,7 +2534,7 @@ export class CallSignatureDeclaration extends Node<SyntaxKind.CallSignature, Ast
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2555,19 +2555,19 @@ export class CallSignatureDeclaration extends Node<SyntaxKind.CallSignature, Ast
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstCallSignatureDeclarationData extends AstTypeScriptNodeData {
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    nextContainer: AstNextContainer | undefined = undefined;
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 }
@@ -2588,10 +2588,10 @@ export class ConstructSignatureDeclaration extends Node<SyntaxKind.ConstructSign
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -2612,7 +2612,7 @@ export class ConstructSignatureDeclaration extends Node<SyntaxKind.ConstructSign
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2633,21 +2633,21 @@ export class ConstructSignatureDeclaration extends Node<SyntaxKind.ConstructSign
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstConstructSignatureDeclarationData extends AstTypeScriptNodeData {
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -2665,10 +2665,10 @@ export class VariableDeclaration extends Node<SyntaxKind.VariableDeclaration, As
     }
 
     get name(): BindingName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value: BindingName) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get exclamationToken(): ExclamationToken | undefined {
         return this.ast.data.exclamationToken?.node;
@@ -2695,7 +2695,7 @@ export class VariableDeclaration extends Node<SyntaxKind.VariableDeclaration, As
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2716,7 +2716,7 @@ export class AstVariableDeclarationData extends AstData {
     initializer: AstExpression | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -2741,7 +2741,7 @@ export class VariableDeclarationList extends Node<SyntaxKind.VariableDeclaration
         return this.ast.data.declarations.nodes;
     }
     set declarations(value) {
-        this.ast.data.declarations = value?.ast;
+        this.ast.data.declarations = value.ast;
     }
 }
 
@@ -2789,11 +2789,11 @@ export class BindingElement extends Node<SyntaxKind.BindingElement, AstBindingEl
     set dotDotDotToken(value) {
         this.ast.data.dotDotDotToken = value?.ast;
     }
-    get name(): Identifier | ObjectBindingPattern | ArrayBindingPattern {
-        return this.ast.data.name?.node;
+    get name(): BindingName {
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get initializer(): Expression | undefined {
         return this.ast.data.initializer?.node;
@@ -2802,7 +2802,7 @@ export class BindingElement extends Node<SyntaxKind.BindingElement, AstBindingEl
         this.ast.data.initializer = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2828,7 +2828,7 @@ export class AstBindingElementData extends AstData {
     name: AstBindingName = undefined!;
     initializer: AstExpression | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -2864,10 +2864,10 @@ export class PropertyDeclaration extends Node<SyntaxKind.PropertyDeclaration, As
         this.ast.data.modifiers = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -2900,7 +2900,7 @@ export class PropertyDeclaration extends Node<SyntaxKind.PropertyDeclaration, As
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -2923,7 +2923,7 @@ export class AstPropertyDeclarationData extends AstData {
     initializer: AstExpression | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(node: AstNode): TransformFlags {
@@ -2954,23 +2954,17 @@ export class PropertyAssignment extends Node<SyntaxKind.PropertyAssignment, AstP
         super.parent = value;
     }
 
-    get name(): PropertyName {
-        return this.ast.data.name?.node;
-    }
-    set name(value) {
-        this.ast.data.name = value?.ast;
-    }
-    get initializer(): Expression {
-        return this.ast.data.initializer?.node;
-    }
-    set initializer(value) {
-        this.ast.data.initializer = value?.ast;
-    }
     get modifiers(): NodeArray<ModifierLike> | undefined {
         return this.ast.data.modifiers?.nodes;
     }
     set modifiers(value) {
         this.ast.data.modifiers = value?.ast;
+    }
+    get name(): PropertyName {
+        return this.ast.data.name.node;
+    }
+    set name(value) {
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -2984,6 +2978,12 @@ export class PropertyAssignment extends Node<SyntaxKind.PropertyAssignment, AstP
     set exclamationToken(value) {
         this.ast.data.exclamationToken = value?.ast;
     }
+    get initializer(): Expression {
+        return this.ast.data.initializer.node;
+    }
+    set initializer(value) {
+        this.ast.data.initializer = value.ast;
+    }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
     }
@@ -2991,7 +2991,7 @@ export class PropertyAssignment extends Node<SyntaxKind.PropertyAssignment, AstP
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3013,7 +3013,7 @@ export class AstPropertyAssignmentData extends AstData {
     initializer: AstExpression = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -3037,29 +3037,17 @@ export class ShorthandPropertyAssignment extends Node<SyntaxKind.ShorthandProper
         super.parent = value;
     }
 
-    get name(): Identifier {
-        return this.ast.data.name?.node;
-    }
-    set name(value) {
-        this.ast.data.name = value?.ast;
-    }
-    get equalsToken(): EqualsToken | undefined {
-        return this.ast.data.equalsToken?.node;
-    }
-    set equalsToken(value) {
-        this.ast.data.equalsToken = value?.ast;
-    }
-    get objectAssignmentInitializer(): Expression | undefined {
-        return this.ast.data.objectAssignmentInitializer?.node;
-    }
-    set objectAssignmentInitializer(value) {
-        this.ast.data.objectAssignmentInitializer = value?.ast;
-    }
     get modifiers(): NodeArray<ModifierLike> | undefined {
         return this.ast.data.modifiers?.nodes;
     }
     set modifiers(value) {
         this.ast.data.modifiers = value?.ast;
+    }
+    get name(): Identifier {
+        return this.ast.data.name.node;
+    }
+    set name(value) {
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -3073,6 +3061,18 @@ export class ShorthandPropertyAssignment extends Node<SyntaxKind.ShorthandProper
     set exclamationToken(value) {
         this.ast.data.exclamationToken = value?.ast;
     }
+    get equalsToken(): EqualsToken | undefined {
+        return this.ast.data.equalsToken?.node;
+    }
+    set equalsToken(value) {
+        this.ast.data.equalsToken = value?.ast;
+    }
+    get objectAssignmentInitializer(): Expression | undefined {
+        return this.ast.data.objectAssignmentInitializer?.node;
+    }
+    set objectAssignmentInitializer(value) {
+        this.ast.data.objectAssignmentInitializer = value?.ast;
+    }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
     }
@@ -3080,7 +3080,7 @@ export class ShorthandPropertyAssignment extends Node<SyntaxKind.ShorthandProper
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3103,7 +3103,7 @@ export class AstShorthandPropertyAssignmentData extends AstData {
     objectAssignmentInitializer: AstExpression | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -3129,10 +3129,10 @@ export class SpreadAssignment extends Node<SyntaxKind.SpreadAssignment, AstSprea
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -3141,7 +3141,7 @@ export class SpreadAssignment extends Node<SyntaxKind.SpreadAssignment, AstSprea
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3158,7 +3158,7 @@ export class SpreadAssignment extends Node<SyntaxKind.SpreadAssignment, AstSprea
 export class AstSpreadAssignmentData extends AstData {
     expression: AstExpression = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 
@@ -3197,16 +3197,16 @@ export class ObjectBindingPattern extends Node<SyntaxKind.ObjectBindingPattern, 
     }
 
     get elements(): NodeArray<BindingElement> {
-        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+        return this.ast.data.elements.nodes;
     }
     set elements(value) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
 /** @internal */
 export class AstObjectBindingPatternData extends AstData {
-    elements: AstNodeArray<AstBindingElement> | undefined = undefined;
+    elements: AstNodeArray<AstBindingElement> = undefined!;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         let transformFlags = propagateChildrenFlags(this.elements) |
@@ -3231,16 +3231,16 @@ export class ArrayBindingPattern extends Node<SyntaxKind.ArrayBindingPattern, As
     }
 
     get elements(): NodeArray<ArrayBindingElement> {
-        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+        return this.ast.data.elements.nodes;
     }
     set elements(value) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
 /** @internal */
 export class AstArrayBindingPatternData extends AstData {
-    elements: AstNodeArray<AstArrayBindingElement> | undefined = undefined;
+    elements: AstNodeArray<AstArrayBindingElement> = undefined!;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.elements) |
@@ -3284,10 +3284,10 @@ export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, As
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -3308,7 +3308,7 @@ export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, As
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3329,7 +3329,7 @@ export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, As
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get endFlowNode(): ts.FlowNode | undefined {
         return this.ast.data.endFlowNode;
@@ -3343,10 +3343,9 @@ export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, As
     set returnFlowNode(value) {
         this.ast.data.returnFlowNode = value;
     }
-
     get typeArguments(): NodeArray<TypeNode> | undefined {
-        return this.ast.data.typeArguments?.nodes;
-    } // Used for quick info, replaces typeParameters for instantiated signatures
+        return this.ast.data.typeArguments?.nodes; // Used for quick info, replaces typeParameters for instantiated signatures
+    }
     set typeArguments(value) {
         this.ast.data.typeArguments = value?.ast;
     }
@@ -3358,15 +3357,14 @@ export class AstFunctionDeclarationData extends AstData {
     asteriskToken: AstAsteriskToken | undefined = undefined;
     name: AstIdentifier | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     body: AstFunctionBody | undefined = undefined;
-
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -3421,10 +3419,10 @@ export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodS
         this.ast.data.modifiers = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -3439,10 +3437,10 @@ export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodS
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -3463,7 +3461,7 @@ export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodS
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3484,7 +3482,7 @@ export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodS
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -3494,15 +3492,15 @@ export class AstMethodSignatureData extends AstTypeScriptNodeData {
     name: AstPropertyName = undefined!;
     questionToken: AstQuestionToken | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
-    typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
+    typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -3537,10 +3535,10 @@ export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMet
         this.ast.data.asteriskToken = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -3561,10 +3559,10 @@ export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMet
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -3591,7 +3589,7 @@ export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMet
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3612,7 +3610,7 @@ export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMet
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -3642,16 +3640,16 @@ export class AstMethodDeclarationData extends AstData {
     questionToken: AstQuestionToken | undefined = undefined;
     exclamationToken: AstExclamationToken | undefined = undefined; // initialized by parser (grammar error)
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     body: AstFunctionBody | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
@@ -3719,10 +3717,10 @@ export class ConstructorDeclaration extends Node<SyntaxKind.Constructor, AstCons
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -3743,7 +3741,7 @@ export class ConstructorDeclaration extends Node<SyntaxKind.Constructor, AstCons
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3764,7 +3762,7 @@ export class ConstructorDeclaration extends Node<SyntaxKind.Constructor, AstCons
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get endFlowNode(): ts.FlowNode | undefined {
         return this.ast.data.endFlowNode;
@@ -3785,15 +3783,15 @@ export class AstConstructorDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;
     body: AstFunctionBody | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined; // initialized by parser (grammar error)
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined; // initialized by parser (grammar error)
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -3871,10 +3869,10 @@ export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetA
         this.ast.data.modifiers = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get body(): Block | undefined {
         return this.ast.data.body?.node;
@@ -3889,10 +3887,10 @@ export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetA
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -3913,7 +3911,7 @@ export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetA
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -3934,7 +3932,7 @@ export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetA
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -3962,15 +3960,15 @@ export class AstGetAccessorDeclarationData extends AstData {
     name: AstPropertyName = undefined!;
     body: AstFunctionBody | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined; // initialized by parser (grammar error)
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
@@ -4017,10 +4015,10 @@ export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetA
         this.ast.data.modifiers = value?.ast;
     }
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get body(): Block | undefined {
         return this.ast.data.body?.node;
@@ -4035,10 +4033,10 @@ export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetA
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -4059,7 +4057,7 @@ export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetA
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4080,7 +4078,7 @@ export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetA
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -4108,15 +4106,15 @@ export class AstSetAccessorDeclarationData extends AstData {
     name: AstPropertyName = undefined!;
     body: AstFunctionBody | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined; // initialized by parser (grammar error)
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined; // initialized by parser (grammar error)
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
@@ -4173,10 +4171,10 @@ export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, A
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode {
         return this.ast.data.type?.node!;
@@ -4197,7 +4195,7 @@ export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, A
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4218,7 +4216,7 @@ export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, A
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -4226,15 +4224,15 @@ export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, A
 export class AstIndexSignatureDeclarationData extends AstTypeScriptNodeData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -4253,17 +4251,17 @@ export class ClassStaticBlockDeclaration extends Node<SyntaxKind.ClassStaticBloc
         super.parent = value;
     }
 
-    get body(): Block {
-        return this.ast.data.body?.node;
-    }
-    set body(value) {
-        this.ast.data.body = value?.ast;
-    }
     get modifiers(): NodeArray<ModifierLike> | undefined {
         return this.ast.data.modifiers?.nodes;
     }
     set modifiers(value) {
         this.ast.data.modifiers = value?.ast;
+    }
+    get body(): Block {
+        return this.ast.data.body.node;
+    }
+    set body(value) {
+        this.ast.data.body = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -4272,7 +4270,7 @@ export class ClassStaticBlockDeclaration extends Node<SyntaxKind.ClassStaticBloc
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4293,7 +4291,7 @@ export class ClassStaticBlockDeclaration extends Node<SyntaxKind.ClassStaticBloc
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get endFlowNode(): ts.FlowNode | undefined {
         return this.ast.data.endFlowNode;
@@ -4315,10 +4313,10 @@ export class AstClassStaticBlockDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined; // initialized by parser (grammar error)
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -4343,10 +4341,10 @@ export class ImportTypeAssertionContainer extends Node<SyntaxKind.ImportTypeAsse
 
     /** @deprecated */
     get assertClause(): ImportAttributes {
-        return this.ast.data.assertClause?.node;
+        return this.ast.data.assertClause.node;
     }
     set assertClause(value) {
-        this.ast.data.assertClause = value?.ast;
+        this.ast.data.assertClause = value.ast;
     }
     get multiLine(): boolean {
         return this.ast.data.multiLine;
@@ -4384,10 +4382,10 @@ export class ImportTypeNode extends Node<SyntaxKind.ImportType, AstImportTypeNod
         this.ast.data.isTypeOf = value;
     }
     get argument(): TypeNode {
-        return this.ast.data.argument?.node;
+        return this.ast.data.argument.node;
     }
     set argument(value) {
-        this.ast.data.argument = value?.ast;
+        this.ast.data.argument = value.ast;
     }
     /** @deprecated */
     get attributes(): ImportAttributes | undefined {
@@ -4469,16 +4467,16 @@ export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionT
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -4493,7 +4491,7 @@ export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionT
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4514,23 +4512,23 @@ export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionT
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstFunctionTypeNodeData extends AstTypeScriptNodeData {
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
     modifiers: AstNodeArray<AstModifier> | undefined = undefined; // initialized by parser (grammar error)
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -4555,16 +4553,16 @@ export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstCon
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -4579,7 +4577,7 @@ export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstCon
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4600,7 +4598,7 @@ export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstCon
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -4608,15 +4606,15 @@ export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstCon
 export class AstConstructorTypeNodeData extends AstTypeScriptNodeData {
     modifiers: AstNodeArray<AstModifier> | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -4626,10 +4624,10 @@ export class TypeReferenceNode extends Node<SyntaxKind.TypeReference, AstTypeRef
     declare _typeNodeBrand: any;
 
     get typeName(): Identifier | QualifiedName {
-        return this.ast.data.typeName?.node;
+        return this.ast.data.typeName.node;
     }
     set typeName(value) {
-        this.ast.data.typeName = value?.ast;
+        this.ast.data.typeName = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -4665,10 +4663,10 @@ export class TypePredicateNode extends Node<SyntaxKind.TypePredicate, AstTypePre
         this.ast.data.assertsModifier = value?.ast;
     }
     get parameterName(): Identifier | ThisTypeNode {
-        return this.ast.data.parameterName?.node;
+        return this.ast.data.parameterName.node;
     }
     set parameterName(value) {
-        this.ast.data.parameterName = value?.ast;
+        this.ast.data.parameterName = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -4692,10 +4690,10 @@ export class TypeQueryNode extends Node<SyntaxKind.TypeQuery, AstTypeQueryNodeDa
     declare _typeNodeBrand: any;
 
     get exprName(): Identifier | QualifiedName {
-        return this.ast.data.exprName?.node;
+        return this.ast.data.exprName.node;
     }
     set exprName(value) {
-        this.ast.data.exprName = value?.ast;
+        this.ast.data.exprName = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -4719,13 +4717,13 @@ export class TypeLiteralNode extends Node<SyntaxKind.TypeLiteral, AstTypeLiteral
     declare _declarationBrand: any;
 
     get members(): NodeArray<TypeElement> {
-        return this.ast.data.members?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.members.nodes;
+    }
     set members(value) {
-        this.ast.data.members = value?.ast;
+        this.ast.data.members = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4740,8 +4738,8 @@ export class TypeLiteralNode extends Node<SyntaxKind.TypeLiteral, AstTypeLiteral
 
 /** @internal */
 export class AstTypeLiteralNodeData extends AstTypeScriptNodeData {
-    members: AstNodeArray<AstTypeElement> | undefined = undefined;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    members: AstNodeArray<AstTypeElement> = undefined!;
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -4752,10 +4750,10 @@ export class ArrayTypeNode extends Node<SyntaxKind.ArrayType, AstArrayTypeNodeDa
     declare _typeNodeBrand: any;
 
     get elementType(): TypeNode {
-        return this.ast.data.elementType?.node;
+        return this.ast.data.elementType.node;
     }
     set elementType(value) {
-        this.ast.data.elementType = value?.ast;
+        this.ast.data.elementType = value.ast;
     }
 }
 
@@ -4771,16 +4769,16 @@ export class TupleTypeNode extends Node<SyntaxKind.TupleType, AstTupleTypeNodeDa
     declare _typeNodeBrand: any;
 
     get elements(): NodeArray<TypeNode | NamedTupleMember> {
-        return this.ast.data.elements?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.elements.nodes;
+    }
     set elements(value: NodeArray<TypeNode | NamedTupleMember>) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
 /** @internal */
 export class AstTupleTypeNodeData extends AstTypeScriptNodeData {
-    elements: AstNodeArray<AstTypeNode | AstNamedTupleMember> | undefined = undefined;
+    elements: AstNodeArray<AstTypeNode | AstNamedTupleMember> = undefined!;
 }
 
 /** @internal */
@@ -4798,10 +4796,10 @@ export class NamedTupleMember extends Node<SyntaxKind.NamedTupleMember, AstNamed
         this.ast.data.dotDotDotToken = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get questionToken(): QuestionToken | undefined {
         return this.ast.data.questionToken?.node;
@@ -4810,10 +4808,10 @@ export class NamedTupleMember extends Node<SyntaxKind.NamedTupleMember, AstNamed
         this.ast.data.questionToken = value?.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -4822,7 +4820,7 @@ export class NamedTupleMember extends Node<SyntaxKind.NamedTupleMember, AstNamed
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -4843,7 +4841,7 @@ export class AstNamedTupleMemberData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -4854,10 +4852,10 @@ export class OptionalTypeNode extends Node<SyntaxKind.OptionalType, AstOptionalT
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -4873,10 +4871,10 @@ export class RestTypeNode extends Node<SyntaxKind.RestType, AstRestTypeNodeData>
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -4892,16 +4890,16 @@ export class UnionTypeNode extends Node<SyntaxKind.UnionType, AstUnionTypeNodeDa
     declare _typeNodeBrand: any;
 
     get types(): NodeArray<TypeNode> {
-        return this.ast.data.types?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.types.nodes;
+    }
     set types(value) {
-        this.ast.data.types = value?.ast;
+        this.ast.data.types = value.ast;
     }
 }
 
 /** @internal */
 export class AstUnionTypeNodeData extends AstTypeScriptNodeData {
-    types: AstNodeArray<AstTypeNode> | undefined = undefined;
+    types: AstNodeArray<AstTypeNode> = undefined!;
 }
 
 /** @internal */
@@ -4911,16 +4909,16 @@ export class IntersectionTypeNode extends Node<SyntaxKind.IntersectionType, AstI
     declare _typeNodeBrand: any;
 
     get types(): NodeArray<TypeNode> {
-        return this.ast.data.types?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.types.nodes;
+    }
     set types(value) {
-        this.ast.data.types = value?.ast;
+        this.ast.data.types = value.ast;
     }
 }
 
 /** @internal */
 export class AstIntersectionTypeNodeData extends AstTypeScriptNodeData {
-    types: AstNodeArray<AstTypeNode> | undefined = undefined;
+    types: AstNodeArray<AstTypeNode> = undefined!;
 }
 
 /** @internal */
@@ -4931,28 +4929,28 @@ export class ConditionalTypeNode extends Node<SyntaxKind.ConditionalType, AstCon
     declare _localsContainerBrand: any;
 
     get checkType(): TypeNode {
-        return this.ast.data.checkType?.node;
+        return this.ast.data.checkType.node;
     }
     set checkType(value) {
-        this.ast.data.checkType = value?.ast;
+        this.ast.data.checkType = value.ast;
     }
     get extendsType(): TypeNode {
-        return this.ast.data.extendsType?.node;
+        return this.ast.data.extendsType.node;
     }
     set extendsType(value) {
-        this.ast.data.extendsType = value?.ast;
+        this.ast.data.extendsType = value.ast;
     }
     get trueType(): TypeNode {
-        return this.ast.data.trueType?.node;
+        return this.ast.data.trueType.node;
     }
     set trueType(value) {
-        this.ast.data.trueType = value?.ast;
+        this.ast.data.trueType = value.ast;
     }
     get falseType(): TypeNode {
-        return this.ast.data.falseType?.node;
+        return this.ast.data.falseType.node;
     }
     set falseType(value) {
-        this.ast.data.falseType = value?.ast;
+        this.ast.data.falseType = value.ast;
     }
     get locals(): ts.SymbolTable | undefined {
         return this.ast.data.locals;
@@ -4964,7 +4962,7 @@ export class ConditionalTypeNode extends Node<SyntaxKind.ConditionalType, AstCon
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -4975,7 +4973,7 @@ export class AstConditionalTypeNodeData extends AstTypeScriptNodeData {
     trueType: AstTypeNode = undefined!;
     falseType: AstTypeNode = undefined!;
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -4985,10 +4983,10 @@ export class InferTypeNode extends Node<SyntaxKind.InferType, AstInferTypeNodeDa
     declare _typeNodeBrand: any;
 
     get typeParameter(): TypeParameterDeclaration {
-        return this.ast.data.typeParameter?.node;
+        return this.ast.data.typeParameter.node;
     }
     set typeParameter(value) {
-        this.ast.data.typeParameter = value?.ast;
+        this.ast.data.typeParameter = value.ast;
     }
 }
 
@@ -5004,10 +5002,10 @@ export class ParenthesizedTypeNode extends Node<SyntaxKind.ParenthesizedType, As
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -5029,10 +5027,10 @@ export class TypeOperatorNode extends Node<SyntaxKind.TypeOperator, AstTypeOpera
         this.ast.data.operator = value;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -5049,16 +5047,16 @@ export class IndexedAccessTypeNode extends Node<SyntaxKind.IndexedAccessType, As
     declare _typeNodeBrand: any;
 
     get objectType(): TypeNode {
-        return this.ast.data.objectType?.node;
+        return this.ast.data.objectType.node;
     }
     set objectType(value) {
-        this.ast.data.objectType = value?.ast;
+        this.ast.data.objectType = value.ast;
     }
     get indexType(): TypeNode {
-        return this.ast.data.indexType?.node;
+        return this.ast.data.indexType.node;
     }
     set indexType(value) {
-        this.ast.data.indexType = value?.ast;
+        this.ast.data.indexType = value.ast;
     }
 }
 
@@ -5083,10 +5081,10 @@ export class MappedTypeNode extends Node<SyntaxKind.MappedType, AstMappedTypeNod
         this.ast.data.readonlyToken = value?.ast;
     }
     get typeParameter(): TypeParameterDeclaration {
-        return this.ast.data.typeParameter?.node;
+        return this.ast.data.typeParameter.node;
     }
     set typeParameter(value) {
-        this.ast.data.typeParameter = value?.ast;
+        this.ast.data.typeParameter = value.ast;
     }
     get nameType(): TypeNode | undefined {
         return this.ast.data.nameType?.node;
@@ -5113,7 +5111,7 @@ export class MappedTypeNode extends Node<SyntaxKind.MappedType, AstMappedTypeNod
         this.ast.data.members = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -5134,7 +5132,7 @@ export class MappedTypeNode extends Node<SyntaxKind.MappedType, AstMappedTypeNod
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -5146,10 +5144,10 @@ export class AstMappedTypeNodeData extends AstTypeScriptNodeData {
     questionToken: AstQuestionToken | AstPlusToken | AstMinusToken | undefined = undefined;
     type: AstTypeNode | undefined = undefined;
     members: AstNodeArray<AstTypeElement> | undefined = undefined;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -5159,10 +5157,10 @@ export class LiteralTypeNode extends Node<SyntaxKind.LiteralType, AstLiteralType
     declare _typeNodeBrand: any;
 
     get literal(): NullLiteral | TrueLiteral | FalseLiteral | PrefixUnaryExpression | LiteralExpression {
-        return this.ast.data.literal?.node;
+        return this.ast.data.literal.node;
     }
     set literal(value) {
-        this.ast.data.literal = value?.ast;
+        this.ast.data.literal = value.ast;
     }
 }
 
@@ -5189,23 +5187,23 @@ export class TemplateLiteralTypeNode extends Node<SyntaxKind.TemplateLiteralType
     declare _typeNodeBrand: any;
 
     get head(): TemplateHead {
-        return this.ast.data.head?.node;
+        return this.ast.data.head.node;
     }
     set head(value) {
-        this.ast.data.head = value?.ast;
+        this.ast.data.head = value.ast;
     }
     get templateSpans(): NodeArray<TemplateLiteralTypeSpan> {
-        return this.ast.data.templateSpans?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.templateSpans.nodes;
+    }
     set templateSpans(value) {
-        this.ast.data.templateSpans = value?.ast;
+        this.ast.data.templateSpans = value.ast;
     }
 }
 
 /** @internal */
 export class AstTemplateLiteralTypeNodeData extends AstTypeScriptNodeData {
     head: AstTemplateHead = undefined!;
-    templateSpans: AstNodeArray<AstTemplateLiteralTypeSpan> | undefined = undefined;
+    templateSpans: AstNodeArray<AstTemplateLiteralTypeSpan> = undefined!;
 }
 
 /** @internal */
@@ -5222,16 +5220,16 @@ export class TemplateLiteralTypeSpan extends Node<SyntaxKind.TemplateLiteralType
     }
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get literal(): TemplateMiddle | TemplateTail {
-        return this.ast.data.literal?.node;
+        return this.ast.data.literal.node;
     }
     set literal(value) {
-        this.ast.data.literal = value?.ast;
+        this.ast.data.literal = value.ast;
     }
 }
 
@@ -5282,10 +5280,10 @@ export class PrefixUnaryExpression extends Node<SyntaxKind.PrefixUnaryExpression
         this.ast.data.operator = value;
     }
     get operand(): UnaryExpression {
-        return this.ast.data.operand?.node;
+        return this.ast.data.operand.node;
     }
     set operand(value) {
-        this.ast.data.operand = value?.ast;
+        this.ast.data.operand = value.ast;
     }
 }
 
@@ -5320,10 +5318,10 @@ export class PostfixUnaryExpression extends Node<SyntaxKind.PostfixUnaryExpressi
     declare _expressionBrand: any;
 
     get operand(): LeftHandSideExpression {
-        return this.ast.data.operand?.node;
+        return this.ast.data.operand.node;
     }
     set operand(value) {
-        this.ast.data.operand = value?.ast;
+        this.ast.data.operand = value.ast;
     }
     get operator(): ts.PostfixUnaryOperator {
         return this.ast.data.operator;
@@ -5362,10 +5360,10 @@ export class DeleteExpression extends Node<SyntaxKind.DeleteExpression, AstDelet
     declare _expressionBrand: any;
 
     get expression(): UnaryExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -5386,10 +5384,10 @@ export class TypeOfExpression extends Node<SyntaxKind.TypeOfExpression, AstTypeO
     declare _expressionBrand: any;
 
     get expression(): UnaryExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -5410,10 +5408,10 @@ export class VoidExpression extends Node<SyntaxKind.VoidExpression, AstVoidExpre
     declare _expressionBrand: any;
 
     get expression(): UnaryExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -5434,10 +5432,10 @@ export class AwaitExpression extends Node<SyntaxKind.AwaitExpression, AstAwaitEx
     declare _expressionBrand: any;
 
     get expression(): UnaryExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -5502,22 +5500,22 @@ export class BinaryExpression extends Node<SyntaxKind.BinaryExpression, AstBinar
     declare _jsdocContainerBrand: any;
 
     get left(): Expression {
-        return this.ast.data.left?.node;
+        return this.ast.data.left.node;
     }
     set left(value) {
-        this.ast.data.left = value?.ast;
+        this.ast.data.left = value.ast;
     }
     get operatorToken(): BinaryOperatorToken {
-        return this.ast.data.operatorToken?.node;
+        return this.ast.data.operatorToken.node;
     }
     set operatorToken(value) {
-        this.ast.data.operatorToken = value?.ast;
+        this.ast.data.operatorToken = value.ast;
     }
     get right(): Expression {
-        return this.ast.data.right?.node;
+        return this.ast.data.right.node;
     }
     set right(value) {
-        this.ast.data.right = value?.ast;
+        this.ast.data.right = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -5526,7 +5524,7 @@ export class BinaryExpression extends Node<SyntaxKind.BinaryExpression, AstBinar
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -5547,7 +5545,7 @@ export class AstBinaryExpressionData extends AstData {
     cachedLiteralKind: SyntaxKind | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -5618,34 +5616,34 @@ export class ConditionalExpression extends Node<SyntaxKind.ConditionalExpression
     declare _expressionBrand: any;
 
     get condition(): Expression {
-        return this.ast.data.condition?.node;
+        return this.ast.data.condition.node;
     }
     set condition(value) {
-        this.ast.data.condition = value?.ast;
+        this.ast.data.condition = value.ast;
     }
     get questionToken(): QuestionToken {
-        return this.ast.data.questionToken?.node;
+        return this.ast.data.questionToken.node;
     }
     set questionToken(value) {
-        this.ast.data.questionToken = value?.ast;
+        this.ast.data.questionToken = value.ast;
     }
     get whenTrue(): Expression {
-        return this.ast.data.whenTrue?.node;
+        return this.ast.data.whenTrue.node;
     }
     set whenTrue(value) {
-        this.ast.data.whenTrue = value?.ast;
+        this.ast.data.whenTrue = value.ast;
     }
-    get colonToken(): Token<ts.SyntaxKind.ColonToken, AstTokenData> {
-        return this.ast.data.colonToken?.node;
+    get colonToken(): ColonToken {
+        return this.ast.data.colonToken.node;
     }
     set colonToken(value) {
-        this.ast.data.colonToken = value?.ast;
+        this.ast.data.colonToken = value.ast;
     }
     get whenFalse(): Expression {
-        return this.ast.data.whenFalse?.node;
+        return this.ast.data.whenFalse.node;
     }
     set whenFalse(value) {
-        this.ast.data.whenFalse = value?.ast;
+        this.ast.data.whenFalse = value.ast;
     }
 }
 
@@ -5727,10 +5725,10 @@ export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstF
         this.ast.data.typeArguments = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -5739,10 +5737,10 @@ export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstF
         this.ast.data.type = value?.ast;
     }
     get body(): Block {
-        return this.ast.data.body?.node;
+        return this.ast.data.body.node;
     }
     set body(value) {
-        this.ast.data.body = value?.ast;
+        this.ast.data.body = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -5751,7 +5749,7 @@ export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstF
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -5772,7 +5770,7 @@ export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstF
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -5800,16 +5798,16 @@ export class AstFunctionExpressionData extends AstData {
     asteriskToken: AstAsteriskToken | undefined = undefined;
     name: AstIdentifier | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     body: AstFunctionBody = undefined!;
     /** @internal */ typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // Used for quick info, replaces typeParameters for instantiated signatures
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
@@ -5856,10 +5854,10 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
         this.ast.data.modifiers = value?.ast;
     }
     get equalsGreaterThanToken(): EqualsGreaterThanToken {
-        return this.ast.data.equalsGreaterThanToken?.node;
+        return this.ast.data.equalsGreaterThanToken.node;
     }
     set equalsGreaterThanToken(value) {
-        this.ast.data.equalsGreaterThanToken = value?.ast;
+        this.ast.data.equalsGreaterThanToken = value.ast;
     }
     get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
         return this.ast.data.typeParameters?.nodes;
@@ -5868,10 +5866,10 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -5880,10 +5878,10 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
         this.ast.data.type = value?.ast;
     }
     get body(): Block | Expression {
-        return this.ast.data.body?.node;
+        return this.ast.data.body.node;
     }
     set body(value) {
-        this.ast.data.body = value?.ast;
+        this.ast.data.body = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -5898,7 +5896,7 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -5919,7 +5917,7 @@ export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFuncti
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -5946,16 +5944,16 @@ export class AstArrowFunctionData extends AstData {
     modifiers: AstNodeArray<AstModifier> | undefined = undefined;
     equalsGreaterThanToken: AstEqualsGreaterThanToken = undefined!;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     body: AstConciseBody = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     returnFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
@@ -6064,7 +6062,7 @@ export class StringLiteral extends Token<SyntaxKind.StringLiteral, AstStringLite
         this.ast.data.textSourceNode = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6085,7 +6083,7 @@ export class AstStringLiteralData extends AstTokenData {
     hasExtendedUnicodeEscape: boolean = false;
 
     textSourceNode?: AstNode<Identifier | StringLiteralLike | NumericLiteral | PrivateIdentifier | JsxNamespacedName | BigIntLiteral> | undefined;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -6137,7 +6135,7 @@ export class NoSubstitutionTemplateLiteral extends Token<SyntaxKind.NoSubstituti
         this.ast.data.templateFlags = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6158,7 +6156,7 @@ export class AstNoSubstitutionTemplateLiteralData extends AstTokenData {
     hasExtendedUnicodeEscape: boolean | undefined = undefined;
     templateFlags: ts.TokenFlags = TokenFlags.None;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -6217,7 +6215,7 @@ export class NumericLiteral extends Token<SyntaxKind.NumericLiteral, AstNumericL
         this.ast.data.numericLiteralFlags = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6234,7 +6232,7 @@ export class NumericLiteral extends Token<SyntaxKind.NumericLiteral, AstNumericL
 export class AstNumericLiteralData extends AstTokenData {
     text: string = "";
     numericLiteralFlags: ts.TokenFlags = TokenFlags.None;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -6463,23 +6461,23 @@ export class TemplateExpression extends Node<SyntaxKind.TemplateExpression, AstT
     declare _expressionBrand: any;
 
     get head(): TemplateHead {
-        return this.ast.data.head?.node;
+        return this.ast.data.head.node;
     }
     set head(value) {
-        this.ast.data.head = value?.ast;
+        this.ast.data.head = value.ast;
     }
     get templateSpans(): NodeArray<TemplateSpan> {
-        return this.ast.data.templateSpans?.nodes!; // TODO: remove `!`
+        return this.ast.data.templateSpans.nodes;
     }
     set templateSpans(value) {
-        this.ast.data.templateSpans = value?.ast;
+        this.ast.data.templateSpans = value.ast;
     }
 }
 
 /** @internal */
 export class AstTemplateExpressionData extends AstData {
     head: AstTemplateHead = undefined!;
-    templateSpans: AstNodeArray<AstTemplateSpan> | undefined = undefined;
+    templateSpans: AstNodeArray<AstTemplateSpan> = undefined!;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.head) |
@@ -6500,16 +6498,16 @@ export class TemplateSpan extends Node<SyntaxKind.TemplateSpan, AstTemplateSpanD
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get literal(): TemplateMiddle | TemplateTail {
-        return this.ast.data.literal?.node;
+        return this.ast.data.literal.node;
     }
     set literal(value) {
-        this.ast.data.literal = value?.ast;
+        this.ast.data.literal = value.ast;
     }
 }
 
@@ -6538,10 +6536,10 @@ export class ParenthesizedExpression extends Node<SyntaxKind.ParenthesizedExpres
     declare _jsdocContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -6582,10 +6580,10 @@ export class ArrayLiteralExpression extends Node<SyntaxKind.ArrayLiteralExpressi
     declare _expressionBrand: any;
 
     get elements(): NodeArray<Expression> {
-        return this.ast.data.elements?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.elements.nodes;
+    }
     set elements(value: NodeArray<Expression>) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
     get multiLine(): boolean | undefined {
         return this.ast.data.multiLine;
@@ -6597,7 +6595,7 @@ export class ArrayLiteralExpression extends Node<SyntaxKind.ArrayLiteralExpressi
 
 /** @internal */
 export class AstArrayLiteralExpressionData extends AstData {
-    elements: AstNodeArray<AstExpression> | undefined = undefined;
+    elements: AstNodeArray<AstExpression> = undefined!;
     multiLine: boolean | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -6619,10 +6617,10 @@ export class SpreadElement extends Node<SyntaxKind.SpreadElement, AstSpreadEleme
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -6671,10 +6669,10 @@ export class ObjectLiteralExpression extends Node<SyntaxKind.ObjectLiteralExpres
     declare _jsdocContainerBrand: any;
 
     get properties(): NodeArray<ObjectLiteralElementLike> {
-        return this.ast.data.properties?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.properties.nodes;
+    }
     set properties(value) {
-        this.ast.data.properties = value?.ast;
+        this.ast.data.properties = value.ast;
     }
     get multiLine(): boolean | undefined {
         return this.ast.data.multiLine;
@@ -6689,7 +6687,7 @@ export class ObjectLiteralExpression extends Node<SyntaxKind.ObjectLiteralExpres
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6704,11 +6702,11 @@ export class ObjectLiteralExpression extends Node<SyntaxKind.ObjectLiteralExpres
 
 /** @internal */
 export class AstObjectLiteralExpressionData extends AstData {
-    properties: AstNodeArray<AstObjectLiteralElementLike> | undefined = undefined;
+    properties: AstNodeArray<AstObjectLiteralElementLike> = undefined!;
     multiLine: boolean | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -6730,10 +6728,10 @@ export class PropertyAccessExpression extends Node<SyntaxKind.PropertyAccessExpr
     declare _flowContainerBrand: any;
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get questionDotToken(): QuestionDotToken | undefined {
         return this.ast.data.questionDotToken?.node;
@@ -6742,10 +6740,10 @@ export class PropertyAccessExpression extends Node<SyntaxKind.PropertyAccessExpr
         this.ast.data.questionDotToken = value?.ast;
     }
     get name(): Identifier | PrivateIdentifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -6754,7 +6752,7 @@ export class PropertyAccessExpression extends Node<SyntaxKind.PropertyAccessExpr
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6780,7 +6778,7 @@ export class AstPropertyAccessExpressionData extends AstData {
     name: AstMemberName = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -6861,10 +6859,10 @@ export class ElementAccessExpression extends Node<SyntaxKind.ElementAccessExpres
     declare _flowContainerBrand: any;
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get questionDotToken(): QuestionDotToken | undefined {
         return this.ast.data.questionDotToken?.node;
@@ -6873,10 +6871,10 @@ export class ElementAccessExpression extends Node<SyntaxKind.ElementAccessExpres
         this.ast.data.questionDotToken = value?.ast;
     }
     get argumentExpression(): Expression {
-        return this.ast.data.argumentExpression?.node;
+        return this.ast.data.argumentExpression.node;
     }
     set argumentExpression(value) {
-        this.ast.data.argumentExpression = value?.ast;
+        this.ast.data.argumentExpression = value.ast;
     }
 
     get jsDoc(): JSDocArray | undefined {
@@ -6886,7 +6884,7 @@ export class ElementAccessExpression extends Node<SyntaxKind.ElementAccessExpres
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -6912,7 +6910,7 @@ export class AstElementAccessExpressionData extends AstData {
     argumentExpression: AstExpression = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
@@ -6961,10 +6959,10 @@ export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpre
     declare _declarationBrand: any;
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get questionDotToken(): QuestionDotToken | undefined {
         return this.ast.data.questionDotToken?.node;
@@ -6979,13 +6977,13 @@ export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpre
         this.ast.data.typeArguments = value?.ast;
     }
     get arguments(): NodeArray<Expression> {
-        return this.ast.data.arguments?.nodes!; // TODO: remove `!`
+        return this.ast.data.arguments.nodes;
     }
     set arguments(value) {
-        this.ast.data.arguments = value?.ast;
+        this.ast.data.arguments = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -7003,9 +7001,9 @@ export class AstCallExpressionData extends AstData {
     expression: AstLeftHandSideExpression = undefined!;
     questionDotToken: AstQuestionDotToken | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
-    arguments: AstNodeArray<AstExpression> | undefined = undefined;
+    arguments: AstNodeArray<AstExpression> = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(node: AstNode): TransformFlags {
@@ -7071,10 +7069,10 @@ export class ExpressionWithTypeArguments extends Node<SyntaxKind.ExpressionWithT
     declare _typeNodeBrand: any;
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -7109,10 +7107,10 @@ export class NewExpression extends Node<SyntaxKind.NewExpression, AstNewExpressi
     declare _declarationBrand: any;
 
     get expression(): LeftHandSideExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -7127,7 +7125,7 @@ export class NewExpression extends Node<SyntaxKind.NewExpression, AstNewExpressi
         this.ast.data.arguments = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -7146,7 +7144,7 @@ export class AstNewExpressionData extends AstData {
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
     arguments: AstNodeArray<AstExpression> | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -7180,10 +7178,10 @@ export class TaggedTemplateExpression extends Node<SyntaxKind.TaggedTemplateExpr
     declare _expressionBrand: any;
 
     get tag(): LeftHandSideExpression {
-        return this.ast.data.tag?.node;
+        return this.ast.data.tag.node;
     }
     set tag(value) {
-        this.ast.data.tag = value?.ast;
+        this.ast.data.tag = value.ast;
     }
     get typeArguments(): NodeArray<TypeNode> | undefined {
         return this.ast.data.typeArguments?.nodes;
@@ -7192,10 +7190,10 @@ export class TaggedTemplateExpression extends Node<SyntaxKind.TaggedTemplateExpr
         this.ast.data.typeArguments = value?.ast;
     }
     get template(): NoSubstitutionTemplateLiteral | TemplateExpression {
-        return this.ast.data.template?.node;
+        return this.ast.data.template.node;
     }
     set template(value) {
-        this.ast.data.template = value?.ast;
+        this.ast.data.template = value.ast;
     }
     get questionDotToken(): QuestionDotToken | undefined {
         return this.ast.data.questionDotToken?.node;
@@ -7234,16 +7232,16 @@ export class AsExpression extends Node<SyntaxKind.AsExpression, AstAsExpressionD
     declare _expressionBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -7267,16 +7265,16 @@ export class TypeAssertion extends Node<SyntaxKind.TypeAssertionExpression, AstT
     declare _expressionBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get expression(): UnaryExpression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -7299,16 +7297,16 @@ export class SatisfiesExpression extends Node<SyntaxKind.SatisfiesExpression, As
     declare _expressionBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -7334,10 +7332,10 @@ export class NonNullExpression extends Node<SyntaxKind.NonNullExpression, AstNon
     declare _expressionBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value: Expression) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -7379,10 +7377,10 @@ export class MetaProperty extends Node<SyntaxKind.MetaProperty, AstMetaPropertyD
         this.ast.data.keywordToken = value;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value: Identifier) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -7427,22 +7425,22 @@ export class JsxElement extends Node<SyntaxKind.JsxElement, AstJsxElementData> i
     declare _expressionBrand: any;
 
     get openingElement(): JsxOpeningElement {
-        return this.ast.data.openingElement?.node;
+        return this.ast.data.openingElement.node;
     }
     set openingElement(value: JsxOpeningElement) {
-        this.ast.data.openingElement = value?.ast;
+        this.ast.data.openingElement = value.ast;
     }
     get children(): NodeArray<JsxChild> {
         return this.ast.data.children.nodes;
     }
     set children(value: NodeArray<JsxChild>) {
-        this.ast.data.children = value?.ast;
+        this.ast.data.children = value.ast;
     }
     get closingElement(): JsxClosingElement {
-        return this.ast.data.closingElement?.node;
+        return this.ast.data.closingElement.node;
     }
     set closingElement(value: JsxClosingElement) {
-        this.ast.data.closingElement = value?.ast;
+        this.ast.data.closingElement = value.ast;
     }
 }
 
@@ -7532,10 +7530,10 @@ export class JsxAttributes extends Node<SyntaxKind.JsxAttributes, AstJsxAttribut
         return this.ast.data.properties.nodes;
     }
     set properties(value) {
-        this.ast.data.properties = value?.ast;
+        this.ast.data.properties = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -7552,7 +7550,7 @@ export class JsxAttributes extends Node<SyntaxKind.JsxAttributes, AstJsxAttribut
 export class AstJsxAttributesData extends AstData {
     properties: AstNodeArray<AstJsxAttributeLike> = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -7566,16 +7564,16 @@ export class JsxNamespacedName extends Node<SyntaxKind.JsxNamespacedName, AstJsx
     declare readonly ast: AstJsxNamespacedName;
 
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get namespace(): Identifier {
-        return this.ast.data.namespace?.node;
+        return this.ast.data.namespace.node;
     }
     set namespace(value) {
-        this.ast.data.namespace = value?.ast;
+        this.ast.data.namespace = value.ast;
     }
 }
 
@@ -7605,7 +7603,7 @@ export class JsxOpeningElement extends Node<SyntaxKind.JsxOpeningElement, AstJsx
     }
 
     get tagName(): JsxTagNameExpression {
-        return this.ast.data.tagName?.node;
+        return this.ast.data.tagName.node;
     }
     set tagName(value) {
         this.ast.data.tagName = value.ast;
@@ -7617,10 +7615,10 @@ export class JsxOpeningElement extends Node<SyntaxKind.JsxOpeningElement, AstJsx
         this.ast.data.typeArguments = value?.ast;
     }
     get attributes(): JsxAttributes {
-        return this.ast.data.attributes?.node;
+        return this.ast.data.attributes.node;
     }
     set attributes(value) {
-        this.ast.data.attributes = value?.ast;
+        this.ast.data.attributes = value.ast;
     }
 }
 
@@ -7654,7 +7652,7 @@ export class JsxClosingElement extends Node<SyntaxKind.JsxClosingElement, AstJsx
     }
 
     get tagName(): JsxTagNameExpression {
-        return this.ast.data.tagName?.node;
+        return this.ast.data.tagName.node;
     }
     set tagName(value) {
         this.ast.data.tagName = value.ast;
@@ -7683,7 +7681,7 @@ export class JsxSelfClosingElement extends Node<SyntaxKind.JsxSelfClosingElement
     declare _expressionBrand: any;
 
     get tagName(): JsxTagNameExpression {
-        return this.ast.data.tagName?.node;
+        return this.ast.data.tagName.node;
     }
     set tagName(value) {
         this.ast.data.tagName = value.ast;
@@ -7695,10 +7693,10 @@ export class JsxSelfClosingElement extends Node<SyntaxKind.JsxSelfClosingElement
         this.ast.data.typeArguments = value?.ast;
     }
     get attributes(): JsxAttributes {
-        return this.ast.data.attributes?.node;
+        return this.ast.data.attributes.node;
     }
     set attributes(value) {
-        this.ast.data.attributes = value?.ast;
+        this.ast.data.attributes = value.ast;
     }
 }
 
@@ -7732,22 +7730,22 @@ export class JsxFragment extends Node<SyntaxKind.JsxFragment, AstJsxFragmentData
     declare _expressionBrand: any;
 
     get openingFragment(): JsxOpeningFragment {
-        return this.ast.data.openingFragment?.node;
+        return this.ast.data.openingFragment.node;
     }
     set openingFragment(value: JsxOpeningFragment) {
-        this.ast.data.openingFragment = value?.ast;
+        this.ast.data.openingFragment = value.ast;
     }
     get children(): NodeArray<JsxChild> {
         return this.ast.data.children.nodes;
     }
     set children(value: NodeArray<JsxChild>) {
-        this.ast.data.children = value?.ast;
+        this.ast.data.children = value.ast;
     }
     get closingFragment(): JsxClosingFragment {
-        return this.ast.data.closingFragment?.node;
+        return this.ast.data.closingFragment.node;
     }
     set closingFragment(value: JsxClosingFragment) {
-        this.ast.data.closingFragment = value?.ast;
+        this.ast.data.closingFragment = value.ast;
     }
 }
 
@@ -7821,10 +7819,10 @@ export class JsxAttribute extends Node<SyntaxKind.JsxAttribute, AstJsxAttributeD
     }
 
     get name(): JsxAttributeName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get initializer(): JsxAttributeValue | undefined {
         return this.ast.data.initializer?.node;
@@ -7833,7 +7831,7 @@ export class JsxAttribute extends Node<SyntaxKind.JsxAttribute, AstJsxAttributeD
         this.ast.data.initializer = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -7851,7 +7849,7 @@ export class AstJsxAttributeData extends AstData {
     name: AstJsxAttributeName = undefined!;
     initializer: AstJsxAttributeValue | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -7889,10 +7887,10 @@ export class JsxSpreadAttribute extends Node<SyntaxKind.JsxSpreadAttribute, AstJ
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -8104,7 +8102,7 @@ export class MissingDeclaration extends Node<SyntaxKind.MissingDeclaration, AstM
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -8123,7 +8121,7 @@ export class AstMissingDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -8140,10 +8138,10 @@ export class Block extends Node<SyntaxKind.Block, AstBlockData> implements JSDoc
     declare _localsContainerBrand: any;
 
     get statements(): NodeArray<Statement> {
-        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+        return this.ast.data.statements.nodes;
     }
     set statements(value) {
-        this.ast.data.statements = value?.ast;
+        this.ast.data.statements = value.ast;
     }
     get multiLine(): boolean | undefined {
         return this.ast.data.multiLine;
@@ -8167,18 +8165,18 @@ export class Block extends Node<SyntaxKind.Block, AstBlockData> implements JSDoc
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstBlockData extends AstData {
-    statements: AstNodeArray<AstStatement> | undefined = undefined;
+    statements: AstNodeArray<AstStatement> = undefined!;
     multiLine: boolean | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.statements);
@@ -8200,10 +8198,10 @@ export class VariableStatement extends Node<SyntaxKind.VariableStatement, AstVar
         this.ast.data.modifiers = value?.ast;
     }
     get declarationList(): VariableDeclarationList {
-        return this.ast.data.declarationList?.node;
+        return this.ast.data.declarationList.node;
     }
     set declarationList(value) {
-        this.ast.data.declarationList = value?.ast;
+        this.ast.data.declarationList = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8246,10 +8244,10 @@ export class ExpressionStatement extends Node<SyntaxKind.ExpressionStatement, As
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8290,16 +8288,16 @@ export class IfStatement extends Node<SyntaxKind.IfStatement, AstIfStatementData
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get thenStatement(): Statement {
-        return this.ast.data.thenStatement?.node;
+        return this.ast.data.thenStatement.node;
     }
     set thenStatement(value) {
-        this.ast.data.thenStatement = value?.ast;
+        this.ast.data.thenStatement = value.ast;
     }
     get elseStatement(): Statement | undefined {
         return this.ast.data.elseStatement?.node;
@@ -8345,16 +8343,16 @@ export class DoStatement extends Node<SyntaxKind.DoStatement, AstDoStatementData
     declare _flowContainerBrand: any;
 
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8393,16 +8391,16 @@ export class WhileStatement extends Node<SyntaxKind.WhileStatement, AstWhileStat
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8468,10 +8466,10 @@ export class ForStatement extends Node<SyntaxKind.ForStatement, AstForStatementD
         this.ast.data.incrementor = value?.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8489,7 +8487,7 @@ export class ForStatement extends Node<SyntaxKind.ForStatement, AstForStatementD
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -8508,7 +8506,7 @@ export class AstForStatementData extends AstData {
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -8537,22 +8535,22 @@ export class ForInStatement extends Node<SyntaxKind.ForInStatement, AstForInStat
     declare _flowContainerBrand: any;
 
     get initializer(): ForInitializer {
-        return this.ast.data.initializer?.node;
+        return this.ast.data.initializer.node;
     }
     set initializer(value) {
-        this.ast.data.initializer = value?.ast;
+        this.ast.data.initializer = value.ast;
     }
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8570,7 +8568,7 @@ export class ForInStatement extends Node<SyntaxKind.ForInStatement, AstForInStat
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -8588,7 +8586,7 @@ export class AstForInStatementData extends AstData {
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -8614,22 +8612,22 @@ export class ForOfStatement extends Node<SyntaxKind.ForOfStatement, AstForOfStat
         this.ast.data.awaitModifier = value?.ast;
     }
     get initializer(): ForInitializer {
-        return this.ast.data.initializer?.node;
+        return this.ast.data.initializer.node;
     }
     set initializer(value) {
-        this.ast.data.initializer = value?.ast;
+        this.ast.data.initializer = value.ast;
     }
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8647,7 +8645,7 @@ export class ForOfStatement extends Node<SyntaxKind.ForOfStatement, AstForOfStat
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
     get flowNode(): FlowNode | undefined {
         return this.ast.data.flowNode;
@@ -8666,7 +8664,7 @@ export class AstForOfStatementData extends AstData {
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -8822,16 +8820,16 @@ export class WithStatement extends Node<SyntaxKind.WithStatement, AstWithStateme
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -8870,16 +8868,16 @@ export class SwitchStatement extends Node<SyntaxKind.SwitchStatement, AstSwitchS
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get caseBlock(): CaseBlock {
-        return this.ast.data.caseBlock?.node;
+        return this.ast.data.caseBlock.node;
     }
     set caseBlock(value) {
-        this.ast.data.caseBlock = value?.ast;
+        this.ast.data.caseBlock = value.ast;
     }
     get possiblyExhaustive(): boolean {
         return this.ast.data.possiblyExhaustive;
@@ -8930,10 +8928,10 @@ export class CaseBlock extends Node<SyntaxKind.CaseBlock, AstCaseBlockData> impl
     }
 
     get clauses(): NodeArray<CaseOrDefaultClause> {
-        return this.ast.data.clauses?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.clauses.nodes;
+    }
     set clauses(value) {
-        this.ast.data.clauses = value?.ast;
+        this.ast.data.clauses = value.ast;
     }
     get locals(): ts.SymbolTable | undefined {
         return this.ast.data.locals;
@@ -8945,16 +8943,16 @@ export class CaseBlock extends Node<SyntaxKind.CaseBlock, AstCaseBlockData> impl
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstCaseBlockData extends AstData {
-    clauses: AstNodeArray<AstCaseOrDefaultClause> | undefined = undefined;
+    clauses: AstNodeArray<AstCaseOrDefaultClause> = undefined!;
 
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.clauses);
@@ -8975,16 +8973,16 @@ export class CaseClause extends Node<SyntaxKind.CaseClause, AstCaseClauseData> i
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get statements(): NodeArray<Statement> {
-        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+        return this.ast.data.statements.nodes;
     }
     set statements(value) {
-        this.ast.data.statements = value?.ast;
+        this.ast.data.statements = value.ast;
     }
     get fallthroughFlowNode(): ts.FlowNode | undefined {
         return this.ast.data.fallthroughFlowNode;
@@ -9003,7 +9001,7 @@ export class CaseClause extends Node<SyntaxKind.CaseClause, AstCaseClauseData> i
 /** @internal */
 export class AstCaseClauseData extends AstData {
     expression: AstExpression = undefined!;
-    statements: AstNodeArray<AstStatement> | undefined = undefined;
+    statements: AstNodeArray<AstStatement> = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     fallthroughFlowNode?: FlowNode | undefined;
@@ -9026,10 +9024,10 @@ export class DefaultClause extends Node<SyntaxKind.DefaultClause, AstDefaultClau
     }
 
     get statements(): NodeArray<Statement> {
-        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+        return this.ast.data.statements.nodes;
     }
     set statements(value) {
-        this.ast.data.statements = value?.ast;
+        this.ast.data.statements = value.ast;
     }
     get fallthroughFlowNode(): ts.FlowNode | undefined {
         return this.ast.data.fallthroughFlowNode;
@@ -9041,7 +9039,7 @@ export class DefaultClause extends Node<SyntaxKind.DefaultClause, AstDefaultClau
 
 /** @internal */
 export class AstDefaultClauseData extends AstData {
-    statements: AstNodeArray<AstStatement> | undefined = undefined;
+    statements: AstNodeArray<AstStatement> = undefined!;
 
     fallthroughFlowNode?: FlowNode | undefined = undefined;
 
@@ -9067,16 +9065,16 @@ export class LabeledStatement extends Node<SyntaxKind.LabeledStatement, AstLabel
     declare _flowContainerBrand: any;
 
     get label(): Identifier {
-        return this.ast.data.label?.node;
+        return this.ast.data.label.node;
     }
     set label(value) {
-        this.ast.data.label = value?.ast;
+        this.ast.data.label = value.ast;
     }
     get statement(): Statement {
-        return this.ast.data.statement?.node;
+        return this.ast.data.statement.node;
     }
     set statement(value) {
-        this.ast.data.statement = value?.ast;
+        this.ast.data.statement = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9115,10 +9113,10 @@ export class ThrowStatement extends Node<SyntaxKind.ThrowStatement, AstThrowStat
     declare _flowContainerBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9155,10 +9153,10 @@ export class TryStatement extends Node<SyntaxKind.TryStatement, AstTryStatementD
     declare _flowContainerBrand: any;
 
     get tryBlock(): Block {
-        return this.ast.data.tryBlock?.node;
+        return this.ast.data.tryBlock.node;
     }
     set tryBlock(value) {
-        this.ast.data.tryBlock = value?.ast;
+        this.ast.data.tryBlock = value.ast;
     }
     get catchClause(): CatchClause | undefined {
         return this.ast.data.catchClause?.node;
@@ -9222,10 +9220,10 @@ export class CatchClause extends Node<SyntaxKind.CatchClause, AstCatchClauseData
         this.ast.data.variableDeclaration = value?.ast;
     }
     get block(): Block {
-        return this.ast.data.block?.node;
+        return this.ast.data.block.node;
     }
     set block(value) {
-        this.ast.data.block = value?.ast;
+        this.ast.data.block = value.ast;
     }
     get locals(): ts.SymbolTable | undefined {
         return this.ast.data.locals;
@@ -9237,7 +9235,7 @@ export class CatchClause extends Node<SyntaxKind.CatchClause, AstCatchClauseData
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -9247,7 +9245,7 @@ export class AstCatchClauseData extends AstData {
     block: AstBlock = undefined!;
 
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.variableDeclaration) |
@@ -9330,10 +9328,10 @@ export class ClassDeclaration extends Node<SyntaxKind.ClassDeclaration, AstClass
         this.ast.data.heritageClauses = value?.ast;
     }
     get members(): NodeArray<ClassElement> {
-        return this.ast.data.members?.nodes!; // TODO: remove `!`
+        return this.ast.data.members.nodes;
     }
     set members(value: NodeArray<ClassElement>) {
-        this.ast.data.members = value?.ast;
+        this.ast.data.members = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9342,7 +9340,7 @@ export class ClassDeclaration extends Node<SyntaxKind.ClassDeclaration, AstClass
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9361,10 +9359,10 @@ export class AstClassDeclarationData extends AstData {
     name: AstIdentifier | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
     heritageClauses: AstNodeArray<AstHeritageClause> | undefined = undefined;
-    members: AstNodeArray<AstClassElement> | undefined = undefined;
+    members: AstNodeArray<AstClassElement> = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -9425,10 +9423,10 @@ export class ClassExpression extends Node<SyntaxKind.ClassExpression, AstClassEx
         this.ast.data.heritageClauses = value?.ast;
     }
     get members(): NodeArray<ClassElement> {
-        return this.ast.data.members?.nodes!; // TODO: remove `!`
+        return this.ast.data.members.nodes;
     }
     set members(value) {
-        this.ast.data.members = value?.ast;
+        this.ast.data.members = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9437,7 +9435,7 @@ export class ClassExpression extends Node<SyntaxKind.ClassExpression, AstClassEx
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9456,10 +9454,10 @@ export class AstClassExpressionData extends AstData {
     name: AstIdentifier | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
     heritageClauses: AstNodeArray<AstHeritageClause> | undefined = undefined;
-    members: AstNodeArray<AstClassElement> | undefined = undefined;
+    members: AstNodeArray<AstClassElement> = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -9506,10 +9504,10 @@ export class InterfaceDeclaration extends Node<SyntaxKind.InterfaceDeclaration, 
         this.ast.data.modifiers = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
         return this.ast.data.typeParameters?.nodes;
@@ -9524,10 +9522,10 @@ export class InterfaceDeclaration extends Node<SyntaxKind.InterfaceDeclaration, 
         this.ast.data.heritageClauses = value?.ast;
     }
     get members(): NodeArray<TypeElement> {
-        return this.ast.data.members?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.members.nodes;
+    }
     set members(value) {
-        this.ast.data.members = value?.ast;
+        this.ast.data.members = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9536,7 +9534,7 @@ export class InterfaceDeclaration extends Node<SyntaxKind.InterfaceDeclaration, 
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9555,10 +9553,10 @@ export class AstInterfaceDeclarationData extends AstTypeScriptNodeData {
     name: AstIdentifier = undefined!;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
     heritageClauses: AstNodeArray<AstHeritageClause> | undefined = undefined;
-    members: AstNodeArray<AstTypeElement> | undefined = undefined;
+    members: AstNodeArray<AstTypeElement> = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -9580,17 +9578,17 @@ export class HeritageClause extends Node<SyntaxKind.HeritageClause, AstHeritageC
         this.ast.data.token = value;
     }
     get types(): NodeArray<ExpressionWithTypeArguments> {
-        return this.ast.data.types?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.types.nodes;
+    }
     set types(value) {
-        this.ast.data.types = value?.ast;
+        this.ast.data.types = value.ast;
     }
 }
 
 /** @internal */
 export class AstHeritageClauseData extends AstData {
     token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword = undefined!;
-    types: AstNodeArray<AstExpressionWithTypeArguments> | undefined = undefined;
+    types: AstNodeArray<AstExpressionWithTypeArguments> = undefined!;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         switch (this.token) {
@@ -9620,10 +9618,10 @@ export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, 
         this.ast.data.modifiers = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
         return this.ast.data.typeParameters?.nodes;
@@ -9632,10 +9630,10 @@ export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, 
         this.ast.data.typeParameters = value?.ast;
     }
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9644,7 +9642,7 @@ export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, 
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9665,7 +9663,7 @@ export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, 
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -9677,10 +9675,10 @@ export class AstTypeAliasDeclarationData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -9698,16 +9696,16 @@ export class EnumDeclaration extends Node<SyntaxKind.EnumDeclaration, AstEnumDec
         this.ast.data.modifiers = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get members(): NodeArray<EnumMember> {
-        return this.ast.data.members?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.members.nodes;
+    }
     set members(value) {
-        this.ast.data.members = value?.ast;
+        this.ast.data.members = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -9716,7 +9714,7 @@ export class EnumDeclaration extends Node<SyntaxKind.EnumDeclaration, AstEnumDec
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9733,10 +9731,10 @@ export class EnumDeclaration extends Node<SyntaxKind.EnumDeclaration, AstEnumDec
 export class AstEnumDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;
     name: AstIdentifier = undefined!;
-    members: AstNodeArray<AstEnumMember> | undefined = undefined;
+    members: AstNodeArray<AstEnumMember> = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -9764,10 +9762,10 @@ export class EnumMember extends Node<SyntaxKind.EnumMember, AstEnumMemberData> i
     }
 
     get name(): PropertyName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get initializer(): Expression | undefined {
         return this.ast.data.initializer?.node;
@@ -9782,7 +9780,7 @@ export class EnumMember extends Node<SyntaxKind.EnumMember, AstEnumMemberData> i
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9801,7 +9799,7 @@ export class AstEnumMemberData extends AstData {
     initializer: AstExpression | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -9850,10 +9848,10 @@ export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstMod
         this.ast.data.modifiers = value?.ast;
     }
     get name(): ModuleName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get body(): ModuleBody | JSDocNamespaceDeclaration | undefined {
         return this.ast.data.body?.node;
@@ -9868,7 +9866,7 @@ export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstMod
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -9889,7 +9887,7 @@ export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstMod
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -9900,10 +9898,10 @@ export class AstModuleDeclarationData extends AstData {
     body: AstModuleBody | AstJSDocNamespaceDeclaration | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         if (modifiersToFlags(this.modifiers?.items) & ModifierFlags.Ambient) {
@@ -9985,10 +9983,10 @@ export class ModuleBlock extends Node<SyntaxKind.ModuleBlock, AstModuleBlockData
     }
 
     get statements(): NodeArray<Statement> {
-        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+        return this.ast.data.statements.nodes;
     }
     set statements(value) {
-        this.ast.data.statements = value?.ast;
+        this.ast.data.statements = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -10000,7 +9998,7 @@ export class ModuleBlock extends Node<SyntaxKind.ModuleBlock, AstModuleBlockData
 
 /** @internal */
 export class AstModuleBlockData extends AstData {
-    statements: AstNodeArray<AstStatement> | undefined = undefined;
+    statements: AstNodeArray<AstStatement> = undefined!;
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10038,10 +10036,10 @@ export class ImportEqualsDeclaration extends Node<SyntaxKind.ImportEqualsDeclara
         this.ast.data.modifiers = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get isTypeOnly(): boolean {
         return this.ast.data.isTypeOnly;
@@ -10050,10 +10048,10 @@ export class ImportEqualsDeclaration extends Node<SyntaxKind.ImportEqualsDeclara
         this.ast.data.isTypeOnly = value;
     }
     get moduleReference(): ModuleReference {
-        return this.ast.data.moduleReference?.node;
+        return this.ast.data.moduleReference.node;
     }
     set moduleReference(value) {
-        this.ast.data.moduleReference = value?.ast;
+        this.ast.data.moduleReference = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -10062,7 +10060,7 @@ export class ImportEqualsDeclaration extends Node<SyntaxKind.ImportEqualsDeclara
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10083,7 +10081,7 @@ export class AstImportEqualsDeclarationData extends AstData {
     moduleReference: AstModuleReference = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10111,10 +10109,10 @@ export class ExternalModuleReference extends Node<SyntaxKind.ExternalModuleRefer
     }
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -10156,10 +10154,10 @@ export class ImportDeclaration extends Node<SyntaxKind.ImportDeclaration, AstImp
         this.ast.data.importClause = value?.ast;
     }
     get moduleSpecifier(): Expression {
-        return this.ast.data.moduleSpecifier?.node;
+        return this.ast.data.moduleSpecifier.node;
     }
     set moduleSpecifier(value) {
-        this.ast.data.moduleSpecifier = value?.ast;
+        this.ast.data.moduleSpecifier = value.ast;
     }
     get attributes(): ImportAttributes | undefined {
         return this.ast.data.attributes?.node;
@@ -10181,7 +10179,7 @@ export class ImportDeclaration extends Node<SyntaxKind.ImportDeclaration, AstImp
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10202,7 +10200,7 @@ export class AstImportDeclarationData extends AstData {
     attributes: AstImportAttributes | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10261,7 +10259,7 @@ export class ImportClause extends Node<SyntaxKind.ImportClause, AstImportClauseD
         this.ast.data.namedBindings = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10280,7 +10278,7 @@ export class AstImportClauseData extends AstData {
     name: AstIdentifier | undefined = undefined;
     namedBindings: AstNamedImportBindings | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10334,16 +10332,16 @@ export class ImportAttribute extends Node<SyntaxKind.ImportAttribute, AstImportA
     }
 
     get name(): ImportAttributeName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get value(): Expression {
-        return this.ast.data.value?.node;
+        return this.ast.data.value.node;
     }
     set value(value) {
-        this.ast.data.value = value?.ast;
+        this.ast.data.value = value.ast;
     }
 }
 
@@ -10387,10 +10385,10 @@ export class ImportAttributes extends Node<SyntaxKind.ImportAttributes, AstImpor
         this.ast.data.token = value;
     }
     get elements(): NodeArray<ImportAttribute> {
-        return this.ast.data.elements?.nodes!; // TODO: remove `!`
+        return this.ast.data.elements.nodes;
     }
     set elements(value) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
     get multiLine(): boolean | undefined {
         return this.ast.data.multiLine;
@@ -10402,8 +10400,8 @@ export class ImportAttributes extends Node<SyntaxKind.ImportAttributes, AstImpor
 
 /** @internal */
 export class AstImportAttributesData extends AstData {
-    token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword = undefined!;
-    elements: AstNodeArray<AstImportAttribute> | undefined = undefined;
+    token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword = SyntaxKind.WithKeyword;
+    elements: AstNodeArray<AstImportAttribute> = undefined!;
     multiLine: boolean | undefined = undefined;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10425,13 +10423,13 @@ export class NamespaceImport extends Node<SyntaxKind.NamespaceImport, AstNamespa
     }
 
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10447,7 +10445,7 @@ export class NamespaceImport extends Node<SyntaxKind.NamespaceImport, AstNamespa
 /** @internal */
 export class AstNamespaceImportData extends AstData {
     name: AstIdentifier = undefined!;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10471,13 +10469,13 @@ export class NamespaceExport extends Node<SyntaxKind.NamespaceExport, AstNamespa
     }
 
     get name(): ModuleExportName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10494,7 +10492,7 @@ export class NamespaceExport extends Node<SyntaxKind.NamespaceExport, AstNamespa
 export class AstNamespaceExportData extends AstData {
     name: AstModuleExportName = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10514,10 +10512,10 @@ export class NamespaceExportDeclaration extends Node<SyntaxKind.NamespaceExportD
     declare _jsdocContainerBrand: any;
 
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get modifiers(): NodeArray<ModifierLike> | undefined {
         return this.ast.data.modifiers?.nodes;
@@ -10532,7 +10530,7 @@ export class NamespaceExportDeclaration extends Node<SyntaxKind.NamespaceExportD
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10550,7 +10548,7 @@ export class AstNamespaceExportDeclarationData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined; // initialized by parser (grammar error)
     name: AstIdentifier = undefined!;
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10618,7 +10616,7 @@ export class ExportDeclaration extends Node<SyntaxKind.ExportDeclaration, AstExp
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10640,7 +10638,7 @@ export class AstExportDeclarationData extends AstData {
     attributes: AstImportAttributes | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10667,7 +10665,7 @@ export class NamedImports extends Node<SyntaxKind.NamedImports, AstNamedImportsD
         return this.ast.data.elements.nodes;
     }
     set elements(value) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
@@ -10694,16 +10692,16 @@ export class NamedExports extends Node<SyntaxKind.NamedExports, AstNamedExportsD
     }
 
     get elements(): NodeArray<ExportSpecifier> {
-        return this.ast.data.elements?.nodes!;
-    } // TODO: remove '!'
+        return this.ast.data.elements.nodes;
+    }
     set elements(value) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
 /** @internal */
 export class AstNamedExportsData extends AstData {
-    elements: AstNodeArray<AstExportSpecifier> | undefined = undefined;
+    elements: AstNodeArray<AstExportSpecifier> = undefined!;
 
     override computeTransformFlags(_: AstNode): TransformFlags {
         let transformFlags = propagateChildrenFlags(this.elements);
@@ -10732,10 +10730,10 @@ export class ImportSpecifier extends Node<SyntaxKind.ImportSpecifier, AstImportS
         this.ast.data.propertyName = value?.ast;
     }
     get name(): Identifier {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get isTypeOnly(): boolean {
         return this.ast.data.isTypeOnly;
@@ -10744,7 +10742,7 @@ export class ImportSpecifier extends Node<SyntaxKind.ImportSpecifier, AstImportS
         this.ast.data.isTypeOnly = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10763,7 +10761,7 @@ export class AstImportSpecifierData extends AstData {
     name: AstIdentifier = undefined!;
     isTypeOnly = false;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10801,10 +10799,10 @@ export class ExportSpecifier extends Node<SyntaxKind.ExportSpecifier, AstExportS
         this.ast.data.propertyName = value?.ast;
     }
     get name(): ModuleExportName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -10814,7 +10812,7 @@ export class ExportSpecifier extends Node<SyntaxKind.ExportSpecifier, AstExportS
     }
 
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10834,7 +10832,7 @@ export class AstExportSpecifierData extends AstData {
     name: AstModuleExportName = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10882,10 +10880,10 @@ export class ExportAssignment extends Node<SyntaxKind.ExportAssignment, AstExpor
         this.ast.data.isExportEquals = value;
     }
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get jsDoc(): JSDocArray | undefined {
         return this.ast.data.jsDoc;
@@ -10894,7 +10892,7 @@ export class ExportAssignment extends Node<SyntaxKind.ExportAssignment, AstExpor
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -10914,7 +10912,7 @@ export class AstExportAssignmentData extends AstData {
     expression: AstExpression = undefined!;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 
     override computeTransformFlags(_: AstNode): TransformFlags {
@@ -10931,10 +10929,10 @@ export class JSDocTypeExpression extends Node<SyntaxKind.JSDocTypeExpression, As
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -10948,10 +10946,10 @@ export class JSDocNameReference extends Node<SyntaxKind.JSDocNameReference, AstJ
     declare readonly ast: AstJSDocNameReference;
 
     get name(): EntityName | JSDocMemberName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
 }
 
@@ -10965,16 +10963,16 @@ export class JSDocMemberName extends Node<SyntaxKind.JSDocMemberName, AstJSDocMe
     declare readonly ast: AstJSDocMemberName;
 
     get left(): EntityName | JSDocMemberName {
-        return this.ast.data.left?.node;
+        return this.ast.data.left.node;
     }
     set left(value) {
-        this.ast.data.left = value?.ast;
+        this.ast.data.left = value.ast;
     }
     get right(): Identifier {
-        return this.ast.data.right?.node;
+        return this.ast.data.right.node;
     }
     set right(value) {
-        this.ast.data.right = value?.ast;
+        this.ast.data.right = value.ast;
     }
 }
 
@@ -11030,10 +11028,10 @@ export class JSDocNonNullableType extends Node<SyntaxKind.JSDocNonNullableType, 
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get postfix(): boolean {
         return this.ast.data.postfix;
@@ -11057,10 +11055,10 @@ export class JSDocNullableType extends Node<SyntaxKind.JSDocNullableType, AstJSD
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
     get postfix(): boolean {
         return this.ast.data.postfix;
@@ -11084,10 +11082,10 @@ export class JSDocOptionalType extends Node<SyntaxKind.JSDocOptionalType, AstJSD
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -11114,10 +11112,10 @@ export class JSDocFunctionType extends Node<SyntaxKind.JSDocFunctionType, AstJSD
         this.ast.data.typeParameters = value?.ast;
     }
     get parameters(): NodeArray<ParameterDeclaration> {
-        return this.ast.data.parameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): TypeNode | undefined {
         return this.ast.data.type?.node;
@@ -11138,7 +11136,7 @@ export class JSDocFunctionType extends Node<SyntaxKind.JSDocFunctionType, AstJSD
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -11159,21 +11157,21 @@ export class JSDocFunctionType extends Node<SyntaxKind.JSDocFunctionType, AstJSD
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
 /** @internal */
 export class AstJSDocFunctionTypeData extends AstData {
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
-    parameters: AstNodeArray<AstParameterDeclaration> | undefined = undefined;
+    parameters: AstNodeArray<AstParameterDeclaration> = undefined!;
     type: AstTypeNode | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined; // quick info
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -11184,10 +11182,10 @@ export class JSDocVariadicType extends Node<SyntaxKind.JSDocVariadicType, AstJSD
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -11204,10 +11202,10 @@ export class JSDocNamepathType extends Node<SyntaxKind.JSDocNamepathType, AstJSD
     declare _typeNodeBrand: any;
 
     get type(): TypeNode {
-        return this.ast.data.type?.node;
+        return this.ast.data.type.node;
     }
     set type(value) {
-        this.ast.data.type = value?.ast;
+        this.ast.data.type = value.ast;
     }
 }
 
@@ -11460,10 +11458,10 @@ export class BaseJSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJS
     }
 
     get tagName(): Identifier {
-        return this.ast.data.tagName?.node;
+        return this.ast.data.tagName.node;
     }
     set tagName(value) {
-        this.ast.data.tagName = value?.ast;
+        this.ast.data.tagName = value.ast;
     }
     get comment(): string | NodeArray<JSDocLink | JSDocLinkCode | JSDocLinkPlain | JSDocText> | undefined {
         const comment = this.ast.data.comment;
@@ -11629,13 +11627,13 @@ export class JSDocEnumTag extends BaseJSDocTag<SyntaxKind.JSDocEnumTag, AstJSDoc
     }
 
     get typeExpression(): JSDocTypeExpression {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -11656,7 +11654,7 @@ export class JSDocEnumTag extends BaseJSDocTag<SyntaxKind.JSDocEnumTag, AstJSDoc
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -11664,20 +11662,20 @@ export class JSDocEnumTag extends BaseJSDocTag<SyntaxKind.JSDocEnumTag, AstJSDoc
 export class AstJSDocEnumTagData extends AstJSDocTagData {
     typeExpression: AstJSDocTypeExpression = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
 export class JSDocThisTag extends BaseJSDocTag<SyntaxKind.JSDocThisTag, AstJSDocThisTagData> implements ts.JSDocThisTag {
     declare readonly ast: AstJSDocThisTag;
     get typeExpression(): JSDocTypeExpression {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
 }
 
@@ -11696,17 +11694,17 @@ export class JSDocTemplateTag extends BaseJSDocTag<SyntaxKind.JSDocTemplateTag, 
         this.ast.data.constraint = value?.ast;
     }
     get typeParameters(): NodeArray<TypeParameterDeclaration> {
-        return this.ast.data.typeParameters?.nodes!; // TODO: remove `!`
+        return this.ast.data.typeParameters.nodes;
     }
     set typeParameters(value) {
-        this.ast.data.typeParameters = value?.ast;
+        this.ast.data.typeParameters = value.ast;
     }
 }
 
 /** @internal */
 export class AstJSDocTemplateTagData extends AstJSDocTagData {
     constraint: AstJSDocTypeExpression | undefined = undefined;
-    typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
+    typeParameters: AstNodeArray<AstTypeParameterDeclaration> = undefined!;
 }
 
 /** @internal */
@@ -11745,10 +11743,10 @@ export class AstJSDocReturnTagData extends AstJSDocTagData {
 export class JSDocTypeTag extends BaseJSDocTag<SyntaxKind.JSDocTypeTag, AstJSDocTypeTagData> implements ts.JSDocTypeTag {
     declare readonly ast: AstJSDocTypeTag;
     get typeExpression(): JSDocTypeExpression {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
 }
 
@@ -11789,7 +11787,7 @@ export class JSDocTypedefTag extends BaseJSDocTag<SyntaxKind.JSDocTypedefTag, As
         this.ast.data.typeExpression = value?.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -11810,7 +11808,7 @@ export class JSDocTypedefTag extends BaseJSDocTag<SyntaxKind.JSDocTypedefTag, As
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -11820,10 +11818,10 @@ export class AstJSDocTypedefTagData extends AstJSDocTagData {
     fullName: AstJSDocNamespaceDeclaration | AstIdentifier | undefined = undefined;
     name: AstIdentifier | undefined = undefined;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -11852,13 +11850,13 @@ export class JSDocCallbackTag extends BaseJSDocTag<SyntaxKind.JSDocCallbackTag, 
         this.ast.data.name = value?.ast;
     }
     get typeExpression(): JSDocSignature {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -11879,7 +11877,7 @@ export class JSDocCallbackTag extends BaseJSDocTag<SyntaxKind.JSDocCallbackTag, 
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -11889,10 +11887,10 @@ export class AstJSDocCallbackTagData extends AstJSDocTagData {
     name: AstIdentifier | undefined = undefined;
     typeExpression: AstJSDocSignature = undefined!;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -11907,10 +11905,10 @@ export class JSDocOverloadTag extends BaseJSDocTag<SyntaxKind.JSDocOverloadTag, 
     }
 
     get typeExpression(): JSDocSignature {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
 }
 
@@ -11955,7 +11953,7 @@ export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSign
         return this.ast.data.parameters.nodes;
     }
     set parameters(value) {
-        this.ast.data.parameters = value?.ast;
+        this.ast.data.parameters = value.ast;
     }
     get type(): JSDocReturnTag | undefined {
         return this.ast.data.type?.node;
@@ -11970,7 +11968,7 @@ export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSign
         this.ast.data.jsDoc = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -11991,7 +11989,7 @@ export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSign
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 }
 
@@ -12002,10 +12000,10 @@ export class AstJSDocSignatureData extends AstData {
     type: AstJSDocReturnTag | undefined = undefined;
 
     jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
 }
 
 /** @internal */
@@ -12021,10 +12019,10 @@ export class JSDocPropertyTag extends BaseJSDocTag<SyntaxKind.JSDocPropertyTag, 
     }
 
     get name(): Identifier | QualifiedName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get typeExpression(): JSDocTypeExpression | undefined {
         return this.ast.data.typeExpression?.node;
@@ -12045,7 +12043,7 @@ export class JSDocPropertyTag extends BaseJSDocTag<SyntaxKind.JSDocPropertyTag, 
         this.ast.data.isBracketed = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -12065,7 +12063,7 @@ export class AstJSDocPropertyTagData extends AstJSDocTagData {
     isNameFirst = false;
     isBracketed = false;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -12082,10 +12080,10 @@ export class JSDocParameterTag extends BaseJSDocTag<SyntaxKind.JSDocParameterTag
     }
 
     get name(): Identifier | QualifiedName {
-        return this.ast.data.name?.node;
+        return this.ast.data.name.node;
     }
     set name(value) {
-        this.ast.data.name = value?.ast;
+        this.ast.data.name = value.ast;
     }
     get typeExpression(): JSDocTypeExpression | undefined {
         return this.ast.data.typeExpression?.node;
@@ -12106,7 +12104,7 @@ export class JSDocParameterTag extends BaseJSDocTag<SyntaxKind.JSDocParameterTag
         this.ast.data.isBracketed = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -12126,7 +12124,7 @@ export class AstJSDocParameterTagData extends AstJSDocTagData {
     isNameFirst = false;
     isBracketed = false;
 
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -12159,7 +12157,7 @@ export class JSDocTypeLiteral extends Node<SyntaxKind.JSDocTypeLiteral, AstJSDoc
         this.ast.data.isArrayType = value;
     }
     get symbol(): ts.Symbol {
-        return this.ast.data.symbol!; // TODO: remove `!`
+        return this.ast.data.symbol;
     }
     set symbol(value) {
         this.ast.data.symbol = value;
@@ -12176,7 +12174,7 @@ export class JSDocTypeLiteral extends Node<SyntaxKind.JSDocTypeLiteral, AstJSDoc
 export class AstJSDocTypeLiteralData extends AstData {
     jsDocPropertyTags: AstNodeArray<AstJSDocPropertyLikeTag> | undefined = undefined;
     isArrayType = false;
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
@@ -12184,10 +12182,10 @@ export class AstJSDocTypeLiteralData extends AstData {
 export class JSDocSatisfiesTag extends BaseJSDocTag<SyntaxKind.JSDocSatisfiesTag, AstJSDocSatisfiesTagData> implements ts.JSDocSatisfiesTag {
     declare readonly ast: AstJSDocSatisfiesTag;
     get typeExpression(): JSDocTypeExpression {
-        return this.ast.data.typeExpression?.node;
+        return this.ast.data.typeExpression.node;
     }
     set typeExpression(value) {
-        this.ast.data.typeExpression = value?.ast;
+        this.ast.data.typeExpression = value.ast;
     }
 }
 
@@ -12214,10 +12212,10 @@ export class JSDocImportTag extends BaseJSDocTag<SyntaxKind.JSDocImportTag, AstJ
         this.ast.data.importClause = value?.ast;
     }
     get moduleSpecifier(): Expression {
-        return this.ast.data.moduleSpecifier?.node;
+        return this.ast.data.moduleSpecifier.node;
     }
     set moduleSpecifier(value) {
-        this.ast.data.moduleSpecifier = value?.ast;
+        this.ast.data.moduleSpecifier = value.ast;
     }
     get attributes(): ImportAttributes | undefined {
         return this.ast.data.attributes?.node;
@@ -12397,10 +12395,10 @@ export class PartiallyEmittedExpression extends Node<SyntaxKind.PartiallyEmitted
     declare _expressionBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value: Expression) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
 }
 
@@ -12423,7 +12421,7 @@ export class CommaListExpression extends Node<SyntaxKind.CommaListExpression, As
         return this.ast.data.elements.nodes;
     }
     set elements(value: NodeArray<Expression>) {
-        this.ast.data.elements = value?.ast;
+        this.ast.data.elements = value.ast;
     }
 }
 
@@ -12446,16 +12444,16 @@ export class SyntheticReferenceExpression extends Node<SyntaxKind.SyntheticRefer
     declare _expressionBrand: any;
 
     get expression(): Expression {
-        return this.ast.data.expression?.node;
+        return this.ast.data.expression.node;
     }
     set expression(value: Expression) {
-        this.ast.data.expression = value?.ast;
+        this.ast.data.expression = value.ast;
     }
     get thisArg(): Expression {
-        return this.ast.data.thisArg?.node;
+        return this.ast.data.thisArg.node;
     }
     set thisArg(value: Expression) {
-        this.ast.data.thisArg = value?.ast;
+        this.ast.data.thisArg = value.ast;
     }
 }
 
@@ -12478,16 +12476,16 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
     declare _localsContainerBrand: any;
 
     get statements(): NodeArray<Statement> {
-        return this.ast.data.statements?.nodes!; // TODO: remove `!`
+        return this.ast.data.statements.nodes;
     }
     set statements(value) {
-        this.ast.data.statements = value?.ast;
+        this.ast.data.statements = value.ast;
     }
     get endOfFileToken(): EndOfFileToken {
-        return this.ast.data.endOfFileToken?.node;
+        return this.ast.data.endOfFileToken.node;
     }
     set endOfFileToken(value) {
-        this.ast.data.endOfFileToken = value?.ast;
+        this.ast.data.endOfFileToken = value.ast;
     }
     get fileName(): string {
         return this.ast.data.fileName;
@@ -12664,9 +12662,8 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
     set version(value) {
         this.ast.data.version = value;
     }
-
     get symbol(): ts.Symbol {
-        return this.ast.data.declaration.symbol!; // TODO: remove `!`
+        return this.ast.data.declaration.symbol;
     }
     set symbol(value) {
         this.ast.data.declaration.symbol = value;
@@ -12821,7 +12818,7 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
         return this.ast.data.nextContainer?.node;
     }
     set nextContainer(value) {
-        this.ast.data.nextContainer = value?.ast as NextContainer | undefined;
+        this.ast.data.nextContainer = value?.ast;
     }
 
     get extendedSourceFiles(): string[] | undefined {
@@ -13029,14 +13026,14 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
 
 /** @internal */
 export class AstDeclarationData {
-    symbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    symbol: Symbol = undefined!; // initialized by binder (Declaration)
     localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
 /** @internal */
 export class AstSourceFileData extends AstData {
     declaration: AstDeclarationData = new AstDeclarationData();
-    statements: AstNodeArray<AstStatement> | undefined = undefined;
+    statements: AstNodeArray<AstStatement> = undefined!;
     endOfFileToken: AstEndOfFileToken = undefined!;
     text = "";
     fileName = "";
@@ -13049,7 +13046,7 @@ export class AstSourceFileData extends AstData {
     isDeclarationFile = false;
     hasNoDefaultLib = false;
     locals: SymbolTable | undefined = undefined;
-    nextContainer: NextContainer | undefined = undefined;
+    nextContainer: AstNextContainer | undefined = undefined;
     endFlowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
     nodeCount = 0;
     identifierCount = 0;

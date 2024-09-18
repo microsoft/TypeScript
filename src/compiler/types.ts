@@ -1895,6 +1895,7 @@ export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
     readonly parent: SignatureDeclaration;
     readonly modifiers?: NodeArray<ModifierLike> | undefined;
     readonly dotDotDotToken?: DotDotDotToken | undefined;    // Present on rest parameter
+    // TODO(rbuckton): `name` can be undefined for JSDoc signature parameters
     readonly name: BindingName;                              // Declared parameter name.
     readonly questionToken?: QuestionToken | undefined;      // Present on optional parameter
     readonly type?: TypeNode | undefined;                    // Optional type annotation
