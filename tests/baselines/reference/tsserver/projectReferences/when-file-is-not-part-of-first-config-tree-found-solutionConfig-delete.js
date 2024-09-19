@@ -99,16 +99,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/app/tsconfig.json, currentDirectory: /home/src/projects/project/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/app/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/app/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project/app/Component.ts"
@@ -121,26 +111,91 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/app/tsconfig.json : 
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/app/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/app/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/tsconfig.json, currentDirectory: /home/src/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/project/app/Component-demos.ts",
+  "/home/src/projects/project/app/Component.ts",
+  "/home/src/projects/project/demos/helpers.ts"
+ ],
+ "options": {
+  "outDir": "/home/src/projects/project/dist",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/home/src/projects/project/demos/tsconfig.json",
+   "originalPath": "./demos/tsconfig.json"
+  },
+  {
+   "path": "/home/src/projects/project/app/tsconfig.json",
+   "originalPath": "./app/tsconfig.json"
+  }
+ ]
+}
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/app/Component.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/demos/helpers.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/demos/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/project/demos/helpers.ts",
+  "/home/src/projects/project/app/Component-demos.ts"
+ ],
+ "options": {
+  "composite": true,
+  "rootDir": "/home/src/projects/project",
+  "outDir": "/home/src/projects/project/demos-dist",
+  "paths": {
+   "demos/*": [
+    "./*"
+   ]
+  },
+  "pathsBasePath": "/home/src/projects/project/demos",
+  "configFilePath": "/home/src/projects/project/demos/tsconfig.json"
+ }
+}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/demos/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/demos 1 undefined Config: /home/src/projects/project/demos/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/demos 1 undefined Config: /home/src/projects/project/demos/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/demos/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/demos/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/demos/helpers.ts Text-1 "export const foo = 1;\n"
+	/home/src/projects/project/app/Component-demos.ts SVC-1-0 "import * as helpers from 'demos/helpers';\nexport const demo = () => {\n    helpers;\n}\n"
 	/home/src/projects/project/app/Component.ts Text-1 "export const Component = () => {}\n"
 
 
-	../../../tslibs/TS/Lib/lib.d.ts
+	../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	Component.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	demos/helpers.ts
+	  Imported via 'demos/helpers' from file 'app/Component-demos.ts'
+	  Matched by default include pattern '**/*'
+	app/Component-demos.ts
+	  Matched by default include pattern '**/*'
+	app/Component.ts
+	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -149,7 +204,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/home/src/projects/project/app/tsconfig.json"
+        "projectName": "/home/src/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -160,14 +215,14 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "e045cfff085eecf970c7400c2ccce12615df3b6cac3c69591527cc19e385b065",
+          "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 1,
-            "tsSize": 34,
+            "ts": 3,
+            "tsSize": 141,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
@@ -176,7 +231,6 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true,
             "outDir": ""
           },
           "typeAcquisition": {
@@ -186,8 +240,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "extends": false,
           "files": false,
-          "include": true,
-          "exclude": true,
+          "include": false,
+          "exclude": false,
           "compileOnSave": false,
           "configFileName": "tsconfig.json",
           "projectType": "configured",
@@ -203,51 +257,126 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "configFileDiag",
       "body": {
         "triggerFile": "/home/src/projects/project/app/Component-demos.ts",
-        "configFile": "/home/src/projects/project/app/tsconfig.json",
+        "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/projects/project/app
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/app/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/demos/tsconfig.json, currentDirectory: /home/src/projects/project/demos
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/demos/tsconfig.json",
+        "reason": "Creating project referenced in solution /home/src/projects/project/tsconfig.json to find possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/demos/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/demos/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/demos/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/demos/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/demos/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/demos/helpers.ts Text-1 "export const foo = 1;\n"
 	/home/src/projects/project/app/Component-demos.ts SVC-1-0 "import * as helpers from 'demos/helpers';\nexport const demo = () => {\n    helpers;\n}\n"
 
 
 	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	Component-demos.ts
-	  Root file specified for compilation
+	helpers.ts
+	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Imported via 'demos/helpers' from file '../app/Component-demos.ts'
+	../app/Component-demos.ts
+	  Matched by include pattern '../app/**/*-demos.*' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project/demos/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "528692a1575f61fd3bf7069493cc100a7cad975f6cd24c47b7a63b99928a8171",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 107,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "rootDir": "",
+            "outDir": "",
+            "paths": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/app/Component-demos.ts",
+        "configFile": "/home/src/projects/project/demos/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -262,19 +391,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/app/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/app/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules: *new*
+/home/src/projects/project/demos/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -284,44 +403,66 @@ FsWatches::
   {}
 /home/src/projects/project/app/tsconfig.json: *new*
   {}
+/home/src/projects/project/demos/helpers.ts: *new*
+  {}
+/home/src/projects/project/demos/tsconfig.json: *new*
+  {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
+/home/src/projects/project: *new*
+  {}
 /home/src/projects/project/app: *new*
+  {}
+/home/src/projects/project/demos: *new*
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred) *new*
+/home/src/projects/project/app/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/home/src/projects/project/app/tsconfig.json (Configured) *new*
+/home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
+    autoImportProviderHost: false
 
 ScriptInfos::
 /home/src/projects/project/app/Component-demos.ts (Open) *new*
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json *default*
 /home/src/projects/project/app/Component.ts *new*
     version: Text-1
     containingProjects: 1
-        /home/src/projects/project/app/tsconfig.json
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/demos/helpers.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 2
-        /home/src/projects/project/app/tsconfig.json
-        /dev/null/inferredProject1*
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json] deleted
@@ -329,32 +470,57 @@ Before running Timeout callback:: count: 1
 Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles* *new*
 
-Host is moving to new time
+Projects::
+/home/src/projects/project/app/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true *changed*
+    deferredClose: true *changed*
+    autoImportProviderHost: undefined *changed*
+
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/app/Component-demos.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -369,17 +535,45 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/dev/null/inferredProject1*
-	findDefaultConfiguredProject:
-		undefined
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/home/src/projects/project/app/tsconfig.json"
+          ]
+        }
+      },
+      "responseRequired": true
+    }
+After request
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running Timeout callback:: count: 1
-2: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 2
+2: /home/src/projects/project/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
@@ -396,35 +590,116 @@ Before running Timeout callback:: count: 1
 }
 
 
-Timeout callback:: count: 1
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 2
+2: /home/src/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
-Host is moving to new time
+Projects::
+/home/src/projects/project/app/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: false *changed*
+    deferredClose: undefined *changed*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Change in config file detected"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/project/app/Component-demos.ts",
+  "/home/src/projects/project/app/Component.ts",
+  "/home/src/projects/project/demos/helpers.ts"
+ ],
+ "options": {
+  "outDir": "/home/src/projects/project/dist",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/home/src/projects/project/demos/tsconfig.json",
+   "originalPath": "./demos/tsconfig.json"
+  },
+  {
+   "path": "/home/src/projects/project/app/tsconfig.json",
+   "originalPath": "./app/tsconfig.json"
+  }
+ ]
+}
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/tsconfig.json",
+        "configFile": "/home/src/projects/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/app/Component-demos.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -439,11 +714,53 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/dev/null/inferredProject1*
-	findDefaultConfiguredProject:
-		undefined
+Projects::
+/home/src/projects/project/app/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/home/src/projects/project/app/tsconfig.json"
+          ],
+          "notInProject": [
+            "/home/src/projects/project/tsconfig.json"
+          ],
+          "defaultProject": "/home/src/projects/project/demos/tsconfig.json"
+        }
+      },
+      "responseRequired": true
+    }
+After request
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -452,12 +769,20 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/projects/random/random.ts"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/random/random.ts ProjectRootPath: undefined:: Result: /home/src/projects/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/random/tsconfig.json, currentDirectory: /home/src/projects/random
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/random/tsconfig.json 2000 undefined Project: /home/src/projects/random/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/random/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/random/random.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/projects/random/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -468,14 +793,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /home/src/projects/random/random.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /home/src/projects/random/tsconfig.json : {
- "rootNames": [
-  "/home/src/projects/random/random.ts"
- ],
- "options": {
-  "configFilePath": "/home/src/projects/random/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/random 1 undefined Config: /home/src/projects/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/random 1 undefined Config: /home/src/projects/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/random/tsconfig.json
@@ -557,39 +874,25 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts
-	/home/src/projects/project/app/Component.ts
-
-
-	../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	Component.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/app/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/app 1 undefined Config: /home/src/projects/project/app/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/app/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/app/Component.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/random/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/random/random.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
@@ -597,7 +900,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 2,
+      "request_seq": 4,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -606,19 +909,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/app/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/app/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/app/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules:
+/home/src/projects/project/demos/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -626,7 +919,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects/project/app/Component.ts:
+  {}
 /home/src/projects/project/app/tsconfig.json:
+  {}
+/home/src/projects/project/demos/helpers.ts:
+  {}
+/home/src/projects/project/demos/tsconfig.json:
   {}
 /home/src/projects/project/tsconfig.json:
   {}
@@ -635,28 +934,29 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
-FsWatches *deleted*::
-/home/src/projects/project/app/Component.ts:
-  {}
-
 FsWatchesRecursive::
+/home/src/projects/project:
+  {}
+/home/src/projects/project/app:
+  {}
+/home/src/projects/project/demos:
+  {}
 /home/src/projects/random: *new*
   {}
 
-FsWatchesRecursive *deleted*::
-/home/src/projects/project/app:
-  {}
-
 Projects::
-/dev/null/inferredProject1* (Inferred)
+/home/src/projects/project/app/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/home/src/projects/project/app/tsconfig.json (Configured) *deleted*
-    projectStateVersion: 1
+/home/src/projects/project/tsconfig.json (Configured)
+    projectStateVersion: 2
     projectProgramVersion: 1
-    isClosed: true *changed*
-    noOpenRef: true
 /home/src/projects/random/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -665,22 +965,28 @@ Projects::
 ScriptInfos::
 /home/src/projects/project/app/Component-demos.ts (Open)
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
-/home/src/projects/project/app/Component.ts *deleted*
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json *default*
+/home/src/projects/project/app/Component.ts
     version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project/app/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/demos/helpers.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
 /home/src/projects/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/random/tsconfig.json *default*
 /home/src/tslibs/TS/Lib/lib.d.ts *changed*
     version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
+    containingProjects: 3 *changed*
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
         /home/src/projects/random/tsconfig.json *new*
-        /home/src/projects/project/app/tsconfig.json *deleted*
 
 Before request
 
@@ -690,45 +996,43 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/projects/random/random.ts"
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/random/random.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/random/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/demos/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/random/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 3,
+      "request_seq": 5,
       "success": true
     }
 After request
 
 PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/app/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/app/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/app/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules:
+/home/src/projects/project/demos/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -736,7 +1040,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/projects/project/app/Component.ts:
+  {}
 /home/src/projects/project/app/tsconfig.json:
+  {}
+/home/src/projects/project/demos/helpers.ts:
+  {}
+/home/src/projects/project/demos/tsconfig.json:
   {}
 /home/src/projects/project/tsconfig.json:
   {}
@@ -748,14 +1058,28 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/home/src/projects/project:
+  {}
+/home/src/projects/project/app:
+  {}
+/home/src/projects/project/demos:
+  {}
 /home/src/projects/random:
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred)
+/home/src/projects/project/app/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    initialLoadPending: true
+/home/src/projects/project/demos/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
+/home/src/projects/project/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
 /home/src/projects/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -765,8 +1089,18 @@ Projects::
 ScriptInfos::
 /home/src/projects/project/app/Component-demos.ts (Open)
     version: SVC-1-0
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json *default*
+/home/src/projects/project/app/Component.ts
+    version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1* *default*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/demos/helpers.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
 /home/src/projects/random/random.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -774,12 +1108,39 @@ ScriptInfos::
         /home/src/projects/random/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject1*
+    containingProjects: 3
+        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/demos/tsconfig.json
         /home/src/projects/random/tsconfig.json
 
-Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
-	getDefaultProjectForFile:
-		/dev/null/inferredProject1*
-	findDefaultConfiguredProject:
-		undefined
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/home/src/projects/project/app/Component-demos.ts",
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/home/src/projects/project/demos/tsconfig.json",
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/home/src/projects/project/app/tsconfig.json"
+          ],
+          "notInProject": [
+            "/home/src/projects/project/tsconfig.json"
+          ],
+          "defaultProject": "/home/src/projects/project/demos/tsconfig.json"
+        }
+      },
+      "responseRequired": true
+    }
+After request

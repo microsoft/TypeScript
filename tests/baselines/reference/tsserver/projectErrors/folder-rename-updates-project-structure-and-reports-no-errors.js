@@ -48,16 +48,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined:: Result: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /a/b/projects/myproject/tsconfig.json, currentDirectory: /a/b/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/tsconfig.json 2000 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/a/b/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for /a/b/projects/myproject/bar/app.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /a/b/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/a/b/projects/myproject/bar/app.ts",
@@ -68,6 +58,16 @@ Info seq  [hh:mm:ss:mss] Config: /a/b/projects/myproject/tsconfig.json : {
   "configFilePath": "/a/b/projects/myproject/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/b/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /a/b/projects/myproject/bar/app.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/foo/foo.ts 500 undefined WatchType: Closed Script info

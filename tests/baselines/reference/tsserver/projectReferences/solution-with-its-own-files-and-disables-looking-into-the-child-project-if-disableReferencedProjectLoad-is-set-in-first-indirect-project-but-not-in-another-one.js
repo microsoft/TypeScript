@@ -166,16 +166,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/tsconfig.json, currentDirectory: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/own/main.ts"
@@ -196,6 +186,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/own/main.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-indirect1.json : {
@@ -441,7 +441,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig-src.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -529,11 +528,39 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json *default*
 
-Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
-	getDefaultProjectForFile:
-		/user/username/projects/myproject/tsconfig-src.json
-	findDefaultConfiguredProject:
-		/user/username/projects/myproject/tsconfig-src.json
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "projectInfo",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "configFileName": "/user/username/projects/myproject/tsconfig-src.json",
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "notMatchedByConfig": [
+            "/user/username/projects/myproject/tsconfig-indirect1.json",
+            "/user/username/projects/myproject/tsconfig-indirect2.json"
+          ],
+          "notInProject": [
+            "/user/username/projects/myproject/tsconfig.json"
+          ],
+          "defaultProject": "/user/username/projects/myproject/tsconfig-src.json"
+        }
+      },
+      "responseRequired": true
+    }
+After request
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -542,7 +569,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/workspaces/dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
@@ -589,7 +616,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -685,7 +712,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -709,7 +736,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true
     }
 After request
@@ -807,7 +834,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -831,7 +858,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true
     }
 After request
@@ -935,7 +962,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/workspaces/dummy/dummy.ts"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/dummy.ts 500 undefined WatchType: Closed Script info
@@ -1014,7 +1041,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1125,22 +1152,12 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
       },
-      "seq": 6,
+      "seq": 7,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/tsconfig.json, currentDirectory: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/own/main.ts"
@@ -1161,6 +1178,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/own/main.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-indirect1.json : {
@@ -1316,7 +1343,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig-src.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -1339,7 +1365,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -1431,7 +1457,7 @@ Before request
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "reloadProjects",
-      "seq": 7,
+      "seq": 8,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] reload projects.
@@ -1452,16 +1478,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/tsconfig.json",
-        "reason": "User requested reload projects: Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/own/main.ts"
@@ -1482,6 +1498,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig.json",
+        "reason": "User requested reload projects: Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig-indirect1.json : {
  "rootNames": [
@@ -1632,7 +1658,6 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig-src.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/workspaces/dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -1714,7 +1739,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "reloadProjects",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *

@@ -45,16 +45,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/jsFile.js ProjectRootPath: undefined:: Result: /home/src/projects/project/a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/a/jsconfig.json, currentDirectory: /home/src/projects/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/jsconfig.json 2000 undefined Project: /home/src/projects/project/a/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/a/jsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/project/a/jsFile.js to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/jsconfig.json : {
  "rootNames": [
   "/home/src/projects/project/a/dTsFile1.d.ts",
@@ -70,6 +60,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/jsconfig.json : {
   "configFilePath": "/home/src/projects/project/a/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/a/jsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/a/jsFile.js to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Config: /home/src/projects/project/a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Config: /home/src/projects/project/a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/dTsFile1.d.ts 500 undefined WatchType: Closed Script info

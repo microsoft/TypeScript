@@ -143,6 +143,7 @@ import {
     CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
+    ConfiguredProjectLoadKind,
     convertFormatOptions,
     convertScriptKindName,
     convertUserPreferences,
@@ -524,7 +525,8 @@ function getRenameLocationsWorker(
         projects,
         defaultProject,
         initialLocation,
-        /*isForRename*/ true,
+        getDefinitionLocation(defaultProject, initialLocation, /*isForRename*/ true),
+        mapDefinitionInProject,
         (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, preferences),
         (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
     );
@@ -569,7 +571,8 @@ function getReferencesWorker(
         projects,
         defaultProject,
         initialLocation,
-        /*isForRename*/ false,
+        getDefinitionLocation(defaultProject, initialLocation, /*isForRename*/ false),
+        mapDefinitionInProject,
         (project, position) => {
             logger.info(`Finding references to ${position.fileName} position ${position.pos} in project ${project.getProjectName()}`);
             return project.getLanguageService().findReferences(position.fileName, position.pos);
@@ -709,9 +712,15 @@ function getPerProjectReferences<TResult>(
     projects: Projects,
     defaultProject: Project,
     initialLocation: DocumentPosition,
-    isForRename: boolean,
+    defaultDefinition: DocumentPosition | undefined,
+    mapDefinitionInProject: (
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined,
+    ) => DocumentPosition | undefined,
     getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
-    forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
+    forPositionInResult?: (result: TResult, cb: (location: DocumentPosition) => void) => void,
 ): readonly TResult[] | Map<Project, readonly TResult[]> {
     // If `getResultsForPosition` returns results for a project, they go in here
     const resultsMap = new Map<Project, readonly TResult[]>();
@@ -732,8 +741,6 @@ function getPerProjectReferences<TResult>(
 
     const projectService = defaultProject.projectService;
     const cancellationToken = defaultProject.getCancellationToken();
-
-    const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation, isForRename);
 
     // Don't call these unless !!defaultDefinition
     const getGeneratedDefinition = memoize(() =>
@@ -800,7 +807,7 @@ function getPerProjectReferences<TResult>(
 
     function searchPosition(project: Project, location: DocumentPosition): readonly TResult[] | undefined {
         const projectResults = getResultsForPosition(project, location);
-        if (!projectResults) return undefined;
+        if (!projectResults || !forPositionInResult) return projectResults;
 
         for (const result of projectResults) {
             forPositionInResult(result, position => {
@@ -833,12 +840,10 @@ function getPerProjectReferences<TResult>(
     }
 }
 
-function mapDefinitionInProject(
+function mapDefinitionInProjectIfFileInProject(
     definition: DocumentPosition,
     project: Project,
-    getGeneratedDefinition: () => DocumentPosition | undefined,
-    getSourceDefinition: () => DocumentPosition | undefined,
-): DocumentPosition | undefined {
+) {
     // If the definition is actually from the project, definition is correct as is
     if (
         project.containsFile(toNormalizedPath(definition.fileName)) &&
@@ -846,13 +851,24 @@ function mapDefinitionInProject(
     ) {
         return definition;
     }
+}
+
+function mapDefinitionInProject(
+    definition: DocumentPosition,
+    project: Project,
+    getGeneratedDefinition: () => DocumentPosition | undefined,
+    getSourceDefinition: () => DocumentPosition | undefined,
+): DocumentPosition | undefined {
+    // If the definition is actually from the project, definition is correct as is
+    const result = mapDefinitionInProjectIfFileInProject(definition, project);
+    if (result) return result;
     const generatedDefinition = getGeneratedDefinition();
     if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
     const sourceDefinition = getSourceDefinition();
     return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
 }
 
-function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
+function isLocationProjectReferenceRedirect(project: Project, location: Pick<DocumentPosition, "fileName"> | undefined) {
     if (!location) return false;
     const program = project.getLanguageService().getProgram();
     if (!program) return false;
@@ -2039,18 +2055,61 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
-        return this.getProjectInfoWorker(args.file, args.projectFileName, args.needFileNameList, /*excludeConfigFiles*/ false);
+        return this.getProjectInfoWorker(
+            args.file,
+            args.projectFileName,
+            args.needFileNameList,
+            args.needDefaultConfiguredProjectInfo,
+            /*excludeConfigFiles*/ false,
+        );
     }
 
-    private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string | undefined, needFileNameList: boolean, excludeConfigFiles: boolean) {
+    private getProjectInfoWorker(
+        uncheckedFileName: string,
+        projectFileName: string | undefined,
+        needFileNameList: boolean,
+        needDefaultConfiguredProjectInfo: boolean | undefined,
+        excludeConfigFiles: boolean,
+    ): Omit<protocol.ProjectInfo, "fileNames"> & { fileNames?: NormalizedPath[]; } {
         const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName);
         updateProjectIfDirty(project);
         const projectInfo = {
             configFileName: project.getProjectName(),
             languageServiceDisabled: !project.languageServiceEnabled,
             fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined,
+            configuredProjectInfo: needDefaultConfiguredProjectInfo ? this.getDefaultConfiguredProjectInfo(uncheckedFileName) : undefined,
         };
         return projectInfo;
+    }
+
+    private getDefaultConfiguredProjectInfo(uncheckedFileName: string): protocol.DefaultConfiguredProjectInfo | undefined {
+        const info = this.projectService.getScriptInfo(uncheckedFileName);
+        if (!info) return;
+
+        // Find default project for the info
+        const result = this.projectService.findDefaultConfiguredProjectWorker(
+            info,
+            ConfiguredProjectLoadKind.CreateReplay,
+        );
+        if (!result) return undefined;
+        let notMatchedByConfig: NormalizedPath[] | undefined;
+        let notInProject: NormalizedPath[] | undefined;
+        result.seenProjects.forEach((kind, project) => {
+            if (project !== result.defaultProject) {
+                if (kind !== ConfiguredProjectLoadKind.CreateReplay) {
+                    (notMatchedByConfig ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+                else {
+                    (notInProject ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+            }
+        });
+        result.seenConfigs?.forEach(config => (notMatchedByConfig ??= []).push(config));
+        return {
+            notMatchedByConfig,
+            notInProject,
+            defaultProject: result.defaultProject && toNormalizedPath(result.defaultProject.getConfigFilePath()),
+        };
     }
 
     private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
@@ -2187,25 +2246,38 @@ export class Session<TMessage = string> implements EventSender {
 
     private getFileReferences(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.FileReferencesResponseBody | readonly ReferenceEntry[] {
         const projects = this.getProjects(args);
-        const fileName = args.file;
-        const preferences = this.getPreferences(toNormalizedPath(fileName));
+        const fileName = toNormalizedPath(args.file);
+        const preferences = this.getPreferences(fileName);
+        const initialLocation: DocumentPosition = { fileName, pos: 0 };
+        const perProjectResults = getPerProjectReferences(
+            projects,
+            this.getDefaultProject(args),
+            initialLocation,
+            initialLocation,
+            mapDefinitionInProjectIfFileInProject,
+            project => {
+                this.logger.info(`Finding references to file ${fileName} in project ${project.getProjectName()}`);
+                return project.getLanguageService().getFileReferences(fileName);
+            },
+        );
 
-        const references: ReferenceEntry[] = [];
-        const seen = createDocumentSpanSet(this.host.useCaseSensitiveFileNames);
-
-        forEachProjectInProjects(projects, /*path*/ undefined, project => {
-            if (project.getCancellationToken().isCancellationRequested()) return;
-
-            const projectOutputs = project.getLanguageService().getFileReferences(fileName);
-            if (projectOutputs) {
+        // No re-mapping or isDefinition updatses are required if there's exactly one project
+        let references: ReferenceEntry[];
+        if (isArray(perProjectResults)) {
+            references = perProjectResults as ReferenceEntry[];
+        }
+        else {
+            references = [];
+            const seen = createDocumentSpanSet(this.host.useCaseSensitiveFileNames);
+            perProjectResults.forEach(projectOutputs => {
                 for (const referenceEntry of projectOutputs) {
                     if (!seen.has(referenceEntry)) {
                         references.push(referenceEntry);
                         seen.add(referenceEntry);
                     }
                 }
-            }
-        });
+            });
+        }
 
         if (!simplifiedResult) return references;
         const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
@@ -3091,16 +3163,19 @@ export class Session<TMessage = string> implements EventSender {
             return;
         }
 
-        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
-        if (languageServiceDisabled) {
-            return;
-        }
+        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(
+            fileName,
+            /*projectFileName*/ undefined,
+            /*needFileNameList*/ true,
+            /*needDefaultConfiguredProjectInfo*/ undefined,
+            /*excludeConfigFiles*/ true,
+        );
+
+        if (languageServiceDisabled) return;
 
         // No need to analyze lib.d.ts
         const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
-        if (fileNamesInProject.length === 0) {
-            return;
-        }
+        if (fileNamesInProject.length === 0) return;
 
         // Sort the file name list to make the recently touched files come first
         const highPriorityFiles: NormalizedPath[] = [];

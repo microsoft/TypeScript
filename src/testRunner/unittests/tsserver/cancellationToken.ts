@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
+    projectInfoForSession,
     TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver.js";
@@ -88,10 +89,7 @@ describe("unittests:: tsserver:: cancellationToken::", () => {
             });
 
             // run new request
-            session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
-                command: ts.server.protocol.CommandTypes.ProjectInfo,
-                arguments: { file: f1.path, needFileNameList: false },
-            });
+            projectInfoForSession(session, f1);
 
             // cancel previously issued Geterr
             session.serverCancellationToken.setRequestToCancel(getErrId);
