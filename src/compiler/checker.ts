@@ -3967,7 +3967,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = symbolFromModule && symbolFromVariable && symbolFromModule !== symbolFromVariable ?
                     combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                     symbolFromModule || symbolFromVariable;
-                if (!symbol) {
+
+                if (isImportOrExportSpecifier(specifier) && isOnlyImportableAsDefault(moduleSpecifier) && nameText !== InternalSymbolName.Default) {
+                    error(name, Diagnostics.Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0, ModuleKind[moduleKind]);
+                }
+                else if (!symbol) {
                     errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, node, name);
                 }
                 return symbol;
