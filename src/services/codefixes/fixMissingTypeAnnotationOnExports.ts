@@ -119,7 +119,7 @@ const extractExpression = "extract-expression";
 const errorCodes = [
     Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
-    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
