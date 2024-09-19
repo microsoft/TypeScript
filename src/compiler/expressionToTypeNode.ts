@@ -424,6 +424,12 @@ export function createSyntacticTypeNodeBuilder(
                 return node;
             }
             if (isLiteralImportTypeNode(node)) {
+                // assert keyword in imported attributes is deprecated, so we don't reuse types that contain it
+                // Ex: import("pkg", { assert: {} }
+                if (node.attributes?.token === SyntaxKind.AssertKeyword) {
+                    markError();
+                    return node;
+                }
                 if (!resolver.canReuseTypeNode(context, node)) {
                     return resolver.serializeExistingTypeNode(context, node);
                 }
