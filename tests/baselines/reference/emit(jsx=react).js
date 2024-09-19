@@ -53,7 +53,7 @@ require("node:path");
 
 
 //// [main.js]
-    var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
     if (typeof path === "string" && path[0] === "." && (path[1] === "/" || path[1] === "." && path[2] === "/")) {
         if (path.substring(path.length - 4) === ".tsx") {
             return path.substring(0, path.length - 4) + (preserveJsx ? ".jsx" : ".js");
@@ -81,7 +81,7 @@ import(__rewriteRelativeImportExtension("./foo.ts"));
 import(__rewriteRelativeImportExtension("./foo.ts"), { with: { attr: "value" } });
 import(__rewriteRelativeImportExtension("" + "./foo.ts"));
 //// [js.js]
-    var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
     if (typeof path === "string" && path[0] === "." && (path[1] === "/" || path[1] === "." && path[2] === "/")) {
         if (path.substring(path.length - 4) === ".tsx") {
             return path.substring(0, path.length - 4) + (preserveJsx ? ".jsx" : ".js");

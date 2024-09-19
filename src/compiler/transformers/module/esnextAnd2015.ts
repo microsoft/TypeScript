@@ -81,7 +81,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableSubstitution(SyntaxKind.Identifier);
 
     const noSubstitution = new Set<NodeId>();
-    let possibleImportsAndRequires: CallExpression[] | undefined;
+    let importsAndRequiresToShim: CallExpression[] | undefined;
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -97,7 +97,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             importRequireStatements = undefined;
             if (compilerOptions.rewriteRelativeImportExtensions && (currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport || isInJSFile(node))) {
                 forEachDynamicImportOrRequireCall(node, /*includeTypeSpaceImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
-                    possibleImportsAndRequires = append(possibleImportsAndRequires, node);
+                    if (!isStringLiteralLike(node.arguments[0]) || shouldRewriteModuleSpecifier(node.arguments[0].text, compilerOptions)) {
+                        importsAndRequiresToShim = append(importsAndRequiresToShim, node);
+                    }
                 });
             }
             let result = updateExternalModule(node);
@@ -153,12 +155,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
             case SyntaxKind.CallExpression:
-                if (node === possibleImportsAndRequires?.[0]) {
-                    return visitImportOrRequireCall(possibleImportsAndRequires.shift()!);
+                if (node === importsAndRequiresToShim?.[0]) {
+                    return visitImportOrRequireCall(importsAndRequiresToShim.shift()!);
                 }
                 break;
             default:
-                if (possibleImportsAndRequires?.length && rangeContainsRange(node, possibleImportsAndRequires[0])) {
+                if (importsAndRequiresToShim?.length && rangeContainsRange(node, importsAndRequiresToShim[0])) {
                     return visitEachChild(node, visitor, context);
                 }
         }
@@ -184,10 +186,6 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     }
 
     function visitImportOrRequireCall(node: CallExpression): VisitResult<Expression> {
-        const moduleNameArgument = node.arguments[0];
-        if (isStringLiteralLike(moduleNameArgument) && !shouldRewriteModuleSpecifier(moduleNameArgument.text, compilerOptions)) {
-            return node;
-        }
         return factory.updateCallExpression(
             node,
             node.expression,
