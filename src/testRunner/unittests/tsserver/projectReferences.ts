@@ -7,6 +7,7 @@ import {
     closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
+    projectInfoForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
     TestSession,
@@ -20,10 +21,10 @@ import {
 
 function logDefaultProjectAndDefaultConfiguredProject(session: TestSession, file: File) {
     const info = session.getProjectService().getScriptInfo(file.path);
-    const defaultProject = session.getProjectService().tryGetDefaultProjectForFile(file.path as ts.server.NormalizedPath);
-    const defaultConfiguredProject = info && session.getProjectService().findDefaultConfiguredProject(info);
-    session.logger.info(`File: ${file.path}:\n\tgetDefaultProjectForFile:\n\t\t${defaultProject?.projectName}\n\tfindDefaultConfiguredProject:\n\t\t${defaultConfiguredProject?.projectName}`);
-    return { defaultProject, defaultConfiguredProject };
+    if (info) {
+        const projectInfo = projectInfoForSession(session, file);
+        return session.getProjectService().findProject(projectInfo.configFileName);
+    }
 }
 
 describe("unittests:: tsserver:: with projectReferences:: and tsbuild", () => {
@@ -581,7 +582,7 @@ testCompositeFunction('why hello there', 42);`,
         baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
     });
 
-    it("when finding local reference doesnt load ancestor/sibling projects", () => {
+    it("when finding local reference doesnt load ancestor sibling projects", () => {
         const solutionLocation = "/user/username/projects/solution";
         const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
@@ -661,7 +662,7 @@ testCompositeFunction('why hello there', 42);`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs("projectReferences", "finding local reference doesnt load ancestor sibling projects", session);
     });
 
     it("when finding references in overlapping projects", () => {
@@ -1080,7 +1081,7 @@ export function bar() {}`,
 
         function verifySolutionScenario(input: Setup) {
             const { session, host } = setup(input);
-            const { defaultProject } = logDefaultProjectAndDefaultConfiguredProject(session, main);
+            const defaultProject = logDefaultProjectAndDefaultConfiguredProject(session, main);
 
             // Verify errors
             verifyGetErrRequest({ session, files: [main] });

@@ -59,16 +59,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/A/a.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/A/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/username/projects/project/A/tsconfig.json, currentDirectory: /users/username/projects/project/A
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/A/tsconfig.json 2000 undefined Project: /users/username/projects/project/A/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/users/username/projects/project/A/tsconfig.json",
-        "reason": "Creating possible configured project for /users/username/projects/project/A/a.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/A/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/project/A/a.ts"
@@ -79,6 +69,16 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/A/tsconfig.jso
   "configFilePath": "/users/username/projects/project/A/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/username/projects/project/A/tsconfig.json",
+        "reason": "Creating possible configured project for /users/username/projects/project/A/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/A 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/A 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/A/tsconfig.json
@@ -235,16 +235,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/B/b.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/B/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/username/projects/project/B/tsconfig.json, currentDirectory: /users/username/projects/project/B
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/B/tsconfig.json 2000 undefined Project: /users/username/projects/project/B/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/users/username/projects/project/B/tsconfig.json",
-        "reason": "Creating possible configured project for /users/username/projects/project/B/b.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/B/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/project/B/b.ts",
@@ -262,6 +252,16 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/B/tsconfig.jso
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/username/projects/project/B/tsconfig.json",
+        "reason": "Creating possible configured project for /users/username/projects/project/B/b.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/B/b2.ts 500 undefined WatchType: Closed Script info
