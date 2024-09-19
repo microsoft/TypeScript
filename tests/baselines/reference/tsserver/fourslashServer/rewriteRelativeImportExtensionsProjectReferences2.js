@@ -179,16 +179,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/src/services/services.ts ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/src/services/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /tests/cases/fourslash/server/src/services/tsconfig.json, currentDirectory: /tests/cases/fourslash/server/src/services
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/src/services/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/src/services/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/tests/cases/fourslash/server/src/services/tsconfig.json",
-        "reason": "Creating possible configured project for /tests/cases/fourslash/server/src/services/services.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/src/services/tsconfig.json : {
  "rootNames": [
   "/tests/cases/fourslash/server/src/services/services.ts"
@@ -209,6 +199,16 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/src/services/tsco
  ]
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/src/tsconfig-base.json 2000 undefined Config: /tests/cases/fourslash/server/src/services/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tests/cases/fourslash/server/src/services/tsconfig.json",
+        "reason": "Creating possible configured project for /tests/cases/fourslash/server/src/services/services.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/src/services 1 undefined Config: /tests/cases/fourslash/server/src/services/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/src/services 1 undefined Config: /tests/cases/fourslash/server/src/services/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tests/cases/fourslash/server/src/services/tsconfig.json

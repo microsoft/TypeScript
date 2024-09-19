@@ -69,16 +69,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/packages/common/tsconfig.json ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/packages/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /tests/cases/fourslash/server/packages/common/tsconfig.json, currentDirectory: /tests/cases/fourslash/server/packages/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/common/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/packages/common/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/tests/cases/fourslash/server/packages/common/tsconfig.json",
-        "reason": "Creating possible configured project for /tests/cases/fourslash/server/packages/common/tsconfig.json to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/common/tsconfig.json : {
  "rootNames": [
   "/tests/cases/fourslash/server/packages/common/src/index.ts"
@@ -91,6 +81,16 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/common/t
   "configFilePath": "/tests/cases/fourslash/server/packages/common/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tests/cases/fourslash/server/packages/common/tsconfig.json",
+        "reason": "Creating possible configured project for /tests/cases/fourslash/server/packages/common/tsconfig.json to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/common 1 undefined Config: /tests/cases/fourslash/server/packages/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/common 1 undefined Config: /tests/cases/fourslash/server/packages/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/common/src/index.ts 500 undefined WatchType: Closed Script info
@@ -183,6 +183,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/packages/common/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /tests/cases/fourslash/server/packages/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/common/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -349,16 +350,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/packages/main/src/index.ts ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/packages/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /tests/cases/fourslash/server/packages/main/tsconfig.json, currentDirectory: /tests/cases/fourslash/server/packages/main
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/main/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/packages/main/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/tests/cases/fourslash/server/packages/main/tsconfig.json",
-        "reason": "Creating possible configured project for /tests/cases/fourslash/server/packages/main/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/main/tsconfig.json : {
  "rootNames": [
   "/tests/cases/fourslash/server/packages/main/src/index.ts"
@@ -377,6 +368,16 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/main/tsc
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tests/cases/fourslash/server/packages/main/tsconfig.json",
+        "reason": "Creating possible configured project for /tests/cases/fourslash/server/packages/main/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/main 1 undefined Config: /tests/cases/fourslash/server/packages/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/packages/main 1 undefined Config: /tests/cases/fourslash/server/packages/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tests/cases/fourslash/server/packages/main/tsconfig.json
