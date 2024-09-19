@@ -4617,12 +4617,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
-                (isInJSFile(location) && isJSDocImportTag(location) ? location.moduleSpecifier : undefined) ||
                 (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
-                findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
-                findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
-                findAncestor(location, isExportDeclaration)?.moduleSpecifier;
+                findAncestor(location, or(isImportDeclaration, isJSDocImportTag, isExportDeclaration))?.moduleSpecifier ||
+                findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier)
             ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier)
             : host.getDefaultResolutionModeForFile(currentSourceFile);
