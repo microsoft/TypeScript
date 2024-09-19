@@ -1158,7 +1158,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
         // base folder has to be present
         const base = getDirectoryPath(file.path);
-        const folder = Debug.checkDefined(this.getRealFolder(base));
+        const folder = this.getRealFolder(base);
+        // this line can throw on purpose, don't use Debug.assert to avoid redundant debugger hits
+        // eslint-disable-next-line no-restricted-syntax
+        if (folder === null || folder === undefined) {
+            throw new Error(`Directory not found: ${base}`);
+        }
 
         if (folder.path === base) {
             if (!this.fs.has(file.path)) {
