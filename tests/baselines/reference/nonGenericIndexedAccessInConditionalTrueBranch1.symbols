@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/nonGenericIndexedAccessInConditionalTrueBranch1.ts] ////
+
+=== nonGenericIndexedAccessInConditionalTrueBranch1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57109
+
+type A = {
+>A : Symbol(A, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 0, 0))
+
+  k: symbol;
+>k : Symbol(k, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 2, 10))
+
+};
+
+type B = "k" extends keyof A ? A["k"] : never;
+>B : Symbol(B, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 4, 2))
+>A : Symbol(A, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 0, 0))
+>A : Symbol(A, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 0, 0))
+
+type C = {
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+
+  k: symbol;
+>k : Symbol(k, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 8, 10))
+
+  other: boolean;
+>other : Symbol(other, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 9, 12))
+
+};
+
+type D = "k" extends keyof C ? C["k"] : never;
+>D : Symbol(D, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 11, 2))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+
+type E = "k" extends keyof C ? C["k" | "other"] : never;
+>E : Symbol(E, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 13, 46))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+>C : Symbol(C, Decl(nonGenericIndexedAccessInConditionalTrueBranch1.ts, 6, 46))
+
